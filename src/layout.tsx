@@ -4,6 +4,8 @@ import {readFileSync} from 'fs';
 
 const tachyons = cat('./node_modules/tachyons/css/tachyons.min.css');
 
+const courseName = 'Master application deployment and scaling with Kubernetes';
+
 export function Layout({Content}: {Content: () => JSX.Element}) {
   return <html lang="en">
   <head>
@@ -43,8 +45,15 @@ export function Layout({Content}: {Content: () => JSX.Element}) {
         font-size: 5rem;
       }
     }
-
     `}</style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-485266-17"></script>
+    <script dangerouslySetInnerHTML={{__html: `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-485266-17');
+    `}}>
+    </script>
     <title>Learnk8s</title>
   </head>
   <body className="bg-near-white sans-serif">
@@ -55,13 +64,18 @@ export function Layout({Content}: {Content: () => JSX.Element}) {
         <h2 className="f4 f3-l normal dark-gray">Online master class</h2>
       </div>
     </div>
-    <section className="bg-near-white pl3 pr2 pt3 lh-copy measure-wide dark-gray center">
+    <section className="bg-near-white pl3 pr2 pt3 pb6 lh-copy measure-wide dark-gray center">
       <h2 className="f4 f3-ns pt4-ns pb3-ns normal">With the explosive momentum of Docker, Kubernetes has become the de-facto standard for orchestrating and managing containerised applications in production.</h2>
-      <p>If you're just getting started with Docker and containers, <strong>now's the best time to become an expert</strong> with our <em>Kubernetes: Master Application Deployment and Scaling</em> course.</p>
+      <p>If you're just getting started with Docker and containers, <strong>now's the best time to become an expert</strong> with our <em>{courseName}</em> course.</p>
       <ul className="list ml3 pl1 pr2">
         <li className="mv2"><strong>What:</strong> Docker and Kubernetes Expertise, served Up Hot</li>
         <li className="mv2"><strong>Where:</strong> Online! Learn how to manage containers in your pyjamas</li>
-        <li className="mv2"><strong>When:</strong></li>
+        <li className="mv2"><strong>When:</strong>
+          <ul>
+            <li><a href="https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic" target="_blank" className="link dark-blue underline">27th-28th of November in London</a></li>
+            <li><a href="https://ti.to/learnk8s/master-application-deployment-and-scaling-with-kubernetes" target="_blank" className="link dark-blue underline">29th-30th of November online</a></li>
+          </ul>
+        </li>
         <li className="mv2"><strong>Who:</strong> Daniele Polencic, the learnk8s team… and you</li>
       </ul>
       <p className="lh-copy"><strong>This course covers the basics of Docker</strong>. So it's like two courses in one!</p>
@@ -84,7 +98,7 @@ export function Layout({Content}: {Content: () => JSX.Element}) {
         <li>Share files between two or more Pods with Volumes?</li>
         <li>Deploy your application without any downtime using rolling updates?</li>
       </ul>
-      <p>Don't worry if you don't—<em>yet</em>. You will after you put yourself through our <em>Kubernetes: Master Application Deployment and Scaling</em> course.</p>
+      <p>Don't worry if you don't—<em>yet</em>. You will after you put yourself through our <em>{courseName}</em> course.</p>
       <h3 className="f3">What you'll learn</h3>
       <p>All of the above, of course. Plus…</p>
       <p>How to trigger deployments in Kubernetes on every commit and every time a Docker image is published.</p>
@@ -96,12 +110,14 @@ export function Layout({Content}: {Content: () => JSX.Element}) {
       <ul className="ml3 pl1 pr2">
         <li><strong>Total Documentation</strong>: ready-to-print PDFs of all slides, perfect for taking notes during class (and reviewing, later on!)</li>
         <li><strong>Transcript of the chat room</strong> with tons of demo code, hints and questions answered</li>
-        <li><strong>Rewatch as often as you like</strong>: you’ll get a special URL to rewatch the class later!</li>
+        <li><strong>Rewatch as often as you like</strong>: you'll get a special URL to rewatch the class later!</li>
       </ul>
       <p>Not to mention a learning hangover. One of the good kinds.</p>
       <h3 className="f3">Q&amp;A sessions included</h3>
       <p>This course is highly interactive!</p>
-      <p>You have at your disposal, for questions and assistance, Daniele Polencic,</p>
+      <p>You have at your disposal, for questions and assistance, Daniele Polencic, the author of the course.</p>
+      <p className="pv4 tc"><a className="b f3 link dim br2 ph3 pv2 mb2 dib white bg-dark-blue" href="https://ti.to/learnk8s/master-application-deployment-and-scaling-with-kubernetes">Register now!</a></p>
+      <p>Do you have any question? Get in touch! <a href="mailto:hello@learnk8s.io" className="link dark-blue underline">hello@learnk8s.io</a></p>
     </section>
   </body>
 </html>
