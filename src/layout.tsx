@@ -46,6 +46,14 @@ export function Layout({Content}: {Content: () => JSX.Element}) {
       }
     }
     `}</style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-485266-17"></script>
+    <script dangerouslySetInnerHTML={{__html: `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-485266-17');
+    `}}>
+    </script>
     <title>Learnk8s</title>
   </head>
   <body className="bg-near-white sans-serif">
