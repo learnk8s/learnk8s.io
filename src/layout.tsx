@@ -61,7 +61,7 @@ export function Layout({Content}: {Content: () => JSX.Element}) {
       <div className="hero w-80">
         <a href="/" className="logo w-10 dib pv2 pb4-l" dangerouslySetInnerHTML={{__html: readFileSync('./src/logo.svg').toString('utf8')}}></a>
         <h1 className="f3 f1-l f-subheadline-xl dark-gray ma0 measure-narrow pb3-l">Master application<br />deployment and scaling<br />with Kubernetes</h1>
-        <h2 className="f4 f3-l normal dark-gray">Online master class</h2>
+        <h2 className="f4 f3-l normal dark-gray">2 days hands-on workshop</h2>
       </div>
     </div>
     <section className="bg-near-white pl3 pr2 pt3 pb6 lh-copy measure-wide dark-gray center">
@@ -69,11 +69,11 @@ export function Layout({Content}: {Content: () => JSX.Element}) {
       <p>If you're just getting started with Docker and containers, <strong>now's the best time to become an expert</strong> with our <em>{courseName}</em> course.</p>
       <ul className="list ml3 pl1 pr2">
         <li className="mv2"><strong>What:</strong>Docker fundamentals and Kubernetes served up by the experts</li>
-        <li className="mv2"><strong>Where:</strong> Online!</li>
+        <li className="mv2"><strong>Where:</strong> At <a href="https://skillsmatter.com" className="link dark-blue underline">Skillsmatter!</a></li>
         <li className="mv2"><strong>When:</strong>
           <ul>
             <li><a href="https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic" target="_blank" className="link dark-blue underline">27th-28th of November in London</a></li>
-            <li><a href="https://ti.to/learnk8s/master-application-deployment-and-scaling-with-kubernetes" target="_blank" className="link dark-blue underline">29th-30th of November online</a></li>
+            <li><a href="https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic" target="_blank" className="link dark-blue underline">21st-22nd of March in London</a></li>
           </ul>
         </li>
         <li className="mv2"><strong>Who:</strong> Daniele Polencic, the learnk8s team… and of course you</li>
@@ -105,18 +105,10 @@ export function Layout({Content}: {Content: () => JSX.Element}) {
       <p>How to successfully leverage Helm to template, version, and share your K8s resources with your entire team.</p>
       <p>How to plan for failover and live a happy life where your weekend worries are a thing of the past.</p>
       <p>How to use Minikube to run deployments locally in a realistic production-like environment.</p>
-      <h3 className="f3">What you'll take home with you</h3>
-      <p>You don't just get the course, you get goodies:</p>
-      <ul className="ml3 pl1 pr2">
-        <li><strong>Complete Documentation</strong>: ready-to-print PDFs of every slide; perfect for taking notes during class (and reviewing, later on!)</li>
-        <li><strong>Slack transcript</strong> with tons of demo code, hints and questions answered</li>
-        <li><strong>Rewatch as often as you like</strong>: you'll get a special URL to rewatch the class later!</li>
-      </ul>
-      <p>Not to mention a learning hangover. One of the good kinds.</p>
       <h3 className="f3">Q&amp;A sessions included</h3>
       <p>This course is highly interactive!</p>
       <p>You have at your disposal, for questions and assistance, Daniele Polencic, the author of the course.</p>
-      <p className="pv4 tc"><a className="b f3 link dim br2 ph3 pv2 mb2 dib white bg-dark-blue" href="https://ti.to/learnk8s/master-application-deployment-and-scaling-with-kubernetes">Register now!</a></p>
+      <p className="pv4 tc"><a className="b f3 link dim br2 ph3 pv2 mb2 dib white bg-dark-blue" href="https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic">Register now!</a></p>
       <p>Do you have any question? Get in touch! <a href="mailto:hello@learnk8s.io" className="link dark-blue underline">hello@learnk8s.io</a></p>
     </section>
   </body>
