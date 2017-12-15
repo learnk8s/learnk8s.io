@@ -1,0 +1,12 @@
+name: learnk8s
+exclude:
+  - node_modules
+  - yarn.lock
+  - docker-compose.yml
+  - package.json
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+sass:
+  load_paths:
+    - node_modules

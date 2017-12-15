@@ -7,3 +7,4 @@ dist/
 *.env
 *.dev
 .DS_Store
+.sass-cache/

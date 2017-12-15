@@ -2,28 +2,10 @@
   "name": "learnk8s",
   "version": "1.0.0",
   "description": "learnk8s.io static website",
-  "scripts": {
-    "build": "ts-node src/index.tsx -o ./dist",
-    "dev": "chokidar './src/*.tsx' -c 'yarn run build' & http-server ./dist"
-  },
+  "scripts": {},
   "author": "Daniele Polencic",
   "license": "MIT",
   "dependencies": {
-    "@types/commander": "^2.11.0",
-    "@types/react": "^16.0.9",
-    "@types/react-dom": "^16.0.0",
-    "@types/shelljs": "^0.7.4",
-    "browser-sync": "^2.18.13",
-    "commander": "^2.11.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "shelljs": "^0.7.8",
-    "tachyons": "^4.8.1",
-    "ts-node": "^3.3.0",
-    "typescript": "^2.5.3"
-  },
-  "devDependencies": {
-    "chokidar-cli": "^1.2.0",
-    "http-server": "^0.10.0"
+    "tachyons-sass": "^4.9.0"
   }
 }

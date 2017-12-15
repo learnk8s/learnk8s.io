@@ -1,0 +1,33 @@
+---
+---
+
+@import 'tachyons-sass/tachyons.scss';
+
+.sky {
+  position: relative;
+  height: 100vh;
+  background-color: #B9E5FB;
+  background-image: url(/assets/boat.svg), url(/assets/wave.svg), url(/assets/dock.svg), url(/assets/clouds.svg);
+  background-repeat: no-repeat, repeat-x, no-repeat, no-repeat;
+  background-position: center bottom 0, center bottom 0, center bottom 0, right 15% top 0;
+  background-size: 100%, 100%, 100%, 100%;
+}
+
+.hero {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -85%);
+}
+
+@media screen and (min-width: 60em) {
+  .sky {
+    background-size: auto 80vh, auto 80vh, auto 80vh, auto 80vh;
+  }
+}
+
+@media screen and (min-width: 85em) {
+  .f-subheadline-xl {
+    font-size: 5rem;
+  }
+}
