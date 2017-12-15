@@ -8,3 +8,5 @@ dist/
 *.dev
 .DS_Store
 .sass-cache/
+vendor/
+_site/
