@@ -1,0 +1,4 @@
+---
+layout: careers
+permalink: "/careers/"
+---
