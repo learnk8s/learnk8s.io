@@ -1,0 +1,4 @@
+---
+layout: course
+permalink: "/course/"
+---

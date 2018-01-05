@@ -86,6 +86,10 @@
   background-color: #F7F9FC;
 }
 
+.bg-almost-white {
+  background-color: #FCFCFC;
+}
+
 .footer {
   background-color: #3a89c9;
 }
@@ -98,6 +102,9 @@
   .intro::before {
     height: calc(100% + 8rem);
     transform: skewY(-29deg);
+  }
+  .intro.course::before {
+    height: calc(100% + 4rem);
   }
   .illustration {
     width: 25rem;
@@ -114,6 +121,10 @@
   .intro::before {
     max-height: calc(100% + 23rem);
     height: calc(100% + 22vw);
+  }
+  .intro.course::before {
+    max-height: calc(100% + 16rem);
+    height: calc(100% + 15vw);
   }
   .illustration {
     width: 40rem;
