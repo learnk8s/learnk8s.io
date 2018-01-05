@@ -1,0 +1,87 @@
+---
+layout: default
+benefits:
+  - Validate your Kubernetes setup and identify opportunities for resource optimisation and cost-savings
+  - Inspect security risks and propose mitigations for sensitive data
+  - Refine your CI/CD pipeline to speed up your software delivieries
+  - Test the cluster for reselience and scaling under high traffic
+---
+
+<div class="intro white pt3 pt0-ns pb5 pb4-ns">
+
+  {% include navbar.html %}
+
+  <section class="hero flex-ns items-end-ns ph5-l pt5-l">
+    <div class="w-70-l">
+      <h1 class="f1 pl3 pl4-ns f-subheadline-l">Enterprise-ready Kubernetes consulting</h1>
+      <h2 class="f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l">Supercharge your team with the latest shiny-shiny.</h2>
+      <a href="/" class="link dib blue bg-white br1 pa3 b f5 shadow-3 mt4 ml3 ph4 ml4-ns mb3">Get started &#8594;</a>
+    </div>
+    <div class="dn illustration db-l mt4 tr">
+      <img class="w4" src="/assets/kcsp.png" alt="">
+      <img class="w4" src="/assets/cka.png" alt="">
+    </div>
+  </section>
+</div>
+
+<section class="content ph3 ph4-ns flex-l items-end-l justify-center-l pt5-ns">
+    <div class="left dn db-l w-30-l">
+      <div class="illustration fr">{% include more_cargo_loading.svg %}</div>
+    </div>
+    <div class="right measure center pt3">
+      <h2 class="f3 navy f2-l measure-narrow">Kubernetes deployments, accelerated</h2>
+      <p class="lh-copy f4-l black-70">Accelerate your development by leveraging learnk8s expertise in deploying production-ready Kubernetes for the hottest start-ups and the largest enterprises. Our engineers will help you:</p>
+      <ul class="list black-70 pl0 pt2">
+        {% for text in layout.benefits %}
+        <li class="mv3">
+            <div class="dtc v-top w2">{% include tick.svg %}</div>
+            <div class="dtc v-top pl3">
+              <p class="mv0 f4-l lh-copy">{{ text }}</p>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+<section class="interlude tr">
+  <div class="illustration dib mr4">{% include small_cargo.svg %}</div>
+</section>
+
+<section class="pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100">
+  <div class="content measure-wide">
+    <h2 class="f3 navy f2-l">Enterprise DevOps and continuous delivery</h2>
+    <p class="f4-l lh-copy black-70">If you can quickly make small changes to your software, get them to market, and get rapid feedback you are reducing the cost and time of delivery. Transforming how you deliver software in this way - making it faster, more frequent and scalable - means that you can exponentially increase the value you create for your customers. </p>
+    <a href="/" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Get in touch &#8594;</a>
+  </div>
+  <div class="w-40-ns pl5 dn db-ns overflow-x-hidden">
+    <div class="illustration">{% include containers.svg %}</div>
+  </div>
+</section>
+
+<section class="pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100 bg-weird-blue">
+  <div class="w-40-ns dn db-ns overflow-x-hidden tc">
+    <img class="dib w4" src="/assets/cloud_providers.png" alt="Cloud providers">
+  </div>
+  <div class="content measure-wide">
+    <h2 class="f3 navy f2-l">Cloud migration and adoption</h2>
+    <p class="f4-l lh-copy black-70">The speed, efficiency and cost-effectiveness of public cloud means that it is an invaluable enabler in any software innovation drive or digital transformation. Learn how to benefit from the cloud and speed up your software development cycle.</p>
+    <a href="/" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Get in touch &#8594;</a>
+  </div>
+</section>
+
+
+<section class="pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100">
+  <div class="content measure-wide">
+    <h2 class="f3 navy f2-l">Cloud-native application development</h2>
+    <p class="f4-l lh-copy black-70">Cloud-native applications are delivered as flexible, scalable microservices in the cloud, where we can fully automate and software-define more of the stack. Leaern how to design, build, deploy and run cloud native application platforms, which drive real business value and competitive advantage.</p>
+    <a href="/" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Get in touch &#8594;</a>
+  </div>
+  <div class="w-40-ns pl5 dn db-ns overflow-x-hidden">
+    <div class="illustration">{% include team.svg %}</div>
+  </div>
+</section>
+
+{% include consultation.html %}
+
+{% include footer.html %}

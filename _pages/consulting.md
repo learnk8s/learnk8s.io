@@ -1,0 +1,4 @@
+---
+layout: consulting
+permalink: "/consulting/"
+---
