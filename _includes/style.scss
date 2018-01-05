@@ -1,30 +1,128 @@
 @import 'tachyons-sass/tachyons.scss';
 
-.sky {
+.logo {
+  fill: white;
+}
+
+.intro,
+.hero,
+.nav,
+.content {
   position: relative;
-  height: 100vh;
-  background-color: #B9E5FB;
-  background-image: url(/assets/boat.svg), url(/assets/wave.svg), url(/assets/dock.svg), url(/assets/clouds.svg);
-  background-repeat: no-repeat, repeat-x, no-repeat, no-repeat;
-  background-position: center bottom 0, center bottom 0, center bottom 0, right 15% top 0;
-  background-size: 100%, 100%, 100%, 100%;
+  z-index: 10;
 }
 
-.hero {
+.intro::before {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -85%);
+  z-index: 5;
+  top: 0;
+  left: 0;
+  content: '';
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #3a89c9 0%, #66a3d5 100%);
+  transform: skewY(-9deg);
+  transform-origin: bottom left;
 }
 
-@media screen and (min-width: 60em) {
-  .sky {
-    background-size: auto 80vh, auto 80vh, auto 80vh, auto 80vh;
+.illustration-containers {
+  left: -100%;
+  bottom: 6em;
+}
+
+.interlude {
+  position: relative;
+  overflow: hidden;
+}
+
+.interlude .illustration {
+  position: relative;
+  z-index: 10;
+}
+
+.interlude::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  transform: skewY(-5deg);
+  background-color: #3a89c9;
+  transform-origin: top right;
+  top: 0;
+  left: 0;
+  margin-top: 1rem;
+}
+
+.consultation {
+  position: relative;
+  overflow: hidden;
+}
+
+.consultation::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  transform: skewY(4deg);
+  background-color: #3a89c9;
+  transform-origin: top left;
+  top: 0;
+  left: 0;
+  margin-top: 1rem;
+}
+
+.consultation > div {
+  position: relative;
+  z-index: 10;
+}
+
+.illustration {
+  width: 20rem;
+}
+
+.bg-weird-blue {
+  background-color: #F7F9FC;
+}
+
+.footer {
+  background-color: #3a89c9;
+}
+
+.footer .icon {
+  fill: white;
+}
+
+@media #{$breakpoint-not-small} {
+  .intro::before {
+    height: calc(100% + 8rem);
+    transform: skewY(-29deg);
+  }
+  .illustration {
+    width: 25rem;
+  }
+  .interlude::before {
+    margin-top: 2rem;
   }
 }
 
-@media screen and (min-width: 85em) {
-  .f-subheadline-xl {
-    font-size: 5rem;
+@media #{$breakpoint-medium} {
+}
+
+@media #{$breakpoint-large} {
+  .intro::before {
+    max-height: calc(100% + 23rem);
+    height: calc(100% + 22vw);
+  }
+  .illustration {
+    width: 40rem;
+  }
+  .interlude::before {
+    margin-top: 3rem;
+  }
+  .consultation::before {
+    transform: skewY(2deg);
   }
 }
+

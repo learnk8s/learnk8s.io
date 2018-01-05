@@ -1,58 +1,139 @@
 ---
 layout: default
+benefits:
+  - Decide which one of the dozen ways to install Kubernetes is right for your team
+  - Speak the Kubernetes lingo and communicate with the rest of the industry
+  - Architect micro services that scale and leverage the strength and weaknesses of the platform
+  - Get up to speed quickly without drowning in the amount of incomplete/outdated documentation
 ---
-<div class="sky cf">
-  <div class="hero w-80">
-    <a href="/" class="logo w-10 dib pv2 pb4-l">{% include logo.svg %}</a>
-    <h1 class="f3 f1-l f-subheadline-xl dark-gray ma0 measure-narrow pb3-l">Master application<br />deployment and scaling<br />with Kubernetes</h1>
-    <h2 class="f4 f3-l normal dark-gray">2 days hands-on workshop</h2>
-  </div>
-</div>
-<section class="bg-near-white pl3 pr2 pt3 pb6 lh-copy measure-wide dark-gray center">
-  <h2 class="f4 f3-ns pt4-ns pb3-ns normal">With the explosive momentum of Docker, Kubernetes has become the de-facto standard for orchestrating and managing containerised applications in production.</h2>
-  <p>If you're just getting started with Docker and containers, <strong>now's the best time to become an expert</strong> with our <em>{{ page.course_name }}</em> course.</p>
-  <ul class="list ml3 pl1 pr2">
-    <li class="mv2"><strong>What:</strong>Docker fundamentals and Kubernetes served up by the experts</li>
-    <li class="mv2"><strong>Where:</strong> At <a href="https://skillsmatter.com" class="link dark-blue underline">Skillsmatter!</a></li>
-    <li class="mv2"><strong>When:</strong>
-      <ul>
-        <li><a href="https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic" target="_blank" class="link dark-blue underline">27th-28th of November in London</a></li>
-        <li><a href="https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic" target="_blank" class="link dark-blue underline">21st-22nd of March in London</a></li>
+<div class="cf w-100 mw9-l center bg-white sans-serif">
+  <div class="intro white pt3 pt0-ns pb5 pb4-ns">
+
+    <section class="nav cf w-100 bb-ns b--lightest-blue-ns pl3 ph3-ns flex-ns items-center-ns">
+      <a href="/" class="logo fl-ns w-100 mw4 mw-none-ns dib w-20-m w-10-l pa2-ns">{% include logo.svg %}</a>
+      <ul class="list fl w-80-m w-90-l pa2 tr dn db-ns">
+        <li class="dib ttu"><a href="/" class="link white mh3 dib f6" title="Training">Training</a></li>
+        <li class="dib ttu"><a href="/" class="link white mh3 dib f6" title="Videos">Videos</a></li>
+        <li class="dib ttu"><a href="/" class="link white mh3 dib f6" title="Consulting">Consulting</a></li>
+        <li class="dib ttu"><a href="/" class="link white mh3 dib f6" title="Blog">Blog</a></li>
       </ul>
-    </li>
-    <li class="mv2"><strong>Who:</strong> Daniele Polencic, the learnk8s team… and of course you</li>
-  </ul>
-  <p class="lh-copy"><strong>This course covers the basics of Docker</strong>. So it's like two courses in one!</p>
-  <h3 class="f3">Do you need this course?</h3>
-  <p>Good question.</p>
-  <p>Do you…</p>
-  <ul class="ml3 pl1 pr2">
-    <li>Mount persistent storage (e.g. databases) in Docker without messing the permission with userid?</li>
-    <li>Tell the difference between CMD and ENTRYPOINT in Dockerfiles? Do you always know when to use COPY or ADD? How about PUBLISH and EXPOSE?</li>
-    <li>Debug Docker containers while they are still running without SSH?</li>
-    <li>Run Docker containers that expose multiple ports and require environment variables to function correctly at all times?</li>
-    <li>Design architectures for micro services that seamlessly handle massive loads by scaling to thousands of containers</li>
-    <li>Connect your Flask/SpringBoot/Node.js applications to a MySQL/MongoDB database using K8s service discovery?</li>
-    <li>Easily expose your K8s services to the outside world using Ingresses?</li>
-    <li>Expose multiple ports from the same Service?</li>
-    <li>Inject arguments into running Pods from ConfigMaps?</li>
-    <li>Reuse a yaml files and deploy it to a brand new environment?</li>
-    <li>Explain all of the subtleties regarding whether to put your Java app, Rabbitmq, and Redis containers into single or separate pods?</li>
-    <li>Reuse your docker-compose files and deploy them to K8s without having to waste time modifying your Docker images?</li>
-    <li>Quickly and easily share files between two or more Pods with Volumes?</li>
-    <li>Seamlessly deploy your application without any downtime using rolling updates?</li>
-  </ul>
-  <p>Don't worry if you don't—<em>yet</em>. You will after you put yourself through our <em>{{ page.course_name }}</em> course.</p>
-  <h3 class="f3">What you'll learn</h3>
-  <p>All of the above, of course. Plus…</p>
-  <p>How to trigger deployments in Kubernetes not just on every commit, but also every time a Docker image is published!</p>
-  <p>How to successfully leverage Helm to template, version, and share your K8s resources with your entire team.</p>
-  <p>How to plan for failover and live a happy life where your weekend worries are a thing of the past.</p>
-  <p>How to use Minikube to run deployments locally in a realistic production-like environment.</p>
-  <h3 class="f3">Q&amp;A sessions included</h3>
-  <p>This course is highly interactive!</p>
-  <p>You have at your disposal, for questions and assistance, Daniele Polencic, the author of the course.</p>
-  <p class="pv4 tc"><a class="b f3 link dim br2 ph3 pv2 mb2 dib white bg-dark-blue" href="https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic">Register now!</a></p>
-  <p>Do you have any question? Get in touch! <a href="mailto:hello@learnk8s.io" class="link dark-blue underline">hello@learnk8s.io</a></p>
- {{ content }}
-</section>
+    </section>
+
+    <section class="hero flex-ns items-start-ns ph5-l pt5-l">
+      <div class="w-70-l">
+        <h1 class="f1 pl3 pl4-ns pt4-l f-subheadline-l">Mastering Kubernetes</h1>
+        <h2 class="f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l">The fastest way to become an expert in deploying applications at scale.</h2>
+        <a href="/" class="link dib blue bg-white br1 pa3 b f5 shadow-3 mt4 ml3 ph4 ml4-ns mb3">Get started &#8594;</a>
+      </div>
+      <div class="dn illustration db-l mt4">{% include loading_cargos.svg %}</div>
+    </div>
+  </section>
+
+  <section class="cf w-100 content ph3 ph4-ns">
+    <div class="left fl-l w-50-l">
+      <div class="dn db-ns illustration ml3 ml5-l ml6-l">{% include medium_cargo.svg %}</div>
+    </div>
+    <div class="right fl-l w-50-l center pt3-m pt5-l measure relative">
+      <h2 class="f3 navy f2-l measure-narrow">Learn Kubernetes the <span class="strike">hard</span> smart way</h2>
+      <p class="lh-copy f4-l black-70">Kubernetes is particularly well known for having a steep learning curve. It's also very early days and the technology is changing a fast pace. So how do you quickly get up to speed when everything around it is moving quickly? At learnk8s we have the best resources to master Kubernetes so that you can:</p>
+      <ul class="list black-70 pl0 pt2">
+        {% for text in layout.benefits %}
+        <li class="mv3">
+            <div class="dtc v-top w2">{% include tick.svg %}</div>
+            <div class="dtc v-top pl3">
+              <p class="mv0 f4-l lh-copy">{{ text }}</p>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <div class="dn db-l illustration absolute illustration-containers">{% include containers.svg %}</div>
+    </div>
+  </section>
+
+  <section class="interlude tr">
+    <div class="illustration dib mr4">{% include small_cargo.svg %}</div>
+  </section>
+
+  <section class="pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100">
+    <div class="content measure-wide">
+      <h2 class="f3 navy f2-l">Kubernetes in production video course</h2>
+      <p class="f4-l lh-copy black-70">Comprehensive video course in the many uses of Kubernetes. From playing to developing, testing to deploying, we'll cover it all in a way that is easy to understand. Master application deployment and scaling from the comfort of your home. There's no deadline: enjoy watching the videos at your pace as many time as you want.</p>
+      <a href="/" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Get started &#8594;</a>
+    </div>
+    <div class="w-40-ns pl5 dn db-ns">
+      <div class="illustration">{% include cat_and_dog.svg %}</div>
+    </div>
+  </section>
+
+  <section class="pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100 bg-weird-blue">
+    <div class="w-40-ns dn db-ns">
+      <div class="illustration mb2 fr mr4-m mr6-l">{% include whiteboard.svg %}</div>
+    </div>
+    <div class="content measure-wide">
+      <h2 class="f3 navy f2-l">Quickstart Kubernetes training</h2>
+      <p class="f4-l lh-copy black-70">Hands-on modular courses that will train you how to deploy Kubernetes, how to get it into production, and how to operate and manage it efficiently and effectively. The training course  draws from the real world examples making it perfect to quickly get up to speed with containers and Kubernetes.</p>
+      <a href="/" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Get started &#8594;</a>
+    </div>
+  </section>
+
+
+  <section class="pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100">
+    <div class="content measure-wide">
+      <h2 class="f3 navy f2-l">Enterprise-ready Kubernetes consulting</h2>
+      <p class="f4-l lh-copy black-70">Have you already built a Kubernetes cluster, but want the confidence it won't die when you move into prod? Our engineers have deployed production-ready Kubernetes for the hottest start-ups and the largest Enterprises. Their wide variety of experience will enable you to get the most out of Kubernetes and make sure you avoid unnecessary issues and pitfalls.</p>
+      <a href="/" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Get started &#8594;</a>
+    </div>
+    <div class="w-40-ns pl5 dn db-ns">
+      <div class="illustration">{% include team.svg %}</div>
+    </div>
+  </section>
+
+  <section class="consultation white flex-l items-end-l justify-around-l bb b--lightest-blue">
+    <div class="pt5 ph3">
+      <h3 class="normal mb1">Are you looking for something else?</h3>
+      <h2 class="f2 mt0">Book a free 15m consultation</h2>
+    </div>
+    <div class="ph3 pb4">
+      <a href="/" class="link dib blue bg-white br1 pa3 b f5 shadow-3">Book now &#8594;</a>
+    </div>
+  </section>
+
+  <footer class="footer white ph3 ph4-ns pt4 pt5-ns pb3">
+    <section class="flex-ns items-start-ns justify-around-ns pr3-m pr7-l">
+      <div class="dn db-l">
+        <a href="/" class="logo w4 db">{% include logo.svg %}</a>
+        <p>Learn Kubernetes the smart way</p>
+      </div>
+      <div class="dn db-ns">
+        <h2 class="ttu f6">Services</h2>
+        <ul class="list pl0">
+          <li class="mv2"><a href="/" class="link white">Video course</a></li>
+          <li class="mv2"><a href="/" class="link white">Training</a></li>
+          <li class="mv2"><a href="/" class="link white">Consulting</a></li>
+        </ul>
+      </div>
+      <div class="">
+        <h2 class="ttu f6">Company</h2>
+        <ul class="list pl0">
+          <li class="mv2"><a href="/" class="link white">Contact us</a></li>
+          <li class="mv2"><a href="/" class="link white">Team</a></li>
+          <li class="mv2"><a href="/" class="link white">Careers</a></li>
+          <li class="mv2"><a href="/" class="link white">Blog</a></li>
+        </ul>
+      </div>
+      <div class="pt3 pt0-ns">
+        <h2 class="ttu f6">Follow us</h2>
+        <ul class="list pl0">
+          <li class="dib"><a href="/" class="link dib w2 icon">{% include github.svg %}</a></li>
+          <li class="dib"><a href="/" class="link dib w2 icon">{% include twitter.svg %}</a></li>
+          <li class="dib"><a href="/" class="link dib w2 icon">{% include skype.svg %}</a></li>
+          <li class="dib"><a href="/" class="link dib w2 icon">{% include linkedin.svg %}</a></li>
+          <li class="dib"><a href="/" class="link dib w2 icon">{% include slack.svg %}</a></li>
+        </ul>
+      </div>
+    </section>
+    <section class="pt2 pt5-ns">
+      <p class="f7 bt b--light-blue pv2 white-70">Copyright &copy; learnk8s 20017-2018. Made with ❤︎ in London. View our Terms of Service or Privacy Policy. Send us a note to <a href="mailto:hello@learnk8s.io" class="link white underline">hello@learnk8s.io</a></p>
+    </section>
+  </footer>
+</div>
