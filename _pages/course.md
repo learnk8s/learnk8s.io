@@ -1,4 +1,4 @@
 ---
 layout: course
-permalink: "/course/"
+permalink: "/video-course/"
 ---
