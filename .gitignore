@@ -10,3 +10,4 @@ dist/
 .sass-cache/
 vendor/
 _site/
+.jekyll-metadata

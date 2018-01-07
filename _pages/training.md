@@ -1,0 +1,4 @@
+---
+layout: training
+permalink: "/training/"
+---

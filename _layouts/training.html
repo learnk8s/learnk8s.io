@@ -1,0 +1,209 @@
+---
+layout: default
+benefits:
+  - Get started with Kubernetes in your next project and you need to quickly get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices
+  - Design and architect micro services from the ground up leveraging the strength of Kubernetes
+  - Understand the why of all hype around Kubernetes and convince your boss to switch to the dark side of container orchestration
+  - Brush up your Kubernetes skills to the latest version of Kubernetes
+  - Become a Certified Kubernetes Administrator (CKA)
+faqs:
+  - title: Who is this workshop for?
+    content: Intended for Software developers, Architects and Deployment engineers seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerized applications.
+  - title: Are there any joining instructions?
+    content: You will receive the joining instructions with all the material needed to run the course after you sign up for a particular course.
+  - title: What version of k8s was this created for?
+    content: The material was authored for Minikube 0.22, Kubernetes 1.8, Helm XXX
+  - title: What if I'm not thrilled?
+    content: "We want to make sure you get real value out of this so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to <a href=\"mailto:hello@learnk8s.io\" class=\"link navy underline\">hello@learnk8s.io</a> with a copy of your receipt and I will refund you."
+  - title: Do you offer a student discount?
+    content: "Absolutely! <a href=\"https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform\" class=\"link underline navy\">Fill out this form</a> with some proof that you are a student and we'll send you a discount code. This applies to anyone in any type of schooling, including evening classes and coding bootcamps!"
+  - title: I have another question!
+    content: "Sure - send an email to <a href=\"mailto:hello@learnk8s.io\" class=\"link navy underline\">hello@learnk8s.io</a>."
+packages:
+  - heading: Intro to Kubernetes
+    subheading: 2 days course
+    styling: mh3 ml4-ns mr2-ns bg-almost-white
+    benefits:
+      - Packaging applications with Docker
+      - Kubernetes internals
+      - Local development with k8s
+      - Persisting changes
+      - Logging, monitoring and troubleshooting
+      - Helm, the k8s package manager
+      - Deploying to GCP, AKS, EKS
+  - heading: Advanced Kubernetes
+    subheading: 3 days course
+    styling: mh3 ml2-ns mr4-ns bg-weird-blue
+    benefits:
+      - Packaging applications with Docker
+      - Kubernetes internals
+      - Local development with k8s
+      - Persisting changes
+      - Logging, monitoring and troubleshooting
+      - Helm, the k8s package manager
+      - Deploying to GCP, AKS, EKS
+      - Creating custom resources
+      - Scheduling with constraints
+      - Multi cloud deployments
+      - Securing applications
+    special_benefit: "<span class=\"b\">Become an official Certified Kubernetes Administrator CKA</span><span class=\"f6 black-50 db\">(The cost of the exam is included)</span>"
+events:
+  - day: 21
+    month: mar
+    title: Intro to Kubernetes
+    course_length: 2 days
+    location: London, Skillsmatter
+    location_link: https://goo.gl/maps/QEJnGGv5aRm
+    price: £1165
+    buy_now_link: https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic
+  - day: 28
+    month: jun
+    title: Intro to Kubernetes
+    course_length: 2 days
+    location: London, Skillsmatter
+    location_link: https://goo.gl/maps/QEJnGGv5aRm
+    price: £1165
+    buy_now_link: https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic
+---
+
+<div class="intro white pt3 pt0-ns pb5 pb4-ns">
+
+    {% include navbar.html %}
+
+    <section class="hero flex-ns items-start-ns ph5-l pt5-l">
+      <div class="w-100 w-70-l">
+        <h1 class="f1 pl3 pl4-ns pt4-l f-subheadline-l">Kubernetes training</h1>
+        <h2 class="f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l">Learn how to deploy web applications with a single command.</h2>
+        <ul class="list w-60-m center-m mw6 bg-white black-70 ph3 pv1 shadow-1 mh3 mh4-ns mt4">
+          <li class="flex items-center justify-between ph2 bb b--light-gray">
+            <p class="ttu">On-site</p>
+            <div class="w2">{% include tick.svg %}</div>
+          </li>
+          <li class="flex items-center justify-between ph2 bb b--light-gray">
+            <p class="ttu v-mid mt2 mb1">Remote <span class="dib w2 v-mid">{% include slack_in_colours.svg %}</span></p>
+            <div class="w2">{% include tick.svg %}</div>
+          </li>
+          <li class="flex items-center justify-between ph2">
+            <p class="ttu">T&M / project based</p>
+            <div class="w2">{% include tick.svg %}</div>
+          </li>
+        </ul>
+        <div class="dn db-l mw6 mh3 mh4-ns tc">
+          <div class="logo w3 dib">{% include down_arrow_white.svg %}</div>
+        </div>
+      </div>
+      <div class="dn illustration db-l mt4">{% include training.svg %}</div>
+    </section>
+  </div>
+
+<section class="content ph3 ph4-ns flex-l items-end-l justify-center-l pt5-ns">
+  <div class="left dn db-l w-30-l">
+    <div class="illustration fr">{% include more_cargo_loading.svg %}</div>
+  </div>
+  <div class="right measure center pt3">
+    <h2 class="f3 navy f2-l measure-narrow">Hands-on courses</h2>
+    <p class="lh-copy f4-l black-70">These courses are great if you wish to:</p>
+    <ul class="list black-70 pl0 pt2">
+      {% for text in layout.benefits %}
+      <li class="mv3">
+          <div class="dtc v-top w2">{% include tick.svg %}</div>
+          <div class="dtc v-top pl3">
+            <p class="mv0 f4-l lh-copy">{{ text }}</p>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="interlude tr">
+  <div class="illustration dib mr4">{% include small_cargo.svg %}</div>
+</section>
+
+<section class="cf pt5">
+  {% for package in layout.packages %}
+  <div class="fl-ns w-50-ns">
+    <div class="mv3 {{package.styling}}">
+      <div class="header ph3 pt1 bb b--light-gray">
+          <h2 class="navy tc mb1">{{package.heading}}</h2>
+          <h3 class="normal black-70 tc mt0">{{package.subheading}}</h3>
+      </div>
+      <div class="content ph4 pb4">
+        <ul class="list pl0 black-70">
+            <p class="lh-copy pt3">You will learn:</p>
+            {% for text in package.benefits %}
+            <li class="mv3">
+              <div class="dtc v-top w2">{% include tick.svg %}</div>
+              <div class="dtc v-top pl3">
+                <p class="mv0 f4-l lh-copy">{{ text }}</p>
+              </div>
+            </li>
+            {% endfor %}
+            {% if package.special_benefit %}
+            <li class="mv3 pt3">
+              <div class="dtc v-top w2">{% include plus.svg %}</div>
+              <div class="dtc v-top pl3">
+                <p class="mv0 f4-l lh-copy">{{ package.special_benefit }}</p>
+              </div>
+            </li>
+            {% endif %}
+          </ul>
+          <div class="tc">
+            <a href="#start" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4">Buy now &#8594;</a>
+          </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+
+<section id="start" class="w-90 center pt3 pb3 pb5-l">
+  <h2 class="navy f4 f3-l">Upcoming events</h2>
+  <ul class="list pl0 pt3">
+    {% for event in layout.events %}
+    <li class="h3-l mv3 bg-weird-blue flex justify-between items-start-l flex-wrap pb3 pb0-l">
+      <div class="date bg-learnk8s-blue w3-l h3 white tc b w-100">
+        <p class="f2 ma0">{{ event.day }}</p>
+        <p class="ttu ma0">{{ event.month }}</p>
+      </div>
+      <div class="description w-90 center w-30-l pv2">
+        <h3 class="ma0 mv1">{{ event.title }}</h3>
+        <h4 class="normal black-70 mv1">{{ event.course_length }}</h4>
+      </div>
+      <div class="location w-90 center w-30-l pv2">
+        <p class="ma0 mv1 ttu b black-20 f6 v-mid">Location</p>
+        {% unless event.location == 'Online' %}
+        <a href="{{ event.location_link }}" class="link db navy underline">{{ event.location }}</a>
+        {% else %}
+        <a href="{{ event.location_link }}" class="link db navy">{{ event.location }} <span class="w1 v-mid dib">{% include slack_in_colours.svg %}</span></a>
+        {% endunless %}
+      </div>
+      <div class="price pv2 w-90 center w-10-l">
+        <p class="ma0 mv1 ttu b black-20 f6">Price</p>
+        <p class="ma0 f4 black-70">{{ event.price }}</p>
+      </div>
+      <div class="buy_now tc w-100 w-auto-l">
+          <a href="{{ event.buy_now_link }}" class="link dib white bg-blue br1 pa3 b f5 shadow-3 ph4 mv2 mr2">Buy now &#8594;</a>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% include train_your_team.html %}
+
+<section class="ph3 measure-wide pv4 center">
+  <h3 class="f3 f2-l navy pb3">Frequently asked questions</h3>
+  <ul class="list pl0">
+    {% for faq in layout.faqs %}
+    <li>
+      <h4 class="navy f4 f3-l mb2">{{ faq.title }}</h4>
+      <p class="lh-copy black-70">{{ faq.content }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% include consultation.html %}
+
+{% include footer.html %}

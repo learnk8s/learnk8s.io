@@ -12,3 +12,4 @@ sass:
   load_paths:
     - node_modules
   style: compressed
+include: ["_pages"]

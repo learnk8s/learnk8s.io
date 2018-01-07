@@ -7,5 +7,8 @@
   "license": "MIT",
   "dependencies": {
     "tachyons-sass": "^4.9.0"
+  },
+  "devDependencies": {
+    "svgo": "^1.0.3"
   }
 }
