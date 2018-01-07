@@ -44,6 +44,81 @@ faqs:
     content: "Absolutely! <a href=\"https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform\" class=\"link underline navy\">Fill out this form</a> with some proof that you are a student and we'll send you a discount code. This applies to anyone in any type of schooling, including evening classes and coding bootcamps!"
   - title: I have another question!
     content: "Sure - send an email to <a href=\"mailto:hello@learnk8s.io\" class=\"link navy underline\">hello@learnk8s.io</a>."
+video_sections:
+  - name: Packaging applications in containers
+    topics:
+      - What is Docker?
+      - Installing Docker
+      - Running containers
+      - Building containers
+      - Sharing files and arguments
+      - Debugging
+  - name: Getting started with k8s
+    topics:
+      - Installing kubectl & Minikube
+      - Launching a cluster
+      - Packaging "Hello World" in a container
+      - Healthchecks
+      - Writing a deployment
+      - Writing a service
+      - Writing an ingress
+      - Scaling
+      - Selectors
+      - Deployment history & rollbacks
+  - name: Kubernetes, the hard truth
+    topics:
+      - Why Kubernetes?
+      - History & background
+      - Nodes
+      - Scheduler
+      - Pod
+      - Replica sets/deployments
+      - Services
+  - name: Kubernetes architecture
+    topics:
+      - ETCD
+      - API server
+      - Kubelet
+      - kubeproxy
+      - Service types
+      - DNS and service discovery
+      - Endpoints
+      - Ingress in detail
+  - name: Persistence and storage
+    topics:
+      - Deploying a database
+      - Managing configuration
+      - Managing secrets
+      - Persistent volumes
+      - Persistent volume claims
+      - StorageClass
+  - name: Logging, monitoring, troubleshooting
+    topics:
+      - Debugging deployments
+      - Debugging services
+      - Debugging the ingress
+      - Daemon sets
+      - Heapster
+      - Horizontal Pod Autoscaling
+      - Logging with Fluentd
+  - name: Helm
+    topics:
+      - What is Helm?
+      - Creating a chart
+      - Managing charts
+      - Templating resources
+      - Paramestrised deployments
+      - Debugging
+      - Helpers
+      - Updating a chart
+      - Rollbacks
+      - Resources and dependencies
+  - name: Deploying to GCP
+    topics:
+      - Installing gcloud
+      - Creating a project
+      - Creating a cluster
+      - Deploying an application
 ---
 
 <div class="intro course white pt3 pt0-ns pb5 pb4-ns">
@@ -89,14 +164,14 @@ faqs:
   <div class="illustration dib mr4">{% include small_cargo.svg %}</div>
 </section>
 
-{% for i in (1..2) %}
+{% for section in layout.video_sections %}
 <section class="center w-90-l ph3">
-  <h2 class="f4 navy f3-l bb b--light-gray pb2 ph3">{{ i }}. Packaging applications in containers</h2>
+  <h2 class="f4 navy f3-l bb b--light-gray pb2 ph3">{{ forloop.index }}. {{ section.name }}</h2>
   <div class="flex flex-wrap justify-center">
-    {% for j in (1..5) %}
+    {% for topic in section.topics %}
     <div class="w5 mh3">
       <img src="/assets/video_lesson.png" alt=""/>
-      <h3 class="f5 navy">Installing Docker</h3>
+      <h3 class="f5 navy">{{ topic }}</h3>
     </div>
     {% endfor %}
   </div>
