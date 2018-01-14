@@ -1,0 +1,4 @@
+---
+layout: archive
+permalink: "/archive/"
+---
