@@ -13,7 +13,7 @@ But how do you keep the size under control when every `RUN` statement creates a 
 
 You may have noticed that most of the `Dockerfile`s in the wild have some weird tricks like this:
 
-```text
+```dockerfile
 FROM ubuntu
 
 RUN apt-get update && apt-get install vim
@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install vim
 
 Why the `&&`? Why not running two `RUN` statements like this?
 
-```text
+```dockerfile
 FROM ubuntu
 
 RUN apt-get update
@@ -34,9 +34,11 @@ Since docker 1.10 the `COPY`, `ADD` and `RUN` statements add a new layer to your
 
 Layers store the difference between the previous and the current version of the image. And like git commits they're very useful if you share them with other repositories or images.
 
-In fact when you request an image from a registry you donwnload only the layers that you don't own. This way is much more efficient to share images.
+In fact when you request an image from a registry you donwnload only the layers that you don't own already. This way is much more efficient to share images.
 
-But layers aren't free. They use space and the more layer you have the bigger the final image is. This is true for Git repositories too, if you think about it. The repository becomes bigger because it has to store all the changes between commits.
+But layers aren't free.
+
+**Layers use space** and the more layer you have the bigger the final image is. This is true for Git repositories too, if you think about it. The repository becomes bigger because it has to store all the changes between commits.
 
 In the past, it was a good practice to combine several `RUN` statements on a single line. Like in the first example.
 
@@ -48,7 +50,9 @@ When a Git repository becomes bigger, you can choose to squash the history into 
 
 It turns out you can do something similar in Docker too with a multi stage build.
 
-In this example, you will build a Node.js container. Let's start with an `index.js`:
+In this example, you will build a Node.js container.
+
+Let's start with an `index.js`:
 
 ```js
 const express = require('express')
@@ -79,7 +83,7 @@ and `package.json`:
 
 You can package this application with the following `Dockerfile`:
 
-```text
+```dockerfile
 FROM node:8
 
 EXPOSE 3000
@@ -137,7 +141,7 @@ Let's try the multi stage Docker build.
 
 You will use the same `Dockerfile` above, but twice:
 
-```text
+```dockerfile
 FROM node:8 as build
 
 WORKDIR /app
@@ -163,6 +167,7 @@ $ docker build -t node-multi-stage2 .
 And now inspect the history:
 
 ```bash
+$ docker history node-multi-stage2
 81cdd113ed21        7 seconds ago       /bin/sh -c #(nop)  CMD ["index.js"]             0B
 111777be4de0        7 seconds ago       /bin/sh -c #(nop)  EXPOSE 3000                  0B
 f753ecac370f        2 minutes ago       /bin/sh -c #(nop) COPY dir:854d4e5ce19a993ec…   1.59MB
@@ -193,7 +198,9 @@ Yes, the three layers image is slightly smaller.
 
 Not bad if you consider that this is just a simple _"Hello World!"_ application.
 
-But the image is still big! Is there anything you can do to make it even smaller?
+But the image is still big!
+
+Is there anything you can do to make it even smaller?
 
 ## 2. Remove all the unecessary cruft from the container with distroless
 
@@ -213,7 +220,7 @@ This is exaclty what you need!
 
 You can tweak the `Dockerfile` to leverage the new base image like this:
 
-```text
+```dockerfile
 FROM node:8 as build
 
 WORKDIR /app
@@ -249,7 +256,9 @@ $ docker images | grep node-distroless
 node-distroless                 latest              7b4db3b7f1e5        3 minutes ago       76.7MB
 ```
 
-**That's only 76.7MB!** More than 600MB down from your previous image!
+**That's only 76.7MB!**
+
+More than 600MB down from your previous image!
 
 This is extremely good news, but there's something you should pay attention to when it comes to distroless.
 
@@ -291,7 +300,7 @@ You shouldn't take their words for granted. Let's check if that's the case.
 
 Let's tweak the `Dockerfile` to use `node:8-alpine`:
 
-```text
+```dockerfile
 FROM node:8 as build
 
 WORKDIR /app
@@ -319,7 +328,9 @@ $ docker images | grep node-alpine
 node-alpine                     latest              aa1f85f8e724        38 seconds ago      69.7MB
 ```
 
-**69.7MB!** Even smaller than the distroless image!
+**69.7MB!**
+
+Even smaller than the distroless image!
 
 Can you attach to a running container, unlike distroless? It's time to find out.
 
@@ -348,7 +359,9 @@ Yes! You can still attach to a running container and you have an overall smaller
 
 It sounds very good, but there's a catch - I know annyoing isn't it?
 
-Alpine based images are based in muslc - an alterntative standard library for C. Most linux Distribution such as Ubuntu, Debian and CentOS are based on glibc that is most commonly used. The two libraries are supposed to implement the same interface to the kernel.
+Alpine based images are based in muslc - an alterntative standard library for C.
+
+Most linux Distribution such as Ubuntu, Debian and CentOS are based on glibc that is most commonly used. The two libraries are supposed to implement the same interface to the kernel.
 
 They also have different goals:
 
@@ -367,11 +380,17 @@ As an example, the PhantomJS prebuilt package doesn't work on Alpine.
 
 Do you use Alpine, distroless or vanilla images?
 
-If you're running in production and you're concerned about security, perhaps distroless images are more appropriate. Even if an attacker is able to exploit a vulnerability in your app, they won't be able to spawn a shell in the container. This is simply because there's nothing more than just the Node.js binary in that container!
+**If you're running in production and you're concerned about security**, perhaps distroless images are more appropriate.
 
-If you're concerned about size at all costs then you should switch to Alpine based images. Those are generally very small, but at the price of compatibility. Alpine uses a slightly different standard C library - muslc. You may experience some compatibility issues from time to time. [1](https://github.com/grpc/grpc/issues/8528) [2](https://github.com/grpc/grpc/issues/6126)
+Even if an attacker is able to exploit a vulnerability in your app, they won't be able to spawn a shell in the container. This is simply because there's nothing more than just the Node.js binary in that container!
 
-The vanilla base image is perfect for testing and development. It's big in size, but provides the same experiences as if you were to have your workstation with Ubuntu installed. Also, you have access to all the binaries available in the operating system.
+**If you're concerned about size at all costs then you should switch to Alpine based images**.
+
+Those are generally very small, but at the price of compatibility. Alpine uses a slightly different standard C library - muslc. You may experience some compatibility issues from time to time. More examples of that [here](https://github.com/grpc/grpc/issues/8528) and [here](https://github.com/grpc/grpc/issues/6126).
+
+**The vanilla base image is perfect for testing and development**.
+
+It's big in size, but provides the same experiences as if you were to have your workstation with Ubuntu installed. Also, you have access to all the binaries available in the operating system.
 
 Recap of image sizes:
 

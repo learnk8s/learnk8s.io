@@ -170,7 +170,7 @@
   @extend .lh-copy, .black-70, .f4, .measure-wide, .center;
 
   h1, h2, h3, h4, h5, h6 {
-    @extend .navy, .lh-title;
+    @extend .navy, .lh-title, .pt4, .pb1;
   }
 
   p, ul, ol {
@@ -181,7 +181,7 @@
     @extend .navy, .link, .underline;
   }
 
-  .highlight {
+  pre.highlight {
     @extend .br2, .pa3, .f5;
     overflow: scroll;
   }
