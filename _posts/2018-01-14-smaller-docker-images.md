@@ -1,6 +1,7 @@
 ---
 layout: post
-title: "3 simple tricks for smaller Docker images"
+slug: 3 simple tricks for smaller docker images
+title: 3 simple tricks for smaller Docker images
 date: 2018-01-14 11:26:00
 categories: docker distroless alpine
 ---
