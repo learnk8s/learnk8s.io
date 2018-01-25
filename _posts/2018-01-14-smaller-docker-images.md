@@ -45,11 +45,11 @@ In the past, it was a good practice to combine several `RUN` statements on a sin
 
 Not anymore.
 
-## 1. Squash multiple layers into one with multi stage Docker builds
+## 1. Squash multiple layers into one with multi-stage Docker builds
 
 When a Git repository becomes bigger, you can choose to squash the history into a single commit and forget about the past.
 
-It turns out you can do something similar in Docker too with a multi stage build.
+It turns out you can do something similar in Docker too with a multi-stage build.
 
 In this example, you will build a Node.js container.
 
@@ -138,7 +138,7 @@ b87c2ad8344d        10 days ago         /bin/sh -c #(nop)  CMD ["node"]         
 
 Instead the resulting image has six new layers: one for each statement in your `Dockerfile`.
 
-Let's try the multi stage Docker build.
+Let's try the multi-stage Docker build.
 
 You will use the same `Dockerfile` above, but twice:
 
@@ -295,7 +295,7 @@ Alpine Linux is:
 
 > a security-oriented, lightweight Linux distribution based on musl libc and busybox
 
-In other words, a linux distribution that is smaller in size.
+In other words, a linux distribution that is smaller in size and more secure.
 
 You shouldn't take their words for granted. Let's check if that's the case.
 
@@ -358,7 +358,7 @@ $ docker exec -ti 9d8e97e307d705e7eb7cb714f16eccd19afabd5eea9db09917eeb8a4eeb367
 
 Yes! You can still attach to a running container and you have an overall smaller image.
 
-It sounds very good, but there's a catch - I know annyoing isn't it?
+It sounds very good, but there's a catch - I know, annoying isn't it?
 
 Alpine based images are based in muslc - an alterntative standard library for C.
 
