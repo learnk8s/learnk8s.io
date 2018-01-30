@@ -89,11 +89,10 @@ FROM node:8
 
 EXPOSE 3000
 WORKDIR /app
-COPY package.json .
-RUN yarn install
-COPY index.js .
+COPY package.json index.js .
+RUN npm install
 
-CMD ["yarn", "start"]
+CMD ["npm", "start"]
 ```
 
 You can build the image with:
@@ -146,9 +145,8 @@ You will use the same `Dockerfile` above, but twice:
 FROM node:8 as build
 
 WORKDIR /app
-COPY package.json .
-RUN yarn install
-COPY index.js .
+COPY package.json index.js .
+RUN npm install
 
 FROM node:8
 
@@ -205,7 +203,7 @@ Is there anything you can do to make it even smaller?
 
 ## 2. Remove all the unecessary cruft from the container with distroless
 
-The current image ships Node.js as well as `yarn`, `npm`, `bash` and a lot of other executables. It's also based on Ubuntu. So you have a full fledge operating system with all its little binaries and utilities.
+The current image ships Node.js as well as `yarn`, `npm`, `bash` and a lot of other binaries. It's also based on Ubuntu. So you have a full fledge operating system with all its little binaries and utilities.
 
 You don't need any of those when you run your container. The only dependency you need is Node.js.
 
@@ -225,9 +223,8 @@ You can tweak the `Dockerfile` to leverage the new base image like this:
 FROM node:8 as build
 
 WORKDIR /app
-COPY package.json .
-RUN yarn install
-COPY index.js .
+COPY package.json index.js .
+RUN npm install
 
 FROM gcr.io/distroless/nodejs
 
@@ -291,9 +288,9 @@ But what if you cared about debugging and smaller sizes?
 
 You could replace the distroless base image with an Alpine based image.
 
-Alpine Linux is:
+[Alpine Linux](https://alpinelinux.org/) is:
 
-> a security-oriented, lightweight Linux distribution based on musl libc and busybox
+> a security-oriented, lightweight Linux distribution based on [musl libc](https://www.musl-libc.org/) and [busybox](https://www.busybox.net/)
 
 In other words, a linux distribution that is smaller in size and more secure.
 
@@ -305,9 +302,8 @@ Let's tweak the `Dockerfile` to use `node:8-alpine`:
 FROM node:8 as build
 
 WORKDIR /app
-COPY package.json .
-RUN yarn install
-COPY index.js .
+COPY package.json index.js .
+RUN npm install
 
 FROM node:8-alpine
 
