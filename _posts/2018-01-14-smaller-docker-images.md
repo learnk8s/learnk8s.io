@@ -89,7 +89,7 @@ FROM node:8
 
 EXPOSE 3000
 WORKDIR /app
-COPY package.json index.js .
+COPY package.json index.js ./
 RUN npm install
 
 CMD ["npm", "start"]
@@ -98,13 +98,18 @@ CMD ["npm", "start"]
 You can build the image with:
 
 ```bash
-$ docker build -t node-multi-stage .
+$ docker build -t node-vanilla .
 ```
 
 And you can test that it works correctly with:
 
 ```bash
-$ docker run -p 3000:3000 -d node-multi-stage
+$ docker run -p 3000:3000 -ti --rm --init node-vanilla
+
+> hello-world@1.0.0 start /app
+> node index.js
+
+Example app listening on port 3000!
 ```
 
 You should be able to visit [http://localhost:3000](http://localhost:3000) and be greeted by _"Hello World!"_.
@@ -112,7 +117,7 @@ You should be able to visit [http://localhost:3000](http://localhost:3000) and b
 There're two `COPY` and one `RUN` statements in the `Dockerfile`. So you should expect to see at least 3 layers more than the base image:
 
 ```bash
-$ docker history node-multi-stage
+$ docker history node-vanilla
 IMAGE               CREATED             CREATED BY                                      SIZE
 813b579d5aa5        9 seconds ago       /bin/sh -c #(nop)  CMD ["yarn" "start"]         0B
 8bf622b3e30b        9 seconds ago       /bin/sh -c #(nop) COPY file:c370ea0f74a3d7d7…   193B
@@ -145,7 +150,7 @@ You will use the same `Dockerfile` above, but twice:
 FROM node:8 as build
 
 WORKDIR /app
-COPY package.json index.js .
+COPY package.json index.js ./
 RUN npm install
 
 FROM node:8
@@ -160,13 +165,13 @@ The first part of the `Dockerfile` creates the same six layers. The second part 
 Go ahead and verify yourself. First build the container:
 
 ```bash
-$ docker build -t node-multi-stage2 .
+$ docker build -t node-multi-stage .
 ```
 
 And now inspect the history:
 
 ```bash
-$ docker history node-multi-stage2
+$ docker history node-multi-stage
 81cdd113ed21        7 seconds ago       /bin/sh -c #(nop)  CMD ["index.js"]             0B
 111777be4de0        7 seconds ago       /bin/sh -c #(nop)  EXPOSE 3000                  0B
 f753ecac370f        2 minutes ago       /bin/sh -c #(nop) COPY dir:854d4e5ce19a993ec…   1.59MB
@@ -188,7 +193,7 @@ b87c2ad8344d        10 days ago         /bin/sh -c #(nop)  CMD ["node"]         
 Hurrah! Has the file size changed at all?
 
 ```bash
-$ docker images | grep node-multi-stage2
+$ docker images | grep node-multi-stage
 node-multi-stage2               latest              abbe2e6023e9        About a minute ago   678MB
 node-multi-stage                latest              813b579d5aa5        11 minutes ago       681MB
 ```
@@ -223,7 +228,7 @@ You can tweak the `Dockerfile` to leverage the new base image like this:
 FROM node:8 as build
 
 WORKDIR /app
-COPY package.json index.js .
+COPY package.json index.js ./
 RUN npm install
 
 FROM gcr.io/distroless/nodejs
@@ -242,7 +247,7 @@ $ docker build -t node-distroless .
 The application should run as normal. To verify that is still the case, you could run the container like this:
 
 ```bash
-$ docker run -p 3000:3000 node-distroless
+$ docker run -p 3000:3000 -ti --rm --init node-distroless
 ```
 
 And visit the page at [http://localhost:3000](http://localhost:3000).
@@ -302,14 +307,14 @@ Let's tweak the `Dockerfile` to use `node:8-alpine`:
 FROM node:8 as build
 
 WORKDIR /app
-COPY package.json index.js .
+COPY package.json index.js ./
 RUN npm install
 
 FROM node:8-alpine
 
 COPY --from=build /app /
 EXPOSE 3000
-CMD ["node", "index.js"]
+CMD ["npm", "start"]
 ```
 
 You can build the image with:
@@ -334,8 +339,8 @@ Can you attach to a running container, unlike distroless? It's time to find out.
 Let's start the container first:
 
 ```bash
-$ docker run -p 3000:3000 -d node-alpine
-9d8e97e307d705e7eb7cb714f16eccd19afabd5eea9db09917eeb8a4eeb36767
+$ docker run -p 3000:3000 -ti --rm --init node-alpine
+Example app listening on port 3000!
 ```
 
 You can attach to the running container with:
