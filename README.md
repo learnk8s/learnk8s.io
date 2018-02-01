@@ -2,16 +2,23 @@
 
 ## Running locally
 
-Install dependencies with:
+After you cloned the repository, cd in the project directory and run:
 
 ```bash
-$ yarn install
+$ docker run -ti --rm -v ${PWD}:/app -p 4000:4000 ruby bash
 ```
 
-Run the code in watch mode with:
+You can install the dependencies with:
 
 ```bash
-$ yarn dev
+$ cd /app
+$ bundle install
+```
+
+You can run an incremental build with:
+
+```bash
+$ bundle exec jekyll serve -H 0.0.0.0 --incremental --drafts
 ```
 
 ## Deployment
@@ -19,5 +26,5 @@ $ yarn dev
 The code is deployed on build with
 
 ```bash
-$ yarn run build
+$ jekyll build
 ```
