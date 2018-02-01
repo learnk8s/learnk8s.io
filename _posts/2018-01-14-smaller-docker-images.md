@@ -384,7 +384,9 @@ Do you use Alpine, distroless or vanilla images?
 
 **If you're running in production and you're concerned about security**, perhaps distroless images are more appropriate.
 
-Even if an attacker is able to exploit a vulnerability in your app, they won't be able to spawn a shell in the container. This is simply because there's nothing more than just the Node.js binary in that container!
+Every binary that is added to a Docker image adds a certain amount of risk to the overall application. You can reduce the overall risk by having only one binary installed in the container. As an example, if an attacker was able to exploit a vulnerability in your app running on Distroless, they won't be able to spawn a shell in the container because there isn't one!
+
+> Please note that [minimising attack surface area is recommended by OWASP](https://www.owasp.org/index.php/Minimize_attack_surface_area).
 
 **If you're concerned about size at all costs then you should switch to Alpine based images**.
 
