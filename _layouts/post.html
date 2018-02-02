@@ -1,0 +1,44 @@
+---
+layout: default
+---
+<div class="intro none white pv2 pv0-ns mb4 mb5-ns">
+
+  {% include navbar.html %}
+
+</div>
+
+
+<article class="ph3 pt0 pb4 article">
+  <div class="tc mb4">
+    <img src="/assets/daniele_polencic.jpg" alt="" class="br-100 w3 dib">
+    <span class="black-50 f6 db">Daniele Polencic</span>
+  </div>
+  <h1 class="navy tc f2 f1-ns">{{ page.title }}</h1>
+  <hr class="w3 center b--navy mv4 mv5-ns">
+  {{ content }}
+</article>
+
+<section class="consultation white bb b--lightest-blue flex-l items-start-l justify-center-l pt5 pb4">
+  <div class="measure-wide-m center-m w-40-l ph3 mw6">
+    <h2 class="f2 mb2 mt3">Join the mailing list</h2>
+    <p class="normal mb1 mt0 lh-copy f4">Sign up for occasional updates on new courses, projects, and blog posts.</p>
+    <p class="normal measure lh-copy f4">No spam, ever.</p>
+  </div>
+  <div class="measure-wide-m center-m w-40-l ph3 mw6">
+    <form netlify>
+      <ol class="list pl0 pb1">
+        <li class="mv3">
+          <label for="name" class="mb2 db b f7 ttu">Name</label>
+          <input class="input-reset pa2 ba b--black-20 db w-100 br2" type="text" id="name" placeholder="Your name" />
+        </li>
+        <li class="mv3">
+          <label for="email" class="mb2 db b f7 ttu">Email</label>
+          <input class="input-reset pa2 ba b--black-20 db w-100 br2" type="text" id="email" placeholder="Your email" />
+        </li>
+      </ol>
+      <button type="submit" class="dib blue bg-white br1 pa3 b f5 shadow-3 ph4">Join over 1,500 others</button>
+    </form>
+  </div>
+</section>
+
+{% include footer.html %}

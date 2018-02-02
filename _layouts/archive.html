@@ -1,0 +1,31 @@
+---
+layout: default
+---
+
+<div class="intro contact-us white pt3 pt0-ns pb2 pb4-ns">
+
+  {% include navbar.html %}
+
+  <section class="hero ph5-l">
+    <div class="w-100">
+      <h1 class="f1 pl3 pl4-ns f-subheadline-l">Archive</h1>
+    </div>
+  </section>
+</div>
+
+
+<section class="ph3 measure-wide pv4 center">
+  <ul class="list pl0">
+    {% for post in site.posts %}
+      <li class="pv3">
+        <h2 class="mb0"><a href="{{ post.url }}" class="link navy">{{ post.title }}</a></h2>
+        <p class="black-40 mt1">{{ post.date | date: '%B %d, %Y' }}</p>
+        <p class="lh-copy black-70">{{ post.excerpt | remove: '<p>' | remove: '</p>' }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% include consultation.html %}
+
+{% include footer.html %}
