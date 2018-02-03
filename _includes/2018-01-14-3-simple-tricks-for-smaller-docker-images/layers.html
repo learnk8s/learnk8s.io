@@ -665,6 +665,8 @@
 			easing: 'easeOutExpo',
 		})
 	document.getElementById('play-layers').onclick = basicTimeline.restart;
-	onScrollIntoView(document.getElementById('layers'), basicTimeline.play);
+	onScrollIntoView(document.getElementById('layers'), function() {
+		setTimeout(basicTimeline.play, 1000)
+	});
 })();
 </script>

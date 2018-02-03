@@ -746,6 +746,8 @@
 		easing: 'easeOutExpo',
 	})
 	document.getElementById('play-multistage').onclick = basicTimeline.restart;
-	onScrollIntoView(document.getElementById('multistage'), basicTimeline.play);
+	onScrollIntoView(document.getElementById('multistage'), function() {
+		setTimeout(basicTimeline.play, 1000)
+	});
 })();
 </script>
