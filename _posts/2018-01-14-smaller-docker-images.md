@@ -31,6 +31,8 @@ RUN apt-get install vim
 
 Since docker 1.10 the `COPY`, `ADD` and `RUN` statements add a new layer to your image. The previous example created two layers instead of just one.
 
+{% include partial name="hello.html" %}
+
 **Layers are like git commits.**
 
 Layers store the difference between the previous and the current version of the image. And like git commits they're very useful if you share them with other repositories or images.
