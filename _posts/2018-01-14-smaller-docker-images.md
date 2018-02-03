@@ -31,7 +31,7 @@ RUN apt-get install vim
 
 Since docker 1.10 the `COPY`, `ADD` and `RUN` statements add a new layer to your image. The previous example created two layers instead of just one.
 
-{% include partial name="hello.html" %}
+{% include partial name="layers.html" %}
 
 **Layers are like git commits.**
 
@@ -121,28 +121,27 @@ There're two `COPY` and one `RUN` statements in the `Dockerfile`. So you should 
 ```bash
 $ docker history node-vanilla
 IMAGE               CREATED             CREATED BY                                      SIZE
-813b579d5aa5        9 seconds ago       /bin/sh -c #(nop)  CMD ["yarn" "start"]         0B
-8bf622b3e30b        9 seconds ago       /bin/sh -c #(nop) COPY file:c370ea0f74a3d7d7…   193B
-79f29e6f7704        9 seconds ago       /bin/sh -c yarn install                         4.11MB
-180851af09a8        13 seconds ago      /bin/sh -c #(nop) COPY file:294c96bce3a399fe…   171B
-500a9fbef90e        13 seconds ago      /bin/sh -c #(nop) WORKDIR /app                  0B
-78b28027dfbf        13 seconds ago      /bin/sh -c #(nop)  EXPOSE 3000                  0B
-b87c2ad8344d        10 days ago         /bin/sh -c #(nop)  CMD ["node"]                 0B
-<missing>           10 days ago         /bin/sh -c set -ex   && for key in     6A010…   4.17MB
-<missing>           10 days ago         /bin/sh -c #(nop)  ENV YARN_VERSION=1.3.2       0B
-<missing>           10 days ago         /bin/sh -c ARCH= && dpkgArch="$(dpkg --print…   56.9MB
-<missing>           10 days ago         /bin/sh -c #(nop)  ENV NODE_VERSION=8.9.4       0B
-<missing>           4 weeks ago         /bin/sh -c set -ex   && for key in     94AE3…   129kB
-<missing>           4 weeks ago         /bin/sh -c groupadd --gid 1000 node   && use…   335kB
-<missing>           4 weeks ago         /bin/sh -c set -ex;  apt-get update;  apt-ge…   324MB
-<missing>           4 weeks ago         /bin/sh -c apt-get update && apt-get install…   123MB
-<missing>           4 weeks ago         /bin/sh -c set -ex;  if ! command -v gpg > /…   0B
-<missing>           4 weeks ago         /bin/sh -c apt-get update && apt-get install…   44.6MB
-<missing>           4 weeks ago         /bin/sh -c #(nop)  CMD ["bash"]                 0B
-<missing>           4 weeks ago         /bin/sh -c #(nop) ADD file:1dd78a123212328bd…   123MB
+075d229d3f48        3 days ago          /bin/sh -c #(nop)  CMD ["npm" "start"]          0B
+bc8c3cc813ae        3 days ago          /bin/sh -c npm install                          2.91MB
+bac31afb6f42        3 days ago          /bin/sh -c #(nop) COPY multi:3071ddd474429e1…   364B
+500a9fbef90e        2 weeks ago         /bin/sh -c #(nop) WORKDIR /app                  0B
+78b28027dfbf        2 weeks ago         /bin/sh -c #(nop)  EXPOSE 3000                  0B
+b87c2ad8344d        4 weeks ago         /bin/sh -c #(nop)  CMD ["node"]                 0B
+<missing>           4 weeks ago         /bin/sh -c set -ex   && for key in     6A010…   4.17MB
+<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV YARN_VERSION=1.3.2       0B
+<missing>           4 weeks ago         /bin/sh -c ARCH= && dpkgArch="$(dpkg --print…   56.9MB
+<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV NODE_VERSION=8.9.4       0B
+<missing>           7 weeks ago         /bin/sh -c set -ex   && for key in     94AE3…   129kB
+<missing>           7 weeks ago         /bin/sh -c groupadd --gid 1000 node   && use…   335kB
+<missing>           7 weeks ago         /bin/sh -c set -ex;  apt-get update;  apt-ge…   324MB
+<missing>           7 weeks ago         /bin/sh -c apt-get update && apt-get install…   123MB
+<missing>           7 weeks ago         /bin/sh -c set -ex;  if ! command -v gpg > /…   0B
+<missing>           7 weeks ago         /bin/sh -c apt-get update && apt-get install…   44.6MB
+<missing>           7 weeks ago         /bin/sh -c #(nop)  CMD ["bash"]                 0B
+<missing>           7 weeks ago         /bin/sh -c #(nop) ADD file:1dd78a123212328bd…   123MB
 ```
 
-Instead the resulting image has six new layers: one for each statement in your `Dockerfile`.
+Instead the resulting image has five new layers: one for each statement in your `Dockerfile`.
 
 Let's try the multi-stage Docker build.
 
@@ -162,7 +161,9 @@ EXPOSE 3000
 CMD ["index.js"]
 ```
 
-The first part of the `Dockerfile` creates the same six layers. The second part is simpler and is producing just three layers.
+The first part of the `Dockerfile` creates three layers. The layers are then merged and copy across to second and final stage. Two more layers are added on top for a total of 3 layers.
+
+{% include partial name="multistage.html" %}
 
 Go ahead and verify yourself. First build the container:
 
@@ -174,30 +175,31 @@ And now inspect the history:
 
 ```bash
 $ docker history node-multi-stage
-81cdd113ed21        7 seconds ago       /bin/sh -c #(nop)  CMD ["index.js"]             0B
-111777be4de0        7 seconds ago       /bin/sh -c #(nop)  EXPOSE 3000                  0B
-f753ecac370f        2 minutes ago       /bin/sh -c #(nop) COPY dir:854d4e5ce19a993ec…   1.59MB
-b87c2ad8344d        10 days ago         /bin/sh -c #(nop)  CMD ["node"]                 0B
-<missing>           10 days ago         /bin/sh -c set -ex   && for key in     6A010…   4.17MB
-<missing>           10 days ago         /bin/sh -c #(nop)  ENV YARN_VERSION=1.3.2       0B
-<missing>           10 days ago         /bin/sh -c ARCH= && dpkgArch="$(dpkg --print…   56.9MB
-<missing>           10 days ago         /bin/sh -c #(nop)  ENV NODE_VERSION=8.9.4       0B
-<missing>           4 weeks ago         /bin/sh -c set -ex   && for key in     94AE3…   129kB
-<missing>           4 weeks ago         /bin/sh -c groupadd --gid 1000 node   && use…   335kB
-<missing>           4 weeks ago         /bin/sh -c set -ex;  apt-get update;  apt-ge…   324MB
-<missing>           4 weeks ago         /bin/sh -c apt-get update && apt-get install…   123MB
-<missing>           4 weeks ago         /bin/sh -c set -ex;  if ! command -v gpg > /…   0B
-<missing>           4 weeks ago         /bin/sh -c apt-get update && apt-get install…   44.6MB
-<missing>           4 weeks ago         /bin/sh -c #(nop)  CMD ["bash"]                 0B
-<missing>           4 weeks ago         /bin/sh -c #(nop) ADD file:1dd78a123212328bd…   123MB
+IMAGE               CREATED             CREATED BY                                      SIZE
+331b81a245b1        3 days ago          /bin/sh -c #(nop)  CMD ["index.js"]             0B
+bdfc932314af        3 days ago          /bin/sh -c #(nop)  EXPOSE 3000                  0B
+f8992f6c62a6        3 days ago          /bin/sh -c #(nop) COPY dir:e2b57dff89be62f77…   1.62MB
+b87c2ad8344d        4 weeks ago         /bin/sh -c #(nop)  CMD ["node"]                 0B
+<missing>           4 weeks ago         /bin/sh -c set -ex   && for key in     6A010…   4.17MB
+<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV YARN_VERSION=1.3.2       0B
+<missing>           4 weeks ago         /bin/sh -c ARCH= && dpkgArch="$(dpkg --print…   56.9MB
+<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV NODE_VERSION=8.9.4       0B
+<missing>           7 weeks ago         /bin/sh -c set -ex   && for key in     94AE3…   129kB
+<missing>           7 weeks ago         /bin/sh -c groupadd --gid 1000 node   && use…   335kB
+<missing>           7 weeks ago         /bin/sh -c set -ex;  apt-get update;  apt-ge…   324MB
+<missing>           7 weeks ago         /bin/sh -c apt-get update && apt-get install…   123MB
+<missing>           7 weeks ago         /bin/sh -c set -ex;  if ! command -v gpg > /…   0B
+<missing>           7 weeks ago         /bin/sh -c apt-get update && apt-get install…   44.6MB
+<missing>           7 weeks ago         /bin/sh -c #(nop)  CMD ["bash"]                 0B
+<missing>           7 weeks ago         /bin/sh -c #(nop) ADD file:1dd78a123212328bd…   123MB
 ```
 
 Hurrah! Has the file size changed at all?
 
 ```bash
-$ docker images | grep node-multi-stage
-node-multi-stage2               latest              abbe2e6023e9        About a minute ago   678MB
-node-multi-stage                latest              813b579d5aa5        11 minutes ago       681MB
+$ docker images | grep node-
+node-multi-stage                latest              331b81a245b1        3 days ago          678MB
+node-vanilla                    latest              075d229d3f48        3 days ago          679MB
 ```
 
 Yes, the three layers image is slightly smaller.
