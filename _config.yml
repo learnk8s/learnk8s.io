@@ -13,10 +13,12 @@ sass:
   load_paths:
     - node_modules
   style: compressed
-include: ["_pages"]
 excerpt_separator: <!--more-->
 post_limit: 5
 collections:
   blog:
     output: true
     permalink: /blog/:path
+  pages:
+    output: true
+    permalink: /:path
