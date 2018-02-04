@@ -16,9 +16,9 @@ layout: default
 
 <section class="ph3 measure-wide pv4 center">
   <ul class="list pl0">
-    {% for post in site.posts limit:site.post_limit %}
+    {% for post in site.blog limit:site.post_limit %}
       <li class="pv3">
-        <h2 class="mb0"><a href="{{ post.url }}" class="link navy">{{ post.title }}</a></h2>
+        <h2 class="mb0"><a href="{{ post.url | replace: "index", "" }}" class="link navy">{{ post.title }}</a></h2>
         <p class="black-40 mt1">{{ post.date | date: '%B %d, %Y' }}</p>
         <p class="lh-copy black-70">{{ post.excerpt | remove: '<p>' | remove: '</p>' }}</p>
       </li>
@@ -26,7 +26,7 @@ layout: default
   </ul>
 </section>
 
-{% assign remaining_posts = site.posts | size | minus:site.post_limit %}
+{% assign remaining_posts = site.blog | size | minus:site.post_limit %}
 {% if remaining_posts > 0 %}
 <section class="consultation white flex-l items-end-l justify-around-l bb b--lightest-blue">
   <div class="pt5 ph3">
