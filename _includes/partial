@@ -1,0 +1,2 @@
+{% capture partialPath %}{{ page.date | date: "%Y-%m-%d" }}-{{ page.slug | slugify }}/{{ include.name }}{% endcapture %}
+{% include {{partialPath}} %}
