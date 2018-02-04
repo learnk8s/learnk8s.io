@@ -12,7 +12,7 @@ You can include resources with [the include_relative tag](https://jekyllrb.com/d
 
 Using a non-standard approach to store blog posts has some pros and cons. Here's a list of cons:
 
-- The URL of the post is "<folder name>/index". The _index_ should be removed
+- The URL of the post is "<folder name>/index". The _link_ tag and generating permalink had to patched to play nicely.
 - All resources within the post folder are copied across.
 - You should iterate through the collection with `for item in site.<collection name>`
 - Drafts are not possibile with collections
