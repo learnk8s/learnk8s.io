@@ -3,6 +3,9 @@ layout: post
 title: 3 simple tricks for smaller Docker images
 date: 2018-01-14 11:26:00
 categories: docker distroless alpine node.js
+js:
+  - anime.min.js
+  - isScrolledIntoView.js
 ---
 
 When it comes to building Docker containers, you should always strive for smaller images. **Images that share layers and are smaller in size are quicker to transfer and deploy**.
