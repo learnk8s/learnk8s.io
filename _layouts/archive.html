@@ -16,9 +16,9 @@ layout: default
 
 <section class="ph3 measure-wide pv4 center">
   <ul class="list pl0">
-    {% for post in site.posts %}
+    {% for post in site.blog %}
       <li class="pv3">
-        <h2 class="mb0"><a href="{{ post.url }}" class="link navy">{{ post.title }}</a></h2>
+        <h2 class="mb0"><a href="{{ post.url | replace: "index", "" }}" class="link navy">{{ post.title }}</a></h2>
         <p class="black-40 mt1">{{ post.date | date: '%B %d, %Y' }}</p>
         <p class="lh-copy black-70">{{ post.excerpt | remove: '<p>' | remove: '</p>' }}</p>
       </li>

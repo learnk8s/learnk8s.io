@@ -1,9 +1,8 @@
 ---
 layout: post
-slug: 3 simple tricks for smaller docker images
 title: 3 simple tricks for smaller Docker images
 date: 2018-01-14 11:26:00
-categories: docker distroless alpine
+categories: docker distroless alpine node.js
 ---
 
 When it comes to building Docker containers, you should always strive for smaller images. **Images that share layers and are smaller in size are quicker to transfer and deploy**.
@@ -31,7 +30,7 @@ RUN apt-get install vim
 
 Since docker 1.10 the `COPY`, `ADD` and `RUN` statements add a new layer to your image. The previous example created two layers instead of just one.
 
-{% include partial name="layers.html" %}
+{% include_relative layers.html %}
 
 **Layers are like git commits.**
 
@@ -163,7 +162,7 @@ CMD ["index.js"]
 
 The first part of the `Dockerfile` creates three layers. The layers are then merged and copied across to the second and final stage. Two more layers are added on top of the image for a total of 3 layers.
 
-{% include partial name="multistage.html" %}
+{% include_relative multistage.html %}
 
 Go ahead and verify yourself. First, build the container:
 
