@@ -1,0 +1,40 @@
+<footer class="footer white ph3 ph4-ns pt4 pt5-ns pb3 bg-learnk8s-blue">
+  <section class="flex-ns items-start-ns justify-around-ns pr3-m pr7-l">
+    <div class="dn db-l">
+      <a href="/" class="logo w4 db">{% include footer/logo.svg %}</a>
+      <p>Learn Kubernetes the smart way</p>
+    </div>
+    <div class="dn db-ns">
+      <h2 class="ttu f6">Services</h2>
+      <ul class="list pl0">
+        {% if site.video_course %}
+        <li class="mv2"><a href="/video-course" class="link white">Video course</a></li>
+        {% endif %}
+        <li class="mv2"><a href="/training" class="link white">Training</a></li>
+        <li class="mv2"><a href="/consulting" class="link white">Consulting</a></li>
+      </ul>
+    </div>
+    <div class="">
+      <h2 class="ttu f6">Company</h2>
+      <ul class="list pl0">
+        <li class="mv2"><a href="/contact-us" class="link white">Contact us</a></li>
+        <li class="mv2"><a href="/about-us" class="link white">Team</a></li>
+        <li class="mv2"><a href="/careers" class="link white">Careers</a></li>
+        <li class="mv2"><a href="/blog" class="link white">Blog</a></li>
+      </ul>
+    </div>
+    <div class="pt3 pt0-ns">
+      <h2 class="ttu f6">Follow us</h2>
+      <ul class="list pl0">
+        <li class="dib"><a href="https://github.com/learnk8s" class="link dib w2 icon">{% include footer/github.svg %}</a></li>
+        <li class="dib"><a href="https://twitter.com/learnk8s" class="link dib w2 icon">{% include footer/twitter.svg %}</a></li>
+        <li class="dib"><a href="skype:daniele.polencic?chat" class="link dib w2 icon">{% include footer/skype.svg %}</a></li>
+        <li class="dib"><a href="https://www.linkedin.com/company/learnk8s/" class="link dib w2 icon">{% include footer/linkedin.svg %}</a></li>
+        <li class="dib"><a href="https://learnk8s-slack-invite.herokuapp.com" class="link dib w2 icon">{% include footer/slack.svg %}</a></li>
+      </ul>
+    </div>
+  </section>
+  <section class="pt2 pt5-ns">
+    <p class="f7 bt b--light-blue pv2 white-70">Copyright &copy; learnk8s 20017-2018. Made with ❤︎ in London. View our Terms of Service or Privacy Policy. Send us a note to <a href="mailto:hello@learnk8s.io" class="link white underline">hello@learnk8s.io</a></p>
+  </section>
+</footer>
