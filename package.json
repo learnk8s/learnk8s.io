@@ -2,13 +2,14 @@
   "name": "learnk8s",
   "version": "1.0.0",
   "description": "learnk8s.io static website",
-  "scripts": {},
+  "scripts": {
+    "minify": "for i in `find _site -name \"*.html\" -type f`; do inline-source --root ./_site $i $i; done"
+  },
   "author": "Daniele Polencic",
   "license": "MIT",
   "dependencies": {
+    "inline-source-cli": "^1.2.0",
     "tachyons-sass": "^4.9.0"
   },
-  "devDependencies": {
-    "svgo": "^1.0.3"
-  }
+  "devDependencies": {}
 }

@@ -2,11 +2,14 @@
 layout: default
 ---
 <div class="intro none white pv2 pv0-ns mb4 mb5-ns">
-
-  {% include navbar.html %}
-
+  {% include navbar/index.html %}
 </div>
 
+<script>
+  {% for js in page.js %}
+    {% include_relative {{js}} %}
+  {% endfor %}
+</script>
 
 <article class="ph3 pt0 pb4 article">
   <div class="tc mb4">
@@ -40,4 +43,4 @@ layout: default
   </div>
 </section>
 
-{% include footer.html %}
+{% include footer/index.html %}

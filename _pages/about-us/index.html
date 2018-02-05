@@ -1,0 +1,67 @@
+---
+layout: default
+team:
+  - name: Daniele Polencic
+    role: Director and instructor
+    pict: daniele_polencic.jpg
+    bio: Daniele is a technical consultant and instructor based in London. Daniele is a certified Kubernetes administrator by the Linux Foundation. In the last decade, Daniele trained developers for companies in the e-commerce, finance and public sector.
+    github: https://github.com/danielepolencic
+    twitter: https://twitter.com/danielepolencic
+    linkedin: https://linkedin.com/danielepolencic
+  - name: Miriam Menegatti
+    role: Head of strategy
+    pict: miriam_menegatti.jpg
+    bio: Miriam is a professional based in London specializing in LNG Trading. She is focused on business development and driving strategic growth. Miriam has also extensive experience in contract negotiation, within the commodity sector.
+    linkedin: https://www.linkedin.com/in/miriam-menegatti-46263915/
+  - name: Bruno Bonanno
+    role: Software engineer
+    pict: bruno_bonanno.jpg
+    bio: Bruno has worked as a software engineer for 15+. He spent 5 years teaching at UTN BA before moving to the consulting arena and helping companies such as Morgan Stanley, Barclays and Lloyds deliver better and more secure software.
+    github: https://github.com/bbonanno
+    linkedin: https://www.linkedin.com/in/bbonanno/
+  - name: Alessandro Moretti
+    role: Head of marketing
+    pict: alessandro_moretti.jpg
+    bio: Alessandro is a digital marketer passionate about emerging technology and blockchain. He has vast expertise in the digital advertising space having worked with companies such as Coca Cola, The Times and Discovery Channel.
+    linkedin: https://www.linkedin.com/in/alemoretti/
+  - name: Mehdi Avdi
+    role: Lead instructor
+    pict: mehdi_avdi.jpg
+    bio: Mehdi is a highly experienced software developer and technical lead, with 12+ years industry experience in software engineering practices. Mehdi has helped built infrastructure for companies such as Pearson, Which? and AGCO.
+    linkedin: https://www.linkedin.com/in/mehdiavdi/
+    github: https://github.com/mavdi
+---
+
+<div class="intro about-us white pt3 pt0-ns pb2 pb4-ns">
+
+  {% include navbar/index.html %}
+
+  <section class="hero ph5-l">
+    <div class="w-100">
+      <h1 class="f1 pl3 pl4-ns f-subheadline-l">About us</h1>
+      <h2 class="f4 normal measure-narrow lh-copy ph3 ph4-ns f3-l pb4">Experienced software consultants, specialising in Kubernetes.</h2>
+    </div>
+  </section>
+</div>
+
+<section class="">
+  <ul class="list pl0 flex flex-wrap justify-center">
+    {% for person in page.team %}
+    <li class="mw5 ma4">
+      <img src="/about-us/{{ person.pict }}" alt="{{ person.name}}" class="db shadow-1">
+      <h2 class="f4 navy mb1">{{ person.name }}</h2>
+      <p class="black-70 mt0">{{ person.role }}</p>
+      <p class="black-70 lh-copy">{{ person.bio }}</p>
+      <div class="cf">
+        {% if person.github %}<a href="{{person.github}}" class="link fl w2 fill-blue">{% include_relative github.svg %}</a>{% endif %}
+        {% if person.linkedin %}<a href="{{person.linkedin}}" class="link fl w2 fill-blue">{% include_relative linkedin.svg %}</a>{% endif %}
+        {% if person.twitter %}<a href="{{person.twitter}}" class="link fl w2 fill-blue">{% include_relative twitter.svg %}</a>{% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% include consultation/index.html %}
+
+{% include footer/index.html %}

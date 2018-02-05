@@ -1,0 +1,226 @@
+---
+layout: default
+benefits:
+  - How to deploy applications locally and to GCP, AKS and EKS
+  - The core components of which Kubernetes is made of
+  - How to package application in Docker containers
+  - How to use volumes and persisting changes
+  - Monitoring, logging and debugging in your cluster
+  - Helm, the Kubernetes package manager
+  - How to deploy your application across different clouds
+  - Advanced scheduling strategy to best utilise your resources
+  - How to secure applications to protect them against malicious attacks
+packages:
+  - heading: Start course
+    subheading: 22 HD videos
+    price: £299
+    styling: mh3 ml4-ns mr2-ns bg-almost-white
+    benefits:
+      - "<span class=\"b\">Access to 22 HD Videos</span> — see above for a full listing of topics"
+      - "<span class=\"b\">All Source Code</span> — build files, scripts and Starter Files for each video"
+      - "<span class=\"b\">Stream course</span> from any device"
+      - "<span class=\"b\">Unlimited Updates</span>"
+  - heading: Master course
+    subheading: 30 HD videos
+    price: £499
+    styling: mh3 ml2-ns mr4-ns bg-weird-blue
+    benefits:
+      - "<span class=\"b\">Access to 30 HD Videos</span> — see above for a full listing of topics"
+      - "<span class=\"b\">All Source Code</span> — build files, scripts and Starter Files for each video"
+      - "<span class=\"b\">Stream course</span> from any device"
+      - "<span class=\"b\">Unlimited Updates</span>"
+      - "<span class=\"b\">Additional resources</span> to pass your exam as Certified Kubernetes Administrator (CKA)"
+      - "<span class=\"b\">Discounted exam</span> for your CKA"
+faqs:
+  - title: I'm starting out. Is this right for me?
+    content: Of course. The video course and the online master class are meant for developers that have little to no experience in containers nor Kubernetes.
+  - title: What happens after I buy the video course?
+    content: You'll be given an account where you can access the course at any time and from any web browser (desktop, tablet, or mobile). You can login and start learning Kubernetes.
+  - title: What version of k8s was this created for?
+    content: The material was authored for Minikube 0.22, Kubernetes 1.8, Helm 2.7.2
+  - title: What if I'm not thrilled?
+    content: "We want to make sure you get real value out of this so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to <a href=\"mailto:hello@learnk8s.io\" class=\"link navy underline\">hello@learnk8s.io</a> with a copy of your receipt and I will refund you."
+  - title: Do you offer a student discount?
+    content: "Absolutely! <a href=\"https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform\" class=\"link underline navy\">Fill out this form</a> with some proof that you are a student and we'll send you a discount code. This applies to anyone in any type of schooling, including evening classes and coding bootcamps!"
+  - title: I have another question!
+    content: "Sure - send an email to <a href=\"mailto:hello@learnk8s.io\" class=\"link navy underline\">hello@learnk8s.io</a>."
+video_sections:
+  - name: Packaging applications in containers
+    topics:
+      - What is Docker?
+      - Installing Docker
+      - Running containers
+      - Building containers
+      - Sharing files and arguments
+      - Debugging
+  - name: Getting started with k8s
+    topics:
+      - Installing kubectl & Minikube
+      - Launching a cluster
+      - Packaging "Hello World" in a container
+      - Healthchecks
+      - Writing a deployment
+      - Writing a service
+      - Writing an ingress
+      - Scaling
+      - Selectors
+      - Deployment history & rollbacks
+  - name: Kubernetes, the hard truth
+    topics:
+      - Why Kubernetes?
+      - History & background
+      - Nodes
+      - Scheduler
+      - Pod
+      - Replica sets/deployments
+      - Services
+  - name: Kubernetes architecture
+    topics:
+      - ETCD
+      - API server
+      - Kubelet
+      - kubeproxy
+      - Service types
+      - DNS and service discovery
+      - Endpoints
+      - Ingress in detail
+  - name: Persistence and storage
+    topics:
+      - Deploying a database
+      - Managing configuration
+      - Managing secrets
+      - Persistent volumes
+      - Persistent volume claims
+      - StorageClass
+  - name: Logging, monitoring, troubleshooting
+    topics:
+      - Debugging deployments
+      - Debugging services
+      - Debugging the ingress
+      - Daemon sets
+      - Heapster
+      - Horizontal Pod Autoscaling
+      - Logging with Fluentd
+  - name: Helm
+    topics:
+      - What is Helm?
+      - Creating a chart
+      - Managing charts
+      - Templating resources
+      - Paramestrised deployments
+      - Debugging
+      - Helpers
+      - Updating a chart
+      - Rollbacks
+      - Resources and dependencies
+  - name: Deploying to GCP
+    topics:
+      - Installing gcloud
+      - Creating a project
+      - Creating a cluster
+      - Deploying an application
+---
+
+<div class="intro course white pt3 pt0-ns pb5 pb4-ns">
+
+  {% include navbar/index.html %}
+
+  <section class="hero ph5-l pt5-l tc">
+    <h1 class="f1 mt1-l pt2-l f-subheadline-l measure-narrow ph4">Mastering Kubernetes video course</h1>
+    <div class="ph3 w-60-m w-40-l center">
+        <img class="shadow-1" src="/video-course/video_preview.png" alt="Kubernetes video course">
+    </div>
+    <div class="dn db-l w3 center pt4"><img inline src="/video-course/down_arrow.svg" alt="Down"></div>
+  </section>
+</div>
+
+<section class="content ph3 ph4-ns flex-l items-center-l justify-center-l">
+  <div class="left dn db-l w-30-l">
+    <div class="illustration fr"><img inline src="/video-course/together.svg" alt="Team"></div>
+  </div>
+  <div class="right measure center pt3">
+    <h2 class="f3 navy f2-l measure-narrow">Learn Kubernetes at your pace</h2>
+    <p class="lh-copy f4-l black-70">With a focus on simplicity and readability, this course will have you deploying and scaling applications in no time! In this course your will learn:</p>
+    <ul class="list black-70 pl0 pt2">
+      {% for text in page.benefits %}
+      <li class="mv3">
+          <div class="dtc v-top w2"><img inline src="/video-course/tick.svg" alt="Tick"></div>
+          <div class="dtc v-top pl3">
+            <p class="mv0 f4-l lh-copy">{{ text }}</p>
+          </div>
+        </li>
+      {% endfor %}
+        <li class="mv3 pt4 b">
+          <div class="dtc v-top w2"><img inline src="/video-course/plus.svg" alt="Plus"></div>
+          <div class="dtc v-top pl3">
+            <p class="mv0 f4-l lh-copy">Everything you need to pass your certification as a Certified Kubernetes Administrator</p>
+          </div>
+        </li>
+    </ul>
+  </div>
+</section>
+
+<section class="interlude tr">
+  <div class="illustration dib mr4"><img inline src="/video-course/small_cargo.svg" alt="Cargo"></div>
+</section>
+
+{% for section in page.video_sections %}
+<section class="center w-90-l ph3">
+  <h2 class="f4 navy f3-l bb b--light-gray pb2 ph3">{{ forloop.index }}. {{ section.name }}</h2>
+  <div class="flex flex-wrap justify-center">
+    {% for topic in section.topics %}
+    <div class="w5 ma3">
+      <img src="/video-course/video_lesson.png" alt="Video lesson"/>
+      <h3 class="f5 navy">{{ topic }}</h3>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+
+<section class="cf pt5">
+  {% for package in page.packages %}
+  <div class="fl-ns w-50-ns">
+    <div class="mv3 {{package.styling}}">
+      <div class="header ph3 pt1 bb b--light-gray">
+          <h2 class="navy tc mb1">{{package.heading}}</h2>
+          <h3 class="normal black-70 tc mt0">{{package.subheading}}</h3>
+      </div>
+      <div class="content ph3 pb4">
+        <p class="navy tc f2">{{package.price}}</p>
+        <ul class="list pl0 black-70">
+            {% for text in package.benefits %}
+            <li class="mv3">
+                <div class="dtc v-top w2"><img inline src="/video-course/tick.svg" alt="Tick"></div>
+                <div class="dtc v-top pl3">
+                  <p class="mv0 f4-l lh-copy">{{ text }}</p>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+          <div class="tc">
+            <a href="/almost-ready" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4">Buy now &#8594;</a>
+          </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+
+{% include train-your-team/index.html %}
+
+<section class="ph3 measure-wide pv4 center">
+  <h3 class="f3 f2-l navy pb3">Frequently asked questions</h3>
+  <ul class="list pl0">
+    {% for faq in page.faqs %}
+    <li>
+      <h4 class="navy f4 f3-l mb2">{{ faq.title }}</h4>
+      <p class="lh-copy black-70">{{ faq.content }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% include consultation/index.html %}
+
+{% include footer/index.html %}
