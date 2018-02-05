@@ -6,6 +6,17 @@
     <meta name="description" content="We help your team adopt Kubernetes, through consulting and corporate or public training. leanrk8s enables you to get the most out of Kubernetes through comprehensive training and consultancy solutions.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta httpEquiv="X-UA-Compatible" content="ie=edge"/>
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@learnk8s" />
+    <meta property="og:url" content="{{site.url}}{{page.url}}" />
+    {% if page.open_graph.image %}
+      <meta property="og:image" content="{{site.url}}{{page.open_graph.image}}" />
+    {% else %}
+      <meta property="og:image" content="{{site.url}}/assets/open_graph_preview.png" />
+    {% endif %}
+    {% if page.open_graph.type %}<meta property="og:type" content="{{page.open_graph.type}}" />{% endif %}
+    {% if page.open_graph.title %}<meta property="og:title" content="{{page.open_graph.title}}" />{% endif %}
+    {% if page.open_graph.description %}<meta property="og:description" content="{{page.open_graph.description}}" />{% endif %}
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"/>
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"/>
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"/>
