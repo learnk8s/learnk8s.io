@@ -17,6 +17,25 @@ Using a non-standard approach to store blog posts has some pros and cons. Here's
 - You should iterate through the collection with `for item in site.<collection name>`
 - Drafts are not possibile with collections
 
+### Post Author
+
+You can specify the author's name for every blog post by setting the front-matter property like so:
+
+`author: "Author Name and Surname"`
+
+You can also set the author's avatar for every blog post by setting the front-matter property like so:
+
+`author_avatar: "author_name_and_surname.extension"`
+
+Jekyll will find the avatar image file in `/assets`
+
+Please note that if no `author` is specified, Jekyll will default to "Daniele Polencic".
+
+On the other hand, if an `author` is specified but `author_avatar` is not, then Jekyll will try to find the images in `/assets` by using the author's name in lowercase and replaces "spaces" with an underscore. It will also assume that the image the extension is ".jpg".
+
+If the above fails, then no image will be shown on top of the Author's name.
+
+
 ## Checking your writing
 
 [Grammarly](https://www.grammarly.com/) is an app that assesses a piece of writing for common grammar mistakes and offers suggestions for correcting them.
@@ -39,16 +58,23 @@ When you paste your text, Grammarly sends the content to its servers and runs a 
 
 ## Running locally
 
-Install dependencies with:
+After you cloned the repository, cd in the project directory and run:
 
 ```bash
-$ yarn install
+$ docker run -ti --rm -v ${PWD}:/app -p 4000:4000 ruby bash
 ```
 
-Run the code in watch mode with:
+You can install the dependencies with:
 
 ```bash
-$ yarn dev
+$ cd /app
+$ bundle install
+```
+
+You can run an incremental build with:
+
+```bash
+$ bundle exec jekyll serve -H 0.0.0.0 --incremental --drafts
 ```
 
 ## Deployment
@@ -56,5 +82,5 @@ $ yarn dev
 The code is deployed on build with
 
 ```bash
-$ yarn run build
+$ jekyll build
 ```
