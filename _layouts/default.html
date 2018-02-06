@@ -3,9 +3,27 @@
   <head>
     <meta charset="utf-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="description" content="We help your team adopt Kubernetes, through consulting and corporate or public training. leanrk8s enables you to get the most out of Kubernetes through comprehensive training and consultancy solutions.">
+    {% if page.description %}
+    <meta name="description" content="{{ page.description }}">
+    {% else %}
+    <meta name="description" content="We help your team adopt Kubernetes, through consulting and corporate or public training. learnk8s enables you to get the most out of Kubernetes through comprehensive training and consultancy solutions.">
+    {% endif %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta httpEquiv="X-UA-Compatible" content="ie=edge"/>
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@learnk8s" />
+    <link rel="canonical" href="{{site.url}}{{page.url | replace: '/index', ''}}" />
+    <meta property="og:site_name" content="learnk8s" />
+    <meta property="og:url" content="{{site.url}}{{page.url | replace: '/index', ''}}" />
+    {% if page.open_graph.image %}
+      <meta property="og:image" content="{{site.url}}{{page.open_graph.image}}" />
+    {% else %}
+      <meta property="og:image" content="{{site.url}}/assets/open_graph_preview.png" />
+    {% endif %}
+    {% if page.open_graph.type %}<meta property="og:type" content="{{page.open_graph.type}}" />{% endif %}
+    {% if page.open_graph.title %}<meta property="og:title" content="{{page.open_graph.title}}" />{% endif %}
+    {% if page.open_graph.description %}<meta property="og:description" content="{{page.open_graph.description}}" />{% endif %}
+    {% if page.open_graph.type == "article" %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}" />{% endif %}
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"/>
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"/>
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"/>
@@ -22,7 +40,11 @@
         gtag('config', 'UA-485266-17');
       })();
     </script>
-    <title>{{ site.name }}</title>
+    {% if page.title %}
+    <title>{{ page.title }} • {{ site.name }}</title>
+    {% else %}
+    <title>{{site.name}}</title>
+    {% endif %}
   </head>
   <body class="bg-near-white sans-serif">
     <div class="cf w-100 mw9-l center bg-white">

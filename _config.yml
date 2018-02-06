@@ -1,4 +1,5 @@
 name: learnk8s
+url: https://learnk8s.io
 video_course: no
 exclude:
   - node_modules
