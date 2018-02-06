@@ -12,9 +12,9 @@
     <meta httpEquiv="X-UA-Compatible" content="ie=edge"/>
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@learnk8s" />
-    <link rel="canonical" href="{{site.url}}{{page.url}}" />
+    <link rel="canonical" href="{{site.url}}{{page.url | replace: '/index', ''}}" />
     <meta property="og:site_name" content="learnk8s" />
-    <meta property="og:url" content="{{site.url}}{{page.url}}" />
+    <meta property="og:url" content="{{site.url}}{{page.url | replace: '/index', ''}}" />
     {% if page.open_graph.image %}
       <meta property="og:image" content="{{site.url}}{{page.open_graph.image}}" />
     {% else %}
