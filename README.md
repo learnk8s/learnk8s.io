@@ -6,7 +6,7 @@ You should store posts in the `_blog` folder. Usually, Jekyll stores blog posts 
 
 > While [there's a plugin to work around the challenge of having locally scoped assets](https://github.com/nhoizey/jekyll-postfiles), it's not ideal. It breaks compatibility with other plugins, and it is difficult to reason about tags such as the include_relative. It's also not actively maintained.
 
-The name of the folder in `_blog` is also the URL of the post. The article should be named `index` — if you're using markdown, that's `index.md`.
+The name of the folder in `_blog` is also the slug of the post. The article should be named `index` — if you're using markdown, that's `index.md`.
 
 You can include resources with [the include_relative tag](https://jekyllrb.com/docs/includes/#including-files-relative-to-another-file).
 
@@ -58,16 +58,23 @@ When you paste your text, Grammarly sends the content to its servers and runs a 
 
 ## Running locally
 
-Install dependencies with:
+After you cloned the repository, cd in the project directory and run:
 
 ```bash
-$ yarn install
+$ docker run -ti --rm -v ${PWD}:/app -p 4000:4000 ruby bash
 ```
 
-Run the code in watch mode with:
+You can install the dependencies with:
 
 ```bash
-$ yarn dev
+$ cd /app
+$ bundle install
+```
+
+You can run an incremental build with:
+
+```bash
+$ bundle exec jekyll serve -H 0.0.0.0 --incremental
 ```
 
 ## Deployment
@@ -75,5 +82,5 @@ $ yarn dev
 The code is deployed on build with
 
 ```bash
-$ yarn run build
+$ yarn install && jekyll build && yarn minify
 ```
