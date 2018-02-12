@@ -16,7 +16,12 @@ layout: default
     {% include author_blurb.html %}
   </div>
   <h1 class="navy tc f2 f1-ns">{{ page.title }}</h1>
+  {% if page.image %}
+  <img src="{{ page.image }}" alt="{{ page.title }}">
+  <hr class="w3 center b--navy mv4 mb5-ns">
+  {% else %}
   <hr class="w3 center b--navy mv4 mv5-ns">
+  {% endif %}
   {{ content }}
 </article>
 
