@@ -304,6 +304,8 @@ $ docker exec -ti <inser_docker_id> node
 
 It's good news because an attacker exploiting your application and gaining access to the container won't be able to do as much damage as if were to access a shell. In other words, fewer binaries mean smaller sizes and increased security. But at the cost of more painful debugging.
 
+> Please note that perhaps you shouldn't attach to and debug containers live. You should rather rely on proper logging and mornitoring.
+
 But what if you cared about debugging and smaller sizes?
 
 ## 3. Smaller base images with Alpine
