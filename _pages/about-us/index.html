@@ -73,9 +73,9 @@ open_graph:
       <p class="black-70 mt0">{{ person.role }}</p>
       <p class="black-70 lh-copy">{{ person.bio }}</p>
       <div class="cf">
-        {% if person.github %}<a href="{{person.github}}" class="link fl w2 fill-blue">{% include_relative github.svg %}</a>{% endif %}
-        {% if person.linkedin %}<a href="{{person.linkedin}}" class="link fl w2 fill-blue">{% include_relative linkedin.svg %}</a>{% endif %}
-        {% if person.twitter %}<a href="{{person.twitter}}" class="link fl w2 fill-blue">{% include_relative twitter.svg %}</a>{% endif %}
+        {% if person.github %}<a href="{{person.github}}" target="_blank" rel="noopener" class="link fl w2 fill-blue">{% include_relative github.svg %}</a>{% endif %}
+        {% if person.linkedin %}<a href="{{person.linkedin}}" target="_blank" rel="noopener" class="link fl w2 fill-blue">{% include_relative linkedin.svg %}</a>{% endif %}
+        {% if person.twitter %}<a href="{{person.twitter}}" target="_blank" rel="noopener" class="link fl w2 fill-blue">{% include_relative twitter.svg %}</a>{% endif %}
       </div>
     </li>
     {% endfor %}
