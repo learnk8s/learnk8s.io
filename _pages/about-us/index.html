@@ -45,6 +45,7 @@ team:
     linkedin: https://www.linkedin.com/in/keith-mifsud-369275157/
     github: https://github.com/keithmifsud
     twitter: https://twitter.com/keithmifsud
+    website: https://keith-mifsud.me
 open_graph:
   title: About us
   description: Experienced software consultants, specialising in Kubernetes.
@@ -76,6 +77,7 @@ open_graph:
         {% if person.github %}<a href="{{person.github}}" target="_blank" rel="noopener" class="link fl w2">{% include_relative github.svg %}</a>{% endif %}
         {% if person.linkedin %}<a href="{{person.linkedin}}" target="_blank" rel="noopener" class="link fl w2">{% include_relative linkedin.svg %}</a>{% endif %}
         {% if person.twitter %}<a href="{{person.twitter}}" target="_blank" rel="noopener" class="link fl w2">{% include_relative twitter.svg %}</a>{% endif %}
+        {% if person.website %}<a href="{{person.website}}" target="_blank" rel="noopener" class="link fl w2">{% include_relative world.svg %}</a>{% endif %}
       </div>
     </li>
     {% endfor %}
