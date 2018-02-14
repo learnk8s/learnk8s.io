@@ -425,3 +425,5 @@ Recap of image sizes:
 | `node:8-alpine` | 69.7 |
 
 If you enjoyed this article don't forget to subscribe!
+
+Thanks to [Chris Nesbitt-Smith](https://github.com/chrisns), [Valentin Ouvrard](https://valentin.ouvrard.it/) and [Keith Mifsud](https://keith-mifsud.me/) for their feedback!
