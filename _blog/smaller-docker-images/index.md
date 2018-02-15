@@ -2,16 +2,20 @@
 layout: post
 title: 3 simple tricks for smaller Docker images
 description: When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?
-date: 2018-01-14 11:26:00
+date: 2018-02-12 11:26:00
 categories: docker distroless alpine node.js
+image: /blog/smaller-docker-images/smaller_images.png
 js:
   - anime.min.js
   - isScrolledIntoView.js
 open_graph:
   type: article
   title: 3 simple tricks for smaller Docker images
+  image: /blog/smaller-docker-images/smaller_images.png
   description: When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?
 ---
+
+<!-- ![Smaller Docker images]({% link _blog/smaller-docker-images/smaller_images.png %}) -->
 
 When it comes to building Docker containers, you should always strive for smaller images. **Images that share layers and are smaller in size are quicker to transfer and deploy**.
 
@@ -300,6 +304,8 @@ $ docker exec -ti <inser_docker_id> node
 
 It's good news because an attacker exploiting your application and gaining access to the container won't be able to do as much damage as if were to access a shell. In other words, fewer binaries mean smaller sizes and increased security. But at the cost of more painful debugging.
 
+> Please note that perhaps you shouldn't attach to and debug containers live. You should rather rely on proper logging and mornitoring.
+
 But what if you cared about debugging and smaller sizes?
 
 ## 3. Smaller base images with Alpine
@@ -419,3 +425,5 @@ Recap of image sizes:
 | `node:8-alpine` | 69.7 |
 
 If you enjoyed this article don't forget to subscribe!
+
+Thanks to [Chris Nesbitt-Smith](https://github.com/chrisns), [Valentin Ouvrard](https://valentin.ouvrard.it/) and [Keith Mifsud](https://keith-mifsud.me/) for their feedback!
