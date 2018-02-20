@@ -74,7 +74,8 @@ open_graph:
 <section class="">
   <ul class="list pl0 flex flex-wrap justify-center">
     {% for person in page.team %}
-    <li class="mw5 ma4">
+    {% assign url_friendly_name = person.name | replace: ' ', '_' | downcase %}
+    <li class="mw5 ma4" id="{{ url_friendly_name }}">
       <img src="/about-us/{{ person.pict }}" alt="{{ person.name}}" class="db shadow-1">
       <h2 class="f4 navy mb1">{{ person.name }}</h2>
       <p class="black-70 mt0">{{ person.role }}</p>
