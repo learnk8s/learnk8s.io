@@ -35,6 +35,15 @@ On the other hand, if an `author` is specified but `author_avatar` is not, then 
 
 If the above fails, then no image will be shown on top of the Author's name.
 
+### Post Excerpt
+
+You can specify the article's excerpt to be displayed in the article list 
+page by adding and setting the front-matter property:
+
+`excerpt: "Your brief description"`
+
+Please check how it looks and fits on the page once set.
+
 
 ## Checking your writing
 
