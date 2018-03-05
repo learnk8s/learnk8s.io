@@ -21,7 +21,7 @@ faqs:
   - title: I have another question!
     content: "Sure - send an email to <a href=\"mailto:hello@learnk8s.io\" class=\"link navy underline\">hello@learnk8s.io</a>."
 packages:
-  - heading: Intro to Kubernetes
+  - heading: Deploying and scaling applications in Kubernetes
     subheading: 2 days course
     styling: mh3 ml4-ns mr2-ns bg-almost-white
     syllabus: syllabus-2days.pdf
@@ -33,7 +33,7 @@ packages:
       - Logging, monitoring and troubleshooting
       - Helm, the k8s package manager
       - Deploying to GCP, AKS, EKS
-  - heading: Advanced Kubernetes
+  - heading: Advanced Kubernetes training
     subheading: 3 days course
     styling: mh3 ml2-ns mr4-ns bg-weird-blue
     syllabus: syllabus-3days.pdf
@@ -51,21 +51,59 @@ packages:
       - Securing applications
     special_benefit: "<span class=\"b\">Become an official Certified Kubernetes Administrator CKA</span><span class=\"f6 black-50 db\">(The cost of the exam is included)</span>"
 events:
-  - day: 21
+  - day: 26
     month: mar
-    title: Intro to Kubernetes
+    title: Deploying and scaling applications in Kubernetes
     course_length: 2 days
     location: London, Skills Matter
     location_link: https://goo.gl/maps/QEJnGGv5aRm
-    price: £1165
+    price: £1250
     buy_now_link: https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic
+  - day: 23
+    month: apr
+    title: Deploying and scaling applications in Kubernetes
+    course_length: 2 days
+    location: Cardiff
+    location_link: https://goo.gl/maps/PBE7wyXwWLE2
+    price: £1250
+    buy_now_link: https://www.eventbrite.com/e/deploying-and-scaling-applications-in-kubernetes-cardiff-tickets-43692920702
+  - day: 9
+    month: may
+    title: Deploying and scaling applications in Kubernetes
+    course_length: 2 days
+    location: London
+    location_link: https://goo.gl/maps/MCmegMMQdgA2
+    price: £1250
+    buy_now_link: https://www.eventbrite.com/e/deploying-and-scaling-applications-in-kubernetes-london-tickets-43659616087
+  - day: 9
+    month: may
+    title: Advanced Kubernetes training
+    course_length: 3 days
+    location: London
+    location_link: https://goo.gl/maps/MCmegMMQdgA2
+    price: £1950
+    buy_now_link: https://www.eventbrite.com/e/advanced-kubernetes-training-london-tickets-43589166370
+  - day: 21
+    month: may
+    title: Deploying and scaling applications in Kubernetes
+    course_length: 2 days
+    location: Online
+    price: £1250
+    buy_now_link: https://www.eventbrite.com/e/deploying-and-scaling-applications-in-kubernetes-online-tickets-43659528826
+  - day: 21
+    month: may
+    title: Advanced Kubernetes training
+    course_length: 3 days
+    location: Online
+    price: £1950
+    buy_now_link: https://www.eventbrite.com/e/advanced-kubernetes-training-online-tickets-43658306169
   - day: 28
     month: jun
-    title: Intro to Kubernetes
+    title: Deploying and scaling applications in Kubernetes
     course_length: 2 days
     location: London, Skills Matter
     location_link: https://goo.gl/maps/QEJnGGv5aRm
-    price: £1165
+    price: £1250
     buy_now_link: https://skillsmatter.com/courses/585-kubernetes-master-application-deployment-and-scaling-with-daniele-polencic
 open_graph:
   title: Kubernetes training
@@ -169,16 +207,16 @@ open_graph:
   <h2 class="navy f4 f3-l">Upcoming events</h2>
   <ul class="list pl0 pt3">
     {% for event in page.events %}
-    <li class="h3-l mv3 bg-weird-blue flex justify-between items-start-l flex-wrap pb3 pb0-l">
+    <li class="mv3 bg-weird-blue flex justify-between items-center-l flex-wrap pb3 pb0-l">
       <div class="date bg-learnk8s-blue w3-l h3 white tc b w-100">
         <p class="f2 ma0">{{ event.day }}</p>
         <p class="ttu ma0">{{ event.month }}</p>
       </div>
-      <div class="description w-90 center w-30-l pv2">
+      <div class="description w-90 center w-40-l pv2">
         <h3 class="ma0 mv1">{{ event.title }}</h3>
         <h4 class="normal black-70 mv1">{{ event.course_length }}</h4>
       </div>
-      <div class="location w-90 center w-30-l pv2">
+      <div class="location w-90 center w-20-l pv2">
         <p class="ma0 mv1 ttu b black-20 f6 v-mid">Location</p>
         {% unless event.location == 'Online' %}
         <a href="{{ event.location_link }}" class="link db navy underline">{{ event.location }}</a>
@@ -191,7 +229,7 @@ open_graph:
         <p class="ma0 f4 black-70">{{ event.price }}</p>
       </div>
       <div class="buy_now tc w-100 w-auto-l">
-          <a href="{{ event.buy_now_link }}" class="link dib white bg-blue br1 pa3 b f5 shadow-3 ph4 mv2 mr2">Buy now &#8594;</a>
+          <a href="{{ event.buy_now_link }}" target="_blank" class="link dib white bg-blue br1 pa3 b f5 shadow-3 ph4 mv2 mr2">Buy now &#8594;</a>
       </div>
     </li>
     {% endfor %}
