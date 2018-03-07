@@ -1,0 +1,23 @@
+{% include_relative two-replicas.svg %}
+<script>
+(function() {
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+    .add({
+      targets: '#two-replicas-pod4',
+      opacity: [100, 0],
+      easing: 'easeOutExpo',
+    })
+    .add({
+      targets: '#two-replicas-pod3',
+      opacity: [100, 0],
+      easing: 'easeOutExpo',
+    })
+  document.getElementById('two-replicas-restart').onclick = basicTimeline.restart;
+  onScrollIntoView(document.getElementById('two-replicas'), function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+})();
+</script>

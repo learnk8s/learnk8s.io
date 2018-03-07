@@ -1,0 +1,53 @@
+{% include_relative kube-proxy.svg %}
+<script>
+(function() {
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+      targets: '#kube-proxy-arrow1',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+    .add({
+      targets: '#kube-proxy-arrow2',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+    .add({
+      targets: ['#kube-proxy-arrow1', '#kube-proxy-arrow2'],
+      opacity: 0,
+      easing: 'easeOutExpo',
+    })
+    .add({
+      targets: '#kube-proxy-arrow3',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+    .add({
+      targets: '#kube-proxy-arrow4',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+    .add({
+      targets: ['#kube-proxy-arrow3', '#kube-proxy-arrow4'],
+      opacity: 0,
+      easing: 'easeOutExpo',
+    })
+    .add({
+      targets: '#kube-proxy-arrow5',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+    .add({
+      targets: '#kube-proxy-question-mark',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+  document.getElementById('kube-proxy-restart').onclick = basicTimeline.restart;
+  onScrollIntoView(document.getElementById('kube-proxy'), function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+})();
+</script>

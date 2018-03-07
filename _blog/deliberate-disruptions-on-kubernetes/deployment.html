@@ -1,0 +1,33 @@
+{% include_relative deployment.svg %}
+<script>
+(function() {
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+      targets: '#deployment-pod1',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+    .add({
+      targets: '#deployment-pod2',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+    .add({
+      targets: '#deployment-pod3',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+    .add({
+      targets: '#deployment-pod4',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+  document.getElementById('deployment-restart').onclick = basicTimeline.restart;
+  onScrollIntoView(document.getElementById('deployment'), function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+})();
+</script>

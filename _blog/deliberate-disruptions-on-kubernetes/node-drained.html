@@ -1,0 +1,38 @@
+{% include_relative node-drained.svg %}
+<script>
+(function() {
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+      targets: '.node-drained-node-2 path',
+      fill: '#333333',
+      easing: 'easeInExpo',
+    })
+    .add({
+      targets: '#node-drained-tick',
+      opacity: [100, 0],
+      easing: 'easeOutExpo',
+    })
+    .add({
+      targets: '#node-drained-x',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+    .add({
+      targets: '#node-drained-pod2',
+      opacity: [100, 0],
+      easing: 'easeOutExpo',
+    })
+    .add({
+      targets: '#node-drained-pod2-2',
+      opacity: [0, 100],
+      easing: 'easeInExpo',
+    })
+  document.getElementById('node-drained-restart').onclick = basicTimeline.restart;
+  onScrollIntoView(document.getElementById('node-drained'), function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+})();
+</script>
