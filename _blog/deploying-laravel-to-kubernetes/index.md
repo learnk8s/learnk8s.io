@@ -35,10 +35,10 @@ If you're still wondering why someone can benefit from using Kubernetes, the ans
 
 As I've afore-mentioned, I will be showing you how to deploy a straightforward and stateless Laravel application to Kubernetes. I aim to detail the steps involved in accomplishing this while explaining why specific actions are required. Furthermore, I will show you how to quickly scale the application and also make it available on a named host using an Ingress controller.
 
-You can run Kubernetes on several cloud hosting providers such as Google Cloud Engine and Amazon Web Services. In this tutorial, I will run the application on Minikube, a tool that makes it easy to run Kubernetes locally.
+You can run Kubernetes on several cloud hosting providers such as Google Cloud Engine and Amazon Web Services. In this tutorial, you will run the application on Minikube, a tool that makes it easy to run Kubernetes locally.
 
-Minikube runs on a single node. You can think of a node as a virtual machine (VM). Inside a node (VM), you have the Docker daemon where you can run Docker containers. You can launch as many containers as you wish, as long as you have enough system resources such as memory and CPU. In this particular tutorial, you have one single node, but you're starting three replicas of this node.
-Which translated from Kubernetes jargon becomes: You have 1 VM with 3 Docker containers running on it.
+Similar to Vagrant, Minikube is merely a Virtual Machine that contains a Kubernetes platform and Docker. You will need both to deploy your application as a Docker container and scale it to three instances using Kubernetes.
+
 
 __The application__
 
@@ -54,14 +54,11 @@ __Prerequisites__
 To follow with this demonstration, you will need the following installed on your local system:
 
 
-1) <a href="https://docs.docker.com/install/" target="_blank" 
-rel="noopener">Docker</a>
+1) <a href="https://docs.docker.com/install/" target="_blank" rel="noopener">Docker</a>
 
-2) <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/" target="_blank" 
-rel="noopener">Kubectl</a>
+2) <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/" target="_blank" rel="noopener">Kubectl</a>
 
-3) <a href="https://github.com/kubernetes/minikube/releases" target="_blank" 
-   rel="noopener">Minikube</a>
+3) <a href="https://github.com/kubernetes/minikube/releases" target="_blank" rel="noopener">Minikube</a>
 
 _Are you having problems installing and running these applications on Windows? LearnK8s will be publishing a tutorial on how to accomplish this very soon. Subscribe and be notified as soon as new articles get published._
 
@@ -95,9 +92,11 @@ eval $(minikube docker-env)
 docker build -t yourname/laravel-kubernetes-demo .
 ```
 
+> Don't forget to execute the eval. Building the image within the virtual machine is necessary. You should run the command only once in the current terminal.
+
 __Deploying the image__
 
-Now that the application's image is built and available locally you can go ahead with deploying it.
+Now that the application's image is built and available in Minikube you can go ahead with deploying it.
 
 I always start with making sure that Kubectl is in the correct context. In this case, the context is Minikube. You can quickly switch context as follows:
 
@@ -210,11 +209,21 @@ You can also see this in the Dashboard under Pods or in the Service detail scree
 Now the application's deployment services are running on three 
 separate, replicated Pods.
 
+Imagine your application becoming even more popular. Thousands of visitors are using your website or software. In the past, you may have been busy writing more scripts to create more instances of your application. In Kubernetes you can scale to multiple instances in a snap:
+
+```bash
+kubectl scale --replicas=10 deployment/laravel-kubernetes-demo
+deployment "laravel-kubernetes-demo" scaled
+```
+
+You can see how convenient it is to use Kubernetes to scale your website.
+
+
 __Ingress__
 
 You've already achieved great things, you deployed the application and scaled the deployment. You have already seen the running application in the browser when pointed to the cluster's (Minikube) IP address and node's port number. Now, you will see how to access the application through an assigned URL as you would do when deploying to the cloud.
 
-Typically a Kubernetes cluster is firewalled from the internet, and the same is true for the Minikube cluster. To use a URL, in Kubernetes, you need Ingress. An Ingress is a set of rules to allow inbound connections to reach a Kubernetes cluster. The Ingress is necessary because, in Kubernetes, resources such as Pods only have IP addresses only routable by and within the cluster. Meaning that they are not accessible or reachable to and from the world outside.
+To use a URL in Kubernetes, you need an Ingress. An Ingress is a set of rules to allow inbound connections to reach a Kubernetes cluster. The Ingress is necessary because, in Kubernetes, resources such as Pods only have IP addresses which are routable by and within the cluster. Meaning that they are not accessible or reachable to and from the world outside.
 
 I have included an `ingress.yaml` file with the source code of this demo application with the following contents:
 
@@ -238,13 +247,15 @@ spec:
           serviceName: laravel-kubernetes-demo
           servicePort: 8181
 ```
-Among the basic content you would expect from a Kubernetes resource file, this file defines a set of rules for the Kubernetes firewall to follow for inbound traffic. The `laravel-kubernetes.demo` URL will point to the Pod where the application is running, as previously labelled `laravel-kubernetes-demo` on port 8181.
+Among the basic content you would expect from a Kubernetes resource file, this file defines a set of rules to follow when routing inbound traffic. The `laravel-kubernetes.demo` URL will point to the Service where the application is running, as previously labelled `laravel-kubernetes-demo` on port 8181.
 
 The Ingress resource is useless without an Ingress controller so you will need to create a new controller or use an existing one. This tutorial uses the Nginx Ingress controller for routing the traffic. Minikube (v0.14 and above) comes with the Nginx setup as an addon which you will need to enable manually:
 
 ```bash
 minikube addons enable ingress
 ```
+
+> Please note that it may take few minutes for Minikube to download and install Nginx as an ingress.
 
 Once you have enabled the Ingress addon, you can create the Ingress in this way:
 
@@ -281,9 +292,3 @@ You can now access the application through the minikube IP address as shown abov
 ## This is just the beginning
 
 Hopefully, this article has helped you in getting acquainted with Kubernetes. From my own experience, once one has performed similar deployments a couple or more times, things start getting habitual and make a lot more sense. But our Kubernetes journey has only just begun. In future articles, we will walk through more real-life applications using storage volumes to persist state, and we will also learn how to deploy to Cloud providers such as Google's  Cloud Platform. Until then, check out these <a href="/training" title ="Learn Kubernetes">courses</a> to get up to speed and possibly even become a Certified Kubernetes Administrator (CKA).
-
-
-
-
-
-
