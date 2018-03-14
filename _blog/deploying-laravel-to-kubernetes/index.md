@@ -60,7 +60,7 @@ To follow with this demonstration, you will need the following installed on your
 
 3) <a href="https://github.com/kubernetes/minikube/releases" target="_blank" rel="noopener">Minikube</a>
 
-_Are you having problems installing and running these applications on Windows? LearnK8s will be publishing a tutorial on how to accomplish this very soon. Subscribe and be notified as soon as new articles get published._
+>Are you having problems installing and running these applications on Windows? LearnK8s will be publishing a tutorial on how to accomplish this very soon. Subscribe and be notified as soon as new articles get published.
 
 
 __Docker image__
@@ -98,7 +98,7 @@ __Deploying the image__
 
 Now that the application's image is built and available in Minikube you can go ahead with deploying it.
 
-I always start with making sure that Kubectl is in the correct context. In this case, the context is Minikube. You can quickly switch context as follows:
+I always start with making sure that `kubectl` is in the correct context. In this case, the context is Minikube. You can quickly switch context as follows:
 
 ```bash
 kubectl config use-context minikube
@@ -110,9 +110,9 @@ then you can deploy the container image:
 kubectl run laravel-kubernetes-demo --image=yourname/laravel-kubernetes-demo 
 --port=8181 --image-pull-policy=IfNotPresent
 ```
-The above command tells Kubectl to run our demo application from the Docker image while making port 8181 available for listening. The last parameter of the command simply asks Kubectl to not pull the image from a registry such as Docker Hub if it exists locally which in this case it does. Do note that you still need to be logged on to Docker's so that Kubectl can check if the image is up to date.
+The above command tells `kubectl` to run our demo application from the Docker image while making port 8181 available for listening. The last parameter of the command simply asks `kubectl` to not pull the image from a registry such as Docker Hub if it exists locally which in this case it does. Do note that you still need to be logged on to Docker's so that `kubectl` can check if the image is up to date.
 
-You can check that a Pod is created for our application by running:
+You can check that a Pod is created for the application by running:
 
 ```bash
 kubectl get pods
@@ -137,9 +137,9 @@ or to acquire the dashboard's URL address:
 minikube dashboard --url=true
 ```
 
-__Exposing a service__
+__Exposing a Service__
 
-So far you have created a deployment which is running the application's container. A pod running in the cluster has a dynamic IP. If you route the traffic directly to it using the IP, you may still need to update the routing table every time the pod is restarted. In fact, on every deployment or container restart, a new IP is assigned to the pod. To avoid managing IP addresses manually, you need to use a Service. The service acts as an IP and serves as a load balancer for a set of pods. So even if the IP address of a pod changes, the service is always pointing to it. And since the Service always has the same IP, you won't need to update anything manually.
+So far you have created a deployment which is running the application's container. A Pod running in the cluster has a dynamic IP. If you route the traffic directly to it using the IP, you may still need to update the routing table every time you restart the Pod. In fact, on every deployment or container restart, a new IP is assigned to the Pod. To avoid managing IP addresses manually, you need to use a Service. The Service acts as a load balancer for a set of Pods. So even if the IP address of a Pod changes, the service is always pointing to it. And since the Service always has the same IP, you won't need to update anything manually.
 
 ```bash
 kubectl expose deployment laravel-kubernetes-demo --type=NodePort --port=8181
@@ -177,7 +177,7 @@ minikube service laravel-kubernetes-demo
 
 __Scaling__
 
-And that is it. You have successfully deployed the application in Kubernetes. It's exciting. But what's the point of doing all of this? Well, you only have one deployment with a single Pod running, provisioned to a Node with the exposed web service. Let's replicate this pod to two more pods acting as load balancers to the web traffic.
+And that is it. You have successfully deployed the application in Kubernetes. It's exciting. But what's the point of doing all of this? Well, you only have one deployment with a single Pod running, provisioned to a Node with the exposed web service. Let's scale this deployment to two more instances of the application.
 
 So that you understand where you are at this moment, run the following command to get a list of desired and available Pods:
 
@@ -206,8 +206,7 @@ laravel-kubernetes-demo   3         3         3            3           59m
 
 You can also see this in the Dashboard under Pods or in the Service detail screen.
 
-Now the application's deployment services are running on three 
-separate, replicated Pods.
+Now you're running three instances of the applications using three Pods.
 
 Imagine your application becoming even more popular. Thousands of visitors are using your website or software. In the past, you may have been busy writing more scripts to create more instances of your application. In Kubernetes you can scale to multiple instances in a snap:
 
@@ -255,7 +254,8 @@ The Ingress resource is useless without an Ingress controller so you will need t
 minikube addons enable ingress
 ```
 
-> Please note that it may take few minutes for Minikube to download and install Nginx as an ingress.
+>Please note that it may take few minutes for Minikube to download and install Nginx as an Ingress.
+
 
 Once you have enabled the Ingress addon, you can create the Ingress in this way:
 
