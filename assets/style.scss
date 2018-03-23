@@ -292,6 +292,11 @@ green     #859900  operators, other keywords
 .highlight .vi { color: #268bd2 } /* Name.Variable.Instance */
 .highlight .il { color: #2aa198 } /* Literal.Number.Integer.Long */
 
+#author-blurb{
+  max-width: 200px;
+  margin: auto;
+}
+
 .silent-link{
   text-decoration: none !important;
 }
