@@ -9,6 +9,7 @@ layout: default
   {% for js in page.js %}
     {% include_relative {{js}} %}
   {% endfor %}
+  {% include social-share/socialSharing.js %}
 </script>
 <aside class="sm-transform sm-floating">
   {% include social-share/index.html %}
