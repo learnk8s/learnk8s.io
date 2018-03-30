@@ -295,3 +295,77 @@ green     #859900  operators, other keywords
 .silent-link{
   text-decoration: none !important;
 }
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.slide-up{
+  height: 60px;
+  transition: all .3s ease-out;
+}
+
+.slide-down{
+  height: 0;
+  transition: all .3s ease-out;
+}
+
+#social-share-container{
+  display: none;
+
+  ul{
+    list-style-type: none;
+  }
+}
+
+.sm-transform {
+  opacity: 0;
+  animation: fadeIn .5s ease-in 1 forwards;
+}
+
+.sm-floating{
+  position: fixed;
+  top:30%;
+  left: 15%;
+}
+
+
+
+@media screen and (max-width: 768px){
+  #social-share-container {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 1024px){
+  .sm-floating{
+    left: 0 !important;
+  }
+}
+
+@media screen and (min-width: 1024px){
+  .hidden-md{
+    display: none !important;
+  }
+}
+
+#bottom-social-share-container{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background: white;
+  border-top: 1px solid #586e75;
+  width: 100%;
+  margin: 0;
+  z-index: 1000;
+  transition: all .3s ease-out;
+  max-height: 60px;
+  text-align: right;
+  padding: 0 20px 0 0;
+
+  ul li{
+    display: inline-block;
+  }
+}
