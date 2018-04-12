@@ -8,7 +8,9 @@
   "author": "Daniele Polencic",
   "license": "MIT",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "inline-source-cli": "^1.2.0",
+    "shelljs": "^0.8.1",
     "tachyons-sass": "^4.9.0"
   },
   "devDependencies": {}

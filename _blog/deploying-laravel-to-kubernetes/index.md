@@ -9,14 +9,18 @@ description: "Laravel is an excellent framework for developing PHP applications.
 
 excerpt: "Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up."
 
-categories: "tbc"
-image: "TBC"
+categories: php docker minikube kubernetes laravel
+image: /blog/deploying-laravel-to-kubernetes/laravel_k8s.jpg
 
 open_graph:
     type: article
     title: Deploying Laravel to Kubernetes
-    image: ""
-    description: "Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up."   
+    image: /blog/deploying-laravel-to-kubernetes/laravel_k8s.jpg
+    description: "Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up."
+
+js:
+  - anime.min.js
+  - isScrolledIntoView.js
 ---
 
 Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows.
@@ -65,7 +69,7 @@ To follow with this demonstration, you will need the following installed on your
 
 __Docker image__
 
-Kubernetes deploys containerised applications, and therefore as a first step, you will need to build a Docker image of the demo application. Since this tutorial will be run locally on Minikube, you can just build a local Docker Image from the `DockerFile` included in the example code. 
+Kubernetes deploys containerised applications, and therefore as a first step, you will need to build a Docker image of the demo application. Since this tutorial will be run locally on Minikube, you can just build a local Docker Image from the `DockerFile` included in the example code.
 
 ```bash
 FROM php:7
@@ -79,11 +83,11 @@ RUN composer install
 RUN php artisan key:generate
 RUN php artisan serve --host=0.0.0.0 --port=8181
 EXPOSE 8181
-``` 
+```
 This `DockerFile` is reasonably basic:
 
 It extends a PHP7 base image, installs some system dependencies including composer and the standard PHP extensions required by Laravel. It then copies the application files to a working directory and installs the application's dependencies via composer. It also runs a couple of `artisan` commands,  last of which serves the application using the built-in PHP web server. In the end, it exposes port `8181` to the host machine.
-  
+
 To build the local Docker image:
 
 ```bash
@@ -107,7 +111,7 @@ kubectl config use-context minikube
 then you can deploy the container image:
 
 ```bash
-kubectl run laravel-kubernetes-demo --image=yourname/laravel-kubernetes-demo 
+kubectl run laravel-kubernetes-demo --image=yourname/laravel-kubernetes-demo
 --port=8181 --image-pull-policy=IfNotPresent
 ```
 The above command tells `kubectl` to run our demo application from the Docker image while making port 8181 available for listening. The last parameter of the command simply asks `kubectl` to not pull the image from a registry such as Docker Hub if it exists locally which in this case it does. Do note that you still need to be logged on to Docker's so that `kubectl` can check if the image is up to date.
@@ -140,6 +144,10 @@ minikube dashboard --url=true
 __Exposing a Service__
 
 So far you have created a deployment which is running the application's container. A Pod running in the cluster has a dynamic IP. If you route the traffic directly to it using the IP, you may still need to update the routing table every time you restart the Pod. In fact, on every deployment or container restart, a new IP is assigned to the Pod. To avoid managing IP addresses manually, you need to use a Service. The Service acts as a load balancer for a set of Pods. So even if the IP address of a Pod changes, the service is always pointing to it. And since the Service always has the same IP, you won't need to update anything manually.
+
+{% include_relative service.html %}
+
+You can create a service with:
 
 ```bash
 kubectl expose deployment laravel-kubernetes-demo --type=NodePort --port=8181
@@ -178,6 +186,8 @@ minikube service laravel-kubernetes-demo
 __Scaling__
 
 And that is it. You have successfully deployed the application in Kubernetes. It's exciting. But what's the point of doing all of this? Well, you only have one deployment with a single Pod running, provisioned to a Node with the exposed web service. Let's scale this deployment to two more instances of the application.
+
+{% include_relative scaling.html %}
 
 So that you understand where you are at this moment, run the following command to get a list of desired and available Pods:
 
@@ -223,6 +233,8 @@ __Ingress__
 You've already achieved great things, you deployed the application and scaled the deployment. You have already seen the running application in the browser when pointed to the cluster's (Minikube) IP address and node's port number. Now, you will see how to access the application through an assigned URL as you would do when deploying to the cloud.
 
 To use a URL in Kubernetes, you need an Ingress. An Ingress is a set of rules to allow inbound connections to reach a Kubernetes cluster. The Ingress is necessary because, in Kubernetes, resources such as Pods only have IP addresses which are routable by and within the cluster. Meaning that they are not accessible or reachable to and from the world outside.
+
+{% include_relative ingress.html %}
 
 I have included an `ingress.yaml` file with the source code of this demo application with the following contents:
 
