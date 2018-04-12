@@ -1,0 +1,18 @@
+.restart {
+  @extend .ba, .dib, .f7, .b--dark-blue, .dark-blue, .br1;
+  cursor: pointer;
+
+  span {
+    @extend .ttu, .dib, .ph2, .pv1;
+  }
+}
+
+.restart.inactive {
+  @extend .b--light-silver, .light-silver;
+}
+
+@media #{$breakpoint-not-small} {
+  .restart {
+    @extend .absolute-ns, .bottom-2-ns, .left-0-ns;
+  }
+}

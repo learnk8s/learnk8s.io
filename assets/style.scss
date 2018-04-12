@@ -1,6 +1,7 @@
 ---
 ---
 @import 'tachyons-sass/tachyons.scss';
+@import '../_blog/deploying-laravel-to-kubernetes/style.scss';
 
 .logo {
   fill: white;
@@ -195,10 +196,6 @@
       @extend .tl;
     }
   }
-}
-
-@media #{$breakpoint-not-small} {
-
 }
 
 @media #{$breakpoint-medium} {
