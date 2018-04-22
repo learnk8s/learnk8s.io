@@ -1,17 +1,17 @@
 ---
 layout: post
-title: Causing deliberate disruptions on Kubernetes
+title: "Kubernetes Chaos Engineering: Simulating Network Partitions"
 description:
 date: 2018-02-27 05:33:00
 categories: kubernetes kubeproxy network
-image:
+image: /blog/deliberate-disruptions-on-kubernetes/chaos-engineering-kubernetes.png
 js:
   - anime.min.js
   - isScrolledIntoView.js
 open_graph:
   type: article
-  title: Causing deliberate disruptions on Kubernetes
-  image:
+  title: "Kubernetes Chaos Engineering: Simulating Network Partitions"
+  image: /blog/deliberate-disruptions-on-kubernetes/chaos-engineering-kubernetes.png
   description:
 ---
 
@@ -52,7 +52,7 @@ The demo application with the kube configuration files is available on [manabusa
 The cluster is running on two nodes:
 
 ```bash
-$ kubectl get no
+$ kubectl get nodes
 NAME                                              STATUS  ROLES   AGE VERSION
 ip-172-20-46-130.ap-northeast-1.compute.internal  Ready   master  17h v1.8.6
 ip-172-20-64-88.ap-northeast-1.compute.internal   Ready   node    18h v1.8.6
@@ -61,7 +61,7 @@ ip-172-20-64-88.ap-northeast-1.compute.internal   Ready   node    18h v1.8.6
 The application is scaled to have ten replicas evenly ditrbuted across the two nodes:
 
 ```bash
-$ kubectl get po
+$ kubectl get pods
 NAME                              READY STATUS RESTARTS AGE
 k8s-hello-world-55f48f8c94-7shq5  1/1   Running 0       1m
 k8s-hello-world-55f48f8c94-9w5tj  1/1   Running 0       1m
@@ -78,7 +78,7 @@ k8s-hello-world-55f48f8c94-xzvlc  1/1   Running 0       1m
 A Service was created to load balance the requests across ten replicas:
 
 ```bash
-$ kubectl get svc
+$ kubectl get services
 NAME              TYPE      CLUSTER-IP      EXTERNAL-IP PORT(S)         AGE
 k8s-hello-world   NodePort  100.69.211.31   <none>      8080:30000/TCP  3h
 kubernetes        ClusterIP 100.64.0.1      <none>      443/TCP         18h

@@ -1,38 +1,62 @@
 {% include_relative node-drained.svg %}
 <script>
 (function() {
+  const svg = document.querySelector('#node-drained')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
   const basicTimeline = anime.timeline({
     autoplay: false,
   });
   basicTimeline
   .add({
-      targets: '.node-drained-node-2 path',
-      fill: '#333333',
-      easing: 'easeInExpo',
-    })
-    .add({
-      targets: '#node-drained-tick',
-      opacity: [100, 0],
-      easing: 'easeOutExpo',
-    })
-    .add({
-      targets: '#node-drained-x',
-      opacity: [0, 100],
-      easing: 'easeInExpo',
-    })
-    .add({
-      targets: '#node-drained-pod2',
-      opacity: [100, 0],
-      easing: 'easeOutExpo',
-    })
-    .add({
-      targets: '#node-drained-pod2-2',
-      opacity: [0, 100],
-      easing: 'easeInExpo',
-    })
-  document.getElementById('node-drained-restart').onclick = basicTimeline.restart;
-  onScrollIntoView(document.getElementById('node-drained'), function() {
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: '#node-drained-animejs-up',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#node-drained-animejs-down',
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    targets: '#node-drained-animejs-node',
+    opacity: [1, 0.2],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#node-drained-animejs-pod2',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#node-drained-animejs-pod5',
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
     setTimeout(basicTimeline.play, 1000)
   });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
 })();
 </script>

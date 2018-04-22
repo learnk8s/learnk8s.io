@@ -1,33 +1,69 @@
 {% include_relative iptables.svg %}
 <script>
 (function() {
+  const svg = document.querySelector('#iptables')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
   const basicTimeline = anime.timeline({
     autoplay: false,
   });
   basicTimeline
   .add({
-      targets: '#iptables-arrow1',
-      opacity: [0, 100],
-      easing: 'easeInExpo',
-    })
-    .add({
-      targets: ['#iptables-arrow2', '#kube-proxy-forward'],
-      opacity: [0, 100],
-      easing: 'easeInExpo',
-    })
-    .add({
-      targets: '#iptables-arrow2',
-      opacity: 0,
-      easing: 'easeOutExpo',
-    })
-    .add({
-      targets: '#iptables-arrow3',
-      opacity: [0, 100],
-      easing: 'easeInExpo',
-    })
-  document.getElementById('iptables-restart').onclick = basicTimeline.restart;
-  onScrollIntoView(document.getElementById('iptables'), function() {
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: '#iptables-animejs-arrow1',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#iptables-animejs-stroke1', '#iptables-animejs-forward'],
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    targets: '#iptables-animejs-stroke1',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#iptables-animejs-stroke2',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
     setTimeout(basicTimeline.play, 1000)
   });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
 })();
 </script>
+<style>
+  #iptables-animejs-stroke1,
+  #iptables-animejs-stroke2 {
+    stroke-dasharray: 25;
+    animation: dash 5s linear infinite;
+  }
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 1000;
+    }
+  }
+</style>
