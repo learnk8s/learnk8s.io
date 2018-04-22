@@ -31,17 +31,17 @@
   })
   .add({
     targets: '#service-animejs-pod2-down',
-    opacity: [0, 100],
-    easing: 'easeInExpo',
+    opacity: [0, 1],
+    easing: 'easeInQuad',
   })
   .add({
     targets: '#service-animejs-pod2-arrow',
-    opacity: [100, 0],
+    opacity: [1, 0],
     easing: 'easeOutExpo',
   })
   .add({
     targets: ['#service-animejs-pod-2', '#service-animejs-pod2-down'],
-    opacity: [100, 0],
+    opacity: [1, 0],
     easing: 'easeOutExpo',
     complete: function() {
       document.querySelector('#service-animejs-pod-label tspan').innerHTML = 'Pod 3'
@@ -51,18 +51,18 @@
   .add({}) // delay
   .add({
     targets: '#service-animejs-pod-2',
-    opacity: [0, 100],
-    easing: 'easeInExpo'
+    opacity: [0, 1],
+    easing: 'easeInQuad'
   })
   .add({
     targets: '#service-animejs-pod2-up',
-    opacity: [0, 100],
-    easing: 'easeInExpo'
+    opacity: [0, 1],
+    easing: 'easeInQuad'
   })
   .add({
     targets: '#service-animejs-pod2-arrow',
-    opacity: [0, 100],
-    easing: 'easeInExpo',
+    opacity: [0, 1],
+    easing: 'easeInQuad',
   })
   .add({
     complete: function() {
