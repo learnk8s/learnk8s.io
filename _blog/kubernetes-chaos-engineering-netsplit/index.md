@@ -4,15 +4,15 @@ title: "Kubernetes Chaos Engineering: Simulating Network Partitions"
 description:
 date: 2018-02-27 05:33:00
 categories: kubernetes kubeproxy network
-image: /blog/deliberate-disruptions-on-kubernetes/chaos-engineering-kubernetes.png
+image: /blog/kubernetes-chaos-engineering-netsplit/chaos-engineering-kubernetes.png
 js:
   - anime.min.js
   - isScrolledIntoView.js
 open_graph:
   type: article
   title: "Kubernetes Chaos Engineering: Simulating Network Partitions"
-  image: /blog/deliberate-disruptions-on-kubernetes/chaos-engineering-kubernetes.png
-  description:
+  image: /blog/kubernetes-chaos-engineering-netsplit/chaos-engineering-kubernetes.png
+  description: What happens when you deliberately disrupt the network proxy in Kubernetes? Does it still work? Perhaps it will self heal if given enough time? This post explores how Kubernetes is designed to handle failures and how you can tweak your cluster to survive network partitions.
 ---
 
 When you deploy an application in Kubernetes, your code ends up running on one or more worker nodes. Nodes are just virtual machines such as AWS EC2 or Google Compute Engine and having several of them means you can run and scale your application across instances efficiently. If you have a cluster made of three nodes and decide to scale your application to have four replicas, Kubernetes will spread the replicas across the nodes evenly like so:
@@ -42,14 +42,14 @@ It doesn't matter which node the traffic is coming from; the iptables rules are 
 
 But what happens when you drop the iptables manually from a node? What happens when there's no rule to forward the traffic?
 
-[Manabu Sakai tried just that](https://blog.manabusakai.com/2018/02/fault-tolerance-of-kubernetes/).
+[Manabu Sakai had the same question](https://blog.manabusakai.com/2018/02/fault-tolerance-of-kubernetes/). So he decided to find out.
 
 You will need a cluster with more than one node to test this — Minkube won't cut it since it's running on a single node.
 Manabu created a Kubernetes cluster on AWS using KOPS, and in this article, you'll replicate his findings.
 
-The demo application with the kube configuration files is available on [manabusakai/k8s-hello-world](https://github.com/manabusakai/k8s-hello-world). The version of the Kubernetes cluster is 1.8.6.
+The demo application with the kube configuration files is available on [manabusakai/k8s-hello-world](https://github.com/manabusakai/k8s-hello-world).
 
-The cluster is running on two nodes:
+Let's assume you have a 2 node cluster on GCP:
 
 ```bash
 $ kubectl get nodes
@@ -58,7 +58,20 @@ ip-172-20-46-130.ap-northeast-1.compute.internal  Ready   master  17h v1.8.6
 ip-172-20-64-88.ap-northeast-1.compute.internal   Ready   node    18h v1.8.6
 ```
 
-The application is scaled to have ten replicas evenly ditrbuted across the two nodes:
+You deployed the application with:
+
+```bash
+$ kubectl create -f https://raw.githubusercontent.com/manabusakai/k8s-hello-world/master/kubernetes/deployment.yml
+$ kubectl create -f https://raw.githubusercontent.com/manabusakai/k8s-hello-world/master/kubernetes/service.yml
+```
+
+And you scaled the deployments to ten replicas with:
+
+```bash
+$ kubectl scale --replicas 10 deployment/k8s-hello-world
+```
+
+The ten replicas are ditributed evenly across the two nodes:
 
 ```bash
 $ kubectl get pods
@@ -75,7 +88,7 @@ k8s-hello-world-55f48f8c94-vrkr9  1/1   Running 0       1m
 k8s-hello-world-55f48f8c94-xzvlc  1/1   Running 0       1m
 ```
 
-A Service was created to load balance the requests across ten replicas:
+A Service was created to load balance the requests across the ten replicas:
 
 ```bash
 $ kubectl get services
@@ -86,13 +99,13 @@ kubernetes        ClusterIP 100.64.0.1      <none>      443/TCP         18h
 
 The service is exposed to the outside world using `NodePort` on port 30000. In other words, each node has port 30000 opened to the public internet and can accept incoming traffic. `kube-proxy` is in charge of setting up the iptables rules to route the incoming traffic from port 30000 to one of the ten pods.
 
-You should try and hit a node on port 30000:
+You should try to make a request to the node on port 30000:
 
 ```bash
 $ curl ip-172-20-46-130.ap-northeast-1.compute.internal:30000
 ```
 
-You should be greeted by `Hello world! via k8s-hello-world-55f48f8c94-tjg4n`. Or the name of any other pod. Please note how even if you're always querying one node, your requests are routed to pods hosted on the other node too.
+You should be greeted by `Hello world! via k8s-hello-world-<id>`. Please note that even if you always make a request from the same node, the response could come from any pod. Even from a pod located in the other node. You can verify that by submitting more request to the same node.
 
 To complete your setup, you should have an external load balancer routing the traffic to your nodes on port 30000.
 
@@ -100,14 +113,14 @@ To complete your setup, you should have an external load balancer routing the tr
 
 ## It's time to break things
 
-Back to the original question. What if you drop the iptables rules? Will the cluster still work? What about the pods?
+Back to the original question. What if you drop the iptables rules? Will the cluster still work? Do the pods still serve traffic?
 
 Let's go ahead and do that.
 
 In a separate shell, you should set up `curl` to query the application every second and monitor for dropped requests:
 
 ```
-$ while sleep 1; do date +%s; curl -sS http://k8s-hello-world.manabusakai.com/ | grep ^Hello; done
+$ while sleep 1; do date +%s; curl -sS http://<your cluster>/ | grep ^Hello; done
 ```
 
 Log into one of the node servers and delete the iptables rules with `iptables -F`.
@@ -122,9 +135,11 @@ If everything went according to plan you should experience something similar to 
 1519526835 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
 ```
 
+Please note that the first column is the timestamp and second one is the message you receive back from the pod.
+
 As you can notice, it took about 27 seconds from when you dropped the iptables rules and the next response, from 1519526807 to 1519526834. During this time the external load balancer queued the request, and the `curl` command was waiting for a response.
 
-The node couldn't reply because there was no rule to route the incoming traffic!
+The first guess is that the node couldn't reply because there was no rule to route the incoming traffic.
 
 And in the meantime the iptables rules that you deleted are magically restored:
 
@@ -140,7 +155,7 @@ It's all `kube-proxy`'s fault, again.
 
 You already familiar with `kube-proxy` generating iptables rules to route incoming traffic to the right pod. In the scenario above, `kube-proxy` sets up iptables rules to do random load balancing between the ten pods.
 
-When you request for the node on port 30000, the IP address is resolved to the IP address of the service 100.69.211.31, and then iptables rules on your localhost (generated by `kube-proxy`) redirect it to one of the ten IP addresses of the pods at random.
+When you make a request using the node's port on 30000, the IP address is resolved to the IP address of the service 100.69.211.31, and then iptables rules on the node (generated by `kube-proxy`) redirect it to one of the ten IP addresses of the pods at random.
 
 So how does `kube-proxy` know when a new IP address was added, removed or just dropped like in your case?
 
@@ -198,4 +213,8 @@ You can see how `--iptables-sync-period=30s` is used to refresh the iptables rul
 
 ## Lesson learned
 
-Dropping iptables rules is similar to taking down a node. The traffic is still routed to the node, but the node is not able to forward it further. Kubernetes can recover from a similar failure by monitoring the state of the iptables rules and updating them when necessary.
+Dropping iptables rules is similar to make a node unavailable. The traffic is still routed to the node, but the node is not able to forward it further. Kubernetes can recover from a similar failure by monitoring the state of the iptables rules and updating them when necessary.
+
+Many thanks to [Manabu Sakai](https://twitter.com/manabusakai)'s blog post that was a huge inspiration and to [Valentin Ouvrard](https://twitter.com/Valentin_NC) for investigating the issue with the iptables propagation.
+
+If you liked the article and you want to know more, subscribe to our newsletter!
