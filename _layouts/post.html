@@ -5,20 +5,16 @@ layout: default
   {% include navbar/index.html %}
 </div>
 
-<aside class="sm-transform sm-floating w4 hidden-sm hidden-xs" id="social-share-container">
-  {% include social-share/index.html %}
-</aside>
 <script>
   {% for js in page.js %}
     {% include_relative {{js}} %}
   {% endfor %}
-  {% include social-share/socialSharing.js %}
 </script>
 
+<div class="tc mb4 db mw4 center" id="author-blurb">
+  {% include author_blurb.html %}
+</div>
 <article class="ph3 pt0 pb4 article">
-  <div class="tc mb4 db mw4 center" id="author-blurb">
-    {% include author_blurb.html %}
-  </div>
   <h1 class="navy tc f2 f1-ns">{{ page.title }}</h1>
   {% if page.image %}
   <img src="{{ page.image }}" alt="{{ page.title }}">
@@ -27,6 +23,7 @@ layout: default
   <hr class="w3 center b--navy mv4 mv5-ns">
   {% endif %}
   {{ content }}
+  {% include social-share/index.html %}
 </article>
 
 <section class="consultation white bb b--lightest-blue flex-l items-start-l justify-center-l pt5 pb4" id="mailing-list-container">
@@ -53,7 +50,3 @@ layout: default
 </section>
 
 {% include footer/index.html %}
-
-<section class="hidden-md" id="bottom-social-share-container">
-    {% include social-share/index.html %}
-</section>

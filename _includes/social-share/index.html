@@ -1,35 +1,48 @@
-<ul>
+<section class="fixed-l top-2-l dn-l nl6-l" id="social-share-container">
+  <div class="ttu f6 dn-l tc pt4 mid-gray silver b">Enjoyed the article? Share it!</div>
+  <ul class="list pl0 flex justify-center flex-column-l">
     <!-- Share on Facebook -->
     <li>
-        <a href="http://www.facebook.com/sharer.php?u={{ site.url }}{{ page.url }}"
-           target="_blank" title="Share on Facebook" rel="nofollow"
-           onclick="return shareOnFacebook()"><div class="w2">{% include social-share/facebook.svg %}</div></a>
+      <a href="http://www.facebook.com/sharer.php?u={{ page.url | absolute_url }}"
+          target="_blank" title="Share on Facebook" rel="nofollow"
+          onclick="openNewWindow(this, 200, 200)"><div class="w3 w2-l">{% include social-share/facebook.svg %}</div></a>
     </li>
     <!-- ./ Share on Facebook -->
 
     <!-- Share on Twitter -->
-    <li><a href="https://twitter.com/share?url={{ site.url }}{{ page.url }}"
-           target="_blank" rel="nofollow" title="Share on Twitter"
-           onclick="return shareOnTwitter()"><div class="w2">{% include social-share/twitter.svg %}</div></a></li>
+    {% assign full_url = page.url | absolute_url %}
+    {% assign url_length = full_url | size %}
+    {% assign available_characters = 275 | minus: url_length %}
+    {% assign tweet_content = page.open_graph.description | truncate: available_characters %}
+    <li>
+      <a href="https://twitter.com/share?text={{ tweet_content }}&?url={{ page.url | absolute_url }}"
+        target="_blank" rel="nofollow" title="Share on Twitter"
+        onclick="openNewWindow(this, 400, 230)"><div class="w3 w2-l">{% include social-share/twitter.svg %}</div></a>
+    </li>
     <!-- ./ Share on Twitter -->
 
     <!-- Share on Google+ -->
-    <li><a href="https://plus.google.com/share?url={{ site.url }}{{ page.url }}"
-           target="_blank" title="Share on Google+" rel="nofollow"
-           onclick="return shareOnGooglePlus()"><div class="w2">{% include social-share/gplus.svg %}</div></a></li>
-    <!-- ./ Share on Google+  -->
+    <li>
+      <a href="https://plus.google.com/share?url={{ page.url | absolute_url }}"
+        target="_blank" title="Share on Google+" rel="nofollow"
+        onclick="openNewWindow(this, 400, 300)"><div class="w3 w2-l">{% include social-share/gplus.svg %}</div></a>
+    </li>
+    <!-- ./ Share on Google+ -->
 
     <!-- Share on LinkedIn -->
     <li>
-        <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ site.url }}{{ page.url }}"
-           title="Share on LinkedIn" target="_blank" rel="nofollow"
-           onclick="return shareOnLinkedIn()"><div class="w2">{% include social-share/linkedin.svg %}</div></a>
+      <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ page.url | absolute_url }}"
+        title="Share on LinkedIn" target="_blank" rel="nofollow"
+        onclick="openNewWindow(this, 400, 300)"><div class="w3 w2-l">{% include social-share/linkedin.svg %}</div></a>
     </li>
     <!-- ./ Share on LinkedIn -->
 
     <!-- Share by Email -->
     <li>
-        <a href="mailto:?Subject={{ page.title }}&amp;Body={{ site.url }}{{ page.url }}"
-           title="Share by Email"><div class="w2">{% include social-share/mail.svg %}</div></a></li>
+      <a href="mailto:?Subject={{ page.title }}&amp;Body={{ page.open_graph.description }}%0A%0A{{ page.url | absolute_url }}"
+        title="Share by Email"><div class="w3 w2-l">{% include social-share/mail.svg %}</div></a>
+    </li>
     <!-- Share by Email -->
-</ul>
+  </ul>
+</section>
+<script>{% include social-share/socialSharing.js %}</script>
