@@ -15,7 +15,7 @@ open_graph:
   description: What happens when you deliberately disrupt the network proxy in Kubernetes? Does it still work? Perhaps it will self heal if given enough time? This post explores how Kubernetes is designed to handle failures and how you can tweak your cluster to survive network partitions.
 ---
 
-When you deploy an application in Kubernetes, your code ends up running on one or more worker nodes. Nodes are virtual machines such as AWS EC2 or Google Compute Engine and having several of them means you can run and scale your application across instances efficiently. If you have a cluster made of three nodes and decide to scale your application to have four replicas, Kubernetes will spread the replicas across the nodes evenly like so:
+When you deploy an application in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or VM such as AWS EC2 or Google Compute Engine and having several of them means you can run and scale your application across instances efficiently. If you have a cluster made of three nodes and decide to scale your application to have four replicas, Kubernetes will spread the replicas across the nodes evenly like so:
 
 {% include_relative deployment.html %}
 
@@ -33,7 +33,7 @@ Since each node can serve the application, how does the third node know that it 
 
 Kubernetes has a binary called `kube-proxy` that runs on each node, and that is in charge of routing the traffic to a specific pod. You can think of `kube-proxy` like a receptionist. The proxy intercepts all the traffic directed to the node and routes it to the right pod.
 
-**But how does `kube-proxy` know where are all the pods?** It doesn't.
+**But how does `kube-proxy` know where all the pods are?** It doesn't.
 
 The master node knows *everything* and is in charge of creating the list with all the routing rules. `kube-proxy` is in charge of checking and enforcing the rules on the list. In the simple scenario above, the list looks like this:
 
@@ -56,9 +56,9 @@ Let's assume you have a 2 node cluster on GCP:
 
 ```bash
 $ kubectl get nodes
-NAME                                              STATUS  ROLES   AGE VERSION
-ip-172-20-46-130.ap-northeast-1.compute.internal  Ready   master  17h v1.8.6
-ip-172-20-64-88.ap-northeast-1.compute.internal   Ready   node    18h v1.8.6
+NAME        STATUS  ROLES   AGE VERSION
+node1       Ready   <none>  17h v1.8.8-gke.0
+node2       Ready   <none>  18h v1.8.8-gke.0
 ```
 
 And you deployed Manabu's application with:
@@ -74,21 +74,21 @@ You should scale the deployments to ten replicas with:
 $ kubectl scale --replicas 10 deployment/k8s-hello-world
 ```
 
-The ten replicas are ditributed evenly across the two nodes:
+The ten replicas are distributed evenly across the two nodes:
 
 ```bash
 $ kubectl get pods
-NAME                              READY STATUS RESTARTS AGE
-k8s-hello-world-55f48f8c94-7shq5  1/1   Running 0       1m
-k8s-hello-world-55f48f8c94-9w5tj  1/1   Running 0       1m
-k8s-hello-world-55f48f8c94-cdc64  1/1   Running 0       1m
-k8s-hello-world-55f48f8c94-lkdvj  1/1   Running 0       1m
-k8s-hello-world-55f48f8c94-npkn6  1/1   Running 0       1m
-k8s-hello-world-55f48f8c94-ppsqk  1/1   Running 0       1m
-k8s-hello-world-55f48f8c94-sc9pf  1/1   Running 0       1m
-k8s-hello-world-55f48f8c94-tjg4n  1/1   Running 0       1m
-k8s-hello-world-55f48f8c94-vrkr9  1/1   Running 0       1m
-k8s-hello-world-55f48f8c94-xzvlc  1/1   Running 0       1m
+NAME                              READY STATUS RESTARTS AGE  NODE
+k8s-hello-world-55f48f8c94-7shq5  1/1   Running 0       1m   node1
+k8s-hello-world-55f48f8c94-9w5tj  1/1   Running 0       1m   node1
+k8s-hello-world-55f48f8c94-cdc64  1/1   Running 0       1m   node2
+k8s-hello-world-55f48f8c94-lkdvj  1/1   Running 0       1m   node2
+k8s-hello-world-55f48f8c94-npkn6  1/1   Running 0       1m   node1
+k8s-hello-world-55f48f8c94-ppsqk  1/1   Running 0       1m   node2
+k8s-hello-world-55f48f8c94-sc9pf  1/1   Running 0       1m   node1
+k8s-hello-world-55f48f8c94-tjg4n  1/1   Running 0       1m   node2
+k8s-hello-world-55f48f8c94-vrkr9  1/1   Running 0       1m   node1
+k8s-hello-world-55f48f8c94-xzvlc  1/1   Running 0       1m   node2
 ```
 
 A Service was created to load balance the requests across the ten replicas:
@@ -109,8 +109,10 @@ But how is the traffic routed from port 30000 to my pod?
 You should try to request the node on port 30000:
 
 ```bash
-$ curl ip-172-20-46-130.ap-northeast-1.compute.internal:30000
+$ curl <node ip>:30000
 ```
+
+> Please note that you can retrieve the node's ip with `kubectl get nodes -o wide`
 
 The application replies with *Hello World!* and the hostname of the container is running on. In the previous command, you should be greeted by `Hello world! via <hostname>`.
 
@@ -122,7 +124,7 @@ To complete your setup, you should have an external load balancer routing the tr
 
 {% include_relative load-balancer.svg %}
 
-The load balancer will route the incoming traffic from the internet to one of the two pods.
+The load balancer will route the incoming traffic from the internet to one of the two nodes.
 
 If you're confused by how many load balancer-like things we have, let me quickly recap:
 
@@ -148,7 +150,7 @@ Let's go ahead and delete the routing rules.
 In a separate shell, you should monitor the application for time and dropped requests. You could use a command like this:
 
 ```bash
-$ while sleep 1; do date +%s; curl -sS http://<your cluster>/ | grep ^Hello; done
+$ while sleep 1; do date +%s; curl -sS http://<your load balancer ip>/ | grep ^Hello; done
 ```
 
 In this case, you have the timestamp in the first column and the response from the pod in the other:
@@ -165,6 +167,8 @@ It's time to drop the bomb. Let's delete the routing rules from the node.
 In **iptables** mode, `kube-proxy` writes the list of routing rules to the node using iptables rules.
 
 So you could log in into one of the node servers and delete the iptables rules with `iptables -F`.
+
+> Please note that `iptables -F` may interfer with your SSH connection.
 
 If everything went according to plan you should experience something similar to this:
 
@@ -215,7 +219,7 @@ Hello world! via k8s-hello-world-55f48f8c94-npkn6
 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
 ```
 
-It shouldn't come as a surprise that connections to the node are timing out after you drop the iptables rules. What's more interesting is that `curls` waits for ten seconds before giving up.
+It shouldn't come as a surprise that connections to the node are timing out after you drop the iptables rules. What's more interesting is that `curl` waits for ten seconds before giving up.
 
 *What if in the previous example the load balancer is waiting for the connection to be made?*
 
