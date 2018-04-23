@@ -160,7 +160,7 @@ In this case, you have the timestamp in the first column and the response from t
 1519526807 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
 ```
 
-It's time to drop the bomb. Let's delete the routing rules from the node.
+Let's delete the routing rules from the node.
 
 `kube-proxy` can operate in three modes: **userspace**, **iptables** and **ipvs**. The default since Kubernetes 1.2 is **iptables**.
 
