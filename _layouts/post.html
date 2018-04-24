@@ -15,10 +15,10 @@ layout: default
   {% include social-share/socialSharing.js %}
 </script>
 
+<div class="tc mb4 db mw4 center" id="author-blurb">
+  {% include author_blurb.html %}
+</div>
 <article class="ph3 pt0 pb4 article">
-  <div class="tc mb4 db mw4 center" id="author-blurb">
-    {% include author_blurb.html %}
-  </div>
   <h1 class="navy tc f2 f1-ns">{{ page.title }}</h1>
   {% if page.image %}
   <img src="{{ page.image }}" alt="{{ page.title }}">
