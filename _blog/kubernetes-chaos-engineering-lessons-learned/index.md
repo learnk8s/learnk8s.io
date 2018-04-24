@@ -1,18 +1,25 @@
 ---
 layout: post
-title: "Kubernetes Chaos Engineering: Lessons Learned"
-description:
+title: "Kubernetes Chaos Engineering: Lessons Learned in Network Load Balancing"
 date: 2018-02-27 05:33:00
-categories: kubernetes kubeproxy network
+author: "Daniele Polencic"
+
+description: "When you deploy an application in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or VM such as AWS EC2 or Google Compute Engine and having several of them means you can run and scale your application across instances efficiently. When there is an incoming request, the cluster routes the traffic to one of the nodes using a network proxy. But what happens when network proxy crashes? Does the cluster still work? Can Kubernetes recover from the failure?"
+
+excerpt: "When you deploy an application in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or VM such as AWS EC2 or Google Compute Engine and having several of them means you can run and scale your application across instances efficiently. When there is an incoming request, the cluster routes the traffic to one of the nodes using a network proxy. But what happens when network proxy crashes? Does the cluster still work? Can Kubernetes recover from the failure?"
+
+categories: kubernetes kube-proxy network "chaos engineering"
 image: /blog/kubernetes-chaos-engineering-lessons-learned/chaos-engineering-kubernetes.png
+
+open_graph:
+  type: article
+  title: "Kubernetes Chaos Engineering: Lessons Learned in Network Load Balancing"
+  image: /blog/kubernetes-chaos-engineering-lessons-learned/chaos-engineering-kubernetes.png
+  description: "When you deploy an app in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or a VM. The cluster routes the traffic to the nodes using a network proxy. But what happens when network proxy crashes?"
+
 js:
   - anime.min.js
   - isScrolledIntoView.js
-open_graph:
-  type: article
-  title: "Kubernetes Chaos Engineering: Lessons Learned"
-  image: /blog/kubernetes-chaos-engineering-lessons-learned/chaos-engineering-kubernetes.png
-  description: What happens when you deliberately disrupt the network proxy in Kubernetes? Does it still work? Perhaps it will self heal if given enough time? This post explores how Kubernetes is designed to handle failures and how you can tweak your cluster to survive failing nodes.
 ---
 
 When you deploy an application in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or VM such as AWS EC2 or Google Compute Engine and having several of them means you can run and scale your application across instances efficiently. If you have a cluster made of three nodes and decide to scale your application to have four replicas, Kubernetes will spread the replicas across the nodes evenly like so:
@@ -33,7 +40,9 @@ Since each node can serve the application, how does the third node know that it 
 
 Kubernetes has a binary called `kube-proxy` that runs on each node, and that is in charge of routing the traffic to a specific pod. You can think of `kube-proxy` like a receptionist. The proxy intercepts all the traffic directed to the node and routes it to the right pod.
 
-**But how does `kube-proxy` know where all the pods are?** It doesn't.
+**But how does `kube-proxy` know where all the pods are?**
+
+It doesn't.
 
 The master node knows *everything* and is in charge of creating the list with all the routing rules. `kube-proxy` is in charge of checking and enforcing the rules on the list. In the simple scenario above, the list looks like this:
 
@@ -46,9 +55,9 @@ It doesn't matter which node the traffic is coming from; `kube-proxy` knows wher
 
 ## But what happens when `kube-proxy` crashes?
 
-And what if the list of rules is lost?
+**And what if the list of rules is lost?**
 
-What happens when there's no rule to forward the traffic to?
+**What happens when there's no rule to forward the traffic to?**
 
 [Manabu Sakai had the same questions](https://blog.manabusakai.com/2018/02/fault-tolerance-of-kubernetes/). So he decided to find out.
 
@@ -102,7 +111,7 @@ kubernetes        ClusterIP 100.64.0.1      <none>      443/TCP         18h
 
 The service is exposed to the outside world using `NodePort` on port 30000. In other words, each node has port 30000 opened to the public internet and can accept incoming traffic.
 
-But how is the traffic routed from port 30000 to my pod?
+**But how is the traffic routed from port 30000 to my pod?**
 
 `kube-proxy` is in charge of setting up the rules to route the incoming traffic from port 30000 to one of the ten pods.
 
@@ -126,7 +135,7 @@ To complete your setup, you should have an external load balancer routing the tr
 
 The load balancer will route the incoming traffic from the internet to one of the two nodes.
 
-If you're confused by how many load balancer-like things we have, let me quickly recap:
+If you're confused by how many load balancer-like things we have, let's quickly recap:
 
 1. Traffic coming from the internet is routed to the primary load balancer
 1. The load balancer forwards the traffic to one of the two nodes on port 30000
@@ -310,7 +319,7 @@ Mystery unravelled!
 
 You can see how `--iptables-sync-period=30s` is used to refresh the iptables rules every 30 seconds. You could go ahead and modify that command to customise the min and max time to update the iptables rules for that node.
 
-## Lesson learned
+## Lessons learned
 
 Dropping iptables rules is similar to make a node unavailable. The traffic is still routed to the node, but the node is not able to forward it further. Kubernetes can recover from a similar failure by monitoring the state of the routing rules and updating them when necessary.
 
