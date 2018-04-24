@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 640" id="two-replicas">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 700" id="two-replicas">
   <g fill="none" fill-rule="evenodd">
-    <g transform="translate(39 126)">
+    <g transform="translate(39 156)">
       <g transform="translate(0 372)">
         <path fill="#D2D2D2" d="M186,5 L186,24 C186,26.7614237 183.761424,29 181,29 L5,29 C2.23857625,29 3.38176876e-16,26.7614237 0,24 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 L181,0 C183.761424,-5.07265313e-16 186,2.23857625 186,5 Z"/>
         <rect width="4" height="4" x="31" y="6" fill="#A3A3A3"/>
@@ -292,7 +292,7 @@
         <path d="M11.2939371,10.339203 C11.2676435,10.3344866 11.2407371,10.3321284 11.2137387,10.3334418 L11.2137081,10.3334418 C11.1686903,10.3356507 11.1235194,10.3468746 11.0803097,10.3671731 C10.9115161,10.4463373 10.8380903,10.6410537 10.9114855,10.8071433 L10.9089419,10.8104269 L11.7076161,12.689591 C12.4774839,12.2118299 13.0537048,11.4979493 13.3547935,10.6739194 L11.2972774,10.3350836 L11.2939371,10.339203 Z"/>
       </g>
     </g>
-    <g transform="translate(536 126)">
+    <g transform="translate(536 156)">
       <g transform="translate(0 372)">
         <path fill="#D2D2D2" d="M186,5 L186,24 C186,26.7614237 183.761424,29 181,29 L5,29 C2.23857625,29 3.38176876e-16,26.7614237 0,24 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 L181,0 C183.761424,-5.07265313e-16 186,2.23857625 186,5 Z"/>
         <rect width="4" height="4" x="31" y="6" fill="#A3A3A3"/>
@@ -584,7 +584,7 @@
         <path d="M11.2939371,10.339203 C11.2676435,10.3344866 11.2407371,10.3321284 11.2137387,10.3334418 L11.2137081,10.3334418 C11.1686903,10.3356507 11.1235194,10.3468746 11.0803097,10.3671731 C10.9115161,10.4463373 10.8380903,10.6410537 10.9114855,10.8071433 L10.9089419,10.8104269 L11.7076161,12.689591 C12.4774839,12.2118299 13.0537048,11.4979493 13.3547935,10.6739194 L11.2972774,10.3350836 L11.2939371,10.339203 Z"/>
       </g>
     </g>
-    <g id="two-replicas-animejs-node" transform="translate(288 104)">
+    <g id="two-replicas-animejs-node" transform="translate(288 134)">
       <g transform="translate(0 22)">
         <g transform="translate(0 372)">
           <path fill="#D2D2D2" d="M186,5 L186,24 C186,26.7614237 183.761424,29 181,29 L5,29 C2.23857625,29 3.38176876e-16,26.7614237 0,24 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 L181,0 C183.761424,-5.07265313e-16 186,2.23857625 186,5 Z"/>
@@ -881,15 +881,15 @@
         <tspan x="0" y="14">Node 2</tspan>
       </text>
     </g>
-    <g fill="#00C176" fill-rule="nonzero" transform="translate(184 75)">
+    <g fill="#00C176" fill-rule="nonzero" transform="translate(184 105)">
       <path d="M20.4,0.00012 C31.68,0.00012 40.8,9.12012 40.8,20.40012 C40.8,31.68012 31.68,40.80012 20.4,40.80012 C9.12,40.80012 0,31.68012 0,20.40012 C0,9.12012 9.12,0.00012 20.4,0.00012 Z M21.3,27.12012 L33.06,15.36012 L29.1,11.40012 L17.34,23.16012 L11.76,17.58012 L7.8,21.54012 L13.38,27.12012 L17.34,31.08012 L21.3,27.12012 Z"/>
     </g>
-    <g id="two-replicas-animejs-up" fill="#00C176" fill-rule="nonzero" transform="translate(433 75)">
+    <g id="two-replicas-animejs-up" fill="#00C176" fill-rule="nonzero" transform="translate(433 105)">
       <g>
         <path d="M20.4,0.00012 C31.68,0.00012 40.8,9.12012 40.8,20.40012 C40.8,31.68012 31.68,40.80012 20.4,40.80012 C9.12,40.80012 0,31.68012 0,20.40012 C0,9.12012 9.12,0.00012 20.4,0.00012 Z M21.3,27.12012 L33.06,15.36012 L29.1,11.40012 L17.34,23.16012 L11.76,17.58012 L7.8,21.54012 L13.38,27.12012 L17.34,31.08012 L21.3,27.12012 Z"/>
       </g>
     </g>
-    <g id="two-replicas-animejs-pod1" transform="translate(52 167)">
+    <g id="two-replicas-animejs-pod1" transform="translate(52 197)">
       <g transform="translate(0 20)">
         <path fill="#FF003C" d="M160,120.62165 C160,121.382957 159.499026,122 158.880799,122 L1.119201,122 C0.500973783,122 0,121.382957 0,120.62165 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 L155,0 C157.761424,-5.07265313e-16 160,2.23857625 160,5 L160,120.62165 Z"/>
         <text fill="#FFF" font-family="-apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif" font-size="34" font-weight="bold">
@@ -904,7 +904,7 @@
         <tspan x="4" y="14">Pod 1</tspan>
       </text>
     </g>
-    <g id="two-replicas-animejs-pod2" transform="translate(301 167)">
+    <g id="two-replicas-animejs-pod2" transform="translate(301 197)">
       <g transform="translate(0 20)">
         <path fill="#FF003C" d="M160,120.62165 C160,121.382957 159.499026,122 158.880799,122 L1.119201,122 C0.500973783,122 0,121.382957 0,120.62165 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 L155,0 C157.761424,-5.07265313e-16 160,2.23857625 160,5 L160,120.62165 Z"/>
         <text fill="#FFF" font-family="-apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif" font-size="34" font-weight="bold">
@@ -919,7 +919,7 @@
         <tspan x="4" y="14">Pod 2</tspan>
       </text>
     </g>
-    <g id="two-replicas-animejs-pod3" transform="translate(549 167)">
+    <g id="two-replicas-animejs-pod3" transform="translate(549 197)">
       <g transform="translate(0 20)">
         <path fill="#FF003C" d="M160,120.62165 C160,121.382957 159.499026,122 158.880799,122 L1.119201,122 C0.500973783,122 0,121.382957 0,120.62165 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 L155,0 C157.761424,-5.07265313e-16 160,2.23857625 160,5 L160,120.62165 Z"/>
         <text fill="#FFF" font-family="-apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif" font-size="34" font-weight="bold">
@@ -934,7 +934,7 @@
         <tspan x="4" y="14">Pod 3</tspan>
       </text>
     </g>
-    <g id="two-replicas-animejs-pod4" transform="translate(52 320)">
+    <g id="two-replicas-animejs-pod4" transform="translate(52 350)">
       <g transform="translate(0 20)">
         <path fill="#FF003C" d="M160,120.62165 C160,121.382957 159.499026,122 158.880799,122 L1.119201,122 C0.500973783,122 0,121.382957 0,120.62165 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 L155,0 C157.761424,-5.07265313e-16 160,2.23857625 160,5 L160,120.62165 Z"/>
         <text fill="#FFF" font-family="-apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif" font-size="34" font-weight="bold">
@@ -950,12 +950,12 @@
       </text>
     </g>
     <text fill="#4A4A4A" font-family="-apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif" font-size="16" font-weight="bold">
-      <tspan x="39" y="118">Node 1</tspan>
+      <tspan x="39" y="148">Node 1</tspan>
     </text>
     <text fill="#4A4A4A" font-family="-apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif" font-size="16" font-weight="bold">
-      <tspan x="536" y="118">Node 3</tspan>
+      <tspan x="536" y="148">Node 3</tspan>
     </text>
-    <g fill="#00C176" fill-rule="nonzero" transform="translate(681 75)">
+    <g fill="#00C176" fill-rule="nonzero" transform="translate(681 105)">
       <path d="M20.4,0.00012 C31.68,0.00012 40.8,9.12012 40.8,20.40012 C40.8,31.68012 31.68,40.80012 20.4,40.80012 C9.12,40.80012 0,31.68012 0,20.40012 C0,9.12012 9.12,0.00012 20.4,0.00012 Z M21.3,27.12012 L33.06,15.36012 L29.1,11.40012 L17.34,23.16012 L11.76,17.58012 L7.8,21.54012 L13.38,27.12012 L17.34,31.08012 L21.3,27.12012 Z"/>
     </g>
   </g>
