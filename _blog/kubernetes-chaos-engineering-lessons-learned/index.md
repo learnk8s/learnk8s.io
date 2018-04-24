@@ -1,18 +1,18 @@
 ---
 layout: post
-title: "Kubernetes Chaos Engineering: Simulating Network Partitions"
+title: "Kubernetes Chaos Engineering: Lessons Learned"
 description:
 date: 2018-02-27 05:33:00
 categories: kubernetes kubeproxy network
-image: /blog/kubernetes-chaos-engineering-netsplit/chaos-engineering-kubernetes.png
+image: /blog/kubernetes-chaos-engineering-lessons-learned/chaos-engineering-kubernetes.png
 js:
   - anime.min.js
   - isScrolledIntoView.js
 open_graph:
   type: article
-  title: "Kubernetes Chaos Engineering: Simulating Network Partitions"
-  image: /blog/kubernetes-chaos-engineering-netsplit/chaos-engineering-kubernetes.png
-  description: What happens when you deliberately disrupt the network proxy in Kubernetes? Does it still work? Perhaps it will self heal if given enough time? This post explores how Kubernetes is designed to handle failures and how you can tweak your cluster to survive network partitions.
+  title: "Kubernetes Chaos Engineering: Lessons Learned"
+  image: /blog/kubernetes-chaos-engineering-lessons-learned/chaos-engineering-kubernetes.png
+  description: What happens when you deliberately disrupt the network proxy in Kubernetes? Does it still work? Perhaps it will self heal if given enough time? This post explores how Kubernetes is designed to handle failures and how you can tweak your cluster to survive failing nodes.
 ---
 
 When you deploy an application in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or VM such as AWS EC2 or Google Compute Engine and having several of them means you can run and scale your application across instances efficiently. If you have a cluster made of three nodes and decide to scale your application to have four replicas, Kubernetes will spread the replicas across the nodes evenly like so:
