@@ -13,10 +13,10 @@ categories: php docker minikube kubernetes laravel
 image: /blog/deploying-laravel-to-kubernetes/laravel_k8s.jpg
 
 open_graph:
-    type: article
-    title: How to deploy Laravel to Kubernetes
-    image: /blog/deploying-laravel-to-kubernetes/laravel_k8s.jpg
-    description: "Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up."
+  type: article
+  title: How to deploy Laravel to Kubernetes
+  image: /blog/deploying-laravel-to-kubernetes/laravel_k8s.jpg
+  description: "Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up."
 
 js:
   - anime.min.js
