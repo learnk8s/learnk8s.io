@@ -4,7 +4,6 @@
  * Forces the share links to open in a new and sized
  * window.
  */
-
 function openShareWindow (element, width, height) {
 
 	var href = element.getAttribute('href')
@@ -15,11 +14,10 @@ function openShareWindow (element, width, height) {
 	window.open(
 		href,
 		'shareWindow',
-		"location=1,toolbar=1,menubar=1,resizable=1,width=" + (width || 400) +
-		",height=" + (height || 300)
+		'location=1,toolbar=1,menubar=1,resizable=1,width=' + (width || 400) +
+		',height=' + (height || 300)
 	)
 }
-
 
 /**
  * Handles the scroll event.
@@ -100,7 +98,7 @@ function isSmallScreen () {
  */
 function getTwitterUrl () {
 	return 'https://twitter.com/intent/tweet?text=' + getTweetText() +
-		'&via=' + getTwitterUsername() + '&url=' + getArticleUrl()
+		'&via=' + getTwitterSetting('username') + '&url=' + getArticleUrl()
 }
 
 /**
@@ -128,10 +126,10 @@ function trimArticleTitleForTweet () {
 	var title = getArticleTitle()
 	var moreText = ' ..'
 	var numberOfCharsToTrim = calculateNumberOfCharactersToTrimFromArticleTitle()
-		+	moreText.length
+		+ moreText.length
 
 	title = title.substr(0, (title.length - numberOfCharsToTrim))
-	return  title + moreText
+	return title + moreText
 }
 
 /**
@@ -142,10 +140,10 @@ function trimArticleTitleForTweet () {
  * @return {boolean}
  */
 function tweetExceedsAllowedLength () {
-	var allowedTweetLength = 280
+	var allowedTweetLength = getTwitterSetting('allowed_tweet_length')
 	var articleTitleLength = getArticleTitle().length + 1 // trailing space
-	var shortenedUrlLength = 24 // 23 + trailing space
-	var userNameLength = 13 // via @learnk8s
+	var shortenedUrlLength = getTwitterSetting('shortened_url_length') + 1 // trailing space
+	var userNameLength = getTwitterSetting('username_display_length')
 	var tweetLength = articleTitleLength + shortenedUrlLength + userNameLength
 	return tweetLength > allowedTweetLength
 }
@@ -156,37 +154,31 @@ function tweetExceedsAllowedLength () {
  *
  * @return {number}
  */
-function calculateNumberOfCharactersToTrimFromArticleTitle() {
-	var standardTweetLength = 280
+function calculateNumberOfCharactersToTrimFromArticleTitle () {
+	var allowedTweetLength = getTwitterSetting('allowed_tweet_length')
 	var articleTitleLength = getArticleTitle().length + 1 // trailing space
-	var shortenedUrlLength = 24 // 23 + trailing space
-	var userNameLength = 13 // "via @learnk8s"
-	var availableCharacters = standardTweetLength - shortenedUrlLength -
+	var shortenedUrlLength = getTwitterSetting('shortened_url_length') + 1 // trailing space
+	var userNameLength = getTwitterSetting('username_display_length')
+	var availableCharacters = allowedTweetLength - shortenedUrlLength -
 		userNameLength
 
 	return articleTitleLength - availableCharacters
 }
 
 /**
- * Article title length: 315 + 1 = 316
- * Url and username length = 37
+ * Gets the twitter setting.
  *
- * Available chars: 280 - 37 = 243
- *
- * Text should be trimmed by: 316 - 243 = 73
- *
- * Text length should be: 280 - 37 = 243
+ * @param name
+ * @return {*}
  */
-
-
-
-/**
- * Gets the Twitter's username.
- *
- * @return {string}
- */
-function getTwitterUsername () {
-	return 'learnk8s'
+function getTwitterSetting (name) {
+	var settings = {
+		'allowed_tweet_length': 280,
+		'shortened_url_length': 23,
+		'username_display_length': 13, // via @learnk8s
+		'username': 'learnk8s'
+	}
+	return settings[name]
 }
 
 /**
@@ -201,12 +193,10 @@ function getArticleUrl () {
  * Gets the Article's title.
  *
  * @return {string}
- * @todo
  */
 function getArticleTitle () {
-	return '{{page.title}}' + '{{page.title}}' + '{{page.title}}' + '{{page.title}}' + '{{page.title}}' + '{{page.title}}' + '{{page.title}}' + '{{page.title}}' + '{{page.title}}'
+	return '{{page.title}}'
 }
-
 
 /**
  * Calls the actOnScroll method when
