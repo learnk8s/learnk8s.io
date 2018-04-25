@@ -186,7 +186,7 @@ function getTwitterSetting (name) {
  * @return {string}
  */
 function getArticleUrl () {
-	return '{{site.url}}{{page.url}}'
+	return '{{ page.url | absolute_url }}'
 }
 
 /**
