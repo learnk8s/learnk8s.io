@@ -5,44 +5,21 @@
  * window.
  */
 
-function shareOnFacebook () {
+function openShareWindow (element, width, height) {
+
+	var href = element.getAttribute('href')
+	if (element.getAttribute('id') === 'twitter-share') {
+		href = getTwitterUrl()
+	}
+
 	window.open(
-		'http://www.facebook.com/sharer.php?u={{ site.url }}{{ page.url }}',
+		href,
 		'shareWindow',
-		'location=1,toolbar=1,menubar=1,resizable=1,width=200,height=200'
+		"location=1,toolbar=1,menubar=1,resizable=1,width=" + (width || 400) +
+		",height=" + (height || 300)
 	)
-	return false
 }
 
-function shareOnTwitter () {
-	window.open(
-		getTwitterUrl(),
-		'shareWindow',
-		'location=1,toolbar=1,menubar=1,resizable=1,width=400,height=300'
-	)
-	console.log(
-		'\nDebug TEXT length:  \n' + getTweetText().length
-	)
-	return false
-}
-
-function shareOnGooglePlus () {
-	window.open(
-		'https://plus.google.com/share?url={{ site.url }}{{ page.url }}',
-		'shareWindow',
-		'location=1,toolbar=1,menubar=1,resizable=1,width=400,height=300'
-	)
-	return false
-}
-
-function shareOnLinkedIn () {
-	window.open(
-		'http://www.linkedin.com/shareArticle?mini=true&amp;url={{ site.url }}{{ page.url }}',
-		'shareWindow',
-		'location=1,toolbar=1,menubar=1,resizable=1,width=400,height=300'
-	)
-	return false
-}
 
 /**
  * Handles the scroll event.
@@ -115,12 +92,6 @@ function isSmallScreen () {
 		return false
 	}
 }
-
-/**
- * Calls the actOnScroll method when
- * the window is scrolling.
- */
-window.onscroll = function () {actOnScroll()}
 
 /**
  * Gets the url for sharing on Twitter.
@@ -237,3 +208,8 @@ function getArticleTitle () {
 }
 
 
+/**
+ * Calls the actOnScroll method when
+ * the window is scrolling.
+ */
+window.onscroll = function () {actOnScroll()}
