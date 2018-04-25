@@ -2,3 +2,5 @@
   base    = "."
   publish = "_site"
   command = "yarn install && jekyll build && yarn minify"
+[context.deploy-preview]
+  command = "yarn install && jekyll build && yarn minify && echo -e \"User-agent: *\nDisallow: /\" > _site/robots.txt"
