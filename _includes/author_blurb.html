@@ -1,7 +1,7 @@
 {% if page.author %}
 {% assign url_friendly_name = page.author | replace: ' ', '_' | downcase %}
 <a href="/about-us#{{url_friendly_name}}" title="{{page.author}}"
-   class="silent-link">
+   class="link">
     {% if page.author_avatar %}
     <img src="/assets/{{ page.author_avatar }}" alt="" class="br-100 w3 dib">
     {% else %}
@@ -12,7 +12,7 @@
 </a>
 {% else %}
 <a href="/about-us#daniele_polencic" title="Daniele Polencic"
-   class="silent-link">
+   class="link">
     <img src="/assets/daniele_polencic.jpg" alt="" class="br-100 w3 dib">
     <span class="black-50 f6 db">Daniele Polencic</span>
 </a>
