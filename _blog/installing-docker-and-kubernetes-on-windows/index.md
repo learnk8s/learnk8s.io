@@ -102,30 +102,35 @@ When it comes to installing Docker on Windows, you have few options.
 
 If you're running Windows 10 Home or Student edition, you won't be able to run the newer versions of Docker for Windows.
 This isn't Docker fault, though. The people at Docker did tremendous good work in porting containers to the Windows platform. And when they picked the technology to virtualise containers, they opted for Hyper-V since it's the native hypervisor in Windows. The benefit is crystal clear: great performance.
-Unfortunately not all Windows versions ship with Hyper-V. If you're using Windows 10 Home or Student edition, you are out of luck. You won't be able to install and run Docker for Windows.
-But worry not! You can still run Docker Toolbox - a virtual machine with Docker installed. You won't reach the same speed as Docker for Windows, but you can download and similarly run containers.
+Unfortunately not all Windows versions ship with Hyper-V. And if you're using Windows 10 Home or Student edition, you are out of luck. You won't be able to install and run Docker for Windows.
+But worry not!
+That are plenty of replacements based on Boot2Docker such as Docker Toolbox or minikube.
+The way Boot2Docker works is simple: there's a virtual machine that runs Linux and Docker. Andy ou connect from your host to the remote Docker daemon on the virtual machine.
+Of all virtual machine that extend Boot2Docker, minikube is the most interesting — that's if you're interested in running a Kubernetes cluster.
+In fact, minikube is a virtual machine that runs Docker and Kubernetes. It's usually used to run Kubernetes only, but you can use it to run Docker too.
+You won't reach the same speed as Docker for Windows, but you can build and run containers without Hyper-V.
 
 At this point, you may think that Docker for Windows is the answer if you're running on Windows 10 Pro. You have the latest Docker, excellent performance and polished user experience.
 There's something else, though.
-The hypervisor used by Docker for Windows is extremely powerful - indeed it's called a Type-1 hypervisor. It's so powerful that it doesn't play nicely with weaker hypervisor such as the one in VirtualBox - or Type-2 hypervisors. You can't have Type-1 and Type-2 hypervisors running at the same time on your machine. Or in other words, if you enable and run Docker for Windows, you won't be able to launch and play with your virtual machines on VirtualBox.
-Depending on your setup, this may be a smaller issue. Maybe you're fully committed to the containerised world.
-But if you're still relying on managing virtual machines with tools such as Vagrant, perhaps you should be aware of the annoyance. You can enable and disable the Hyper-V hypervisor at will, but it requires a restart of your laptop.
+The hypervisor used by Docker for Windows is extremely powerful - indeed it's called a Type-1 hypervisor. It's so powerful that it doesn't play nicely with weaker hypervisors such as the one in VirtualBox - or Type-2 hypervisors. You can't have Type-1 and Type-2 hypervisors running at the same time on your machine. Or in other words, if you run Docker for Windows, you won't be able to start your virtual machines on VirtualBox.
+Depending on your setup, this may be an insignificant detail. Perhaps you're fully committed to the containerised world and you left virtual machine behind. An old and distant memory.
+But if you're still relying on virtual machines and tools such as Vagrant, perhaps you should be aware of the annoyance. You can enable and disable the Hyper-V hypervisor at will, but it requires a restart of your laptop.
 
-If you're frequently switching from containers to virtual machines, perhaps Docker Toolbox is a more convenient choice.
+If you're frequently switching from containers to virtual machines, perhaps minikube is a more convenient choice to run Docker and Kubernetes alongside your existing virtual machines.
 
 Lastly, if you're interested in running Windows containers - aka containers with a base image that inherits from Windows - Docker for Windows is the only option. And you will need Windows 10 Pro or Enterprise for that.
 
 ## What about Kubernetes
 
-If you want to run Kubernetes locally, the most accessible choice is Minikube.
+If you want to run Kubernetes locally, the most accessible choice is minikube.
 
 Minikube is a virtual machine running on an embedded Linux Distribution (Buildroot) and comes with the Docker daemon pre-installed. It's Kubernetes batteries included.
 Minikube can run its virtual machine on VirtualBox or Hyper-V - [there are more options too](https://github.com/kubernetes/minikube#quickstart).
-Which is great news because if you decide to use Hyper-V, you should use the Hyper-V driver fro minikube and avoid restarting your laptop every time you want to test container locally or deploy to Kubernetes.
+Which is great news if you already have Hyper-V and want to maintain using the same hypervisor for Docker and minikube. It's equally good news if you can't run Hyper-V since you can use VirtualBox to run it.
 
 That's a lot of choices and trade-offs, so here's a summary of what we discussed:
 
-![r](https://user-images.githubusercontent.com/1130499/39386282-cf29b836-4a6b-11e8-9535-a2f548c903ad.png)
+{% include_relative diagram.svg %}
 
 ## 0. Installing the tools to install the tools
 
@@ -298,94 +303,7 @@ Restart and now you're ready to run and deploy containers to Kubernetes!
 
 ## 2. Installing Docker and Kubernetes on Windows 10 Home
 
-If you're interested in running Docker locally and use a remote Kubernetes cluster, you can download the Docker Toolbox only:
-
-```bash
-choco install docker-toolbox -y
-```
-
-You should refresh your environment variables with:
-
-```bash
-refreshenv
-```
-
-To start with Docker Toolbox, you should create a Docker machine.
-
-```bash
-docker-machine create default
-```
-
-A docker-machine is a virtual machine running Linux with a Docker daemon inside. After the machine was created, you can start it with:
-
-```bash
-docker-machine start
-```
-
-You can connect to the Docker daemon running inside the virtual machine with the following command:
-
-```bash
-@FOR /f "tokens=*" %i IN ('docker-machine env') DO @%i
-```
-
-> Please note that you should type the above command every time you open a new terminal. A shorter way to remind yourself about that command is to type `docker-machine env`.
-
-With a Docker machine running, open a new command prompt and type:
-
-```bash
-docker ps
-```
-
-If everything works as expected, you should see an empty list of running containers.
-
-At this point, you're ready. But before you move on, you should be aware of some the limits of Docker Toolbox.
-
-Docker is made of two components:
-
-- the Docker daemon. You can think about it as a server with an API. You can send commands to the API and Docker will receive and execute the commands on your behalf.
-- the Docker CLI. The executable that used to send the command to the Docker daemon API
-
-Most of the time you're interacting with the Docker CLI and you don't really see the Docker daemon. So why having a client and a server? Why not having a single binary?
-
-It all comes down to flexiblity.
-
-When you run Docker for Windows, you Docker CLI is connected to your local Docker daemon.
-
-[TODO: pict]
-
-But sometimes you don't have a Docker daemon. Perhaps you want to build containers on a remote machine. Perhaps you can't run Hyper-V on your machine and your Docker daemon is installed in a virtual machine in VirtualBox.
-This is the exactly the case if you're running Docker Toolbox.
-Your Docker CLI is connected remotely to a Docker daemon that is located inside the Docker Toolbox virtual machine.
-
-[TODO: pict]
-
-When you're running containers against a remote Docker daemon, you need to adjust your port bindings.
-
-In Docker for Windows, you can run a container that exposes port 80 and bind it on port 8080 on your localhost with the following command:
-
-```bash
-docker run -ti -p 8080:80 nginx
-```
-
-You can visit [http://localhost:8080](http://localhost:8080) and see the _"Welcome to Nginx"_ page.
-
-If you run the same command using Docker Toolbox and visit the same page, you won't see anything. The URL is unreachable. So, what's different?
-
-The Docker daemon is in charge of running the containers and forwarding ports. With Docker for Windows the daemon runs locally — on your localhost. So you can just visit the running container on localhost and on the right port.
-
-Docker Toolbox, on the other hand, is a remote Docker daemon. You need to visit the machine with the Docker daemon if you wish to see your running container. You can find the IP address of the virtual machine that runs Docker toolbox with:
-
-```bash
-docker-machine ip
-```
-
-You can visit http://<your docker-machine ip>:8080 and see the _"Welcome to Nginx"_ page.
-
-## 3. Installing Docker and Kubernetes on Windows 10 Home
-
-It turns out that minikube works in a very similar fashion to Docker Toolbox. In fact, minikube is a virtual machine with a Docker daemon inside. As well as Kubernetes, of course.
-
-If you're planning on using Docker and Kubernetes locally, you can probably save yourself from installing both Docker Toolbox and minikube. You can just use minikube as a remote Docker daemon for building and running your containers as well as your local Kubernetes cluster.
+If you're planning on using Docker and Kubernetes locally, you can probably save yourself from installing tools such as Docker Toolbox. You can just use minikube as a remote Docker daemon as well as your local Kubernetes cluster.
 
 You can download and install minikube with:
 
@@ -429,7 +347,48 @@ docker ps
 
 You should see a lot of running containers. Most of those belong to Kubernetes.
 
-It's time to test your Docker and Kubernetes installation.
+At this point, you're ready. But before you move on, you should be aware of some the limits of using minikube as your remote Docker daemon.
+
+Docker is made of two components:
+
+- the Docker daemon. You can think about it as a server with an API. You can send commands to the API and Docker will receive and execute the commands on your behalf.
+- the Docker CLI. The executable that used to send the command to the Docker daemon API
+
+Most of the time you're interacting with the Docker CLI and you don't really see the Docker daemon. So why having a client and a server? Why not having a single binary?
+
+It all comes down to flexiblity.
+
+When you run Docker for Windows, you Docker CLI is connected to your local Docker daemon.
+
+[TODO: pict]
+
+But sometimes you don't have a Docker daemon. Perhaps you want to build containers on a remote machine. Perhaps you can't run Hyper-V on your machine and your Docker daemon is installed in a virtual machine in VirtualBox.
+This is the exactly the case if you're running Docker Toolbox.
+Your Docker CLI is connected remotely to a Docker daemon that is located inside the minikube virtual machine.
+
+[TODO: pict]
+
+When you're running containers against a remote Docker daemon, you need to adjust your port bindings.
+
+In Docker for Windows, you can run a container that exposes port 80 and bind it on port 8080 on your localhost with the following command:
+
+```bash
+docker run -ti -p 8080:80 nginx
+```
+
+You can visit [http://localhost:8080](http://localhost:8080) and see the _"Welcome to Nginx"_ page.
+
+If you run the same command using the remote Docker daemon and visit the same page, you won't see anything. The URL is unreachable. So, what's different?
+
+The Docker daemon is in charge of running the containers and forwarding ports. With Docker for Windows the daemon runs locally — on your localhost. So you can just visit the running container on localhost.
+
+Minikube, on the other hand, runs a remote Docker daemon. You need to visit the machine with the Docker daemon if you wish to see your running container. You can find the IP address of the virtual machine that runs Docker toolbox with:
+
+```bash
+minikube ip
+```
+
+You can visit http://<your minikube ip>:8080 and see the _"Welcome to Nginx"_ page.
 
 ## Testing your Docker installation
 
