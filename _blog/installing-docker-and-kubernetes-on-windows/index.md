@@ -27,7 +27,7 @@ When it comes to installing Docker on Windows, you have few options.
 
 ## Using Windows 10 Home? You won't be able to run Docker for Windows
 
-When the amazing people at Docker decided to implement Docker on Windows, they opted for Hyper-V as their virtualisation technology. The benefit is crystal clear: great performance and a native hypervisor.
+When the fantastic people at Docker decided to implement Docker on Windows, they opted for Hyper-V as their virtualisation technology. The benefit is crystal clear: excellent performance and a native hypervisor.
 
 **Unfortunately not all Windows versions ship with Hyper-V.**
 
@@ -35,11 +35,11 @@ And if you're using Windows 10 Home or Student edition, you are out of luck. You
 
 _But worry not!_
 
-That are plenty of replacements based on [Docker Machine](https://docs.docker.com/machine/) such as Docker Toolbox or minikube.
+That is plenty of replacements based on [Docker Machine](https://docs.docker.com/machine/) such as Docker Toolbox or minikube.
 
 The way Docker Machine works is simple: there's a virtual machine that runs Linux and Docker. And you connect from your host to the remote Docker daemon in that virtual machine.
 
-Minikube is the somehow one of most interesting virtual machine based on Docker Machine — _that's if you're into running Kubernetes clusters._
+Minikube is the somehow one of the most interesting virtual machine based on Docker Machine — _that's if you're into running Kubernetes clusters._
 
 In fact, minikube is a virtual machine that runs Docker **and** Kubernetes. It's usually used to run Kubernetes only, but you can use it to run Docker containers too.
 
@@ -47,9 +47,9 @@ You won't reach the same speed as Docker for Windows, but you can build and run 
 
 ## With Windows 10 Pro, Docker for Windows is the best — until it isn't
 
-You have the latest Windows 10 Pro and you can install Docker for Windows.
+You have the latest Windows 10 Pro, and you can install Docker for Windows.
 
-Great performance, excellent developer experience. You're sorted, aren't you?
+Excellent performance, excellent developer experience. You're sorted, aren't you?
 
 *Maybe.*
 
@@ -61,13 +61,13 @@ You can't have Type-1 and Type-2 hypervisors running at the same time on your ma
 
 Depending on your setup, this may be an insignificant detail.
 
-Perhaps you're fully committed to the containerised world and you left virtual machines behind. An old and distant memory.
+Perhaps you're fully committed to the containerised world, and you left virtual machines behind. An old and distant memory.
 
 But if you're still relying on virtual machines and tools such as Vagrant, perhaps you should be aware of the annoyance.
 
 **You can enable and disable the Hyper-V hypervisor at will, but it requires a restart of your laptop.**
 
-If you're frequently switching from containers to virtual machines, perhaps minikube is a more convenient choice. You don't need to restart your laptop when you switch from containers to virtual machines. But you don't benefit from the extra performance, or the improved experience.
+If you're frequently switching from containers to virtual machines, perhaps minikube is a more convenient choice. You don't need to restart your laptop when you change from containers to virtual machines. But you don't benefit from the extra performance or the improved experience.
 
 Lastly, if you're interested in running Windows containers — _aka containers with a base image that inherits from Windows_ — Docker for Windows is the only option. And you will need Windows 10 Pro or Enterprise for that.
 
@@ -79,7 +79,7 @@ Minikube is a virtual machine running on an embedded Linux Distribution (Buildro
 
 **It's Kubernetes batteries included.**
 
-Minikube can run its virtual machine on VirtualBox or Hyper-V - [there are more options too](https://github.com/kubernetes/minikube#quickstart).
+Minikube can run virtual machines using VirtualBox or Hyper-V - [there are more options too](https://github.com/kubernetes/minikube#quickstart).
 
 Which is great news if you already have Hyper-V and want to maintain using the same hypervisor for Docker and minikube.
 
@@ -93,17 +93,17 @@ That's a lot of choices and trade-offs, so here's a summary of what was discusse
 
 You can download and install all the dependencies such as Docker for Windows, Docker Toolbox, VirtualBox, kubectl, Docker CLI, etc. from the official websites, but it's inconvenient.
 
-You have to visit the website, hope that the url is still valid, search for the download page, select the right version, download it, install it and finally add it to your path.
+You have to visit the website, hope that the URL is still valid, search for the download page, select the right version, download it, install it and finally add it to your path.
 
-It's doable, but you could rather spend time doing more coding than chasing and installing binaries from the internet.
+It's doable, but I'm sure you would rather spend time doing more coding than chasing and installing binaries from the internet.
 
 **Enter Chocolatey.**
 
-[Chocolatey](https://chocolatey.org) is a package manager for Windows. You tell it what binaries you wish to install and Chocolatey installs them on your behalf.
+[Chocolatey](https://chocolatey.org) is a package manager for Windows. You tell it what binaries you wish to install, and Chocolatey installs them on your behalf.
 
-Your handing out all the hard work to someone else.
+You're handing out all the hard work to someone else.
 
-Installing Chocolatey is easy. You can find the [full instructions on the official website](https://chocolatey.org/install). But in a nutshell this what you have to do:
+Installing Chocolatey is easy. You can find the [full instructions on the official website](https://chocolatey.org/install). But in a nutshell, this what you have to do:
 
 1. Start `cmd.exe` as administrator
 2. Execute this long command:
@@ -112,7 +112,7 @@ Installing Chocolatey is easy. You can find the [full instructions on the offici
 ```
 3. Reload `cmd.exe`
 
-If the installation was successful, you can now search for applications to install with:
+If the installation was successful, you could now search for applications to install with:
 
 ```powershell
 choco search docker
@@ -124,7 +124,7 @@ Since you're there, you could give `choco` a go. You could install [Cmder](http:
 choco install cmder -y
 ```
 
-The binary was installed in `C:\tools`. If you wish to continue the tutorial using Cmder, you should start the binary as an administrator.
+Chocolatey installed the binary in `C:\tools`. If you wish to continue the tutorial using Cmder, you should start the binary as an administrator.
 
 ![Cmder — a portable console emulator for Windows]({% link _blog/installing-docker-and-kubernetes-on-windows/cmder.png %})
 
@@ -148,7 +148,7 @@ Yes, you do!
 
 You should be aware that Docker requires VT-X/AMD-v virtual hardware extension to be enabled before you can run any container. Depending on your computer, you may need to reboot and enable it in your BIOS.
 
-If you're unsure about VT-X/AMD-v being enabled, don't worry. If you don't have it, you will be greeted with the following error message:
+If you're unsure VT-X/AMD-v was enabled, don't worry. If you don't have it, Docker will greet you with the following error message:
 
 > Hardware assisted virtualization and data execution protection must be enabled in the BIOS.
 
@@ -199,11 +199,11 @@ choco install minikube -y
 
 Before you start the cluster, you should create an external network switch in Hyper-V Manager.
 
-You can follow this instructions to create a networking switch in Hyper-V Manager:
+You can follow these instructions to create a networking switch in Hyper-V Manager:
 
 1. Open Hyper-V Manager
 2. From the left column select your computer
-3. From the right sideebar select _Virtual Switch Manager_
+3. From the right sidebar select _Virtual Switch Manager_
 4. Create a new External Switch
 5. Name it "minikube" (without the quotes)
 6. Apply your changes
@@ -279,7 +279,7 @@ Open a new command prompt as an administrator and type the following:
 bcdedit /set hypervisorlaunchtype auto
 ```
 
-Restart and now you're ready to run and deploy containers to Kubernetes!
+Restart, and now you're ready to run and deploy containers to Kubernetes!
 
 [Jump to the testing your Docker installation](#testing-your-docker-installation)
 
@@ -335,18 +335,18 @@ You should see a lot of running containers. Most of those belong to Kubernetes.
 
 But before you move on, you should be aware of some the limits of using minikube as your remote Docker daemon.
 
-Docker is made of two components:
+Docker is made of two parts:
 
 - **the Docker daemon** — you can think about it as a server with an API. You can send commands to the API and Docker will receive and execute the commands on your behalf.
 - **the Docker CLI** — the executable that used to send the command to the Docker daemon API
 
-Most of the time you're interacting with the Docker CLI and you don't really see the Docker daemon.
+Most of the time you're interacting with the Docker CLI, and you don't see the Docker daemon.
 
 _So why having a client and a server?_
 
 _Why not having a single binary?_
 
-**It all comes down to flexiblity.**
+**It all comes down to flexibility.**
 
 When you run Docker for Windows, you Docker CLI is connected to your local Docker daemon.
 
@@ -356,21 +356,23 @@ When you run Docker for Windows, you Docker CLI is connected to your local Docke
 
 Perhaps you want to build containers on a remote machine.
 
-Perhaps you can't run Hyper-V on your machine and your Docker daemon is installed in a virtual machine in VirtualBox.
+Perhaps you can't run Hyper-V on your machine, and your Docker daemon is installed in a virtual machine in VirtualBox.
 
-This is the exactly the case if you're running minikube.
+Exactly the case if you're running minikube.
 
-Your Docker CLI is connected remotely to a Docker daemon that is located inside the minikube virtual machine.
+Your Docker CLI is connected remotely to a Docker daemon located inside the minikube virtual machine.
 
 ![Minikube and Docker]({% link _blog/installing-docker-and-kubernetes-on-windows/docker-architecture02.png %})
 
 When you're running containers against a remote Docker daemon, you need to adjust your port bindings.
 
-In Docker for Windows, you can run a container that exposes port 80 and bind it on port 8080 on your localhost with the following command:
+In Docker for Windows, you can run and bind a container on port 8080 with the following command:
 
 ```bash
 docker run -ti -p 8080:80 nginx
 ```
+
+> Please note how the container exposes port 80 and you mapped that port to 8080.
 
 You can visit [http://localhost:8080](http://localhost:8080) and see the _"Welcome to Nginx"_ page.
 
@@ -380,11 +382,11 @@ The URL is unreachable.
 
 _So, what's different?_
 
-The Docker daemon is in charge of running the containers and forwarding ports
+The Docker daemon is in charge of running the containers and forwarding ports.
 
 **With Docker for Windows the daemon runs locally — on your localhost.**
 
-So you can just visit the running container on localhost.
+So you can visit the running container on localhost.
 
 Minikube, on the other hand, runs the Docker daemon inside the virtual machine. It's a remote Docker daemon.
 
@@ -419,11 +421,10 @@ Once Docker has completed downloading all the package, you should visit [http://
 
 ## Summary
 
-So now that you can run K8s on your Windows workstation, why not follow the
+So now that you can run K8s on your Windows workstation why not follow the
 <a href="/blog/deploying-laravel-to-kubernetes" title="Deploying Laravel to
 Kubernetes">Deploying Laravel to Kubernetes</a> tutorial and get a more
 in-depth introduction to Kubernetes? You will notice that in Unix systems
 both `minikube` and `kubectl` commands can be run from anywhere as opposed to
- Windows's requirements were you'll need to specifically refer to the `.exe`
- files from within the location they reside. Other than that, all is the
- same, the commands in the tutorial can easily be translated to work on Windows.
+ Windows's requirements were you'll need to refer to the `.exe` specifically
+ files from within the location they reside. Other than that, all is the same, the commands in the tutorial can easily be translated to work on Windows.
