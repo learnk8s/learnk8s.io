@@ -1,0 +1,120 @@
+<div class="carousel">
+  <ul class="list pl0">
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch01.jpg %}" alt="Switch01" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch02.jpg %}" alt="Switch02" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch03.jpg %}" alt="Switch03" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch04.jpg %}" alt="Switch04" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch05.jpg %}" alt="Switch05" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch06.jpg %}" alt="Switch06" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch07.jpg %}" alt="Switch07" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch08.jpg %}" alt="Switch08" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch09.jpg %}" alt="Switch09" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch10.jpg %}" alt="Switch10" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch11.jpg %}" alt="Switch11" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch12.jpg %}" alt="Switch12" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch13.jpg %}" alt="Switch13" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch14.jpg %}" alt="Switch14" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch15.jpg %}" alt="Switch15" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch16.jpg %}" alt="Switch16" />
+    </li>
+    <li>
+      <img src="{% link _blog/installing-docker-and-kubernetes-on-windows/switch17.jpg %}" alt="Switch17" />
+    </li>
+  </ul>
+  <div class="flex items-center justify-center pa4">
+    <button class="prev f6 moon-gray bg-animate bg-light-gray hover-bg-dark-gray hover-white inline-flex items-center pa2 ba border-box b--moon-gray">
+      <svg class="w1" data-icon="chevronLeft" viewBox="0 0 32 32" style="fill:currentcolor">
+        <title>chevronLeft icon</title>
+        <path d="M20 1 L24 5 L14 16 L24 27 L20 31 L6 16 z"></path>
+      </svg>
+      <span class="pl1">Previous</span>
+    </button>
+    <div class="progress mh3 f5">0/0</div>
+    <button class="next f5 dark-gray bg-animate bg-light-gray hover-bg-dark-gray hover-white inline-flex items-center pa3 ba border-box b--moon-gray">
+      <span class="pr1">Next</span>
+      <svg class="w1" data-icon="chevronRight" viewBox="0 0 32 32" style="fill:currentcolor">
+        <title>chevronRight icon</title>
+        <path d="M12 1 L26 16 L12 31 L8 27 L18 16 L8 5 z"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+<style>
+.carousel ul li {
+  display: none;
+}
+</style>
+<script>
+function Carousel(settings){
+  'use strict';
+  settings = settings || {};
+  this.carousel = document.querySelector(settings.carousel || '.carousel');
+  this.progress = document.querySelector(settings.progress || '.progress');
+  this.slides = this.carousel.querySelectorAll('ul li');
+
+  this.slides_total = this.slides.length;
+  this.current_slide = -1;
+  this.next();
+}
+
+Carousel.prototype.next = function () {
+  'use strict';
+  for (var s = 0; s < this.slides.length; s += 1) {
+    this.slides[s].style.display = 'none';
+  }
+  this.current_slide = (this.current_slide + 1) % this.slides.length;
+  this.slides[this.current_slide].style.display = 'block';
+  this.progress.innerHTML = (this.current_slide + 1) + '/' + this.slides_total;
+};
+
+Carousel.prototype.prev = function () {
+  'use strict';
+  for (var s = 0; s < this.slides.length; s += 1) {
+    this.slides[s].style.display = 'none';
+  }
+  this.current_slide = Math.abs(this.current_slide - 1 + this.slides.length) % this.slides.length;
+  this.slides[this.current_slide].style.display = 'block';
+  this.progress.innerHTML = (this.current_slide + 1) + '/' + this.slides_total;
+};
+var carousel = new Carousel({
+  carousel: '.carousel',
+  progress: '.progress'
+})
+document.querySelector('.carousel .next').addEventListener('click', function() {
+  carousel.next();
+});
+document.querySelector('.carousel .prev').addEventListener('click', function() {
+  carousel.prev();
+});
+</script>

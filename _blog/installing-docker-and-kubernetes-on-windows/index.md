@@ -96,58 +96,94 @@ both `minikube` and `kubectl` commands can be run from anywhere as opposed to
 
 [TODO: toc]
 
-## What are the trade-offs/challenges of installing Docker and Kubernetes on Windows
-
 When it comes to installing Docker on Windows, you have few options.
 
-If you're running Windows 10 Home or Student edition, you won't be able to run the newer versions of Docker for Windows.
-This isn't Docker fault, though. The people at Docker did tremendous good work in porting containers to the Windows platform. And when they picked the technology to virtualise containers, they opted for Hyper-V since it's the native hypervisor in Windows. The benefit is crystal clear: great performance.
-Unfortunately not all Windows versions ship with Hyper-V. And if you're using Windows 10 Home or Student edition, you are out of luck. You won't be able to install and run Docker for Windows.
-But worry not!
-That are plenty of replacements based on Boot2Docker such as Docker Toolbox or minikube.
-The way Boot2Docker works is simple: there's a virtual machine that runs Linux and Docker. Andy ou connect from your host to the remote Docker daemon on the virtual machine.
-Of all virtual machine that extend Boot2Docker, minikube is the most interesting — that's if you're interested in running a Kubernetes cluster.
-In fact, minikube is a virtual machine that runs Docker and Kubernetes. It's usually used to run Kubernetes only, but you can use it to run Docker too.
+## Using Windows 10 Home? You won't be able to run Docker for Windows
+
+When the amazing people at Docker decided to implement Docker on Windows, they opted for Hyper-V as their virtualisation technology. The benefit is crystal clear: great performance and a native hypervisor.
+
+**Unfortunately not all Windows versions ship with Hyper-V.**
+
+And if you're using Windows 10 Home or Student edition, you are out of luck. You won't be able to install and run Docker for Windows.
+
+_But worry not!_
+
+That are plenty of replacements based on [Docker Machine](https://docs.docker.com/machine/) such as Docker Toolbox or minikube.
+
+The way Docker Machine works is simple: there's a virtual machine that runs Linux and Docker. And you connect from your host to the remote Docker daemon in that virtual machine.
+
+Minikube is the somehow one of most interesting virtual machine based on Docker Machine — _that's if you're into running Kubernetes clusters._
+
+In fact, minikube is a virtual machine that runs Docker **and** Kubernetes. It's usually used to run Kubernetes only, but you can use it to run Docker containers too.
+
 You won't reach the same speed as Docker for Windows, but you can build and run containers without Hyper-V.
 
-At this point, you may think that Docker for Windows is the answer if you're running on Windows 10 Pro. You have the latest Docker, excellent performance and polished user experience.
-There's something else, though.
-The hypervisor used by Docker for Windows is extremely powerful - indeed it's called a Type-1 hypervisor. It's so powerful that it doesn't play nicely with weaker hypervisors such as the one in VirtualBox - or Type-2 hypervisors. You can't have Type-1 and Type-2 hypervisors running at the same time on your machine. Or in other words, if you run Docker for Windows, you won't be able to start your virtual machines on VirtualBox.
-Depending on your setup, this may be an insignificant detail. Perhaps you're fully committed to the containerised world and you left virtual machine behind. An old and distant memory.
-But if you're still relying on virtual machines and tools such as Vagrant, perhaps you should be aware of the annoyance. You can enable and disable the Hyper-V hypervisor at will, but it requires a restart of your laptop.
+## With Windows 10 Pro, Docker for Windows is the best — until it isn't
 
-If you're frequently switching from containers to virtual machines, perhaps minikube is a more convenient choice to run Docker and Kubernetes alongside your existing virtual machines.
+You have the latest Windows 10 Pro and you can install Docker for Windows.
 
-Lastly, if you're interested in running Windows containers - aka containers with a base image that inherits from Windows - Docker for Windows is the only option. And you will need Windows 10 Pro or Enterprise for that.
+Great performance, excellent developer experience. You're sorted, aren't you?
 
-## What about Kubernetes
+*Maybe.*
 
-If you want to run Kubernetes locally, the most accessible choice is minikube.
+The hypervisor used by Docker for Windows is extremely powerful — _indeed it's called a Type-1 hypervisor_.
 
-Minikube is a virtual machine running on an embedded Linux Distribution (Buildroot) and comes with the Docker daemon pre-installed. It's Kubernetes batteries included.
+It's so powerful that it doesn't play nicely with weaker hypervisors such as the one in VirtualBox — _or Type-2 hypervisors_.
+
+You can't have Type-1 and Type-2 hypervisors running at the same time on your machine. Or in other words, if you run Docker for Windows, you won't be able to start your virtual machines on VirtualBox.
+
+Depending on your setup, this may be an insignificant detail.
+
+Perhaps you're fully committed to the containerised world and you left virtual machines behind. An old and distant memory.
+
+But if you're still relying on virtual machines and tools such as Vagrant, perhaps you should be aware of the annoyance.
+
+**You can enable and disable the Hyper-V hypervisor at will, but it requires a restart of your laptop.**
+
+If you're frequently switching from containers to virtual machines, perhaps minikube is a more convenient choice. You don't need to restart your laptop when you switch from containers to virtual machines. But you don't benefit from the extra performance, or the improved experience.
+
+Lastly, if you're interested in running Windows containers — _aka containers with a base image that inherits from Windows_ — Docker for Windows is the only option. And you will need Windows 10 Pro or Enterprise for that.
+
+## Running a local Kubernetes cluster
+
+If you want to run Kubernetes locally, you should consider minikube.
+
+Minikube is a virtual machine running on an embedded Linux Distribution (Buildroot) and comes with the Docker daemon pre-installed.
+
+**It's Kubernetes batteries included.**
+
 Minikube can run its virtual machine on VirtualBox or Hyper-V - [there are more options too](https://github.com/kubernetes/minikube#quickstart).
-Which is great news if you already have Hyper-V and want to maintain using the same hypervisor for Docker and minikube. It's equally good news if you can't run Hyper-V since you can use VirtualBox to run it.
 
-That's a lot of choices and trade-offs, so here's a summary of what we discussed:
+Which is great news if you already have Hyper-V and want to maintain using the same hypervisor for Docker and minikube.
 
-{% include_relative diagram.svg %}
+It's equally good news if you can't run Hyper-V since you can use VirtualBox.
+
+That's a lot of choices and trade-offs, so here's a summary of what was discussed:
+
+![Installing Docker and Kubernetes on Windows]({% link _blog/installing-docker-and-kubernetes-on-windows/diagram.png %})
 
 ## 0. Installing the tools to install the tools
 
-You can download and install all the dependencies such as Docker for Windows, Docker Toolbox, VirtualBox, kubectl, Docker CLI, etc. from the official websites, but it's inconvenient. You have to visit the website, hope that the url is still valid, search for the download page, select the right version, download it, install it and finally add it to your path.
+You can download and install all the dependencies such as Docker for Windows, Docker Toolbox, VirtualBox, kubectl, Docker CLI, etc. from the official websites, but it's inconvenient.
 
-It's doable, but you could rather spend time doing more coding than chasing and installing binaries on the internet.
+You have to visit the website, hope that the url is still valid, search for the download page, select the right version, download it, install it and finally add it to your path.
 
-Enter Chocolatey. Chocolatey is a package manager for Windows. You tell it what packages you wish to install and Chocolatey installs them on your behalf. Your handing out all the hard work to someone else.
+It's doable, but you could rather spend time doing more coding than chasing and installing binaries from the internet.
+
+**Enter Chocolatey.**
+
+[Chocolatey](https://chocolatey.org) is a package manager for Windows. You tell it what binaries you wish to install and Chocolatey installs them on your behalf.
+
+Your handing out all the hard work to someone else.
 
 Installing Chocolatey is easy. You can find the [full instructions on the official website](https://chocolatey.org/install). But in a nutshell this what you have to do:
 
-1. Start cmd.exe as administrator
+1. Start `cmd.exe` as administrator
 2. Execute this long command:
 ```powershell
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 ```
-3. Reload cmd.exe
+3. Reload `cmd.exe`
 
 If the installation was successful, you can now search for applications to install with:
 
@@ -155,18 +191,17 @@ If the installation was successful, you can now search for applications to insta
 choco search docker
 ```
 
-Since you're there, you could give `choco` a go. You could install _Cmder_ — a modern shell for Windows with:
+Since you're there, you could give `choco` a go. You could install [Cmder](http://cmder.net/) — a modern shell for Windows with:
 
 ```powershell
 choco install cmder -y
 ```
 
-The binary was installed in `C:\tools`. If you wish to continue the tutorial using Cmder, you can start the binary as an administrator.
+The binary was installed in `C:\tools`. If you wish to continue the tutorial using Cmder, you should start the binary as an administrator.
 
-[TODO: pict of Cmder]
+![Cmder — a portable console emulator for Windows]({% link _blog/installing-docker-and-kubernetes-on-windows/cmder.png %})
 
 Looking nice!
-
 
 ## 1. Installing Docker and Kubernetes on Windows 10 Pro
 
@@ -178,23 +213,26 @@ You can download Docker for Windows with:
 choco install docker-for-windows -y
 ```
 
-Restart your laptop. Docker will ask you if you wish to enable Hyper-V. Yes, you do!
+Restart your laptop. Docker will ask you if you wish to enable Hyper-V.
+
+![Enabling Hyper-V with Docker]({% link _blog/installing-docker-and-kubernetes-on-windows/enable_hyperv.png %})
+
+Yes, you do!
 
 You should be aware that Docker requires VT-X/AMD-v virtual hardware extension to be enabled before you can run any container. Depending on your computer, you may need to reboot and enable it in your BIOS.
 
 If you're unsure about VT-X/AMD-v being enabled, don't worry. If you don't have it, you will be greeted with the following error message:
 
-```text
-This computer doesn't have VT-X/AMD-v enabled. Enabling it in the BIOS is mandatory
-```
+> Hardware assisted virtualization and data execution protection must be enabled in the BIOS.
+
+![You should enable VT-X/AMD-v]({% link _blog/installing-docker-and-kubernetes-on-windows/vtx_amdv.png %})
 
 Another common error has to do with the Hyper-V hypervisor not being enabled. If you experience this error:
 
-```text
-Unable to start: The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: 'MobyLinuxVM' failed to start.
+> Unable to start: The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: 'MobyLinuxVM' failed to start.
+> Failed to start the virtual machine 'MobyLinuxVM' because one of the Hyper-V components is not running.
 
-Failed to start the virtual machine 'MobyLinuxVM' because one of the Hyper-V components is not running.
-```
+![You should enable Hyper-V with Docker for Windows]({% link _blog/installing-docker-and-kubernetes-on-windows/hyperv_not_running.png %})
 
 You should enable Hyper-V. Open a new command prompt as an administrator and type the following:
 
@@ -202,7 +240,9 @@ You should enable Hyper-V. Open a new command prompt as an administrator and typ
 bcdedit /set hypervisorlaunchtype auto
 ```
 
-You should reboot your machine and Docker should finally work. But how do you know if Docker is working?
+You should reboot your machine and Docker should finally start.
+
+_But how do you know if Docker is working?_
 
 Open a new command prompt and type:
 
@@ -210,13 +250,17 @@ Open a new command prompt and type:
 docker ps
 ```
 
-If everything works as expected, you should see an empty list of containers running. If your Docker daemon isn't running, you're probably banging your head against this error:
+If everything works as expected, you should see an empty list of containers running.
 
-```text
-error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.37/containers/json: open //./pipe/docker_engine: The system cannot find the file specified. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.
-```
+If your Docker daemon isn't running, you're probably banging your head against this error:
 
-The error above is suggesting that your Docker installation is not behaving normally and wasn't able to start correctly.
+> error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.37/containers/json: open //./pipe/docker_engine: The system cannot find the file specified. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.
+
+![Docker daemon failed to start]({% link _blog/installing-docker-and-kubernetes-on-windows/docker_error_connection.png %})
+
+The error above is suggesting that your Docker installation is not behaving normally and wasn't able to start.
+
+You should start your Docker daemon before you connect to it.
 
 ### Installing Minikube on Hyper-V
 
@@ -228,14 +272,21 @@ choco install minikube -y
 
 Before you start the cluster, you should create an external network switch in Hyper-V Manager.
 
-[Instruction on how to create an external network switch in Hyper-V Manager https://docs.docker.com/machine/drivers/hyper-v/]
+You can follow this instructions to create a networking switch in Hyper-V Manager:
+
+1. Open Hyper-V Manager
+2. From the left column select your computer
+3. From the right sideebar select _Virtual Switch Manager_
+4. Create a new External Switch
+5. Name it "minikube" (without the quotes)
+6. Apply your changes
+
+{% include_relative switch.html %}
 
 If you fail to create the network switch, you will see the following error when you start minikube:
 
-```text
-E0427 09:06:16.000298    3252 start.go:159] Error starting host: Error creating host: Error executing step: Running precreate checks.
-: no External vswitch found. A valid vswitch must be available for this command to run. Check https://docs.docker.com/machine/drivers/hyper-v/.
-```
+> E0427 09:06:16.000298    3252 start.go:159] Error starting host: Error creating host: Error executing step: Running precreate checks.
+> no External vswitch found. A valid vswitch must be available for this command to run. Check https://docs.docker.com/machine/drivers/hyper-v/.
 
 You can test your minikube installation with:
 
@@ -254,9 +305,7 @@ minikube start --vm-driver=hyperv --memory=2048 --v=7 --alsologtostderr
 
 The extra verbose logging should help you get to the issue. In my particular case, minikube used to fail with:
 
-```text
-E0427 09:19:10.114873   10012 start.go:159] Error starting host: Error starting stopped host: exit status 1.
-```
+> E0427 09:19:10.114873   10012 start.go:159] Error starting host: Error starting stopped host: exit status 1.
 
 Not very helpful. After enabling verbose logging the issue was more obvious:
 
@@ -281,17 +330,23 @@ You should be able to see a single node in Kubernetes.
 
 Since Hyper-V is now enabled on your device, you won't be able to start any VM on VirtualBox. You can still try and launch your VM. You may experience the following error, though:
 
-```text
-Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart it for you.
-```
+> Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart it for you.
 
-If you wish to use VirtualBox or any other executable that uses a Type-2 hypervisor, you should disable it and restart your computer first. Open a new command prompt as an administrator and type the following:
+![Blue screen of death]({% link _blog/installing-docker-and-kubernetes-on-windows/bsod.png %})
+
+**If you wish to use VirtualBox or any other executable that uses a Type-2 hypervisor, you should disable it and restart your computer first.**
+
+Open a new command prompt as an administrator and type the following:
 
 ```bash
 bcdedit /set hypervisorlaunchtype off
 ```
 
-After restarting your device, you should be able to use VirtualBox as usual. If you wish to use Docker and minikube again, you should enable Hyper-V and restart your machine. Open a new command prompt as an administrator and type the following:
+After restarting your device, you should be able to use VirtualBox as usual.
+
+If you wish to use Docker and minikube again, you should enable Hyper-V and restart your machine.
+
+Open a new command prompt as an administrator and type the following:
 
 ```bash
 bcdedit /set hypervisorlaunchtype auto
