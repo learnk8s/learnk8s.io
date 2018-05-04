@@ -358,7 +358,9 @@ Restart and now you're ready to run and deploy containers to Kubernetes!
 
 ## 2. Installing Docker and Kubernetes on Windows 10 Home
 
-If you're planning on using Docker and Kubernetes locally, you can probably save yourself from installing tools such as Docker Toolbox. You can just use minikube as a remote Docker daemon as well as your local Kubernetes cluster.
+If you're planning on using Docker and Kubernetes locally, you can probably save yourself from installing other Docker Machine tool such as Docker Toolbox.
+
+You should use minikube as a remote Docker daemon as well as your local Kubernetes cluster.
 
 You can download and install minikube with:
 
@@ -402,26 +404,38 @@ docker ps
 
 You should see a lot of running containers. Most of those belong to Kubernetes.
 
-At this point, you're ready. But before you move on, you should be aware of some the limits of using minikube as your remote Docker daemon.
+**You've made it this far: you're ready.**
+
+But before you move on, you should be aware of some the limits of using minikube as your remote Docker daemon.
 
 Docker is made of two components:
 
-- the Docker daemon. You can think about it as a server with an API. You can send commands to the API and Docker will receive and execute the commands on your behalf.
-- the Docker CLI. The executable that used to send the command to the Docker daemon API
+- **the Docker daemon** — you can think about it as a server with an API. You can send commands to the API and Docker will receive and execute the commands on your behalf.
+- **the Docker CLI** — the executable that used to send the command to the Docker daemon API
 
-Most of the time you're interacting with the Docker CLI and you don't really see the Docker daemon. So why having a client and a server? Why not having a single binary?
+Most of the time you're interacting with the Docker CLI and you don't really see the Docker daemon.
 
-It all comes down to flexiblity.
+_So why having a client and a server?_
+
+_Why not having a single binary?_
+
+**It all comes down to flexiblity.**
 
 When you run Docker for Windows, you Docker CLI is connected to your local Docker daemon.
 
-[TODO: pict]
+![Docker for Windows]({% link _blog/installing-docker-and-kubernetes-on-windows/docker-architecture01.png %})
 
-But sometimes you don't have a Docker daemon. Perhaps you want to build containers on a remote machine. Perhaps you can't run Hyper-V on your machine and your Docker daemon is installed in a virtual machine in VirtualBox.
-This is the exactly the case if you're running Docker Toolbox.
+**But sometimes you don't have a Docker daemon.**
+
+Perhaps you want to build containers on a remote machine.
+
+Perhaps you can't run Hyper-V on your machine and your Docker daemon is installed in a virtual machine in VirtualBox.
+
+This is the exactly the case if you're running minikube.
+
 Your Docker CLI is connected remotely to a Docker daemon that is located inside the minikube virtual machine.
 
-[TODO: pict]
+![Minikube and Docker]({% link _blog/installing-docker-and-kubernetes-on-windows/docker-architecture02.png %})
 
 When you're running containers against a remote Docker daemon, you need to adjust your port bindings.
 
@@ -433,17 +447,27 @@ docker run -ti -p 8080:80 nginx
 
 You can visit [http://localhost:8080](http://localhost:8080) and see the _"Welcome to Nginx"_ page.
 
-If you run the same command using the remote Docker daemon and visit the same page, you won't see anything. The URL is unreachable. So, what's different?
+If you run the same command using the remote Docker daemon and visit the same page, you won't see anything.
 
-The Docker daemon is in charge of running the containers and forwarding ports. With Docker for Windows the daemon runs locally — on your localhost. So you can just visit the running container on localhost.
+The URL is unreachable.
 
-Minikube, on the other hand, runs a remote Docker daemon. You need to visit the machine with the Docker daemon if you wish to see your running container. You can find the IP address of the virtual machine that runs Docker toolbox with:
+_So, what's different?_
+
+The Docker daemon is in charge of running the containers and forwarding ports
+
+**With Docker for Windows the daemon runs locally — on your localhost.**
+
+So you can just visit the running container on localhost.
+
+Minikube, on the other hand, runs the Docker daemon inside the virtual machine. It's a remote Docker daemon.
+
+You need to visit the machine with the Docker daemon if you wish to see your running container. You can find the IP address with:
 
 ```bash
 minikube ip
 ```
 
-You can visit http://<your minikube ip>:8080 and see the _"Welcome to Nginx"_ page.
+You can visit http://your_minikube_ip:8080 and see the _"Welcome to Nginx"_ page.
 
 ## Testing your Docker installation
 
