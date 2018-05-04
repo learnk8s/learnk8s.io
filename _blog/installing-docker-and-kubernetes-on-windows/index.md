@@ -13,15 +13,11 @@ open_graph:
   description: "In this article, you will learn how to install Docker on Windows and how to install the tools needed to run Kubernetes locally. These are Kubectl, the command line interface for Kubernetes and Minikube, a local Kubernetes platform."
 ---
 
-## Intro
-
 You work on a Windows workstation. Maybe you use Vagrant as a portable environment for your code development. Now you're working on a new project where the team members are using Docker as a local deployment tool and to share the containers across the DevOps stakeholders. The team also wants to be prepared to deploy the application on Kubernetes because, in production, the application will be served across multiple services.
 
 You will encounter several issues to install and run Docker on Windows because the Docker Engine daemon uses features specific to the Linux Kernel and you cannot deploy to Kubernetes without a Docker image. So where do you start from?
 
 In this article, you will learn how to install Docker on Windows and how to install the tools needed to run Kubernetes locally. These are Kubectl, the command line interface for Kubernetes and Minikube, a local Kubernetes platform.
-
-[TODO: toc]
 
 When it comes to installing Docker on Windows, you have few options.
 
@@ -400,24 +396,75 @@ You can visit http://your_minikube_ip:8080 and see the _"Welcome to Nginx"_ page
 
 ## Testing your Docker installation
 
-A better test is to run Wordpress as a Docker container. In your command prompt type:
+You installed Docker, but _how do you know if it works for real?_
+
+In your terminal type:
 
 ```bash
 docker run -ti -p 8080:80 wordpress
 ```
 
-Once Docker has completed downloading all the package, you should visit [http://localhost:8080/](http://localhost:8080/). You should be able to see the Wordpress installation Wizard.
+Once Docker has completed downloading all the package, you should visit [http://localhost:8080/](http://localhost:8080/).
+
+> Please note that, if you're running minikube as your remote Docker daemon, you should use http://minikube_ip:8080 as your URL.
+
+You should be able to see the Wordpress installation Wizard.
+
+**Hurrah!**
+
+Wordpress serving traffic from within a container!
 
 > Please note that you won't be able to complete the Wordpress installation because there's no database.
 
-
 ## Testing your Kubernetes cluster installation
 
-### Deployment
+It's about time to test your local Kubernetes cluster. In this section, you will deploy the [Smashing.io dashboard](https://smashing.github.io/).
 
-### Service
+![Smashing.io dashboard]({% link _blog/installing-docker-and-kubernetes-on-windows/dashing.png %})
 
-### Dashboard
+### Deploy Smashing to Kubernetes
+
+You can deploy your dashboard to Kubernetes with:
+
+```bash
+kubectl run smashing --image=visibilityspots/smashing --port=3030
+```
+
+Once the container is downloaded, you should see it running:
+
+```bash
+kubectl get pods
+```
+
+### Exposing the dashboard
+
+You can expose your deployment with:
+
+```bash
+kubectl expose deployment smashing --type=NodePort
+```
+
+You can open the dashboard in your browser with:
+
+```bash
+minikube service smashing
+```
+
+Dashboard is served from Kubernetes! Hurrah!
+
+# A bird's eye view of Kubernetes
+
+Minikube is packed with goodies.
+
+You can visit [the official Kubernetes dashboard](https://github.com/kubernetes/dashboard) with:
+
+```bash
+minikube dashboard
+```
+
+![Kubernetes dashboard]({% link _blog/installing-docker-and-kubernetes-on-windows/dashboard-ui.png %})
+
+From there, you can explore your cluster and deploy applications.
 
 ## Summary
 
