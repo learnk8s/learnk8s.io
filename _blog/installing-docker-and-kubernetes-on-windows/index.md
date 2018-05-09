@@ -4,20 +4,22 @@ title: Installing Docker and Kubernetes on Windows
 description: ""
 date: 2018-02-19 02:00:00
 categories: docker kubernetes windows
-
+excerpt: "Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to start. And even worse, installing Docker and Kubernetes on Windows require expertise on how you use containers at scale. It's the usual chicken and egg problem. You have to master containers before you can install Docker and Kubernetes. But you need to install those dependencies before you can learn how to use them! So how do you know how to install Docker and Kubernetes on Windows? In this article, you will learn how to install Docker on Windows and a local Kubernetes cluster."
 author: "Keith Mifsud"
 open_graph:
   type: article
   title: Installing Docker and Kubernetes on Windows
   image: ""
-  description: "In this article, you will learn how to install Docker on Windows and how to install the tools needed to run Kubernetes locally. These are Kubectl, the command line interface for Kubernetes and Minikube, a local Kubernetes platform."
+  description: "In this article, you will learn how to install Docker on Windows and a local Kubernetes cluster."
 ---
 
-You work on a Windows workstation. Maybe you use Vagrant as a portable environment for your code development. Now you're working on a new project where the team members are using Docker as a local deployment tool and to share the containers across the DevOps stakeholders. The team also wants to be prepared to deploy the application on Kubernetes because, in production, the application will be served across multiple services.
+Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to start. And even worse, installing Docker and Kubernetes on Windows require expertise on how you use containers at scale.
 
-You will encounter several issues to install and run Docker on Windows because the Docker Engine daemon uses features specific to the Linux Kernel and you cannot deploy to Kubernetes without a Docker image. So where do you start from?
+It's the usual chicken and egg problem. You have to master containers before you can install Docker and Kubernetes. But you need to install those dependencies before you can learn how to use them!
 
-In this article, you will learn how to install Docker on Windows and how to install the tools needed to run Kubernetes locally. These are Kubectl, the command line interface for Kubernetes and Minikube, a local Kubernetes platform.
+_So how do you know how to install Docker and Kubernetes on Windows?_
+
+In this article, you will learn how to install Docker on Windows and a local Kubernetes cluster.
 
 When it comes to installing Docker on Windows, you have few options.
 
@@ -73,7 +75,7 @@ If you want to run Kubernetes locally, you should consider minikube.
 
 Minikube is a virtual machine running on an embedded Linux Distribution (Buildroot) and comes with the Docker daemon pre-installed.
 
-**It's Kubernetes batteries included.**
+**It's Kubernetes with batteries included.**
 
 Minikube can run virtual machines using VirtualBox or Hyper-V - [there are more options too](https://github.com/kubernetes/minikube#quickstart).
 
