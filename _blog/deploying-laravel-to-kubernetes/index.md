@@ -46,7 +46,7 @@ Similar to Vagrant, Minikube is merely a Virtual Machine that contains a Kuberne
 
 __The application__
 
-I have prepared a simple Laravel application which you can clone from <a href="https://github.com/learnk8s/laravel-kubernetes-demo" target="_blank" rel="noopener" class="link">GitHub</a>{%include link/external.html href="https://github.com/learnk8s/laravel-kubernetes-demo" text="just text" title="title" rel="noopener" %}. It is nothing more than a fresh Laravel installation. Therefore you can follow this example using either the demo application or just create a new Laravel application. To use the demo application clone it in your project's directory.
+I have prepared a simple Laravel application which you can clone from <a href="https://github.com/learnk8s/laravel-kubernetes-demo" target="_blank" rel="noopener" class="link">GitHub</a>. It is nothing more than a fresh Laravel installation. Therefore you can follow this example using either the demo application or just create a new Laravel application. To use the demo application clone it in your project's directory.
 
 ```bash
 cd /to/your/working/directory
