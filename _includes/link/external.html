@@ -1,0 +1,12 @@
+{% if include.title %}
+  {% assign title = include.title %}
+{% else %}
+  {% assign title = include.text %}
+{% endif %}
+{% if include.rel %}
+  {% assign rel = include.rel %}
+{% else %}
+  {% assign rel = "nofollow" %}
+{% endif %}<a href="{{include.href}}" class="link" target="_blank" title="{{title}}" rel="{{rel}}">
+  {{include.text}}
+</a>
