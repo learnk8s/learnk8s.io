@@ -77,6 +77,10 @@ $ kubectl create -f https://raw.githubusercontent.com/manabusakai/k8s-hello-worl
 $ kubectl create -f https://raw.githubusercontent.com/manabusakai/k8s-hello-world/master/kubernetes/service.yml
 ```
 
+The application is simple. It displays the hostname of the current pod in a web page:
+
+{% include_relative hello.svg %}
+
 You should scale the deployments to ten replicas with:
 
 ```bash
@@ -87,18 +91,20 @@ The ten replicas are distributed evenly across the two nodes:
 
 ```bash
 $ kubectl get pods
-NAME                              READY STATUS RESTARTS AGE  NODE
-k8s-hello-world-55f48f8c94-7shq5  1/1   Running 0       1m   node1
-k8s-hello-world-55f48f8c94-9w5tj  1/1   Running 0       1m   node1
-k8s-hello-world-55f48f8c94-cdc64  1/1   Running 0       1m   node2
-k8s-hello-world-55f48f8c94-lkdvj  1/1   Running 0       1m   node2
-k8s-hello-world-55f48f8c94-npkn6  1/1   Running 0       1m   node1
-k8s-hello-world-55f48f8c94-ppsqk  1/1   Running 0       1m   node2
-k8s-hello-world-55f48f8c94-sc9pf  1/1   Running 0       1m   node1
-k8s-hello-world-55f48f8c94-tjg4n  1/1   Running 0       1m   node2
-k8s-hello-world-55f48f8c94-vrkr9  1/1   Running 0       1m   node1
-k8s-hello-world-55f48f8c94-xzvlc  1/1   Running 0       1m   node2
+NAME                              READY STATUS  NODE
+k8s-hello-world-55f48f8c94-7shq5  1/1   Running node1
+k8s-hello-world-55f48f8c94-9w5tj  1/1   Running node1
+k8s-hello-world-55f48f8c94-cdc64  1/1   Running node2
+k8s-hello-world-55f48f8c94-lkdvj  1/1   Running node2
+k8s-hello-world-55f48f8c94-npkn6  1/1   Running node1
+k8s-hello-world-55f48f8c94-ppsqk  1/1   Running node2
+k8s-hello-world-55f48f8c94-sc9pf  1/1   Running node1
+k8s-hello-world-55f48f8c94-tjg4n  1/1   Running node2
+k8s-hello-world-55f48f8c94-vrkr9  1/1   Running node1
+k8s-hello-world-55f48f8c94-xzvlc  1/1   Running node2
 ```
+
+{% include_relative load-distribution.svg %}
 
 A Service was created to load balance the requests across the ten replicas:
 
@@ -111,6 +117,8 @@ kubernetes        ClusterIP 100.64.0.1      <none>      443/TCP         18h
 
 The service is exposed to the outside world using `NodePort` on port 30000. In other words, each node has port 30000 opened to the public internet and can accept incoming traffic.
 
+{% include_relative nodeport.svg %}
+
 **But how is the traffic routed from port 30000 to my pod?**
 
 `kube-proxy` is in charge of setting up the rules to route the incoming traffic from port 30000 to one of the ten pods.
@@ -121,13 +129,13 @@ You should try to request the node on port 30000:
 $ curl <node ip>:30000
 ```
 
-> Please note that you can retrieve the node's ip with `kubectl get nodes -o wide`
+> Please note that you can retrieve the node's IP with `kubectl get nodes -o wide`
 
 The application replies with *Hello World!* and the hostname of the container is running on. In the previous command, you should be greeted by `Hello world! via <hostname>`.
 
 If you keep requesting the same URL, you may notice how sometimes you get the same response and sometimes it changes. `kube-proxy` is acting as a load balancer and is looking at the routing list and distributing the traffic across the ten pods.
 
-What's more interesting is that it doesn't matter which node you request. The response could come from any pod, even one that is not hosted on the same node you made the request to.
+What's more interesting is that it doesn't matter which node you request. The response could come from any pod, even one that is not hosted on the same node you requested.
 
 To complete your setup, you should have an external load balancer routing the traffic to your nodes on port 30000.
 
@@ -156,18 +164,24 @@ Now that you know how things are plugged in together let's get back to the origi
 
 Let's go ahead and delete the routing rules.
 
-In a separate shell, you should monitor the application for time and dropped requests. You could use a command like this:
+In a separate shell, you should monitor the application for time and dropped requests.
+
+You could write a loop that every second prints the time and request the application:
 
 ```bash
-$ while sleep 1; do date +%s; curl -sS http://<your load balancer ip>/ | grep ^Hello; done
+$ while sleep 1; do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello; done
 ```
 
-In this case, you have the timestamp in the first column and the response from the pod in the other:
+In this case, you have the time in the first column and the response from the pod in the other:
 
 ```bash
-1519526805 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
-1519526807 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
+10:14:41 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
+10:14:43 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
 ```
+
+> The first call was made to the _k8s-hello-world-55f48f8c94-vrkr9_ pod at 10:14 and 41 seconds.
+
+> The second call was made to the _k8s-hello-world-55f48f8c94-tjg4n_ pod at 10:14 and 43 seconds.
 
 Let's delete the routing rules from the node.
 
@@ -177,19 +191,19 @@ In **iptables** mode, `kube-proxy` writes the list of routing rules to the node 
 
 So you could log in into one of the node servers and delete the iptables rules with `iptables -F`.
 
-> Please note that `iptables -F` may interfer with your SSH connection.
+> Please note that `iptables -F` may interfere with your SSH connection.
 
 If everything went according to plan you should experience something similar to this:
 
 ```bash
-1519526805 Hello world! via k8s-hello-world-55f48f8c94-xzvlc
-1519526807 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
+10:14:41 Hello world! via k8s-hello-world-55f48f8c94-xzvlc
+10:14:43 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
 # this is when `iptables -F` was issued
-1519526834 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
-1519526835 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
+10:15:10 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
+10:15:11 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
 ```
 
-As you noticed, it took about 27 seconds from when you dropped the iptables rules and the next response, from 1519526807 to 1519526834.
+As you noticed, it took about 27 seconds from when you dropped the iptables rules and the next response, from 10:14:43 to 10:15:10.
 
 *What happened in this 27 seconds?*
 
@@ -198,20 +212,22 @@ As you noticed, it took about 27 seconds from when you dropped the iptables rule
 Perhaps it's just a coincidence. Let's flush the rules again:
 
 ```bash
-1519526855 Hello world! via k8s-hello-world-55f48f8c94-xzvlc
-1519526856 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
+11:29:55 Hello world! via k8s-hello-world-55f48f8c94-xzvlc
+11:29:56 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
 # this is when `iptables -F` was issued
-1519526885 Hello world! via k8s-hello-world-55f48f8c94-npkn6
-1519526887 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
+11:30:25 Hello world! via k8s-hello-world-55f48f8c94-npkn6
+11:30:27 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
 ```
 
-There was a gap of 29 seconds, from 1519526856 to 1519526885, but the cluster is back to normal.
+There was a gap of 29 seconds, from 11:29:56 to 11:30:25, but the cluster is back to normal.
 
 *Why does it take about 30 seconds to reply?*
 
 *Is the node receiving traffic despite no routing table?*
 
-Maybe you could investigate what happens to the node in this 30 seconds. In another terminal, let's monitor requests to the node with:
+Maybe you could investigate what happens to the node in this 30 seconds.
+
+In another terminal, you should write a loop to make requests to the application every second. But this time, you should request the node and not the load balancer:
 
 ```bash
 $ while sleep 1; printf %"s\n" $(curl -sS http://<ip of the node>:30000); done
@@ -222,6 +238,7 @@ And let's drop the iptables rules. The log from the previous command is:
 ```bash
 Hello world! via k8s-hello-world-55f48f8c94-xzvlc
 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
+# this is when `iptables -F` was issued
 curl: (28) Connection timed out after 10003 milliseconds
 curl: (28) Connection timed out after 10004 milliseconds
 Hello world! via k8s-hello-world-55f48f8c94-npkn6
@@ -232,7 +249,7 @@ It shouldn't come as a surprise that connections to the node are timing out afte
 
 *What if in the previous example the load balancer is waiting for the connection to be made?*
 
-That would explain the 30 seconds delay. But it doesn't tell why the node is ready to accept connection when you wait long enough.
+That would explain the 30 seconds delay. But it doesn't tell why the node is ready to accept a connection when you wait long enough.
 
 *So why is the traffic recovering after 30 seconds?*
 
@@ -325,4 +342,4 @@ Dropping iptables rules is similar to make a node unavailable. The traffic is st
 
 Many thanks to [Manabu Sakai](https://twitter.com/manabusakai)'s blog post that was a huge inspiration and to [Valentin Ouvrard](https://twitter.com/Valentin_NC) for investigating the issue with the iptables propagation.
 
-If you liked the article and you want to know more, subscribe to our newsletter!
+If you liked the article, you should stay tuned for more! Subscribe to our newsletter!
