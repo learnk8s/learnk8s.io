@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" id="hello">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 600" id="hello">
   <g fill="none" fill-rule="evenodd">
-    <g transform="translate(85 65)">
+    <g transform="translate(64 65)">
       <path fill="#FF003C" d="M632,465.678665 C632,468.61781 630.021154,471 627.579156,471 L4.42084395,471 C1.97884644,471 0,468.61781 0,465.678665 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 L627,0 C629.761424,-5.07265313e-16 632,2.23857625 632,5 L632,465.678665 Z"/>
       <text fill="#FFF" font-family="-apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif" font-size="34" font-weight="bold">
         <tspan x="136.512" y="245.842">Hello world! via 7shq5</tspan>
