@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kube-hello-world
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: kube-hello-world
+    spec:
+      containers:
+      - name: hello-world-nodejs
+        image: learnk8s/node-hello-world
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8080
