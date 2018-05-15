@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Kubernetes Chaos Engineering: Lessons Learned"
-date: 2018-05-13 08:43:00
+date: 2018-05-15 07:10:00
 author: "Daniele Polencic"
 
 description: "When you deploy an application in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or VM such as AWS EC2 or Google Compute Engine and having several of them means you can run and scale your application across instances efficiently. When there is an incoming request, the cluster routes the traffic to one of the nodes using a network proxy. But what happens when network proxy crashes? Does the cluster still work? Can Kubernetes recover from the failure?"
