@@ -195,20 +195,37 @@ You can download minikube with:
 choco install minikube -y
 ```
 
-Before you start the cluster, you should create an external network switch in Hyper-V Manager.
+Before you start the cluster, you should create an external network switch.
 
-You can follow these instructions to create a networking switch in Hyper-V Manager:
+First you need to identify what network adapters you have on your computer.
 
-1. Open Hyper-V Manager
-2. From the left column select your computer
-3. From the right sidebar select _Virtual Switch Manager_
-4. Create a new External Switch
-5. Name it "minikube" (without the quotes)
-6. Apply your changes
+You should ignore the virtual interface and focus on real, live, physical network adapters such as Ethernet and WiFi.
 
-{% include_relative switch.html %}
+Picking a real adapter will let you share the internet connection with the virtual switch.
 
-If you fail to create the network switch, you will see the following error when you start minikube:
+To inspect your current network adapters, you can use the `Get-NetAdapter` cmdlet in Powershell.
+
+Click left lower corner Windows icon and start typing PowerShell to open it.
+
+Type the following command to list all the adapters:
+
+```powershell
+Get-NetAdapter
+```
+
+![Get-NetAdapter on PowerShell]({% link _blog/installing-docker-and-kubernetes-on-windows/netadapter.png %})
+
+> If you're finding it hard to select an adapter, try selecting one that has **Up** in the _Status_ column.
+
+Once you identified the right adapter, you can create an External Virtual Switch with the following command:
+
+```powershell
+New-VMSwitch –Name "minikube" –AllowManagement $True –NetAdapterName "INSERT_HERE_ADAPTER"
+```
+
+Don't forget to insert the adapter that you selected earlier.
+
+If you fail to create the network switch, you should see the following error when you start minikube:
 
 > E0427 09:06:16.000298    3252 start.go:159] Error starting host: Error creating host: Error executing step: Running precreate checks.
 > no External vswitch found. A valid vswitch must be available for this command to run. Check https://docs.docker.com/machine/drivers/hyper-v/.
@@ -216,16 +233,16 @@ If you fail to create the network switch, you will see the following error when 
 You can test your minikube installation with:
 
 ```bash
-minikube start --vm-driver=hyperv --memory=2048
+minikube start --vm-driver=hyperv --hyperv-virtual-switch=minikube
 ```
 
-> Please note that `--vm-driver=hyperv --memory=2048` are necessary only for the first start. If you wish to change the driver or the memory you have to `minikube destroy` and recreate the VM with the new settings.
+> Please note that `--vm-driver=hyperv --hyperv-virtual-switch=minikube` are necessary only for the first start. If you wish to change the driver or the memory you have to `minikube destroy` and recreate the VM with the new settings.
 
 If for any reason minikube fails to start up, you can debug it with:
 
 ```bash
 minikube delete
-minikube start --vm-driver=hyperv --memory=2048 --v=7 --alsologtostderr
+minikube start --vm-driver=hyperv --hyperv-virtual-switch=minikube --v=7 --alsologtostderr
 ```
 
 The extra verbose logging should help you get to the issue. In my particular case, minikube used to fail with:
