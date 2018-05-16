@@ -258,7 +258,7 @@ That would explain the 30 seconds delay. But it doesn't tell why the node is rea
 Before you drop the iptables rules, you can inspect them with:
 
 ```bash
-$ iptables -F
+$ iptables -L
 ```
 
 Soon after you drop the rules, you should keep executing `iptables -F` and notice that the rules are back in few seconds!
