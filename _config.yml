@@ -23,3 +23,7 @@ collections:
   pages:
     output: true
     permalink: /:path
+plugins:
+  - jekyll-autolink_email
+autolink_email:
+  link_attr: class='email-link' # attributes to add to the link
