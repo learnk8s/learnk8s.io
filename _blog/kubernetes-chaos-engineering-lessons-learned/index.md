@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Kubernetes Chaos Engineering: Lessons Learned"
+title: "Kubernetes Chaos Engineering: Lessons Learned — Part 1"
 date: 2018-05-15 07:10:00
 author: "Daniele Polencic"
 
@@ -13,7 +13,7 @@ image: /blog/kubernetes-chaos-engineering-lessons-learned/chaos-engineering-kube
 
 open_graph:
   type: article
-  title: "Kubernetes Chaos Engineering: Lessons Learned"
+  title: "Kubernetes Chaos Engineering: Lessons Learned — Part 1"
   image: /blog/kubernetes-chaos-engineering-lessons-learned/chaos-engineering-kubernetes.png
   description: "When you deploy an app in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or a VM. The cluster routes the traffic to the nodes using a network proxy. But what happens when network proxy crashes?"
 
