@@ -1,39 +1,43 @@
 ---
 layout: post
-title: Installing Docker and Kubernetes on Windows
+title: Getting started with Docker and Kubernetes on Windows 10
 description: ""
 date: 2018-02-19 02:00:00
 categories: docker kubernetes windows
-excerpt: "Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to start. And even worse, installing Docker and Kubernetes on Windows require expertise on how you use containers at scale. It's the usual chicken and egg problem. You have to master containers before you can install Docker and Kubernetes. But you need to install those dependencies before you can learn how to use them! So how do you know how to install Docker and Kubernetes on Windows? In this article, you will learn how to install Docker on Windows and a local Kubernetes cluster."
+excerpt: "Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. And it doesn't help that installing the software isn't exactly a walk in the park. In fact, you should already be a Docker and Kubernetes expert to navigate the options on how to install them. But don't worry! If you're just starting your journey with containers and Kubernetes on Windows this article is for you. You'll learn how to make the right choices when it comes to setting up your development environment on Windows."
 author: "Keith Mifsud"
 open_graph:
   type: article
-  title: Installing Docker and Kubernetes on Windows
+  title: Getting started with Docker and Kubernetes on Windows 10
   image: ""
-  description: "In this article, you will learn how to install Docker on Windows and a local Kubernetes cluster."
+  description: "Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows."
 ---
 
-Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to start. And even worse, installing Docker and Kubernetes on Windows require expertise on how you use containers at scale.
+Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin.
 
-It's the usual chicken and egg problem. You have to master containers before you can install Docker and Kubernetes. But you need to install those dependencies before you can learn how to use them!
+And it doesn't help that installing the software isn't exactly a walk in the park.
 
-_So how do you know how to install Docker and Kubernetes on Windows?_
+In fact, you should already be a Docker and Kubernetes expert to navigate the options on how to install them.
 
-In this article, you will learn how to install Docker on Windows and a local Kubernetes cluster.
+_But don't worry!_
 
-When it comes to installing Docker on Windows, you have few options.
+If you're just starting your journey with containers and Kubernetes on Windows this article is for you.
+
+You'll learn how to make the right choices when it comes to setting up your development environment on Windows.
+
+Let's start with Docker.
 
 ## Using Windows 10 Home? You won't be able to run Docker for Windows
 
-When the fantastic people at Docker decided to implement Docker on Windows, they opted for Hyper-V as their virtualisation technology. The benefit is crystal clear: excellent performance and a native hypervisor.
+When the people at Docker decided to implement Docker on Windows, they opted for Hyper-V as their virtualisation technology. The benefit is crystal clear: excellent performance and a native hypervisor.
 
 **Unfortunately not all Windows versions ship with Hyper-V.**
 
 And if you're using Windows 10 Home or Student edition, you are out of luck. You won't be able to install and run Docker for Windows.
 
-_But worry not!_
+_But it's not game over._
 
-That is plenty of replacements based on [Docker Machine](https://docs.docker.com/machine/) such as Docker Toolbox or minikube.
+There are plenty of replacements based on [Docker Machine](https://docs.docker.com/machine/) such as Docker Toolbox or minikube.
 
 The way Docker Machine works is simple: there's a virtual machine that runs Linux and Docker. And you connect from your host to the remote Docker daemon in that virtual machine.
 
@@ -47,7 +51,7 @@ You won't reach the same speed as Docker for Windows, but you can build and run 
 
 You have the latest Windows 10 Pro, and you can install Docker for Windows.
 
-Excellent performance, excellent developer experience. You're sorted, aren't you?
+Excellent performance and excellent developer experience. You're sorted, aren't you?
 
 *Maybe.*
 
@@ -59,15 +63,21 @@ You can't have Type-1 and Type-2 hypervisors running at the same time on your ma
 
 Depending on your setup, this may be an insignificant detail.
 
-Perhaps you're fully committed to the containerised world, and you left virtual machines behind. An old and distant memory.
+Perhaps you're fully committed to a containerised world, and you left virtual machines behind.
+
+An old and distant memory.
 
 But if you're still relying on virtual machines and tools such as Vagrant, perhaps you should be aware of the annoyance.
 
-**You can enable and disable the Hyper-V hypervisor at will, but it requires a restart of your laptop.**
+**You can enable and disable the Hyper-V hypervisor at will, but it requires a restart of your computer.**
 
-If you're frequently switching from containers to virtual machines, perhaps minikube is a more convenient choice. You don't need to restart your laptop when you change from containers to virtual machines. But you don't benefit from the extra performance or the improved experience.
+If you're frequently switching from containers to virtual machines, perhaps minikube is a more convenient choice. You don't need to restart your computer when you change from containers to virtual machines.
 
-Lastly, if you're interested in running Windows containers — _aka containers with a base image that inherits from Windows_ — Docker for Windows is the only option. And you will need Windows 10 Pro or Enterprise for that.
+But you don't benefit from the extra performance or the improved experience.
+
+Lastly, if you're interested in running Windows containers — _aka containers with a base image that inherits from Windows_ — Docker for Windows is the only option.
+
+And you will need Windows 10 Pro or Enterprise for that.
 
 ## Running a local Kubernetes cluster
 
@@ -77,7 +87,7 @@ Minikube is a virtual machine running on an embedded Linux Distribution (Buildro
 
 **It's Kubernetes with batteries included.**
 
-Minikube can run virtual machines using VirtualBox or Hyper-V - [there are more options too](https://github.com/kubernetes/minikube#quickstart).
+Minikube can run virtual machines using VirtualBox or Hyper-V — [there are more options too](https://github.com/kubernetes/minikube#quickstart).
 
 Which is great news if you already have Hyper-V and want to maintain using the same hypervisor for Docker and minikube.
 
@@ -87,19 +97,19 @@ That's a lot of choices and trade-offs, so here's a summary of what was discusse
 
 ![Installing Docker and Kubernetes on Windows]({% link _blog/installing-docker-and-kubernetes-on-windows/diagram.png %})
 
-## 0. Installing the tools to install the tools
+## Prerequisites
 
-You can download and install all the dependencies such as Docker for Windows, Docker Toolbox, VirtualBox, kubectl, Docker CLI, etc. from the official websites, but it's inconvenient.
+You can download and install all the dependencies such as Docker for Windows, Docker Toolbox, VirtualBox, kubectl, Docker CLI, etc. from the official websites, but it's hard work.
 
 You have to visit the website, hope that the URL is still valid, search for the download page, select the right version, download it, install it and finally add it to your path.
 
-It's doable, but I'm sure you would rather spend time doing more coding than chasing and installing binaries from the internet.
+It's doable, but I'm sure you would rather spend time doing more coding than chasing and installing executables from the internet.
 
 **Enter Chocolatey.**
 
-[Chocolatey](https://chocolatey.org) is a package manager for Windows. You tell it what binaries you wish to install, and Chocolatey installs them on your behalf.
+[Chocolatey](https://chocolatey.org) is a package manager for Windows. You tell it what executables you wish to install, and Chocolatey installs them on your behalf.
 
-You're handing out all the hard work to someone else.
+You're outsourcing all the hard work of provisioning software to someone else.
 
 Installing Chocolatey is easy. You can find the [full instructions on the official website](https://chocolatey.org/install). But in a nutshell, this what you have to do:
 
@@ -197,15 +207,15 @@ choco install minikube -y
 
 Before you start the cluster, you should create an external network switch.
 
-First you need to identify what network adapters you have on your computer.
+First, you need to identify what network adapters you have on your computer.
 
-You should ignore the virtual interface and focus on real, live, physical network adapters such as Ethernet and WiFi.
+You should ignore the virtual interface and focus on real, live, physical network adapters such as _Ethernet_ or _WiFi_.
 
 Picking a real adapter will let you share the internet connection with the virtual switch.
 
 To inspect your current network adapters, you can use the `Get-NetAdapter` cmdlet in Powershell.
 
-Click left lower corner Windows icon and start typing PowerShell to open it.
+Click left lower corner Windows icon and start typing "PowerShell" to open it.
 
 Type the following command to list all the adapters:
 
@@ -215,7 +225,7 @@ Get-NetAdapter
 
 ![Get-NetAdapter on PowerShell]({% link _blog/installing-docker-and-kubernetes-on-windows/netadapter.png %})
 
-> If you're finding it hard to select an adapter, try selecting one that has **Up** in the _Status_ column.
+> If you're finding it hard to select an adapter, try picking one that has **Up** in the _Status_ column.
 
 Once you identified the right adapter, you can create an External Virtual Switch with the following command:
 
@@ -236,7 +246,7 @@ You can test your minikube installation with:
 minikube start --vm-driver=hyperv --hyperv-virtual-switch=minikube
 ```
 
-> Please note that `--vm-driver=hyperv --hyperv-virtual-switch=minikube` are necessary only for the first start. If you wish to change the driver or the memory you have to `minikube destroy` and recreate the VM with the new settings.
+> Please note that `--vm-driver=hyperv --hyperv-virtual-switch=minikube` is necessary only for the first start. If you wish to change the driver or the memory you have to `minikube destroy` and recreate the VM with the new settings.
 
 If for any reason minikube fails to start up, you can debug it with:
 
@@ -270,7 +280,7 @@ You should be able to see a single node in Kubernetes.
 
 ### Running virtual machines on VirtualBox
 
-Since Hyper-V is now enabled on your device, you won't be able to start any VM on VirtualBox. You can still try and launch your VM. You may experience the following error, though:
+Since you enabled Hyper-V on your device, you won't be able to start any VM on VirtualBox. You can still try and launch your VM. You may experience the following error, though:
 
 > Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart it for you.
 
@@ -300,7 +310,7 @@ Restart, and now you're ready to run and deploy containers to Kubernetes!
 
 ## 2. Installing Docker and Kubernetes on Windows 10 Home
 
-If you're planning on using Docker and Kubernetes locally, you can probably save yourself from installing other Docker Machine tool such as Docker Toolbox.
+If you're planning on using Windows 10 Home or Student edition, you can probably save yourself from installing another Docker Machine tool such as Docker Toolbox.
 
 You should use minikube as a remote Docker daemon as well as your local Kubernetes cluster.
 
@@ -350,10 +360,10 @@ You should see a lot of running containers. Most of those belong to Kubernetes.
 
 But before you move on, you should be aware of some the limits of using minikube as your remote Docker daemon.
 
-Docker is made of two parts:
+Docker was designed in two parts:
 
-- **the Docker daemon** — you can think about it as a server with an API. You can send commands to the API and Docker will receive and execute the commands on your behalf.
-- **the Docker CLI** — the executable that used to send the command to the Docker daemon API
+- **the Docker daemon** — you can think about it as a server with an API. You can send commands to the API and Docker will receive and execute them on your behalf.
+- **the Docker CLI** — the executable that sends the commands to the Docker daemon API
 
 Most of the time you're interacting with the Docker CLI, and you don't see the Docker daemon.
 
@@ -373,7 +383,7 @@ Perhaps you want to build containers on a remote machine.
 
 Perhaps you can't run Hyper-V on your machine, and your Docker daemon is installed in a virtual machine in VirtualBox.
 
-Exactly the case if you're running minikube.
+Precisely the case if you're running minikube.
 
 Your Docker CLI is connected remotely to a Docker daemon located inside the minikube virtual machine.
 
@@ -403,7 +413,9 @@ The Docker daemon is in charge of running the containers and forwarding ports.
 
 So you can visit the running container on localhost.
 
-Minikube, on the other hand, runs the Docker daemon inside the virtual machine. It's a remote Docker daemon.
+Minikube, on the other hand, runs the Docker daemon inside the virtual machine.
+
+_It's a remote Docker daemon._
 
 You need to visit the machine with the Docker daemon if you wish to see your running container. You can find the IP address with:
 
@@ -431,7 +443,7 @@ You should be able to see the Wordpress installation Wizard.
 
 **Hurrah!**
 
-Wordpress serving traffic from within a container!
+Wordpress is serving traffic from within a container!
 
 > Please note that you won't be able to complete the Wordpress installation because there's no database.
 
@@ -449,7 +461,7 @@ You can deploy your dashboard to Kubernetes with:
 kubectl run smashing --image=visibilityspots/smashing --port=3030
 ```
 
-Once the container is downloaded, you should see it running:
+Once Kubernetes completes downloading the container, you should see it running:
 
 ```bash
 kubectl get pods
@@ -469,7 +481,7 @@ You can open the dashboard in your browser with:
 minikube service smashing
 ```
 
-Dashboard is served from Kubernetes! Hurrah!
+You can visit the dashboard from Kubernetes! Hurrah!
 
 # A bird's eye view of Kubernetes
 
@@ -487,10 +499,12 @@ From there, you can explore your cluster and deploy applications.
 
 ## Summary
 
-So now that you can run K8s on your Windows workstation why not follow the
-<a href="/blog/deploying-laravel-to-kubernetes" title="Deploying Laravel to
-Kubernetes">Deploying Laravel to Kubernetes</a> tutorial and get a more
-in-depth introduction to Kubernetes? You will notice that in Unix systems
-both `minikube` and `kubectl` commands can be run from anywhere as opposed to
- Windows's requirements were you'll need to refer to the `.exe` specifically
- files from within the location they reside. Other than that, all is the same, the commands in the tutorial can easily be translated to work on Windows.
+_And that's all!_
+
+Now you know all the options when it comes to installing Docker and Kubernetes on Windows.
+
+If you stumbled on an error not described in the article, feel free to get in touch on Twitter [@learnk8s](https://twitter.com/learnk8s) or [Slack](https://learnk8s-slack-invite.herokuapp.com/).
+
+And since you have a fully working environment, you should check out the tutorial on [how to deploy Laravel applications to Kubernetes]({% link _blog/deploying-laravel-to-kubernetes/index.md %}).
+
+If you liked the article, you should stay tuned for more! Subscribe to our newsletter!
