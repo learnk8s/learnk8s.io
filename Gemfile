@@ -1,4 +1,4 @@
 source "https://rubygems.org"
 
 gem 'jekyll', '~> 3.7.0'
-gem 'jekyll-autolink_email'
+gem 'jekyll-target-blank', '0.2.0'
