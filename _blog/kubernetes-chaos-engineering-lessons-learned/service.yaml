@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: kube-hello-world-service
+  name: kube-hello-world-service
+spec:
+  type: NodePort
+  ports:
+  - name: exposed-port
+    port: 80
+    targetPort: 8080
+    nodePort: 30000
+  selector:
+    name: kube-hello-world

@@ -181,7 +181,8 @@
     overflow: scroll;
   }
 
-  p > code {
+  p > code,
+  li > code {
     @extend .bg-near-white, .pa1, .br2, .ba, .b--black-20, .f5;
   }
 
