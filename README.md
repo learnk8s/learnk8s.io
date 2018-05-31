@@ -44,6 +44,48 @@ page by adding and setting the front-matter property:
 
 Please check how it looks and fits on the page once set.
 
+### Links
+
+If you need to include an external link, you can use an available `include 
+directive` as opposed to standard HTML. To do so, simply add the following to
+ your article:
+ 
+```
+{% include link.external.html href="http://example.com" text="Text you want 
+to show" %}
+```
+
+___Optional arguments:___
+
+As you might of assumed the `href` ad the `text` arguments are required in 
+order for link to be shown and to be directed appropriately. You can pass 
+additional arguments for the `title` and the `rel` options as follows:
+
+1) Rel
+
+The default setting if not stated is `rel=nofollow`. Setting this attribute 
+will override the default setting. For example, this setting:
+
+```
+{% include link.external.html href="http://example.com" text="Text you want 
+to show" rel="noopener" %}
+``` 
+
+will result as:
+
+```html
+<a href="http://example.com" rel="noopener">Text you want to show</a>
+```
+
+2) Title
+
+If you do not specify a title, the text will be used by default. You can 
+override the default title by setting it, Like so:
+
+```html
+<a href="http://example.com" title="Your desired title">Text you want to 
+show</a>
+```
 
 ## Checking your writing
 
