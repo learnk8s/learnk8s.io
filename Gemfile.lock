@@ -31,7 +31,7 @@ GEM
       safe_yaml (~> 1.0)
     jekyll-sass-converter (1.5.1)
       sass (~> 3.4)
-    jekyll-target-blank (0.7.0)
+    jekyll-target-blank (1.0)
       jekyll (~> 3.0)
       nokogiri (~> 1.8.2)
     jekyll-watch (2.0.0)
@@ -69,7 +69,7 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll (~> 3.7.0)
-  jekyll-target-blank (= 0.7.0)
+  jekyll-target-blank (= 1.0)
 
 BUNDLED WITH
-   1.16.1
+   1.16.2
