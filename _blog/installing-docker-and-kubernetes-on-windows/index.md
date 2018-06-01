@@ -156,6 +156,9 @@ Yes, you do!
 
 You should be aware that Docker requires VT-X/AMD-v virtual hardware extension to be enabled before you can run any container. Depending on your computer, you may need to reboot and enable it in your BIOS.
 
+> You can check if VT-X/AMD-v is enabled by running `systeminfo` from the 
+command prompt.
+
 If you're unsure VT-X/AMD-v was enabled, don't worry. If you don't have it, Docker will greet you with the following error message:
 
 > Hardware assisted virtualization and data execution protection must be enabled in the BIOS.
