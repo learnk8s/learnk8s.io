@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 842 580" id="spike">
+  <defs>
+    <linearGradient id="linearGradient-1" x1="50%" x2="50%" y1="100%" y2="33.643%">
+      <stop offset="0%" stop-color="#4AC5B6"/>
+      <stop offset="100%" stop-color="#9BEE50"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <g stroke-linejoin="round" transform="translate(79 81)">
+      <path stroke="#778F9B" stroke-dasharray="1 6" d="M0 1L690 1M0 113L690 113M0 226L690 226"/>
+      <path stroke="#000A12" stroke-linecap="round" stroke-width="2" d="M0,339 L690,339"/>
+    </g>
+    <path id="spike-animejs-line" fill="url(#linearGradient-1)" d="M79,417 C79,417 85.1483552,417.337391 200.438137,417.501631 C315.727918,417.66587 377.351632,417.501631 431.124885,417.501631 C484.898138,417.501631 423.507087,417.501631 538.671392,417.501631 C653.835696,417.501631 653.835696,417 769,417.501631 L769,419 L79,418.667596 L79,417 Z"/>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="699.253" y="450">10:00</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="581.253" y="450">08:00</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="463.253" y="450">06:00</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="345.253" y="450">05:00</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="227.253" y="450">03:00</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="109.253" y="450">01:00</tspan>
+    </text>
+  </g>
+</svg>

@@ -17,21 +17,25 @@ open_graph:
   title: Scaling Microservices using Spring Boot and Kubernetes
   image:
   description: ""
+
+js:
+  - anime.min.js
+  - isScrolledIntoView.js
 ---
 
-When you design and build applications at scale, you deal with two significant challenges: scalability and robustness.
+When you design and build applications at scale, you deal with two significant challenges: **scalability and robustness**.
 
 You should design your services so that even if it is subject to intermittent heavy loads, it continues to operate reliably.
 
-Take the Apple Store as an example.
+_Take the Apple Store as an example._
 
 Every year millions of Apple customers preregister to buy a new iPhone.
 
-And all of them visit the website and fill in their details at precisely the same time.
+That's millions of people all buying an item at the same time.
 
 If you were to picture the Apple store's traffic over time, this is what the graph could look like:
 
-[TODO: pict]
+{% include_relative spike.html %}
 
 Now imagine you're tasked with the challenge of building such application.
 
@@ -41,15 +45,15 @@ You need a microservice to render the web pages and serving the static assets.
 
 You also need a backend REST API to process the incoming requests.
 
-You want the two components to be separated because with the same REST API you could serve your website and your mobile apps.
+You want the two components to be separated because with the same REST API you could serve the website and mobile apps.
 
-[TODO: pict]
+{% include_relative api.html %}
 
 Today turned out to be the big day, and your store goes live.
 
-You decide to scale the application to four instances each because you predict the website is busier than usual.
+You decide to scale the application to four instances each because you predict the website to be busier than usual.
 
-[TODO: pict]
+{% include_relative normal-traffic.html %}
 
 You start receiving more and more traffic.
 
@@ -61,7 +65,7 @@ You noticed that it is struggling to keep up with the number of transactions.
 
 No worries, you can scale the number of replicas to 8 for the API layer.
 
-[TODO: pict]
+{% include_relative scaling-in-response.html %}
 
 You're receiving even more traffic, and the API layer can't cope with it.
 
@@ -73,7 +77,7 @@ And now you're drowning in traffic.
 
 Your API layer can't cope with it, and it drops plenty of connections.
 
-[TODO: pict]
+{% include_relative dropping-connections.html %}
 
 You just lost a ton of money, and your customers are unhappy.
 
@@ -87,7 +91,7 @@ And lost transactions are lost revenues.
 
 You could redesign your architecture to decouple the front-end and the API with a queue.
 
-[TODO: pict]
+{% include_relative queue.html %}
 
 The front-end posts messages to the queue, while the API layer processes the pending messages one at the time.
 
@@ -129,11 +133,11 @@ The application can function in two modes:
 
 **As frontend**, the application renders the shop website where people can buy items.
 
-[TODO: pict]
+![Store front-end]({% link _blog/scaling-spring-boot-microservices/store.png %})
 
 **As a worker**, the application waits for messages in the queue and processes them.
 
-[TODO: pict]
+![Store admin worker]({% link _blog/scaling-spring-boot-microservices/admin.png %})
 
 You can configure the application in either mode, by changing the values in your `application.yaml`.
 
@@ -143,11 +147,9 @@ By default, the application starts as a frontend and worker.
 
 You can run the application and, as long as you have a Redis instance running locally, you should be able to buy items and having those processed by the system.
 
-[TODO: gif]
+![Store admin worker]({% link _blog/scaling-spring-boot-microservices/demo.gif %})
 
 If you inspect the logs, you should see the worker processing items.
-
-[TODO: gif]
 
 It worked!
 
@@ -179,6 +181,8 @@ The main queue can be model as a list.
 
 And messages are appended to it.
 
+{% include_relative push.html %}
+
 Some processes competes for messages from the main queue.
 
 When a process gets hold of a message from the main queue, it moves it to the local queue and starts processing it.
@@ -187,7 +191,7 @@ When the process completes the task, it removes the message from the local queue
 
 The process then waits for more messages.
 
-[TODO: image]
+{% include_relative reliable.html %}
 
 The pattern works well in case of crashes.
 
@@ -372,7 +376,7 @@ For each of them you need to create:
 
 Each instance of your application in a deployment is called _Pod_.
 
-[TODO: picture]
+{% include_relative k8s.html %}
 
 ### Deploy Redis
 
@@ -381,11 +385,38 @@ Let's start with the Redis database.
 You should create a `redis-deployment.yaml` file with the following content:
 
 ```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: web
+        image: redis
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 6379
 ```
 
 Create a `redis-service.yaml` file with the following content:
 
 ```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: redis
 ```
 
 You can create the resources with:
@@ -406,11 +437,56 @@ kubectl get pods -l=app=redis
 Create a `fe-deployment.yaml` file with the following content:
 
 ```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: store
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: store
+    spec:
+      containers:
+      - name: store
+        image: spring-boot-hpa
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: REDIS_URL
+          value: "redis://redis:6379"
+        - name: STORE_ENABLED
+          value: "true"
+        - name: WORKER_ENABLED
+          value: "false"
+        ports:
+          - containerPort: 8080
+        livenessProbe:
+          initialDelaySeconds: 2
+          periodSeconds: 5
+          httpGet:
+            path: /health
+            port: 8080
+        resources:
+          limits:
+            memory: 512Mi
 ```
 
 Create a `fe-service.yaml` file with the following content:
 
 ```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: store
+spec:
+  ports:
+  - nodePort: 32000
+    port: 80
+    targetPort: 8080
+  selector:
+    app: store
+  type: NodePort
 ```
 
 You can create the resources with:
@@ -431,11 +507,58 @@ kubectl get pods -l=app=fe
 Create a `worker-deployment.yaml` file with the following content:
 
 ```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: worker
+      annotations:
+        prometheus.io/scrape: 'true'
+    spec:
+      containers:
+      - name: worker
+        image: spring-boot-hpa
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: REDIS_URL
+          value: "redis://redis:6379"
+        - name: STORE_ENABLED
+          value: "false"
+        - name: WORKER_ENABLED
+          value: "true"
+        ports:
+          - containerPort: 8080
+        livenessProbe:
+          initialDelaySeconds: 2
+          periodSeconds: 5
+          httpGet:
+            path: /health
+            port: 8080
+        resources:
+          limits:
+            memory: 512Mi
 ```
 
 Create a `worker-service.yaml` file with the following content:
 
 ```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker
+spec:
+  ports:
+  - nodePort: 31000
+    port: 80
+    targetPort: 8080
+  selector:
+    app: worker
+  type: NodePort
 ```
 
 You can create the resources with:
@@ -582,6 +705,22 @@ Kubernetes has an object called Horizontal Pod Autoscaler that is used to monito
 You should create a `hpa.yaml` file with the following content:
 
 ```bash
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: spring-boot-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: worker
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Pods
+    pods:
+      metricName: messages
+      targetAverageValue: 10
 ```
 
 If you're unfamiliar with Kubernetes, the file may be hard to read.
@@ -630,7 +769,7 @@ The algorithm for scaling is the following:
 MAX(CURRENT_REPLICAS_LENGTH * 2, 4)
 ```
 
-> The documentation doesn't help a lot when it comes to the scaling algorithm. You can [find the details in the code](https://github.com/kubernetes/kubernetes/blob/bac31d698c1eed2b54374bdabfd120f7319dd5c8/pkg/controller/podautoscaler/horizontal.go#L588).
+> The documentation doesn't help a lot when it comes to exaplaining the algorithm. You can [find the details in the code](https://github.com/kubernetes/kubernetes/blob/bac31d698c1eed2b54374bdabfd120f7319dd5c8/pkg/controller/podautoscaler/horizontal.go#L588).
 
 Every scale-up is re-evaluated every minute, whereas any scale down every two minutes.
 
@@ -652,7 +791,7 @@ Good news!
 
 As you need more resources, you can have a cluster autoscaler that adds more nodes to your Kubernetes cluster.
 
-[TODO: pict]
+{% include_relative autoscaling-cluster.html %}
 
 The cluster autoscaler comes in different shapes and sizes.
 

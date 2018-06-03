@@ -1,0 +1,42 @@
+{% include_relative spike.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#spike')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: '#spike-animejs-line',
+    d: 'M79,412.59749 C79,412.59749 126.283879,412.510656 200.438137,410.089443 C274.592394,407.668229 380.898543,422.509307 431.124885,356.985465 C481.351227,291.461624 485.548577,80.4053541 538.671392,109.788314 C591.794206,139.171273 657.162757,427.71686 769,413.200076 L769,419 L79,418.600698 L79,412.59749 Z',
+    easing: 'easeOutExpo',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>

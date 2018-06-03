@@ -1,0 +1,79 @@
+{% include_relative push.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#push')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: '#push-animejs-item6',
+    translateX: [183 - (53 * 3), 448],
+    translateY: [154 - (30 * 3), 306],
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    targets: '#push-animejs-item5',
+    translateX: [183 - (53 * 3), 395],
+    translateY: [154 - (30 * 3), 275],
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    targets: '#push-animejs-item4',
+    translateX: [183 - (53 * 3), 341],
+    translateY: [154 - (30 * 3), 244],
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    targets: '#push-animejs-item3',
+    translateX: [183 - (53 * 3), 288],
+    translateY: [154 - (30 * 3), 215],
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    targets: '#push-animejs-item2',
+    translateX: [183 - (53 * 3), 236],
+    translateY: [154 - (30 * 3), 184],
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    targets: '#push-animejs-item1',
+    translateX: [183 - (53 * 3), 183],
+    translateY: [154 - (30 * 3), 154],
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>

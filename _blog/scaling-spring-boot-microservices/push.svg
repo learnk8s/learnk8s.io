@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 650" id="push">
+  <g fill="none" fill-rule="evenodd">
+    <g id="push-animejs-item1" fill="#C93D2E" stroke="#511D1C" transform="translate(183 154)">
+      <g>
+        <g>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="27.768 76.679 133.848 15.677 133.848 137.68 27.768 198.526"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="107.328 .466 133.848 15.677 27.768 76.679 1.248 61.467"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="1.248 183.315 27.768 198.526 27.768 76.679 1.248 61.467"/>
+        </g>
+      </g>
+    </g>
+    <g id="push-animejs-item2" fill="#C93D2E" stroke="#511D1C" transform="translate(236 184)">
+      <g>
+        <g>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="27.768 76.679 133.848 15.677 133.848 137.68 27.768 198.526"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="107.328 .466 133.848 15.677 27.768 76.679 1.248 61.467"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="1.248 183.315 27.768 198.526 27.768 76.679 1.248 61.467"/>
+        </g>
+      </g>
+    </g>
+    <g id="push-animejs-item3" fill="#C93D2E" stroke="#511D1C" transform="translate(288 215)">
+      <g>
+        <g>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="27.768 76.679 133.848 15.677 133.848 137.68 27.768 198.526"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="107.328 .466 133.848 15.677 27.768 76.679 1.248 61.467"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="1.248 183.315 27.768 198.526 27.768 76.679 1.248 61.467"/>
+        </g>
+      </g>
+    </g>
+    <g id="push-animejs-item4" fill="#C93D2E" stroke="#511D1C" transform="translate(341 244)">
+      <g>
+        <g>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="27.768 76.679 133.848 15.677 133.848 137.68 27.768 198.526"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="107.328 .466 133.848 15.677 27.768 76.679 1.248 61.467"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="1.248 183.315 27.768 198.526 27.768 76.679 1.248 61.467"/>
+        </g>
+      </g>
+    </g>
+    <g id="push-animejs-item5" fill="#C93D2E" stroke="#511D1C" transform="translate(395 275)">
+      <g>
+        <g>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="27.768 76.679 133.848 15.677 133.848 137.68 27.768 198.526"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="107.328 .466 133.848 15.677 27.768 76.679 1.248 61.467"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="1.248 183.315 27.768 198.526 27.768 76.679 1.248 61.467"/>
+        </g>
+      </g>
+    </g>
+    <g id="push-animejs-item6" fill="#C93D2E" stroke="#511D1C" transform="translate(448 306)">
+      <g>
+        <g>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="27.768 76.679 133.848 15.677 133.848 137.68 27.768 198.526"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="107.328 .466 133.848 15.677 27.768 76.679 1.248 61.467"/>
+          <polygon fill-rule="nonzero" stroke-width="1.56" points="1.248 183.315 27.768 198.526 27.768 76.679 1.248 61.467"/>
+        </g>
+      </g>
+    </g>
+    <g transform="translate(130 61)">
+      <g transform="translate(0 45.6)">
+        <polygon fill="#C93D2E" fill-opacity=".3" fill-rule="nonzero" points="132.614 .312 .048 76.887 344.721 276.511 477.288 199.313"/>
+        <polygon fill="#C93D2E" fill-opacity=".1" points="345.204 276.858 345.204 431.719 477.216 354.288 477.216 200.559"/>
+        <polygon fill="#C93D2E" fill-opacity=".3" fill-rule="nonzero" points=".048 230.348 344.721 430.596 344.721 276.979 .048 77.199"/>
+        <polygon stroke="#661F1F" stroke-width="4.68" points="344.721 276.199 477.288 199.625 477.288 352.774 344.721 430.596"/>
+        <polygon stroke="#661F1F" stroke-width="4.68" points=".048 230.348 344.721 430.596 344.721 276.979 .048 77.199"/>
+        <polygon stroke="#661F1F" stroke-width="4.68" points="132.614 .312 .048 76.887 344.721 276.511 477.288 199.313"/>
+      </g>
+      <text fill="#4A4A4A" font-size="24.96" font-weight="bold" class="sans-serif">
+        <tspan x="158.4" y="23">Head</tspan>
+      </text>
+      <text fill="#4A4A4A" font-size="24.96" font-weight="bold" class="sans-serif">
+        <tspan x="496.8" y="207.8">Tail</tspan>
+      </text>
+    </g>
+  </g>
+</svg>
