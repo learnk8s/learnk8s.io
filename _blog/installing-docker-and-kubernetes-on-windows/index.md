@@ -6,10 +6,11 @@ date: 2018-06-01 02:00:00
 categories: docker kubernetes windows
 excerpt: "Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. And it doesn't help that installing the software isn't exactly a walk in the park. In fact, you should already be a Docker and Kubernetes expert to navigate the options on how to install them. But don't worry! If you're just starting your journey with containers and Kubernetes on Windows this article is for you. You'll learn how to make the right choices when it comes to setting up your development environment on Windows."
 author: "Keith Mifsud"
+image: /blog/installing-docker-and-kubernetes-on-windows/k8s_on_win.jpg
 open_graph:
   type: article
   title: Getting started with Docker and Kubernetes on Windows 10
-  image: ""
+  image: /blog/installing-docker-and-kubernetes-on-windows/k8s_on_win.jpg
   description: "Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows."
 ---
 
