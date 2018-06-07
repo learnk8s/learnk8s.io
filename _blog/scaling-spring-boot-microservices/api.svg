@@ -25,7 +25,7 @@
       <path d="M-1.36424205e-12,2.27373675e-13 L-1.36424205e-12,175.148437 L-1.36424205e-12,2.27373675e-13 Z"/>
     </g>
     <text fill="#FFF" font-size="46" font-weight="bold" letter-spacing=".23" class="sans-serif">
-      <tspan x="298.768" y="471">REST API</tspan>
+      <tspan x="188.52" y="471">BACKEND REST API</tspan>
     </text>
   </g>
 </svg>

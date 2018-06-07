@@ -8,7 +8,7 @@ description: ""
 
 excerpt: ""
 
-categories: queue redis kubernetes "spring boot"
+categories: queue activemq jms kubernetes "spring boot"
 
 image:
 
@@ -25,7 +25,7 @@ js:
 
 When you design and build applications at scale, you deal with two significant challenges: **scalability and robustness**.
 
-You should design your services so that even if it is subject to intermittent heavy loads, it continues to operate reliably.
+You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably.
 
 _Take the Apple Store as an example._
 
@@ -39,11 +39,11 @@ If you were to picture the Apple store's traffic over time, this is what the gra
 
 Now imagine you're tasked with the challenge of building such application.
 
-**You're building a store where users can buy their favorite items.**
+**You're building a store where users can buy their favourite items.**
 
-You need a microservice to render the web pages and serving the static assets.
+You build a microservice to render the web pages and serving the static assets.
 
-You also need a backend REST API to process the incoming requests.
+You also build a backend REST API to process the incoming requests.
 
 You want the two components to be separated because with the same REST API you could serve the website and mobile apps.
 
@@ -59,15 +59,15 @@ You start receiving more and more traffic.
 
 The front-end services are handling the traffic fine.
 
-The API layer that is connected to the database and is doing the heavy processing.
+The backend that is connected to the database and is doing the heavy processing.
 
 You noticed that it is struggling to keep up with the number of transactions.
 
-No worries, you can scale the number of replicas to 8 for the API layer.
+No worries, you can scale the number of replicas to 8 for the backend.
 
 {% include_relative scaling-in-response.html %}
 
-You're receiving even more traffic, and the API layer can't cope with it.
+You're receiving even more traffic, and the backend can't cope with it.
 
 Some of the services started dropping connections.
 
@@ -75,7 +75,7 @@ Angry customers get in touch with your customer service.
 
 And now you're drowning in traffic.
 
-Your API layer can't cope with it, and it drops plenty of connections.
+Your backend can't cope with it, and it drops plenty of connections.
 
 {% include_relative dropping-connections.html %}
 
@@ -83,23 +83,23 @@ You just lost a ton of money, and your customers are unhappy.
 
 Your application is not designed to be robust and highly available:
 
-- the front-end and the API are tightly coupled
-- the front-end and API have to scale in concert
-- if the API is unavailable, you can't process incoming transactions
+- the front-end and the backend are tightly coupled
+- the front-end and backend have to scale in concert
+- if the backend is unavailable, you can't process incoming transactions
 
 And lost transactions are lost revenues.
 
-You could redesign your architecture to decouple the front-end and the API with a queue.
+You could redesign your architecture to decouple the front-end and the backend with a queue.
 
 {% include_relative queue.html %}
 
-The front-end posts messages to the queue, while the API layer processes the pending messages one at the time.
+The front-end posts messages to the queue, while the backend processes the pending messages one at the time.
 
 The new architecture has some obvious benefits:
 
-- if the API is unavailable, the queue acts as a buffer
-- if the front-end is producing more messages than what the API can handle, those messages are buffered in the queue
-- you can scale the API layer independently of the front-end — i.e. you could have hundreds of front-end services and a single instance of the API
+- if the backend is unavailable, the queue acts as a buffer
+- if the front-end is producing more messages than what the backend can handle, those messages are buffered in the queue
+- you can scale the backend independently of the front-end — i.e. you could have hundreds of front-end services and a single instance of the API
 
 In this article, you will learn how to design queue based architectures using Spring Boot.
 
@@ -107,19 +107,21 @@ You'll also learn how to package applications as Docker containers, deploy your 
 
 ## Coding a Spring Boot shop app
 
-You need to services: a front-end and the API layer.
+You need to services: a front-end and the backend.
 
 The front-end is a simple Spring Boot web app with the Thymeleaf template engine.
 
-The API layer is akin to a worker consuming messages from a queue.
+The backend is akin to a worker consuming messages from a queue.
 
-You could use [@Async functions in Spring Boot](https://spring.io/guides/gs/async-method/) for asynchronous processing of messages in a separate thread.
+You could use a [JSM broker with Spring Boot](https://spring.io/guides/gs/messaging-jms/) for asynchronous processing of messages in a separate thread.
 
-Lucky for you, there's a demo project ready to be tested.
+Lucky for you, there's a demo project ready to be used.
 
 You can check out the code at [learnk8s/spring-boot-k8s-hpa](https://github.com/learnk8s/spring-boot-k8s-hpa).
 
-There's a single code base, and you can configure the project to run either as the front-end or the worker.
+> Please note that the application is written in Java 10 to leverage the [improved Docker container integration](https://blog.docker.com/2018/04/improved-docker-container-integration-with-java-10/).
+
+There's a single code base, and you can configure the project to run either as the front-end or backend.
 
 You should know that the app has:
 
@@ -145,7 +147,7 @@ You can configure the application in either mode, by changing the values in your
 
 By default, the application starts as a frontend and worker.
 
-You can run the application and, as long as you have a Redis instance running locally, you should be able to buy items and having those processed by the system.
+You can run the application and, as long as you have an ActiveMQ instance running locally, you should be able to buy items and having those processed by the system.
 
 ![Store admin worker]({% link _blog/scaling-spring-boot-microservices/demo.gif %})
 
@@ -153,111 +155,88 @@ If you inspect the logs, you should see the worker processing items.
 
 It worked!
 
-## What is Redis anyway?
+## Publishing and subscribing to messages using a JMS broker
 
-You noticed that you need Redis to run the application.
+Spring JMS (Java Message Service) is a powerful mechanism to send and receive messages using standard protocols.
 
-Perhaps you are familiar with Kafka, RabbitMQ or AWS SQS as message brokers.
+If you're familiar with the JDBC API, you will find the JMS API familiar since it works similarly.
 
-While those are excellent choices for a queue, they come with extra complexity:
+The most popular message broker that you can consume with JMS is [ActiveMQ](http://activemq.apache.org/) — an open source messaging server.
 
-- they're challenging to deploy because they're made of several parts
-- they consume significant resources such as CPU and RAM
-- they have dependencies
+With those two components, you can publish messages to a queue (ActiveMQ) using a familiar interface (JMS) and use the same interface to receive messages.
 
-On the contrary, Redis is a simple, lightweight binary with no dependency.
+And even better, Spring Boot has excellent integration with JMS so you can get up to speed in no time.
 
-In its most natural form, Redis is a key-value store.
-
-But Redis has other data structures such as lists, maps, sets, etc.
-
-Which is all you need when you're in need of a simple and efficient queue.
-
-## Reliable queue pattern in Redis
-
-Implementing a reliable queue in Redis is straightforward.
-
-The main queue can be model as a list.
-
-And messages are appended to it.
-
-{% include_relative push.html %}
-
-Some processes competes for messages from the main queue.
-
-When a process gets hold of a message from the main queue, it moves it to the local queue and starts processing it.
-
-When the process completes the task, it removes the message from the local queue.
-
-The process then waits for more messages.
-
-{% include_relative reliable.html %}
-
-The pattern works well in case of crashes.
-
-In fact, the message isn't lost unless the worker can remove it from the local queue.
-
-## Jedis — a blazingly small Redis Java client
-
-_In theory, the algorithm is excellent, but how do you implement the above as a Service in Spring Boot?_
-
-You start with a Redis client.
-
-The most popular Java client for Redis is called - _guess what!_ - Jedis.
-
-Pushing an item to the queue is trivial:
+The following class encapsulate the logic used to interact with the queue:
 
 ```java
-@Override
-public boolean addJob(String listName, String val) {
-  Jedis jedis = this.jedisPool.getResource();
-  try {
-    return "OK".equals(jedis.lpush(listName, val));
-  } finally {
-    if (jedis != null)
-      jedis.close();
+@Component
+public class QueueService implements MessageListener {
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueueService.class);
+
+  @Autowired
+  private JmsTemplate jmsTemplate;
+
+  public void send(String destination, String message) {
+    LOGGER.info("sending message='{}' to destination='{}'", message, destination);
+    jmsTemplate.convertAndSend(destination, message);
   }
-}
-```
 
-Where the `lpush` method is used to insert an item at the head of a list.
-
-[TODO: pict]
-
-The code for processing jobs in the background runs on a separate thread and is:
-
-```java
-@Async
-public void processJobs(String mainQueueName, String workerQueueName) {
-  Jedis jedis = this.jedisPool.getResource();
-  try {
-    while (true) {
-      List<String> taskIds = jedis.lrange(workerQueueName, 0, 0);
-      String taskId = taskIds.size() > 0 ? taskIds.get(0) : jedis.brpoplpush(mainQueueName, workerQueueName, 0);
-      LOGGER.info("Processing task " + taskId);
-      Thread.sleep(5000);
-      LOGGER.info("Completed task " + taskId);
-      jedis.lrem(workerQueueName, -1, taskId);
-      this.completedJobs += 1;
+  @Override
+  public void onMessage(Message message) {
+    if (message instanceof ActiveMQTextMessage) {
+      ActiveMQTextMessage textMessage = (ActiveMQTextMessage) message;
+      try {
+        LOGGER.info("Processing task " + textMessage.getText());
+        Thread.sleep(5000);
+        LOGGER.info("Completed task " + textMessage.getText());
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      } catch (JMSException e) {
+        e.printStackTrace();
+      }
+    } else {
+      LOGGER.error("Message is not a text message " + message.toString());
     }
-  } catch (InterruptedException e) {
-    e.printStackTrace();
-  } finally {
-    if (jedis != null)
-      jedis.close();
   }
 }
 ```
 
-The code reads as follow:
+You can use the `send` method to publish messages to a named queue.
 
-1. the `lrange` method returns all the messages in the local queue called `workerQueueName`
-2. if there's a message in the pending queue, the algorithm select that as for the next message to process
-3. if the local queue is empty, the `brpoplpush` method waits for a message on the main queue. When there's one, it moves the message to the local queue
-4. the next step is processing the task. Here you're pretending to do a long-running computation by waiting for 5 seconds
-5. the computation is completed and finally `lrem` deletes the message from the queue
+Spring Boot will execute the `onMessage` method for every incoming message.
 
-You can [read the source code in full for the Spring queue service](https://github.com/learnk8s/spring-boot-k8s-hpa/blob/master/src/main/java/com/learnk8s/app/service/QueueServiceImpl.java) from the project on Github.
+> Please note that the class simulate a long computation with sleeping for 5 seconds.
+
+The last piece of the puzzle is instructing Spring Boot to use the class.
+
+In fact, you can process messages in the background by [registering the listener in the Spring Boot application](https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#jms-annotated-programmatic-registration) like so:
+
+```java
+@SpringBootApplication
+@EnableJms
+public class SpringBootApplication implements JmsListenerConfigurer {
+  @Autowired
+  private QueueService queueService;
+
+  public static void main(String[] args) {
+    SpringApplication.run(SpringBootApplication.class, args);
+  }
+
+  @Override
+  public void configureJmsListeners(JmsListenerEndpointRegistrar registrar) {
+    SimpleJmsListenerEndpoint endpoint = new SimpleJmsListenerEndpoint();
+    endpoint.setId("myId");
+    endpoint.setDestination("queueName");
+    endpoint.setMessageListener(queueService);
+    registrar.registerEndpoint(endpoint);
+  }
+}
+```
+
+Where the _id_ is the _id_ of the consumer and _destination_ is the name of the queue.
+
+You can [read the source code in full for the Spring queue service](https://github.com/learnk8s/spring-boot-k8s-hpa/blob/master/src/main/java/com/learnk8s/app/queue/QueueService.java) from the project on Github.
 
 Notice how you were able to code a reliable queue in less than 40 lines of code.
 
@@ -287,7 +266,7 @@ You should also install `kubectl`, the client to connect to your cluster.
 
 You can find the instructions on how to install `minikube` and `kubectl` from the [official documentation](https://kubernetes.io/docs/tasks/tools/).
 
-> If you're running on Windows, you should check out our [detailed guide on how to install Kubernetes and Docker](#TODO).
+> If you're running on Windows, you should check out our [detailed guide on how to install Kubernetes and Docker](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows).
 
 You should start a cluster with 8GB of RAM and some extra configuration:
 
@@ -319,7 +298,7 @@ Containers are similar to fat jars: they contain all the dependencies necessary 
 
 Even the JVM is part of the container.
 
-So they're technically an even fatter fat jar.
+So they're technically an even fatter fat-jar.
 
 You're going to use Docker to package your containers.
 
@@ -364,8 +343,8 @@ Next, you should tell Kubernetes to deploy the application.
 Your application has three components:
 
 - the Spring Boot application that renders the frontend
-- a Redis database used a queue
-- the Spring Boot worker that processes transactions
+- ActiveMQ as a message broker
+- the Spring Boot backend that processes transactions
 
 You have to deploy the three component separately.
 
@@ -378,61 +357,64 @@ Each instance of your application in a deployment is called _Pod_.
 
 {% include_relative k8s.html %}
 
-### Deploy Redis
+### Deploy ActiveMQ
 
-Let's start with the Redis database.
+Let's start with ActiveMQ.
 
-You should create a `redis-deployment.yaml` file with the following content:
+You should create a `activemq-deployment.yaml` file with the following content:
 
 ```yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: redis
+  name: queue
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: redis
+        app: queue
     spec:
       containers:
       - name: web
-        image: redis
+        image: webcenter/activemq:5.14.3
         imagePullPolicy: IfNotPresent
         ports:
-          - containerPort: 6379
+          - containerPort: 61616
+        resources:
+          limits:
+            memory: 512Mi
 ```
 
-Create a `redis-service.yaml` file with the following content:
+Create a `activemq-service.yaml` file with the following content:
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis
+  name: queue
 spec:
   ports:
-  - port: 6379
-    targetPort: 6379
+  - port: 61616
+    targetPort: 61616
   selector:
-    app: redis
+    app: queue
 ```
 
 You can create the resources with:
 
 ```bash
-kubectl create -f redis-deployment.yaml
-kubectl create -f redis-service.yaml
+kubectl create -f activemq-deployment.yaml
+kubectl create -f activemq-service.yaml
 ```
 
 You can verify that one instance of the database is running with:
 
 ```bash
-kubectl get pods -l=app=redis
+kubectl get pods -l=app=queue
 ```
 
-### Deploy the frontend
+### Deploy the front-end
 
 Create a `fe-deployment.yaml` file with the following content:
 
@@ -440,21 +422,21 @@ Create a `fe-deployment.yaml` file with the following content:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: store
+  name: frontend
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: store
+        app: frontend
     spec:
       containers:
-      - name: store
+      - name: frontend
         image: spring-boot-hpa
         imagePullPolicy: IfNotPresent
         env:
-        - name: REDIS_URL
-          value: "redis://redis:6379"
+        - name: ACTIVEMQ_BROKER_URL
+          value: "tcp://queue:61616"
         - name: STORE_ENABLED
           value: "true"
         - name: WORKER_ENABLED
@@ -462,7 +444,7 @@ spec:
         ports:
           - containerPort: 8080
         livenessProbe:
-          initialDelaySeconds: 2
+          initialDelaySeconds: 5
           periodSeconds: 5
           httpGet:
             path: /health
@@ -478,14 +460,14 @@ Create a `fe-service.yaml` file with the following content:
 apiVersion: v1
 kind: Service
 metadata:
-  name: store
+  name: frontend
 spec:
   ports:
   - nodePort: 32000
     port: 80
     targetPort: 8080
   selector:
-    app: store
+    app: frontend
   type: NodePort
 ```
 
@@ -502,31 +484,31 @@ You can verify that one instance of the front-end application is running with:
 kubectl get pods -l=app=fe
 ```
 
-### Deploy the worker
+### Deploy the backend
 
-Create a `worker-deployment.yaml` file with the following content:
+Create a `backend-deployment.yaml` file with the following content:
 
 ```yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: worker
+  name: backend
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: worker
+        app: backend
       annotations:
         prometheus.io/scrape: 'true'
     spec:
       containers:
-      - name: worker
+      - name: backend
         image: spring-boot-hpa
         imagePullPolicy: IfNotPresent
         env:
-        - name: REDIS_URL
-          value: "redis://redis:6379"
+        - name: ACTIVEMQ_BROKER_URL
+          value: "tcp://queue:61616"
         - name: STORE_ENABLED
           value: "false"
         - name: WORKER_ENABLED
@@ -534,7 +516,7 @@ spec:
         ports:
           - containerPort: 8080
         livenessProbe:
-          initialDelaySeconds: 2
+          initialDelaySeconds: 5
           periodSeconds: 5
           httpGet:
             path: /health
@@ -544,34 +526,34 @@ spec:
             memory: 512Mi
 ```
 
-Create a `worker-service.yaml` file with the following content:
+Create a `backend-service.yaml` file with the following content:
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: worker
+  name: backend
 spec:
   ports:
   - nodePort: 31000
     port: 80
     targetPort: 8080
   selector:
-    app: worker
+    app: backend
   type: NodePort
 ```
 
 You can create the resources with:
 
 ```bash
-kubectl create -f worker-deployment.yaml
-kubectl create -f worker-service.yaml
+kubectl create -f backend-deployment.yaml
+kubectl create -f backend-service.yaml
 ```
 
-You can verify that one instance of the worker is running with:
+You can verify that one instance of the backend is running with:
 
 ```bash
-kubectl get pods -l=app=worker
+kubectl get pods -l=app=backend
 ```
 
 You should visit your application in the browser and make sure that it works.
@@ -579,7 +561,13 @@ You should visit your application in the browser and make sure that it works.
 You can visit the application with the following command:
 
 ```bash
-minikube service spring-boot-hpa
+minikube service backend
+```
+
+and
+
+```bash
+minikube service frontend
 ```
 
 Try to buy some items!
@@ -592,9 +580,11 @@ You just deployed the application to Kubernetes!
 
 ## Scaling manually to meet increasing demand
 
-A single worker may not be able to handle a large number of tickets.
+A single worker may not be able to handle a large number of messages.
 
-If you decide to buy thousands of items in the shop, it will take hours before the queue is cleared.
+In fact, it can only handle one message at the time.
+
+If you decide to buy thousands of items, it will take hours before the queue is cleared.
 
 You have two options now:
 
@@ -603,31 +593,31 @@ You have two options now:
 
 Let's start with the basics first.
 
-You can scale the worker to three instances with:
+You can scale the backend to three instances with:
 
 ```bash
-kubectl scale --replicas=5 deployment/worker
+kubectl scale --replicas=5 deployment/backend
 ```
 
-You can verify that Kubernetes created five more instances of the worker application with:
+You can verify that Kubernetes created five more instances with:
 
 ```bash
 kubectl get pods
 ```
 
-And the application can process five times more tickets at the same time.
+And the application can process five times more messages.
 
 Once the workers drained the queue, you can scale down with:
 
 ```bash
-kubectl scale --replicas=1 deployment/worker
+kubectl scale --replicas=1 deployment/backend
 ```
 
 Manually scaling up and down is great — if you know when the peak of traffic hits your service.
 
 If you don't, setting up an autoscaler allows the application to scale automatically without manual intervention.
 
-You only need to define the rules.
+You only need to define few rules.
 
 ## Exposing application metrics
 
@@ -637,7 +627,7 @@ So you could expose the length of the queue as a metric and ask the autoscaler t
 
 The more pending messages in the queue, the more instances of your application Kubernetes will create.
 
-The application has a `/metrics` endpoint to expose the number of messages in the queue
+The application has a `/metrics` endpoint to expose the number of messages in the queue.
 
 If you try to visit that page you'll notice the following content:
 
@@ -713,7 +703,7 @@ spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: worker
+    name: backend
   minReplicas: 1
   maxReplicas: 10
   metrics:
@@ -737,7 +727,7 @@ You can create the resource with:
 kubectl create -f hpa.yaml
 ```
 
-After you submitted the autoscaler, you should notice that the number of replicas for the workers is two:
+After you submitted the autoscaler, you should notice that the number of replicas for the backend is two:
 
 ```bash
 kubectl get pods
@@ -745,7 +735,7 @@ kubectl get pods
 
 It makes sense since we asked the autoscaler always to have at least two replicas running.
 
-To inspect the conditions that triggered the autoscaler and events generated by it you can use:
+You can inspect the conditions that triggered the autoscaler and the events generated as a consequence with:
 
 ```bash
 kubectl describe hpa
@@ -769,7 +759,7 @@ The algorithm for scaling is the following:
 MAX(CURRENT_REPLICAS_LENGTH * 2, 4)
 ```
 
-> The documentation doesn't help a lot when it comes to exaplaining the algorithm. You can [find the details in the code](https://github.com/kubernetes/kubernetes/blob/bac31d698c1eed2b54374bdabfd120f7319dd5c8/pkg/controller/podautoscaler/horizontal.go#L588).
+> The documentation doesn't help a lot when it comes to explaining the algorithm. You can [find the details in the code](https://github.com/kubernetes/kubernetes/blob/bac31d698c1eed2b54374bdabfd120f7319dd5c8/pkg/controller/podautoscaler/horizontal.go#L588).
 
 Every scale-up is re-evaluated every minute, whereas any scale down every two minutes.
 

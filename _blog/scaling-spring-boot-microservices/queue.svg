@@ -39,8 +39,8 @@
       <g fill="#34302E" stroke="#7CB050" stroke-width="9.1">
         <rect width="133.9" height="133.9" x="4.55" y="4.55"/>
       </g>
-      <text fill="#FFF" font-size="50" font-weight="bold" class="sans-serif">
-        <tspan x="30.325" y="84">API</tspan>
+      <text fill="#FFF" font-size="21" font-weight="bold" class="sans-serif">
+        <tspan x="19.5" y="72">BACKEND</tspan>
       </text>
     </g>
     <g fill="#3C3C3C" transform="translate(367 288)">
