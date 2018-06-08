@@ -88,6 +88,10 @@ This `DockerFile` is reasonably basic:
 
 It extends a PHP7 base image, installs some system dependencies including composer and the standard PHP extensions required by Laravel. It then copies the application files to a working directory and installs the application's dependencies via composer. It also runs a couple of `artisan` commands,  last of which serves the application using the built-in PHP web server. In the end, it exposes port `8181` to the host machine.
 
+> Remember that the `artisan serve` command should never be used in a 
+production environment. I explain how to serve the application through Nginx 
+(instead of the PHP's built-in server) further below.
+
 To build the local Docker image:
 
 ```bash
