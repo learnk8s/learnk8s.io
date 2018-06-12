@@ -23,5 +23,8 @@ collections:
   pages:
     output: true
     permalink: /:path
+  newsletter:
+    output: true
+    permalink: /newsletter/:path
 plugins:
   - jekyll-target-blank
