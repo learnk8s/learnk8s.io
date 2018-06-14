@@ -16,7 +16,6 @@ sass:
   style: compressed
 excerpt_separator: <!--more-->
 post_limit: 5
-newsletter_arhive_limit: 5
 collections:
   blog:
     output: true
