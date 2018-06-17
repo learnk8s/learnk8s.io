@@ -67,12 +67,12 @@ editor_pick:
   - title: "The journey from monolith to Docker to Kubernetes: part 1"
     url: "https://devops.college/the-journey-from-monolith-to-docker-to-kubernetes-part-1-f5dbd730f620"
     image: ed_pick_1.png
-    summary: "Why" and "How" to go from a monolith app to dockerized one and eventually to run our app on a kubernetes cluster. In part one, the author discusses the benefits and the abilities of Docker and the app's code architecture.
+    summary: "'Why' and 'How' to go from a monolith app to dockerized one and eventually to run our app on a kubernetes cluster. In part one, the author discusses the benefits and the abilities of Docker and the app's code architecture."
     tags: [docker, micro services]
   - title: "Dissecting Kubernetes deployments"
     url: "https://blog.heroku.com/dissecting-kubernetes-deployments"
     summary: Twitter's team have been developing a design system they call Horizon. Ashlie Ford tracks its journey, from humble beginnings as a hack-day project.
-    tags: [deployments]          
+    tags: [deployments]
 ```
 
 The example above includes two editor's picks. The image is optional, as you can see the second item does not have one. Images must be saved in the same directory as the issue.
