@@ -1,3 +1,63 @@
-<div class="intro none white pv2 pv0-ns mb4 mb5-ns">
-    {% include navbar/index.html %}
-</div>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+    {% if page.description %}
+    <meta name="description" content="{{ page.description }}"> 
+    {% else %}
+    <meta name="description" content="We help your team adopt Kubernetes, through consulting and corporate or public training. learnk8s enables you to get the most out of Kubernetes through comprehensive training and consultancy solutions."> 
+    {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@learnk8s" />
+    <link rel="canonical" href="{{site.url}}{{page.url}}" />
+    <meta property="og:site_name" content="learnk8s" />
+    <meta property="og:url" content="{{site.url}}{{page.url}}" />
+    {% if page.open_graph.image %}
+    <meta property="og:image" content="{{site.url}}{{page.open_graph.image}}" /> 
+    {% else %}
+    <meta property="og:image" content="{{site.url}}/assets/open_graph_preview.png" /> 
+    {% endif %}
+    {% if page.open_graph.type %}
+    <meta property="og:type" content="{{page.open_graph.type}}" />
+    {% else %}
+    <meta property="og:type" content="article" />
+    {% endif %}
+    {% if page.open_graph.title %}
+    <meta property="og:title" content="{{page.open_graph.title}}" />
+    {% else %}
+    <meta property="og:title" content="LearnK8s Newsletter - {{page.issue}}" />
+    {% endif %}
+    {% if page.open_graph.description %}
+    <meta property="og:description" content="{{page.open_graph.description}}" />
+    {% endif %}
+    <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
+    <link rel="manifest" href="/assets/manifest.json" />
+    <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#326ce5" />
+    <meta name="theme-color" content="#ffffff" />
+    <link inline rel="stylesheet" href="/assets/style.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-485266-17"></script>
+    <script>
+        ; (function () {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'UA-485266-17');
+        })();
+    </script> 
+    <title>Newsletter Issue {{ page.issue }} • {{ site.name }}</title>
+</head>
+
+<body class="bg-near-white sans-serif">
+    <div class="cf w-100 mw9-l center bg-white">
+    </div>
+</body>
+
+</html>
