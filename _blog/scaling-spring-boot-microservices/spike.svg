@@ -6,28 +6,37 @@
     </linearGradient>
   </defs>
   <g fill="none" fill-rule="evenodd">
-    <g stroke-linejoin="round" transform="translate(79 81)">
+    <g stroke-linejoin="round" transform="translate(99 81)">
       <path stroke="#778F9B" stroke-dasharray="1 6" d="M0 1L690 1M0 113L690 113M0 226L690 226"/>
       <path stroke="#000A12" stroke-linecap="round" stroke-width="2" d="M0,339 L690,339"/>
     </g>
-    <path id="spike-animejs-line" fill="url(#linearGradient-1)" d="M79,417 C79,417 85.1483552,417.337391 200.438137,417.501631 C315.727918,417.66587 377.351632,417.501631 431.124885,417.501631 C484.898138,417.501631 423.507087,417.501631 538.671392,417.501631 C653.835696,417.501631 653.835696,417 769,417.501631 L769,419 L79,418.667596 L79,417 Z"/>
+    <path id="spike-animejs-line" fill="url(#linearGradient-1)" d="M99,413.200076 C99,413.200076 146.653617,413.200076 220.438137,413.200076 C294.222656,413.200076 381.706801,413.200076 451.124885,413.200076 C520.542969,413.200076 500.027344,413.200076 558.671392,413.200076 C617.315439,413.200076 678.21875,413.200076 789,413.200076 L789,419 L99,418.600698 L99,413.200076 Z"/>
     <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
-      <tspan x="699.253" y="450">10:00</tspan>
+      <tspan x="705.606" y="450">10:00 pm</tspan>
     </text>
     <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
-      <tspan x="581.253" y="450">08:00</tspan>
+      <tspan x="587.606" y="450">08:00 pm</tspan>
     </text>
     <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
-      <tspan x="463.253" y="450">06:00</tspan>
+      <tspan x="469.606" y="450">06:00 pm</tspan>
     </text>
     <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
-      <tspan x="345.253" y="450">05:00</tspan>
+      <tspan x="351.606" y="450">05:00 pm</tspan>
     </text>
     <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
-      <tspan x="227.253" y="450">03:00</tspan>
+      <tspan x="233.606" y="450">03:00 pm</tspan>
     </text>
     <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
-      <tspan x="109.253" y="450">01:00</tspan>
+      <tspan x="115.606" y="450">01:00 pm</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="20.089" y="85">10k req/s</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="29.137" y="199">7k req/s</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="29.137" y="313">3k req/s</tspan>
     </text>
   </g>
 </svg>
