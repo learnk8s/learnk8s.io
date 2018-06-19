@@ -53,7 +53,7 @@ You will need to replace the `date` and  `issue` from the above example with the
 
 #### Adding data to the new issue's sections
 
-Depending on which section you'd like to include in the issue, you will need to add their relevant information as follows.
+Depending on which sections you'd like to include in the issue, you will need to add their relevant information as follows:
 
 ##### Editor's Pick
 
