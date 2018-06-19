@@ -76,3 +76,5 @@ editor_pick:
 ```
 
 The example above includes two editor's picks. The image is optional, as you can see the second item does not have one. Images must be saved in the same directory as the issue.
+
+##### Watch out for these projects
