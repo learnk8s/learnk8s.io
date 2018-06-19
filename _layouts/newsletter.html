@@ -63,9 +63,10 @@
        <article class="ph3 pt0 pb4 mt3 article bg-white">
             {% if page.editor_pick %}
             <section id="editor_pick">
+                <h2 class="ttu"></h2>Editor's Pick</h2>
                 {% for pick in page.editor_pick %}
                     <div>
-                        <h2>{{ pick.title }}</h2>
+                        <h3>{{ pick.title }}</h3>
                         <ul>
                             {% for tag in pick.tags %}
                                 <li>{{ tag }}</li>
