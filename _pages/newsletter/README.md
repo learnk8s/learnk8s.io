@@ -3,7 +3,7 @@
 
 ## Newsletter Issue Content
 
-Each issue can have the following section:
+Each issue can include the following sections:
 
 __1) Editor's Pick__
 
