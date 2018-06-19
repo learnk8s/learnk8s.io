@@ -59,7 +59,25 @@
     <div class="cf w-100 mw9-l center mt6">
         <div class="tc black-40"><strong class="ttu">Issue #{{ page.issue }} &mdash; {{ page.date | date: '%B %d, %Y'}}</strong</div>
        <article class="ph3 pt0 pb4 mt3 article bg-white">
-            some text
+            {% if page.editor_pick %}
+            <section id="editor_pick">
+                {% for pick in page.editor_pick %}
+                    <div>
+                        <h2>{{ pick.title }}</h2>
+                        <ul>
+                            {% for tag in pick.tags %}
+                                <li>{{ tag }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% if pick.image %}
+                            <img src="{{ pick.image }}" alt="{{ pick.title }}">
+                        {% endif %}
+                        <p>{{ pick.summary }}</p>
+                        <a href="{{ pick.url }}" title="{{ pick.title }}">Look up --></a>
+                    </div>
+                {% endfor %}
+            </section>
+            {% endif %}
        </article>
     </div>
 </body>
