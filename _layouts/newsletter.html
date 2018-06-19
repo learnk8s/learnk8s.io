@@ -33,6 +33,8 @@
     {% endif %}
     {% if page.open_graph.description %}
     <meta property="og:description" content="{{page.open_graph.description}}" />
+    {% else %}
+    <meta property="og:description" content="{{page.description}}" />
     {% endif %}
     <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}" />
 

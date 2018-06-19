@@ -45,7 +45,7 @@ description: "Some text describing this newsletter issue. The description is sho
 excerpt: "Some text describing this newsletter issue. The except is shown in the newsletetr archive page."
 
 open_graph:
-    description: "An optional description for the open graph. The main description will be sued if none is entered here."
+    description: "An optional description for the open graph. The main description will be used if none is entered here."
 
 ```
 
@@ -76,5 +76,3 @@ editor_pick:
 ```
 
 The example above includes two editor's picks. The image is optional, as you can see the second item does not have one. Images must be saved in the same directory as the issue.
-
-
