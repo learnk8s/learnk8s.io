@@ -57,7 +57,7 @@ Depending on which sections you'd like to include in the issue, you will need to
 
 ##### Editor's Pick
 
-To add the editor's pick section to the issue you must have at least one item. This should be added tot he front-matter as follows:
+To add the editor's pick section to the issue you must have at least one item. This should be added to the front-matter as follows:
 
 ```yaml
 
@@ -78,3 +78,27 @@ editor_pick:
 The example above includes two editor's picks. The image is optional, as you can see the second item does not have one. Images must be saved in the same directory as the issue.
 
 ##### Watch out for these projects
+
+Same as the editor's pick, if you wish to feature one or more project, you will need to add the following front-matter data:
+
+```yaml
+
+...cont
+
+projects:
+  - name: "kubernetes-helm/chartmuseum"
+    stars: 517
+    forks: 66
+    url: "https://github.com/kubernetes-helm/chartmuseum"
+    image: project_1.png
+    summary: "ChartMuseum is an open-source Helm Chart Repository written in Go (GoLang), with support for cloud storage backends, including Google Cloud Storage, Amazon S3, and Microsoft Azure Blob Storage."
+  - name: "pusher/k8s-auth-example"
+    stars: 20
+    forks: 6
+    url: "https://github.com/pusher/k8s-auth-example"
+    summary: "Example Kubernetes Authentication helper. This is an example of how to connect to an OIDC provider and authenticate users before configuring their kubeconfig."
+
+```
+
+The above example also includes two projects and the image is also optional.
+
