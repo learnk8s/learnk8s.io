@@ -20,6 +20,19 @@ editor_pick:
     summary: Twitter's team have been developing a design system they call Horizon. Ashlie Ford tracks its journey, from humble beginnings as a hack-day project.
     tags: [deployments]
 
+projects:
+  - name: "kubernetes-helm/chartmuseum"
+    stars: 517
+    forks: 66
+    url: "https://github.com/kubernetes-helm/chartmuseum"
+    image: project_1.png
+    summary: "ChartMuseum is an open-source Helm Chart Repository written in Go (GoLang), with support for cloud storage backends, including Google Cloud Storage, Amazon S3, and Microsoft Azure Blob Storage."
+  - name: "pusher/k8s-auth-example"
+    stars: 20
+    forks: 6
+    url: "https://github.com/pusher/k8s-auth-example"
+    summary: "Example Kubernetes Authentication helper. This is an example of how to connect to an OIDC provider and authenticate users before configuring their kubeconfig."
+
  
 
 ---

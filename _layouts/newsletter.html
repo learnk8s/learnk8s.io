@@ -63,7 +63,7 @@
        <article class="ph3 pt0 pb4 mt3 article bg-white">
             {% if page.editor_pick %}
             <section id="editor_pick">
-                <h2 class="ttu"></h2>Editor's Pick</h2>
+                <h2 class="ttu">Editor's Pick</h2>
                 {% for pick in page.editor_pick %}
                     <div>
                         <h3>{{ pick.title }}</h3>
@@ -80,6 +80,16 @@
                     </div>
                 {% endfor %}
             </section>
+            {% endif %}
+            {%  if page.projects %}
+                <section id="projects">
+                    <h2 class="ttu">Watch out for these projects</h2>
+                    {% for project in page.projects %}
+                        <div>
+                            <h3>{{ project.name }}</h3>
+                        </div>
+                    {% endfor %}
+                </section>
             {% endif %}
        </article>
     </div>
