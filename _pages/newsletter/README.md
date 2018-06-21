@@ -125,3 +125,36 @@ user_pick:
 
 The example above includes two user picks. All the data is required with exclusion of the image which is optional.
 
+##### Things that made us laugh
+
+Currently, we can add two types of things that made us laugh. These are _memes_ and _tweets_.
+
+As with other sections, you must include the content as the issue's front-matter for it to show up. You can do this as follows:
+
+```yaml
+
+...cont
+
+laughs:
+  - type: meme
+    text: "That feeling when you realise that someone comes to you and you realize that they just reinvented Helm"
+    image: laugh_1.png
+    tweetable: true
+  - type: tweet
+    text: "When the inventor of the USB stick dies they'll gently lower the coffin, then pull it back up, turn it the other way, then lower it again."
+    user: "cluedont"
+    avatar: cluedont.jpeg
+    url: "https://twitter.com/cluedont/status/482614101764763648"
+    date: 2014-06-27
+
+```
+
+This examples includes two items. One _meme_ and one _tweet_. You ca include as many tweets and memes as needed.
+
+__Memes:__
+
+Memes should include text, image or both. If the tweetable property is set to true, then a _click to tweet_ link will be displayed.
+
+__Tweets:__
+
+Currently, the template only support text tweets. All the properties shown in the example are required for tweets to be displayed properly.
