@@ -3,39 +3,24 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-    {% if page.description %}
-    <meta name="description" content="{{ page.description }}"> 
-    {% else %}
-    <meta name="description" content="We help your team adopt Kubernetes, through consulting and corporate or public training. learnk8s enables you to get the most out of Kubernetes through comprehensive training and consultancy solutions."> 
-    {% endif %}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> {% if page.description %}
+    <meta name="description" content="{{ page.description }}"> {% else %}
+    <meta name="description" content="We help your team adopt Kubernetes, through consulting and corporate or public training. learnk8s enables you to get the most out of Kubernetes through comprehensive training and consultancy solutions."> {% endif %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@learnk8s" />
     <link rel="canonical" href="{{site.url}}{{page.url}}" />
     <meta property="og:site_name" content="learnk8s" />
-    <meta property="og:url" content="{{site.url}}{{page.url}}" />
-    {% if page.open_graph.image %}
-    <meta property="og:image" content="{{site.url}}{{page.open_graph.image}}" /> 
-    {% else %}
-    <meta property="og:image" content="{{site.url}}/assets/open_graph_preview.png" /> 
-    {% endif %}
-    {% if page.open_graph.type %}
-    <meta property="og:type" content="{{page.open_graph.type}}" />
-    {% else %}
-    <meta property="og:type" content="article" />
-    {% endif %}
-    {% if page.open_graph.title %}
-    <meta property="og:title" content="{{page.open_graph.title}}" />
-    {% else %}
-    <meta property="og:title" content="LearnK8s Newsletter - {{page.issue}}" />
-    {% endif %}
-    {% if page.open_graph.description %}
-    <meta property="og:description" content="{{page.open_graph.description}}" />
-    {% else %}
-    <meta property="og:description" content="{{page.description}}" />
-    {% endif %}
+    <meta property="og:url" content="{{site.url}}{{page.url}}" /> {% if page.open_graph.image %}
+    <meta property="og:image" content="{{site.url}}{{page.open_graph.image}}" /> {% else %}
+    <meta property="og:image" content="{{site.url}}/assets/open_graph_preview.png" /> {% endif %} {% if page.open_graph.type %}
+    <meta property="og:type" content="{{page.open_graph.type}}" /> {% else %}
+    <meta property="og:type" content="article" /> {% endif %} {% if page.open_graph.title %}
+    <meta property="og:title" content="{{page.open_graph.title}}" /> {% else %}
+    <meta property="og:title" content="LearnK8s Newsletter - {{page.issue}}" /> {% endif %} {% if page.open_graph.description %}
+    <meta property="og:description" content="{{page.open_graph.description}}" /> {% else %}
+    <meta property="og:description" content="{{page.description}}" /> {% endif %}
     <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
@@ -53,46 +38,45 @@
             gtag('js', new Date());
             gtag('config', 'UA-485266-17');
         })();
-    </script> 
+    </script>
     <title>Newsletter Issue {{ page.issue }} • {{ site.name }}</title>
 </head>
 
 <body class="bg-near-white sans-serif">
     <div class="cf w-100 mw9-l center mt6">
-        <div class="tc black-40"><strong class="ttu">Issue #{{ page.issue }} &mdash; {{ page.date | date: '%B %d, %Y'}}</strong</div>
-       <article class="ph3 pt0 pb4 mt3 article bg-white">
-            {% if page.editor_pick %}
-            <section id="editor_pick">
-                <h2 class="ttu">Editor's Pick</h2>
-                {% for pick in page.editor_pick %}
-                    <div>
-                        <h3>{{ pick.title }}</h3>
-                        <ul>
-                            {% for tag in pick.tags %}
+        <div class="tc black-40">
+            <strong class="ttu">Issue #{{ page.issue }} &mdash; {{ page.date | date: '%B %d, %Y'}}</strong</div>
+                <article class="ph3 pt0 pb4 mt3 article bg-white">
+                    {% if page.editor_pick %}
+                    <section id="editor_pick">
+                        <h2 class="ttu">Editor's Pick</h2>
+                        {% for pick in page.editor_pick %}
+                        <div>
+                            {% if pick.image %}
+                            <img src="{{ pick.image }}" alt="{{ pick.title }}"> {% endif %}
+                            <h3>{{ pick.title }}</h3>
+                            <ul>
+                                {% for tag in pick.tags %}
                                 <li>{{ tag }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% if pick.image %}
-                            <img src="{{ pick.image }}" alt="{{ pick.title }}">
-                        {% endif %}
-                        <p>{{ pick.summary }}</p>
-                        <a href="{{ pick.url }}" title="{{ pick.title }}">Look up --></a>
-                    </div>
-                {% endfor %}
-            </section>
-            {% endif %}
-            {%  if page.projects %}
-                <section id="projects">
-                    <h2 class="ttu">Watch out for these projects</h2>
-                    {% for project in page.projects %}
+                                {% endfor %}
+                            </ul>
+                            <p>{{ pick.summary }}</p>
+                            <a href="{{ pick.url }}" title="{{ pick.title }}">Look up --></a>
+                        </div>
+                        {% endfor %}
+                    </section>
+                    {% endif %} {% if page.projects %}
+                    <section id="projects">
+                        <h2 class="ttu">Watch out for these projects</h2>
+                        {% for project in page.projects %}
                         <div>
                             <h3>{{ project.name }}</h3>
                         </div>
-                    {% endfor %}
-                </section>
-            {% endif %}
-       </article>
-    </div>
+                        {% endfor %}
+                    </section>
+                    {% endif %}
+                </article>
+        </div>
 </body>
 
 </html>
