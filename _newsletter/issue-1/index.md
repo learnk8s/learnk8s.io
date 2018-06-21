@@ -33,7 +33,17 @@ projects:
     url: "https://github.com/pusher/k8s-auth-example"
     summary: "Example Kubernetes Authentication helper. This is an example of how to connect to an OIDC provider and authenticate users before configuring their kubeconfig."
 
- 
+laughs:
+  - type: meme
+    text: "That feeling when you realise that someone comes to you and you realize that they just reinvented Helm"
+    image: laugh_1.png
+    tweetable: true
+  - type: tweet
+    text: "When the inventor of the USB stick dies they'll gently lower the coffin, then pull it back up, turn it the other way, then lower it again."
+    user: "cluedont"
+    avatar: cluedont.jpeg
+    url: "https://twitter.com/cluedont/status/482614101764763648"
+    date: 2014-06-27 
 
 ---
 
