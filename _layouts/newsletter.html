@@ -70,7 +70,13 @@
                         <h2 class="ttu">Watch out for these projects</h2>
                         {% for project in page.projects %}
                         <div>
+                            {% if project.image %}
+                            <img src="{{ project.image }}" alt="{{ project.name }}">
+                            {% endif %}
                             <h3>{{ project.name }}</h3>
+                            {% include github/badges.html stars=project.stars forks=project.forks %}
+                            <p>{{ project.summary }}</p>
+                            <a href="{{ project.url }}" title="{{ project.name }}">Look up --></a>
                         </div>
                         {% endfor %}
                     </section>
