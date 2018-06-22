@@ -102,9 +102,12 @@
                     <section id="laughs">
                         <h2 class="ttu">Things that made us laugh</h2>
                         {% for laugh in page.laughs %}
+                        {% if laugh.image %}
+                        {% assign image='/newsletter/issue-' | append: page.issue | append: '/' | append: laugh.image %}
+                        {% endif %}
                         <div>
                             {% if laugh.type == 'meme' %}
-                            {% include meme/index.html text = laugh.text image = laugh.image tweetable = laugh.tweetable %}
+                            {% include meme/index.html text = laugh.text image = image tweetable = laugh.tweetable %}
                             {% endif %}
                         </div>                        
                         {% endfor %}
