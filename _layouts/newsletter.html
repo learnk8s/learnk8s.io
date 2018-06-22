@@ -71,7 +71,7 @@
                         {% for project in page.projects %}
                         <div>
                             {% if project.image %}
-                            <img src="{{ project.image }}" alt="{{ project.name }}"> {% endif %}
+                            <img src="/newsletter/issue-{{ page.issue }}/{{ project.image }}" alt="{{ project.name }}"> {% endif %}
                             <h3>{{ project.name }}</h3>
                             {% include github/badges.html stars=project.stars forks=project.forks %}
                             <p>{{ project.summary }}</p>
@@ -85,7 +85,7 @@
                         {% for pick in page.user_pick %}
                         <div>
                             {% if pick.image %}
-                            <img src="{{ pick.image }}" alt="{{ pick.title }}"> {% endif %}
+                            <img src="/newsletter/issue-{{ page.issue }}/{{ pick.image }}" alt="{{ pick.title }}"> {% endif %}
                             <h3>{{ pick.title }}</h3>
                             <ul>
                                 {% for tag in pick.tags %}
