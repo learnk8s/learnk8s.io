@@ -6,7 +6,7 @@
     | append: site.url | append: page.url | abosulute_url %} {% assign url_query = '' %} {% if include.text != '' %} {% assign url_query =
     url_query | append: '&text=' | append: include.text %} {% endif %} 
     {% if include.image != '' %} 
-    {% assign url_query = url_query | append: '&image=' | append: site.url | append: include.image %} 
+    {% assign url_query = url_query | append: ' ' | append: site.url | append: include.image %} 
     {% endif %}
     {% assign full_url = url | append: url_query %}
     <a href="{{ full_url }}">Tweet this</a>
