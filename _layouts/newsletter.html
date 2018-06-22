@@ -53,7 +53,7 @@
                         {% for pick in page.editor_pick %}
                         <div>
                             {% if pick.image %}
-                            <img src="{{ pick.image }}" alt="{{ pick.title }}"> {% endif %}
+                            <img src="/newsletter/issue-{{ page.issue }}/{{ pick.image }}" alt="{{ pick.title }}"> {% endif %}
                             <h3>{{ pick.title }}</h3>
                             <ul>
                                 {% for tag in pick.tags %}
