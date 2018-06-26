@@ -26,7 +26,7 @@ One or more funny tweets or memes. Should be relevant to our readers.
 
 __5) Popular Tweets__
 
-One or more popular tweets which are relevant to our readers. 
+One or more popular tweets which are relevant to our readers.
 
 ### Drafting a new issue
 
@@ -149,11 +149,11 @@ laughs:
 
 ```
 
-This examples includes two items. One _meme_ and one _tweet_. You ca include as many tweets and memes as needed.
+This examples includes three items. Two _memes_ and one _tweet_. You can include as many tweets and memes as needed.
 
 __Memes:__
 
-Memes should include text, image or both. If the tweetable property is set to true, then a _click to tweet_ link will be displayed.
+Memes should include text, image or both. If the tweetable property is set to true, then a _click to tweet_ link will be displayed. Please note that in order for the meme image to be tweeted, a Twiiter picture URL must be supplied as shown in the second item/example.
 
 __Tweets:__
 
