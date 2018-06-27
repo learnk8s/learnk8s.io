@@ -162,4 +162,4 @@ Memes should include text, image or both. If the tweetable property is set to tr
 
 __Tweets:__
 
-Currently, the template only support text tweets. All the properties shown in the example are required for tweets to be displayed properly. *** Fix this, images should be allowed ***
+Currently, the template only support text tweets. All the properties shown in the example are required for tweets to be displayed properly.
