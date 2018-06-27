@@ -164,3 +164,10 @@ Memes should include text, image or both. If the tweetable property is set to tr
 __Tweets:__
 
 Currently, the template only support text tweets. All the properties shown in the example are required for tweets to be displayed properly.
+
+- The `text` property refers to the tweet's content.
+- The `user` property refers to the Twitter username of the tweet's author.
+- The `full_name` property refers to the Twitter display name of the tweet's author.
+- The `avatar` property refers to the Twitter profile photo of the tweet's author.
+- The `url` property refers to the link of the tweet.
+- The `date` property refers to the date when the tweet was posted.
