@@ -42,7 +42,7 @@ laughs:
     text: "Every github user right now !"
     image: laugh_2.jpg
     tweetable: true
-    twitter_pic_url: wnByFoAwgs
+    twitter_pic: wnByFoAwgs
   - type: tweet
     text: "When the inventor of the USB stick dies they'll gently lower the coffin, then pull it back up, turn it the other way, then lower it again."
     user: "cluedont"

@@ -144,7 +144,7 @@ laughs:
     text: "Every github user right now 😂"
     image: laugh_2.jpg
     tweetable: true
-    twitter_pic_url: pic.twitter.com/wnByFoAwgs
+    twitter_pic: wnByFoAwgs
   - type: tweet
     text: "When the inventor of the USB stick dies they'll gently lower the coffin, then pull it back up, turn it the other way, then lower it again."
     user: "cluedont"
@@ -158,7 +158,7 @@ This examples includes three items. Two _memes_ and one _tweet_. You can include
 
 __Memes:__
 
-Memes should include text, image or both. If the tweetable property is set to true, then a _click to tweet_ link will be displayed. Please note that in order for the meme image to be tweeted, a Twiiter picture URL must be supplied as shown in the second item/example.
+Memes should include text, image or both. If the tweetable property is set to true, then a _click to tweet_ link will be displayed. Please note that in order for the _meme_ image to be tweeted, a Twiiter picture URL must be supplied as shown in the second item/example: `twitter_pic: wnByFoAwgs`.
 
 __Tweets:__
 
