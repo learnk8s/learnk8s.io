@@ -217,3 +217,7 @@ The above example includes two popular tweets. All the properties are required, 
 
 As with all Jekyll's pages, you can add any additional to the newsletter's issue. The content can be written in markdown and html. You can also include liquid `tags` and `includes`. The content is written after the the three dashes `---` at the end of the front-matter. By default the content is displayed underneath the sections described in the front-matter.
 
+__Note:__
+
+If a particular type of content is used regularly, it may be better to consider creating a new section type or an include file to avoid repetitive work.
+
