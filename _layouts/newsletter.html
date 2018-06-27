@@ -71,6 +71,21 @@
                     {% endif %}
                          {% include newsletter/section.html name = 'content' %}
                      {% endif %}
+
+                     <section id="share">
+                        <h2>Enjoyed this issue?</h2>
+                        <p>We'd love it if you shared the love on Twitter. If you have a resource or article you'd like to submit for next week, send it via reindeer to weekly@learnk8s.io 🦌</p>
+                        <div>
+                            <div>
+                                <h3>Share the issue</h3>
+                                <a href="https://twitter.com/intent/tweet?via=learnk8s&url={{ site.url }}{{ page.url }}" title="Share on Twitter">{% include newsletter/twitter.svg %}</a>
+                            </div>
+                            <div>
+                                <h3>Join the conversation</h3>
+                                 <a href="https://learnk8s-slack-invite.herokuapp.com" title="Chat on Slack">{% include newsletter/slack.svg %}</a>
+                            </div>
+                        </div>
+                     </section>
                 </article>
         </div>
 </body>
