@@ -74,14 +74,4 @@ popular_tweets:
    text: "Want to learn how to choose the right #Kubernetes objects for running workloads in Azure? Download our eBook."
    image: popular_tweet_1jpg
 
-section_order:
-  - user_pick
-  - editor_pick
-  - projects
-  - content
-  - popular_tweets
-  - laughs
-
 ---
-
-The content section.
