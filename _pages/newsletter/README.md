@@ -140,6 +140,11 @@ laughs:
     text: "That feeling when you realise that someone comes to you and you realize that they just reinvented Helm"
     image: laugh_1.png
     tweetable: true
+  - type: meme
+    text: "Every github user right now 😂"
+    image: laugh_2.jpg
+    tweetable: true
+    twitter_pic_url: pic.twitter.com/wnByFoAwgs
   - type: tweet
     text: "When the inventor of the USB stick dies they'll gently lower the coffin, then pull it back up, turn it the other way, then lower it again."
     user: "cluedont"
@@ -157,4 +162,4 @@ Memes should include text, image or both. If the tweetable property is set to tr
 
 __Tweets:__
 
-Currently, the template only support text tweets. All the properties shown in the example are required for tweets to be displayed properly.
+Currently, the template only support text tweets. All the properties shown in the example are required for tweets to be displayed properly. *** Fix this, images should be allowed ***

@@ -107,9 +107,9 @@
                         {% endif %}
                         <div>
                             {% if laugh.type == 'meme' %}
-                            {% include meme/index.html text = laugh.text image = image tweetable = laugh.tweetable %}
+                            {% include meme/index.html text = laugh.text image = image tweetable = laugh.tweetable twitter_pic = laugh.twitter_pic_url %}
                             {% endif %}
-                        </div>                        
+                        </div>
                         {% endfor %}
                     </section>
                     {% endif %}

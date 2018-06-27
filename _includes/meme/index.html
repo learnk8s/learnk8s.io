@@ -1,14 +1,25 @@
+<!--
 <div>
     {% if include.text %}
     <p>{{ include.text }}</p>
     {% endif %} {% if include.image %}
     <img src="{{ include.image }}" alt=""> {% endif %} {% if include.tweetable && include.tweetable == true %} {% assign url = 'https://twitter.com/intent/tweet?via=learnk8s&url='
     | append: site.url | append: page.url | abosulute_url %} {% assign url_query = '' %} {% if include.text != '' %} {% assign url_query =
-    url_query | append: '&text=' | append: include.text %} {% endif %} 
-    {% if include.image != '' %} 
-    {% assign url_query = url_query | append: ' ' | append: site.url | append: include.image %} 
+    url_query | append: '&text=' | append: include.text %} {% endif %}
+    {% if include.image != '' %}
+    {% assign url_query = url_query | append: ' ' | append: site.url | append: include.image %}
     {% endif %}
     {% assign full_url = url | append: url_query %}
     <a href="{{ full_url }}">Tweet this</a>
+    {% endif %}
+</div>
+-->
+
+<div>
+    {% if include.text %}
+    <p>{{ include.text }}</p>
+    {% endif %}
+    {% if include.image %}
+    <img src="{{ include.image }}" alt="">
     {% endif %}
 </div>
