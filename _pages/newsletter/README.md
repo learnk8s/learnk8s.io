@@ -250,6 +250,11 @@ section_order:
 
 ```
 
+__You should only list the sections which you want to display.__
+
+__You don't have to add the above front-matter if you're happy with the default sort order.__
+
+
 The example above details how the sort order of each section, including the `content` can be customised. This example will display the section in this order:
 
 |Section Id|Section Name|Display Order|
