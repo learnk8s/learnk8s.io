@@ -46,6 +46,7 @@ laughs:
   - type: tweet
     text: "When the inventor of the USB stick dies they'll gently lower the coffin, then pull it back up, turn it the other way, then lower it again."
     user: "cluedont"
+    full_name: "cluedont"
     avatar: cluedont.jpeg
     url: "https://twitter.com/cluedont/status/482614101764763648"
     date: 2014-06-27

@@ -107,7 +107,8 @@
                             tweetable = laugh.tweetable twitter_pic = laugh.twitter_pic %} {% endif %}
 
                             {% if laugh.type == 'tweet' %}
-
+                                {% assign avatar = '/newsletter/issue-' | append: page.issue | append: '/' | append: laugh.avatar %}
+                                {% include twitter/tweet.html avatar = avatar full_name = laugh.full_name user = laugh.user url = laugh.url text = laugh.text date = laugh.date %}
                             {% endif %}
                         </div>
                         {% endfor %}
