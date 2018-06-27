@@ -241,12 +241,12 @@ The sort order of the sections can be changed for each issue without the need to
 ...cont
 
 section_order:
-  user_pick: 1
-  editor_pick: 2
-  projects: 3
-  content: 4
-  popular_tweets: 5
-  laughs: 6
+  - user_pick
+  - editor_pick
+  - projects
+  - content
+  - popular_tweets
+  - laughs
 
 ```
 
