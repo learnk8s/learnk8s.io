@@ -6,6 +6,6 @@
     <img src="{{ include.image }}" alt="">
     {% endif %}
     {% if include.tweetable && include.tweetable == true %}
-        {% include social-share/twitter/tweet-this.html text = include.text pic_url = include.twitter_pic_url %}
+        {% include social-share/twitter/tweet-this.html text = include.text pic_url = include.twitter_pic %}
     {% endif %}
 </div>
