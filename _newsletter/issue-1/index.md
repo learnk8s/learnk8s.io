@@ -59,6 +59,21 @@ laughs:
     date: 2017-09-12
     image: laugh_4.jpg
 
+popular_tweets:
+ - user: kubernetesio
+   full_name: Kubernetes
+   avatar: kubernetesio.png
+   url: https://twitter.com/kubernetesio/status/1011339341489045504
+   date: 2017-06-25
+   text: "We didn’t change our organization because we wanted to use #Kubernetes, we used Kubernetes because we wanted to change our organization."
+ - user: Azure
+   full_name: Microsoft Azure
+   avatar: Azure.jpg
+   url: https://twitter.com/Azure/status/1009598024874643461
+   date: 2017-06-21
+   text: "Want to learn how to choose the right #Kubernetes objects for running workloads in Azure? Download our eBook."
+   image: popular_tweet_1jpg
+
 ---
 
 

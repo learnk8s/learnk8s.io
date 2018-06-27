@@ -119,6 +119,15 @@
                         {% endfor %}
                     </section>
                     {% endif %}
+                    {% if page.popular_tweets %}
+                    <section id="popular-tweets">
+                        <h2 class="ttu">Popular tweets</h2>
+                        {% for tweet in page.popular_tweets %}
+                         {% assign avatar = '/newsletter/issue-' | append: page.issue | append: '/' | append: tweet.avatar %}
+                            {% include twitter/tweet.html avatar = avatar full_name = tweet.full_name user = tweet.user url = tweet.url text = tweet.text date = tweet.date image = tweet.image %}
+                        {% endfor %}
+                    </section>
+                    {% endif %}
                 </article>
         </div>
 </body>
