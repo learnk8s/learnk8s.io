@@ -75,5 +75,3 @@ popular_tweets:
    image: popular_tweet_1jpg
 
 ---
-
-
