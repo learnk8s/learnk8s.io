@@ -73,7 +73,7 @@
                             {% if project.image %}
                             <img src="/newsletter/issue-{{ page.issue }}/{{ project.image }}" alt="{{ project.name }}"> {% endif %}
                             <h3>{{ project.name }}</h3>
-                            {% include github/badges.html stars=project.stars forks=project.forks %}
+                            {% include github/badges.html stars=project.stars forks=project.forks url = project.url %}
                             <p>{{ project.summary }}</p>
                             <a href="{{ project.url }}" title="{{ project.name }}">Look up --></a>
                         </div>
