@@ -5,5 +5,8 @@
     <span><a href="{{ include.url }}">Link</a></span>
   </p>
   <p>{{ include.text }}</p>
+  {% if include.image && include.image != '' %}
+  <img src="{{ include.image }}" alt="">
+  {% endif %}
   <p>{{ include.date }}</p>
 </div>

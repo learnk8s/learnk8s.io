@@ -50,6 +50,14 @@ laughs:
     avatar: cluedont.jpeg
     url: "https://twitter.com/cluedont/status/482614101764763648"
     date: 2014-06-27
+  - type: tweet
+    text: "#JavascriptIsToJavaAsHamIsToHamster"
+    user: "sitemeer"
+    full_name: "Sitemeer"
+    avatar: sitemeer.png
+    url: "https://twitter.com/sitemeer/status/907581822783148032"
+    date: 2017-09-12
+    image: laugh_4.jpg
 
 ---
 
