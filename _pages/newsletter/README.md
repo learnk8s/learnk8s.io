@@ -28,6 +28,10 @@ __5) Popular Tweets__
 
 One or more popular tweets which are relevant to our readers.
 
+__6) Content__
+
+Other content can be added to the newsletter's issue.
+
 ### Drafting a new issue
 
 Create a new new directory named `issue-xx` under the `_newsletter` collection directory. Replace the `xx` with the next issue's number.
@@ -207,3 +211,9 @@ popular_tweets:
 ```
 
 The above example includes two popular tweets. All the properties are required, excluding the image which is optional. If the tweet contains an image, the image should be saved in the same directory of the newsletter's issue.
+
+
+#### Content
+
+As with all Jekyll's pages, you can add any additional to the newsletter's issue. The content can be written in markdown and html. You can also include liquid `tags` and `includes`. The content is written after the the three dashes `---` at the end of the front-matter. By default the content is displayed underneath the sections described in the front-matter.
+
