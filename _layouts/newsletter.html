@@ -48,33 +48,18 @@
             <strong class="ttu">Issue #{{ page.issue }} &mdash; {{ page.date | date: '%B %d, %Y'}}</strong</div>
                 <article class="ph3 pt0 pb4 mt3 article bg-white">
 
-                    {% if page.section_order %}
-                        {% for section in page.section_order %}
-                            {% include newsletter/section.html name = section %}
-                        {% endfor %}
-                    {% else %}
+                    {% if page.section_order %} {% for section in page.section_order %} {% include newsletter/section.html name = section %}
+                    {% endfor %} {% else %} {% if page.editor_pick %} {% include newsletter/section.html name = 'editor_pick'
+                    %} {% endif %} {% if page.projects %} {% include newsletter/section.html name = 'projects' %} {% endif
+                    %} {% if page.user_pick %} {% include newsletter/section.html name = 'user_pick' %} {% endif %} {% if
+                    page.laughs %} {% include newsletter/section.html name = 'laughs' %} {% endif %} {% if page.popular_tweets
+                    %} {% include newsletter/section.html name = 'popular_tweets' %} {% endif %} {% include newsletter/section.html
+                    name = 'content' %} {% endif %}
 
-                    {% if page.editor_pick %}
-                        {% include newsletter/section.html name = 'editor_pick' %}
-                    {% endif %}
-                    {% if page.projects %}
-                        {% include newsletter/section.html name = 'projects' %}
-                    {% endif %}
-                    {% if page.user_pick %}
-                         {% include newsletter/section.html name = 'user_pick' %}
-                    {% endif %}
-                    {% if page.laughs %}
-                         {% include newsletter/section.html name = 'laughs' %}
-                    {% endif %}
-                    {% if page.popular_tweets %}
-                         {% include newsletter/section.html name = 'popular_tweets' %}
-                    {% endif %}
-                         {% include newsletter/section.html name = 'content' %}
-                     {% endif %}
-
-                     <section id="share">
+                    <section id="share">
                         <h2>Enjoyed this issue?</h2>
-                        <p>We'd love it if you shared the love on Twitter. If you have a resource or article you'd like to submit for next week, send it via reindeer to weekly@learnk8s.io 🦌</p>
+                        <p>We'd love it if you shared the love on Twitter. If you have a resource or article you'd like to submit
+                            for next week, send it via reindeer to weekly@learnk8s.io 🦌</p>
                         <div>
                             <div>
                                 <h3>Share the issue</h3>
@@ -82,10 +67,13 @@
                             </div>
                             <div>
                                 <h3>Join the conversation</h3>
-                                 <a href="https://learnk8s-slack-invite.herokuapp.com" title="Chat on Slack">{% include newsletter/slack.svg %}</a>
+                                <a href="https://learnk8s-slack-invite.herokuapp.com" title="Chat on Slack">{% include newsletter/slack.svg %}</a>
                             </div>
                         </div>
-                     </section>
+                    </section>
+                    <div>
+                        <a href="/newsletter-archive" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3" </a>Browse the archive --></a>
+                    </div>
                 </article>
         </div>
 </body>
