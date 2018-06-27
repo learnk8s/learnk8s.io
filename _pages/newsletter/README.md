@@ -152,10 +152,18 @@ laughs:
     avatar: cluedont.jpeg
     url: "https://twitter.com/cluedont/status/482614101764763648"
     date: 2014-06-27
+  - type: tweet
+    text: "#JavascriptIsToJavaAsHamIsToHamster"
+    user: "sitemeer"
+    full_name: "Sitemeer"
+    avatar: sitemeer.png
+    url: "https://twitter.com/sitemeer/status/907581822783148032"
+    date: 2017-09-12
+    image: laugh_4.jpg
 
 ```
 
-This examples includes three items. Two _memes_ and one _tweet_. You can include as many tweets and memes as needed.
+This examples includes four items. Two _memes_ and two _tweet_. You can include as many tweets and memes as needed.
 
 __Memes:__
 
@@ -163,7 +171,7 @@ Memes should include text, image or both. If the tweetable property is set to tr
 
 __Tweets:__
 
-Currently, the template only support text tweets. All the properties shown in the example are required for tweets to be displayed properly.
+All the properties except for the image in the example are required for tweets to be displayed properly.
 
 - The `text` property refers to the tweet's content.
 - The `user` property refers to the Twitter username of the tweet's author.
@@ -171,3 +179,4 @@ Currently, the template only support text tweets. All the properties shown in th
 - The `avatar` property refers to the Twitter profile photo of the tweet's author.
 - The `url` property refers to the link of the tweet.
 - The `date` property refers to the date when the tweet was posted.
+- The `image` property is optional. Included images must be located within the same directory as the issue.
