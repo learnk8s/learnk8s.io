@@ -141,7 +141,7 @@ laughs:
     image: laugh_1.png
     tweetable: true
   - type: meme
-    text: "Every github user right now 😂"
+    text: "Every github user right now!"
     image: laugh_2.jpg
     tweetable: true
     twitter_pic: wnByFoAwgs
@@ -167,7 +167,7 @@ This examples includes four items. Two _memes_ and two _tweet_. You can include 
 
 __Memes:__
 
-Memes should include text, image or both. If the tweetable property is set to true, then a _click to tweet_ link will be displayed. Please note that in order for the _meme_ image to be tweeted, a Twiiter picture URL must be supplied as shown in the second item/example: `twitter_pic: wnByFoAwgs`.
+Memes should include text, image or both. If the tweetable property is set to true, then a _click to tweet_ link will be displayed. Please note that in order for the _meme_ image to be tweeted, a Twitter picture URL must be supplied as shown in the second item/example: `twitter_pic: wnByFoAwgs`.
 
 __Tweets:__
 
@@ -180,3 +180,30 @@ All the properties except for the image in the example are required for tweets t
 - The `url` property refers to the link of the tweet.
 - The `date` property refers to the date when the tweet was posted.
 - The `image` property is optional. Included images must be located within the same directory as the issue.
+
+##### Popular Tweets
+
+In this section you can list one or more Tweets you deem popular. To add this section, simply add the following data to the front-matter with at least one tweet.
+
+```yaml
+
+...cont
+
+popular_tweets:
+ - user: kubernetesio
+    full_name: Kubernetes
+    avatar: kubernetesio.png
+    url: https://twitter.com/kubernetesio/status/1011339341489045504
+    date: 2017-06-25
+    text: "We didn’t change our organization because we wanted to use #Kubernetes, we used Kubernetes because we wanted to change our organization."
+ - user: Azure
+    full_name: Microsoft Azure
+    avatar: Azure.jpg
+    url: https://twitter.com/Azure/status/1009598024874643461
+    date:2017-06-21
+    text: "Want to learn how to choose the right #Kubernetes objects for running workloads in Azure? Download our eBook."
+    image: popular_tweet_1jpg
+
+```
+
+The above example includes two popular tweets. All the properties are required, excluding the image which is optional. If the tweet contains an image, the image should be saved in the same directory of the newsletter's issue.
