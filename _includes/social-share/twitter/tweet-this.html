@@ -1,0 +1,10 @@
+  {% assign url = 'https://twitter.com/intent/tweet?via=learnk8s&url=' | append: site.url | append: page.url | absolute_url
+  %} {% assign url_query = '' %} {% if include.text && include.text != '' %} {% assign url_query = url_query | append: '&text='
+  | append: include.text %} {% endif %} {% if include.pic_url && include.pic_url != '' %} {% assign url_query =url_query |
+  append: ' pic.twitter.com/' | append: include.pic_url %} {% endif %}
+
+  {% assign full_url = url | append: url_query %}
+
+  <div>
+    <a href="{{ full_url }}" class="link dib white bg-blue br1 pa3 b f5 mv3 ph4">Tweet this</a>
+  </div>
