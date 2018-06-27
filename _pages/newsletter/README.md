@@ -221,3 +221,42 @@ __Note:__
 
 If a particular type of content is used regularly, it may be better to consider creating a new section type or an include file to avoid repetitive work.
 
+#### Sort order
+
+By default, the sections are displayed in the same order as they are documented here and the `content` as a last item before the footer. I.e:
+
+|Section Id|Section Name|Sort Order|
+|:---------|:-----------|---------:|
+|editor_pick|Editor's Pick|1|
+|projects|Watch out for these projects|2|
+|user_pick|Your Picks|3|
+|laughs|Things that made us laugh|4|
+|popular_tweets|Popular Tweets|5|
+|content|The file's content|6|
+
+The sort order of the sections can be changed for each issue without the need to edit the `newsletter` layout. To change the section's order, add the following front-matter:
+
+```yaml
+
+...cont
+
+section_order:
+  user_pick: 1
+  editor_pick: 2
+  projects: 3
+  content: 4
+  popular_tweets: 5
+  laughs: 6
+
+```
+
+The example above details how the sort order of each section, including the `content` can be customised. This example will display the section in this order:
+
+|Section Id|Section Name|Display Order|
+|:---------|:-----------|:--------:|
+|user_pick|Your Picks|First|
+|editor_pick|Editor's Pick|Second|
+|projects|Watch out for these projects|Third|
+|content|The file's content|Fourth|
+|popular_tweets|Popular Tweets|Fifth|
+|laughs|Things that made us laugh|Sixth|
