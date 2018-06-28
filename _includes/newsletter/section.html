@@ -1,26 +1,31 @@
 {% if include.name == 'editor_pick' %}
-<section id="editor_pick">
-  <h2 class="ttu">Editor's Pick</h2>
+<section id="editor_pick" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  <h2 class="ttu tl">Editor's Pick</h2>
   {% for pick in page.editor_pick %}
   <div>
     {% if pick.image %}
     <img src="/newsletter/issue-{{ page.issue }}/{{ pick.image }}" alt="{{ pick.title }}"> {% endif %}
-    <h3>{{ pick.title }}</h3>
-    <ul>
+    <h3 class="tl">{{ pick.title }}</h3>
+    <ul class="list tl pl0">
       {% for tag in pick.tags %}
-      <li>{{ tag }}</li>
+      <li class="dib bg-black-30 white ph2 ttu tag fwb br1">{{ tag }}</li>
       {% endfor %}
     </ul>
-    <p>{{ pick.summary }}</p>
-    <a href="{{ pick.url }}" title="{{ pick.title }}">Look up --></a>
+    <p class="tl">{{ pick.summary }}</p>
+    <div class="tl">
+      <a class="" href="{{ pick.url }}" title="{{ pick.title }}">Look up --></a>
+    </div>
+    {% unless forloop.last %}
+    <hr class="light-gray">
+    {% endunless %}
   </div>
   {% endfor %}
 </section>
 {% endif %}
 
 {% if include.name == 'projects' %}
-  <section id="projects">
-    <h2 class="ttu">Watch out for these projects</h2>
+  <section id="projects" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+    <h2 class="ttu tl">Watch out for these projects</h2>
     {% for project in page.projects %}
     <div>
       {% if project.image %}
@@ -35,8 +40,8 @@
 {% endif %}
 
 {% if include.name == 'user_pick' %}
-<section id="user_pick">
-  <h2 class="ttu">Your Pick</h2>
+<section id="user_pick" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  <h2 class="ttu tl">Your Pick</h2>
   {% for pick in page.user_pick %}
   <div>
     {% if pick.image %}
@@ -55,8 +60,8 @@
 {% endif %}
 
 {% if include.name == 'laughs' %}
-<section id="laughs">
-  <h2 class="ttu">Things that made us laugh</h2>
+<section id="laughs" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  <h2 class="ttu tl">Things that made us laugh</h2>
   {% for laugh in page.laughs %} {% assign image = nil %}
   <div>
     {% if laugh.type == 'meme' %} {% if laugh.image %} {% assign image='/newsletter/issue-' | append: page.issue | append: '/'
@@ -71,8 +76,8 @@
 {% endif %}
 
 {% if include.name == 'popular_tweets' %}
-<section id="popular-tweets">
-  <h2 class="ttu">Popular tweets</h2>
+<section id="popular-tweets" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  <h2 class="ttu tl">Popular tweets</h2>
   {% for tweet in page.popular_tweets %} {% assign avatar = '/newsletter/issue-' | append: page.issue | append: '/' | append:
   tweet.avatar %} {% include twitter/tweet.html avatar = avatar full_name = tweet.full_name user = tweet.user url = tweet.url
   text = tweet.text date = tweet.date image = tweet.image %} {% endfor %}
@@ -80,5 +85,7 @@
 {% endif %}
 
 {% if include.name == 'content' %}
-<div>{{ content }}</div>
+<section id="content" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  {{ content }}
+</section>
 {% endif %}

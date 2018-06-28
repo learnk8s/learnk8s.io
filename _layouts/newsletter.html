@@ -45,18 +45,24 @@
 <body class="bg-near-white sans-serif">
     <div class="cf w-100 mw9-l center mt6">
         <div class="tc black-40">
-            <strong class="ttu">Issue #{{ page.issue }} &mdash; {{ page.date | date: '%B %d, %Y'}}</strong</div>
-                <article class="ph3 pt0 pb4 mt3 article bg-white">
+            <strong class="ttu">Issue #{{ page.issue }} &mdash; {{ page.date | date: '%B %d, %Y'}}</strong>
+                <article class="ph3 pt0 pb4 mt3 article" id="newsletter-issue">
 
                     {% if page.section_order %} {% for section in page.section_order %} {% include newsletter/section.html name = section %}
                     {% endfor %} {% else %} {% if page.editor_pick %} {% include newsletter/section.html name = 'editor_pick'
                     %} {% endif %} {% if page.projects %} {% include newsletter/section.html name = 'projects' %} {% endif
                     %} {% if page.user_pick %} {% include newsletter/section.html name = 'user_pick' %} {% endif %} {% if
                     page.laughs %} {% include newsletter/section.html name = 'laughs' %} {% endif %} {% if page.popular_tweets
-                    %} {% include newsletter/section.html name = 'popular_tweets' %} {% endif %} {% include newsletter/section.html
-                    name = 'content' %} {% endif %}
+                    %} {% include newsletter/section.html name = 'popular_tweets' %} {% endif %}
 
-                    <section id="share">
+                    {% assign content = page.content | strip_newlines %}
+                    {% if content != "" %}
+                    {% include newsletter/section.html
+                    name = 'content' %}
+                    {% endif %}
+                    {% endif %}
+
+                    <section id="share" class="bg-white">
                         <h2>Enjoyed this issue?</h2>
                         <p>We'd love it if you shared the love on Twitter. If you have a resource or article you'd like to submit
                             for next week, send it via reindeer to weekly@learnk8s.io 🦌</p>

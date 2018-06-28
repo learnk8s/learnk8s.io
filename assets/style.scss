@@ -363,3 +363,21 @@ green     #859900  operators, other keywords
     display: inline-block;
   }
 }
+
+#newsletter-issue section{
+  .tag{
+    font-family: -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif;
+    font-size: 0.75rem
+  }
+  h2{
+    color: #D53960;
+    font-size: 1rem;
+  }
+  h3{
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  .section-item{
+
+  }
+}
