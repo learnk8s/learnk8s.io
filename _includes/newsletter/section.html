@@ -13,10 +13,10 @@
     </ul>
     <p class="tl">{{ pick.summary }}</p>
     <div class="tl">
-      <a class="" href="{{ pick.url }}" title="{{ pick.title }}">Look up --></a>
+      <a class="fw6" href="{{ pick.url }}" title="{{ pick.title }}">Look up &#8674;</a>
     </div>
     {% unless forloop.last %}
-    <hr class="light-gray">
+    <hr class="mt3">
     {% endunless %}
   </div>
   {% endfor %}
