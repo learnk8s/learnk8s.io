@@ -1,9 +1,9 @@
-<div>
+<div class="meme br2 pa2">
     {% if include.text %}
-    <p>{{ include.text }}</p>
+    <p class="black-90">{{ include.text }}</p>
     {% endif %}
     {% if include.image %}
-    <img src="{{ include.image }}" alt="">
+    <img class="ph4" src="{{ include.image }}" alt="">
     {% endif %}
     {% if include.tweetable && include.tweetable == true %}
         {% include social-share/twitter/tweet-this.html text = include.text pic_url = include.twitter_pic %}

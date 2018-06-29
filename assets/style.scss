@@ -398,5 +398,32 @@ green     #859900  operators, other keywords
     top: 0.05rem !important;
     position: relative;
   }
+}
 
+.meme{
+  background: #DEECF9;
+  img{
+    max-width: 80%;
+  }
+}
+
+.tweet-this{
+  a{
+     color: #ffffff !important;
+     text-decoration: none;
+  }
+  a:visited {
+     color: #ffffff !important;
+  }
+  a:hover{
+    color: #ffffff !important;
+  }
+  .favicon{
+    position: relative;
+    top: 0.3rem;
+  }
+}
+
+.twitter-blue{
+  background-color: #5E9FE6;
 }

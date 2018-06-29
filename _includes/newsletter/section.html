@@ -69,7 +69,7 @@
 <section id="laughs" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
   <h2 class="ttu tl">Things that made us laugh</h2>
   {% for laugh in page.laughs %} {% assign image = nil %}
-  <div>
+  <div class="mb4">
     {% if laugh.type == 'meme' %} {% if laugh.image %} {% assign image='/newsletter/issue-' | append: page.issue | append: '/'
     | append: laugh.image %} {% endif %} {% include meme/index.html text = laugh.text image = image tweetable = laugh.tweetable
     twitter_pic = laugh.twitter_pic %} {% endif %} {% if laugh.type == 'tweet' %} {% if laugh.image %} {% assign image='/newsletter/issue-'
