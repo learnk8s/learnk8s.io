@@ -32,9 +32,7 @@
     {% if project.image %}
     <img src="/newsletter/issue-{{ page.issue }}/{{ project.image }}" alt="{{ project.name }}"> {% endif %} {% assign owner = project.name | split: '/' | first %} {% assign repo = project.name | split: '/' | last
     %}
-    <h3 class="tl">{{ owner }}/
-      <span class="fw9">{{ repo }}</span>
-    </h3>
+    <h3 class="tl">{{ owner }}/<span class="fw9">{{ repo }}</span></h3>
 
     {% include github/badges.html stars=project.stars forks=project.forks url = project.url %}
     <p class="tl">{{ project.summary }}</p>
