@@ -1,7 +1,13 @@
 <div>
     {% if include.stars %}
-    <span><a href="{{ include.url }}">Star</a> {{ include.stars }}</span>
+    <span>
+        <a href="{{ include.url }}">Star</a>
+        <a href="{{ include.url }}/stargazers">{{ include.stars }}</a>
+    </span>
     {% endif %} {% if include.forks %}
-    <span><a href="{{ include.url }}/fork">Fork</a> {{ include.forks }}</span>
+    <span>
+        <a href="{{ include.url }}/fork">Fork</a>
+        <a href="{{ include.url }}/network">{{ include.forks }}</a>
+    </span>
     {% endif %}
 </div>
