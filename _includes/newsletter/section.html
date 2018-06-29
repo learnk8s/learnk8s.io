@@ -16,30 +16,37 @@
       <a class="fw6" href="{{ pick.url }}" title="{{ pick.title }}">Look up &#8674;</a>
     </div>
     {% unless forloop.last %}
-    <hr class="mt3">
-    {% endunless %}
+    <hr class="mt3"> {% endunless %}
   </div>
   {% endfor %}
 </section>
-{% endif %}
+{% endif %} {% if include.name == 'projects' %}
+<section id="projects" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  <div class="dib tl fl ">
+    <span class="dib relative top-1 favicon">{% include newsletter/github.svg %}</span>
+    <h2 class="ttu dib pl1">
+      Watch out for these projects</h2>
+  </div>
+  {% for project in page.projects %}
+  <div>
+    {% if project.image %}
+    <img src="/newsletter/issue-{{ page.issue }}/{{ project.image }}" alt="{{ project.name }}"> {% endif %} {% assign owner = project.name | split: '/' | first %} {% assign repo = project.name | split: '/' | last
+    %}
+    <h3 class="tl">{{ owner }}/
+      <span class="fw9">{{ repo }}</span>
+    </h3>
 
-{% if include.name == 'projects' %}
-  <section id="projects" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
-    <h2 class="ttu tl">Watch out for these projects</h2>
-    {% for project in page.projects %}
-    <div>
-      {% if project.image %}
-      <img src="/newsletter/issue-{{ page.issue }}/{{ project.image }}" alt="{{ project.name }}"> {% endif %}
-      <h3>{{ project.name }}</h3>
-      {% include github/badges.html stars=project.stars forks=project.forks url = project.url %}
-      <p>{{ project.summary }}</p>
-      <a href="{{ project.url }}" title="{{ project.name }}">Look up --></a>
+    {% include github/badges.html stars=project.stars forks=project.forks url = project.url %}
+    <p class="tl">{{ project.summary }}</p>
+    <div class="tl">
+      <a class="fw6" href="{{ project.url }}" title="{{ project.name }}">Look up &#8674;</a>
     </div>
-    {% endfor %}
-  </section>
-{% endif %}
-
-{% if include.name == 'user_pick' %}
+    {% unless forloop.last %}
+    <hr class="mt3"> {% endunless %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %} {% if include.name == 'user_pick' %}
 <section id="user_pick" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
   <h2 class="ttu tl">Your Pick</h2>
   {% for pick in page.user_pick %}
@@ -57,9 +64,7 @@
   </div>
   {% endfor %}
 </section>
-{% endif %}
-
-{% if include.name == 'laughs' %}
+{% endif %} {% if include.name == 'laughs' %}
 <section id="laughs" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
   <h2 class="ttu tl">Things that made us laugh</h2>
   {% for laugh in page.laughs %} {% assign image = nil %}
@@ -73,18 +78,14 @@
   </div>
   {% endfor %}
 </section>
-{% endif %}
-
-{% if include.name == 'popular_tweets' %}
+{% endif %} {% if include.name == 'popular_tweets' %}
 <section id="popular-tweets" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
   <h2 class="ttu tl">Popular tweets</h2>
   {% for tweet in page.popular_tweets %} {% assign avatar = '/newsletter/issue-' | append: page.issue | append: '/' | append:
   tweet.avatar %} {% include twitter/tweet.html avatar = avatar full_name = tweet.full_name user = tweet.user url = tweet.url
   text = tweet.text date = tweet.date image = tweet.image %} {% endfor %}
 </section>
-{% endif %}
-
-{% if include.name == 'content' %}
+{% endif %} {% if include.name == 'content' %}
 <section id="content" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
   {{ content }}
 </section>
