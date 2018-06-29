@@ -34,7 +34,10 @@
     %}
     <h3 class="tl">{{ owner }}/<span class="fw9">{{ repo }}</span></h3>
 
-    {% include github/badges.html stars=project.stars forks=project.forks url = project.url %}
+    <div class="tl pt3">
+       {% include github/badges.html stars=project.stars forks=project.forks url = project.url %}
+    </div>
+
     <p class="tl">{{ project.summary }}</p>
     <div class="tl">
       <a class="fw6" href="{{ project.url }}" title="{{ project.name }}">Look up &#8674;</a>

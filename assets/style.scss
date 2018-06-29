@@ -387,3 +387,16 @@ green     #859900  operators, other keywords
     top: 0.35rem;
   }
 }
+
+.gh-badges{
+  a{
+    color: #000000 !important;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .favicon{
+    top: 0.05rem !important;
+    position: relative;
+  }
+
+}
