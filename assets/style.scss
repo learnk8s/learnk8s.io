@@ -427,3 +427,19 @@ green     #859900  operators, other keywords
 .twitter-blue{
   background-color: #5E9FE6;
 }
+
+.tweet{
+  .username{
+    font-size: 1rem;
+    position: relative;
+    bottom: 1rem;
+    left: -0.7rem;
+  }
+  .full-name{
+    position: relative;
+    top: -0.5rem;
+  }
+  .date{
+    font-size: 1rem;
+  }
+}
