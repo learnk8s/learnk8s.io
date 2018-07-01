@@ -443,3 +443,10 @@ green     #859900  operators, other keywords
     font-size: 1rem;
   }
 }
+
+#popular-tweets{
+  .favicon {
+    position: relative;
+    top: 0.2rem
+  }
+}
