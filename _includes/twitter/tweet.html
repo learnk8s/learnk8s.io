@@ -1,4 +1,11 @@
 <div class="tweet b--solid b--light-gray bw1 pa3">
+  <div class="fr">
+    <span>
+      <a href="{{ include.url }}">
+        <span class="favicon">{% include twitter/twitter-bird-blue.svg %}</span>
+      </a>
+    </span>
+  </div>
   <div class="dib fl">
     <div class="avatar dib">
       <img class="br-100 mw3" src="{{ include.avatar }}" alt="{{ include.full_name }}">
@@ -7,12 +14,6 @@
       <span class="fw9 full-name">{{ include.full_name }}</span>
       <br><span class="username">@{{ include.user }}</span>
     </div>
-  </div>
-
-  <div class="fr">
-    <span>
-      <a href="{{ include.url }}"><span class="favicon">{% include twitter/twitter-bird-blue.svg %}</span></a>
-    </span>
   </div>
   <div class="cf">
   </div>

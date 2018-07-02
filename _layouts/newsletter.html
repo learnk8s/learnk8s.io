@@ -42,7 +42,7 @@
     <title>Newsletter Issue {{ page.issue }} • {{ site.name }}</title>
 </head>
 
-<body class="bg-near-white sans-serif">
+<body class="bg-near-white sans-serif ml4 ml0-l ml0-m">
     <div class="cf w-100 mw9-l center mt6-l mt4" id="newsletter-issue">
         <div class="tc black-40">
             <strong class="ttu">Issue #{{ page.issue }} &mdash; {{ page.date | date: '%B %d, %Y'}}</strong>
@@ -66,7 +66,7 @@
                     <div class="fl w-50">
                         <h3>Share the issue</h3>
                         <div class="br br--solid light-gray bw1">
-                        <div class="mw4 center">
+                        <div class="mw4-ns mw3 center">
                             <a href="https://twitter.com/intent/tweet?via=learnk8s&url={{ site.url }}{{ page.url }}" title="Share on Twitter">
                                 <span class="">{% include newsletter/twitter.svg %}</span>
                             </a>
@@ -75,7 +75,7 @@
                     </div>
                     <div class="fr w-50 center">
                         <h3>Join the conversation</h3>
-                        <div class="mw4 center">
+                        <div class="mw4-ns mw3 center">
                         <a href="https://learnk8s-slack-invite.herokuapp.com" title="Chat on Slack">
                             <span class="">{% include newsletter/slack.svg %}</span>
                         </a>

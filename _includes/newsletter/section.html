@@ -22,10 +22,8 @@
 </section>
 {% endif %} {% if include.name == 'projects' %}
 <section id="projects" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
-  <div class="dib tl fl ">
-    <span class="dib relative top-1 favicon">{% include newsletter/github.svg %}</span>
-    <h2 class="ttu dib pl1">
-      Watch out for these projects</h2>
+  <div class="dib tl fl">
+    <h2 class="ttu dib pl1"><span class="dib relative top-1 favicon">{% include newsletter/github.svg %}</span> Watch out for these projects</h2>
   </div>
   {% for project in page.projects %}
   <div>
