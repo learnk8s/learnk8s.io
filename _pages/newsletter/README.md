@@ -120,14 +120,26 @@ user_pick:
     image: ed_pick_1.png
     summary: "'Why' and 'How' to go from a monolith app to dockerized one and eventually to run our app on a kubernetes cluster. In part one, the author discusses the benefits and the abilities of Docker and the app's code architecture."
     tags: [docker, micro services]
+    user_full_name: John Doe
+    user_avatar: john_doe.jpg
+    user_gh_username: johndoe
+    user_twitter_username: johndoe
+    user_website: https://john-doe.me
+    user_linkedin: johndoe-123456789
   - title: "Dissecting Kubernetes deployments"
     url: "https://blog.heroku.com/dissecting-kubernetes-deployments"
     summary: Twitter's team have been developing a design system they call Horizon. Ashlie Ford tracks its journey, from humble beginnings as a hack-day project.
     tags: [deployments]
+    user_full_name: Jane Doe
+    user_avatar: jane_doe.jpg
+    user_gh_username: janedoe
+    user_twitter_username: janedoe
+    user_website: https://jane-doe.me
+    user_linkedin: janedoe-123456789
 
 ```
 
-The example above includes two user picks. All the data is required with exclusion of the image which is optional.
+The example above includes two user picks. All the data is required with exclusion of the image which is optional and the user's data. The User's data will be shown in the contributors section of the landing page. in the future. Please refer to #GH-95
 
 ##### Things that made us laugh
 
