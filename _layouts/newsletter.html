@@ -46,43 +46,49 @@
     <div class="cf w-100 mw9-l center mt6">
         <div class="tc black-40">
             <strong class="ttu">Issue #{{ page.issue }} &mdash; {{ page.date | date: '%B %d, %Y'}}</strong>
-                <article class="ph3 pt0 pb4 mt3 article" id="newsletter-issue">
+            <article class="pt0 mt3 article" id="newsletter-issue">
 
-                    {% if page.section_order %} {% for section in page.section_order %} {% include newsletter/section.html name = section %}
-                    {% endfor %} {% else %} {% if page.editor_pick %} {% include newsletter/section.html name = 'editor_pick'
-                    %} {% endif %} {% if page.projects %} {% include newsletter/section.html name = 'projects' %} {% endif
-                    %} {% if page.user_pick %} {% include newsletter/section.html name = 'user_pick' %} {% endif %} {% if
-                    page.laughs %} {% include newsletter/section.html name = 'laughs' %} {% endif %} {% if page.popular_tweets
-                    %} {% include newsletter/section.html name = 'popular_tweets' %} {% endif %}
+                {% if page.section_order %} {% for section in page.section_order %} {% include newsletter/section.html name = section %}
+                {% endfor %} {% else %} {% if page.editor_pick %} {% include newsletter/section.html name = 'editor_pick'
+                %} {% endif %} {% if page.projects %} {% include newsletter/section.html name = 'projects' %} {% endif %}
+                {% if page.user_pick %} {% include newsletter/section.html name = 'user_pick' %} {% endif %} {% if page.laughs
+                %} {% include newsletter/section.html name = 'laughs' %} {% endif %} {% if page.popular_tweets %} {% include
+                newsletter/section.html name = 'popular_tweets' %} {% endif %} {% assign content = page.content | strip_newlines
+                %} {% if content != "" %} {% include newsletter/section.html name = 'content' %} {% endif %} {% endif %}
 
-                    {% assign content = page.content | strip_newlines %}
-                    {% if content != "" %}
-                    {% include newsletter/section.html
-                    name = 'content' %}
-                    {% endif %}
-                    {% endif %}
 
-                    <section id="share" class="bg-white">
-                        <h2>Enjoyed this issue?</h2>
-                        <p>We'd love it if you shared the love on Twitter. If you have a resource or article you'd like to submit
-                            for next week, send it via reindeer to weekly@learnk8s.io 🦌</p>
-                        <div>
-                            <div>
-                                <h3>Share the issue</h3>
-                                <a href="https://twitter.com/intent/tweet?via=learnk8s&url={{ site.url }}{{ page.url }}" title="Share on Twitter">{% include newsletter/twitter.svg %}</a>
-                            </div>
-                            <div>
-                                <h3>Join the conversation</h3>
-                                <a href="https://learnk8s-slack-invite.herokuapp.com" title="Chat on Slack">{% include newsletter/slack.svg %}</a>
-                            </div>
+            </article>
+            <div id="share" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4 article">
+                <h2 class="tl">Enjoyed this issue?</h2>
+                <p class="tl">We'd love it if you shared the love on Twitter. If you have a resource or article you'd like to submit for
+                    next week, send it via reindeer to weekly@learnk8s.io 🦌</p>
+                <div class="cf">
+                    <div class="fl w-50">
+                        <h3>Share the issue</h3>
+                        <div class="br br--solid light-gray bw1">
+                        <div class="mw4 center">
+                            <a href="https://twitter.com/intent/tweet?via=learnk8s&url={{ site.url }}{{ page.url }}" title="Share on Twitter">
+                                <span class="">{% include newsletter/twitter.svg %}</span>
+                            </a>
                         </div>
-                    </section>
-                    <div>
-                        <a href="/newsletter-archive" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3" </a>Browse the archive --></a>
+                        </div>
                     </div>
-                    <footer>learnK8s - Prepared with ❤︎ in London</footer>
-                </article>
+                    <div class="fr w-50 center">
+                        <h3>Join the conversation</h3>
+                        <div class="mw4 center">
+                        <a href="https://learnk8s-slack-invite.herokuapp.com" title="Chat on Slack">
+                            <span class="">{% include newsletter/slack.svg %}</span>
+                        </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <a href="/newsletter-archive" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3" </a>Browse the archive --></a>
+            </div>
+            <footer>learnK8s - Prepared with ❤︎ in London</footer>
         </div>
+    </div>
 </body>
 
 </html>
