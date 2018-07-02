@@ -43,10 +43,10 @@
 </head>
 
 <body class="bg-near-white sans-serif">
-    <div class="cf w-100 mw9-l center mt6" id="newsletter-issue">
+    <div class="cf w-100 mw9-l center mt6-l mt4" id="newsletter-issue">
         <div class="tc black-40">
             <strong class="ttu">Issue #{{ page.issue }} &mdash; {{ page.date | date: '%B %d, %Y'}}</strong>
-            <article class="pt0 mt3 article">
+            <article class="pt0 mt3 article ph2-m ph0">
 
                 {% if page.section_order %} {% for section in page.section_order %} {% include newsletter/section.html name = section %}
                 {% endfor %} {% else %} {% if page.editor_pick %} {% include newsletter/section.html name = 'editor_pick'
@@ -58,7 +58,7 @@
 
 
             </article>
-            <div id="share" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4 article">
+            <div id="share" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4 article mh2-m">
                 <h2 class="tl">Enjoyed this issue?</h2>
                 <p class="tl">We'd love it if you shared the love on Twitter. If you have a resource or article you'd like to submit for
                     next week, send it via reindeer to weekly@learnk8s.io 🦌</p>

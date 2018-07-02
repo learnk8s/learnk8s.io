@@ -463,3 +463,12 @@ green     #859900  operators, other keywords
   font-size: 1.5rem;
   background-color: #4E89C4;
 }
+
+@media screen and (max-width: 60em) and (min-width: 30em) {
+#newsletterissue {
+    .mh2-m {
+      margin-left: .5rem !important;
+      margin-right: .5rem !important;
+    }
+  }
+}
