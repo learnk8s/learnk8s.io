@@ -43,10 +43,10 @@
 </head>
 
 <body class="bg-near-white sans-serif">
-    <div class="cf w-100 mw9-l center mt6">
+    <div class="cf w-100 mw9-l center mt6" id="newsletter-issue">
         <div class="tc black-40">
             <strong class="ttu">Issue #{{ page.issue }} &mdash; {{ page.date | date: '%B %d, %Y'}}</strong>
-            <article class="pt0 mt3 article" id="newsletter-issue">
+            <article class="pt0 mt3 article">
 
                 {% if page.section_order %} {% for section in page.section_order %} {% include newsletter/section.html name = section %}
                 {% endfor %} {% else %} {% if page.editor_pick %} {% include newsletter/section.html name = 'editor_pick'
@@ -86,7 +86,7 @@
             <div>
                 <a href="/newsletter-archive" class="archive-link link dib white  br2 pa3 ph4 b mv3" </a>Browse the archive &#8674;</a>
             </div>
-            <footer>learnK8s - Prepared with ❤︎ in London</footer>
+            <footer class="pv4"><a class="link black-40" href="https://learnk8s.io" title="LearnK8s">learnk8s</a> - Prepared with ❤︎ in London</footer>
         </div>
     </div>
 </body>
