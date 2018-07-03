@@ -364,27 +364,32 @@ green     #859900  operators, other keywords
   }
 }
 
-#newsletter-issue section{
-  .tag{
-    font-family: -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif;
-    font-size: 0.75rem
-  }
-  h2{
-    color: #D53960;
-    font-size: 1rem;
-  }
-  h3{
-    padding-bottom: 0;
-    margin-bottom: 0;
-    padding-top: 0;
-  }
-  a{
-    color: #568EC7;
-    font-size: 1rem
-  }
-  .favicon{
-    width: 1.5rem;
-    top: 0.35rem;
+#newsletter-issue {
+  section{
+    .tag{
+      font-family: -apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif;
+      font-size: 0.75rem
+    }
+    h2{
+      color: #D53960;
+      font-size: 1rem;
+    }
+    h3{
+      padding-bottom: 0;
+      margin-bottom: 0;
+      padding-top: 0;
+    }
+    a{
+      color: #568EC7;
+      font-size: 1rem
+    }
+    .favicon{
+      width: 1.5rem;
+      top: 0.35rem;
+    }
+    p{
+      font-family: sans-serif;
+    }
   }
 }
 
@@ -456,6 +461,9 @@ green     #859900  operators, other keywords
   }
   h3{
     padding-top: 0;
+  }
+  p {
+    font-family: sans-serif;
   }
 }
 
