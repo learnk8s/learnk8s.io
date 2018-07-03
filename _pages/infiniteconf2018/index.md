@@ -2,8 +2,8 @@
 layout: post
 title: Scaling Machine Learning in the Cloud with Kubernetes — Infiniteconf 2018
 open_graph:
-  title: Contact us
-  description: Get in touch and let us know how we can help.
+  title: Scaling Machine Learning in the Cloud with Kubernetes — Infiniteconf 2018
+  description: This article will guide you through writing models that can be trained with Distributed Tensorflow
   type: business.business
   image: /assets/open_graph_preview.png
 ---
