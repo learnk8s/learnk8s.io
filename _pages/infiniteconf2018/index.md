@@ -8,15 +8,10 @@ open_graph:
   image: /assets/open_graph_preview.png
 ---
 
-# Distributed Tensorflow on Kubernetes
-
-Build a fully integrated pipeline to train your machine learning models with Tensorflow and Kubernetes.
-
-This repo will guide you through:
+This article will guide you through:
 
 1. setting up a local environment with python, pip and tensorflow
 1. packaging up your models as Docker containers
-1. creating and configuring a Kubernetes cluster
 1. deploying models in your cluster
 1. scaling your model using Distributed Tensorflow
 1. serving your model
@@ -26,12 +21,13 @@ This repo will guide you through:
 
 You should have the following tools installed:
 
+- Docker
 - git
 - kubectl
 - python 2.7 and pip
-- sed
+- bash (if you're using Windows we recommend [Cmder](http://cmder.net/))
 - an account on Docker Hub
-- an account on GCP
+- an account on GKE
 
 ## Recognising handwritten digits
 
