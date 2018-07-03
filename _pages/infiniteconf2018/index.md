@@ -57,7 +57,7 @@ If you plan to train your model using distributed Tensorflow you should be aware
 Clone the following repository [learnk8s/distributed-tensorflow-on-k8s](https://github.com/learnk8s/distributed-tensorflow-on-k8s):
 
 ```bash
-git clone learnk8s/distributed-tensorflow-on-k8s
+git clone https://github.com/learnk8s/distributed-tensorflow-on-k8s
 cd distributed-tensorflow-on-k8s
 ```
 
@@ -125,7 +125,7 @@ mv config_file_path ~/.kube/config
 You can verify that the installation was successfull with:
 
 ```bash
-kubectl get all
+kubectl get services
 ```
 
 You should be able to see a list of resources.
@@ -178,6 +178,14 @@ kubectl port-forward tensorboard-XX-ID-XX 8080:6006
 
 You can visit the dashboard at [http://localhost:8080](http://localhost:8080).
 
+![Tensorboard]({% link _pages/infiniteconf2018/tensorboard.png %})
+
+In the dashboard you should pay attention to the accuracy of your model.
+
+The accuracy is actually very poor: around 10%.
+
+Only 1 out 10 samples is correctly recognised.
+
 ## Serving your model
 
 You can serve your model with [Tensorflow Serving](https://www.tensorflow.org/serving/).
@@ -197,7 +205,7 @@ kubectl get pods -l app=tf-serving
 You can forward the traffic from the Tensorboard's Pod on your cluster to your computer with:
 
 ```bash
-kubectl port-forward tf-serving-XX-ID-XX 8080:9000
+kubectl port-forward tf-serving-XX-ID-XX 8081:9000
 ```
 
 > Please note that you should probably use an Ingress manifest to expose your service to the public permanently.
@@ -206,7 +214,7 @@ You can query the model using the client:
 
 ```bash
 cd src
-python client.py --host localhost --port 8080 --image ../data/4.png --signature_name predict --model test
+python client.py --host localhost --port 8081 --image ../data/4.png --signature_name predict --model test
 ```
 
 > Please make sure your virtualenv is still active.
@@ -214,6 +222,10 @@ python client.py --host localhost --port 8080 --image ../data/4.png --signature_
 The model should recognise the digit 4.
 
 ## Tuning your model using hyperparameter optimisation
+
+_But how do you improve the accuracy?_
+
+_Could you perhaps tests different parameters?_
 
 The model can be tuned with the following parameters:
 
@@ -240,6 +252,12 @@ cd templated
 ```
 
 You can follow the progress of the training in real-time at [http://localhost:8080](http://localhost:8080).
+
+![Tensorboard]({% link _pages/infiniteconf2018/tensorboard.gif %})
+
+You can follow the progress for the accuracy of each model in real time.
+
+By the end of the experiment you should have one of two candidates that are more promising than others.
 
 ## Final notes
 
