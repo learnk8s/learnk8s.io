@@ -1,5 +1,9 @@
-{% assign latest = site.newsletter.last %}
+{% if page.preview-issue-number %}
+{% assign issue = '/newsletter/issue-' | append: page.preview-issue-number %}
+{% else %}
+{% assign issue = site.newsletter.last.url %}
+{% endif %}
 
 <div>
-  <iframe src="{{ site.url }}{{ latest.url }}" frameborder="0"></iframe>
+  <iframe src="{{ site.url }}{{ issue }}" frameborder="0"></iframe>
 </div>
