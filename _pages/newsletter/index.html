@@ -2,6 +2,18 @@
 layout: default
 title: Newsletter
 
+contributors:
+  - name: Daniele Polencic
+    github:
+    twitter:
+    linkedin:
+    avatar:
+  - name: Miriam Menegatti
+    linkedin:
+    avatar:
+  - name: Alessandro Moretti
+    linkedin:
+    avatar:
 ---
 
 Newsletter landing page.
@@ -13,6 +25,12 @@ Newsletter landing page.
 
 <section id="issue-preview">
   {% include newsletter/issue-preview/preview.html %}
+</section>
+
+<section id="contributors">
+  {% if page.contributors %}
+  {% include newsletter/contributors/static.html %}
+  {% endif %}
 </section>
 
 
