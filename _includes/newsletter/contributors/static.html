@@ -1,3 +1,39 @@
 <div>
-
+  {% for contributor in page.contributors %}
+  <div class="contributor">
+    <img src="{{ contributor.avatar }}" alt="{{ contributor.name }}">
+    <strong>{{ contributor.name }}</strong>
+    {% if contributor.github or contributor.twitter or contributor.linkedin or contributor.website %}
+    <ul class="links">
+      {% if contributor.github %}
+      <li>
+        <a href="https://github.com/{{ contributor.github }}" title="{{ contributor.name }}'s GitHub">
+          <span>Icon</span>
+        </a>
+      </li>
+      {% endif %} {% if contributor.twitter %}
+      <li>
+        <a href="https://twitter.com/{{ contributor.twitter }}" title="{{ contributor.name }}'s Twitter">
+          <span>Icon</span>
+        </a>
+      </li>
+      {% endif %}
+       {% if contributor.linkedin %}
+      <li>
+        <a href="https://linkedin.com/in/{{ contributor.linkedin }}" title="{{ contributor.name }}'s LinkedIn">
+          <span>Icon</span>
+        </a>
+      </li>
+      {% endif %}
+       {% if contributor.website %}
+      <li>
+        <a href="{{ contributor.website }}" title="{{ contributor.name }}'s website">
+          <span>Icon</span>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </div>
+ {% endfor %}
 </div>
