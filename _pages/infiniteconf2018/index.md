@@ -101,7 +101,11 @@ You can test the Docker image with:
 docker run -ti learnk8s/mnist:1.0.0
 ```
 
-You can upload the Docker image to the Docker Hub registry with:
+You could upload the Docker image to the Docker Hub registry.
+
+Since the image is rather large, the image was uploaded previously.
+
+The command we used to upload the image was:
 
 ```bash
 docker push learnk8s/mnist:1.0.0
@@ -109,7 +113,9 @@ docker push learnk8s/mnist:1.0.0
 
 ## Creating and configuring a Kubernetes cluster
 
-You should have obtained your config file to connect to a remote cluster.
+You should have obtained the unique name for your cluster.
+
+Head over to [https://infiniteconf2018.herokuapp.com/](https://infiniteconf2018.herokuapp.com/) to download the credentials.
 
 Move the config file in the kube folder:
 
