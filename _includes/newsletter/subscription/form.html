@@ -17,39 +17,23 @@
         <div class="view-messages" style=" margin:5px 0;">
         </div>
         <!-- an email as primary -->
-        <div class="primary-group email-group forms-builder-group ui-sortable" style="">
-          <div class="row" style="padding: 10px 20px; font-size: 17px; position: relative; left: 0px; top: 0px;">
-            <div class="lbl-tinyltr" style="clear:both; float:none;">Name</div>
-            <input type="text" name="FIRSTNAME" id="FIRSTNAME" value="" style="padding: 10px 2%; width: 90%; min-width: auto;">
-            <div class="clear" style="clear:both;"></div>
-            <div class="hidden-btns">
-              <a class="btn move" href="#">
-                <i class="fa fa-arrows"></i>
-              </a>
-              <br>
-              <a class="btn btn-danger delete" href="#">
-                <i class="fa fa-trash-o fa-inverse"></i>
-              </a>
-            </div>
+        <div class="primary-group email-group forms-builder-group ui-sortable mb4">
+          <div class="row">
+            <div class="tl ttu pb2 fw6">Your first name</div>
+            <input type="text" name="FIRSTNAME" id="FIRSTNAME" value="" class="pv2 ph3 w-100 br3 input-reset b--none" placeholder="Your name">
           </div>
-          <div class="row mandatory-email" style="padding: 10px 20px; position: relative; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; color: rgb(52, 52, 52); font-size: 17px;">
-            <div class="lbl-tinyltr" style="clear: both; float: none; font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;">Enter your email address to subscribe.
-              <red style="color:#ff0000;">*</red>
+          <div class="row mandatory-email mt4">
+            <div class="tl ttu pb2 fw6">Your email address
             </div>
-            <input type="text" name="email" id="email" value="" style="padding: 10px 2%; width: 90%; min-width: auto;">
-            <div style="clear:both;"></div>
-            <div class="hidden-btns">
-              <a class="btn move" href="#">
-                <i class="fa fa-arrows"></i>
-              </a>
-              <br>
-              <!--<a class="btn btn-danger delete" href="#"><i class="fa fa-trash-o fa-inverse"></i></a>-->
+            <input type="text" name="email" id="email" value="" class="pv2 ph3 w-100 br3 input-reset b--none" placeholder="Your email address">
+            <div class="mt2 tl">
+              <small>We'll never share your email address and you can opt out at any time.</small>
             </div>
           </div>
         </div>
         <!-- end of primary -->
         <div class="byline">
-          <button class="button editable " type="submit" data-editfield="subscribe">Subscribe</button>
+          <button class="link dib blue bg-white br2 pa3 b f3 mt2 ml3 ph5 ml4-ns mb3 b--none subscribe-button" type="submit" data-editfield="subscribe">Subscribe  &#8674;</button>
         </div>
         <div style="clear:both;"></div>
       </div>

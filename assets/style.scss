@@ -480,3 +480,56 @@ green     #859900  operators, other keywords
     }
   }
 }
+
+#newsletter-landing{
+  #contributors{
+    h2{
+      color: #001b44;
+    }
+  }
+  #sib_embed_signup{
+    input{
+      height: 3rem;
+    }
+    .blue{
+      color: #4E89C4;
+    }
+    button{
+      cursor: pointer;
+    }
+    .subscribe-button{
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+    }
+    .message_area{
+      text-align: left;
+      padding: 0.5rem 1rem 0.5rem 1rem;
+    }
+    .close{
+      margin-right: 1rem;
+      border: none;
+      background: none;
+    }
+  }
+  #issue-preview{
+    z-index: 100;
+    top: -7rem;
+    .browser-bg{
+      background: {
+        image: url('/newsletter/browser.png');
+        repeat: no-repeat;
+        position: center;
+      }
+      height: 669px;
+    }
+    .preview-container{
+      padding-top: 9rem;
+      iframe{
+        width: 600px;
+        height: 525px;
+      }
+    }
+  }
+}
+
+

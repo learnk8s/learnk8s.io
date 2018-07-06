@@ -1,39 +1,41 @@
-<div>
+<ul class="list">
   {% for contributor in page.contributors %}
-  <div class="contributor">
-    <img src="{{ contributor.avatar }}" alt="{{ contributor.name }}">
-    <strong>{{ contributor.name }}</strong>
+  <li class="contributor dib ph2">
+    <div class="w4 mb3">
+      <img class="br-100" src="{{ contributor.avatar }}" alt="{{ contributor.name }}">
+    </div>
+    <strong cl>{{ contributor.name }}</strong>
     {% if contributor.github or contributor.twitter or contributor.linkedin or contributor.website %}
-    <ul class="links">
+    <ul class="list ph0 mt2">
       {% if contributor.github %}
-      <li>
-        <a href="https://github.com/{{ contributor.github }}" title="{{ contributor.name }}'s GitHub">
-          <span>Icon</span>
+      <li class="dib">
+        <a href="https://github.com/{{ contributor.github }}" title="{{ contributor.name }}'s GitHub" class="link fl w2">
+          {% include newsletter/contributors/github.svg %}
         </a>
       </li>
       {% endif %} {% if contributor.twitter %}
-      <li>
-        <a href="https://twitter.com/{{ contributor.twitter }}" title="{{ contributor.name }}'s Twitter">
-          <span>Icon</span>
+      <li class="dib">
+        <a href="https://twitter.com/{{ contributor.twitter }}" title="{{ contributor.name }}'s Twitter" class="link fl w2">
+          {% include newsletter/contributors/twitter.svg %}
         </a>
       </li>
       {% endif %}
        {% if contributor.linkedin %}
-      <li>
-        <a href="https://linkedin.com/in/{{ contributor.linkedin }}" title="{{ contributor.name }}'s LinkedIn">
-          <span>Icon</span>
+      <li class="dib">
+        <a href="https://linkedin.com/in/{{ contributor.linkedin }}" title="{{ contributor.name }}'s LinkedIn" class="link fl w2">
+          {% include newsletter/contributors/linkedin.svg %}
         </a>
       </li>
       {% endif %}
        {% if contributor.website %}
-      <li>
-        <a href="{{ contributor.website }}" title="{{ contributor.name }}'s website">
-          <span>Icon</span>
+      <li class="dib">
+        <a href="{{ contributor.website }}" title="{{ contributor.name }}'s website" class="link fl w2">
+          {% include newsletter/contributors/world.svg %}
         </a>
       </li>
       {% endif %}
     </ul>
     {% endif %}
-  </div>
+  </li>
  {% endfor %}
-</div>
+</ul>

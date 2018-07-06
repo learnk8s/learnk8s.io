@@ -100,7 +100,7 @@
         }
         var required = reqField.split("~");
         var sendinblueFormLang = wrapper.find('#'+sib_prefix+'_embed_signup_lang').val();
-        var emptyError = "Please complete this field.";
+        var emptyError = "Please enter your email address.";
         var emailError = wrapper.find('#'+sib_prefix+'_embed_invalid_email_message').val();
         var smsError = 'The SMS field must contain between 6 and 19 digits.';
         var dateError = "Invalid date format";

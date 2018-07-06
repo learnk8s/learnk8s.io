@@ -14,26 +14,47 @@ contributors:
   - name: Alessandro Moretti
     linkedin: alemoretti
     avatar: /about-us/alessandro_moretti.jpg
+
 ---
 
-Newsletter landing page.
+<div id="newsletter-landing">
+  <div class="intro contact-us white pt3 pt0-ns pb2 pb6-ns">
+    {% include navbar/index.html %}
+    <section class="hero ph5-l">
+      <div class="w-100 tc mt4">
+        <h1 class="f1 f-subheadline-l">Learn k8s newsletter</h1>
+        <p class="tc w-50 center f2 lh-title">Sign up for curated Kubernetes news, article and resources, delivered straight to your inbox every Sunday evening.</p>
+      </div>
+      <div id="subscription-form" class="w-40 tc center mb5">
+        {% include newsletter/subscription/form.html %}
+      </div>
+    </section>
+  </div>
 
+  <div id="issue-preview" class="w-80 center tc relative">
+    <div class="browser-bg center tc">
+      {% include newsletter/issue-preview/preview.html %}
+    </div>
+  </div>
 
-<section id="subscription-form">
-  {% include newsletter/subscription/form.html %}
-</section>
+  <section class="center tc">
+    <p class="f3 black-70">Missed an issue?
+      <span class="ml4">
+        <a href="/newsletter-archive" class="archive-link link dib white br2 pa3 ph4 b mv3">Check out the archive &#8674;</a>
+      </span>
+    </p>
+  </section>
 
-<section id="issue-preview">
-  {% include newsletter/issue-preview/preview.html %}
-</section>
+  <section id="contributors" class="center tc mt6">
+    <h2 class="f2 mt4">Curated by learnk8s and people like you!</h2>
+    {% if page.contributors %} {% include newsletter/contributors/static.html %} {% endif %}
+  </section>
 
-<a href="/newsletter-archive" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Check out the archive --></a>
+  <section class="center tc mt4 mb4">
+    <a href="mailto:news@learnk8s.io?subject=Link Submission" class="archive-link link dib white br2 pa3 ph4 b mv3">Submit a link &#8674;</a>
+  </section>
 
-<section id="contributors">
-  {% if page.contributors %}
-  {% include newsletter/contributors/static.html %}
-  {% endif %}
-</section>
+{% include consultation/index.html %}
 
-
-<a href="mailto:news@learnk8s.io?subject=Link Submission" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Submit a link --></a>
+{% include footer/index.html %}
+</div>
