@@ -554,3 +554,31 @@ green     #859900  operators, other keywords
     font-size: 1rem;
   }
 }
+
+@media screen and (max-width: 30em) {
+  #sib_embed_signup{
+    .subscribe-button{
+      padding-top: 1rem !important;
+      padding-bottom: 1rem !important;
+    }
+  }
+  #issue-preview{
+    z-index: 100;
+    top: -7rem;
+    .browser-bg{
+      background: none !important;
+      height: 520px !important;
+    }
+    .preview-container{
+      padding-top: 3rem !important;
+      iframe{
+        width: 300px !important;
+        height: 500px !important;
+        border: solid 1px grey;
+      }
+    }
+  }
+  .archive-link{
+    font-size: 1rem;
+  }
+}
