@@ -533,3 +533,24 @@ green     #859900  operators, other keywords
 }
 
 
+@media screen and (max-width: 60em) and (min-width: 30em) {
+  #issue-preview{
+    z-index: 100;
+    top: -7rem;
+    .browser-bg{
+      background: none !important;
+      height: 410px !important;
+    }
+    .preview-container{
+      padding-top: 0 !important;
+      iframe{
+        width: 520px !important;
+        height: 510px !important;
+        border: solid 1px grey;
+      }
+    }
+  }
+  .archive-link{
+    font-size: 1rem;
+  }
+}
