@@ -26,8 +26,6 @@ You should have the following tools installed:
 - kubectl
 - python 2.7 and pip
 - bash (if you're using Windows we recommend [Cmder](http://cmder.net/))
-- an account on Docker Hub
-- an account on GKE
 
 ## Recognising handwritten digits
 
@@ -115,7 +113,11 @@ docker push learnk8s/mnist:1.0.0
 
 You should have obtained the unique name for your cluster.
 
-Head over to [https://infiniteconf2018.herokuapp.com/](https://infiniteconf2018.herokuapp.com/) to download the credentials.
+Download the credentials from:
+
+```
+https://infiniteconf2018.herokuapp.com/your-unique-name-here
+```
 
 Move the config file in the kube folder:
 
