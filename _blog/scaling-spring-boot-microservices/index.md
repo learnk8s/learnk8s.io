@@ -1,22 +1,22 @@
 ---
 layout: post
-title: Autoscaling Microservices using Spring Boot and Kubernetes
+title: Scaling Microservices with Message Queues, Spring Boot and Kubernetes
 date: 2018-05-17 00:00:00
 author: "Daniele Polencic"
 
-description: ""
+description: "When you design and build applications at scale, you deal with two significant challenges: scalability and robustness. You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically? Kubernetes has a feature called autoscaler where instances of your applications are increased or decreased automatically based on metrics that you define."
 
-excerpt: ""
+excerpt: "When you design and build applications at scale, you deal with two significant challenges: scalability and robustness. You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically? Kubernetes has a feature called autoscaler where instances of your applications are increased or decreased automatically based on metrics that you define."
 
-categories: queue activemq jms kubernetes "spring boot"
+categories: queue activemq jms kubernetes "spring boot" autoscaling
 
 image:
 
 open_graph:
   type: article
-  title: Scaling Microservices using Spring Boot and Kubernetes
+  title: Scaling Microservices with Message Queues, Spring Boot and Kubernetes
   image:
-  description: ""
+  description: "You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?"
 
 js:
   - anime.min.js
@@ -292,7 +292,7 @@ You should verify that the installation was successful with:
 kubectl get all
 ```
 
-You should see few resources listed as a table.
+You should see a few resources listed as a table.
 
 The cluster is ready, _perhaps you should start deploying now?_
 
@@ -657,7 +657,7 @@ Manually scaling up and down is great — if you know when the most traffic hits
 
 If you don't, setting up an autoscaler allows the application to scale automatically without manual intervention.
 
-You only need to define few rules.
+You only need to define a few rules.
 
 ## Exposing application metrics
 
@@ -843,7 +843,7 @@ _It would be great if you could use an autoscaler similar to the Horizontal Pod 
 
 Good news!
 
-As you need more resources, you can have a cluster autoscaler that adds more nodes to your Kubernetes cluster.
+You can have a cluster autoscaler that adds more nodes to your Kubernetes cluster as you need more resources.
 
 {% include_relative autoscaling-cluster.html %}
 
