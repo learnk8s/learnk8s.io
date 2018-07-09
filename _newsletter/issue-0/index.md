@@ -1,6 +1,6 @@
 ---
 date: 2018-06-17
-issue: 1
+issue: 0
 
 description: "The first ever issue of LearnK8s newsletter. Full of informative, educational and even funny stuff."
 
