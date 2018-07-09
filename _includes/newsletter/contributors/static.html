@@ -1,6 +1,6 @@
 <ul class="list">
   {% for contributor in page.contributors %}
-  <li class="contributor dib ph2">
+  <li class="contributor dib {% if forloop.first %} pr2 {% else %} ph2 {% endif %}">
     <div class="w4 mb3">
       <img class="br-100" src="{{ contributor.avatar }}" alt="{{ contributor.name }}">
     </div>
