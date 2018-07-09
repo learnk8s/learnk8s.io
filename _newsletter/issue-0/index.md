@@ -2,6 +2,8 @@
 date: 2018-06-17
 issue: 0
 
+meta_robots: noindex
+
 description: "The first ever issue of LearnK8s newsletter. Full of informative, educational and even funny stuff."
 
 excerpt: "The first ever issue of LearnK8s newsletter. Full of informative, educational and even funny stuff."
