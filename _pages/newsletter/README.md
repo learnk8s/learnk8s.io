@@ -79,7 +79,7 @@ editor_pick:
     tags: [deployments]
 ```
 
-The example above includes two editor's picks. The image is optional, as you can see the second item does not have one. Images must be saved in the same directory as the issue.
+The example above includes two editor's picks. The image is optional, as you can see the second item does not have one. Images must be saved in the same directory as the issue. Tags are also optional.
 
 ##### Watch out for these projects
 
@@ -139,7 +139,7 @@ user_pick:
 
 ```
 
-The example above includes two user picks. All the data is required with exclusion of the image which is optional and the user's data. The User's data will be shown in the contributors section of the landing page. in the future. Please refer to #GH-95
+The example above includes two user picks. All the data is required with exclusion of the image which is optional and the user's data. The tags are also optional. The User's data will be shown in the contributors section of the landing page. in the future. Please refer to #GH-95
 
 ##### Things that made us laugh
 
