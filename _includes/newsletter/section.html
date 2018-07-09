@@ -53,13 +53,19 @@
     {% if pick.image %}
     <img src="/newsletter/issue-{{ page.issue }}/{{ pick.image }}" alt="{{ pick.title }}"> {% endif %}
     <h3>{{ pick.title }}</h3>
-    <ul>
+    {% if pick.tags %}
+    <ul class="list tl pl0">
       {% for tag in pick.tags %}
-      <li>{{ tag }}</li>
+      <li class="dib bg-black-30 white ph2 ttu tag fwb br1">{{ tag }}</li>
       {% endfor %}
     </ul>
-    <p>{{ pick.summary }}</p>
-    <a href="{{ pick.url }}" title="{{ pick.title }}">Look up &#8674;</a>
+    {% endif %}
+    <p class="tl">{{ pick.summary }}</p>
+    <div class="tl">
+      <a class="fw6" href="{{ pick.url }}" title="{{ pick.title }}">Look up &#8674;</a>
+    </div>
+         {% unless forloop.last %}
+        <hr class="mt3"> {% endunless %}
   </div>
   {% endfor %}
 </section>

@@ -33,6 +33,29 @@ projects:
     url: "https://github.com/pusher/k8s-auth-example"
     summary: "Example Kubernetes Authentication helper. This is an example of how to connect to an OIDC provider and authenticate users before configuring their kubeconfig."
 
+user_pick:
+  - title: "The journey from monolith to Docker to Kubernetes: part 1"
+    url: "https://devops.college/the-journey-from-monolith-to-docker-to-kubernetes-part-1-f5dbd730f620"
+    image: ed_pick_1.png
+    summary: "'Why' and 'How' to go from a monolith app to dockerized one and eventually to run our app on a kubernetes cluster. In part one, the author discusses the benefits and the abilities of Docker and the app's code architecture."
+    tags: [docker, micro services]
+    user_full_name: John Doe
+    user_avatar: john_doe.jpg
+    user_gh_username: johndoe
+    user_twitter_username: johndoe
+    user_website: https://john-doe.me
+    user_linkedin: johndoe-123456789
+  - title: "Dissecting Kubernetes deployments"
+    url: "https://blog.heroku.com/dissecting-kubernetes-deployments"
+    summary: Twitter's team have been developing a design system they call Horizon. Ashlie Ford tracks its journey, from humble beginnings as a hack-day project.
+    tags: [deployments]
+    user_full_name: Jane Doe
+    user_avatar: jane_doe.jpg
+    user_gh_username: janedoe
+    user_twitter_username: janedoe
+    user_website: https://jane-doe.me
+    user_linkedin: janedoe-123456789
+
 laughs:
   - type: meme
     text: "That feeling when you realise that someone comes to you and you realize that they just reinvented Helm"
