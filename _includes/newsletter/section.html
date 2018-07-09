@@ -6,11 +6,13 @@
     {% if pick.image %}
     <img src="/newsletter/issue-{{ page.issue }}/{{ pick.image }}" alt="{{ pick.title }}"> {% endif %}
     <h3 class="tl">{{ pick.title }}</h3>
+    {% if pick.tags %}
     <ul class="list tl pl0">
       {% for tag in pick.tags %}
       <li class="dib bg-black-30 white ph2 ttu tag fwb br1">{{ tag }}</li>
       {% endfor %}
     </ul>
+    {% endif %}
     <p class="tl">{{ pick.summary }}</p>
     <div class="tl">
       <a class="fw6" href="{{ pick.url }}" title="{{ pick.title }}">Look up &#8674;</a>
