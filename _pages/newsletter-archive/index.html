@@ -25,11 +25,17 @@ open_graph:
     {% assign sorted = site.newsletter | sort: 'date' %}
     {% assign reversed = sorted | reverse %}
     {% for issue in reversed %}
-      <li class="pv3">
-        <h2 class="mb0"><a title="LearnK8s newsletter issue #{{ issue.issue }}" target="_blank" href="{{ issue.url | replace: "index", "" }}" class="link navy">Issue #{{ issue.issue }}</a></h2>
-        <p class="black-40 mt1">{{ issue.date | date: '%B %d, %Y' }}</p>
-        <p class="lh-copy black-70">{{ issue.excerpt | remove: '<p>' | remove: '</p>' }}</p>
-      </li>
+      {% unless issue.issue == 0 %}
+        <li class="pv3">
+          <h2 class="mb0">
+            <a title="LearnK8s newsletter issue #{{ issue.issue }}" target="_blank" href="{{ issue.url | replace: " index ", "
+              " }}" class="link navy">Issue #{{ issue.issue }}</a>
+          </h2>
+          <p class="black-40 mt1">{{ issue.date | date: '%B %d, %Y' }}</p>
+          <p class="lh-copy black-70">{{ issue.excerpt | remove: '
+            <p>' | remove: '</p>' }}</p>
+        </li>
+      {% endunless %}
     {% endfor %}
   </ul>
 </section>
