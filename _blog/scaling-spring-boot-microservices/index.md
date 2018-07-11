@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Scaling Microservices with Message Queues, Spring Boot and Kubernetes
-date: 2018-05-17 00:00:00
+date: 2018-07-11 16:49:00
 author: "Daniele Polencic"
 
 description: "When you design and build applications at scale, you deal with two significant challenges: scalability and robustness. You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically? Kubernetes has a feature called autoscaler where instances of your applications are increased or decreased automatically based on metrics that you define."
@@ -10,12 +10,12 @@ excerpt: "When you design and build applications at scale, you deal with two sig
 
 categories: queue activemq jms kubernetes "spring boot" autoscaling
 
-image:
+image: /blog/scaling-spring-boot-microservices/autoscaling.png
 
 open_graph:
   type: article
   title: Scaling Microservices with Message Queues, Spring Boot and Kubernetes
-  image:
+  image: /blog/scaling-spring-boot-microservices/autoscaling.png
   description: "You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?"
 
 js:
