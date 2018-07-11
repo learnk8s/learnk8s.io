@@ -1,0 +1,121 @@
+{%  include_relative dropping-connections.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#dropping-connections')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-up5', '#dropping-connections-animejs-up6'],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-down5', '#dropping-connections-animejs-down6'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-instance5', '#dropping-connections-animejs-instance6'],
+    opacity: [1, 0.5],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#dropping-connections-animejs-connection1',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#dropping-connections-animejs-cat1',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-up2', '#dropping-connections-animejs-up7', '#dropping-connections-animejs-up8'],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-down2', '#dropping-connections-animejs-down7', '#dropping-connections-animejs-down8'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-instance2', '#dropping-connections-animejs-instance7', '#dropping-connections-animejs-instance8'],
+    opacity: [1, 0.5],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-connection3', '#dropping-connections-animejs-connection4'],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#dropping-connections-animejs-cat2',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-up1', '#dropping-connections-animejs-up3', '#dropping-connections-animejs-up4'],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-down1', '#dropping-connections-animejs-down3', '#dropping-connections-animejs-down4'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-instance1', '#dropping-connections-animejs-instance3', '#dropping-connections-animejs-instance4'],
+    opacity: [1, 0.5],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: ['#dropping-connections-animejs-connection2'],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>
+<style>
+  #dropping-connections-animejs-connection1 path,
+  #dropping-connections-animejs-connection2 path,
+  #dropping-connections-animejs-connection3 path,
+  #dropping-connections-animejs-connection4 path {
+    stroke-dasharray: 15;
+    animation: dash 11s linear infinite;
+  }
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 1000;
+    }
+  }
+</style>
