@@ -1,0 +1,65 @@
+{% include_relative api.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#api')
+  const basicTimeline = anime.timeline({
+    autoplay: true,
+    loop: true
+  });
+  basicTimeline
+  .add({
+    targets: '#api-animejs-connection2',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#api-animejs-connection3',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#api-animejs-connection1',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#api-animejs-connection1',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#api-animejs-connection2',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#api-animejs-connection4',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#api-animejs-connection3',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#api-animejs-connection4',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+})();
+</script>
+<style>
+  #api-animejs-connection1 path,
+  #api-animejs-connection2 path,
+  #api-animejs-connection3 path,
+  #api-animejs-connection4 path {
+    stroke-dasharray: 15;
+    animation: dash 11s linear infinite;
+  }
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 1000;
+    }
+  }
+</style>

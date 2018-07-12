@@ -1,0 +1,57 @@
+{% include_relative deployment.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#deployment')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: '#deployment-animejs-pod1',
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    targets: '#deployment-animejs-pod2',
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    targets: '#deployment-animejs-pod3',
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    targets: '#deployment-animejs-pod4',
+    opacity: [0, 1],
+    easing: 'easeInQuad',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>
