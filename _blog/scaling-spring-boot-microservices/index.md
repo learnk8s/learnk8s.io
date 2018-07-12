@@ -115,9 +115,9 @@ The front-end is a simple Spring Boot web app with the Thymeleaf templating engi
 
 The backend is a worker consuming messages from a queue.
 
-And since [Spring Boot has excellent integration with JSM](https://spring.io/guides/gs/messaging-jms/), you could use that to send and receive asynchronous messages.
+And since [Spring Boot has excellent integration with JMS](https://spring.io/guides/gs/messaging-jms/), you could use that to send and receive asynchronous messages.
 
-You can find a sample project with a front-end and backend application connected to JSM at [learnk8s/spring-boot-k8s-hpa](https://github.com/learnk8s/spring-boot-k8s-hpa).
+You can find a sample project with a front-end and backend application connected to JMS at [learnk8s/spring-boot-k8s-hpa](https://github.com/learnk8s/spring-boot-k8s-hpa).
 
 > Please note that the application is written in Java 10 to leverage the [improved Docker container integration](https://blog.docker.com/2018/04/improved-docker-container-integration-with-java-10/).
 
