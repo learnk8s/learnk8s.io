@@ -557,13 +557,14 @@ green     #859900  operators, other keywords
   }
   #issue-preview{
     z-index: 100;
-    top: -7rem;
+    top: -2rem !important;
+    height: 200px !important;
     .preview-container{
-      padding-top: 3rem !important;
+      top: -9rem !important;
       iframe{
-        width: 300px !important;
-        height: 500px !important;
-        border: solid 1px grey;
+        width: 248px !important;
+        height: 130px !important;
+        margin-left: -0.7rem;
       }
     }
   }
