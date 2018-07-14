@@ -516,15 +516,6 @@ green     #859900  operators, other keywords
     z-index: 100;
     top: -8rem;
     height: 600px;
-   /* .browser-bg{
-      background: {
-        image: url('/newsletter/browser.svg');
-        repeat: no-repeat;
-        position: center;
-      }
-      height: 669px;
-    }
-    */
     .preview-container{
       z-index: 200;
       position: relative;
@@ -541,17 +532,14 @@ green     #859900  operators, other keywords
 @media screen and (max-width: 60em) and (min-width: 30em) {
   #issue-preview{
     z-index: 100;
-    top: -7rem;
-    .browser-bg{
-      background: none !important;
-      height: 410px !important;
-    }
+    height: 240px !important;
     .preview-container{
-      padding-top: 0 !important;
+      top: -16rem !important;
+      z-index:200;
       iframe{
-        width: 520px !important;
-        height: 510px !important;
-        border: solid 1px grey;
+        width: 400px !important;
+        height: 236px !important;
+        margin-left: -2rem;
       }
     }
   }
@@ -570,10 +558,6 @@ green     #859900  operators, other keywords
   #issue-preview{
     z-index: 100;
     top: -7rem;
-    .browser-bg{
-      background: none !important;
-      height: 520px !important;
-    }
     .preview-container{
       padding-top: 3rem !important;
       iframe{
