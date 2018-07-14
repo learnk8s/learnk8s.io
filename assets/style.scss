@@ -511,10 +511,12 @@ green     #859900  operators, other keywords
       background: none;
     }
   }
+
   #issue-preview{
     z-index: 100;
-    top: -7rem;
-    .browser-bg{
+    top: -8rem;
+    height: 600px;
+   /* .browser-bg{
       background: {
         image: url('/newsletter/browser.svg');
         repeat: no-repeat;
@@ -522,11 +524,14 @@ green     #859900  operators, other keywords
       }
       height: 669px;
     }
+    */
     .preview-container{
-      padding-top: 9rem;
+      z-index: 200;
+      position: relative;
+      top: -34rem;
       iframe{
         width: 600px;
-        height: 525px;
+        height: 508px;
       }
     }
   }

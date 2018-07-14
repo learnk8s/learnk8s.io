@@ -33,8 +33,9 @@ contributors:
 
   <div id="issue-preview" class="w-80 center tc relative">
     <div class="browser-bg center tc">
-      {% include newsletter/issue-preview/preview.html %}
+      {% include_relative browser.svg %}
     </div>
+    {% include newsletter/issue-preview/preview.html %}
   </div>
 
   {% if site.newsletter.size > 1 %}
