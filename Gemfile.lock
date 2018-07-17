@@ -31,6 +31,8 @@ GEM
       safe_yaml (~> 1.0)
     jekyll-sass-converter (1.5.1)
       sass (~> 3.4)
+    jekyll-sitemap (1.2.0)
+      jekyll (~> 3.3)
     jekyll-target-blank (1.0)
       jekyll (~> 3.0)
       nokogiri (~> 1.8.2)
@@ -69,6 +71,7 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll (~> 3.7.0)
+  jekyll-sitemap (= 1.2.0)
   jekyll-target-blank (= 1.0)
 
 BUNDLED WITH
