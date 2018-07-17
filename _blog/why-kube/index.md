@@ -1,50 +1,68 @@
 During the last few years, the industry as experienced a shift towards micro service based architecture.
 
-It's probably not news to you that more and more companies are breaking their large and static monoliths into a set of decouple and independent micro services.
+It doesn't come as a surprise that more and more companies are breaking their large and static monoliths into a set of decouple and independent micro services.
 
-And it's hard to argue with the hard truth that microservices:
+And rightly so. Microservices are:
 
-- are quicker to deploy because you don't need to wait for a long release cycle to complete
-- allow for quicker iterations since they can be developed and released independently
-- can handle failure gracefully — the overall service can still function despite one of the components not being available
+- quicker to deploy because you create and release smaller services
+- easier to iterate on, since adding features happens independently
+- reselient — the overall service can still function despite one of the services not being available
 
 Microservices are great from a product and development perspective.
 
 But how does the microservices cultural shift impact the infrastructure?
 
-It turns out that things are rather simple when you deal with few sparse monoliths.
+It turns out that things are rather simple when you deal with few sparse applications.
 
-You only manage a handful of applications and your infrastructure team can take care and look after them.
+You only manage a handful of them and your infrastructure team has plenty of time to dedicate to supporting and releasing them.
 
-If you're a large organisation, managing hundreds of monoliths is demanding, but still manageable.
+If you're a large organisation, managing hundreds of applications is demanding, but still manageable.
 
 You have several teams dedicated to developing, packaging and releasing applications.
 
-Microservices on the other hand introduce complexity.
+Microservices on the other hand introduce a different challenge.
 
-When for every monolith that you created, you can refactor the same applications in a collection of 4 microservices, you have at least 4 times more artefacts to develop, package and release.
+When for every application that you created, you can refactor the same applications in a collection of four microservices, you have at least four times more services to develop, package and release.
 
 It's not uncommon for a small service to be made out of dozen of micro services such as a front-end app, a backend API, an authorisation server, an admin application, etc.
 
-Most of microservices are deployed to virtual machines such as Amazon EC2, Digital Ocean Droplets or Azure <name>.
+Indeed when you develop services that interact with each other, you see an explosion of applications deployed on your infrastructure.
 
-And each virtual machine has an operating system that consumes part of the memory and CPU allocated to the VM.
+And that's a challenge in managing and scaling your infrastructure.
 
-If you ask for a 1GB, 2Ghz machine on DO, you're probably using a 0.8GB / 1.8Ghz computer after you remove the operating system.
+But it doesn't end there.
 
-The wastage when you use dozens of microservices and dozen of virtual machine is perhaps considerable. At least 20% of your bill is burned in running the OS.
+Most of microservices are deployed to virtual machines such as Amazon EC2, Digital Ocean Droplets or Azure Virtual Machines.
 
-You pay the same "tax" even if you're on bare metal. So perhaps you can live with it as every one else is effected in the same way.
+Each virtual machine comes with an operating system that consumes part of the memory and CPU allocated to it.
 
-But overhead from OSes is not your only concern.
+When you ask for a 1GB, 1 vCPU droplet on Digital Ocean, you're probably only using 700MB in memory and 0.8 vCPU after you remove the overhead of the operating system.
+
+Or in other words, every five virtual machine the overhead adds up to a full virtual machine.
+
+You pay for five, but can use only four.
+
+You can't escape from it, even if you're on bare metal.
+
+You still need to run your services from a base operating system.
+
+It's fine, you say.
+
+Everybody needs to run an operating system.
+
+Everybody pays for it.
+
+It's an unavoidable _tax_.
+
+And you're right.
+
+The cash wasted on operating systems overhead is only the tip of the iceberg.
 
 Microservices come with very different resource requirements.
 
-Some microservices are more CPU intensive such as data processing and data mining applications.
+Some microservices such as data processing and data mining applications are more CPU intensive .
 
-Others are more memory intesive such as servers for real-time applications.
-
-Unfortunately not many teams have time to profile the application and select the right VMs.
+Others such as servers for real-time applications are more memory intesive.
 
 It's a common trade-off to select a handful of VM sizes that fit most of the application use cases.
 
