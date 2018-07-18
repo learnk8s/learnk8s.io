@@ -1,8 +1,10 @@
 During the last few years, the industry as experienced a shift towards micro service based architecture.
 
-It doesn't come as a surprise that more and more companies are breaking their large and static monoliths into a set of decouple and independent micro services.
+It doesn't come as a surprise that more and more companies are breaking their large and static monoliths into a set of decoupled and independent micro services.
 
-And rightly so. Microservices are:
+And rightly so.
+
+Microservices are:
 
 - quicker to deploy because you create and release smaller services
 - easier to iterate on, since adding features happens independently
@@ -14,7 +16,7 @@ But how does the microservices cultural shift impact the infrastructure?
 
 It turns out that things are rather simple when you deal with few sparse applications.
 
-You only manage a handful of them and your infrastructure team has plenty of time to dedicate to supporting and releasing them.
+You only manage a handful of them and your infrastructure team has plenty of time to dedicate to support and release.
 
 If you're a large organisation, managing hundreds of applications is demanding, but still manageable.
 
@@ -22,7 +24,7 @@ You have several teams dedicated to developing, packaging and releasing applicat
 
 Microservices on the other hand introduce a different challenge.
 
-When for every application that you created, you can refactor the same applications in a collection of four microservices, you have at least four times more services to develop, package and release.
+When for every application, you can refactor the same applications in a collection of four microservices, you have at least four times more services to develop, package and release.
 
 It's not uncommon for a small service to be made out of dozen of micro services such as a front-end app, a backend API, an authorisation server, an admin application, etc.
 
@@ -58,59 +60,131 @@ And you're right.
 
 The cash wasted on operating systems overhead is only the tip of the iceberg.
 
-Microservices come with very different resource requirements.
+You have probably realised that microservices come with very different resource requirements.
 
-Some microservices such as data processing and data mining applications are more CPU intensive .
+Some microservices such as data processing and data mining applications are more CPU intensive.
 
-Others such as servers for real-time applications are more memory intesive.
+Others, such as servers for real-time applications, are more memory intesive.
 
-It's a common trade-off to select a handful of VM sizes that fit most of the application use cases.
+Your automation and CI pipelines engineers has selected the most common setup as the de facto standard.
 
-When you're lucky.
+Every application is wrapped into a 2GB and vCPU machine.
 
-It's very common to have a single VM size for all of your microservices.
+Even if you need only 1GB of memory.
 
-So you end up wasting 50% of the cost of a 1GB EC2 t2.micro when all you need is 256MB for your Node.js application.
+You will optimise in the future, you keep telling yourself.
 
-You could almost fit 4 apps in that space!
+In practice, it never happens.
 
-Indeed most of the company nowadays are able to utilise only 10% of the resources they allocate.
+When you're lucky the micro services fits the requirements perfectly.
 
-Wouldn't be great if you could get your money back on the resources you don't use?
+Some times you end up wasting few hundreds megabytes of RAM.
 
-And it would be even better if you could pay only for the CPU and memory that your application actually uses.
+Others you only use a single digit percent of the allocated resources.
 
-You don't really want to pay for OSes, do you?
+It's common to find companies utilising only 10% of the allocated resources.
 
-What if you could pack your applications more efficiently and reduce your cloud provider bill?
+You pay $1000 in EC2 instances on Amazon, you only actual use $100 of it.
 
-Resource utilisation is not the only challenge when it comes to microservices.
+That doesn't sound like the best way to spend your budget.
 
-Development teams have the freedom to iterate quickly and use the right tool for the job.
+You should get your money back on the resources you don't use.
 
-Indeed, team using microservices are more keen on using more programming languages and technologies than teams that are stuck developing and mantaining monoliths.
+You should also have a word with your engineering team and ask to pack your applications more efficiently!
 
-Node.js, Spring Boot, Flask, React.js, you name it.
+You could do all of the above.
 
-It turns out that the increased speed in delivery is usually lost when it's time to deploy the application.
+But resource utilisation is not the only challenge when it comes to microservices.
+
+Development teams have the freedom to use the right tool for the job.
+
+And when they do so, they can iterate quickly and churn more features.
+
+Your infrastructure becomes a theme park.
+
+Node.js for the front-end, Spring Boot for the backend API, Flask and Celery for the workers, React.js for the client-side, you name it.
+
+Having the right technology for the job enables greater iteration speed, but it usually comes with the extra burden on managing one more programming language.
 
 In fact, your infrastructure team has never been busier than now.
 
 Each application has a number of dependencies, runtimes and libraries to be installed before it can be deployed.
 
-And each of them is a special snowflake: even two Java applications running on the JVM can end up using Java 1.8 and Java 10.
+And each of them is a special snowflake: both the payment and the backend API team selected Java as their technology of choice, but they run on Java 1.8 and Java 10 respectively.
 
-Your cloud engineers are busy writing scripts to deploy applications automatically and wrapping all of the dependecies with it.
+It turns out, your cloud engineers are writing Puppet scripts to automate deployments and installing dependecies.
 
-But they size of the team is nowhere near your development team.
+But they size of the team is nowhere comparable with the rest of the development teams.
 
-And your engineers are busy supporting the existing infrastructure.
+So you're pipelines are clogged.
 
-It would be great if the development team could do the work as part of developing the application.
+Features rarely make it to production in time and there's a costant chatting between development and infrastructure team.
 
-And it would be even better if they could define all of the depdencies in the scripts.
+Too much talking not enough action!
 
-You will most end up with a team doing development and operations. A real DevOps team.
+It would much easier if the development team could help out by taking some of the responsabilities such as packaging dependencies.
+
+You could finally stop hiring dozen of cloud engineers just to cope with the current demand.
+
+If you've started thinking that perhaps holding to the big monoliths is not such a bad idea, please welcome to the club.
+
+Not only it was more cost effective, but it scaled nicely with the team.
+
+And you had proper teams!
+
+System administrators, testers, developers, Jenkins team.
+
+All of them separated in their own cublicles talking through a well organised Jira board.
+
+Those were the days!
+
+Unlike today where collaboration is king and you should strive to have cross functional teams that are empowered in making decisions.
+
+But what if that wasn't such a bad idea, after all?
+
+What if your small team could work on packaging, deploying and releasing their application.
+
+What if they had the tool to ship consistent artefacts that can be easily deployed in production.
+
+And what if instead of having humans providing virtual machines and selecting resources and requirements you had a machine in charge of orchestrating the resources?
+
+You could finally save thousands of dollars on your cloud provider bill.
+
+You could finally save yourself from hirining dozen of niche engineers since you can now empower your team into making releases.
+
+You could finally promote collaboration and break the silos that divide your teams.
+
+You're in luck, today.
+
+Linux containers are a technology popularised by Docker that helps you replace virtual machines with simple processes.
+
+Instead of instantiating a virtual machine and running a process, Docker containers allow you to isolate a process in the kernel.
+
+It's like clicking on Firefox on your desktop.
+
+When it opens and you're ready to browse.
+
+The magic of containers comes from two feature in the Linux kernel: control groups and namespaces.
+
+Control groups are a convenient way to limit the CPU or memory that a particular process can use.
+
+In our example, you could say that Firefox should use only 2GB of memory and one of your 4 core processors CPU.
+
+Namespaces on the other hand are in charge of isolating the process and limiting what it can see.
+
+Again, Firefox could only see the network packets that are directly related to it.
+
+It won't be able to see all of the network packets flowing through the network adapter.
+
+Control groups and namespaces are low level primitives.
+
+With the years developers created more and more layers of abstractions.
+
+At the beginning there was LXC, then finally Docker and the rest is history.
+
+So Docker containers aren't virtual machines and don't need to emulate hardware or have an operating system.
+
+But how can they help your team to ship software quicker?
 
 
 
@@ -133,6 +207,7 @@ Why should you bother with Docker and Kubernetes?
     - different skills (past)
   3. team silos
     - devops => is just ops
+    - testers
     - network
     - request IP on load balancer, VM as jira ticket
 - What if
