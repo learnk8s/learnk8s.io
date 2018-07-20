@@ -158,11 +158,11 @@ You're in luck, today.
 
 Linux containers are a technology popularised by Docker that helps you replace virtual machines with simple processes.
 
-Instead of instantiating a virtual machine and running a process, Docker containers allow you to isolate a process in the kernel.
+Instead of instantiating a virtual machine and running a process within an operating system, Docker containers allow you to isolate a process in the kernel.
 
 It's like clicking on Firefox on your desktop.
 
-When it opens and you're ready to browse.
+When it opens, you're ready to browse.
 
 The magic of containers comes from two feature in the Linux kernel: control groups and namespaces.
 
@@ -186,7 +186,157 @@ So Docker containers aren't virtual machines and don't need to emulate hardware 
 
 But how can they help your team to ship software quicker?
 
+Docker containers can be easily described with recipes.
 
+And you're the chef.
+
+If your application requires the JVM 1.8 with the Java Cryptographic Extension, you should add them to your list.
+
+If you your application uses Imagemagick or PhantomJS, you can add those in too.
+
+Once you're ready, you can bake your container with all dependencies and files.
+
+The process is akin to packaging an RPM or compressing a Gzip file.
+
+But out of the box you can use Docker to run the process in the container.
+
+And not just your container, but all other containers too.
+
+In fact containers expose a consistent interface to run them.
+
+Have a look:
+
+```
+docker run -ti ubuntu bash
+```
+
+And I have a bash in a Ubuntu-flavoured environment. Or I can do:
+
+```
+docker run -ti mysql
+```
+
+And I can use a MySQL database inside a container.
+
+By using a consistent interface to run a variety of containers you just solved the problem of portability.
+
+As long as your platform engineers know how to run containers, they can deploy applications ranging from Java, to Node.js, to Python.
+
+No need for complicated puppet scripts, the development team provided you with a self-packaged application.
+
+And best of all, no operating system.
+
+The Docker container is simply a running process that can only see its own resources.
+
+You're saving money operating systems ✅
+Developers can package their creations in generic containers ✅
+You still have to manage thousands of containers ❌
+
+Managing containers at scale sounds one of those problems that require a bit of thinking upfront.
+
+Perhaps you should ask the platform engineers to automate the infrastructure even more.
+
+Still doesn't help with optimising resources if you run one Docker container per virtual machine.
+
+You could work out how to run multiple containers on the same virtual machine.
+
+Sounds like a lot of work, but if it pays off, perhaps it's worth it.
+
+But what if you could automate that too?
+
+What if you could have an algorithm deciding where to place those containers?
+
+It turns out that someone had exactly that idea.
+
+Actually more than a single person.
+
+Three technology are competing in the container orchestration arena:
+
+- Apache Mesos
+- Hashicopr Nomad
+- Kubernetes
+
+They all have pros and cons.
+
+But the reality is that if you start comparing them you will notice that it's not a fair fight.
+
+Kubernetes is the de facto container orchestrator with support from all the major players: Google, Microsoft, Red Hat, Pivotal, VMware, IBM and many more.
+
+Why Kubernetes?
+
+What's so special about it?
+
+Kubernetes was originally a Google creation.
+
+Google was running a technology similar to containers and had to find an efficient way to schedule workloads.
+
+They decided to write a platform that can automatically analyse resource utilisation and schedule deployments.
+
+Later on few Googlers decided to leave Google and restart the project as open source.
+
+The rest is history, but the good news is that anyone can run containers at Google scale.
+
+How does Kubernetes work, you say?
+
+You can think about it as a scheduler.
+
+Kubernetes measures your infrastructure (bare metal or cloud, public or private) and collects CPU and memory for each computer.
+
+When you request to deploy a container, Kubernetes identifies the memory requirements for your container and finds the best computer to satisfy your request.
+
+You don't decide where the application is deployed, the data centre is abstracted away from you.
+
+In other words, Kubernetes will play Tetris with your infrastructure.
+
+Docker containers are the blocks, computers are the board and Kubernetes is the player.
+
+And it super skilles because it can play several games at the same time.
+
+Having someone efficiently packing your infrastructure means that you get more computing for your money.
+
+And your overall bill usage should decrease as a result of that.
+
+Remember when I said that with only 10% of resource utilisation is like you're throwing money out the window?
+
+Well, Kubernetes is making sure you never do that again.
+
+But there's more.
+
+Kubernetes has a killer feature that's usually forgotten or dismissed.
+
+Everything you do in Kubernetes is one API call away from you.
+
+You need to deploy a container? There's a REST endpoint for that.
+
+Perhaps you wish to provision a load balancer? Not a problem. Just call this API.
+
+Do you wish to provision storage? Please send a POST request to this URL.
+
+Literally everything you do in Kubernetes is calling APIs.
+
+And there're plenty of good reasons to be excited about that.
+
+- You can create scripts and daemons that interact with the API programatically
+- The APIs are versioned; when you upgrade your cluster you can keep using the old APIs and gradually upgrade
+- You can install Kubernetes in any cloud provider or data centre and you can leverage the same API
+
+You can think as Kubernetes as a layer on top of your infrastructure.
+
+And since this layer is generic and it can be installed anywhere, you can always take it with you.
+
+Amazon Web Service is too expensive?
+
+No problemo.
+
+You can install Kubernetes on Google Cloud Platform and redeploy all of your infrastrcture.
+
+Or perhaps you can keep both, because having a strategy for high availability comes always handy.
+
+But maybe you don't believe me.
+
+It's too good to be true and I'm selling smoke and mirrors.
+
+Let me show you.
 
 
 https://twitter.com/amicel/status/1009326802106552320
