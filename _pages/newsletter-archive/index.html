@@ -1,0 +1,44 @@
+---
+layout: default
+title: Newsletter Archive
+open_graph:
+  title: LearnK8s Newsletters Archive
+  description: A list of published newsletters by LearnK8s.
+  type: product
+  image: /assets/open_graph_preview.png
+---
+
+<div class="intro contact-us white pt3 pt0-ns pb2 pb4-ns">
+
+  {% include navbar/index.html %}
+
+  <section class="hero ph5-l">
+    <div class="w-100">
+      <h1 class="f1 pl3 pl4-ns f-subheadline-l">Newsletter archive</h1>
+    </div>
+  </section>
+</div>
+
+
+<section class="ph3 measure-wide pv4 center">
+  <ul class="list pl0">
+    {% assign sorted = site.newsletter | sort: 'date' %}
+    {% assign reversed = sorted | reverse %}
+    {% for issue in reversed %}
+      {% unless issue.issue == 0 %}
+        <li class="pv3">
+          <h2 class="mb0">
+            <a title="LearnK8s newsletter issue #{{ issue.issue }}" target="_blank" href="{{ issue.url | replace: " index ", "
+              " }}" class="link navy">Issue #{{ issue.issue }}</a>
+          </h2>
+          <p class="black-40 mt1">{{ issue.date | date: '%B %d, %Y' }}</p>
+          <p class="lh-copy black-70">{{ issue.excerpt | remove: '
+            <p>' | remove: '</p>' }}</p>
+        </li>
+      {% endunless %}
+    {% endfor %}
+  </ul>
+</section>
+
+
+{% include footer/index.html %}

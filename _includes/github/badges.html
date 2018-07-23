@@ -1,0 +1,21 @@
+<div class="gh-badges">
+    {% if include.stars %}
+    <div class="stars dib bg-black-05 ph1 br2">
+        <span>
+            <a class="" href="{{ include.url }}"><span class="favicon">{% include github/star.svg %}</span> Star</a>
+        </span>
+        <span class="bg-white">
+            <a class="ph1" href="{{ include.url }}/stargazers">{{ include.stars }}</a>
+        </span>
+    </div>
+    {% endif %} {% if include.forks %}
+    <div class="stars dib bg-black-05 ph1 br2">
+        <span>
+            <a class="" href="{{ include.url }}/fork"><span class="favicon">{% include github/git-branch.svg %}</span> Fork</a>
+        </span>
+        <span class="bg-white">
+            <a class="ph1" href="{{ include.url }}/network">{{ include.forks }}</a>
+        </span>
+    </div>
+    {% endif %}
+</div>
