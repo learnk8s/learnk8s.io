@@ -1,40 +1,40 @@
-During the last few years, the industry has experienced a shift towards micro service-based architecture.
+During the last few years, the industry has experienced a shift towards developing smaller and more focussed applications.
 
-It doesn't come as a surprise that more and more companies are breaking their massive and static monoliths into a set of decoupled and independent microservices.
+It doesn't come as a surprise that more and more companies are breaking their massive and static monoliths into a set of decoupled and independent components.
 
 And rightly so.
 
-Microservices are:
+Services that are tiny in size are:
 
 - quicker to deploy because you create and release smaller services
 - easier to iterate on, since adding features happens independently
 - resilient — the overall service can still function despite one of the services not being available
 
-Microservices are great from a product and development perspective.
+Smaller services are great from a product and development perspective.
 
-But how does the microservices cultural shift impact the infrastructure?
+But how does that cultural shift impact the infrastructure?
 
-It turns out that things are rather simple when you deal with a few sparse applications.
+It turns out that things are rather simple when you deal with a few sparse large applications.
 
-You only manage a handful of them, and your infrastructure team has plenty of time to dedicate to support and release.
+You can count them with your hands, and indeed your infrastructure team has plenty of time to dedicate to support and release.
 
 If you're a large organisation, managing hundreds of applications is demanding, but still manageable.
 
 You have several teams dedicated to developing, packaging and releasing applications.
 
-Microservices, on the other hand, introduces a different challenge.
+Developing services out of smaller components, on the other hand, introduces a different challenge.
 
-When for every application, you can refactor the same apps in a collection of four microservices, you have at least four times more services to develop, package and release.
+When for every application, you can refactor the same apps in a collection of four components, you have at least four times more services to develop, package and release.
 
-It's not uncommon for a small service to be made out of a dozen of micro-services such as a front-end app, a backend API, an authorisation server, an admin application, etc.
+It's not uncommon for a small service to be made out of a dozen of components such as a front-end app, a backend API, an authorisation server, an admin application, etc.
 
 Indeed when you develop services that interact with each other, you see an explosion of applications deployed on your infrastructure.
 
-And that's a challenge in managing and scaling your infrastructure.
+And that's the challenge in managing and scaling your infrastructure.
 
 But it doesn't end there.
 
-Most of the microservices are deployed to virtual machines such as Amazon EC2, Digital Ocean Droplets or Azure Virtual Machines.
+Most of the services are deployed to virtual machines such as Amazon EC2, Digital Ocean Droplets or Azure Virtual Machines.
 
 Each virtual machine comes with an operating system that consumes part of the memory and CPU allocated to it.
 
@@ -60,29 +60,33 @@ And you're right.
 
 The cash wasted on operating systems overhead is only the tip of the iceberg.
 
-You have probably realised that microservices come with very different resource requirements.
+You have probably realised that when you break your service in smaller components each of them comes with very different resource requirements.
 
-Some microservices such as data processing and data mining applications are more CPU intensive.
+Some components such as data processing and data mining applications are more CPU intensive.
 
 Others, such as servers for real-time applications, are more memory intensive.
 
-Your automation and CI pipelines engineers have selected the most common setup as the de facto standard.
+Amazon Web Services has indeed a long list of machines that fits every need: general purpose, CPU optimised, memory optimised, storage optimised and GPU computing.
 
-Every application is wrapped into a 2GB and vCPU machine.
+In practice, selecting the right virtual machine to match the CPU and memory requirements of your component is rather uncommon.
+
+It's much easier to select a couple of computing profiles that are good enough in 80% of the cases.
+
+In fact, what's wrong in using mostly the same virtual machine for every workload?
+
+None at all, if you're happy to wrap every component into a 2GB of memory and vCPU compute capacity.
 
 Even if you need only 1GB of memory.
 
-You will optimise in the future; you keep telling yourself.
+Yes, you could optimise in the feature.
 
-In practice, it never happens.
+But let's be honest: you never have the time.
 
-When you're lucky, the micro-services fits the requirements perfectly.
+And you end up wasting hundreds of megabytes of RAM and plenty of CPU cycles.
 
-Sometimes you end up wasting a few hundred megabytes of RAM.
+If it makes you feel any better, there're plenty companies suffering from poor resource utilisation.
 
-Others you only use a single digit per cent of the allocated resources.
-
-It's common to find companies utilising only 10% of the allocated resources.
+Sometimes as little as 10% of the allocated resources.
 
 You pay $1000 in EC2 instances on Amazon, you only actual use $100 of it.
 
@@ -90,43 +94,43 @@ That doesn't sound like the best way to spend your budget.
 
 You should get your money back on the resources you don't use.
 
-You should also have a word with your engineering team and ask to pack your applications more efficiently!
+And you should spend more time tailoring compute capacity to your services.
 
-You could do all of the above.
+But resource utilisation is not the only challenge.
 
-But resource utilisation is not the only challenge when it comes to microservices.
-
-Development teams have the freedom to use the right tool for the job.
-
-And when they do so, they can iterate quickly and churn more features.
-
-Your infrastructure becomes a theme park.
+When development teams have the freedom to use the right tool for the job they usually go wild.
 
 Node.js for the front-end, Spring Boot for the backend API, Flask and Celery for the workers, React.js for the client-side, you name it.
 
+And your infrastructure becomes a theme park, hundreds of attractions running on completely different runtimes.
+
 Having the right technology for the job enables greater iteration speed, but it usually comes with the extra burden of managing one more programming language.
 
-In fact, your infrastructure team has never been busier than now.
+You could play the whac-a-mole game and write a Puppet script for each application that the development team plan to release to production.
 
-Each application has many dependencies, runtimes and libraries to be installed before it can be deployed.
+If your development team is rather large, it's usually an unfair game.
 
-And each of them is a special snowflake: both the payment and the backend API team selected Java as their technology of choice, but they run on Java 1.8 and Java 10 respectively.
+You're busy writing scripts and don't have enough time to do look after the infrastructure.
 
-It turns out, your cloud engineers are writing Puppet scripts to automate deployments and installing dependencies.
+Plus you're the bottleneck now.
 
-But the size of the team is nowhere comparable with the rest of the development teams.
+The product owner is frustrated because you are slowing down delivery.
 
-So your pipelines are clogged.
+Features rarely make it to production in time, and there's a constant pointing fingers between you and the development team.
 
-Features rarely make it to production in time, and there's a constant chatting between development and infrastructure team.
+Why is that they have to use a new language all the time?
+
+The application is ready you just have to deploy it!
 
 Too much talking not enough action!
 
-It would be much easier if the development team could help out by taking some of the responsibilities such as packaging dependencies.
+It would be much easier if the development team could help out instead of leaving it to you to sort out.
 
-You could finally stop hiring a dozen cloud engineers to cope with the current demand.
+They could at least help with managing and packaging their dependencies.
 
-If you've started thinking that perhaps holding to the big monoliths is not such a bad idea, please welcome to the club.
+That would go a long way to help you focus on monitoring and supporting live services.
+
+If you've started thinking that perhaps holding to the massive monoliths is not such a bad idea, please welcome to the club.
 
 Not only it was more cost effective, but it scaled nicely with the team.
 
@@ -136,8 +140,6 @@ System administrators, testers, developers, Jenkins team.
 
 All of them separated in their cubicles talking through a well organised Jira board.
 
-Those were the days!
-
 Unlike today where collaboration is king, and you should strive to have cross-functional teams that are empowered in making decisions.
 
 But what if that wasn't such a bad idea, after all?
@@ -146,41 +148,47 @@ What if your small team could work on packaging, deploying and releasing their a
 
 What if they had the tool to ship consistent artefacts that can be quickly deployed in production.
 
-And what if instead of having humans providing virtual machines and selecting resources and requirements you had a computer in charge of orchestrating the resources?
+And what if instead of having humans matchin compute capacity you had an automated agent in charge of orchestrating the resources?
 
 You could finally save thousands of dollars on your cloud provider bill.
 
-You could finally save yourself from hiring a dozen niche engineers since you can now empower your team into making releases.
+You could finally automate the boring part of your job and focus on running reliable services.
 
-You could finally promote collaboration and break the silos that divide your teams.
+You could finally promote collaboration and break the silos that divides your teams.
 
-You're in luck, today.
+You're in luck!
 
-Linux containers are a technology popularised by Docker that helps you replace virtual machines with simple processes.
+It turns out the technologies you dream of are ready available.
 
-Instead of instantiating a virtual machine and running a process within an operating system, Docker containers allow you to isolate a process in the kernel.
+In fact, you could replace virtual machines with something lighter.
 
-It's like clicking on Firefox on your desktop.
+Linux containers are a technology popularised by Docker that helps you run isolated processes.
 
-When it opens, you're ready to browse.
+Instead of instantiating a virtual machine and running a process within an operating system, Docker containers allow you to sandbox a process in the kernel.
+
+It's like opening Outlook. Click. Done.
+
+When it opens, you're ready to see your emails.
+
+When you want to use your Gmail instead, you have to open a web browser, find the right address, wait for the browser to render the page and finally read your emails.
 
 The magic of containers comes from two feature in the Linux kernel: control groups and namespaces.
 
 Control groups are a convenient way to limit the CPU or memory that a particular process can use.
 
-In our example, you could say that Firefox should use only 2GB of memory and one of your four core processors CPU.
+As an example, you could say that your component should use only 2GB of memory and one of your four core processors CPU.
 
 Namespaces, on the other hand, are in charge of isolating the process and limiting what it can see.
 
-Again, Firefox could only see the network packets that are directly related to it.
+The component can only see the network packets that are directly related to it.
 
 It won't be able to see all of the network packets flowing through the network adapter.
 
 Control groups and namespaces are low-level primitives.
 
-With time developers created more and more layers of abstractions.
+With time developers created more and more layers of abstractions to make it easier to control those kernel features.
 
-At the beginning there was LXC, then finally Docker and the rest is history.
+One of the first abstractions was LXC, but the real deal was when Docker was released in 2013.
 
 So Docker containers aren't virtual machines and don't need to emulate hardware or have an operating system.
 
@@ -196,13 +204,19 @@ If you your application uses ImageMagick or PhantomJS, you can add those in too.
 
 Once you're ready, you can bake your container with all dependencies and files.
 
-The process is akin to packaging an RPM or compressing a Gzip file.
+The process is akin to packaging an RPM or compressing a folder as a Gzip file.
 
-But out of the box you can use Docker to run the process in the container.
+This is what the ~recipe~ `Dockerfile` looks like:
 
-And not just your container, but all other containers too.
+```dockerfile
+FROM TODO
+```
 
-In fact, containers expose a consistent interface to run them.
+So what's different this time?
+
+Once you know how to run a process packaged as a container, you know how to run all other containers.
+
+In fact, containers expose a consistent interface independenlty of what they contain.
 
 Have a look:
 
@@ -220,9 +234,9 @@ And I can use a MySQL database inside a container.
 
 By using a consistent interface to run a variety of containers you just solved the problem of portability.
 
-As long as your platform engineers know how to run containers, they can deploy applications ranging from Java to Node.js, to Python.
+As long as you know how to run containers, you can deploy applications ranging from Java to Node.js, to Python.
 
-No need for complicated puppet scripts, the development team provided you with a self-packaged application.
+No need for complicated Puppet scripts.
 
 And best of all, no operating system.
 
@@ -232,15 +246,17 @@ You're saving money operating systems ✅
 Developers can package their creations in generic containers ✅
 You still have to manage thousands of containers ❌
 
-Managing containers at scale sound one of those problems that require a bit of thinking upfront.
+Managing containers at scale sound one of those hard problems that require a bit of thinking.
 
-Perhaps you should ask the platform engineers to automate the infrastructure even more.
+Perhaps you could automate your deployment even more.
 
-Still doesn't help with optimising resources if you run one Docker container per virtual machine.
+Still doesn't help with optimising resources if you run one Docker container per virtual machine, though.
 
-You could work out how to run multiple containers on the same virtual machine.
+You should work out how to run multiple containers on the same virtual machine.
 
-Sounds like a lot of work, but if it pays off, perhaps it's worth it.
+But it sounds like a lot of work.
+
+However if it pays off, perhaps it's worth it.
 
 But what if you could automate that too?
 
@@ -248,9 +264,9 @@ What if you could have an algorithm deciding where to place those containers?
 
 It turns out that someone had precisely that idea.
 
-More than a single person.
+And luckily for you, more than a single person.
 
-Three technology are competing in the container orchestration arena:
+Three technologies are competing in the container orchestration arena:
 
 - Apache Mesos
 - Hashicopr Nomad
@@ -272,9 +288,9 @@ Google was running a technology similar to containers and had to find an efficie
 
 They decided to write a platform that can automatically analyse resource utilisation and schedule deployments.
 
-Later on, few Googlers decided to leave Google and restart the project as open source.
+Later on, few Googlers decided to leave the company and restart the project as an open source effort.
 
-The rest is history, but the good news is that anyone can run containers at Google scale.
+The rest is history.
 
 How does Kubernetes work, you say?
 
@@ -290,15 +306,13 @@ In other words, Kubernetes will play Tetris with your infrastructure.
 
 Docker containers are the blocks; computers are the board, and Kubernetes is the player.
 
-And it super skilled because it can play several games at the same time.
-
 Having someone efficiently packing your infrastructure means that you get more computing for your money.
 
 And your overall bill usage should decrease as a result of that.
 
-Remember when I said that with only 10% of resource utilisation is like you're throwing money out the window?
+Remember the companies using only 10% of their allocated resource?
 
-Well, Kubernetes is making sure you never do that again.
+Well, Kubernetes just saved your day.
 
 But there's more.
 
@@ -314,7 +328,7 @@ Do you wish to provision storage? Please send a POST request to this URL.
 
 Everything you do in Kubernetes is calling APIs.
 
-And there're plenty of good reasons to be excited about that.
+And there're plenty of good reasons to be excited about that:
 
 - You can create scripts and daemons that interact with the API programmatically
 - The APIs are versioned; when you upgrade your cluster you can keep using the old APIs and gradually upgrade
@@ -328,7 +342,7 @@ Amazon Web Service is too expensive?
 
 No problemo.
 
-You can install Kubernetes on Google Cloud Platform and redeploy all of your infrastructures.
+You can install Kubernetes on Google Cloud Platform and move your workloads there.
 
 Or perhaps you can keep both because having a strategy for high availability always comes in handy.
 
