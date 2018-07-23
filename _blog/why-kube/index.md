@@ -1,3 +1,17 @@
+---
+layout: post
+title: What is Kubernetes anyway?
+description:
+date: 2018-07-16 11:26:00
+categories:
+image:
+open_graph:
+  type: article
+  title: What is Kubernetes anyway?
+  image:
+  description:
+---
+
 During the last few years, the industry has experienced a shift towards developing smaller and more focussed applications.
 
 It doesn't come as a surprise that more and more companies are breaking their massive and static monoliths into a set of decoupled and independent components.
