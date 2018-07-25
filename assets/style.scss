@@ -511,38 +511,10 @@ green     #859900  operators, other keywords
       background: none;
     }
   }
-
-  #issue-preview{
-    z-index: 100;
-    top: -8rem;
-    height: 600px;
-    .preview-container{
-      z-index: 200;
-      position: relative;
-      top: -34rem;
-      iframe{
-        width: 600px;
-        height: 508px;
-      }
-    }
-  }
 }
 
 
 @media screen and (max-width: 60em) and (min-width: 30em) {
-  #issue-preview{
-    z-index: 100;
-    height: 240px !important;
-    .preview-container{
-      top: -16rem !important;
-      z-index:200;
-      iframe{
-        width: 400px !important;
-        height: 236px !important;
-        margin-left: -2rem;
-      }
-    }
-  }
   .archive-link{
     font-size: 1rem;
   }
@@ -553,19 +525,6 @@ green     #859900  operators, other keywords
     .subscribe-button{
       padding-top: 1rem !important;
       padding-bottom: 1rem !important;
-    }
-  }
-  #issue-preview{
-    z-index: 100;
-    top: -2rem !important;
-    height: 200px !important;
-    .preview-container{
-      top: -9rem !important;
-      iframe{
-        width: 248px !important;
-        height: 130px !important;
-        margin-left: -0.7rem;
-      }
     }
   }
   .archive-link{
