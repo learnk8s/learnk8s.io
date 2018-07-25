@@ -1,3 +1,5 @@
+require 'open3'
+
 module Jekyll
   class Document
     def url=(name)
@@ -39,6 +41,25 @@ Could not find document '#{@relative_path}' in tag '#{self.class.tag_name}'.
 Make sure the document exists and the path is correct.
 MSG
       end
+    end
+  end
+end
+
+module Jekyll
+  class TSX < Converter
+    safe true
+
+    def matches(ext)
+      ext =~ /^\.tsx$/i
+    end
+
+    def output_ext(ext)
+      ".html"
+    end
+
+    def convert(content)
+      stdout, status = Open3.capture3('node _plugins/convert.js', stdin_data: content)
+      stdout
     end
   end
 end

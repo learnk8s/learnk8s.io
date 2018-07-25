@@ -8,10 +8,17 @@
   "author": "Daniele Polencic",
   "license": "MIT",
   "dependencies": {
+    "@types/react": "^16.4.7",
+    "browserify": "^16.2.2",
     "cheerio": "^1.0.0-rc.2",
+    "get-stdin": "^6.0.0",
     "inline-source-cli": "^1.2.0",
-    "shelljs": "^0.8.1",
-    "tachyons-sass": "^4.9.0"
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "shelljs": "^0.8.2",
+    "tachyons-sass": "^4.9.0",
+    "tsify": "^4.0.0",
+    "typescript": "^2.9.2"
   },
   "devDependencies": {}
 }
