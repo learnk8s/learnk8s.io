@@ -492,10 +492,6 @@ green     #859900  operators, other keywords
     button{
       cursor: pointer;
     }
-    .subscribe-button{
-      padding-top: 1.5rem;
-      padding-bottom: 1.5rem;
-    }
     .message_area{
       text-align: left;
       padding: 0.5rem 1rem 0.5rem 1rem;
@@ -506,17 +502,7 @@ green     #859900  operators, other keywords
       background: none;
     }
   }
-}
-
-@media screen and (max-width: 30em) {
-  #sib_embed_signup{
-    .subscribe-button{
-      padding-top: 1rem !important;
-      padding-bottom: 1rem !important;
-    }
-  }
-}
-.subscribe {
+}.subscribe {
   position: relative;
 }
 .subscribe:after {
