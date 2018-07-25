@@ -20,9 +20,9 @@ And rightly so.
 
 Services that are tiny in size are:
 
-- quicker to deploy because you create and release smaller services
+- quicker to deploy because you create and release them in chunks
 - easier to iterate on, since adding features happens independently
-- resilient — the overall service can still function despite one of the services not being available
+- resilient — the overall service can still function despite one of the components not being available
 
 Smaller services are great from a product and development perspective.
 
@@ -30,9 +30,9 @@ _But how does that cultural shift impact the infrastructure?_
 
 ## Managing infrastructure at scale
 
-It turns out that things are rather simple when you deal with a few sparse large applications.
+It turns out that things are rather simple when you deal with a few sparse applications.
 
-You can count them with your hands, and you have plenty of time to dedicate to support and release each of them.
+You can count them with your hands, and you have plenty of time to dedicate to support and release.
 
 In large organisation, managing hundreds of applications is demanding, but still manageable.
 
@@ -40,15 +40,13 @@ You have several teams dedicated to developing, packaging and releasing applicat
 
 Developing services out of smaller components, on the other hand, introduces a different challenge.
 
-When for every application, you can refactor the same apps in a collection of four components, you have at least four times more services to develop, package and release.
+When for every application, you can refactor the same apps in a collection of four components, you have at least four times more apps to develop, package and release.
 
 It's not uncommon for a small service to be made out of a dozen of components such as a front-end app, a backend API, an authorisation server, an admin application, etc.
 
 Indeed when you develop services that interact with each other, you see an explosion of components deployed on your infrastructure.
 
-And that's the challenge of managing infrastructure at scale.
-
-But it doesn't end there.
+It gets harder, though.
 
 ## You're probably wasting your money on compute resources
 
@@ -56,7 +54,7 @@ Most of the services are deployed to virtual machines such as Amazon EC2, Digita
 
 Each virtual machine comes with an operating system that consumes part of the memory and CPU allocated to it.
 
-When you ask for a 1GB, 1 vCPU droplet on Digital Ocean, you're probably only using 700MB in memory and 0.8 vCPU after you remove the overhead of the operating system.
+When you create a 1GB of memory and 1 vCPU droplet on Digital Ocean, you end up using 700MB in memory and 0.8 vCPU after you remove the overhead of the operating system.
 
 Or in other words, every five virtual machine the overhead adds up to a full virtual machine.
 
@@ -76,27 +74,31 @@ _It's an unavoidable tax_.
 
 And you're right.
 
-The cash wasted on operating systems overhead is only the tip of the iceberg.
+However, the cash wasted on operating systems overhead is only the tip of the iceberg.
 
-## You're probably wasting even more cash
+## Who is paying for all the waste?
 
 You have probably realised that when you break your service in smaller components each of them comes with very different resource requirements.
 
-Some components such as data processing and data mining applications are more CPU intensive.
+Some components such as data processing and data mining applications are CPU intensive.
 
-Others, such as servers for real-time applications, are more memory intensive.
+Others, such as servers for real-time applications might use more memory.
 
 Amazon Web Services has indeed a long list of compute resources that fits every need: general purpose, CPU optimised, memory optimised, storage optimised and GPU computing.
 
-In practice, selecting the right virtual machine to match the CPU and memory requirements of your component is rather uncommon.
+You should strive to use the right virtual machine that supports the requirements of the component that you're developing.
 
-It's much easier to select a couple of computing profiles that are good enough in 80% of the cases.
+The closer you match the requirements, the better you're utilising your resources.
+
+In practice this is rather uncommon, though.
+
+It's much easier to select a couple of computing profiles that are good enough in 80% of the cases and use those for all components.
 
 _In fact, what's wrong with using mostly the same virtual machine for every workload?_
 
 None at all, if you're happy to wrap every component into a 2GB of memory and vCPU compute capacity.
 
-Even if you need only 1GB of memory.
+Even if your component can run with only 1GB of memory.
 
 _Yes, you could optimise in the feature._
 
@@ -116,7 +118,7 @@ _You should get your money back on the resources you don't use._
 
 _And you should spend more time tailoring compute capacity to your services._
 
-But resource utilisation is not the only challenge.
+_But why are those requirements so different anyway?!_
 
 ## Choosing the right tool — ah! it hurts!
 
@@ -128,7 +130,7 @@ The infrastructure becomes a theme park, hundreds of applications running on com
 
 Having the right technology for the job enables greater iteration speed, but it usually comes with the extra burden of managing one more programming language.
 
-While you could mitigate the proliferation of tools and languages, in practice it's more complex than that.
+While you could mitigate the proliferation of tools and languages, in practice, it's more complex than that.
 
 Two applications sharing the same JVM runtime might rely on a different set of dependencies and libraries.
 
@@ -136,7 +138,7 @@ Perhaps one relies on ImageMagick to resize images.
 
 The other relies on a binary such as PhantomJS to be available in its path.
 
-You should package those dependencies alongside the application.
+You should package those dependencies alongside its application.
 
 And so you end up dealing with dozens configurations that are the same, but different in their special way.
 
@@ -146,13 +148,13 @@ You're always one step behind, catching up and reacting to changes pushed from u
 
 You shouldn't treat the infrastructure as an after thought.
 
-A much better to way is to declare dependencies and package them as you develop your application, right from the beginning.
+You should look after your dependencies and package them as you develop the application, right from the beginning.
 
-What would be even more useful if you could pass down the application, the dependencies and artefact as a single bundle.
+Ideally, you should archive all of the parts necessary to run your component as a single archive.
 
-So that when the application is deployed, you don't have to start from zero in looking into what's needed for it to start.
+No more getting lost in chasing dependencies just before a release.
 
-_It sounds all good, but how do you actually scale that to several teams?_
+_It sounds all good, but how do you actually scale that in th organisation?_
 
 ## Scaling releases with your teams
 
@@ -165,9 +167,11 @@ And you want to keep teams accountable to their duties:
 
 And the in the tipical scenario your application is developed, packaged and released in subsequent steps, one after the other.
 
-When you work on several components that has to be released, reality kicks.
+One team produces the work, the other packages and releases it.
 
-What you thought was a straight line from development to production is indeed a mess.
+But when you actually implement the plan, you start noticing that reality looks different.
+
+What you thought was a straight line from development to production is a bumpy road.
 
 Features are delayed because the automation pipeline isn't working.
 
@@ -177,7 +181,7 @@ Development team have picked up a new language!
 
 You have to spend more time automating it.
 
-They said this is the last time, though.
+Developers promised that this is the last time, though.
 
 They have coding standards and a mature governance to prevent that.
 
@@ -187,7 +191,7 @@ And there's a constant pointing fingers between the teams.
 
 _"The application is done and dusted, we're just waiting for it to be deployed!"_
 
-_"We can't deploy applications that require 48GB in memory! What are the developer doing?"_
+_"We can't deploy applications that require 48GB in memory! What are the developers doing?"_
 
 It would be much easier if the teams could play nicely together.
 
@@ -195,27 +199,21 @@ It would be even better if they can work together, on the same project, on the s
 
 They could finally focus on releasing features rather than fighting each other.
 
-Imagine having new functionality released around the clock.
+They could finally talk rather than dumping responsabilities to one another.
 
-On a hourly basis.
+And you could finally smile at features shipped around the clock.
 
-Wow!
+If only!
 
-If you were to start all over again and could transform your organisation you could definetely do that.
+If only you could also cut your cloud provider bills too!
 
-Alongside cutting your cloud provider bill, of course.
-
-You still don't want to pay for all of the operating systems or the resources you don't use.
-
-That could really help you cost optimisation strategy
-
-And it could finally boost collaboration between the teams.
+Paying for something that you don't use still hurts.
 
 Less spending, quicker iterations and delivery.
 
-Sounds too good to be true.
+If only.
 
-_Does this technology exist?_
+_Maybe there's something you can do._
 
 # Virtual machine on a diet
 
