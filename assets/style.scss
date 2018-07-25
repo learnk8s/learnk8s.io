@@ -467,11 +467,6 @@ green     #859900  operators, other keywords
   }
 }
 
-.archive-link{
-  font-size: 1.5rem;
-  background-color: #4E89C4;
-}
-
 @media screen and (max-width: 60em) and (min-width: 30em) {
 #newsletter-issue {
     .mh2-m {
@@ -513,13 +508,6 @@ green     #859900  operators, other keywords
   }
 }
 
-
-@media screen and (max-width: 60em) and (min-width: 30em) {
-  .archive-link{
-    font-size: 1rem;
-  }
-}
-
 @media screen and (max-width: 30em) {
   #sib_embed_signup{
     .subscribe-button{
@@ -527,11 +515,7 @@ green     #859900  operators, other keywords
       padding-bottom: 1rem !important;
     }
   }
-  .archive-link{
-    font-size: 1rem;
-  }
 }
-
 .subscribe {
   position: relative;
 }
