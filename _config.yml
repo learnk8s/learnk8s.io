@@ -37,4 +37,3 @@ plugins:
   - jekyll-sitemap
 target-blank:
   noopener: false
-  noreferrer: false
