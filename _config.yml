@@ -35,3 +35,6 @@ defaults:
 plugins:
   - jekyll-target-blank
   - jekyll-sitemap
+target-blank:
+  noopener: false
+  noreferrer: false
