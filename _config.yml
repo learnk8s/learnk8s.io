@@ -35,5 +35,3 @@ defaults:
 plugins:
   - jekyll-target-blank
   - jekyll-sitemap
-target-blank:
-  add_css_classes: some-class another-class
