@@ -35,6 +35,3 @@ defaults:
 plugins:
   - jekyll-target-blank
   - jekyll-sitemap
-
-target-blank:
-  css_class: ext-link
