@@ -44,7 +44,7 @@ Since docker 1.10 the `COPY`, `ADD` and `RUN` statements add a new layer to your
 
 **Layers are like git commits.**
 
-Layers store the difference between the previous and the current version of the image. And like git commits they're handy if you share them with other repositories or images.
+{% include tweet_this/index.html content="Docker layers store the difference between the previous and the current version of the image. And like git commits they're handy if you share them with other repositories or images." %}
 
 In fact, when you request an image from a registry you download only the layers that you don't own already. This way is much more efficient to share images.
 
@@ -225,7 +225,9 @@ The current image ships Node.js as well as `yarn`, `npm`, `bash` and a lot of ot
 
 You don't need any of those when you run your container. The only dependency you need is Node.js.
 
-You could remove everything but Node.js.
+{% include tweet_this/index.html content="Docker containers should wrap a single process and contain the bare minimal to run it. You don't need an operating system." %}
+
+In fact, you could remove everything but Node.js.
 
 **But how?**
 
