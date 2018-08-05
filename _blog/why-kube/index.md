@@ -20,7 +20,7 @@ And rightly so.
 
 Services that are tiny in size are:
 
-- quicker to deploy because you create and release them in chunks
+- quicker to deploy because you create and release them in smaller chunks
 - easier to iterate on, since adding features happens independently
 - resilient — the overall service can still function despite one of the components not being available
 
@@ -52,7 +52,7 @@ It gets harder, though.
 
 Most of the services are deployed to virtual machines such as Amazon EC2, Digital Ocean Droplets or Azure Virtual Machines.
 
-Each virtual machine comes with an operating system that consumes part of the memory and CPU allocated to it.
+Each virtual machine comes with an operating system that consumes part of the memory and CPU resources allocated to it.
 
 When you create a 1GB of memory and 1 vCPU droplet on Digital Ocean, you end up using 700MB in memory and 0.8 vCPU after you remove the overhead of the operating system.
 
@@ -78,7 +78,7 @@ However, the cash wasted on operating systems overhead is only the tip of the ic
 
 ## Who is paying for all the waste?
 
-You have probably realised that when you break your service in smaller components each of them comes with very different resource requirements.
+You have probably realised that when you break your service in smaller components each of them comes with different resource requirements.
 
 Some components such as data processing and data mining applications are CPU intensive.
 
@@ -88,9 +88,15 @@ Amazon Web Services has indeed a long list of compute resources that fits every 
 
 You should strive to use the right virtual machine that supports the requirements of the component that you're developing.
 
+Are you working on a critical web component written in Java? Perhaps you should use a c5.4xlarge optimised for compute intensive workloads.
+
 The closer you match the requirements, the better you're utilising your resources.
 
 In practice this is rather uncommon, though.
+
+_Should you use a c5.2xlarge or a c5.4xlarge?_
+
+_Do the 8 vCPU and 16GB memory makes a difference?_
 
 It's much easier to select a couple of computing profiles that are good enough in 80% of the cases and use those for all components.
 
@@ -106,9 +112,9 @@ But let's be honest: **you never have the time**.
 
 And you end up wasting hundreds of megabytes of RAM and plenty of CPU cycles.
 
-If it makes you feel any better, there're plenty companies suffering from poor resource utilisation.
+If it makes you feel any better, there're plenty companies suffering from similar inefficiencies.
 
-Sometimes utilising as little as 10% of the allocated resources.
+Some utilise as little as 10% of the allocated resources.
 
 **You pay $1000 in EC2 instances on Amazon, you only actual use $100 of it.**
 
@@ -144,13 +150,13 @@ And so you end up dealing with dozens configurations that are the same, but diff
 
 Using automation scripts such as Chef or Puppet will only take you so far.
 
-You're always one step behind, catching up and reacting to changes pushed from upstream.
+You're always one step behind, catching up and reacting at the mercy of the development team.
 
-You shouldn't treat the infrastructure as an after thought.
+In fact, you shouldn't treat the infrastructure as an after thought.
 
 You should look after your dependencies and package them as you develop the application, right from the beginning.
 
-Ideally, you should archive all of the parts necessary to run your component as a single archive.
+Ideally, you should archive all of the parts necessary to run your component as a single bundle.
 
 No more getting lost in chasing dependencies just before a release.
 
@@ -171,35 +177,19 @@ One team produces the work, the other packages and releases it.
 
 But when you actually implement the plan, you start noticing that reality looks different.
 
-What you thought was a straight line from development to production is a bumpy road.
-
-Features are delayed because the automation pipeline isn't working.
-
-Infrastructure engineers are on it, though.
-
-Development team have picked up a new language!
-
-You have to spend more time automating it.
-
-Developers promised that this is the last time, though.
-
-They have coding standards and a mature governance to prevent that.
-
-The product owner is frustrated because teams are figthing each other and slowing down delivery.
-
-And there's a constant pointing fingers between the teams.
+What you thought was a straight line from development to production is instead a bumpy road.
 
 _"The application is done and dusted, we're just waiting for it to be deployed!"_
 
 _"We can't deploy applications that require 48GB in memory! What are the developers doing?"_
 
+The product owner is frustrated because teams are figthing each other and slowing down delivery.
+
+And there's a constant pointing fingers between the teams.
+
 It would be much easier if the teams could play nicely together.
 
-It would be even better if they can work together, on the same project, on the same desk, next to each other.
-
 They could finally focus on releasing features rather than fighting each other.
-
-They could finally talk rather than dumping responsabilities to one another.
 
 And you could finally smile at features shipped around the clock.
 
