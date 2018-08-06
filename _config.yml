@@ -27,7 +27,7 @@ collections:
     output: true
     permalink: /newsletter/:path
 defaults:
-  - scope: 
+  - scope:
       path: ""
       type: "newsletter"
     values:
