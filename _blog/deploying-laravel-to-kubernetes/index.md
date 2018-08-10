@@ -178,7 +178,7 @@ So far you have created a deployment which is running the application's containe
 You can create a service with:
 
 ```bash
-kubectl expose deployment laravel-kubernetes-demo --type=NodePort --port=8181
+kubectl expose deployment laravel-kubernetes-demo --type=NodePort --port=80
 ```
 
 and provided all went well, you will see a confirmation similar to:
