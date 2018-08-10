@@ -69,7 +69,7 @@ To follow with this demonstration, you will need the following installed on your
 
 __Docker image__
 
-Kubernetes deploys containerised applications, and therefore as a first step, you will need to build a Docker image of the demo application. Since this tutorial will be run locally on Minikube, you can just build a local Docker Image from the `DockerFile` included in the example code.
+Kubernetes deploys containerised applications, and therefore as a first step, you will need to build a Docker image of the demo application. Since this tutorial will be run locally on Minikube, you can just build a local Docker Image from the `Dockerfile` included in the example code.
 
 ```bash
 FROM php:7
@@ -84,12 +84,12 @@ RUN php artisan key:generate
 RUN php artisan serve --host=0.0.0.0 --port=8181
 EXPOSE 8181
 ```
-This `DockerFile` is reasonably basic:
+This `Dockerfile` is reasonably basic:
 
 It extends a PHP7 base image, installs some system dependencies including composer and the standard PHP extensions required by Laravel. It then copies the application files to a working directory and installs the application's dependencies via composer. It also runs a couple of `artisan` commands,  last of which serves the application using the built-in PHP web server. In the end, it exposes port `8181` to the host machine.
 
-> Remember that the `artisan serve` command should never be used in a 
-production environment. I explain how to serve the application through Nginx 
+> Remember that the `artisan serve` command should never be used in a
+production environment. I explain how to serve the application through Nginx
 (instead of the PHP's built-in server) further below.
 
 To build the local Docker image:
