@@ -72,17 +72,17 @@ __Docker image__
 Kubernetes deploys containerised applications, and therefore as a first step, you will need to build a Docker image of the demo application. Since this tutorial will be run locally on Minikube, you can just build a local Docker Image from the `Dockerfile` included in the example code.
 
 ```bash
-FROM php:7
-RUN apt-get update -y && apt-get install -y openssl zip unzip git
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN docker-php-ext-install pdo mbstring
+FROM composer:1.6.5 as build
 WORKDIR /app
 COPY . /app
 RUN composer install
 
-RUN php artisan key:generate
-RUN php artisan serve --host=0.0.0.0 --port=8181
-EXPOSE 8181
+FROM php:7.1.8-apache
+EXPOSE 80
+COPY --from=build /app /app
+COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+RUN chown -R www-data:www-data /app \
+    && a2enmod rewrite
 ```
 This `Dockerfile` is reasonably basic:
 
