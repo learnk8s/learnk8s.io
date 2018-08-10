@@ -1,0 +1,103 @@
+{% if include.name == 'editor_pick' %}
+<section id="editor_pick" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  <h2 class="ttu tl">Editor's Pick</h2>
+  {% for pick in page.editor_pick %}
+  <div>
+    {% if pick.image %}
+    <img src="/newsletter/issue-{{ page.issue }}/{{ pick.image }}" alt="{{ pick.title }}"> {% endif %}
+    <h3 class="tl">{{ pick.title }}</h3>
+    {% if pick.tags %}
+    <ul class="list tl pl0">
+      {% for tag in pick.tags %}
+      <li class="dib bg-black-30 white ph2 ttu tag fwb br1">{{ tag }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <p class="tl">{{ pick.summary }}</p>
+    <div class="tl">
+      <a class="fw6" href="{{ pick.url }}" title="{{ pick.title }}">Look up &#8674;</a>
+    </div>
+    {% unless forloop.last %}
+    <hr class="mt3"> {% endunless %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %} {% if include.name == 'projects' %}
+<section id="projects" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  <div class="dib tl fl">
+    <h2 class="ttu dib pl1"><span class="dib relative top-1 favicon">{% include newsletter/github.svg %}</span> Watch out for these projects</h2>
+  </div>
+  {% for project in page.projects %}
+  <div>
+    {% if project.image %}
+    <img src="/newsletter/issue-{{ page.issue }}/{{ project.image }}" alt="{{ project.name }}"> {% endif %} {% assign owner = project.name | split: '/' | first %} {% assign repo = project.name | split: '/' | last
+    %}
+    <h3 class="tl">{{ owner }}/<span class="fw9">{{ repo }}</span></h3>
+
+    <div class="tl pt3">
+       {% include github/badges.html stars=project.stars forks=project.forks url = project.url %}
+    </div>
+
+    <p class="tl">{{ project.summary }}</p>
+    <div class="tl">
+      <a class="fw6" href="{{ project.url }}" title="{{ project.name }}">Look up &#8674;</a>
+    </div>
+    {% unless forloop.last %}
+    <hr class="mt3"> {% endunless %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %} {% if include.name == 'user_pick' %}
+<section id="user_pick" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  <h2 class="ttu tl">Your Pick</h2>
+  {% for pick in page.user_pick %}
+  <div>
+    {% if pick.image %}
+    <img src="/newsletter/issue-{{ page.issue }}/{{ pick.image }}" alt="{{ pick.title }}"> {% endif %}
+    <h3>{{ pick.title }}</h3>
+    {% if pick.tags %}
+    <ul class="list tl pl0">
+      {% for tag in pick.tags %}
+      <li class="dib bg-black-30 white ph2 ttu tag fwb br1">{{ tag }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <p class="tl">{{ pick.summary }}</p>
+    <div class="tl">
+      <a class="fw6" href="{{ pick.url }}" title="{{ pick.title }}">Look up &#8674;</a>
+    </div>
+         {% unless forloop.last %}
+        <hr class="mt3"> {% endunless %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %} {% if include.name == 'laughs' %}
+<section id="laughs" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  <h2 class="ttu tl">😂 Things that made us laugh</h2>
+  {% for laugh in page.laughs %} {% assign image = nil %}
+  <div class="mb4">
+    {% if laugh.type == 'meme' %} {% if laugh.image %} {% assign image='/newsletter/issue-' | append: page.issue | append: '/'
+    | append: laugh.image %} {% endif %} {% include meme/index.html text = laugh.text image = image tweetable = laugh.tweetable
+    twitter_pic = laugh.twitter_pic %} {% endif %} {% if laugh.type == 'tweet' %} {% if laugh.image %} {% assign image='/newsletter/issue-'
+    | append: page.issue | append: '/' | append: laugh.image %} {% endif %} {% assign avatar = '/newsletter/issue-' | append:
+    page.issue | append: '/' | append: laugh.avatar %} {% include twitter/tweet.html avatar = avatar full_name = laugh.full_name
+    user = laugh.user url = laugh.url text = laugh.text date = laugh.date image = image %} {% endif %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %} {% if include.name == 'popular_tweets' %}
+<section id="popular-tweets" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  <h2 class="ttu tl"><span class="favicon">{% include newsletter/twitter-bird-blue.svg %}</span> Popular tweets</h2>
+  {% for tweet in page.popular_tweets %} {% assign avatar = '/newsletter/issue-' | append: page.issue | append: '/' | append:
+  tweet.avatar %}
+  <div class="mb4">
+  {% include twitter/tweet.html avatar = avatar full_name = tweet.full_name user = tweet.user url = tweet.url
+  text = tweet.text date = tweet.date image = tweet.image %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %} {% if include.name == 'content' %}
+<section id="content" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+  {{ content }}
+</section>
+{% endif %}

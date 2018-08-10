@@ -65,6 +65,7 @@ function hideBottomShareButtonOnScrollDown () {
  */
 function timeToHide () {
 	var visible = document.getElementById('mailing-list-container')
+	if (!visible) return;
 	var bounding = visible.getBoundingClientRect()
 	if (
 		bounding.top >= 0 &&

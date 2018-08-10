@@ -129,25 +129,25 @@ There is a `COPY` and a `RUN` statements in the `Dockerfile`. So you should expe
 
 ```bash
 $ docker history node-vanilla
-IMAGE               CREATED             CREATED BY                                      SIZE
-075d229d3f48        3 days ago          /bin/sh -c #(nop)  CMD ["npm" "start"]          0B
-bc8c3cc813ae        3 days ago          /bin/sh -c npm install                          2.91MB
-bac31afb6f42        3 days ago          /bin/sh -c #(nop) COPY multi:3071ddd474429e1…   364B
-500a9fbef90e        2 weeks ago         /bin/sh -c #(nop) WORKDIR /app                  0B
-78b28027dfbf        2 weeks ago         /bin/sh -c #(nop)  EXPOSE 3000                  0B
-b87c2ad8344d        4 weeks ago         /bin/sh -c #(nop)  CMD ["node"]                 0B
-<missing>           4 weeks ago         /bin/sh -c set -ex   && for key in     6A010…   4.17MB
-<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV YARN_VERSION=1.3.2       0B
-<missing>           4 weeks ago         /bin/sh -c ARCH= && dpkgArch="$(dpkg --print…   56.9MB
-<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV NODE_VERSION=8.9.4       0B
-<missing>           7 weeks ago         /bin/sh -c set -ex   && for key in     94AE3…   129kB
-<missing>           7 weeks ago         /bin/sh -c groupadd --gid 1000 node   && use…   335kB
-<missing>           7 weeks ago         /bin/sh -c set -ex;  apt-get update;  apt-ge…   324MB
-<missing>           7 weeks ago         /bin/sh -c apt-get update && apt-get install…   123MB
-<missing>           7 weeks ago         /bin/sh -c set -ex;  if ! command -v gpg > /…   0B
-<missing>           7 weeks ago         /bin/sh -c apt-get update && apt-get install…   44.6MB
-<missing>           7 weeks ago         /bin/sh -c #(nop)  CMD ["bash"]                 0B
-<missing>           7 weeks ago         /bin/sh -c #(nop) ADD file:1dd78a123212328bd…   123MB
+IMAGE          CREATED BY                                      SIZE
+075d229d3f48   /bin/sh -c #(nop)  CMD ["npm" "start"]          0B
+bc8c3cc813ae   /bin/sh -c npm install                          2.91MB
+bac31afb6f42   /bin/sh -c #(nop) COPY multi:3071ddd474429e1…   364B
+500a9fbef90e   /bin/sh -c #(nop) WORKDIR /app                  0B
+78b28027dfbf   /bin/sh -c #(nop)  EXPOSE 3000                  0B
+b87c2ad8344d   /bin/sh -c #(nop)  CMD ["node"]                 0B
+<missing>      /bin/sh -c set -ex   && for key in     6A010…   4.17MB
+<missing>      /bin/sh -c #(nop)  ENV YARN_VERSION=1.3.2       0B
+<missing>      /bin/sh -c ARCH= && dpkgArch="$(dpkg --print…   56.9MB
+<missing>      /bin/sh -c #(nop)  ENV NODE_VERSION=8.9.4       0B
+<missing>      /bin/sh -c set -ex   && for key in     94AE3…   129kB
+<missing>      /bin/sh -c groupadd --gid 1000 node   && use…   335kB
+<missing>      /bin/sh -c set -ex;  apt-get update;  apt-ge…   324MB
+<missing>      /bin/sh -c apt-get update && apt-get install…   123MB
+<missing>      /bin/sh -c set -ex;  if ! command -v gpg > /…   0B
+<missing>      /bin/sh -c apt-get update && apt-get install…   44.6MB
+<missing>      /bin/sh -c #(nop)  CMD ["bash"]                 0B
+<missing>      /bin/sh -c #(nop) ADD file:1dd78a123212328bd…   123MB
 ```
 
 Instead the resulting image has five new layers: one for each statement in your `Dockerfile`.
@@ -184,31 +184,31 @@ And now inspect the history:
 
 ```bash
 $ docker history node-multi-stage
-IMAGE               CREATED             CREATED BY                                      SIZE
-331b81a245b1        3 days ago          /bin/sh -c #(nop)  CMD ["index.js"]             0B
-bdfc932314af        3 days ago          /bin/sh -c #(nop)  EXPOSE 3000                  0B
-f8992f6c62a6        3 days ago          /bin/sh -c #(nop) COPY dir:e2b57dff89be62f77…   1.62MB
-b87c2ad8344d        4 weeks ago         /bin/sh -c #(nop)  CMD ["node"]                 0B
-<missing>           4 weeks ago         /bin/sh -c set -ex   && for key in     6A010…   4.17MB
-<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV YARN_VERSION=1.3.2       0B
-<missing>           4 weeks ago         /bin/sh -c ARCH= && dpkgArch="$(dpkg --print…   56.9MB
-<missing>           4 weeks ago         /bin/sh -c #(nop)  ENV NODE_VERSION=8.9.4       0B
-<missing>           7 weeks ago         /bin/sh -c set -ex   && for key in     94AE3…   129kB
-<missing>           7 weeks ago         /bin/sh -c groupadd --gid 1000 node   && use…   335kB
-<missing>           7 weeks ago         /bin/sh -c set -ex;  apt-get update;  apt-ge…   324MB
-<missing>           7 weeks ago         /bin/sh -c apt-get update && apt-get install…   123MB
-<missing>           7 weeks ago         /bin/sh -c set -ex;  if ! command -v gpg > /…   0B
-<missing>           7 weeks ago         /bin/sh -c apt-get update && apt-get install…   44.6MB
-<missing>           7 weeks ago         /bin/sh -c #(nop)  CMD ["bash"]                 0B
-<missing>           7 weeks ago         /bin/sh -c #(nop) ADD file:1dd78a123212328bd…   123MB
+IMAGE          CREATED BY                                      SIZE
+331b81a245b1   /bin/sh -c #(nop)  CMD ["index.js"]             0B
+bdfc932314af   /bin/sh -c #(nop)  EXPOSE 3000                  0B
+f8992f6c62a6   /bin/sh -c #(nop) COPY dir:e2b57dff89be62f77…   1.62MB
+b87c2ad8344d   /bin/sh -c #(nop)  CMD ["node"]                 0B
+<missing>      /bin/sh -c set -ex   && for key in     6A010…   4.17MB
+<missing>      /bin/sh -c #(nop)  ENV YARN_VERSION=1.3.2       0B
+<missing>      /bin/sh -c ARCH= && dpkgArch="$(dpkg --print…   56.9MB
+<missing>      /bin/sh -c #(nop)  ENV NODE_VERSION=8.9.4       0B
+<missing>      /bin/sh -c set -ex   && for key in     94AE3…   129kB
+<missing>      /bin/sh -c groupadd --gid 1000 node   && use…   335kB
+<missing>      /bin/sh -c set -ex;  apt-get update;  apt-ge…   324MB
+<missing>      /bin/sh -c apt-get update && apt-get install…   123MB
+<missing>      /bin/sh -c set -ex;  if ! command -v gpg > /…   0B
+<missing>      /bin/sh -c apt-get update && apt-get install…   44.6MB
+<missing>      /bin/sh -c #(nop)  CMD ["bash"]                 0B
+<missing>      /bin/sh -c #(nop) ADD file:1dd78a123212328bd…   123MB
 ```
 
 Hurrah! Has the file size changed at all?
 
 ```bash
 $ docker images | grep node-
-node-multi-stage                latest              331b81a245b1        3 days ago          678MB
-node-vanilla                    latest              075d229d3f48        3 days ago          679MB
+node-multi-stage   331b81a245b1   678MB
+node-vanilla       075d229d3f48   679MB
 ```
 
 Yes, the last image is slightly smaller.
@@ -271,7 +271,7 @@ Is the image without all the extra binaries smaller?
 
 ```bash
 $ docker images | grep node-distroless
-node-distroless                 latest              7b4db3b7f1e5        3 minutes ago       76.7MB
+node-distroless   7b4db3b7f1e5   76.7MB
 ```
 
 **That's only 76.7MB!**
@@ -344,7 +344,7 @@ And you can check the size with:
 
 ```bash
 $ docker images | grep node-alpine
-node-alpine                     latest              aa1f85f8e724        38 seconds ago      69.7MB
+node-alpine   aa1f85f8e724   69.7MB
 ```
 
 **69.7MB!**

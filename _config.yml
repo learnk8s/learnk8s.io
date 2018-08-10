@@ -23,5 +23,15 @@ collections:
   pages:
     output: true
     permalink: /:path
+  newsletter:
+    output: true
+    permalink: /newsletter/:path
+defaults:
+  - scope:
+      path: ""
+      type: "newsletter"
+    values:
+      layout: "newsletter"
 plugins:
   - jekyll-target-blank
+  - jekyll-sitemap
