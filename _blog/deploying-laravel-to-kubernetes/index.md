@@ -135,10 +135,14 @@ kubectl config use-context minikube
 then you can deploy the container image:
 
 ```bash
-kubectl run laravel-kubernetes-demo --image=yourname/laravel-kubernetes-demo
---port=8181 --image-pull-policy=IfNotPresent
+kubectl run laravel-kubernetes-demo \
+  --image=yourname/laravel-kubernetes-demo \
+  --port=80 \
+  --image-pull-policy=IfNotPresent \
+  --env=APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY=
 ```
-The above command tells `kubectl` to run our demo application from the Docker image while making port 8181 available for listening. The last parameter of the command simply asks `kubectl` to not pull the image from a registry such as Docker Hub if it exists locally which in this case it does. Do note that you still need to be logged on to Docker's so that `kubectl` can check if the image is up to date.
+
+The above command tells `kubectl` to run our demo application from the Docker image. The first parameter of the command simply asks `kubectl` to not pull the image from a registry such as Docker Hub if it exists locally which in this case it does. Do note that you still need to be logged on to Docker's so that `kubectl` can check if the image is up to date.
 
 You can check that a Pod is created for the application by running:
 
