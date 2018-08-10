@@ -84,15 +84,35 @@ COPY vhost.conf /etc/apache2/sites-available/000-default.conf
 RUN chown -R www-data:www-data /app \
     && a2enmod rewrite
 ```
-This `Dockerfile` is reasonably basic:
 
-It extends a PHP7 base image, installs some system dependencies including composer and the standard PHP extensions required by Laravel. It then copies the application files to a working directory and installs the application's dependencies via composer. It also runs a couple of `artisan` commands,  last of which serves the application using the built-in PHP web server. In the end, it exposes port `8181` to the host machine.
+This `Dockerfile` is made of two parts:
 
-> Remember that the `artisan serve` command should never be used in a
-production environment. I explain how to serve the application through Nginx
-(instead of the PHP's built-in server) further below.
+- The first part extends a PHP `composer` image so that you can install the application's dependencies.
 
-To build the local Docker image:
+- The second part creates a final Docker image with an Apache web server to serve the application.
+
+Before you can test the Docker image, you will need to build it:
+
+
+```bash
+cd /to/your/project/directory
+docker build -t yourname/laravel-kubernetes-demo .
+```
+
+Then run the application with:
+
+```bash
+docker run -ti \
+  -p 8080:80 \
+  -e APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY= \
+  laravel-kubernetes-demo
+```
+
+And the application should be available on `http://localhost:8080`.
+
+With this setup, the container is generic and the `APP_KEY` is not hardcoded or shared.
+
+__Building the image within Minikube__
 
 ```bash
 cd /to/your/project/directory
