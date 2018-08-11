@@ -21,6 +21,8 @@ open_graph:
 js:
   - anime.min.js
   - isScrolledIntoView.js
+
+has_cta: true
 ---
 
 When you design and build applications at scale, you deal with two significant challenges: **scalability and robustness**.

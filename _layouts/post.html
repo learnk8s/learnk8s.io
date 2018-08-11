@@ -29,30 +29,9 @@ layout: default
   {{ content }}
 </article>
 
-<div class="center mw8-l pb5">
-  <section class="consultation white flex-l items-start-l justify-center-l pt5 pb4" id="mailing-list-container">
-    <div class="measure-wide-m center-m w-40-l ph3 mw6">
-      <h2 class="f2 mb2 mt3">Don't miss the next experiment, story, or tip</h2>
-      <p class="normal measure lh-copy f4">Get new content straight to your inbox and level up your expertise in Kubernetes.</p>
-    </div>
-    <div class="measure-wide-m center-m w-40-l ph3 mw6">
-      <form netlify name="subscribe-blog">
-        <ol class="list pl0">
-          <li class="mv3">
-            <label for="name" class="mb2 db b f7 ttu">First name</label>
-            <input class="input-reset pa3 ba b--black-20 db w-100 br2 sans-serif" type="text" id="name" placeholder="Your first name" name="name" />
-          </li>
-          <li class="mv3">
-            <label for="email" class="mb2 db b f7 ttu">Email</label>
-            <input class="input-reset pa3 ba b--black-20 db w-100 br2 sans-serif" type="text" id="email" placeholder="Your email" name="email"/>
-          </li>
-        </ol>
-        <p class="f6 pb1">We'll never share your email address and you can opt out at any time.</p>
-        <button type="submit" class="dib blue bg-white br1 pa3 b f5 shadow-3 ph4">Subscribe &#8594;</button>
-      </form>
-    </div>
-  </section>
-</div>
+{% if page.has_cta %}
+  {% include subscribe_now/index.html %}
+{% endif %}
 
 {% include footer/index.html %}
 

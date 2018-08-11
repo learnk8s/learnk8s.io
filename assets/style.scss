@@ -164,15 +164,15 @@
 .article {
   @extend .lh-copy, .black-70, .f4, .measure-wide, .center;
 
-  h1, h2, h3, h4, h5, h6 {
+  > h1, > h2, > h3, > h4, > h5, > h6 {
     @extend .navy, .lh-title, .pt4, .pb1;
   }
 
-  p, ul, ol {
+  > p, > ul, > ol {
     @extend .lh-copy, .f4, .serif;
   }
 
-  a {
+  > a {
     @extend .navy, .link, .underline;
   }
 

@@ -20,6 +20,8 @@ open_graph:
 js:
   - anime.min.js
   - isScrolledIntoView.js
+
+has_cta: true
 ---
 
 When you deploy an application in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or VM such as AWS EC2 or Google Compute Engine and having several of them means you can run and scale your application across instances efficiently. If you have a cluster made of three nodes and decide to scale your application to have four replicas, Kubernetes will spread the replicas across the nodes evenly like so:
