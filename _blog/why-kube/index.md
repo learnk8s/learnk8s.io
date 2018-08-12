@@ -1,13 +1,13 @@
 ---
 layout: post
-title: What is Kubernetes? And how you can save 50% of your cloud bill
+title: What is Kubernetes? And how you can save 50% on your cloud bill
 description:
 date: 2018-07-16 11:26:00
 categories:
 image:
 open_graph:
   type: article
-  title: What is Kubernetes? And how you can save 50% of your cloud bill
+  title: What is Kubernetes? And how you can save 50% on your cloud bill
   image:
   description:
 ---
@@ -364,6 +364,8 @@ It's too good to be true, and I'm selling smoke and mirrors.
 
 Let me show you.
 
+## Saving on your cloud bill with Kubernetes
+
 Netlify is a platform for building, deploying, and managing static websites.
 
 It has its own CI pipeline, so every time you push a change to a repository, your website is rebuilt.
@@ -409,3 +411,69 @@ _No?_
 Only $1280/hr for 128000 vCPU and $400 for the 256 Nvidia P100.
 
 That's not a lot considering that winning Dota tournaments could net you prizes in the order of millions of dollars.
+
+So, what are you waiting?
+
+Get ready to adopt Kubernetes and save on your cloud bill!
+
+## Final notes
+
+Kubernetes and containers are here to stay.
+
+With backing on company such as Google, Microsoft, Red Hat, Pivotal, Oracle, IBM, and many more it's hard to believe that it won't catch on.
+
+Many companies are head starting on the Kubernetes and joining the revolution.
+
+Not just startup and SMEs, but big corporations such as banks, financial institution, insurance company are betting on container and Kubernetes to be the future.
+
+It's still early days and the community has still time to mature, but you should keep a close eye on the innovation in this space.
+
+## That's all folks!
+
+Many thanks to [Andy Griffiths](https://andrewgriffithsonline.com/) for reading a draft of this post and offering some invaluable suggestions.
+
+If you enjoyed this article, you might find interesting reading:
+
+- [Getting started with Docker and Kubernetes on Windows 10](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows) where you’ll get your hands dirty and install Docker and Kubernetes in your Windows environment.
+- [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images). Docker images don't have to be large. Learn how to put your Docker images on a diet!
+
+## Become an expert at deploying and scaling applications in Kubernetes
+ Get a head start with our hands-on courses and learn how to master scalability in the cloud.
+ Learn how to:
+ <ul class="list ph3">
+  <li class="mv3">
+    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
+    <div class="dtc v-top pl3">
+      <p class="mv0 f4-l lh-copy">Handle the busiest traffic websites without breaking a sweat</p>
+    </div>
+  </li>
+  <li class="mv3">
+    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
+    <div class="dtc v-top pl3">
+      <p class="mv0 f4-l lh-copy">Scale your jobs to thousands of servers and reduce the waiting time from days to minutes</p>
+    </div>
+  </li>
+  <li class="mv3">
+    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
+    <div class="dtc v-top pl3">
+      <p class="mv0 f4-l lh-copy">Enjoy peace of mind knowning that your apps are highly available with a multi-cloud setup</p>
+    </div>
+  </li>
+  <li class="mv3">
+    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
+    <div class="dtc v-top pl3">
+      <p class="mv0 f4-l lh-copy">Save ton of cash on your cloud bill by using only the resources your need</p>
+    </div>
+  </li>
+  <li class="mv3">
+    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
+    <div class="dtc v-top pl3">
+      <p class="mv0 f4-l lh-copy">Supercharge your delivery pipeline and deploy application around the clock</p>
+    </div>
+  </li>
+</ul>
+ <div class="pt2 pb4">
+  <a href="/training" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Become an expert &#8594;</a>
+</div>
+
+ P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
