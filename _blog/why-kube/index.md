@@ -34,7 +34,7 @@ It turns out that things are rather simple when you deal with a few sparse appli
 
 You can count them with your hands, and you have plenty of time to dedicate to support and release.
 
-In large organisation, managing hundreds of applications is demanding, but still manageable.
+In large organisation, managing hundreds of applications is demanding, but still doable.
 
 You have several teams dedicated to developing, packaging and releasing applications.
 
@@ -64,19 +64,15 @@ You can't escape from it, even if you're on bare metal.
 
 You still need to run your services from a base operating system.
 
-_It's okay_, you say.
-
-_Everybody needs to run an operating system._
+_It's okay, Everybody needs to run an operating system_ — you say.
 
 _Everybody pays for it._
-
-_It's an unavoidable tax_.
 
 And you're right.
 
 However, the cash wasted on operating systems overhead is only the tip of the iceberg.
 
-## Who is paying for all the waste?
+## You're also wasting A LOT of money on allocated resources
 
 You have probably realised that when you break your service in smaller components each of them comes with different resource requirements.
 
@@ -84,7 +80,7 @@ Some components such as data processing and data mining applications are CPU int
 
 Others, such as servers for real-time applications might use more memory.
 
-Amazon Web Services has indeed a long list of compute resources that fits every need: general purpose, CPU optimised, memory optimised, storage optimised and GPU computing.
+Amazon Web Services and the other cloud providers have indeed a long list of compute resources that fits every need: general purpose, CPU optimised, memory optimised, storage optimised and GPU computing.
 
 You should strive to use the right virtual machine that supports the requirements of the component that you're developing.
 
@@ -96,7 +92,7 @@ In practice this is rather uncommon, though.
 
 _Should you use a c5.2xlarge or a c5.4xlarge?_
 
-_Do the 8 vCPU and 16GB memory makes a difference?_
+_Does the next tier (8 vCPU and 16GB memory) make a difference?_
 
 It's much easier to select a couple of computing profiles that are good enough in 80% of the cases and use those for all components.
 
@@ -108,9 +104,13 @@ Even if your component can run with only 1GB of memory.
 
 _Yes, you could optimise in the feature._
 
-But let's be honest: **you never have the time**.
+But let's be honest: **it's like changing the wheels of a running car**.
 
-And you end up wasting hundreds of megabytes of RAM and plenty of CPU cycles.
+You put a lot of effort in updating the specs, the applications is updated and you need to start from scratch.
+
+So you surrend and use a short selection of compute resources: small, medium and large.
+
+And you accept wasting hundreds of megabytes of RAM and plenty of CPU cycles.
 
 If it makes you feel any better, there're plenty companies suffering from similar inefficiencies.
 
@@ -122,11 +122,11 @@ That doesn't sound like the best way to spend your budget.
 
 _You should get your money back on the resources you don't use._
 
-_And you should spend more time tailoring compute capacity to your services._
+_And you should put more effort in time tailoring compute capacity to your services._
 
 _But why are those requirements so different anyway?!_
 
-## Choosing the right tool — ah! it hurts!
+## When choosing the right tool does more harm than good
 
 When developers have the freedom to use the right tool for the job they usually go wild.
 
@@ -175,7 +175,7 @@ And the in the tipical scenario your application is developed, packaged and rele
 
 One team produces the work, the other packages and releases it.
 
-But when you actually implement the plan, you start noticing that reality looks different.
+But when you actually implement the plan, reality hits hard.
 
 What you thought was a straight line from development to production is instead a bumpy road.
 
@@ -187,17 +187,15 @@ The product owner is frustrated because teams are figthing each other and slowin
 
 And there's a constant pointing fingers between the teams.
 
+Chaos.
+
 It would be much easier if the teams could play nicely together.
 
-They could finally focus on releasing features rather than fighting each other.
+They could finally focus on releasing features rather than playing the blame game.
 
 And you could finally smile at features shipped around the clock.
 
 If only!
-
-If only you could also cut your cloud provider bills too!
-
-Paying for something that you don't use still hurts.
 
 Less spending, quicker iterations and delivery.
 
@@ -205,27 +203,37 @@ If only.
 
 _Maybe there's something you can do._
 
-# Virtual machine on a diet
+## Virtual machine on a diet
 
 It turns out the technologies you dream of are ready available.
 
 In fact, you could replace virtual machines with something lighter.
 
-Linux containers are a technology popularised by Docker that helps you run isolated processes.
+_Something_ that doesn't require resources to be allocated when you start them.
 
-Instead of instantiating a virtual machine and running a process within an operating system, Docker containers allow you to sandbox a process in the kernel.
+_Something_ that isolates processes like if you were using virtual machines.
 
-It's like opening Outlook. Click. Done.
+That _something_ is Linux containers — a technology popularised by Docker that helps you run isolated processes.
 
-When it opens, you're ready to see your emails.
+Instead of instantiating a virtual machine and running a process within an operating system, containers allow you to sandbox a process in the kernel.
 
-When you want to use your Gmail instead, you have to open a web browser, find the right address, wait for the browser to render the page and finally read your emails.
+For the same operating system and server, you could have dozens of containers running.
+
+Containers can't see each other and they all behave as if they were in a virtual machine despite being on the same host.
+
+That's great news!
+
+You don't need to waste resources on one operating system per application.
+
+_But what are those Linux containers, anyway?_
+
+## Linux containers are isolated processes with benefits
 
 The magic of containers comes from two feature in the Linux kernel: control groups and namespaces.
 
 Control groups are a convenient way to limit the CPU or memory that a particular process can use.
 
-As an example, you could say that your component should use only 2GB of memory and one of your four core processors CPU.
+As an example, you could say that your component should use only 2GB of memory and one of your four CPU cores.
 
 Namespaces, on the other hand, are in charge of isolating the process and limiting what it can see.
 
@@ -241,13 +249,15 @@ One of the first abstractions was LXC, but the real deal was when Docker was rel
 
 So Docker containers aren't virtual machines and don't need to emulate hardware or have an operating system.
 
-But how can they help your team to ship software quicker?
+_They save you money by removing the need for extra operating systems, but how do they help the team to ship software quicker?_
 
-Docker containers can be easily described with recipes.
+## Containers as a self-container unit
+
+Containers can be easily described with recipes.
 
 And you're the chef.
 
-If your application requires the JVM 1.8 with the Java Cryptographic Extension, you should add them to your list.
+If your application requires the JVM 1.8 with the Java Cryptographic Extension, you add them to your list.
 
 If you your application uses ImageMagick or PhantomJS, you can add those in too.
 
@@ -255,39 +265,27 @@ Once you're ready, you can bake your container with all dependencies and files.
 
 The process is akin to packaging an RPM or compressing a folder as a Gzip file.
 
-This is what the ~recipe~ `Dockerfile` looks like:
+You're ready to run it.
 
-```dockerfile
-FROM TODO
-```
-
-So what's different this time?
-
-Once you know how to run a process packaged as a container, you know how to run all other containers.
-
-In fact, containers expose a consistent interface independenlty of what they contain.
-
-Have a look:
+Since all dependencies are self-contained, you can start containers with a generic and standarised command.
 
 ```
-docker run -ti ubuntu bash
+docker run my-little-component
 ```
 
-And I have a bash in an Ubuntu-flavoured environment. Or I can do:
+But you could package anything you wish in containers.
 
 ```
-docker run -ti mysql
+docker run mysql
 ```
 
 And I can use a MySQL database inside a container.
 
 By using a consistent interface to run a variety of containers you just solved the problem of portability.
 
-As long as you know how to run containers, you can deploy applications ranging from Java to Node.js, to Python.
+In fact `docker run` works for every container and as long as you know how to run containers, you can deploy applications ranging from Java to Node.js, to Python.
 
 No need for complicated Puppet scripts.
-
-And best of all, no operating system.
 
 The Docker container is merely a running process that can only see its resources.
 
@@ -295,67 +293,63 @@ You're saving money operating systems ✅
 Developers can package their creations in generic containers ✅
 You still have to manage thousands of containers ❌
 
-Managing containers at scale sound one of those hard problems that require a bit of thinking.
+Managing containers at scale sound one of those hard problems that requires a bit of thinking.
 
-Perhaps you could automate your deployment even more.
+## Managing containers at scale
 
-Still doesn't help with optimising resources if you run one Docker container per virtual machine, though.
+Ideally, you should work out how to run multiple containers on the same virtual machine.
 
-You should work out how to run multiple containers on the same virtual machine.
+And you should plan for containers to be spread on multiple servers too.
 
-But it sounds like a lot of work.
+So your component could have few containers on one host and few more on another.
+
+You could automate the deployment, but you would need to keep track of each application and where's deployed.
+
+What happens when something breaks?
+
+You would need to look at your long list of deployed apps, find the right server and fix it.
+
+If it sounds like a lot of work, it is.
 
 However if it pays off, perhaps it's worth it.
 
-But what if you could automate that too?
+But what if you could have an algorithm deciding where to place those containers?
 
-What if you could have an algorithm deciding where to place those containers?
+What if there was an automated agent keeping that list of deployed apps.
 
-It turns out that someone had precisely that idea.
+It turns out that someone had precisely that idea and came up with a solution.
 
-And luckily for you, more than a single person.
-
-Three technologies are competing in the container orchestration arena:
-
-- Apache Mesos
-- Hashicopr Nomad
-- Kubernetes
-
-They all have pros and cons.
-
-But the reality is that if you start comparing them, you will notice that it's not a fair fight.
-
-Kubernetes is the de facto container orchestrator with support from all the major players: Google, Microsoft, Red Hat, Pivotal, VMware, IBM and many more.
-
-Why Kubernetes?
-
-What's so unique about it?
+## Kubernetes, the mighty container orchestrator
 
 Kubernetes has initially been a Google creation.
 
 Google was running a technology similar to containers and had to find an efficient way to schedule workloads.
 
-They decided to write a platform that can automatically analyse resource utilisation and schedule deployments.
+They didn't want to keep and manually update a long list of containers and servers.
+
+So they decided to write a platform that can automatically analyse resource utilisation, schedule and deploy containers.
 
 Later on, few Googlers decided to leave the company and restart the project as an open source effort.
 
 The rest is history.
 
-How does Kubernetes work, you say?
-
-You can think about it as a scheduler.
+You can think about Kubernetes as a scheduler.
 
 Kubernetes measures your infrastructure (bare metal or cloud, public or private) and collects CPU and memory for each computer.
 
-When you request to deploy a container, Kubernetes identifies the memory requirements for your container and finds the best computer to satisfy your request.
+When you request to deploy a container, Kubernetes identifies the memory requirements for your container and finds the best server that satisfies your request.
 
-You don't decide where the application is deployed. The data centre is abstracted away from you.
+You don't decide where the application is deployed.
+
+The data centre is abstracted away from you.
 
 In other words, Kubernetes will play Tetris with your infrastructure.
 
 Docker containers are the blocks; computers are the board, and Kubernetes is the player.
 
 Having someone efficiently packing your infrastructure means that you get more computing for your money.
+
+You can do a lot more with a lot less.
 
 And your overall bill usage should decrease as a result of that.
 
@@ -366,6 +360,8 @@ Well, Kubernetes just saved your day.
 But there's more.
 
 Kubernetes has a killer feature that's usually forgotten or dismissed.
+
+## Kubernetes as an API layer over your data centre
 
 Everything you do in Kubernetes is one API call away from you.
 
@@ -380,8 +376,8 @@ Everything you do in Kubernetes is calling APIs.
 And there're plenty of good reasons to be excited about that:
 
 - You can create scripts and daemons that interact with the API programmatically
-- The APIs are versioned; when you upgrade your cluster you can keep using the old APIs and gradually upgrade
-- You can install Kubernetes in any cloud provider or data centre, and you can leverage the same API
+- The APIs are versioned; when you upgrade your cluster you can keep using the old APIs and gradually migrate to new ones
+- You can install Kubernetes in any cloud provider or data centre, and you can leverage the exact same APIs
 
 You can think of Kubernetes as a layer on top of your infrastructure.
 
@@ -427,21 +423,21 @@ But they went the extra step and trained a team of machines to play together.
 
 And they used Kubernetes to scale their machine learning model in the cloud.
 
-Do you want to know the details?
+The details of their cluster?
 
-128000 vCPUs
+_128000 vCPUs_
 
 That's about 16000 MacBook Pros.
 
-256 Nvidia Tesla P100
+_256 Nvidia Tesla P100_
 
 That's 2100 Teraflops 16-bit floating-point performance.
 
 The same as you'd run 525 PlayStation 4.
 
-Can you guess the cost per hour?
+_Can you guess the cost per hour?_
 
-No?
+_No?_
 
 Only $1280/hr for 128000 vCPU and $400 for the 256 Nvidia P100.
 
