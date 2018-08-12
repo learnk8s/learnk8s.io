@@ -20,9 +20,9 @@ And rightly so.
 
 Services that are tiny in size are:
 
-- quicker to deploy because you create and release them in smaller chunks
-- easier to iterate on, since adding features happens independently
-- resilient — the overall service can still function despite one of the components not being available
+- **quicker to deploy** because you create and release them in smaller chunks
+- **easier to iterate on**, since adding features happens independently
+- **resilient** — the overall service can still function despite one of the components not being available
 
 Smaller services are great from a product and development perspective.
 
@@ -38,7 +38,7 @@ In large organisation, managing hundreds of applications is demanding, but still
 
 You have several teams dedicated to developing, packaging and releasing applications.
 
-Developing services out of smaller components, on the other hand, introduces a different challenge.
+**Developing services out of smaller components, on the other hand, introduces a different challenge.**
 
 When for every application, you can refactor the same apps in a collection of four components, you have at least four times more apps to develop, package and release.
 
@@ -82,7 +82,7 @@ Amazon Web Services and the other cloud providers have indeed a long list of com
 
 You should strive to use the right virtual machine for your component.
 
-Ideally it should match the max memory consumption and CPU utilisation.
+Ideally it should match the memory consumption and CPU utilisation.
 
 _Are you working on a critical web component written in Java?_
 
@@ -104,9 +104,9 @@ None at all, if you're happy to wrap every component into a 2GB of memory and vC
 
 Even if your component can run with only 1GB of memory.
 
-_Yes, you could optimise in the feature._
+_Yes, you could optimise in the future._
 
-But let's be honest: **it's like changing the wheels of a running car**.
+But let's be honest: **it's like changing tyres while driving**.
 
 You put a lot of effort in tuning the system only to realise that the application changed again and you have to start from scratch.
 
@@ -123,8 +123,6 @@ Some utilise as little as 10% of the allocated resources.
 That doesn't sound like the best way to spend your budget.
 
 _You should get your money back on the resources you don't use._
-
-_And you should put more effort in time tailoring compute capacity to your services._
 
 _But why are those requirements so different anyway?!_
 
@@ -166,7 +164,7 @@ Or maybe not.
 
 Information technology is not the only industy with the exact same problem.
 
-Shipping goods in cargos all around the globe is challenging if you need to store items individually.
+Shipping goods in cargos around the globe is hard when you need to store items individually.
 
 Imagine having thousands of boxes of all shape and sizes to store in the hold.
 
@@ -174,11 +172,11 @@ You should pay extra attention on how you pack the items, because you don't want
 
 The cargo industry came up with a solution: containers.
 
-The cargo company doesn't carry goods, it carries containers.
+The cargo company doesn't carry goods, it ships containers.
 
 _Do you want to ship all your goods safely?_
 
-Place all of them in a container.
+Place them in a container.
 
 When the container is unloaded, you're guaranteed to have everything there.
 
@@ -190,11 +188,11 @@ Wrap them into a Linux container.
 
 A Linux container is a like a cargo container, but it encapsulate all files, binaries, and libraries necessary to run your process.
 
-_That sounds a lot like a virtual machine._
+_Doesn't that sounds a lot like a virtual machines?_
 
 ## Virtual machine on a diet
 
-Indeed, if you squint and look at virtual machines, you can think about them as containers too.
+Indeed, if you squint and look at virtual machines from far, you can think about them as containers too.
 
 They encapsulate the application and its depedencies like containers.
 
@@ -208,7 +206,7 @@ Linux containers, on the other hand, are merely processes running on your host.
 
 Indeed, for the same operating system and server, you could have dozens of containers running on that host.
 
-And despite living on the same computer, containers can't see each other.
+And despite living on the same computer, processes running in containers can't see each other.
 
 Applications running inside containers are completely isolated and can't tell the difference between a virtual machine and a container.
 
@@ -238,7 +236,7 @@ With time developers created more and more layers of abstractions to make it eas
 
 One of the first abstractions was LXC, but the real deal was Docker that was released in 2013.
 
-Docker not only abstracts the above kernel features but it is plesant to work with.
+Docker not only abstracts the above kernel features but it is pleasant to work with.
 
 Running a Docker container is as simple as:
 
@@ -276,7 +274,7 @@ So you can distribute the load across several nodes and prevent that a single fa
 
 Keeping track of where every container is deployed in your infrastructure doesn't sound like the best use of your time.
 
-Perhaps there's a way to automate it?
+_Perhaps there's a way to automate it?_
 
 And what if you could have an algorithm deciding where to place those containers too?
 
@@ -334,19 +332,19 @@ Kubernetes has a killer feature that's usually forgotten or dismissed.
 
 Everything you do in Kubernetes is one API call away from you.
 
-Do you need to deploy a container? There's a REST endpoint for that.
+_Do you need to deploy a container?_ There's a REST endpoint for that.
 
-Perhaps you wish to provision a load balancer? Not a problem. Just call this API.
+_Perhaps you wish to provision a load balancer?_ Not a problem. Just call this API.
 
-Do you wish to provision storage? Please send a POST request to this URL.
+_Do you wish to provision storage?_ Please send a POST request to this URL.
 
 Everything you do in Kubernetes is calling APIs.
 
 And there're plenty of good reasons to be excited about that:
 
 - You can create scripts and daemons that interact with the API programmatically
-- The APIs are versioned; when you upgrade your cluster you can keep using the old APIs and gradually migrate to new ones
-- You can install Kubernetes in any cloud provider or data centre, and you can leverage the exact same APIs
+- The API is versioned; when you upgrade your cluster you can keep using the old API and gradually migrate
+- You can install Kubernetes in any cloud provider or data centre, and you can leverage the exact same API
 
 You can think of Kubernetes as a layer on top of your infrastructure.
 
@@ -354,7 +352,7 @@ And since this layer is generic and it can be installed anywhere, you can always
 
 Amazon Web Service is too expensive?
 
-No problemo.
+**No problemo.**
 
 You can install Kubernetes on Google Cloud Platform and move your workloads there.
 
