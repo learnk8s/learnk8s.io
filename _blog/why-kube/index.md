@@ -1,13 +1,13 @@
 ---
 layout: post
-title: What is Kubernetes? And does it help you save 50% on your cloud bill
+title: What is Kubernetes? And how you can save 50% of your cloud bill
 description:
 date: 2018-07-16 11:26:00
 categories:
 image:
 open_graph:
   type: article
-  title: What is Kubernetes? And does it help you save 50% on your cloud bill
+  title: What is Kubernetes? And how you can save 50% of your cloud bill
   image:
   description:
 ---
