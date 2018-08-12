@@ -12,7 +12,7 @@ open_graph:
   description:
 ---
 
-During the last few years, the industry has experienced a shift towards developing smaller and more focussed applications.
+During the last few years, the industry has experienced a shift towards developing smaller and more focused applications.
 
 It doesn't come as a surprise that more and more companies are breaking their massive and static monoliths into a set of decoupled and independent components.
 
@@ -24,7 +24,7 @@ Services that are tiny in size are:
 - **easier to iterate on**, since adding features happens independently
 - **resilient** — the overall service can still function despite one of the components not being available
 
-Smaller services are great from a product and development perspective.
+Smaller services are excellent from a product and development perspective.
 
 _But how does that cultural shift impact the infrastructure?_
 
@@ -34,7 +34,7 @@ It turns out that things are rather simple when you deal with a few sparse appli
 
 You can count them with your hands, and you have plenty of time to dedicate to support and release.
 
-In large organisation, managing hundreds of applications is demanding, but still doable.
+In a large organisation, managing hundreds of applications is demanding, but still doable.
 
 You have several teams dedicated to developing, packaging and releasing applications.
 
@@ -42,7 +42,7 @@ You have several teams dedicated to developing, packaging and releasing applicat
 
 When for every application, you can refactor the same apps in a collection of four components, you have at least four times more apps to develop, package and release.
 
-It's not uncommon for a small service to be made out of a dozen of components such as a front-end app, a backend API, an authorisation server, an admin application, etc.
+It's not uncommon for a small service to be made out of a dozen components such as a front-end app, a backend API, an authorisation server, an admin application, etc.
 
 Indeed when you develop services that interact with each other, you see an explosion of components deployed on your infrastructure.
 
@@ -72,25 +72,25 @@ However, the cash wasted on operating systems is only the tip of the iceberg.
 
 ## You're also wasting A LOT of money on resource utilisation
 
-You have probably realised that when you break your service in smaller components each of them comes with different resource requirements.
+You have probably realised that when you break your service into smaller components, each of them comes with different resource requirements.
 
 Some components such as data processing and data mining applications are CPU intensive.
 
 Others, such as servers for real-time applications might use more memory than CPU.
 
-Amazon Web Services and the other cloud providers have indeed a long list of compute resources that fits every need: general purpose, CPU optimised, memory optimised, storage optimised and GPU computing.
+Amazon Web Services and the other cloud providers have indeed a long list of compute resources that fit every need: general purpose, CPU optimised, memory optimised, storage optimised and GPU computing.
 
 You should strive to use the right virtual machine for your component.
 
-Ideally it should match the memory consumption and CPU utilisation.
+Ideally, it should match the memory consumption and CPU utilisation.
 
 _Are you working on a critical web component written in Java?_
 
-Perhaps you should use a c5.4xlarge optimised for compute intensive workloads.
+Perhaps you should use a c5.4xlarge optimised for compute-intensive workloads.
 
 The closer you match the requirements, the better you're utilising your resources.
 
-In practice this is rather uncommon, though.
+In practice, this is somewhat uncommon, though.
 
 _Should you use a c5.2xlarge or a c5.4xlarge?_
 
@@ -108,13 +108,13 @@ _Yes, you could optimise in the future._
 
 But let's be honest: **it's like changing tyres while driving**.
 
-You put a lot of effort in tuning the system only to realise that the application changed again and you have to start from scratch.
+You put a lot of effort into tuning the system only to realise that the application changed again and you have to start from scratch.
 
 So you end up taking the only sensible choice: selecting a small, medium and large profile for virtual machines and using them for all workloads.
 
 You know you have to live with wasting hundreds of megabytes of RAM and plenty of CPU cycles.
 
-If it makes you feel any better, there're plenty companies suffering from similar inefficiencies.
+If it makes you feel any better, there're plenty of companies suffering from similar inefficiencies.
 
 Some utilise as little as 10% of the allocated resources.
 
@@ -132,11 +132,11 @@ When developers have the freedom to use the right tool for the job they usually 
 
 Node.js for the front-end, Spring Boot for the backend API, Flask and Celery for the processing background jobs, React.js for the client-side, you name it.
 
-The infrastructure becomes a theme park, hundreds of applications running on completely different runtimes.
+The infrastructure becomes a theme park, hundreds of applications running on entirely different runtimes.
 
 Having the right technology for the job enables greater iteration speed, but it usually comes with the extra burden of managing one more programming language.
 
-While you could mitigate the proliferation of tools and languages, in practice, it's more complex than that.
+While you could mitigate the proliferation of tools and languages, in practice, it's more complicated than that.
 
 Two applications sharing the same JVM runtime might rely on a different set of dependencies and libraries.
 
@@ -146,9 +146,9 @@ The other relies on a binary such as PhantomJS or ZeroMQ to be available in its 
 
 You should package those dependencies alongside its application.
 
-And so you end up dealing with dozens configurations that are the same, but different in their special way.
+And so you end up dealing with dozens of configurations that are the same, but different in their unique way.
 
-You shouldn't treat the infrastructure as an after thought.
+You shouldn't treat the infrastructure as an afterthought.
 
 You should look after your dependencies and package them as you develop the application, right from the beginning.
 
@@ -162,17 +162,17 @@ Or maybe not.
 
 ## Borrowing containers from the shipping industry
 
-Information technology is not the only industy with the exact same problem.
+Information technology is not the only industry with the same problem.
 
 Shipping goods in cargos around the globe is hard when you need to store items individually.
 
 Imagine having thousands of boxes of all shape and sizes to store in the hold.
 
-You should pay extra attention on how you pack the items, because you don't want to miss one when it's time to unload.
+You should pay extra attention to how you pack the items because you don't want to miss one when it's time to unload.
 
 The cargo industry came up with a solution: containers.
 
-The cargo company doesn't carry goods, it ships containers.
+The cargo company doesn't carry goods; it ships containers.
 
 _Do you want to ship all your goods safely?_
 
@@ -186,17 +186,17 @@ _Do you want to deploy your application and all its dependency safely?_
 
 Wrap them into a Linux container.
 
-A Linux container is a like a cargo container, but it encapsulate all files, binaries, and libraries necessary to run your process.
+A Linux container is a like a cargo container, but it encapsulates all files, binaries, and libraries necessary to run your process.
 
-_Doesn't that sounds a lot like a virtual machines?_
+_Doesn't that sounds a lot like virtual machines?_
 
 ## Virtual machine on a diet
 
 Indeed, if you squint and look at virtual machines from far, you can think about them as containers too.
 
-They encapsulate the application and its depedencies like containers.
+They encapsulate the application and its dependencies like containers.
 
-However, virtual machines are slow to start, usually larger in size and — as you learnt — a waste of resources.
+However, virtual machines are slow to start, usually larger and — as you learnt — a waste of resources.
 
 In fact, you have to allocate a fixed number of CPU and memory to run your application.
 
@@ -208,11 +208,11 @@ Indeed, for the same operating system and server, you could have dozens of conta
 
 And despite living on the same computer, processes running in containers can't see each other.
 
-Applications running inside containers are completely isolated and can't tell the difference between a virtual machine and a container.
+Applications running inside containers are entirely isolated and can't tell the difference between a virtual machine and a container.
 
 That's great news!
 
-Linux containers are like virtual machine, but more effiencient.
+Linux containers are like virtual machines, but more efficient.
 
 _But what are those Linux containers made of, anyway?_
 
@@ -244,7 +244,7 @@ Running a Docker container is as simple as:
 docker run <my-container>
 ```
 
-And since all containers implement a common interface, you can run any other container with the same command:
+And since all containers implement a standard interface, you can run any other container with the same command:
 
 ```bash
 docker run mysql
@@ -252,7 +252,7 @@ docker run mysql
 
 And you have a MySQL database.
 
-Portability of the application and a common interface to create and run processes is what makes containers so popular.
+Portability of the application and a standard interface to create and run processes is what makes containers so popular.
 
 Containers are great!
 
@@ -278,7 +278,7 @@ _Perhaps there's a way to automate it?_
 
 And what if you could have an algorithm deciding where to place those containers too?
 
-Perhaps it could be so smart to pack containers efficiently so to maxisime server density.
+Perhaps it could be so smart to pack containers efficiently so to maximise server density.
 
 Maybe even keep a list of deployed containers and their host.
 
@@ -300,7 +300,7 @@ The rest is history.
 
 _So what's Kubernetes?_
 
-You can think about Kubernetes as a scheduler.
+You can think of Kubernetes as a scheduler.
 
 Kubernetes inspects your infrastructure (bare metal or cloud, public or private) and measures CPU and memory for each computer.
 
@@ -344,7 +344,7 @@ And there're plenty of good reasons to be excited about that:
 
 - You can create scripts and daemons that interact with the API programmatically
 - The API is versioned; when you upgrade your cluster you can keep using the old API and gradually migrate
-- You can install Kubernetes in any cloud provider or data centre, and you can leverage the exact same API
+- You can install Kubernetes in any cloud provider or data centre, and you can leverage the same API
 
 You can think of Kubernetes as a layer on top of your infrastructure.
 
@@ -390,7 +390,7 @@ But they went the extra step and trained a team of machines to play together.
 
 And they used Kubernetes to scale their machine learning model in the cloud.
 
-The details of their cluster?
+Wondering the details of their cluster?
 
 _128000 vCPUs_
 
