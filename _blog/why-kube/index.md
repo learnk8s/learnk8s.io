@@ -1,13 +1,13 @@
 ---
 layout: post
-title: What is Kubernetes anyway?
+title: What is Kubernetes? And does it help you save 50% on your cloud bill
 description:
 date: 2018-07-16 11:26:00
 categories:
 image:
 open_graph:
   type: article
-  title: What is Kubernetes anyway?
+  title: What is Kubernetes? And does it help you save 50% on your cloud bill
   image:
   description:
 ---
@@ -70,7 +70,7 @@ And you're right.
 
 However, the cash wasted on operating systems is only the tip of the iceberg.
 
-## You're also wasting A LOT of money on resource efficiency
+## You're also wasting A LOT of money on resource utilisation
 
 You have probably realised that when you break your service in smaller components each of them comes with different resource requirements.
 
@@ -80,7 +80,9 @@ Others, such as servers for real-time applications might use more memory than CP
 
 Amazon Web Services and the other cloud providers have indeed a long list of compute resources that fits every need: general purpose, CPU optimised, memory optimised, storage optimised and GPU computing.
 
-You should strive to use the right virtual machine that supports the requirements of the component that you're developing.
+You should strive to use the right virtual machine for your component.
+
+Ideally it should match the max memory consumption and CPU utilisation.
 
 _Are you working on a critical web component written in Java?_
 
@@ -108,9 +110,9 @@ But let's be honest: **it's like changing the wheels of a running car**.
 
 You put a lot of effort in tuning the system only to realise that the application changed again and you have to start from scratch.
 
-So you end up taking the only sensible choice: selecting a small, medium and large virtual machine and use them for all workloads.
+So you end up taking the only sensible choice: selecting a small, medium and large profile for virtual machines and using them for all workloads.
 
-You know you are wasting hundreds of megabytes of RAM and plenty of CPU cycles and you have to live with it.
+You know you have to live with wasting hundreds of megabytes of RAM and plenty of CPU cycles.
 
 If it makes you feel any better, there're plenty companies suffering from similar inefficiencies.
 
@@ -142,17 +144,13 @@ Two applications sharing the same JVM runtime might rely on a different set of d
 
 Perhaps one relies on ImageMagick to resize images.
 
-The other relies on a binary such as PhantomJS to be available in its path.
+The other relies on a binary such as PhantomJS or ZeroMQ to be available in its path.
 
 You should package those dependencies alongside its application.
 
 And so you end up dealing with dozens configurations that are the same, but different in their special way.
 
-Using automation scripts such as Chef or Puppet will only take you so far.
-
-You're always one step behind, catching up and reacting at the mercy of the development team.
-
-In fact, you shouldn't treat the infrastructure as an after thought.
+You shouldn't treat the infrastructure as an after thought.
 
 You should look after your dependencies and package them as you develop the application, right from the beginning.
 
@@ -160,7 +158,7 @@ Ideally, you should archive all of the parts necessary to run your component as 
 
 No more getting lost in chasing dependencies just before a release.
 
-_Easier said than done._
+_Yes, easier said than done._
 
 Or maybe not.
 
@@ -170,15 +168,17 @@ Information technology is not the only industy with the exact same problem.
 
 Shipping goods in cargos all around the globe is challenging if you need to store items individually.
 
-Imagine having thousands of boxes of all shape and sizes to store individually in the hold.
+Imagine having thousands of boxes of all shape and sizes to store in the hold.
 
-You should pay extra attention on how you store the items, because you don't want to miss one when it's time to unload.
+You should pay extra attention on how you pack the items, because you don't want to miss one when it's time to unload.
 
 The cargo industry came up with a solution: containers.
 
+The cargo company doesn't carry goods, it carries containers.
+
 _Do you want to ship all your goods safely?_
 
-Place all of them in containers.
+Place all of them in a container.
 
 When the container is unloaded, you're guaranteed to have everything there.
 
@@ -188,7 +188,7 @@ _Do you want to deploy your application and all its dependency safely?_
 
 Wrap them into a Linux container.
 
-A Linux container is a like a cargo container, but it encapsulate all files, binaries, libraries necessary to run your process.
+A Linux container is a like a cargo container, but it encapsulate all files, binaries, and libraries necessary to run your process.
 
 _That sounds a lot like a virtual machine._
 
@@ -196,27 +196,27 @@ _That sounds a lot like a virtual machine._
 
 Indeed, if you squint and look at virtual machines, you can think about them as containers too.
 
-They encapsulate the application and its depedencies like Linux containers.
+They encapsulate the application and its depedencies like containers.
 
-However, virtual machines are slow to start and usually larger in size.
+However, virtual machines are slow to start, usually larger in size and — as you learnt — a waste of resources.
 
 In fact, you have to allocate a fixed number of CPU and memory to run your application.
 
 They also have to emulate hardware and come with the extra baggage of an operating system.
 
-Containers, on the other hand, are merely processes running on your host.
+Linux containers, on the other hand, are merely processes running on your host.
 
-Indeed, for the same operating system and server, you could have dozens of containers running.
+Indeed, for the same operating system and server, you could have dozens of containers running on that host.
 
-Despite living on the same host, containers can't see each other.
+And despite living on the same computer, containers can't see each other.
 
-And applications running inside containers are completely isolated and can't tell the difference between a virtual machine and a container.
+Applications running inside containers are completely isolated and can't tell the difference between a virtual machine and a container.
 
 That's great news!
 
-You don't need to waste resources on an operating system per application.
+Linux containers are like virtual machine, but more effiencient.
 
-_But what are those Linux containers, anyway?_
+_But what are those Linux containers made of, anyway?_
 
 ## Linux containers are isolated processes with benefits
 
@@ -238,13 +238,29 @@ With time developers created more and more layers of abstractions to make it eas
 
 One of the first abstractions was LXC, but the real deal was Docker that was released in 2013.
 
-Docker containers aren't virtual machines and don't need to emulate hardware or have an operating system.
+Docker not only abstracts the above kernel features but it is plesant to work with.
 
-That's great news. So far you have
+Running a Docker container is as simple as:
 
-- saved money on running operating systems ✅
-- packaged applications as portable units ✅
-- proliferation of containers ❌
+```bash
+docker run <my-container>
+```
+
+And since all containers implement a common interface, you can run any other container with the same command:
+
+```bash
+docker run mysql
+```
+
+And you have a MySQL database.
+
+Portability of the application and a common interface to create and run processes is what makes containers so popular.
+
+Containers are great!
+
+- You saved money on running dozens of operating systems ✅
+- You packaged applications as portable units ✅
+- You have a proliferation of containers ❌
 
 It sounds like containers haven't solved all problems after all.
 
@@ -256,13 +272,13 @@ When you have hundreds if not thousands of containers, you should find a way to 
 
 And you should plan for containers to be spread on multiple servers too.
 
-So you can distribute the load across several nodes and prevent that a single failure could take down the service.
+So you can distribute the load across several nodes and prevent that a single failure could take down the entire service.
 
 Keeping track of where every container is deployed in your infrastructure doesn't sound like the best use of your time.
 
 Perhaps there's a way to automate it?
 
-and what if you could have an algorithm deciding where to place those containers?
+And what if you could have an algorithm deciding where to place those containers too?
 
 Perhaps it could be so smart to pack containers efficiently so to maxisime server density.
 
@@ -284,9 +300,11 @@ Later on, few Googlers decided to leave the company and restart the project as a
 
 The rest is history.
 
+_So what's Kubernetes?_
+
 You can think about Kubernetes as a scheduler.
 
-Kubernetes measures your infrastructure (bare metal or cloud, public or private) and collects CPU and memory for each computer.
+Kubernetes inspects your infrastructure (bare metal or cloud, public or private) and measures CPU and memory for each computer.
 
 When you request to deploy a container, Kubernetes identifies the memory requirements for your container and finds the best server that satisfies your request.
 
