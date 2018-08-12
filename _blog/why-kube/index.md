@@ -64,27 +64,27 @@ You can't escape from it, even if you're on bare metal.
 
 You still need to run your services from a base operating system.
 
-_It's okay, Everybody needs to run an operating system_ — you say.
-
-_Everybody pays for it._
+_It's okay, everybody needs to run an operating system_ — you say.
 
 And you're right.
 
-However, the cash wasted on operating systems overhead is only the tip of the iceberg.
+However, the cash wasted on operating systems is only the tip of the iceberg.
 
-## You're also wasting A LOT of money on allocated resources
+## You're also wasting A LOT of money on resource efficiency
 
 You have probably realised that when you break your service in smaller components each of them comes with different resource requirements.
 
 Some components such as data processing and data mining applications are CPU intensive.
 
-Others, such as servers for real-time applications might use more memory.
+Others, such as servers for real-time applications might use more memory than CPU.
 
 Amazon Web Services and the other cloud providers have indeed a long list of compute resources that fits every need: general purpose, CPU optimised, memory optimised, storage optimised and GPU computing.
 
 You should strive to use the right virtual machine that supports the requirements of the component that you're developing.
 
-Are you working on a critical web component written in Java? Perhaps you should use a c5.4xlarge optimised for compute intensive workloads.
+_Are you working on a critical web component written in Java?_
+
+Perhaps you should use a c5.4xlarge optimised for compute intensive workloads.
 
 The closer you match the requirements, the better you're utilising your resources.
 
@@ -106,11 +106,11 @@ _Yes, you could optimise in the feature._
 
 But let's be honest: **it's like changing the wheels of a running car**.
 
-You put a lot of effort in updating the specs, the applications is updated and you need to start from scratch.
+You put a lot of effort in tuning the system only to realise that the application changed again and you have to start from scratch.
 
-So you surrend and use a short selection of compute resources: small, medium and large.
+So you end up taking the only sensible choice: selecting a small, medium and large virtual machine and use them for all workloads.
 
-And you accept wasting hundreds of megabytes of RAM and plenty of CPU cycles.
+You know you are wasting hundreds of megabytes of RAM and plenty of CPU cycles and you have to live with it.
 
 If it makes you feel any better, there're plenty companies suffering from similar inefficiencies.
 
@@ -160,70 +160,61 @@ Ideally, you should archive all of the parts necessary to run your component as 
 
 No more getting lost in chasing dependencies just before a release.
 
-_It sounds all good, but how do you actually scale that in th organisation?_
+_Easier said than done._
 
-## Scaling releases with your teams
+Or maybe not.
 
-When you have teams dedicated to development and others looking after the infrastructure, you have clear priorities defined for each of them.
+## Borrowing containers from the shipping industry
 
-And you want to keep teams accountable to their duties:
+Information technology is not the only industy with the exact same problem.
 
-- software engineers — develop and release new features!
-- infrastructure engineers — you're on package, release and support!
+Shipping goods in cargos all around the globe is challenging if you need to store items individually.
 
-And the in the tipical scenario your application is developed, packaged and released in subsequent steps, one after the other.
+Imagine having thousands of boxes of all shape and sizes to store individually in the hold.
 
-One team produces the work, the other packages and releases it.
+You should pay extra attention on how you store the items, because you don't want to miss one when it's time to unload.
 
-But when you actually implement the plan, reality hits hard.
+The cargo industry came up with a solution: containers.
 
-What you thought was a straight line from development to production is instead a bumpy road.
+_Do you want to ship all your goods safely?_
 
-_"The application is done and dusted, we're just waiting for it to be deployed!"_
+Place all of them in containers.
 
-_"We can't deploy applications that require 48GB in memory! What are the developers doing?"_
+When the container is unloaded, you're guaranteed to have everything there.
 
-The product owner is frustrated because teams are figthing each other and slowing down delivery.
+You can apply the same principle to your applications.
 
-And there's a constant pointing fingers between the teams.
+_Do you want to deploy your application and all its dependency safely?_
 
-Chaos.
+Wrap them into a Linux container.
 
-It would be much easier if the teams could play nicely together.
+A Linux container is a like a cargo container, but it encapsulate all files, binaries, libraries necessary to run your process.
 
-They could finally focus on releasing features rather than playing the blame game.
-
-And you could finally smile at features shipped around the clock.
-
-If only!
-
-Less spending, quicker iterations and delivery.
-
-If only.
-
-_Maybe there's something you can do._
+_That sounds a lot like a virtual machine._
 
 ## Virtual machine on a diet
 
-It turns out the technologies you dream of are ready available.
+Indeed, if you squint and look at virtual machines, you can think about them as containers too.
 
-In fact, you could replace virtual machines with something lighter.
+They encapsulate the application and its depedencies like Linux containers.
 
-_Something_ that doesn't require resources to be allocated when you start them.
+However, virtual machines are slow to start and usually larger in size.
 
-_Something_ that isolates processes like if you were using virtual machines.
+In fact, you have to allocate a fixed number of CPU and memory to run your application.
 
-That _something_ is Linux containers — a technology popularised by Docker that helps you run isolated processes.
+They also have to emulate hardware and come with the extra baggage of an operating system.
 
-Instead of instantiating a virtual machine and running a process within an operating system, containers allow you to sandbox a process in the kernel.
+Containers, on the other hand, are merely processes running on your host.
 
-For the same operating system and server, you could have dozens of containers running.
+Indeed, for the same operating system and server, you could have dozens of containers running.
 
-Containers can't see each other and they all behave as if they were in a virtual machine despite being on the same host.
+Despite living on the same host, containers can't see each other.
+
+And applications running inside containers are completely isolated and can't tell the difference between a virtual machine and a container.
 
 That's great news!
 
-You don't need to waste resources on one operating system per application.
+You don't need to waste resources on an operating system per application.
 
 _But what are those Linux containers, anyway?_
 
@@ -245,77 +236,37 @@ Control groups and namespaces are low-level primitives.
 
 With time developers created more and more layers of abstractions to make it easier to control those kernel features.
 
-One of the first abstractions was LXC, but the real deal was when Docker was released in 2013.
+One of the first abstractions was LXC, but the real deal was Docker that was released in 2013.
 
-So Docker containers aren't virtual machines and don't need to emulate hardware or have an operating system.
+Docker containers aren't virtual machines and don't need to emulate hardware or have an operating system.
 
-_They save you money by removing the need for extra operating systems, but how do they help the team to ship software quicker?_
+That's great news. So far you have
 
-## Containers as a self-container unit
+- saved money on running operating systems ✅
+- packaged applications as portable units ✅
+- proliferation of containers ❌
 
-Containers can be easily described with recipes.
+It sounds like containers haven't solved all problems after all.
 
-And you're the chef.
-
-If your application requires the JVM 1.8 with the Java Cryptographic Extension, you add them to your list.
-
-If you your application uses ImageMagick or PhantomJS, you can add those in too.
-
-Once you're ready, you can bake your container with all dependencies and files.
-
-The process is akin to packaging an RPM or compressing a folder as a Gzip file.
-
-You're ready to run it.
-
-Since all dependencies are self-contained, you can start containers with a generic and standarised command.
-
-```
-docker run my-little-component
-```
-
-But you could package anything you wish in containers.
-
-```
-docker run mysql
-```
-
-And I can use a MySQL database inside a container.
-
-By using a consistent interface to run a variety of containers you just solved the problem of portability.
-
-In fact `docker run` works for every container and as long as you know how to run containers, you can deploy applications ranging from Java to Node.js, to Python.
-
-No need for complicated Puppet scripts.
-
-The Docker container is merely a running process that can only see its resources.
-
-You're saving money operating systems ✅
-Developers can package their creations in generic containers ✅
-You still have to manage thousands of containers ❌
-
-Managing containers at scale sound one of those hard problems that requires a bit of thinking.
+You need a way to manage containers.
 
 ## Managing containers at scale
 
-Ideally, you should work out how to run multiple containers on the same virtual machine.
+When you have hundreds if not thousands of containers, you should find a way to run multiple containers on the same server.
 
 And you should plan for containers to be spread on multiple servers too.
 
-So your component could have few containers on one host and few more on another.
+So you can distribute the load across several nodes and prevent that a single failure could take down the service.
 
-You could automate the deployment, but you would need to keep track of each application and where's deployed.
+Keeping track of where every container is deployed in your infrastructure doesn't sound like the best use of your time.
 
-What happens when something breaks?
+Perhaps there's a way to automate it?
 
-You would need to look at your long list of deployed apps, find the right server and fix it.
+and what if you could have an algorithm deciding where to place those containers?
 
-If it sounds like a lot of work, it is.
+Perhaps it could be so smart to pack containers efficiently so to maxisime server density.
 
-However if it pays off, perhaps it's worth it.
-
-But what if you could have an algorithm deciding where to place those containers?
-
-What if there was an automated agent keeping that list of deployed apps.
+Maybe even keep a list of deployed containers and their host.
 
 It turns out that someone had precisely that idea and came up with a solution.
 
@@ -345,7 +296,7 @@ The data centre is abstracted away from you.
 
 In other words, Kubernetes will play Tetris with your infrastructure.
 
-Docker containers are the blocks; computers are the board, and Kubernetes is the player.
+Docker containers are the blocks; servers are the boards, and Kubernetes is the player.
 
 Having someone efficiently packing your infrastructure means that you get more computing for your money.
 
