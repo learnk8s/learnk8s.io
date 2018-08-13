@@ -284,7 +284,7 @@ spec:
       - path: /
         backend:
           serviceName: laravel-kubernetes-demo
-          servicePort: 8181
+          servicePort: 80
 ```
 Among the basic content you would expect from a Kubernetes resource file, this file defines a set of rules to follow when routing inbound traffic. The `laravel-kubernetes.demo` URL will point to the Service where the application is running, as previously labelled `laravel-kubernetes-demo` on port 8181.
 
