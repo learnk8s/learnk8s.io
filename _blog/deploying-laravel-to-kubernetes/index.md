@@ -64,8 +64,7 @@ To follow with this demonstration, you will need the following installed on your
 
 3) <a href="https://github.com/kubernetes/minikube/releases" target="_blank" rel="noopener">Minikube</a>
 
->Are you having problems installing and running these applications on Windows? LearnK8s will be publishing a tutorial on how to accomplish this very soon. Subscribe and be notified as soon as new articles get published.
-
+>Are you having problems installing and running these applications on Windows? Check out the article [Getting started with Docker and Kubernetes on Windows 10](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows), for a step by step guide.
 
 __Docker image__
 
