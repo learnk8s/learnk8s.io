@@ -56,7 +56,7 @@ Each virtual machine comes with an operating system that consumes part of the me
 
 When you create a 1GB of memory and 1 vCPU droplet on Digital Ocean, you end up using 700MB in memory and 0.8 vCPU after you remove the overhead of the operating system.
 
-Or in other words, every five virtual machine the overhead adds up to a full virtual machine.
+Or in other words, every fifth virtual machine the overhead adds up to a full virtual machine.
 
 **You pay for five but can use only four.**
 
@@ -118,7 +118,7 @@ If it makes you feel any better, there're plenty of companies suffering from sim
 
 Some utilise as little as 10% of the allocated resources.
 
-**You pay $1000 in EC2 instances on Amazon, you only actual use $100 of it.**
+**You pay $1000 in EC2 instances on Amazon, you only actually use $100 of it.**
 
 That doesn't sound like the best way to spend your budget.
 
@@ -164,9 +164,9 @@ Or maybe not.
 
 Information technology is not the only industry with the same problem.
 
-Shipping goods in cargos around the globe is hard when you need to store items individually.
+Shipping goods in cargo around the globe is hard when you need to store items individually.
 
-Imagine having thousands of boxes of all shape and sizes to store in the hold.
+Imagine having thousands of boxes of all shapes and sizes to store in the hold.
 
 You should pay extra attention to how you pack the items because you don't want to miss one when it's time to unload.
 
@@ -294,7 +294,7 @@ They didn't want to keep and manually update a long list of containers and serve
 
 So they decided to write a platform that can automatically analyse resource utilisation, schedule and deploy containers.
 
-Later on, few Googlers decided to leave the company and restart the project as an open source effort.
+Later on, a few Googlers decided to leave the company and restart the project as an open source effort.
 
 The rest is history.
 
@@ -350,7 +350,7 @@ You can think of Kubernetes as a layer on top of your infrastructure.
 
 And since this layer is generic and it can be installed anywhere, you can always take it with you.
 
-Amazon Web Service is too expensive?
+Amazon Web Services is too expensive?
 
 **No problemo.**
 
@@ -402,7 +402,7 @@ _256 Nvidia Tesla P100_
 
 That's 2100 Teraflops 16-bit floating-point performance.
 
-The same as you'd run 525 PlayStation 4.
+The same as you'd run 525 PlayStation 4s.
 
 _Can you guess the cost per hour?_
 
@@ -412,7 +412,7 @@ Only $1280/hr for 128000 vCPU and $400 for the 256 Nvidia P100.
 
 That's not a lot considering that winning Dota tournaments could net you prizes in the order of millions of dollars.
 
-So, what are you waiting?
+So, what are you waiting for?
 
 Get ready to adopt Kubernetes and save on your cloud bill!
 
@@ -420,17 +420,17 @@ Get ready to adopt Kubernetes and save on your cloud bill!
 
 Kubernetes and containers are here to stay.
 
-With backing on company such as Google, Microsoft, Red Hat, Pivotal, Oracle, IBM, and many more it's hard to believe that it won't catch on.
+With backing from companies such as Google, Microsoft, Red Hat, Pivotal, Oracle, IBM, and many more it's hard to believe that it won't catch on.
 
-Many companies are head starting on the Kubernetes and joining the revolution.
+Many companies are getting a head start on Kubernetes and joining the revolution.
 
-Not just startup and SMEs, but big corporations such as banks, financial institution, insurance company are betting on container and Kubernetes to be the future.
+Not just startups and SMEs, but big corporations such as banks, financial institutions and insurance companies are betting on containers and Kubernetes to be the future.
 
 It's still early days and the community has still time to mature, but you should keep a close eye on the innovation in this space.
 
 ## That's all folks!
 
-Many thanks to [Andy Griffiths](https://andrewgriffithsonline.com/) for reading a draft of this post and offering some invaluable suggestions.
+Many thanks to [Andy Griffiths](https://andrewgriffithsonline.com/) for reading a draft of this post and offering some invaluable suggestions th.
 
 If you enjoyed this article, you might find interesting reading:
 
