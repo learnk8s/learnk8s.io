@@ -26,4 +26,30 @@ __Article Preparation:__
 
 ## Documentation
 
-Documentation placeholder for the steps taken and challenges faced. Useful as a reference for the article's content and workshop material.
+This section outlines all the technical steps I am taking to install K8s on the RPi devices so that I can refer to it when typing the article.
+
+### Setting the Hardware
+
+### Installing Software Dependencies
+
+### Setting up a Network with Internet
+
+### Installing Docker
+
+### Installing Kubernetes
+
+### Running Kubernetes
+
+Master & Worker Nodes.
+
+## Results
+
+- [ ] I have Kubernetes installed and running on 3 RPi devices:
+  - [ ] One Master Node (MN1)
+  - [ ] Two Worker Nodes (WN1) & (WN2)
+
+- [ ] I can run an application (POD) on WN1
+
+- [ ] I can replicate the application (POD) on WN2
+
+- [ ] I can see the two running Pods from MN1
