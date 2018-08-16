@@ -219,8 +219,6 @@ But the image is still big!
 
 Is there anything you can do to make it even smaller?
 
-{% include inline-subscribe-cta/index.html %}
-
 ## 2. Remove all the unnecessary cruft from the container with distroless
 
 The current image ships Node.js as well as `yarn`, `npm`, `bash` and a lot of other binaries. It's also based on Ubuntu. So you have a fully fledged operating system with all its little binaries and utilities.
@@ -309,6 +307,8 @@ It's good news because an attacker exploiting your application and gaining acces
 > Please note that perhaps you shouldn't attach to and debug containers in a production environment. You should rather rely on proper logging and monitoring.
 
 But what if you cared about debugging and smaller sizes?
+
+{% include inline-subscribe-cta/index.html %}
 
 ## 3. Smaller base images with Alpine
 
