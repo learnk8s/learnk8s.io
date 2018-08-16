@@ -21,8 +21,6 @@ open_graph:
 js:
   - anime.min.js
   - isScrolledIntoView.js
-
-has_cta: true
 ---
 
 When you design and build applications at scale, you deal with two significant challenges: **scalability and robustness**.
@@ -354,6 +352,8 @@ The cluster is ready, you packaged your application, _perhaps you're ready to de
 
 Yes, you can finally ask Kubernetes to deploy the applications.
 
+{% include inline-subscribe-cta/index.html %}
+
 ## Deploying your application to Kubernetes
 
 Your application has three components:
@@ -673,7 +673,7 @@ Only then it can increase or decrease the instances of your application.
 
 So you could expose the length of the queue as a metric and ask the autoscaler to watch that value.
 
-The more pending messages in the queue, the more instances of your application Kubernetes will create.
+{% include tweet_this/index.html content="With the autoscaler enabled, the more pending messages in the queue, the more instances of your application Kubernetes will create." %}
 
 _So how do you expose those metrics?_
 
@@ -839,7 +839,7 @@ Scaling Pods across nodes works fabulously.
 
 _But what if you don't have enough capacity in the cluster to scale your Pods?_
 
-If you reach peak capacity, Kubernetes will leave the Pods in a pending state and wait for more resources to be available.
+{% include tweet_this/index.html content="If you reach peak capacity in the cluster, Kubernetes will leave the Pods in a pending state and wait for more resources to be available." %}
 
 _It would be great if you could use an autoscaler similar to the Horizontal Pod Autoscaler, but for Nodes._
 
@@ -857,7 +857,7 @@ And it's also cloud provider specific.
 
 You can find [more information about the cluster autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler#cluster-autoscaler) and the [cloud provider implementation](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler#deployment) on Github.
 
-## Recap
+## Summary
 
 Designing applications at scale require careful planning and testing.
 
@@ -865,4 +865,21 @@ Queue based architecture is an excellent design pattern to decouple your microse
 
 And while you can roll out your deployment scripts, it's easier to leverage a container orchestrator such as Kubernetes to deploy and scale your applications automatically.
 
-If you liked the article, you should stay tuned for more! Subscribe to our newsletter!
+## That's all folks!
+
+Thanks to [Nathan Cashmore](https://www.linkedin.com/in/nathancashmore/), and [Andy Griffiths](https://andrewgriffithsonline.com/) for their feedback!
+
+If you enjoyed this article, you might find interesting reading:
+
+- [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images) and learn how to build and deploy Docker images quicker.
+- [Kubernetes Chaos Engineering: Lessons Learned — Part 1](https://learnk8s.io/blog/kubernetes-chaos-engineering-lessons-learned) what happens when things go wrong in Kubernetes? Can Kubernetes recover from failure and self-heal?
+
+## Become an expert at deploying and scaling applications in Kubernetes
+
+Get a head start with our hands-on courses and learn how to master scalability in the cloud.
+
+Learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
