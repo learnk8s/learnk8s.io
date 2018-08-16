@@ -1,0 +1,59 @@
+{% include_relative vmless.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#vmless')
+  const toggle = document.querySelector('#vmless-animejs-toggle')
+  const vmLabel = svg.querySelector('#vmless-animejs-vm-label')
+  const containerLabel = svg.querySelector('#vmless-animejs-container-label')
+  let state = 'vms'
+
+  const vmTimeline = anime.timeline({
+    autoplay: false,
+  });
+  vmTimeline
+  .add({
+    targets: '#vmless-animejs-pin',
+    translateX: [0, -25],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#vmless-animejs-vm-1', '#vmless-animejs-vm-2', '#vmless-animejs-vm-3', '#vmless-animejs-vm-4', '#vmless-animejs-vm-5', '#vmless-animejs-vm-6', '#vmless-animejs-vm-7', '#vmless-animejs-vm-8', '#vmless-animejs-vm-9', '#vmless-animejs-vm-10', '#vmless-animejs-vm-11', '#vmless-animejs-vm-12', '#vmless-animejs-vm-13', '#vmless-animejs-vm-14', '#vmless-animejs-vm-15', '#vmless-animejs-vm-16'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+    begin: function() {
+      containerLabel.setAttribute('fill', '#9B9B9B')
+      vmLabel.setAttribute('fill', '#4A4A4A')
+    }
+  })
+
+  const containerTimeline = anime.timeline({
+    autoplay: false,
+  });
+  containerTimeline
+  .add({
+    targets: '#vmless-animejs-pin',
+    translateX: [-25, 0],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#vmless-animejs-vm-1', '#vmless-animejs-vm-2', '#vmless-animejs-vm-3', '#vmless-animejs-vm-4', '#vmless-animejs-vm-5', '#vmless-animejs-vm-6', '#vmless-animejs-vm-7', '#vmless-animejs-vm-8', '#vmless-animejs-vm-9', '#vmless-animejs-vm-10', '#vmless-animejs-vm-11', '#vmless-animejs-vm-12', '#vmless-animejs-vm-13', '#vmless-animejs-vm-14', '#vmless-animejs-vm-15', '#vmless-animejs-vm-16'],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+    begin: function() {
+      vmLabel.setAttribute('fill', '#9B9B9B')
+      containerLabel.setAttribute('fill', '#4A4A4A')
+    }
+  })
+
+  toggle.onclick = (e) => {
+    e.preventDefault()
+    if (state === 'containers') {
+      state = 'vms'
+      vmTimeline.restart()
+    } else {
+      state = 'containers'
+      containerTimeline.restart()
+    }
+  }
+})();
+</script>

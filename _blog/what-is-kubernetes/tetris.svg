@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 633" id="tetris">
+  <g fill="none" fill-rule="evenodd">
+    <g transform="translate(271 173)">
+      <path fill="#7C7C7C" d="M258,339.110522 L258,367.191866 C258,368.742755 256.656854,370 255,370 L2.99999982,370 C1.34314567,370 2.02906113e-16,368.742755 0,367.191866 L0,339.110522 C-2.02906113e-16,337.559632 1.34314567,336.302387 2.99999982,336.302387 L255,336.302387 C256.656854,336.302387 258,337.559632 258,339.110522 Z"/>
+      <g transform="translate(7.8 344.102)">
+        <polygon fill="#D8D8D8" points="28.8 0 199.2 0 199.2 4 28.8 4"/>
+        <polygon fill="#D7D7D7" points="7.2 0 11.2 0 11.2 4 7.2 4"/>
+        <polygon fill="#D7D7D7" points="0 0 4 0 4 4 0 4"/>
+        <polygon fill="#00CD00" points="230.4 0 234.4 0 234.4 4 230.4 4"/>
+        <polygon fill="#D7D400" points="223.2 0 227.2 0 227.2 4 223.2 4"/>
+        <polygon fill="#FF3C00" points="216 0 220 0 220 4 216 4"/>
+        <polygon fill="#00CD00" points="237.6 0 241.6 0 241.6 4 237.6 4"/>
+      </g>
+      <g transform="translate(7.8 351.102)">
+        <polygon fill="#D8D8D8" points="28.8 0 199.2 0 199.2 4 28.8 4"/>
+        <polygon fill="#D7D7D7" points="7.2 0 11.2 0 11.2 4 7.2 4"/>
+        <polygon fill="#D7D7D7" points="0 0 4 0 4 4 0 4"/>
+        <polygon fill="#00CD00" points="230.4 0 234.4 0 234.4 4 230.4 4"/>
+        <polygon fill="#D7D400" points="223.2 0 227.2 0 227.2 4 223.2 4"/>
+        <polygon fill="#FF3C00" points="216 0 220 0 220 4 216 4"/>
+        <polygon fill="#00CD00" points="237.6 0 241.6 0 241.6 4 237.6 4"/>
+      </g>
+      <g transform="translate(7.8 358.102)">
+        <polygon fill="#D8D8D8" points="28.8 0 199.2 0 199.2 4 28.8 4"/>
+        <polygon fill="#D7D7D7" points="7.2 0 11.2 0 11.2 4 7.2 4"/>
+        <polygon fill="#D7D7D7" points="0 0 4 0 4 4 0 4"/>
+        <polygon fill="#00CD00" points="230.4 0 234.4 0 234.4 4 230.4 4"/>
+        <polygon fill="#D7D400" points="223.2 0 227.2 0 227.2 4 223.2 4"/>
+        <polygon fill="#FF3C00" points="216 0 220 0 220 4 216 4"/>
+        <polygon fill="#00CD00" points="237.6 0 241.6 0 241.6 4 237.6 4"/>
+      </g>
+      <path fill="#7C7C7C" d="M258,2.99999982 L258,329.39998 C258,331.056835 256.656854,332.39998 255,332.39998 L2.99999982,332.39998 C1.34314567,332.39998 2.02906113e-16,331.056835 0,329.39998 L0,2.99999982 C-2.02906113e-16,1.34314567 1.34314567,3.0435917e-16 2.99999982,0 L255,0 C256.656854,1.58830439e-14 258,1.34314567 258,2.99999982 Z"/>
+      <polygon fill="#D7D7D7" points="8.8 320.4 249.8 320.4 249.8 324.4 8.8 324.4"/>
+      <polygon fill="#D7D7D7" points="7.8 21.6 249.8 21.6 249.8 25.6 7.8 25.6"/>
+      <polygon fill="#D7D7D7" points="7.8 14.4 249.8 14.4 249.8 18.4 7.8 18.4"/>
+      <polygon fill="#D7D7D7" points="7.8 7.2 249.8 7.2 249.8 11.2 7.8 11.2"/>
+      <path fill="#FFF" d="M8.99999993,33.599998 L249,33.599998 C249.662742,33.599998 250.2,34.1372563 250.2,34.7999979 L250.2,310.799981 C250.2,311.462723 249.662742,311.999981 249,311.999981 L8.99999993,311.999981 C8.33725827,311.999981 7.8,311.462723 7.8,310.799981 L7.8,34.7999979 C7.8,34.1372563 8.33725827,33.599998 8.99999993,33.599998 Z"/>
+    </g>
+    <rect id="tetris-animejs-block-5" width="31" height="31" x="487" y="391" fill="#D8D8D8"/>
+    <rect id="tetris-animejs-block-9" width="31" height="31" x="388" y="302" fill="#D8D8D8"/>
+    <rect id="tetris-animejs-block-8" width="31" height="31" x="282" y="271" fill="#D8D8D8"/>
+    <rect id="tetris-animejs-block-1" width="119" height="120" x="282" y="362" fill="#FA2A00"/>
+    <rect id="tetris-animejs-block-2" width="46" height="149" x="401" y="333" fill="#F5A623"/>
+    <rect id="tetris-animejs-block-7" width="46" height="149" x="342" y="213" fill="#F5A623"/>
+    <rect id="tetris-animejs-block-3" width="60" height="60" x="447" y="422" fill="#86B8B1"/>
+    <rect id="tetris-animejs-block-6" width="60" height="60" x="282" y="302" fill="#86B8B1"/>
+    <rect id="tetris-animejs-block-4" width="40" height="130" x="447" y="292" fill="#3D1C00"/>
+  </g>
+</svg>

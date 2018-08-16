@@ -1,0 +1,139 @@
+{% include_relative tetris.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#tetris')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: '#tetris-animejs-block-1',
+    translateX: [{value: ['56px', '56px']}, {value: ['56px', 0]}],
+    translateY: [{value: ['-330px', 0]}, {value: 0}],
+    easing: 'easeInExpo',
+  })
+
+  .add({
+    targets: '#tetris-animejs-block-2',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#tetris-animejs-block-2',
+    translateX: [{value: ['-20px', 0]}, {value: 0}],
+    translateY: [{value: ['-330px', '-330px']}, {value: ['-330px', 0]}],
+    easing: 'easeInExpo',
+  })
+
+  .add({
+    targets: '#tetris-animejs-block-3',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#tetris-animejs-block-3',
+    translateX: [{value: ['-74px', 0]}, {value: 0}],
+    translateY: [{value: ['-330px', '-330px']}, {value: ['-330px', 0]}],
+    easing: 'easeInExpo',
+  })
+
+  .add({
+    targets: '#tetris-animejs-block-4',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#tetris-animejs-block-4',
+    translateX: [{value: ['-60px', 0]}, {value: 0}],
+    translateY: [{value: ['-260px', '-260px']}, {value: ['-260px', 0]}],
+    easing: 'easeInExpo',
+  })
+
+  .add({
+    targets: '#tetris-animejs-block-5',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#tetris-animejs-block-5',
+    translateX: [{value: ['-100px', 0]}, {value: 0}],
+    translateY: [{value: ['-260px', '-260px']}, {value: ['-260px', 0]}],
+    easing: 'easeInExpo',
+  })
+
+  .add({
+    targets: '#tetris-animejs-block-6',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#tetris-animejs-block-6',
+    translateX: [{value: ['90px', 0]}, {value: 0}],
+    translateY: [{value: ['-200px', '-200px']}, {value: ['-200px', 0]}],
+    easing: 'easeInExpo',
+  })
+
+  .add({
+    targets: '#tetris-animejs-block-7',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#tetris-animejs-block-7',
+    translateX: [{value: ['36px', 0]}, {value: 0}],
+    translateY: [{value: ['-200px', '-200px']}, {value: ['-200px', 0]}],
+    easing: 'easeInExpo',
+  })
+
+  .add({
+    targets: '#tetris-animejs-block-8',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#tetris-animejs-block-8',
+    translateX: [{value: ['106px', 0]}, {value: 0}],
+    translateY: [{value: ['-140px', '-140px']}, {value: ['-140px', 0]}],
+    easing: 'easeInExpo',
+  })
+
+  .add({
+    targets: '#tetris-animejs-block-9',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#tetris-animejs-block-9',
+    translateY: ['-170px', 0],
+    easing: 'easeInExpo',
+  })
+
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>

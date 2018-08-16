@@ -10,6 +10,9 @@ open_graph:
   title: What is Kubernetes? And how you can save 50% on your cloud bill
   image:
   description:
+js:
+  - anime.min.js
+  - isScrolledIntoView.js
 ---
 
 During the last few years, the industry has experienced a shift towards developing smaller and more focused applications.
@@ -42,9 +45,13 @@ You have several teams dedicated to developing, packaging and releasing applicat
 
 When for every application, you can refactor the same apps in a collection of four components, you have at least four times more apps to develop, package and release.
 
+{% include_relative monolith.html %}
+
 It's not uncommon for a small service to be made out of a dozen components such as a front-end app, a backend API, an authorisation server, an admin application, etc.
 
 Indeed when you develop services that interact with each other, you see an explosion of components deployed on your infrastructure.
+
+{% include_relative explosion.html %}
 
 It gets harder, though.
 
@@ -55,6 +62,8 @@ Most of the services are deployed to virtual machines such as Amazon EC2, Digita
 Each virtual machine comes with an operating system that consumes part of the memory and CPU resources allocated to it.
 
 When you create a 1GB of memory and 1 vCPU droplet on Digital Ocean, you end up using 700MB in memory and 0.8 vCPU after you remove the overhead of the operating system.
+
+{% include_relative overhead.html %}
 
 Or in other words, every fifth virtual machine the overhead adds up to a full virtual machine.
 
@@ -113,6 +122,8 @@ You put a lot of effort into tuning the system only to realise that the applicat
 So you end up taking the only sensible choice: selecting a small, medium and large profile for virtual machines and using them for all workloads.
 
 You know you have to live with wasting hundreds of megabytes of RAM and plenty of CPU cycles.
+
+{% include_relative waste.html %}
 
 If it makes you feel any better, there're plenty of companies suffering from similar inefficiencies.
 
@@ -192,7 +203,7 @@ _Doesn't that sounds a lot like virtual machines?_
 
 ## Virtual machine on a diet
 
-Indeed, if you squint and look at virtual machines from far, you can think about them as containers too.
+Indeed, if you squint and look from far at virtual machines, they resemble containers.
 
 They encapsulate the application and its dependencies like containers.
 
@@ -203,6 +214,8 @@ In fact, you have to allocate a fixed number of CPU and memory to run your appli
 They also have to emulate hardware and come with the extra baggage of an operating system.
 
 Linux containers, on the other hand, are merely processes running on your host.
+
+{% include_relative vmless.html %}
 
 Indeed, for the same operating system and server, you could have dozens of containers running on that host.
 
@@ -313,6 +326,8 @@ The data centre is abstracted away from you.
 In other words, Kubernetes will play Tetris with your infrastructure.
 
 Docker containers are the blocks; servers are the boards, and Kubernetes is the player.
+
+{% include_relative tetris.html %}
 
 Having someone efficiently packing your infrastructure means that you get more computing for your money.
 
@@ -430,7 +445,7 @@ It's still early days and the community has still time to mature, but you should
 
 ## That's all folks!
 
-Many thanks to [Andy Griffiths](https://andrewgriffithsonline.com/) for reading a draft of this post and offering some invaluable suggestions th.
+Many thanks to [Andy Griffiths](https://andrewgriffithsonline.com/), [John Topley](http://johntopley.com/) and [Walter Miani](https://www.linkedin.com/in/waltermiani/) for reading a draft of this post and offering some invaluable suggestions.
 
 If you enjoyed this article, you might find interesting reading:
 
