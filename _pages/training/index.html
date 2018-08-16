@@ -58,14 +58,14 @@ events:
     location: London, Skills Matter
     location_link: https://goo.gl/maps/QEJnGGv5aRm
     price: £1250
-    buy_now_link: "mailto:hello@learnk8s.io?subject=Kubernetes%20Training%20course%20on%20the%2024th%20of%20September&body=Hello%20learnk8s%2C%0A%0AI'd%20like%20to%20know%20more%20about%20the%20Kubernetes%20course%20on%20the%2024th%20of%20September.%0A%0AKind%20regards%2C"
+    buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 24th of September.\n\nKind regards,"
   - day: 24
     month: oct
     title: Advanced Kubernetes training
     course_length: 3 days
     location: Online
     price: £1950
-    buy_now_link: "mailto:hello@learnk8s.io?subject=Kubernetes%20Training%20course%20on%20the%2024th%20of%20October&body=Hello%20learnk8s%2C%0A%0AI'd%20like%20to%20know%20more%20about%20the%20Kubernetes%20course%20on%20the%2024th%20of%20October.%0A%0AKind%20regards%2C"
+    buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 24th of October.\n\nKind regards,"
   - day: 13
     month: dec
     title: Deploying and scaling applications in Kubernetes
@@ -73,7 +73,44 @@ events:
     location: London, Skills Matter
     location_link: https://goo.gl/maps/QEJnGGv5aRm
     price: £1250
-    buy_now_link: mailto:hello@learnk8s.io?subject=Kubernetes%20Training%20course%20on%20the%2013th%20of%20December&body=Hello%20learnk8s%2C%0A%0AI'd%20like%20to%20know%20more%20about%20the%20Kubernetes%20course%20on%20the%2013th%20of%20December.%0A%0AKind%20regards%2C
+    buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 13th of December.\n\nKind regards,"
+  - day: 23
+    month: jan
+    title: Advanced Kubernetes training
+    course_length: 3 days
+    location: Online
+    price: £1950
+    buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 23rd of January.\n\nKind regards,"
+  - day: 28
+    month: feb
+    title: Deploying and scaling applications in Kubernetes
+    course_length: 2 days
+    location: London, Skills Matter
+    location_link: https://goo.gl/maps/QEJnGGv5aRm
+    price: £1250
+    buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 28th of February.\n\nKind regards,"
+  - day: 20
+    month: mar
+    title: Advanced Kubernetes training
+    course_length: 3 days
+    location: Online
+    price: £1950
+    buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 20th of March.\n\nKind regards,"
+  - day: 15
+    month: may
+    title: Advanced Kubernetes training
+    course_length: 3 days
+    location: Online
+    price: £1950
+    buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 15th of May.\n\nKind regards,"
+  - day: 6
+    month: jun
+    title: Deploying and scaling applications in Kubernetes
+    course_length: 2 days
+    location: London, Skills Matter
+    location_link: https://goo.gl/maps/QEJnGGv5aRm
+    price: £1250
+    buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 6th of June.\n\nKind regards,"
 open_graph:
   title: Kubernetes training
   description: Learn how to deploy web applications with a single command.
@@ -198,7 +235,7 @@ open_graph:
         <p class="ma0 f4 black-70">{{ event.price }}</p>
       </div>
       <div class="buy_now tc w-100 w-auto-l">
-          <a href="{{ event.buy_now_link }}" target="_blank" class="link dib white bg-blue br1 pa3 b f5 shadow-3 ph4 mv2 mr2">Get in touch &#8594;</a>
+          <a href="mailto:hello@learnk8s.io?subject={{ "Kubernetes training course enquiry" | url_encode }}&body={{ event.buy_now_link | url_encode }}" target="_blank" class="link dib white bg-blue br1 pa3 b f5 shadow-3 ph4 mv2 mr2">Get in touch &#8594;</a>
       </div>
     </li>
     {% endfor %}
