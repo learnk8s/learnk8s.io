@@ -186,7 +186,7 @@
     @extend .bg-near-white, .pa1, .br2, .ba, .b--black-20, .f5;
   }
 
-  blockquote {
+  > blockquote {
     @extend .bl, .pl3, .bw2, .b--black-20;
   }
 

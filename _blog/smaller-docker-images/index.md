@@ -219,16 +219,7 @@ But the image is still big!
 
 Is there anything you can do to make it even smaller?
 
-### Don't miss then next story, experiment or tip.
-
-If you're enjoying this article, stay tuned for more. Get new content straight to your inbox and level up your expertise in Kubernetes.
-
-<form netlify name="subscribe-blog">
-  <label for="email" class="mb2 db b f7 ttu">Email</label>
-  <input class="input-reset pa3 ba b--black-20 db w-100 br2 sans-serif measure-narrow" type="text" id="email" placeholder="Your email" name="email"/>
-  <p class="f7 pb1">We'll never share your email address and you can opt out at any time.</p>
-  <button type="submit" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Subscribe &#8594;</button>
-</form>
+{% include inline-subscribe-cta/index.html %}
 
 ## 2. Remove all the unnecessary cruft from the container with distroless
 
@@ -450,41 +441,6 @@ Get a head start with our hands-on courses and learn how to master scalability i
 
 Learn how to:
 
-<ul class="list ph3">
-  <li class="mv3">
-    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-    <div class="dtc v-top pl3">
-      <p class="mv0 f4-l lh-copy">Handle the busiest traffic websites without breaking a sweat</p>
-    </div>
-  </li>
-  <li class="mv3">
-    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-    <div class="dtc v-top pl3">
-      <p class="mv0 f4-l lh-copy">Scale your jobs to thousands of servers and reduce the waiting time from days to minutes</p>
-    </div>
-  </li>
-  <li class="mv3">
-    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-    <div class="dtc v-top pl3">
-      <p class="mv0 f4-l lh-copy">Enjoy peace of mind knowning that your apps are highly available with a multi-cloud setup</p>
-    </div>
-  </li>
-  <li class="mv3">
-    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-    <div class="dtc v-top pl3">
-      <p class="mv0 f4-l lh-copy">Save ton of cash on your cloud bill by using only the resources your need</p>
-    </div>
-  </li>
-  <li class="mv3">
-    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-    <div class="dtc v-top pl3">
-      <p class="mv0 f4-l lh-copy">Supercharge your delivery pipeline and deploy application around the clock</p>
-    </div>
-  </li>
-</ul>
-
-<div class="pt2 pb4">
-  <a href="/training" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Become an expert &#8594;</a>
-</div>
+{% include promo-workshop/index.html %}
 
 P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
