@@ -353,6 +353,12 @@ If you enjoyed this article, you might find interesting reading:
 
 ## Become an expert at deploying and scaling applications in Kubernetes
 
+Breaking the cluster is one of the core module in our training courses.
+
+At the end of the day, you need to be prepared for the worse.
+
+You never know!
+
 Get a head start with our hands-on courses and learn how to master scalability in the cloud.
 
 Learn how to:
