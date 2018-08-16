@@ -35,4 +35,3 @@ defaults:
 plugins:
   - jekyll-target-blank
   - jekyll-sitemap
-  - jekyll-redirect-from
