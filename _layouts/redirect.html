@@ -1,0 +1,9 @@
+<html>
+<head>
+  {% if page.redirect %}
+  <script language="javascript">
+    window.location = "{{ page.redirect }}";
+  </script>
+  {% endif %}
+</head>
+</html>
