@@ -12,8 +12,6 @@ open_graph:
   title: Getting started with Docker and Kubernetes on Windows 10
   image: /blog/installing-docker-and-kubernetes-on-windows/k8s_on_win.jpg
   description: "Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows."
-
-has_cta: true
 ---
 
 Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin.
@@ -453,6 +451,8 @@ Wordpress is serving traffic from within a container!
 
 > Please note that you won't be able to complete the Wordpress installation because there's no database.
 
+{% include inline-subscribe-cta/index.html %}
+
 ## Testing your Kubernetes cluster installation
 
 It's about time to test your local Kubernetes cluster. In this section, you will deploy the [Smashing.io dashboard](https://smashing.github.io/).
@@ -513,4 +513,12 @@ If you stumbled on an error not described in the article, feel free to get in to
 
 And since you have a fully working environment, you should check out the tutorial on [how to deploy Laravel applications to Kubernetes]({% link _blog/deploying-laravel-to-kubernetes/index.md %}).
 
-If you liked the article, you should stay tuned for more! Subscribe to our newsletter!
+## Become an expert at deploying and scaling applications in Kubernetes
+
+This article is part of the learnk8s workshop "Deploying and Scaling applications in Kubernetes".
+
+In the rest of the course you will learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
