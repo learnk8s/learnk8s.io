@@ -1,15 +1,15 @@
 ---
 layout: post
 title: What is Kubernetes? And how you can save 50% on your cloud bill
-description:
+description: "In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month."
 date: 2018-07-16 11:26:00
-categories:
+categories: kubernetes docker microservices
 image:
 open_graph:
   type: article
   title: What is Kubernetes? And how you can save 50% on your cloud bill
   image:
-  description:
+  description: "In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month."
 js:
   - anime.min.js
   - isScrolledIntoView.js
@@ -147,7 +147,7 @@ Node.js for the front-end, Spring Boot for the backend API, Flask and Celery for
 
 The infrastructure becomes a theme park, hundreds of applications running on entirely different runtimes.
 
-Having the right technology for the job enables greater iteration speed, but it usually comes with the extra burden of managing one more programming language.
+{% include tweet_this/index.html content="Having the right technology for the job enables greater iteration speed, but it usually comes with the extra burden of managing one more programming language." %}
 
 While you could mitigate the proliferation of tools and languages, in practice, it's more complicated than that.
 
@@ -331,9 +331,7 @@ Docker containers are the blocks; servers are the boards, and Kubernetes is the 
 
 {% include_relative tetris.html %}
 
-Having someone efficiently packing your infrastructure means that you get more computing for your money.
-
-You can do a lot more with a lot less.
+{% include tweet_this/index.html content="Having Kubernetes efficiently packing your infrastructure means that you get more computing for your money. You can do a lot more with a lot less." %}
 
 And your overall bill usage should decrease as a result of that.
 
