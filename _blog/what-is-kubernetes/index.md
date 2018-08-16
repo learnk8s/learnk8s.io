@@ -299,6 +299,8 @@ Maybe even keep a list of deployed containers and their host.
 
 It turns out that someone had precisely that idea and came up with a solution.
 
+{% include inline-subscribe-cta/index.html %}
+
 ## Kubernetes, the mighty container orchestrator
 
 Kubernetes has initially been a Google creation.
@@ -453,42 +455,11 @@ If you enjoyed this article, you might find interesting reading:
 - [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images). Docker images don't have to be large. Learn how to put your Docker images on a diet!
 
 ## Become an expert at deploying and scaling applications in Kubernetes
- Get a head start with our hands-on courses and learn how to master scalability in the cloud.
- Learn how to:
- <ul class="list ph3">
-  <li class="mv3">
-    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-    <div class="dtc v-top pl3">
-      <p class="mv0 f4-l lh-copy">Handle the busiest traffic websites without breaking a sweat</p>
-    </div>
-  </li>
-  <li class="mv3">
-    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-    <div class="dtc v-top pl3">
-      <p class="mv0 f4-l lh-copy">Scale your jobs to thousands of servers and reduce the waiting time from days to minutes</p>
-    </div>
-  </li>
-  <li class="mv3">
-    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-    <div class="dtc v-top pl3">
-      <p class="mv0 f4-l lh-copy">Enjoy peace of mind knowning that your apps are highly available with a multi-cloud setup</p>
-    </div>
-  </li>
-  <li class="mv3">
-    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-    <div class="dtc v-top pl3">
-      <p class="mv0 f4-l lh-copy">Save ton of cash on your cloud bill by using only the resources your need</p>
-    </div>
-  </li>
-  <li class="mv3">
-    <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-    <div class="dtc v-top pl3">
-      <p class="mv0 f4-l lh-copy">Supercharge your delivery pipeline and deploy application around the clock</p>
-    </div>
-  </li>
-</ul>
- <div class="pt2 pb4">
-  <a href="/training" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Become an expert &#8594;</a>
-</div>
 
- P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
+Get a head start with our hands-on courses and learn how to master scalability in the cloud.
+
+Learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
