@@ -876,7 +876,9 @@ If you enjoyed this article, you might find interesting reading:
 
 ## Become an expert at deploying and scaling applications in Kubernetes
 
-Get a head start with our hands-on courses and learn how to master scalability in the cloud.
+Learning how to deploy and scale applications with the Horizontal Pod Autoscaler is only the beginning!
+
+Get a head start with our hands-on courses and learn how to master Kubernetes.
 
 Learn how to:
 

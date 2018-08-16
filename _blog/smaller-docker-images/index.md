@@ -441,11 +441,11 @@ If you enjoyed this article, you might find interesting reading:
 
 ## Become an expert at deploying and scaling applications in Kubernetes
 
-Dealing with one container at the time is easy, but what happens when you have thousands of containers to build, deploy and monitor?
+But how do you deal with thousands of _small_ containers?
 
-Kubernetes is the de facto container orchestrator and helps you to manage Docker containers with ease.
+You should learn how to leverage a container orchestrator such as Kubernetes.
 
-Get a head start with our hands-on courses and learn how to master scalability in the cloud.
+You can get a head start with our hands-on courses and learn how to master scalability in the cloud.
 
 Learn how to:
 
