@@ -22,7 +22,8 @@ open_graph:
 
 <section class="ph3 measure-wide pv4 center">
   <ul class="list pl0">
-    {% assign sorted = site.blog | sort: 'date' %}
+    {% assign listable = site.blog | where: "layout", "post" %}
+    {% assign sorted = listable | sort: 'date' %}
     {% assign reversed = sorted | reverse %}
     {% for post in reversed limit:site.post_limit %}
       <li class="pv3">
