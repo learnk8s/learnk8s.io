@@ -20,8 +20,6 @@ open_graph:
 js:
   - anime.min.js
   - isScrolledIntoView.js
-
-has_cta: true
 ---
 
 When you deploy an application in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or VM such as AWS EC2 or Google Compute Engine and having several of them means you can run and scale your application across instances efficiently. If you have a cluster made of three nodes and decide to scale your application to have four replicas, Kubernetes will spread the replicas across the nodes evenly like so:
@@ -153,6 +151,8 @@ If you're confused by how many load balancer-like things we have, let's quickly 
 1. the traffic reaches the pod
 
 Phew! That was long!
+
+{% include inline-subscribe-cta/index.html %}
 
 ## It's time to break things
 
@@ -344,4 +344,19 @@ Dropping iptables rules is similar to make a node unavailable. The traffic is st
 
 Many thanks to [Manabu Sakai](https://twitter.com/manabusakai)'s blog post that was a huge inspiration and to [Valentin Ouvrard](https://twitter.com/Valentin_NC) for investigating the issue with the iptables propagation.
 
-If you liked the article, you should stay tuned for more! Subscribe to our newsletter!
+## That's all folks!
+
+If you enjoyed this article, you might find interesting reading:
+
+- [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images) and learn how to build and deploy Docker images quicker.
+- [Scaling Microservices with Message Queues, Spring Boot and Kubernetes](http://learnk8s.io/blog/scaling-spring-boot-microservices/). Learn how to use the Horizontal Pod Autoscaler to dynamically resize your fleet of applications.
+
+## Become an expert at deploying and scaling applications in Kubernetes
+
+Get a head start with our hands-on courses and learn how to master scalability in the cloud.
+
+Learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
