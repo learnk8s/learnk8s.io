@@ -87,6 +87,8 @@ Some components such as data processing and data mining applications are CPU int
 
 Others, such as servers for real-time applications might use more memory than CPU.
 
+{% include_relative profiles.html %}
+
 Amazon Web Services and the other cloud providers have indeed a long list of compute resources that fit every need: general purpose, CPU optimised, memory optimised, storage optimised and GPU computing.
 
 You should strive to use the right virtual machine for your component.
