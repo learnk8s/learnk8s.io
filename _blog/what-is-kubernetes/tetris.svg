@@ -1,49 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 633" id="tetris">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" id="tetris">
   <g fill="none" fill-rule="evenodd">
-    <g transform="translate(271 173)">
-      <path fill="#7C7C7C" d="M258,339.110522 L258,367.191866 C258,368.742755 256.656854,370 255,370 L2.99999982,370 C1.34314567,370 2.02906113e-16,368.742755 0,367.191866 L0,339.110522 C-2.02906113e-16,337.559632 1.34314567,336.302387 2.99999982,336.302387 L255,336.302387 C256.656854,336.302387 258,337.559632 258,339.110522 Z"/>
-      <g transform="translate(7.8 344.102)">
-        <polygon fill="#D8D8D8" points="28.8 0 199.2 0 199.2 4 28.8 4"/>
-        <polygon fill="#D7D7D7" points="7.2 0 11.2 0 11.2 4 7.2 4"/>
-        <polygon fill="#D7D7D7" points="0 0 4 0 4 4 0 4"/>
-        <polygon fill="#00CD00" points="230.4 0 234.4 0 234.4 4 230.4 4"/>
-        <polygon fill="#D7D400" points="223.2 0 227.2 0 227.2 4 223.2 4"/>
-        <polygon fill="#FF3C00" points="216 0 220 0 220 4 216 4"/>
-        <polygon fill="#00CD00" points="237.6 0 241.6 0 241.6 4 237.6 4"/>
+    <g transform="translate(237 216)">
+      <path fill="#7C7C7C" d="M326,427.279232 L326,462.661723 C326,464.615844 324.302847,466.199972 322.209303,466.199972 L3.79069745,466.199972 C1.69715306,466.199972 2.56385244e-16,464.615844 0,462.661723 L0,427.279232 C-2.56385244e-16,425.325111 1.69715306,423.740983 3.79069745,423.740983 L322.209303,423.740983 C324.302847,423.740983 326,425.325111 326,427.279232 Z"/>
+      <g transform="translate(9.856 433.383)">
+        <polygon fill="#D8D8D8" points="36.391 0 251.702 0 251.702 5.038 36.391 5.038"/>
+        <polygon fill="#D7D7D7" points="9.072 0 14.112 0 14.112 5.04 9.072 5.04"/>
+        <polygon fill="#D7D7D7" points="0 0 5.04 0 5.04 5.04 0 5.04"/>
+        <polygon fill="#00CD00" points="290.304 0 295.344 0 295.344 5.04 290.304 5.04"/>
+        <polygon fill="#D7D400" points="281.232 0 286.272 0 286.272 5.04 281.232 5.04"/>
+        <polygon fill="#FF3C00" points="272.16 0 277.2 0 277.2 5.04 272.16 5.04"/>
+        <polygon fill="#00CD00" points="299.376 0 304.416 0 304.416 5.04 299.376 5.04"/>
       </g>
-      <g transform="translate(7.8 351.102)">
-        <polygon fill="#D8D8D8" points="28.8 0 199.2 0 199.2 4 28.8 4"/>
-        <polygon fill="#D7D7D7" points="7.2 0 11.2 0 11.2 4 7.2 4"/>
-        <polygon fill="#D7D7D7" points="0 0 4 0 4 4 0 4"/>
-        <polygon fill="#00CD00" points="230.4 0 234.4 0 234.4 4 230.4 4"/>
-        <polygon fill="#D7D400" points="223.2 0 227.2 0 227.2 4 223.2 4"/>
-        <polygon fill="#FF3C00" points="216 0 220 0 220 4 216 4"/>
-        <polygon fill="#00CD00" points="237.6 0 241.6 0 241.6 4 237.6 4"/>
+      <g transform="translate(9.856 442.2)">
+        <polygon fill="#D8D8D8" points="36.391 0 251.702 0 251.702 5.038 36.391 5.038"/>
+        <polygon fill="#D7D7D7" points="9.072 0 14.112 0 14.112 5.04 9.072 5.04"/>
+        <polygon fill="#D7D7D7" points="0 0 5.04 0 5.04 5.04 0 5.04"/>
+        <polygon fill="#00CD00" points="290.304 0 295.344 0 295.344 5.04 290.304 5.04"/>
+        <polygon fill="#D7D400" points="281.232 0 286.272 0 286.272 5.04 281.232 5.04"/>
+        <polygon fill="#FF3C00" points="272.16 0 277.2 0 277.2 5.04 272.16 5.04"/>
+        <polygon fill="#00CD00" points="299.376 0 304.416 0 304.416 5.04 299.376 5.04"/>
       </g>
-      <g transform="translate(7.8 358.102)">
-        <polygon fill="#D8D8D8" points="28.8 0 199.2 0 199.2 4 28.8 4"/>
-        <polygon fill="#D7D7D7" points="7.2 0 11.2 0 11.2 4 7.2 4"/>
-        <polygon fill="#D7D7D7" points="0 0 4 0 4 4 0 4"/>
-        <polygon fill="#00CD00" points="230.4 0 234.4 0 234.4 4 230.4 4"/>
-        <polygon fill="#D7D400" points="223.2 0 227.2 0 227.2 4 223.2 4"/>
-        <polygon fill="#FF3C00" points="216 0 220 0 220 4 216 4"/>
-        <polygon fill="#00CD00" points="237.6 0 241.6 0 241.6 4 237.6 4"/>
+      <g transform="translate(9.856 451.015)">
+        <polygon fill="#D8D8D8" points="36.391 0 251.702 0 251.702 5.038 36.391 5.038"/>
+        <polygon fill="#D7D7D7" points="9.072 0 14.112 0 14.112 5.04 9.072 5.04"/>
+        <polygon fill="#D7D7D7" points="0 0 5.04 0 5.04 5.04 0 5.04"/>
+        <polygon fill="#00CD00" points="290.304 0 295.344 0 295.344 5.04 290.304 5.04"/>
+        <polygon fill="#D7D400" points="281.232 0 286.272 0 286.272 5.04 281.232 5.04"/>
+        <polygon fill="#FF3C00" points="272.16 0 277.2 0 277.2 5.04 272.16 5.04"/>
+        <polygon fill="#00CD00" points="299.376 0 304.416 0 304.416 5.04 299.376 5.04"/>
       </g>
-      <path fill="#7C7C7C" d="M258,2.99999982 L258,329.39998 C258,331.056835 256.656854,332.39998 255,332.39998 L2.99999982,332.39998 C1.34314567,332.39998 2.02906113e-16,331.056835 0,329.39998 L0,2.99999982 C-2.02906113e-16,1.34314567 1.34314567,3.0435917e-16 2.99999982,0 L255,0 C256.656854,1.58830439e-14 258,1.34314567 258,2.99999982 Z"/>
-      <polygon fill="#D7D7D7" points="8.8 320.4 249.8 320.4 249.8 324.4 8.8 324.4"/>
-      <polygon fill="#D7D7D7" points="7.8 21.6 249.8 21.6 249.8 25.6 7.8 25.6"/>
-      <polygon fill="#D7D7D7" points="7.8 14.4 249.8 14.4 249.8 18.4 7.8 18.4"/>
-      <polygon fill="#D7D7D7" points="7.8 7.2 249.8 7.2 249.8 11.2 7.8 11.2"/>
-      <path fill="#FFF" d="M8.99999993,33.599998 L249,33.599998 C249.662742,33.599998 250.2,34.1372563 250.2,34.7999979 L250.2,310.799981 C250.2,311.462723 249.662742,311.999981 249,311.999981 L8.99999993,311.999981 C8.33725827,311.999981 7.8,311.462723 7.8,310.799981 L7.8,34.7999979 C7.8,34.1372563 8.33725827,33.599998 8.99999993,33.599998 Z"/>
+      <path fill="#7C7C7C" d="M326,3.77999955 L326,415.043951 C326,417.131587 324.302847,418.82395 322.209303,418.82395 L3.79069745,418.82395 C1.69715306,418.82395 2.56385244e-16,417.131587 0,415.043951 L0,3.77999955 C-2.56385244e-16,1.69236344 1.69715306,3.83492531e-16 3.79069745,0 L322.209303,0 C324.302847,2.00126342e-14 326,1.69236344 326,3.77999955 Z"/>
+      <polygon fill="#D7D7D7" points="11.088 403.704 314.748 403.704 314.748 408.744 11.088 408.744"/>
+      <polygon fill="#D7D7D7" points="9.828 27.216 314.748 27.216 314.748 32.256 9.828 32.256"/>
+      <polygon fill="#D7D7D7" points="9.828 18.144 314.748 18.144 314.748 23.184 9.828 23.184"/>
+      <polygon fill="#D7D7D7" points="9.828 9.072 314.748 9.072 314.748 14.112 9.828 14.112"/>
+      <path fill="#FFF" d="M11.3720929,42.3178353 L314.627907,42.3178353 C315.465325,42.3178353 316.144186,42.9944903 316.144186,43.8291866 L316.144186,391.439977 C316.144186,392.274673 315.465325,392.951328 314.627907,392.951328 L11.3720929,392.951328 C10.5346752,392.951328 9.85581395,392.274673 9.85581395,391.439977 L9.85581395,43.8291866 C9.85581395,42.9944903 10.5346752,42.3178353 11.3720929,42.3178353 Z"/>
     </g>
-    <rect id="tetris-animejs-block-5" width="31" height="31" x="487" y="391" fill="#D8D8D8"/>
-    <rect id="tetris-animejs-block-9" width="31" height="31" x="388" y="302" fill="#D8D8D8"/>
-    <rect id="tetris-animejs-block-8" width="31" height="31" x="282" y="271" fill="#D8D8D8"/>
-    <rect id="tetris-animejs-block-1" width="119" height="120" x="282" y="362" fill="#FA2A00"/>
-    <rect id="tetris-animejs-block-2" width="46" height="149" x="401" y="333" fill="#F5A623"/>
-    <rect id="tetris-animejs-block-7" width="46" height="149" x="342" y="213" fill="#F5A623"/>
-    <rect id="tetris-animejs-block-3" width="60" height="60" x="447" y="422" fill="#86B8B1"/>
-    <rect id="tetris-animejs-block-6" width="60" height="60" x="282" y="302" fill="#86B8B1"/>
-    <rect id="tetris-animejs-block-4" width="40" height="130" x="447" y="292" fill="#3D1C00"/>
+    <rect id="tetris-animejs-block-5" width="39" height="39" x="509" y="491" fill="#D8D8D8"/>
+    <rect id="tetris-animejs-block-9" width="39" height="39" x="385" y="378" fill="#D8D8D8"/>
+    <rect id="tetris-animejs-block-8" width="39" height="39" x="251" y="340" fill="#D8D8D8"/>
+    <rect id="tetris-animejs-block-1" width="150" height="151" x="251" y="454" fill="#FA2A00"/>
+    <rect id="tetris-animejs-block-2" width="58" height="188" x="401" y="417" fill="#F5A623"/>
+    <rect id="tetris-animejs-block-7" width="58" height="188" x="327" y="266" fill="#F5A623"/>
+    <rect id="tetris-animejs-block-3" width="76" height="76" x="459" y="530" fill="#86B8B1"/>
+    <rect id="tetris-animejs-block-6" width="76" height="76" x="251" y="378" fill="#86B8B1"/>
+    <rect id="tetris-animejs-block-4" width="50" height="164" x="459" y="366" fill="#3D1C00"/>
   </g>
 </svg>

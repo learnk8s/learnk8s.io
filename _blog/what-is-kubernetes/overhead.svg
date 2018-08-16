@@ -1,22 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 583" id="overhead">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" id="overhead">
   <g fill="none" fill-rule="evenodd">
-    <text id="overhead-animejs-cpu-label" fill="#4A4A4A" font-size="26.4" font-weight="bold" class="sans-serif">
-      <tspan x="133.391" y="283">CPU OS</tspan>
+    <text id="overhead-animejs-cpu-label" fill="#4A4A4A" font-size="31.68" font-weight="bold" class="sans-serif">
+      <tspan x="91.27" y="334">CPU OS</tspan>
     </text>
-    <text id="overhead-animejs-mem-label" fill="#4A4A4A" font-size="26.4" font-weight="bold" class="sans-serif">
-      <tspan x="332.146" y="489">Memory OS</tspan>
+    <text id="overhead-animejs-mem-label" fill="#4A4A4A" font-size="31.68" font-weight="bold" class="sans-serif">
+      <tspan x="330.475" y="581">Memory OS</tspan>
     </text>
-    <text fill="#9B9B9B" font-size="36.4" font-weight="bold" class="sans-serif">
-      <tspan x="270.469" y="88">Virtual machine</tspan>
+    <text fill="#9B9B9B" font-size="33.68" font-weight="bold" class="sans-serif">
+      <tspan x="294.096" y="100">Virtual machine</tspan>
     </text>
-    <rect width="288" height="288" x="262" y="145" fill="#86B8B1" fill-rule="nonzero"/>
-    <polygon id="overhead-animejs-mem-bar" fill="#D8D8D8" fill-rule="nonzero" points="314.278 381 550 381 550 433 262 433"/>
-    <polygon id="overhead-animejs-cpu-bar" fill="#D8D8D8" fill-rule="nonzero" points="262 145 314 145 314 381.408 262 433"/>
-    <text id="overhead-animejs-usable" fill="#4A4A4A" font-size="26.4" font-weight="bold" class="sans-serif">
-      <tspan x="393.213" y="254">Usable</tspan> <tspan x="340.407" y="284">CPU & memory</tspan>
+    <rect width="346" height="346" x="246" y="168" fill="#86B8B1" fill-rule="nonzero"/>
+    <polygon id="overhead-animejs-mem-bar" fill="#D8D8D8" fill-rule="nonzero" points="308.806 451 592 451 592 513 246 513"/>
+    <polygon id="overhead-animejs-cpu-bar" fill="#D8D8D8" fill-rule="nonzero" points="246 168 308 168 308 452.018 246 514"/>
+    <text id="overhead-animejs-usable" fill="#4A4A4A" font-size="31.68" font-weight="bold" class="sans-serif">
+      <tspan x="403.556" y="299">Usable</tspan> <tspan x="340.188" y="335">CPU & memory</tspan>
     </text>
-    <text id="overhead-animejs-total" fill="#4A4A4A" font-size="26.4" font-weight="bold" class="sans-serif">
-      <tspan x="374.97" y="271">Total</tspan> <tspan x="310.407" y="301">CPU & memory</tspan>
+    <text id="overhead-animejs-total" fill="#4A4A4A" font-size="31.68" font-weight="bold" class="sans-serif">
+      <tspan x="381.663" y="319">Total</tspan> <tspan x="304.188" y="355">CPU & memory</tspan>
     </text>
   </g>
 </svg>
