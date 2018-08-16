@@ -33,7 +33,7 @@ This section outlines all the technical steps I am taking to install K8s on the 
 
 ### Setting the Hardware
 
-After unpacking the devices, I connected the fans and fitted the RPi devices into the cases. I connected the RPi devices to the power banks (due to power cuts). Once I've truned on each RPi device, I can confirm that the red LED light is working.
+After unpacking the devices, I connected the fans and fitted the RPi devices into the cases. I connected the RPi devices to the power banks (due to power cuts). Once I've turned on each RPi device, I can confirm that the red LED light is working.
 
 At this stage, the result is that I have 3 Raspberry Pi 3 model B devices capable of being powered on.
 
