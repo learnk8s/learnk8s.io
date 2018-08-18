@@ -280,7 +280,7 @@ node-distroless   7b4db3b7f1e5   76.7MB
 
 **That's only 76.7MB!**
 
-More than 600MB less than your previous image!
+600MB less than your previous image!
 
 Excellent news! But there's something you should pay attention to when it comes to distroless.
 
@@ -306,7 +306,7 @@ $ docker exec -ti <insert_docker_id> node
 
 It's good news because an attacker exploiting your application and gaining access to the container won't be able to do as much damage as if were to access a shell. In other words, fewer binaries mean smaller sizes and increased security. But at the cost of more painful debugging.
 
-> Please note that perhaps you shouldn't attach to and debug containers live. You should rather rely on proper logging and monitoring.
+> Please note that perhaps you shouldn't attach to and debug containers in a production environment. You should rather rely on proper logging and monitoring.
 
 But what if you cared about debugging and smaller sizes?
 
@@ -440,6 +440,10 @@ If you enjoyed this article, you might find interesting reading:
 - [Kubernetes Chaos Engineering: Lessons Learned — Part 1](https://learnk8s.io/blog/kubernetes-chaos-engineering-lessons-learned) what happens when things go wrong in Kubernetes?
 
 ## Become an expert at deploying and scaling applications in Kubernetes
+
+Dealing with one container at the time is easy, but what happens when you have thousands of containers to build, deploy and monitor?
+
+Kubernetes is the de facto container orchestrator and helps you to manage Docker containers with ease.
 
 Get a head start with our hands-on courses and learn how to master scalability in the cloud.
 
