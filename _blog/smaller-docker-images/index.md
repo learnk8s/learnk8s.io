@@ -287,7 +287,7 @@ Excellent news! But there's something you should pay attention to when it comes 
 When your container is running, and you wish to inspect it, you can attach to a running container with:
 
 ```bash
-$ docker exec -ti <inser_docker_id> bash
+$ docker exec -ti <insert_docker_id> bash
 ```
 
 Attaching to a running container and running `bash` feels like establishing an SSH session.
@@ -301,12 +301,12 @@ The good and the bad news is that you can't.
 It's bad news because you can only execute the binaries in the container. The only binary you could run is Node.js:
 
 ```bash
-$ docker exec -ti <inser_docker_id> node
+$ docker exec -ti <insert_docker_id> node
 ```
 
 It's good news because an attacker exploiting your application and gaining access to the container won't be able to do as much damage as if were to access a shell. In other words, fewer binaries mean smaller sizes and increased security. But at the cost of more painful debugging.
 
-> Please note that perhaps you shouldn't attach to and debug containers live. You should rather rely on proper logging and mornitoring.
+> Please note that perhaps you shouldn't attach to and debug containers live. You should rather rely on proper logging and monitoring.
 
 But what if you cared about debugging and smaller sizes?
 
