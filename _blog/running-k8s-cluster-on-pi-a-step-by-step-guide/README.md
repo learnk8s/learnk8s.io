@@ -188,8 +188,85 @@ IPADDR=192.168.137.51
 IPADDR=192.168.137.52
 ```
 
-### Security
+### Security & Access
 
+The steps in this section are optional but highly recommended.
+
+#### Change the default Password.
+
+I recommend to change the default `SSH` password from `raspberry` to something more unique and secure. To do so, first ssh into the first RPi device using the default password
+
+```
+ssh pi@192.168.137.50
+```
+
+Then enter the `passwd` command, your current password and type in the new password. Type it again for confirmation.
+
+Repeat the above for the other RPi devices.
+
+#### Change the `hostname`
+
+Furthermore, for a more organised workflow, I change the `hostname` of each device so that when I `ssh` into them, I can see which Node I'm working with. As detailed in the above sections, I have a key name for each RPi device and I ultimately want to have the following:
+
+|Key|Role|Description|IP Address|Hostname|
+|:-:|:--:|:----------|:---------|:------:|
+|MN1|Master|Kubernetes Master Node|192.168.137.50|learnk8s-mn1|
+|WN1|Worker|Kubernetes Worker Node|192.168.137.51|learnk8s-wn1|
+|WN2|Worker|Kubernetes Worker Node|192.168.137.52|learnk8s-wn2|
+
+To change the `hostname`, for each RPi device, `ssh` into it, now using the new password.
+
+```
+ssh pi@192.168.137.50
+```
+
+Then edit the `hostname` using the preinstalled `nano` editor:
+
+```
+sudo nano /etc/hostname
+```
+
+Change `raspberrypi` to `learn8s-mn1`. Furthermore, we need to update the `hosts` file:
+
+```
+sudo nano /etc/hosts
+```
+
+Add change `raspberrypi` to `learn8s-mn1` at last line of the file. The last line should look like this:
+
+```
+127.0.1.1       learnk8s-mn1
+```
+
+Finally, `sudo reboot` the RPi device.
+
+Repeat this foe the other RPi devices.
+
+#### Passwordless SSH access
+
+For more secure access to your RPi devices and also to avoid having to type in the `ssh` login password every time you want to `ssh` into a device, you can configure `ssh` to use your public `ssh key`. Assuming you have a public `ssh key` located in `~/.ssh` on your host machine, you can copy it into your RPi devices.
+
+First access the first RPi using your password:
+
+```
+ssh pi@192.168.137.50
+```
+Then create a `.ssh` directory using the following command to ensure the permissions are correct:
+
+```
+cd ~
+install -d -m 700 ~/.ssh
+```
+
+With the `.ssh` directory set up, go back to your host machine and enter the following command to copy the key into the first RPi:
+
+```
+cat ~/.ssh/id_rsa.pub | ssh pi@192.168.137.50 'cat >> .ssh/authorized_keys'
+```
+
+Enter your password and you're done. If you try to `ssh` into RPi one more time, you should be automatically authenticated.
+
+Repeat the above for the other RPi devices.
 
 
 ### Installing Docker
