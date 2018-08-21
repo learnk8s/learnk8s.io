@@ -67,7 +67,7 @@ I decided to use [Etcher](https://etcher.io) to flash the SD cards because it is
 
 __ For each MicroSD Card:__
 
-- [x] Open Etcher, select the Raspian image, double check the correct drive and click Flash.
+- [x] Open Etcher, select the Raspbian image, double check the correct drive and click Flash.
 - [x] Once ready, enable `headless start` by placing a file named `ssh` without any extension into the boot partition of the SD card. Simply use a terminal, navigate to your drive such as `cd /f` and `touch ssh`.
 > In Windows, I found that the best way to do this is to create a file named `ssh` anywhere on the PC and then copy and paste it from the GUI because of write access issues. You can probably also use `Command Prompt` as an Administrator.
 
@@ -77,6 +77,9 @@ While booting the RPi devices, you should start seeing a blinking green LED(s) n
 
 
 ### Setting up a Network with Internet
+
+
+
 
 ### Installing Docker
 
