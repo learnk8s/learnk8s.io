@@ -78,6 +78,117 @@ While booting the RPi devices, you should start seeing a blinking green LED(s) n
 
 ### Setting up a Network with Internet
 
+In my setup, I am using my mobile network provider's data for an internet connection. Therefore, I have my Android phone connected tot he internet through Mobile Data and is used a Tethering Hotspot by my laptop. My laptop also has a Mobile Hotspot enabled and thus the RPi devices can connect to it through WiFi.
+
+> I don't think this is possible on Mac systems. Mac users may need to use a WiFi USB Dongle if their WiFi Card does not allow simultaneous connections I.e. Internet traffic through connecting the Laptop to the Mobile Hotspot and LAN traffic through its own Hotspot.
+
+I am also using a [DHCP Server software](http://www.dhcpserver.de/) so that I can reserve IP addresses for the RPi devices.
+
+> This software is only available for Windows systems. I think that Mac systems include a built in DHCP server.
+
+- [x] Configure a Mobile Hotspot on the host machine and assign it a static IP such as `192.169.0.10`
+- [x] Mobile Hotspot should have an internet connection. In my case, I have internet through a Mobile Hotspot from my mobile phone.
+- [x] Download, install and configure the [DHCP Server software](http://www.dhcpserver.de/) by following the online documentation.
+
+- [ x For each RPi device, configure the WiFi settings in the `boot` partition so that Raspbian will automatically copy the settings to the OS on the next boot. The steps to follow are:
+
+1) Insert the MicroSD card in your laptop.
+2) Create a new file in the `boot` partition named `wpa_supplicant.conf` and enter the following contents:
+
+```
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=GB
+
+network={
+    ssid="Kubernetes"
+    psk="learnk8s"
+    key_mgmt=WPA-PSK
+}
+```
+
+You will need to change the `country code`, network `SSID` and `PSK` to match the settings of your WiFi connection.
+
+3) Safely remove the MicroSD card from your laptop and with the RPi powered off, insert the card in the RPi device. Then power the RPi on.
+
+>Since, I don't know the MAC addresses of each RPi, I had to power them on one by one so that I can see the MAC address when the DHCP server assigns an IP address.
+
+- [x] Reserve an IP address for each device as follows:
+
+1) Make sure the DHCP server software is running.
+2) Power on one RPi device and wait for the DHCP server software to assign an IP to it. The software will show you the MAC address of the RPi device and the IP address it automatically assigned to it.
+3) To confirm this, simply `ssh` into the RPi using the IP address assigned by the DHCP server software. In my case:
+
+`ssh pi@192.168.137.48` Initial password is `raspberry`.
+4) Open `dhcpsrv.ini` from within the DHCP Server Software directory and add this entry:
+
+```
+[B8-27-EB-C8-6A-2B]
+IPADDR=192.168.137.50
+```
+
+The first line being the MSC address of the device and the second the desired IP address from the IP POOL.
+
+5) Reboot your RPi:
+```
+ssh pi@192.168.137.48
+sudo shutdown -h now
+```
+
+6) Power on the RPi and it should now have the reserved IP assigned to it. Check:
+
+```
+ssh pi@192.168.137.50
+```
+
+7) To check that the internet connection is available, simply ping a website:
+
+`ping google.com`
+
+Once all RPi devices have a reserved IP address, my final `dhcpsrv.ini` includes:
+
+```
+[SETTINGS]
+IPPOOL_1=192.168.137.48-56
+IPBIND_1=192.168.0.10
+AssociateBindsToPools=1
+Trace=1
+DeleteOnRelease=0
+ExpiredLeaseTimeout=3600
+
+[GENERAL]
+LEASETIME=86400
+NODETYPE=8
+SUBNETMASK=255.255.255.0
+NEXTSERVER=192.168.0.10
+ROUTER_0=0.0.0.0
+
+[DNS-SETTINGS]
+EnableDNS=0
+
+[TFTP-SETTINGS]
+EnableTFTP=0
+ROOT=C:\Users\Keith\Code\uasabi\learnk8s\resources\rpi-research\dhcpsrv2.5.2\wwwroot
+WritePermission=0
+
+[HTTP-SETTINGS]
+EnableHTTP=1
+ROOT=C:\Users\Keith\Code\uasabi\learnk8s\resources\rpi-research\dhcpsrv2.5.2\wwwroot
+AutoConfig=08/21/2018 09:35:25
+Hostname=raspberrypi
+LeaseEnd=1534910042
+
+[B8-27-EB-C8-6A-2B]
+IPADDR=192.168.137.50
+
+[B8-27-EB-E5-F2-FA]
+IPADDR=192.168.137.51
+
+[B8-27-EB-00-AB-34]
+IPADDR=192.168.137.52
+```
+
+### Security
 
 
 
