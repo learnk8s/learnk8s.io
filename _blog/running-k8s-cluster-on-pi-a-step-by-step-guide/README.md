@@ -204,11 +204,11 @@ Repeat the above for the other RPi devices.
 
 Furthermore, for a more organised workflow, I change the `hostname` of each device so that when I `ssh` into them, I can see which Node I'm working with. As detailed in the above sections, I have a key name for each RPi device and I ultimately want to have the following:
 
-|Key|Role|Description|IP Address|Hostname|
-|:-:|:--:|:----------|:---------|:------:|
-|MN1|Master|Kubernetes Master Node|192.168.137.50|learnk8s-mn1|
-|WN1|Worker|Kubernetes Worker Node|192.168.137.51|learnk8s-wn1|
-|WN2|Worker|Kubernetes Worker Node|192.168.137.52|learnk8s-wn2|
+|Key|Role|Description|IP Address|Hostname|IP Address|
+|:-:|:--:|:----------|:---------|:------:|---------:|
+|MN1|Master|Kubernetes Master Node|192.168.137.50|learnk8s-mn1|192.168.137.39|
+|WN1|Worker|Kubernetes Worker Node|192.168.137.51|learnk8s-wn1|192.168.137.129|
+|WN2|Worker|Kubernetes Worker Node|192.168.137.52|learnk8s-wn2|192.168.137.200|
 
 To change the `hostname`, for each RPi device, `ssh` into it, now using the new password.
 
