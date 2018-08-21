@@ -124,7 +124,7 @@ You will need to change the `country code`, network `SSID` and `PSK` to match th
 
 ```
 [B8-27-EB-C8-6A-2B]
-IPADDR=192.168.137.50
+IPADDR=192.168.137.39
 ```
 
 The first line being the MSC address of the device and the second the desired IP address from the IP POOL.
@@ -138,7 +138,7 @@ sudo shutdown -h now
 6) Power on the RPi and it should now have the reserved IP assigned to it. Check:
 
 ```
-ssh pi@192.168.137.50
+ssh pi@192.168.137.39
 ```
 
 7) To check that the internet connection is available, simply ping a website:
@@ -149,8 +149,8 @@ Once all RPi devices have a reserved IP address, my final `dhcpsrv.ini` includes
 
 ```
 [SETTINGS]
-IPPOOL_1=192.168.137.48-56
-IPBIND_1=192.168.0.10
+IPPOOL_1=192.168.137.1-254
+IPBIND_1=192.168.137.1
 AssociateBindsToPools=1
 Trace=1
 DeleteOnRelease=0
@@ -160,7 +160,7 @@ ExpiredLeaseTimeout=3600
 LEASETIME=86400
 NODETYPE=8
 SUBNETMASK=255.255.255.0
-NEXTSERVER=192.168.0.10
+NEXTSERVER=192.168.137.1
 ROUTER_0=0.0.0.0
 
 [DNS-SETTINGS]
@@ -174,18 +174,14 @@ WritePermission=0
 [HTTP-SETTINGS]
 EnableHTTP=1
 ROOT=C:\Users\Keith\Code\uasabi\learnk8s\resources\rpi-research\dhcpsrv2.5.2\wwwroot
-AutoConfig=08/21/2018 09:35:25
-Hostname=raspberrypi
-LeaseEnd=1534910042
-
 [B8-27-EB-C8-6A-2B]
-IPADDR=192.168.137.50
+IPADDR=192.168.137.39
 
 [B8-27-EB-E5-F2-FA]
-IPADDR=192.168.137.51
+IPADDR=192.168.137.129
 
 [B8-27-EB-00-AB-34]
-IPADDR=192.168.137.52
+IPADDR=192.168.137.200
 ```
 
 ### Security & Access
