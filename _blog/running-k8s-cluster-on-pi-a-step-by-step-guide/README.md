@@ -175,7 +175,7 @@ WritePermission=0
 EnableHTTP=1
 ROOT=C:\Users\Keith\Code\uasabi\learnk8s\resources\rpi-research\dhcpsrv2.5.2\wwwroot
 [B8-27-EB-C8-6A-2B]
-IPADDR=192.168.137.39
+IPADDR=192.168.137.122
 
 [B8-27-EB-E5-F2-FA]
 IPADDR=192.168.137.129
@@ -206,14 +206,14 @@ Furthermore, for a more organised workflow, I change the `hostname` of each devi
 
 |Key|Role|Description|IP Address|Hostname|IP Address|
 |:-:|:--:|:----------|:---------|:------:|---------:|
-|MN1|Master|Kubernetes Master Node|192.168.137.50|learnk8s-mn1|192.168.137.39|
+|MN1|Master|Kubernetes Master Node|192.168.137.50|learnk8s-mn1|192.168.137.122|
 |WN1|Worker|Kubernetes Worker Node|192.168.137.51|learnk8s-wn1|192.168.137.129|
 |WN2|Worker|Kubernetes Worker Node|192.168.137.52|learnk8s-wn2|192.168.137.200|
 
 To change the `hostname`, for each RPi device, `ssh` into it, now using the new password.
 
 ```
-ssh pi@192.168.137.50
+ssh pi@192.168.137.122
 ```
 
 Then edit the `hostname` using the preinstalled `nano` editor:
@@ -245,7 +245,7 @@ For more secure access to your RPi devices and also to avoid having to type in t
 First access the first RPi using your password:
 
 ```
-ssh pi@192.168.137.50
+ssh pi@192.168.137.122
 ```
 Then create a `.ssh` directory using the following command to ensure the permissions are correct:
 
@@ -257,7 +257,7 @@ install -d -m 700 ~/.ssh
 With the `.ssh` directory set up, go back to your host machine and enter the following command to copy the key into the first RPi:
 
 ```
-cat ~/.ssh/id_rsa.pub | ssh pi@192.168.137.50 'cat >> .ssh/authorized_keys'
+cat ~/.ssh/id_rsa.pub | ssh pi@192.168.137.122 'cat >> .ssh/authorized_keys'
 ```
 
 Enter your password and you're done. If you try to `ssh` into RPi one more time, you should be automatically authenticated.
@@ -267,9 +267,93 @@ Repeat the above for the other RPi devices.
 
 ### Installing Docker
 
+
+I've had issues with installing docker and after trying several OSs with varying Kernel versions at no avail, I stumbled upon a fix. The issue was when running `curl -sSL get.docker.com |sh`, it was failing at the end with the following output:
+
+```
+pi@learnk8s-mn1:~ $ curl -sSL get.docker.com | sh
+# Executing docker install script, commit: 36b78b2
++ sudo -E sh -c apt-get update -qq >/dev/null
++ sudo -E sh -c apt-get install -y -qq apt-transport-https ca-certificates curl >/dev/null
++ sudo -E sh -c curl -fsSL "https://download.docker.com/linux/raspbian/gpg" | apt-key add -qq - >/dev/null
+Warning: apt-key output should not be parsed (stdout is not a terminal)
++ sudo -E sh -c echo "deb [arch=armhf] https://download.docker.com/linux/raspbian stretch edge" > /etc/apt/sources.list.d/docker.list
++ [ raspbian = debian ]
++ sudo -E sh -c apt-get update -qq >/dev/null
++ sudo -E sh -c apt-get install -y -qq --no-install-recommends docker-ce >/dev/null
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+```
+
+> At times this issue occurred  even when simply running `sudo apt-get upgrade`.
+
+Therefore, before running the following commands, edit the `/etc/login.defs` file by uncommenting the following two entries:
+
+```
+SYS_GID_MIN 100
+SYS_GID_MAX 999
+```
+
+Then proceed to:
+
+
+```
+sudo apt-get update
+sudo apt-get upgrade
+```
+
+```
+curl -sSL get.docker.com | sh
+sudo usermod pi -aG docker
+```
+
+```
+sudo dphys-swapfile swapoff
+sudo dphys-swapfile uninstall
+sudo update-rc.d dphys-swapfile remove
+```
+
+Double check swap is off (should return nothing)
+```
+sudo swapon --summary
+```
+
+Add: `cgroup_enable-cpuset` and `cgroup_enable=memory` to this file `/boot/cmdline.txt` at the end of the single line.
+
+```
+sudo reboot
+```
+
 ### Installing Kubernetes
 
+Add the repository key:
+```
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+```
+
+Add the repository:
+```
+echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+
+Install `kubeadm`
+```
+sudo apt-get update
+sudo apt-get install -y kubeadm
+```
+
+Repeat for all RPis
+
+
+
 ### Running Kubernetes
+
+__Master:__
+```
+sudo kubeadm init --token-ttl=0 --pod-network-cidr 10.244.0.0/16 --apiserver-advertise-address=192.168.137.122
+```
+
+> Research: `token-ttl` and `pod-network-cidr`
+
 
 Master & Worker Nodes.
 
