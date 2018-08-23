@@ -439,6 +439,7 @@ If you enjoyed this article, you might find interesting reading:
 - [Getting started with Docker and Kubernetes on Windows 10](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows) where you'll get your hands dirty and install Docker and Kubernetes in your Windows environment.
 - [Kubernetes Chaos Engineering: Lessons Learned — Part 1](https://learnk8s.io/blog/kubernetes-chaos-engineering-lessons-learned) what happens when things go wrong in Kubernetes?
 
+{:.caution}
 ## Become an expert at deploying and scaling applications in Kubernetes
 
 But how do you deal with thousands of _small_ containers?
@@ -451,4 +452,4 @@ Learn how to:
 
 {% include promo-workshop/index.html %}
 
-P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})
