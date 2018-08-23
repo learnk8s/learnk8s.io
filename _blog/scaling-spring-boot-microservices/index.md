@@ -874,6 +874,7 @@ If you enjoyed this article, you might find interesting reading:
 - [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images) and learn how to build and deploy Docker images quicker.
 - [Kubernetes Chaos Engineering: Lessons Learned — Part 1](https://learnk8s.io/blog/kubernetes-chaos-engineering-lessons-learned) what happens when things go wrong in Kubernetes? Can Kubernetes recover from failure and self-heal?
 
+{:.caution}
 ## Become an expert at deploying and scaling applications in Kubernetes
 
 Learning how to deploy and scale applications with the Horizontal Pod Autoscaler is only the beginning!
@@ -884,4 +885,4 @@ Learn how to:
 
 {% include promo-workshop/index.html %}
 
-P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})

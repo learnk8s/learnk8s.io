@@ -531,3 +531,27 @@ green     #859900  operators, other keywords
     font-size: 1rem;
   }
 }
+
+.subscribe {
+  position: relative;
+}
+.subscribe:after {
+  position: absolute;
+  left: 0;
+  top: -2em;
+  font-size: 0.75em;
+  content: "Caution: shameless plug ahead! Continue reading below ↓"
+}
+
+.caution {
+  margin-top: 2em !important;
+  @extend .relative;
+}
+.caution:after {
+  left: 0;
+  top: 0;
+  font-size: 0.5em;
+  content: "↓ Caution: shameless plug ahead! ↓";
+  font-weight: normal;
+  @extend .black-70, .absolute;
+}

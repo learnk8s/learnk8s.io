@@ -351,6 +351,7 @@ If you enjoyed this article, you might find interesting reading:
 - [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images) and learn how to build and deploy Docker images quicker.
 - [Scaling Microservices with Message Queues, Spring Boot and Kubernetes](http://learnk8s.io/blog/scaling-spring-boot-microservices/). Learn how to use the Horizontal Pod Autoscaler to dynamically resize your fleet of applications.
 
+{:.caution}
 ## Become an expert at deploying and scaling applications in Kubernetes
 
 Breaking the cluster is one of the core module in our training courses.
@@ -365,4 +366,4 @@ Learn how to:
 
 {% include promo-workshop/index.html %}
 
-P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})

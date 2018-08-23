@@ -513,6 +513,7 @@ If you stumbled on an error not described in the article, feel free to get in to
 
 And since you have a fully working environment, you should check out the tutorial on [how to deploy Laravel applications to Kubernetes]({% link _blog/deploying-laravel-to-kubernetes/index.md %}).
 
+{:.caution}
 ## Become an expert at deploying and scaling applications in Kubernetes
 
 This article is part of the learnk8s workshop "Deploying and Scaling applications in Kubernetes".
@@ -521,4 +522,4 @@ In the rest of the course you will learn how to:
 
 {% include promo-workshop/index.html %}
 
-P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})
