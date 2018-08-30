@@ -1,6 +1,6 @@
 # Research, Document and Publish an article on running a K8s cluster on Pi devices.
 
-My aim is to install and Kubernetes on three Raspberry Pi devices. One cluster will serve as the Master Node and the other two will be the Worker Nodes.
+My aim is to install and Kubernetes on three Raspberry Pi devices. One RPi device will serve as the Master Node and the other two will be the Worker Nodes.
 
 This file outlines the set up requirements and the steps I've taken to complete this task. This document is also the foundation of a corresponding Blog Article.
 
@@ -98,7 +98,7 @@ sudo raspi-config
 Navigate to `Network Options` and the `Hostname`.
 
 ```
-sudo rebot
+sudo reboot
 ```
 
 Once rebooted, I can access SSH into the device using the assigned static IP, which in this example is `192.168.137.100`.
