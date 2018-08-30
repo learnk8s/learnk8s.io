@@ -1,99 +1,44 @@
 # Research, Document and Publish an article on running a K8s cluster on Pi devices.
 
-__Research phase:__
+My aim is to install and Kubernetes on three Raspberry Pi devices. One cluster will serve as the Master Node and the other two will be the Worker Nodes.
 
-- [x] Set up a proposed BOM.
+This file outlines the set up requirements and the steps I've taken to complete this task. This document is also the foundation of a corresponding Blog Article.
 
-- [x] Get it approved.
+It is important to note that some of the steps I've detailed here are only required due to my particular set up. The main variables are:
 
-- [x] Acquire the materials as per BOM.
+1) I'm only using WiFi connections. My Internet connection is sourced from my mobile phone's HotSpot and the LAN is managed through my Laptop's HotSpot.
 
->>Please note that I ended up purchasing one 16GB MicroSD card and two 32GB MicroSD cards.
-Because I want to make sure that the Master Node (MN1) can run on 16GB, I will use the 16GB card for MN1 and the two 32GB cards for he worker nodes (WN1 & WN2).
+2) My host machine's operating system is Windows 10. Other operating systems will probably require additional hardware for setting up a HotSpot.
 
-- [ ] Document initial technical strategy for installing and managing the K8s cluster.
-  - [ ] 2 Pi devices as Nodes.
-  - [ ] 1 Pi device as Master.
+3) I decided to install the Raspbian Stretch Lite operating system on my RPi devices and thus, I needed to customise the standard setup and versions.
 
-- [ ] Start development and refactor documentation as I go along.
+## Hardware Requirements
 
-- [ ] Refactor the actual deployment strategy and resources (such as config files)
+My set up includes:
 
-- [ ] Finalise the research phase:
-  - [ ] Code repos for configurations.
-  - [ ] Documentation.
-
-__Article Preparation:__
-
-- [ ] Set up tasks as per writing checklist.
-
-## Documentation
-
-This section outlines all the technical steps I am taking to install K8s on the RPi devices so that I can refer to it when typing the article.
-
-### Setting the Hardware
-
-After unpacking the devices, I connected the fans and fitted the RPi devices into the cases. I connected the RPi devices to the power banks (due to power cuts). Once I've turned on each RPi device, I can confirm that the red LED light is working.
-
-At this stage, the result is that I have 3 Raspberry Pi 3 model B devices capable of being powered on.
-
-- [ ] Label the RPi devices
-  - [ ] One device __MN1__ which stands for Master Node One.
-  - [ ] One device __WN1__ which stands for Worker Node One.
-  - [ ] One device __MN2__ which stands for Worker Node Two.
-
-- [x] Cannot label the MicroSD cards as otherwise they won't fit in the reader slot. However:
-  - [ ] MN1 will use a 16GB Samsung microSDHC Card.
-  - [ ] WN1 will use a 32GB Samsung microSDHC Card.
-  - [ ] WN2 will use a 32GB Samsung microSDHC Card.
-
-- [ ] Label any cables and their power switches for ease of maintenance.
+3 x  Raspberry Pi 3 Model B.
+3 x 32GB MicroSD cards.
+1 x MicroSD to SD adaptor.
+2 x RPi Acrylic Cases with Fan.
+1 x RPi Plastic Case.
+2 x Power Banks, 20000mAh, 5V and 1 & 2.1 Amps Output. Each have two outputs.
+3 x USB to MicroUSB Power Cables with switch.
+1 x Laptop running Windows 10 with HotSpot. Must allow incoming and outgoing WiFi connections simultaneously.
+1 x Mobile Phone with a Data Connection and HotSpot tethering.
 
 
-### Installing Software Dependencies
+## Installing and Configuring the Operating System on the RPi devices
 
-I decided to not install NOOBS on the SD cards so that I can install each dependency separately.
+With the hardware (RPi cases and cabling) ready, I flashed each device with the [Raspbian Stretch Lite](https://www.raspberrypi.org/downloads/raspbian/) operating system using [Etcher](https://etcher.io/).
 
-#### Installing an Operating System
+Once the operating system is installed on the MicroSD Cards, I prepared them for SSH access. This is simple, just create a file named `ssh`, without any extension in the boot partition using the host machine.
 
-I decided to first try using the Raspbian Lite (Stretch) a minimal image based on Debian Stretch.
+```
+cd /f # or whatever the boot partition is named
+touch ssh
+```
 
-- [x] Download the OS from the [official website](https://www.raspberrypi.org/downloads/raspbian/)
-
-I decided to use [Etcher](https://etcher.io) to flash the SD cards because it is safer for everyone to use, avoiding flashing the wrong drive and minimising the list of commands to type.
-
-- [x] Download and Install [Etcher](https://etcher.io)
-> On MAC, you can simply run `brew cask install etcher`.
-
-__ For each MicroSD Card:__
-
-- [x] Open Etcher, select the Raspbian image, double check the correct drive and click Flash.
-- [x] Once ready, enable `headless start` by placing a file named `ssh` without any extension into the boot partition of the SD card. Simply use a terminal, navigate to your drive such as `cd /f` and `touch ssh`.
-> In Windows, I found that the best way to do this is to create a file named `ssh` anywhere on the PC and then copy and paste it from the GUI because of write access issues. You can probably also use `Command Prompt` as an Administrator.
-
-- [x] With all the RPi devices powered OFF, insert the newly flashed SD cards.
-
-While booting the RPi devices, you should start seeing a blinking green LED(s) notifying you that the device is reading from the SD card.
-
-
-### Setting up a Network with Internet
-
-In my setup, I am using my mobile network provider's data for an internet connection. Therefore, I have my Android phone connected tot he internet through Mobile Data and is used a Tethering Hotspot by my laptop. My laptop also has a Mobile Hotspot enabled and thus the RPi devices can connect to it through WiFi.
-
-> I don't think this is possible on Mac systems. Mac users may need to use a WiFi USB Dongle if their WiFi Card does not allow simultaneous connections I.e. Internet traffic through connecting the Laptop to the Mobile Hotspot and LAN traffic through its own Hotspot.
-
-I am also using a [DHCP Server software](http://www.dhcpserver.de/) so that I can reserve IP addresses for the RPi devices.
-
-> This software is only available for Windows systems. I think that Mac systems include a built in DHCP server.
-
-- [x] Configure a Mobile Hotspot on the host machine and assign it a static IP such as `192.169.0.10`
-- [x] Mobile Hotspot should have an internet connection. In my case, I have internet through a Mobile Hotspot from my mobile phone.
-- [x] Download, install and configure the [DHCP Server software](http://www.dhcpserver.de/) by following the online documentation.
-
-- [ x For each RPi device, configure the WiFi settings in the `boot` partition so that Raspbian will automatically copy the settings to the OS on the next boot. The steps to follow are:
-
-1) Insert the MicroSD card in your laptop.
-2) Create a new file in the `boot` partition named `wpa_supplicant.conf` and enter the following contents:
+Then I preconfigured the WiFi so that each device connects to the Laptop's HotSpot once they've booted. This is straight forward, simply create a new file named `wpa_supplicant.conf` in the same boot partition and add the connection details. My details are:
 
 ```
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -107,268 +52,264 @@ network={
 }
 ```
 
-You will need to change the `country code`, network `SSID` and `PSK` to match the settings of your WiFi connection.
+> I also had to make some changes in my LAN's adapter properties so that the Laptop's HotSpot always uses a fixed IP address. Mine is set as `192.168.137.1` and remains static even if the HotSpot is restarted.
 
-3) Safely remove the MicroSD card from your laptop and with the RPi powered off, insert the card in the RPi device. Then power the RPi on.
+## Initial device configuration
 
->Since, I don't know the MAC addresses of each RPi, I had to power them on one by one so that I can see the MAC address when the DHCP server assigns an IP address.
+Initially, when I power on the RPi devices, they get assigned an IP address by the Laptop's HotSpot. I tried various ways to be able to set static IP addresses for the devices. Using a [DHCP Server Software](http://www.dhcpserver.de/) did not work because once the HotSpot is restarted, the DHCP software fails to assign the set IP, probably due to conflicts. Most of the times the DHCP attempts to assign the IP set in its configuration but the HotSpot refuses it. Other times, the static IP gets assigned but the device only has a LAN connection without access to the internet. Eventually I've learned that simply setting a static IP address in the RPi DHCP configuration works.
 
-- [x] Reserve an IP address for each device as follows:
+You can see the devices' initial IP addresses from the Laptop's HotSpot connection details. You will need to check them so that you can SSH into each device and follow along the following changes. For this example, my first device was assigned `192.168.137.28` IP address. The other two devices also had random IPs which I used to SSH into.
 
-1) Make sure the DHCP server software is running.
-2) Power on one RPi device and wait for the DHCP server software to assign an IP to it. The software will show you the MAC address of the RPi device and the IP address it automatically assigned to it.
-3) To confirm this, simply `ssh` into the RPi using the IP address assigned by the DHCP server software. In my case:
-
-`ssh pi@192.168.137.48` Initial password is `raspberry`.
-4) Open `dhcpsrv.ini` from within the DHCP Server Software directory and add this entry:
+Do this for each device:
 
 ```
-[B8-27-EB-C8-6A-2B]
-IPADDR=192.168.137.39
+ssh pi@192.168.137.28
 ```
 
-The first line being the MSC address of the device and the second the desired IP address from the IP POOL.
+Initial password is `raspberry` and we need to change it so it is not the default. To change the password, simply type `passwd`, enter the current default password and then type the new one and type the new one once again for confirmation.
 
-5) Reboot your RPi:
-```
-ssh pi@192.168.137.48
-sudo shutdown -h now
-```
-
-6) Power on the RPi and it should now have the reserved IP assigned to it. Check:
+I then add a `.ssh` directory so that I can access the device with my `ssh` key instead of the password:
 
 ```
-ssh pi@192.168.137.39
-```
-
-7) To check that the internet connection is available, simply ping a website:
-
-`ping google.com`
-
-Once all RPi devices have a reserved IP address, my final `dhcpsrv.ini` includes:
-
-```
-[SETTINGS]
-IPPOOL_1=192.168.137.1-254
-IPBIND_1=192.168.137.1
-AssociateBindsToPools=1
-Trace=1
-DeleteOnRelease=0
-ExpiredLeaseTimeout=3600
-
-[GENERAL]
-LEASETIME=86400
-NODETYPE=8
-SUBNETMASK=255.255.255.0
-NEXTSERVER=192.168.137.1
-ROUTER_0=0.0.0.0
-
-[DNS-SETTINGS]
-EnableDNS=0
-
-[TFTP-SETTINGS]
-EnableTFTP=0
-ROOT=C:\Users\Keith\Code\uasabi\learnk8s\resources\rpi-research\dhcpsrv2.5.2\wwwroot
-WritePermission=0
-
-[HTTP-SETTINGS]
-EnableHTTP=1
-ROOT=C:\Users\Keith\Code\uasabi\learnk8s\resources\rpi-research\dhcpsrv2.5.2\wwwroot
-[B8-27-EB-C8-6A-2B]
-IPADDR=192.168.137.122
-
-[B8-27-EB-E5-F2-FA]
-IPADDR=192.168.137.129
-
-[B8-27-EB-00-AB-34]
-IPADDR=192.168.137.200
-```
-
-### Security & Access
-
-The steps in this section are optional but highly recommended.
-
-#### Change the default Password.
-
-I recommend to change the default `SSH` password from `raspberry` to something more unique and secure. To do so, first ssh into the first RPi device using the default password
-
-```
-ssh pi@192.168.137.50
-```
-
-Then enter the `passwd` command, your current password and type in the new password. Type it again for confirmation.
-
-Repeat the above for the other RPi devices.
-
-#### Change the `hostname`
-
-Furthermore, for a more organised workflow, I change the `hostname` of each device so that when I `ssh` into them, I can see which Node I'm working with. As detailed in the above sections, I have a key name for each RPi device and I ultimately want to have the following:
-
-|Key|Role|Description|IP Address|Hostname|IP Address|
-|:-:|:--:|:----------|:---------|:------:|---------:|
-|MN1|Master|Kubernetes Master Node|192.168.137.50|learnk8s-mn1|192.168.137.122|
-|WN1|Worker|Kubernetes Worker Node|192.168.137.51|learnk8s-wn1|192.168.137.129|
-|WN2|Worker|Kubernetes Worker Node|192.168.137.52|learnk8s-wn2|192.168.137.200|
-
-To change the `hostname`, for each RPi device, `ssh` into it, now using the new password.
-
-```
-ssh pi@192.168.137.122
-```
-
-Then edit the `hostname` using the preinstalled `nano` editor:
-
-```
-sudo nano /etc/hostname
-```
-
-Change `raspberrypi` to `learn8s-mn1`. Furthermore, we need to update the `hosts` file:
-
-```
-sudo nano /etc/hosts
-```
-
-Add change `raspberrypi` to `learn8s-mn1` at last line of the file. The last line should look like this:
-
-```
-127.0.1.1       learnk8s-mn1
-```
-
-Finally, `sudo reboot` the RPi device.
-
-Repeat this foe the other RPi devices.
-
-#### Passwordless SSH access
-
-For more secure access to your RPi devices and also to avoid having to type in the `ssh` login password every time you want to `ssh` into a device, you can configure `ssh` to use your public `ssh key`. Assuming you have a public `ssh key` located in `~/.ssh` on your host machine, you can copy it into your RPi devices.
-
-First access the first RPi using your password:
-
-```
-ssh pi@192.168.137.122
-```
-Then create a `.ssh` directory using the following command to ensure the permissions are correct:
-
-```
-cd ~
 install -d -m 700 ~/.ssh
 ```
 
-With the `.ssh` directory set up, go back to your host machine and enter the following command to copy the key into the first RPi:
+At this stage I also want to assign a static IP address to the device for use with the `wlan0` connection.
 
 ```
-cat ~/.ssh/id_rsa.pub | ssh pi@192.168.137.122 'cat >> .ssh/authorized_keys'
+sudo nano /etc/dhcpcd.conf
 ```
 
-Enter your password and you're done. If you try to `ssh` into RPi one more time, you should be automatically authenticated.
-
-Repeat the above for the other RPi devices.
-
-
-### Installing Docker
-
-
-I've had issues with installing docker and after trying several OSs with varying Kernel versions at no avail, I stumbled upon a fix. The issue was when running `curl -sSL get.docker.com |sh`, it was failing at the end with the following output:
+Add the following but change the static IP address accordingly:
 
 ```
-pi@learnk8s-mn1:~ $ curl -sSL get.docker.com | sh
-# Executing docker install script, commit: 36b78b2
-+ sudo -E sh -c apt-get update -qq >/dev/null
-+ sudo -E sh -c apt-get install -y -qq apt-transport-https ca-certificates curl >/dev/null
-+ sudo -E sh -c curl -fsSL "https://download.docker.com/linux/raspbian/gpg" | apt-key add -qq - >/dev/null
-Warning: apt-key output should not be parsed (stdout is not a terminal)
-+ sudo -E sh -c echo "deb [arch=armhf] https://download.docker.com/linux/raspbian stretch edge" > /etc/apt/sources.list.d/docker.list
-+ [ raspbian = debian ]
-+ sudo -E sh -c apt-get update -qq >/dev/null
-+ sudo -E sh -c apt-get install -y -qq --no-install-recommends docker-ce >/dev/null
-E: Sub-process /usr/bin/dpkg returned an error code (1)
+interface wlan0
+static ip_address=192.168.137.100/24
+static routers=192.168.137.1
+static domain_name_servers=8.8.8.8
 ```
 
-> At times this issue occurred  even when simply running `sudo apt-get upgrade`.
-
-Therefore, before running the following commands, edit the `/etc/login.defs` file by uncommenting the following two entries:
+As a final setting before I reboot the device, I change the `hostname` so that I can easily manage all the devices.
 
 ```
-SYS_GID_MIN 100
-SYS_GID_MAX 999
+sudo raspi-config
 ```
 
-Then proceed to:
-
-
-```
-sudo apt-get update
-sudo apt-get upgrade
-```
+Navigate to `Network Options` and the `Hostname`.
 
 ```
-curl -sSL get.docker.com | sh
-sudo usermod pi -aG docker
+sudo rebot
 ```
 
+Once rebooted, I can access SSH into the device using the assigned static IP, which in this example is `192.168.137.100`.
+
+However, before I do so, I want to copy my public `ssh` key into the device so that I can access it without password. From the host machine:
+
 ```
-sudo dphys-swapfile swapoff
-sudo dphys-swapfile uninstall
+cat ~/.ssh/id_rsa.pub | ssh pi@192.168.137.100 'cat >> .ssh/authorized_keys'
+```
+
+I enter the newly set password and now I can `ssh` into the device by simply typing:
+
+```
+ssh pi@192.168.137.100
+```
+
+I do this for all the devices to achieve the following setup:
+
+
+|Key|Role|Description|IP Address|Hostname|
+|:-:|:--:|:----------|:---------|:------:|
+|MN1|Master|Kubernetes Master Node|192.168.137.100|learnk8s-mn1|
+|WN1|Worker|Kubernetes Worker Node|192.168.137.101|learnk8s-wn1|
+|WN2|Worker|Kubernetes Worker Node|192.168.137.102|learnk8s-wn2|
+
+## Installing and Configuring Docker
+
+Docker needs to be installed in each RPi device.
+
+First, I disable `swap`
+
+```
+sudo dphys-swapfile swapoff && \
+sudo dphys-swapfile uninstall && \
 sudo update-rc.d dphys-swapfile remove
 ```
 
-Double check swap is off (should return nothing)
+And confirm it is disabled by running:
+
 ```
 sudo swapon --summary
 ```
 
-Add: `cgroup_enable-cpuset` and `cgroup_enable=memory` to this file `/boot/cmdline.txt` at the end of the single line.
+Confirm that no output is returned and proceed to:
+
+```
+curl -sSL get.docker.com | sh && \
+sudo usermod pi -aG docker
+```
+
+Note that until you exit `ssh`, the user permissions won't yet be refreshed so running:
+
+```
+docker ps
+```
+
+will print out a permission issue. With Docker installed, I set some `cgroups` configuration by editing the following:
+
+```
+sudo nano /boot/cmdline.txt
+```
+
+Add the following to the end of the line:
+
+```
+cgroup_enable=cpuset cgroup_enable=memory
+```
+
+__Make sure that there's no carriage return at the end of the line, save and:
 
 ```
 sudo reboot
 ```
 
-### Installing Kubernetes
+## Installing and Configuring Kubernetes
 
-Add the repository key:
+I need to install Kubernetes on all RPi devices. I have tried several versions of Docker and Kubernetes, even different versions of Raspbian, the following works for Raspbian Stretch and Raspbian Stretch Lite.
+
+Run this command to allow installation over https:
+
+```
+sudo apt update && sudo apt install -y apt-transport-https curl
+```
+
+The following adds the GPG key for the repository:
+
 ```
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 ```
 
-Add the repository:
-```
-echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-```
+Update the sources:
 
-Install `kubeadm`
 ```
-sudo apt-get update
-sudo apt-get install -y kubeadm
+sudo nano /etc/apt/sources.list.d/kubernetes.list
 ```
 
-Repeat for all RPis
+Add this line:
 
-
-
-### Running Kubernetes
-
-__Master:__
 ```
-sudo kubeadm init --token-ttl=0 --pod-network-cidr 10.244.0.0/16 --apiserver-advertise-address=192.168.137.122
+deb http://apt.kubernetes.io/ kubernetes-xenial main
 ```
 
-> Research: `token-ttl` and `pod-network-cidr`
+Install Kubernetes, Please note that I am using version ~1.9.
+```
+sudo apt update
+sudo apt install kubelet=1.9.6-00 kubeadm=1.9.6-00 kubectl=1.9.6-00
+```
+
+Once Kubernetes is installed, I added a parameter to the `ExecStart` command. First I check the `cgroup name` used by Docker:
+
+```
+docker info | grep -i cgroup
+```
+
+Output says it uses `cgroupfs` so I edit the following:
+
+```
+sudo nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+```
+
+And add `--cgroup-driver=cgroupfs` to the `ExecStart`. Then, I reload the `daemon` and restart `kubelet`:
+
+```
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+```
+
+## Initialise `Kubeadm` on the Master Node
+
+The following only applies to the Master Node (learnk8s-mn1).
+
+Start `kubeadm`:
+
+```
+sudo kubeadm init
+```
+
+Once started, the output will tell you to run a few commands:
+
+```
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+The output also includes a `join` command. Copy the command and save it somewhere as you'll need this to connect the Worker Nodes to this cluster.
+
+```
+kubeadm join --token 4fcec8.5b07254afe870cf9 192.168.137.100:6443 --discovery-token-ca-cert-hash sha256:62856061f60cbeb2575b36aa3bddd6a4e7ae223e44f7436afe92f13b47ec90c6
+```
+
+The above steps result in having Kubernetes running on the Master Node, however, as this point I don't have Pod to Pod networking running and thus the other Nodes cannot connect to the Cluster. There are several networking systems available. I decided to use `Weave Net` but `Flannel` is also a good candidate.
+
+Install `Weave Net` Pod to Pod networking:
+
+```
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.WEAVE_NO_FASTDP=1"
+```
+
+Wait for containers to start and check them here:
+
+```
+kubectl get pods --all-namespaces
+```
+
+You should see something like this:
+
+```
+pi@learnk8s-mn1:~ $ kubectl get pods --all-namespaces
+NAMESPACE     NAME                                   READY     STATUS    RESTARTS   AGE
+kube-system   etcd-learnk8s-mn1                      1/1       Running   0          18m
+kube-system   kube-apiserver-learnk8s-mn1            1/1       Running   5          20m
+kube-system   kube-controller-manager-learnk8s-mn1   1/1       Running   0          19m
+kube-system   kube-dns-7b6ff86f69-2qs9x              3/3       Running   0          19m
+kube-system   kube-proxy-7k5bp                       1/1       Running   0          19m
+kube-system   kube-scheduler-learnk8s-mn1            1/1       Running   0          19m
+kube-system   weave-net-lh2m5                        2/2       Running   0          17m
+```
+
+The Master Node is now ready to accept connection from the Worker Nodes.
+
+## Setting Up the Worker Nodes
+
+Connecting the Worker Nodes to the cluster is very easy.
+
+Run the following on each Worker Node:
 
 
-Master & Worker Nodes.
+```
+sudo kubeadm join --token 4fcec8.5b07254afe870cf9 192.168.137.100:6443 --discovery-token-ca-cert-hash sha256:62856061f60cbeb2575b36aa3bddd6a4e7ae223e44f7436afe92f13b47ec90c6
+```
 
-## Results
+After a few minutes, you can check that the nodes are running and connected to cluster. From the Master Node:
 
-- [ ] I have Kubernetes installed and running on 3 RPi devices:
-  - [ ] One Master Node (MN1)
-  - [ ] Two Worker Nodes (WN1) & (WN2)
+```
+watch kubectl get nodes
+```
 
-- [ ] I can run an application (POD) on WN1
+```
+Every 2.0s: kubectl get nodes                                                                   learnk8s-mn1: Wed Aug 29 10:10:02 2018
 
-- [ ] I can replicate the application (POD) on WN2
+NAME           STATUS    ROLES     AGE       VERSION
+learnk8s-mn1   Ready     master    42m       v1.9.6
+learnk8s-wn1   Ready     <none>    8m        v1.9.6
+learnk8s-wn2   Ready     <none>    8m        v1.9.6
+```
 
-- [ ] I can see the two running Pods from MN1
+## Next Steps
 
-- [ ] Check available memory?
-
-- [ ] Check available storage space?
+- [ ] Attempt to run Kubernetes version 1.11
+- [ ] Plan a small IoT application to include a Hardware and Software Setup
+- [ ] Develop the planned application, including setting up the Hardware and Writing the Software
+- [ ] Run the application of separate Nodes and detail the steps I followed.
+- [ ] Write an article explaining how I run xxx application on a Raspberry Pi Kubernetes cluster.
