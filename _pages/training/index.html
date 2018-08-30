@@ -64,7 +64,7 @@ events:
     course_length: 2 days
     location: London, Skills Matter
     location_link: https://goo.gl/maps/QEJnGGv5aRm
-    price: £1250
+    price: £1225
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 13th of December.\n\nKind regards,"
   - day: 23
     month: jan
@@ -79,7 +79,7 @@ events:
     course_length: 2 days
     location: London, Skills Matter
     location_link: https://goo.gl/maps/QEJnGGv5aRm
-    price: £1250
+    price: £1225
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 28th of February.\n\nKind regards,"
   - day: 20
     month: mar
@@ -101,7 +101,7 @@ events:
     course_length: 2 days
     location: London, Skills Matter
     location_link: https://goo.gl/maps/QEJnGGv5aRm
-    price: £1250
+    price: £1225
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 6th of June.\n\nKind regards,"
 open_graph:
   title: Kubernetes training
@@ -224,7 +224,7 @@ open_graph:
       </div>
       <div class="price pv2 w-90 center w-10-l">
         <p class="ma0 mv1 ttu b black-20 f6">Price</p>
-        <p class="ma0 f4 black-70">{{ event.price }}</p>
+        <p class="ma0 f4 black-70">{{ event.price }} <span class="f7 v-mid">+&nbsp;VAT</span></p>
       </div>
       <div class="buy_now tc w-100 w-auto-l">
           <a href="mailto:hello@learnk8s.io?subject={{ "Kubernetes training course enquiry" | url_encode }}&body={{ event.buy_now_link | url_encode }}" target="_blank" class="link dib white bg-blue br1 pa3 b f5 shadow-3 ph4 mv2 mr2">Get in touch &#8594;</a>
