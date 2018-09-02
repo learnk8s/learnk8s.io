@@ -2,13 +2,14 @@
 layout: post
 title: What is Kubernetes? And how you can save 50% on your cloud bill
 description: "In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month."
-date: 2018-07-16 11:26:00
+excerpt: "In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month."
+date: 2018-09-02 07:26:00
 categories: kubernetes docker microservices
-image:
+image: /blog/what-is-kubernetes/why-kube.png
 open_graph:
   type: article
   title: What is Kubernetes? And how you can save 50% on your cloud bill
-  image:
+  image: /blog/what-is-kubernetes/why-kube.png
   description: "In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month."
 js:
   - anime.min.js
@@ -201,9 +202,9 @@ Wrap them into a Linux container.
 
 A Linux container is a like a cargo container, but it encapsulates all files, binaries, and libraries necessary to run your process.
 
-_Doesn't that sounds a lot like virtual machines?_
+_Doesn't that sound a lot like virtual machines?_
 
-## Virtual machine on a diet
+## Virtual machines on a diet
 
 Indeed, if you squint and look from far at virtual machines, they resemble containers.
 
@@ -309,11 +310,13 @@ Google was running a technology similar to containers and had to find an efficie
 
 They didn't want to keep and manually update a long list of containers and servers.
 
-So they decided to write a platform that can automatically analyse resource utilisation, schedule and deploy containers.
+So they decided to write a platform that could automatically analyse resource utilisation, schedule and deploy containers.
 
-Later on, a few Googlers decided to leave the company and restart the project as an open source effort.
+But it was closed source.
 
-The rest is history.
+Few Googlers decided to rewrite the platform as an open source effort.
+
+And the rest is history.
 
 _So what's Kubernetes?_
 
@@ -454,6 +457,7 @@ If you enjoyed this article, you might find interesting reading:
 - [Getting started with Docker and Kubernetes on Windows 10](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows) where you’ll get your hands dirty and install Docker and Kubernetes in your Windows environment.
 - [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images). Docker images don't have to be large. Learn how to put your Docker images on a diet!
 
+{:.caution}
 ## Become an expert at deploying and scaling applications in Kubernetes
 
 Get a head start with our hands-on courses and learn how to master scalability in the cloud.
