@@ -128,7 +128,7 @@ You know you have to live with wasting hundreds of megabytes of RAM and plenty o
 
 {% include_relative waste.html %}
 
-If it makes you feel any better, there're plenty of companies suffering from similar inefficiencies.
+If it makes you feel any better, there are plenty of companies suffering from similar inefficiencies.
 
 Some utilise as little as 10% of the allocated resources.
 
@@ -360,7 +360,7 @@ _Do you wish to provision storage?_ Please send a POST request to this URL.
 
 Everything you do in Kubernetes is calling APIs.
 
-And there're plenty of good reasons to be excited about that:
+And there are plenty of good reasons to be excited about that:
 
 - You can create scripts and daemons that interact with the API programmatically
 - The API is versioned; when you upgrade your cluster you can keep using the old API and gradually migrate
