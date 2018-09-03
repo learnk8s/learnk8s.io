@@ -24,8 +24,8 @@ And rightly so.
 
 Services that are tiny in size are:
 
-- **quicker to deploy** because you create and release them in smaller chunks
-- **easier to iterate on**, since adding features happens independently
+- **quicker to deploy** — because you create and release them in smaller chunks
+- **easier to iterate on** — since adding features happens independently
 - **resilient** — the overall service can still function despite one of the components not being available
 
 Smaller services are excellent from a product and development perspective.
@@ -66,7 +66,7 @@ When you create a 1GB of memory and 1 vCPU droplet on Digital Ocean, you end up 
 
 {% include_relative overhead.html %}
 
-Or in other words, every fifth virtual machine the overhead adds up to a full virtual machine.
+Or in other words, for every fifth virtual machine the overhead adds up to a full virtual machine.
 
 **You pay for five but can use only four.**
 
@@ -82,7 +82,7 @@ However, the cash wasted on operating systems is only the tip of the iceberg.
 
 ## You're also wasting A LOT of money on resource utilisation
 
-You have probably realised that when you break your service into smaller components, each of them comes with different resource requirements.
+You have probably realised that when you break your services into smaller components, each of them comes with different resource requirements.
 
 Some components such as data processing and data mining applications are CPU intensive.
 
@@ -234,7 +234,7 @@ _But what are those Linux containers made of, anyway?_
 
 ## Linux containers are isolated processes with benefits
 
-The magic of containers comes from two feature in the Linux kernel: control groups and namespaces.
+The magic of containers comes from two features in the Linux kernel: control groups and namespaces.
 
 Control groups are a convenient way to limit the CPU or memory that a particular process can use.
 
@@ -248,7 +248,7 @@ It won't be able to see all of the network packets flowing through the network a
 
 Control groups and namespaces are low-level primitives.
 
-With time developers created more and more layers of abstractions to make it easier to control those kernel features.
+With time, developers created more and more layers of abstractions to make it easier to control those kernel features.
 
 One of the first abstractions was LXC, but the real deal was Docker that was released in 2013.
 
@@ -445,6 +445,8 @@ With backing from companies such as Google, Microsoft, Red Hat, Pivotal, Oracle,
 Many companies are getting a head start on Kubernetes and joining the revolution.
 
 Not just startups and SMEs, but big corporations such as banks, financial institutions and insurance companies are betting on containers and Kubernetes to be the future.
+
+Even companies invested in the Internet of Things and embedded systems.
 
 It's still early days and the community has still time to mature, but you should keep a close eye on the innovation in this space.
 

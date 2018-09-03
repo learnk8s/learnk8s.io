@@ -35,6 +35,11 @@
     easing: 'easeInExpo',
   })
   .add({
+    target: '#monolith-animejs-monolith',
+    opacity: [1, 0],
+    easing: 'easeOutQuad',
+  })
+  .add({
     complete: function() {
       wrapper.onclick = basicTimeline.restart
       restart.classList.remove('inactive')
