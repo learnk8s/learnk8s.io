@@ -1,0 +1,52 @@
+{% include_relative explosion.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#explosion')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: ['#explosion-animejs-vm1', '#explosion-animejs-vm2', '#explosion-animejs-vm3', '#explosion-animejs-vm4'],
+    opacity: [1, 0],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#explosion-animejs-monolith1', '#explosion-animejs-monolith2', '#explosion-animejs-monolith3', '#explosion-animejs-monolith4'],
+    opacity: [1, 0],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#explosion-animejs-microservices',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>

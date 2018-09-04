@@ -1,0 +1,44 @@
+{% include_relative profiles.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#profiles')
+  const basicTimeline = anime.timeline({
+    autoplay: true,
+    loop: true
+  });
+  basicTimeline
+  .add({
+    targets: '#profiles-animejs-high-cpu',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({}).add({})
+  .add({
+    targets: '#profiles-animejs-high-cpu',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#profiles-animejs-high-memory',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({}).add({})
+  .add({
+    targets: '#profiles-animejs-high-memory',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#profiles-animejs-moderate',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({}).add({})
+  .add({
+    targets: '#profiles-animejs-moderate',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+})();
+</script>

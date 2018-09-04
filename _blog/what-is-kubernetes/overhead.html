@@ -1,0 +1,57 @@
+{% include_relative overhead.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#overhead')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: '#overhead-animejs-total',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: ['#overhead-animejs-mem-bar', '#overhead-animejs-mem-label'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#overhead-animejs-cpu-bar', '#overhead-animejs-cpu-label'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#overhead-animejs-usable',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>
