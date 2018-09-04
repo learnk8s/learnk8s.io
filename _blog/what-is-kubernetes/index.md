@@ -406,7 +406,7 @@ If you're still not impressed, you should check out the press made by OpenAI.
 
 OpenAI is a non-profit research company that focuses on artificial intelligence and machine learning.
 
-They wrote an algorithm to play the first shooter game Dota as any human player would.
+They wrote an algorithm to play the multi player online game Dota as any human player would.
 
 But they went the extra step and trained a team of machines to play together.
 
