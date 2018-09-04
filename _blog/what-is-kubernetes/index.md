@@ -3,7 +3,7 @@ layout: post
 title: What is Kubernetes? And how you can save 50% on your cloud bill
 description: "In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month."
 excerpt: "In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month."
-date: 2018-09-02 07:26:00
+date: 2018-09-04 07:03:00
 categories: kubernetes docker microservices
 image: /blog/what-is-kubernetes/why-kube.png
 open_graph:
