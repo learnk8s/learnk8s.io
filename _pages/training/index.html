@@ -73,6 +73,13 @@ events:
     location: Online
     price: £1950
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 23rd of January.\n\nKind regards,"
+  - day: 30
+    month: jan
+    title: Advanced Kubernetes training
+    course_length: 3 days
+    location: London
+    price: £1950
+    buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 23rd of January.\n\nKind regards,"
   - day: 28
     month: feb
     title: Deploying and scaling applications in Kubernetes
@@ -86,6 +93,13 @@ events:
     title: Advanced Kubernetes training
     course_length: 3 days
     location: Online
+    price: £1950
+    buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 20th of March.\n\nKind regards,"
+  - day: 27
+    month: mar
+    title: Advanced Kubernetes training
+    course_length: 3 days
+    location: London
     price: £1950
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 20th of March.\n\nKind regards,"
   - day: 15
@@ -227,7 +241,7 @@ open_graph:
         <p class="ma0 f4 black-70">{{ event.price }} <span class="f7 v-mid">+&nbsp;VAT</span></p>
       </div>
       <div class="buy_now tc w-100 w-auto-l">
-          <a href="mailto:hello@learnk8s.io?subject={{ "Kubernetes training course enquiry" | url_encode }}&body={{ event.buy_now_link | url_encode }}" target="_blank" class="link dib white bg-blue br1 pa3 b f5 shadow-3 ph4 mv2 mr2">Get in touch &#8594;</a>
+          <a href="mailto:hello@learnk8s.io?subject={{ "Kubernetes training course enquiry" | uri_escape }}&body={{ event.buy_now_link | uri_escape }}" target="_blank" class="link dib white bg-blue br1 pa3 b f5 shadow-3 ph4 mv2 mr2">Get in touch &#8594;</a>
       </div>
     </li>
     {% endfor %}
