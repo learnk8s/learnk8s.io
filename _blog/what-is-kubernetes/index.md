@@ -148,7 +148,7 @@ Node.js for the front-end, Spring Boot for the backend API, Flask and Celery for
 
 The infrastructure becomes a theme park, hundreds of applications running on entirely different runtimes.
 
-{% include tweet_this/index.html content="Having the right technology for the job enables greater iteration speed, but it usually comes with the extra burden of managing one more programming language." %}
+Having the right technology for the job enables greater iteration speed, but it usually comes with the extra burden of managing one more programming language.
 
 While you could mitigate the proliferation of tools and languages, in practice, it's more complicated than that.
 
@@ -336,7 +336,7 @@ Docker containers are the blocks; servers are the boards, and Kubernetes is the 
 
 {% include_relative tetris.html %}
 
-{% include tweet_this/index.html content="Having Kubernetes efficiently packing your infrastructure means that you get more computing for your money. You can do a lot more with a lot less." %}
+Having Kubernetes efficiently packing your infrastructure means that you get more computing for your money. You can do a lot more with a lot less.
 
 And your overall bill usage should decrease as a result of that.
 
