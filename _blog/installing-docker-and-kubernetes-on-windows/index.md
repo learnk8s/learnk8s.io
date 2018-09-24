@@ -511,7 +511,7 @@ Now you know all the options when it comes to installing Docker and Kubernetes o
 
 If you stumbled on an error not described in the article, feel free to get in touch on Twitter [@learnk8s](https://twitter.com/learnk8s) or [Slack](https://learnk8s-slack-invite.herokuapp.com/).
 
-And since you have a fully working environment, you should check out the tutorial on [how to deploy Laravel applications to Kubernetes]({% link _blog/deploying-laravel-to-kubernetes/index.md %}).
+And since you have a fully working environment, you should check out the tutorial on [how to deploy Laravel applications to Kubernetes]({% link _blog/kubernetes-deploy-laravel-the-easy-way/index.md %}).
 
 {:.caution}
 ## Become an expert at deploying and scaling applications in Kubernetes
