@@ -86,7 +86,7 @@
   {% endfor %}
 </section>
 {% endif %} {% if include.name == 'popular_tweets' %}
-<section id="popular-tweets" class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
+<section class="bg-white ph4 pb4 b--solid b--light-gray bw1 mb4">
   <h2 class="ttu tl"><span class="favicon">{% include newsletter/twitter-bird-blue.svg %}</span> Popular tweets</h2>
   {% for tweet in page.popular_tweets %} {% assign avatar = '/newsletter/issue-' | append: page.issue | append: '/' | append:
   tweet.avatar %}

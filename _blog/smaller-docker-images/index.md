@@ -44,7 +44,7 @@ Since docker 1.10 the `COPY`, `ADD` and `RUN` statements add a new layer to your
 
 **Layers are like git commits.**
 
-Layers store the difference between the previous and the current version of the image. And like git commits they're handy if you share them with other repositories or images.
+{% include tweet_this/index.html content="Docker layers store the difference between the previous and the current version of the image. And like git commits they're handy if you share them with other repositories or images." %}
 
 In fact, when you request an image from a registry you download only the layers that you don't own already. This way is much more efficient to share images.
 
@@ -225,7 +225,9 @@ The current image ships Node.js as well as `yarn`, `npm`, `bash` and a lot of ot
 
 You don't need any of those when you run your container. The only dependency you need is Node.js.
 
-You could remove everything but Node.js.
+{% include tweet_this/index.html content="Docker containers should wrap a single process and contain the bare minimal to run it. You don't need an operating system." %}
+
+In fact, you could remove everything but Node.js.
 
 **But how?**
 
@@ -276,14 +278,14 @@ node-distroless   7b4db3b7f1e5   76.7MB
 
 **That's only 76.7MB!**
 
-More than 600MB less than your previous image!
+600MB less than your previous image!
 
 Excellent news! But there's something you should pay attention to when it comes to distroless.
 
 When your container is running, and you wish to inspect it, you can attach to a running container with:
 
 ```bash
-$ docker exec -ti <inser_docker_id> bash
+$ docker exec -ti <insert_docker_id> bash
 ```
 
 Attaching to a running container and running `bash` feels like establishing an SSH session.
@@ -297,14 +299,16 @@ The good and the bad news is that you can't.
 It's bad news because you can only execute the binaries in the container. The only binary you could run is Node.js:
 
 ```bash
-$ docker exec -ti <inser_docker_id> node
+$ docker exec -ti <insert_docker_id> node
 ```
 
 It's good news because an attacker exploiting your application and gaining access to the container won't be able to do as much damage as if were to access a shell. In other words, fewer binaries mean smaller sizes and increased security. But at the cost of more painful debugging.
 
-> Please note that perhaps you shouldn't attach to and debug containers live. You should rather rely on proper logging and mornitoring.
+> Please note that perhaps you shouldn't attach to and debug containers in a production environment. You should rather rely on proper logging and monitoring.
 
 But what if you cared about debugging and smaller sizes?
+
+{% include inline-subscribe-cta/index.html %}
 
 ## 3. Smaller base images with Alpine
 
@@ -401,7 +405,11 @@ Do you use Alpine, distroless or vanilla images?
 
 **If you're running in production and you're concerned about security**, perhaps distroless images are more appropriate.
 
-Every binary that is added to a Docker image adds a certain amount of risk to the overall application. You can reduce the overall risk by having only one binary installed in the container. As an example, if an attacker was able to exploit a vulnerability in your app running on Distroless, they won't be able to spawn a shell in the container because there isn't one!
+Every binary that is added to a Docker image adds a certain amount of risk to the overall application.
+
+You can reduce the overall risk by having only one binary installed in the container.
+
+As an example, if an attacker was able to exploit a vulnerability in your app running on Distroless, they won't be able to spawn a shell in the container because there isn't one!
 
 > Please note that [minimising attack surface area is recommended by OWASP](https://www.owasp.org/index.php/Minimize_attack_surface_area).
 
@@ -422,6 +430,26 @@ Recap of image sizes:
 | `gcr.io/distroless/nodejs` | 76.7 |
 | `node:8-alpine` | 69.7 |
 
-If you enjoyed this article don't forget to subscribe!
+## That's all folks!
 
 Thanks to [Chris Nesbitt-Smith](https://github.com/chrisns), [Valentin Ouvrard](https://valentin.ouvrard.it/) and [Keith Mifsud](https://keith-mifsud.me/) for their feedback!
+
+If you enjoyed this article, you might find interesting reading:
+
+- [Getting started with Docker and Kubernetes on Windows 10](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows) where you'll get your hands dirty and install Docker and Kubernetes in your Windows environment.
+- [Kubernetes Chaos Engineering: Lessons Learned — Part 1](https://learnk8s.io/blog/kubernetes-chaos-engineering-lessons-learned) what happens when things go wrong in Kubernetes?
+
+{:.caution}
+## Become an expert at deploying and scaling applications in Kubernetes
+
+But how do you deal with thousands of _small_ containers?
+
+You should learn how to leverage a container orchestrator such as Kubernetes.
+
+You can get a head start with our hands-on courses and learn how to master scalability in the cloud.
+
+Learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})

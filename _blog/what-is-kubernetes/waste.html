@@ -1,0 +1,78 @@
+{% include_relative waste.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#waste')
+  const basicTimeline = anime.timeline({
+    autoplay: true,
+    loop: true
+  });
+  basicTimeline
+  .add({
+    targets: '#waste-animejs-app-small',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#waste-animejs-waste-pattern', '#waste-animejs-waste-generic'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({})
+  .add({
+    targets: ['#waste-animejs-app-small', '#waste-animejs-waste-pattern', '#waste-animejs-waste-generic'],
+    opacity: [1, 0],
+    easing: 'easeOutQuad',
+  })
+
+  .add({
+    targets: '#waste-animejs-app-tall',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#waste-animejs-waste-pattern', '#waste-animejs-waste-tall'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({})
+  .add({
+    targets: ['#waste-animejs-app-tall', '#waste-animejs-waste-pattern', '#waste-animejs-waste-tall'],
+    opacity: [1, 0],
+    easing: 'easeOutQuad',
+  })
+
+  .add({
+    targets: '#waste-animejs-app-large',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#waste-animejs-waste-pattern', '#waste-animejs-waste-generic'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({})
+  .add({
+    targets: ['#waste-animejs-app-large', '#waste-animejs-waste-pattern', '#waste-animejs-waste-generic'],
+    opacity: [1, 0],
+    easing: 'easeOutQuad',
+  })
+
+  .add({
+    targets: '#waste-animejs-app-almost',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#waste-animejs-waste-pattern', '#waste-animejs-waste-almost1', '#waste-animejs-waste-almost2'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({})
+  .add({
+    targets: ['#waste-animejs-app-almost', '#waste-animejs-waste-pattern', '#waste-animejs-waste-almost1', '#waste-animejs-waste-almost2'],
+    opacity: [1, 0],
+    easing: 'easeOutQuad',
+  })
+})();
+</script>

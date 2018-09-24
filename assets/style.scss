@@ -164,15 +164,15 @@
 .article {
   @extend .lh-copy, .black-70, .f4, .measure-wide, .center;
 
-  h1, h2, h3, h4, h5, h6 {
+  > h1, > h2, > h3, > h4, > h5, > h6 {
     @extend .navy, .lh-title, .pt4, .pb1;
   }
 
-  p, ul, ol {
+  > p, > ul, > ol {
     @extend .lh-copy, .f4, .serif;
   }
 
-  a {
+  > a {
     @extend .navy, .link, .underline;
   }
 
@@ -186,7 +186,7 @@
     @extend .bg-near-white, .pa1, .br2, .ba, .b--black-20, .f5;
   }
 
-  blockquote {
+  > blockquote {
     @extend .bl, .pl3, .bw2, .b--black-20;
   }
 
@@ -448,30 +448,6 @@ green     #859900  operators, other keywords
   }
 }
 
-#popular-tweets{
-  .favicon {
-    position: relative;
-    top: 0.2rem
-  }
-}
-
-#share{
-  h2{
-    padding-top: 0;
-  }
-  h3{
-    padding-top: 0;
-  }
-  p {
-    font-family: sans-serif;
-  }
-}
-
-.archive-link{
-  font-size: 1.5rem;
-  background-color: #4E89C4;
-}
-
 @media screen and (max-width: 60em) and (min-width: 30em) {
 #newsletter-issue {
     .mh2-m {
@@ -497,10 +473,6 @@ green     #859900  operators, other keywords
     button{
       cursor: pointer;
     }
-    .subscribe-button{
-      padding-top: 1.5rem;
-      padding-bottom: 1.5rem;
-    }
     .message_area{
       text-align: left;
       padding: 0.5rem 1rem 0.5rem 1rem;
@@ -511,23 +483,26 @@ green     #859900  operators, other keywords
       background: none;
     }
   }
+}.subscribe {
+  position: relative;
+}
+.subscribe:after {
+  position: absolute;
+  left: 0;
+  top: -2em;
+  font-size: 0.75em;
+  content: "Caution: shameless plug ahead! Continue reading below ↓"
 }
 
-
-@media screen and (max-width: 60em) and (min-width: 30em) {
-  .archive-link{
-    font-size: 1rem;
-  }
+.caution {
+  margin-top: 2em !important;
+  @extend .relative;
 }
-
-@media screen and (max-width: 30em) {
-  #sib_embed_signup{
-    .subscribe-button{
-      padding-top: 1rem !important;
-      padding-bottom: 1rem !important;
-    }
-  }
-  .archive-link{
-    font-size: 1rem;
-  }
+.caution:after {
+  left: 0;
+  top: 0;
+  font-size: 0.5em;
+  content: "↓ Caution: shameless plug ahead! ↓";
+  font-weight: normal;
+  @extend .black-70, .absolute;
 }

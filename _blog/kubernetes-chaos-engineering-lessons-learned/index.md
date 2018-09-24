@@ -152,6 +152,8 @@ If you're confused by how many load balancer-like things we have, let's quickly 
 
 Phew! That was long!
 
+{% include inline-subscribe-cta/index.html %}
+
 ## It's time to break things
 
 Now that you know how things are plugged in together let's get back to the original question.
@@ -342,4 +344,26 @@ Dropping iptables rules is similar to make a node unavailable. The traffic is st
 
 Many thanks to [Manabu Sakai](https://twitter.com/manabusakai)'s blog post that was a huge inspiration and to [Valentin Ouvrard](https://twitter.com/Valentin_NC) for investigating the issue with the iptables propagation.
 
-If you liked the article, you should stay tuned for more! Subscribe to our newsletter!
+## That's all folks!
+
+If you enjoyed this article, you might find interesting reading:
+
+- [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images) and learn how to build and deploy Docker images quicker.
+- [Scaling Microservices with Message Queues, Spring Boot and Kubernetes](http://learnk8s.io/blog/scaling-spring-boot-microservices/). Learn how to use the Horizontal Pod Autoscaler to dynamically resize your fleet of applications.
+
+{:.caution}
+## Become an expert at deploying and scaling applications in Kubernetes
+
+Breaking the cluster is one of the core module in our training courses.
+
+At the end of the day, you need to be prepared for the worse.
+
+You never know!
+
+Get a head start with our hands-on courses and learn how to master scalability in the cloud.
+
+Learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})

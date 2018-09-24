@@ -157,7 +157,7 @@ Yes, you do!
 
 You should be aware that Docker requires VT-X/AMD-v virtual hardware extension to be enabled before you can run any container. Depending on your computer, you may need to reboot and enable it in your BIOS.
 
-> You can check if VT-X/AMD-v is enabled by running `systeminfo` from the 
+> You can check if VT-X/AMD-v is enabled by running `systeminfo` from the
 command prompt.
 
 If you're unsure VT-X/AMD-v was enabled, don't worry. If you don't have it, Docker will greet you with the following error message:
@@ -451,6 +451,8 @@ Wordpress is serving traffic from within a container!
 
 > Please note that you won't be able to complete the Wordpress installation because there's no database.
 
+{% include inline-subscribe-cta/index.html %}
+
 ## Testing your Kubernetes cluster installation
 
 It's about time to test your local Kubernetes cluster. In this section, you will deploy the [Smashing.io dashboard](https://smashing.github.io/).
@@ -511,4 +513,13 @@ If you stumbled on an error not described in the article, feel free to get in to
 
 And since you have a fully working environment, you should check out the tutorial on [how to deploy Laravel applications to Kubernetes]({% link _blog/deploying-laravel-to-kubernetes/index.md %}).
 
-If you liked the article, you should stay tuned for more! Subscribe to our newsletter!
+{:.caution}
+## Become an expert at deploying and scaling applications in Kubernetes
+
+This article is part of the learnk8s workshop "Deploying and Scaling applications in Kubernetes".
+
+In the rest of the course you will learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})

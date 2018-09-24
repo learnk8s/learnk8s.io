@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 551" id="profiles">
+  <g fill="none" fill-rule="evenodd">
+    <g stroke-linejoin="round" transform="translate(137 123)">
+      <path stroke="#778F9B" stroke-dasharray="1 6" d="M0 1L578 1M0 113L578 113M0 226L578 226"/>
+      <path stroke="#000A12" stroke-linecap="round" stroke-width="2" d="M0,339 L578,339"/>
+    </g>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="637.21" y="492">16GiB</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="524.254" y="492">8GiB</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="406.254" y="492">4GiB</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="288.254" y="492">2GiB</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="172.952" y="492">0</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="66.139" y="127">8 vCPU</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="71.139" y="241">4 vCPU</tspan>
+    </text>
+    <text fill="#778F9B" font-size="16" letter-spacing=".08" class="sans-serif">
+      <tspan x="71.139" y="355">1 vCPU</tspan>
+    </text>
+    <g id="profiles-animejs-high-memory" transform="translate(178 34)">
+      <rect width="484" height="114" y="313" fill="#FA2A00"/>
+      <text fill="#4A4A4A" font-size="21" font-weight="400" letter-spacing=".105" class="sans-serif">
+        <tspan x="104.541" y="22">Memory intensive application</tspan>
+      </text>
+    </g>
+    <g id="profiles-animejs-high-cpu" transform="translate(178 34)">
+      <rect width="126" height="339" y="88" fill="#F5A623"/>
+      <text fill="#4A4A4A" font-size="21" font-weight="400" letter-spacing=".105" class="sans-serif">
+        <tspan x="122.986" y="22">CPU intensive application</tspan>
+      </text>
+    </g>
+    <g id="profiles-animejs-moderate" transform="translate(178 34)">
+      <rect width="246" height="227" y="200" fill="#86B8B1"/>
+      <text fill="#4A4A4A" font-size="21" font-weight="400" letter-spacing=".105" class="sans-serif">
+        <tspan x="54.013" y="22">Application with moderate requirements</tspan>
+      </text>
+    </g>
+  </g>
+</svg>

@@ -15,7 +15,7 @@ sass:
     - node_modules
   style: compressed
 excerpt_separator: <!--more-->
-post_limit: 5
+post_limit: 20
 collections:
   blog:
     output: true
@@ -35,3 +35,4 @@ defaults:
 plugins:
   - jekyll-target-blank
   - jekyll-sitemap
+  - jekyll-redirect-from
