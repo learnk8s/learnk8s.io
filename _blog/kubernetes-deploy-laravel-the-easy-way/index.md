@@ -22,8 +22,6 @@ js:
   - anime.min.js
   - isScrolledIntoView.js
 
-has_cta: true
-
 redirect_from:
   - /blog/deploying-laravel-to-kubernetes
 
@@ -216,6 +214,8 @@ or, launch the application directly in the browser:
 minikube service laravel-kubernetes-demo
 ```
 
+{% include inline-subscribe-cta/index.html %}
+
 __Scaling__
 
 And that is it. You have successfully deployed the application in Kubernetes. It's exciting. But what's the point of doing all of this? Well, you only have one deployment with a single Pod running, provisioned to a Node with the exposed web service. Let's scale this deployment to two more instances of the application.
@@ -337,3 +337,14 @@ You can now access the application through the minikube IP address as shown abov
 ## This is just the beginning
 
 Hopefully, this article has helped you in getting acquainted with Kubernetes. From my own experience, once one has performed similar deployments a couple or more times, things start getting habitual and make a lot more sense. But our Kubernetes journey has only just begun. In future articles, we will walk through more real-life applications using storage volumes to persist state, and we will also learn how to deploy to Cloud providers such as Google's  Cloud Platform. Until then, check out these <a href="/training" title ="Learn Kubernetes">courses</a> to get up to speed and possibly even become a Certified Kubernetes Administrator (CKA).
+
+{:.caution}
+## Become an expert at deploying and scaling applications in Kubernetes
+
+This article is part of the learnk8s workshop "Deploying and Scaling applications in Kubernetes".
+
+In the rest of the course you will learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})
