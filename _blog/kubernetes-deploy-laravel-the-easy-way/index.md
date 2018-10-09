@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to deploy Laravel to Kubernetes
+title: "Kubernetes: deploy Laravel the easy way"
 date: 2018-04-25 00:00:00
 author: "Keith Mifsud"
 
@@ -10,19 +10,21 @@ description: "Laravel is an excellent framework for developing PHP applications.
 excerpt: "Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up."
 
 categories: php docker minikube kubernetes laravel
-image: /blog/deploying-laravel-to-kubernetes/laravel_k8s.jpg
+image: /blog/kubernetes-deploy-laravel-the-easy-way/laravel_k8s.jpg
 
 open_graph:
   type: article
   title: How to deploy Laravel to Kubernetes
-  image: /blog/deploying-laravel-to-kubernetes/laravel_k8s.jpg
+  image: /blog/kubernetes-deploy-laravel-the-easy-way/laravel_k8s.jpg
   description: "Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up."
 
 js:
   - anime.min.js
   - isScrolledIntoView.js
 
-has_cta: true
+redirect_from:
+  - /blog/deploying-laravel-to-kubernetes
+
 ---
 
 Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows.
@@ -66,31 +68,54 @@ To follow with this demonstration, you will need the following installed on your
 
 3) <a href="https://github.com/kubernetes/minikube/releases" target="_blank" rel="noopener">Minikube</a>
 
->Are you having problems installing and running these applications on Windows? LearnK8s will be publishing a tutorial on how to accomplish this very soon. Subscribe and be notified as soon as new articles get published.
-
+>Are you having problems installing and running these applications on Windows? Check out the article [Getting started with Docker and Kubernetes on Windows 10](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows), for a step by step guide.
 
 __Docker image__
 
-Kubernetes deploys containerised applications, and therefore as a first step, you will need to build a Docker image of the demo application. Since this tutorial will be run locally on Minikube, you can just build a local Docker Image from the `DockerFile` included in the example code.
+Kubernetes deploys containerised applications, and therefore as a first step, you will need to build a Docker image of the demo application. Since this tutorial will be run locally on Minikube, you can just build a local Docker Image from the `Dockerfile` included in the example code.
 
 ```bash
-FROM php:7
-RUN apt-get update -y && apt-get install -y openssl zip unzip git
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN docker-php-ext-install pdo mbstring
+FROM composer:1.6.5 as build
 WORKDIR /app
 COPY . /app
 RUN composer install
 
-RUN php artisan key:generate
-RUN php artisan serve --host=0.0.0.0 --port=8181
-EXPOSE 8181
+FROM php:7.1.8-apache
+EXPOSE 80
+COPY --from=build /app /app
+COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+RUN chown -R www-data:www-data /app \
+    && a2enmod rewrite
 ```
-This `DockerFile` is reasonably basic:
 
-It extends a PHP7 base image, installs some system dependencies including composer and the standard PHP extensions required by Laravel. It then copies the application files to a working directory and installs the application's dependencies via composer. It also runs a couple of `artisan` commands,  last of which serves the application using the built-in PHP web server. In the end, it exposes port `8181` to the host machine.
+This `Dockerfile` is made of two parts:
 
-To build the local Docker image:
+- The first part extends a PHP `composer` image so that you can install the application's dependencies.
+
+- The second part creates a final Docker image with an Apache web server to serve the application.
+
+Before you can test the Docker image, you will need to build it:
+
+
+```bash
+cd /to/your/project/directory
+docker build -t yourname/laravel-kubernetes-demo .
+```
+
+Then run the application with:
+
+```bash
+docker run -ti \
+  -p 8080:80 \
+  -e APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY= \
+  laravel-kubernetes-demo
+```
+
+And the application should be available on `http://localhost:8080`.
+
+With this setup, the container is generic and the `APP_KEY` is not hardcoded or shared.
+
+__Building the image within Minikube__
 
 ```bash
 cd /to/your/project/directory
@@ -113,10 +138,14 @@ kubectl config use-context minikube
 then you can deploy the container image:
 
 ```bash
-kubectl run laravel-kubernetes-demo --image=yourname/laravel-kubernetes-demo
---port=8181 --image-pull-policy=IfNotPresent
+kubectl run laravel-kubernetes-demo \
+  --image=yourname/laravel-kubernetes-demo \
+  --port=80 \
+  --image-pull-policy=IfNotPresent \
+  --env=APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY=
 ```
-The above command tells `kubectl` to run our demo application from the Docker image while making port 8181 available for listening. The last parameter of the command simply asks `kubectl` to not pull the image from a registry such as Docker Hub if it exists locally which in this case it does. Do note that you still need to be logged on to Docker's so that `kubectl` can check if the image is up to date.
+
+The above command tells `kubectl` to run our demo application from the Docker image. The first parameter of the command simply asks `kubectl` to not pull the image from a registry such as Docker Hub if it exists locally which in this case it does. Do note that you still need to be logged on to Docker's so that `kubectl` can check if the image is up to date.
 
 You can check that a Pod is created for the application by running:
 
@@ -152,7 +181,7 @@ So far you have created a deployment which is running the application's containe
 You can create a service with:
 
 ```bash
-kubectl expose deployment laravel-kubernetes-demo --type=NodePort --port=8181
+kubectl expose deployment laravel-kubernetes-demo --type=NodePort --port=80
 ```
 
 and provided all went well, you will see a confirmation similar to:
@@ -184,6 +213,8 @@ or, launch the application directly in the browser:
 ```bash
 minikube service laravel-kubernetes-demo
 ```
+
+{% include inline-subscribe-cta/index.html %}
 
 __Scaling__
 
@@ -258,7 +289,7 @@ spec:
       - path: /
         backend:
           serviceName: laravel-kubernetes-demo
-          servicePort: 8181
+          servicePort: 80
 ```
 Among the basic content you would expect from a Kubernetes resource file, this file defines a set of rules to follow when routing inbound traffic. The `laravel-kubernetes.demo` URL will point to the Service where the application is running, as previously labelled `laravel-kubernetes-demo` on port 8181.
 
@@ -306,3 +337,14 @@ You can now access the application through the minikube IP address as shown abov
 ## This is just the beginning
 
 Hopefully, this article has helped you in getting acquainted with Kubernetes. From my own experience, once one has performed similar deployments a couple or more times, things start getting habitual and make a lot more sense. But our Kubernetes journey has only just begun. In future articles, we will walk through more real-life applications using storage volumes to persist state, and we will also learn how to deploy to Cloud providers such as Google's  Cloud Platform. Until then, check out these <a href="/training" title ="Learn Kubernetes">courses</a> to get up to speed and possibly even become a Certified Kubernetes Administrator (CKA).
+
+{:.caution}
+## Become an expert at deploying and scaling applications in Kubernetes
+
+This article is part of the learnk8s workshop "Deploying and Scaling applications in Kubernetes".
+
+In the rest of the course you will learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})
