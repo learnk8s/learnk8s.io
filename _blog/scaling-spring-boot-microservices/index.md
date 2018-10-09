@@ -673,7 +673,7 @@ Only then it can increase or decrease the instances of your application.
 
 So you could expose the length of the queue as a metric and ask the autoscaler to watch that value.
 
-{% include tweet_this/index.html content="With the autoscaler enabled, the more pending messages in the queue, the more instances of your application Kubernetes will create." %}
+With the autoscaler enabled, the more pending messages in the queue, the more instances of your application Kubernetes will create.
 
 _So how do you expose those metrics?_
 
@@ -839,7 +839,7 @@ Scaling Pods across nodes works fabulously.
 
 _But what if you don't have enough capacity in the cluster to scale your Pods?_
 
-{% include tweet_this/index.html content="If you reach peak capacity in the cluster, Kubernetes will leave the Pods in a pending state and wait for more resources to be available." %}
+If you reach peak capacity in the cluster, Kubernetes will leave the Pods in a pending state and wait for more resources to be available.
 
 _It would be great if you could use an autoscaler similar to the Horizontal Pod Autoscaler, but for Nodes._
 

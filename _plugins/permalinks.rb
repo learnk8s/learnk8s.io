@@ -42,20 +42,3 @@ MSG
     end
   end
 end
-
-module Jekyll
-  module TweetThisFilter
-    include Liquid::StandardFilters
-    def tweet_this(text)
-      url = @context.registers[:page]['url']
-      tweet = "https://twitter.com/share?url=#{absolute_url(url)}&text=#{text}&via=learnk8s"
-      if tweet.length > 280
-        raise "Tweet to long: #{tweet.length} characters. Source: #{url}"
-      else
-        return tweet
-      end
-    end
-  end
-end
-
-Liquid::Template.register_filter(Jekyll::TweetThisFilter)
