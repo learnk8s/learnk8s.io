@@ -8,58 +8,168 @@ open_graph:
   image: /assets/open_graph_preview.png
 ---
 
-# Distributed TensorFlow on Kubernetes
+Gathering facts and data to better understand the world we live has become the new norm.
 
-Building production-ready Machine Learning/Deep Learning/Data Science systems is complex. The setup of the services and tools required for effective development and deployment of ML models is time consuming. The aim of this blog post is to look at the challenges faced by Data Scientists and how these can be resolved. 
+From self-driving cars to smart personal assistants, data and data science is everywhere.
 
-## The Challenges
+Even the phones that we carry in our pockets now feature dedicated units for machine learning.
 
-1. Build once, run ~~everywhere~~ locally:
-This issues is not new to any kind of software development. You write an algorithm on your laptop or your computer, test it by training it locally and produce a model. It works well and you are proud of your work! When you promote your work to the proceeding environments or your colleague tries to run it, it fails! You carry out extensive checks and realise that there is a conflict of framework version between your and rest of the environments e.g. Python 3.0 instead of Python 2.7! 
+In fact, there has never been more need for more performant and efficient system to ingest and extract meanings out of large volumes of numbers.
 
-2. My machine can't handle it: There comes a point while developing models that the machine you are using will not be enough to train your model. Sure, you could buy a powerful gaming PC. However, you will have to wait for it to be delivered and set it all up with the required pre-requsistes. If you are working in a team and they all require the same setup, buying a powerful machine for each of the members will not be financially viable. Another issue will be that these machines will be under-utilised.
+The challenges for data scientists and engineers is how to design pipelines and processes that can operate at scale and in real-time.
 
-3. The whole setup is too complex:  
-The expectation of a data scientist/ML engineer is that they will focus on a handful of things such as writing an algorithm, training the model, testing and evaluating the outcome of the model.
+Traditionally, the setup of the services and tools required for effective development and deployment of deep learning model has been time consuming and error prone.
 
-![Data Science Expectations]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/datascience_expectation.png %})
+## Build once, run ~~everywhere~~ on my machine
 
-The reality however is very sobering, the data scientist will have to deal with a myriad of things. Set up the infrastructure that can serve the required models, set up monitoring tools, think about resource management and the list goes on! 
+Being able to run your models locally and reproduce the same results in the data farm is what you should expect.
 
-![Data Science Reality]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/datascience_reality.png %})
+But it's not always like this.
 
-In order to become a data scientist, one has to quickly grasp and specialise other aspects of software development, operations and infrastructure management.  
+And the issues is not new to any kind of software development either.
 
-4. Training a bunch of models repeatedly
+You write an algorithm on your computer and test it by training it locally to produce a model.
 
-Imagine you have a product that relies on three types of models. One that is recommendation system based, another one that serves an antispam model and another that predicts churn rate. Based on the data that the system receives, a data scientist would ideally like iterate through a number of versions by tweaking the training parameters. Eventually settling for a final version.
+It works well and you are proud of your work.
 
-![Training Models]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/training_models.png %})
+But when you send it to the data farm or your colleague tries to run it, it fails.
 
-In most scenarios this will not be a one-time job. The model will have to be trained at least once everyday, if not more frequently. Running the training manually can be error-prone and a very slow process.
+It's only after carring out extensive checks that you realise that there is a conflict of runtime version — your colleague is still stuck at Python 2.7!
 
-![Training Models Everyday :(]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/training_models_everyday.png %})
+It would be much easier if you could send your models alongside your environment and settings.
 
-So far we have discussed about the issues that a data scientist/machine learning engineer faces day-to-day. All of these issues slow down the process of training and serving these models for an end product. If a data scientist could do the following then they will get more time to focus on writing algorithms and training the model.
+You could truly have reproducible results indepedently from when you run your tests.
 
-- Rent a fleet of machines by the hour for training and use them only when required
-- Mix the training nodes with CPUs, GPUs, TPUs an
-- Scale the whole infrastructure instantly and  in an automated fashion 
+Particularly when you need a larger computer to process even more data.
+
+## When your computer is not enough
+
+There comes a point while developing models that the computer you are using will not be enough to train your model.
+
+Sure, you could buy a powerful gaming PC and stuff it with video cards.
+
+However, you will have to wait for it to be delivered and set it all up with the required pre-requsistes.
+
+And if you are working in a team and they all require the same setup, buying a powerful machine for each of the members will not be financially viable.
+
+You won't have a good return of investment when you go on holiday.
+
+The kit stays under your desk and collects dust.
+
+A better strategy would be to rent the kit only when you need it.
+
+So you can pay only for what you use.
+
+Perhaps you could use a workstation in the cloud, so that even your colleagues can provision large clusters when and if they needed.
+
+## The whole setup is too complex
+
+Provisioning clusters in the cloud, designing the infrastructure to ingest and extract miningful data, researching and training models.
+
+As a data scientist your expertise and duties span several disciplines.
+
+The expectation of a data scientist is that you will focus on a handful of things such as writing an algorithm, training the model, testing and evaluating the outcome of the model.
+
+![Data Science Expectations]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/datascience_expectation.png %})
+
+The reality however is very sobering.
+
+You have to deal with a myriad of things.
+
+From setting up the infrastructure that can serve the required models, to configuring monitoring tools, tuning resource management, supporting batched jobs and the list goes on!
+
+![Data Science Reality]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/datascience_reality.png %})
+
+In order to become a data scientist, one has to quickly grasp and specialise other aspects of software development, operations and infrastructure management.
+
+Even if you don't want to, unfortunately.
+
+## Scaling machine learning in the cloud
+
+_But what if you could outsource all of the non data science to someone else while still retaining control?_
+
+_What if you could leverage an existing platform for scaling your models without having to reinvent the wheel?_
+
+_What if you could train and evaluate your model in the cloud as you do locally?_
+
+You could finally focus on what you do best: the data science!
+
+There're few competing solutions that provide an easy entry to a data farm.
+
+You might have heard of:
+
+- [Google Cloud Machine Learning](https://cloud.google.com/ml-engine/)
+- [Machine learning on AWS](https://aws.amazon.com/machine-learning/)
+- [Scale](https://www.scaleapi.com/) the API for training data
+
+They are all valid solutions, but they tend to run in public clouds and you can't easily move to another once you committed to one.
+
+## Kubeflow — an open source machine learning platform
+
+An excellent alternative for training and evaluating your models in public and private clouds is to use [Kubeflow](https://github.com/kubeflow/kubeflow) — an open source toolkit to distribute machine learning.
+
+Kubeflow is designed to make your machine learning experiments portable and scalable.
+
+You start by creating Jupyter notebooks in the cloud.
+
+Since you can rent kit by the hours, you can run your experiment on large compute resources with dedicated hardware such as GPUs and TPUs.
+
+When you sense you have hit a breakthrough, it's time to scale your model to run thousand of machines.
+
+You can save your algorithm as a Python script and let Kubeflow divide the work into smaller tasks that can be processes in parallel on several machines.
+
+Combine that with a cluster autoscaler and you can easily rent kit to run thousands of nodes and train your model an order of magnitude quicker than you're used to!
+
+When the computention is the complete, you can use Kubeflow builting serving webserver to offer an API to query the model. No need to create your own webserver and plug in the algorithm. Kubeflow offers that out of the box.
+
+But things gets even better.
+
+Kubeflow can run parametrised jobs. That's great news if you need to tune your hyperparameters. Instead of starting a single job and having it broken down to smaller tasks, you can submit several jobs and let Kubeflow optimise the processing for you.
+
+And while you wait, you can observe the progress of each model on the built-in dashboard.
+
+Let me recap what Kubeflow does for you:
+
+- deploys a JupyterHub where you can start notebooks with beefy machines
+- breaks down your models into smaller tasks that can be parallelised
+- serves your models as an API to be queries by other services
+- can run parametrised jobs in parallel — ideal for hyperparameter sweeping
+
+Exciting!
+
+All the annoying tasks that were not data science are just removed from the equation.
+
+You can finally focus on what you know best: the data science!
+
+_So how do you get started with Kubeflow?_
+
+
+
+
+
+
+
+
+
+
+
+At the moment Kubeflow understands and scales only Tensorflow (and Keras) scripts. But the project is looking to add other competing frameworks such as PyTorch, MXNet and Chainer to name a few.
+
 
 ### ENTER KUBERNETES
 
 ## What is Kubernetes?
-<TODO> What is K8s and how it helps with containerised applications and how it can provision resources. Perhaps explain what containers are.
+TODO: What is K8s and how it helps with containerised applications and how it can provision resources. Perhaps explain what containers are.
 
-<TODO> How it helps with splitting up of jobs and deploying them in servers which have the capacity
+TODO: How it helps with splitting up of jobs and deploying them in servers which have the capacity
 
 ### ENTER KUBEFLOW
 
 ## What is Kubeflow?
 
-<TODO> How Kubeflow uses Kubernetes API to help with serving of models.
+TODO How Kubeflow uses Kubernetes API to help with serving of models.
 
-<TODO> Different parts of Kubeflow: 
+TODO Different parts of Kubeflow:
 - Pytorch
 - Jupyter Notebooks
 - Tensorflow
@@ -95,7 +205,7 @@ You should have the following tools installed:
 
 You are given a set of images with handwritten digits and you wish to transcribe them.
 
-![MNIST dataset]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/MNIST.png %})
+![MNIST dataset]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/MNIST.png %})
 
 As an example, the above image should be transcribed to 5, 0, 4 and 1.
 
@@ -113,7 +223,7 @@ TensorFlow is a framework for building machine learning algorithms and is the pe
 
 Even better, it turns out that recognising digits is a well understood problem and there're plenty of examples online.
 
-For convenience, you can find the source code of the model at [learnk8s/distributed-TensorFlow-on-k8s](https://github.com/learnk8s/distributed-TensorFlow-on-k8s).
+For convenience, you can find the source code of the model at [learnk8s/distributed-TensorFlow-on-k8s](https://github.com/learnk8s/distributed-tensorflow-on-k8s).
 
 You can checkout the code with:
 
@@ -206,7 +316,7 @@ Before you scale your training in the cloud, you should pay attention to how you
 
 TensorFlow exposes three different kinds of APIs: low, mid and high level APIs.
 
-![TensorFlow programming stack]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/TensorFlow_programming_environment.png %})
+![TensorFlow programming stack]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/tensorflow_programming_environment.png %})
 
 When you use the high level APIs such as the [Estimators API](https://www.TensorFlow.org/programmers_guide/estimators) you benefit from:
 
@@ -507,3 +617,21 @@ You can follow the progress of the training in real-time at [http://localhost:80
 ## Final notes
 
 The NFS volume is running on a single instance and isn't highly available. Having a single node for your storage may work if you run small workloads, but you should probably investigate [Ceph](http://docs.ceph.com/docs/mimic/cephfs/), [GlusterFS](https://www.gluster.org/) or [rook.io](https://rook.io) as a way to manage distributed storage.
+
+
+
+4. Training a bunch of models repeatedly
+
+Imagine you have a product that relies on three types of models. One that is recommendation system based, another one that serves an antispam model and another that predicts churn rate. Based on the data that the system receives, a data scientist would ideally like iterate through a number of versions by tweaking the training parameters. Eventually settling for a final version.
+
+![Training Models]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/training_models.png %})
+
+In most scenarios this will not be a one-time job. The model will have to be trained at least once everyday, if not more frequently. Running the training manually can be error-prone and a very slow process.
+
+![Training Models Everyday :(]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/training_models_everyday.png %})
+
+So far we have discussed about the issues that a data scientist/machine learning engineer faces day-to-day. All of these issues slow down the process of training and serving these models for an end product. If a data scientist could do the following then they will get more time to focus on writing algorithms and training the model.
+
+- Rent a fleet of machines by the hour for training and use them only when required
+- Mix the training nodes with CPUs, GPUs, TPUs an
+- Scale the whole infrastructure instantly and  in an automated fashion
