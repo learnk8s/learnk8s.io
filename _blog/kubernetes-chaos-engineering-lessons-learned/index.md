@@ -263,7 +263,7 @@ Before you drop the iptables rules, you can inspect them with:
 $ iptables -L
 ```
 
-Soon after you drop the rules, you should keep executing `iptables -F` and notice that the rules are back in few seconds!
+Soon after you drop the rules, you should keep executing `iptables -F` and notice that the rules are back in a few seconds!
 
 *Is this you, `kube-proxy`?*
 
@@ -354,7 +354,7 @@ If you enjoyed this article, you might find interesting reading:
 {:.caution}
 ## Become an expert at deploying and scaling applications in Kubernetes
 
-Breaking the cluster is one of the core module in our training courses.
+Breaking the cluster is one of the core modules in our training courses.
 
 At the end of the day, you need to be prepared for the worse.
 
