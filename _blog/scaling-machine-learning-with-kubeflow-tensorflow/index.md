@@ -1,101 +1,20 @@
 ---
 layout: post
-title: Scaling Machine Learning in the Cloud with Kubernetes
+title: Recognising handwritten digits at scale with Kubernetes and Tensorflow
+description:
+date: 2018-10-26 11:26:00
+categories: kubernetes docker tensorflow
+image:
 open_graph:
-  title: Contact us
-  description: Get in touch and let us know how we can help.
-  type: business.business
-  image: /assets/open_graph_preview.png
+  type: article
+  title: Recognising handwritten digits at scale with Kubernetes and Tensorflow
+  image:
+  description:
 ---
-
-# Distributed TensorFlow on Kubernetes
-
-Building production-ready Machine Learning/Deep Learning/Data Science systems is complex. The setup of the services and tools required for effective development and deployment of ML models is time consuming. The aim of this blog post is to look at the challenges faced by Data Scientists and how these can be resolved. 
-
-## The Challenges
-
-1. Build once, run ~~everywhere~~ locally:
-This issues is not new to any kind of software development. You write an algorithm on your laptop or your computer, test it by training it locally and produce a model. It works well and you are proud of your work! When you promote your work to the proceeding environments or your colleague tries to run it, it fails! You carry out extensive checks and realise that there is a conflict of framework version between your and rest of the environments e.g. Python 3.0 instead of Python 2.7! 
-
-2. My machine can't handle it: There comes a point while developing models that the machine you are using will not be enough to train your model. Sure, you could buy a powerful gaming PC. However, you will have to wait for it to be delivered and set it all up with the required pre-requsistes. If you are working in a team and they all require the same setup, buying a powerful machine for each of the members will not be financially viable. Another issue will be that these machines will be under-utilised.
-
-3. The whole setup is too complex:  
-The expectation of a data scientist/ML engineer is that they will focus on a handful of things such as writing an algorithm, training the model, testing and evaluating the outcome of the model.
-
-![Data Science Expectations]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/datascience_expectation.png %})
-
-The reality however is very sobering, the data scientist will have to deal with a myriad of things. Set up the infrastructure that can serve the required models, set up monitoring tools, think about resource management and the list goes on! 
-
-![Data Science Reality]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/datascience_reality.png %})
-
-In order to become a data scientist, one has to quickly grasp and specialise other aspects of software development, operations and infrastructure management.  
-
-4. Training a bunch of models repeatedly
-
-Imagine you have a product that relies on three types of models. One that is recommendation system based, another one that serves an antispam model and another that predicts churn rate. Based on the data that the system receives, a data scientist would ideally like iterate through a number of versions by tweaking the training parameters. Eventually settling for a final version.
-
-![Training Models]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/training_models.png %})
-
-In most scenarios this will not be a one-time job. The model will have to be trained at least once everyday, if not more frequently. Running the training manually can be error-prone and a very slow process.
-
-![Training Models Everyday :(]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/training_models_everyday.png %})
-
-So far we have discussed about the issues that a data scientist/machine learning engineer faces day-to-day. All of these issues slow down the process of training and serving these models for an end product. If a data scientist could do the following then they will get more time to focus on writing algorithms and training the model.
-
-- Rent a fleet of machines by the hour for training and use them only when required
-- Mix the training nodes with CPUs, GPUs, TPUs an
-- Scale the whole infrastructure instantly and  in an automated fashion 
-
-### ENTER KUBERNETES
-
-## What is Kubernetes?
-<TODO> What is K8s and how it helps with containerised applications and how it can provision resources. Perhaps explain what containers are.
-
-<TODO> How it helps with splitting up of jobs and deploying them in servers which have the capacity
-
-### ENTER KUBEFLOW
-
-## What is Kubeflow?
-
-<TODO> How Kubeflow uses Kubernetes API to help with serving of models.
-
-<TODO> Different parts of Kubeflow: 
-- Pytorch
-- Jupyter Notebooks
-- Tensorflow
-- Hyperparameter tuning
-
-
-## Train ML Model
-
-
-Build a fully integrated pipeline to train your machine learning models with TensorFlow and Kubernetes.
-
-This repo will guide you through:
-
-1. setting up a local environment with python, pip and TensorFlow
-1. packaging up your models as Docker containers
-1. creating and configuring a Kubernetes cluster
-1. deploying models in your cluster
-1. scaling your model using Distributed TensorFlow
-1. serving your model
-1. tuning your model using hyperparameter optimisation
-
-## Prerequisites
-
-You should have the following tools installed:
-
-- git
-- kubectl
-- python 2.7 and pip
-- bash
-- an account on Docker Hub
-
-## Recognising handwritten digits
 
 You are given a set of images with handwritten digits and you wish to transcribe them.
 
-![MNIST dataset]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/MNIST.png %})
+![MNIST dataset]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/MNIST.png %})
 
 As an example, the above image should be transcribed to 5, 0, 4 and 1.
 
@@ -206,7 +125,7 @@ Before you scale your training in the cloud, you should pay attention to how you
 
 TensorFlow exposes three different kinds of APIs: low, mid and high level APIs.
 
-![TensorFlow programming stack]({% link _blog/scaling-machine-learning-with-kubeflow-TensorFlow/TensorFlow_programming_environment.png %})
+![TensorFlow programming stack]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/tensorflow_programming_environment.png %})
 
 When you use the high level APIs such as the [Estimators API](https://www.TensorFlow.org/programmers_guide/estimators) you benefit from:
 
@@ -263,31 +182,89 @@ The most popular choices are:
 
 - Google Kubernetes Engine (GKE), on Google Cloud Platform
 - Azure Kubernetes Service (AKS), on Azure
+- Elastic container service for Kubernetes (GKE), on Amazon Web Services
 
-> Please note that there's no specific integration with Elastic Kubernetes Service (EKS) on AWS at the moment. You can install Kubeflow on EKS, but you won't get the same level of support as GKE or AKS.
+Most of the cloud providers will lure you in with some free credits.
 
-Most of the cloud providers will lure you in with some free credits, so you can pick the one you like the most.
+In this tutorial you'll create a cluster on Google Cloud Platform, but the same applies to other cloud providers.
 
-Once you've made your choice, create a cluster with 3 nodes.
+At this point you should [sign up for an account on Google Cloud](https://console.cloud.google.com/freetrial).
 
-You don't need large machines, even a node with 4GB of memory will do the job.
+You'll use `gcloud` — a command-line interface to Google Cloud Platform (GCP) — to create the cluster.
 
-You can follow the links below to set up your cluster on the provider of your choice:
+You can download the `gcloud` binary [from the official website](https://cloud.google.com/sdk/downloads).
 
-- GKE
-- AKS
+And you should link your `gcloud` with your account on Google Cloud Platform with:
 
-Come back when you're ready.
+```bash
+gcloud init
+```
 
-_Are you ready yet?_
+The command opens a web page and asks you for authorisation.
+
+As soon as you give the go ahead, you can decide to use an existing project or create a new one.
+
+Feel free to create a new project and name it _"kubeflow"_.
+
+To operate a cluster, you need to add a debit/credit card to your account.
+
+You have to go through this tedious process even if you have free credits to spend on GCP.
+
+You can verify that your account is successfully linked to your card with:
+
+```bash
+gcloud alpha billing accounts list
+```
+
+The column _OPEN_ should display the value _True_.
+
+You can link the billing account to your project with:
+
+```bash
+gcloud alpha billing projects link kubeflow \
+  --billing-account <replace with billing id>
+```
+
+> Please note that you should use the billing id that you listed in the previous step.
+
+You are almost ready to create your first Kubernetes cluster.
+
+But first, you should enable the Google Container Engine clusters and Google Compure Engine APIs.
+
+```bash
+gcloud services enable container.googleapis.com
+gcloud services enable compute.googleapis.com
+```
+
+Finally, create a 3 nodes cluster with:
+
+```bash
+gcloud container clusters create distributed-tf --machine-type=n1-standard-8 --num-nodes=3
+```
+
+You should install `kubectl` to send instructions to the cluster.
+
+You can follow the instructions on how do that [from the official documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl).
+
+Then, you can obtain the credentials for `kubectl` with:
+
+```bash
+gcloud container clusters get-credentials distributed-tf
+```
 
 Please make sure you can successfully connect to the cluster with:
 
 ```bash
-kubectl get all --all-namespaces
+kubectl cluster-info
 ```
 
-> kubectl is the client that sends instructions to the cluster.
+And give yourself admin permission to install kubeflow:
+
+```
+kubectl create clusterrolebinding default-admin \
+  --clusterrole=cluster-admin \
+  --user=<replace with your GCP/Gmail email address>
+```
 
 ## Installing Kubeflow
 
