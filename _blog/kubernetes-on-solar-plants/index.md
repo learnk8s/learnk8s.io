@@ -17,6 +17,10 @@ open_graph:
   title: Kubernetes on solar plants
   image:
   description:
+
+js:
+  - anime.min.js
+  - isScrolledIntoView.js
 ---
 
 Demand for renewable energy has been growing steadily in the last decade.
@@ -49,6 +53,8 @@ In larger plants, all the data is passed through a wired network, but it's not u
 
 **Imagine controlling your solar panels over 5G:** the beauty of not having to deal with extra cables and the horror of long responses, dropped connections and timeouts.
 
+{% include_relative over_the_air.html %}
+
 In a setup like that, deploying and managing applications becomes a real challenge.
 
 ## Designing the internet of things at scale
@@ -56,6 +62,8 @@ In a setup like that, deploying and managing applications becomes a real challen
 If you're managing hundreds or thousands of devices, it's not practical to install software and firmware updates manually.
 
 You should design a system that can be updated remotely and where you can release software incrementally without leaving your desk.
+
+{% include_relative ota_updates.html %}
 
 Ideally, you should design a mechanism to package software that has almost zero overhead without sacrificing portability.
 
@@ -103,6 +111,8 @@ It's designed so that you install an agent on the computer and a master node is 
 
 You tell ECS what to deploy and the software instruct one of the agents to download and run it.
 
+{% include_relative ecs.html %}
+
 That sounds a lot like what you want to do with your solar panels.
 
 You want to have an agent installed on each embedded computer, and you want to manage applications from a central location.
@@ -119,6 +129,8 @@ Kubernetes is similar to ECS: you install an agent called the kubelet in your de
 
 From that moment onwards your devices are acting as one, and you can schedule deployments and manage applications.
 
+{% include_relative k8s.html %}
+
 **This time, however, you're not locked in.**
 
 Kubernetes is a major open source effort, and you're free to download, customise it and contribute back.
@@ -126,6 +138,8 @@ Kubernetes is a major open source effort, and you're free to download, customise
 _Is it secure?_
 
 Communication between the kubelet and the master node is secured using TLS.
+
+![The communication between the Kubernetes master and the kubelet is encrypted]({% link _blog/kubernetes-on-solar-plants/encrypted.png %})
 
 Each node can be provisioned with its certificate, so even if one node is compromised, you can reject only a single certificate while keeping the rest of the cluster available.
 
@@ -161,6 +175,8 @@ So instead of developing your mechanism to distribute applications, you can:
 
 When you update your package and wish to redistribute it, you can only ship the difference between the previous and the current container.
 
+{% include_relative layers.html %}
+
 When the delta is received, the new package is recomputed from the diff, unzipped and run as a separate process.
 
 Linux containers and Kubernetes are an excellent platform to run applications on your internet of things.
@@ -179,6 +195,8 @@ Kubernetes continually watches your infrastructure for failing processes and age
 
 When a device fails, Kubernetes will reschedule all of the applications deployed on that computer to another.
 
+{% include_relative reschedule.html %}
+
 Also If one of the application fails, perhaps because of a memory leak, Kubernetes will restart the app a predetermined number of times.
 
 Kubernetes never trust the nodes and the applications to work fine and is always observing the state of your infrastructure for glitches.
@@ -187,13 +205,17 @@ In the cloud, Kubernetes also monitors resources.
 
 If you don't have enough capacity to run all of your apps, it will ask the cloud provider to provision more compute resources.
 
+{% include_relative scaling.html %}
+
 Kubernetes is excellent for deploying containers, but it's designed to maximise the efficiency of your infrastructure.
 
-When you deploy five instances of an application, those are scheduled to maximise efficiency.
+When you deploy three instances of an application, those are scheduled to maximise efficiency.
 
 Kubernetes by default will try to spread the containers across all nodes, and try to pack your nodes as dense as possible.
 
-There's no guarantee that five instances of your applications will end up on five different devices.
+There's no guarantee that three instances of your applications will end up on five different devices.
+
+{% include_relative allocations.html %}
 
 They could be deployed all on the same node.
 
@@ -201,7 +223,9 @@ Or maybe in two, depending on the resource allocation.
 
 Particularly in the embedded world where resources are scares, you don't want deployments just to be placed anywhere.
 
-You want to have a strict set of rules for deployments. As an example, each solar panel should have only one app running at any given time.
+**You want to have a strict set of rules for deployments.**
+
+As an example, each solar panel should have only one app running at any given time.
 
 In the case of an application in charge of tilting the solar panels to track the trajectory of the sun, you don't want to have two applications deployed on the same node to drive the same motor.
 
@@ -227,6 +251,8 @@ If you wish to have a single application accessing the hardware of your embedded
 
 If you add a new solar panel with a connected device and join it to the cluster, Kubernetes will schedule and deploy the application automatically on that node too.
 
+{% include_relative daemonset.html %}
+
 So far so good.
 
 You have:
@@ -242,7 +268,7 @@ Now you that you know what Kubernetes is capable of and how it can scale your in
 
 ## Running Kubernetes in cars
 
-In June 2018 Redmonk wrote an article suggesting that Toyota runs Kubernetes in their cars.
+In June 2018 Redmonk wrote an article suggesting that [Toyota runs Kubernetes in their cars](https://redmonk.com/jgovernor/2018/06/28/rancher-labs-treating-cattle-like-cattle/).
 
 You can imagine each small component in your car such as the dashboard, the radio functions or the side lights having their computer with a Kubernetes agent installed.
 
@@ -278,9 +304,9 @@ Few days after the release, Redmonk amended the article to clarify the use of Ku
 
 Even if the story was untrue and was just a result of a misunderstanding, it still makes you think.
 
-## What if?
+_What if?_
 
-_What if you could run Kubernetes in a car?_
+## What if you could run Kubernetes in a car?
 
 _And what's stopping you from using Kubernetes in a solar plant?_
 

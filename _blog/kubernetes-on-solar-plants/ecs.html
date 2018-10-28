@@ -1,0 +1,67 @@
+{% include_relative ecs.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#ecs')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: ['#ecs-animejs-ecs', '#ecs-animejs-ecs1', '#ecs-animejs-ecs2', '#ecs-animejs-ecs3'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#ecs-animejs-wifi-1',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#ecs-animejs-wifi-2',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#ecs-animejs-wifi-3',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#ecs-animejs-app1', '#ecs-animejs-app2', '#ecs-animejs-app3'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#ecs-animejs-wifi-1', '#ecs-animejs-wifi-2', '#ecs-animejs-wifi-3'],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>
