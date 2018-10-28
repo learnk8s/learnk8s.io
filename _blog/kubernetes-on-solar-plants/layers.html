@@ -1,0 +1,56 @@
+{% include_relative layers.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#layers')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: ['#layers-v2-left', '#layers-v2-right'],
+    translateY: [-50, 70],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#layers-v3-left',
+    translateY: [-50, 106],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({})
+  .add({
+    targets: '#layers-v3-left',
+    translateY: [106, 106],
+    translateX: [0, 326],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>

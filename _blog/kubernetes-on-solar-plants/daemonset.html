@@ -1,0 +1,102 @@
+{% include_relative daemonset.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#daemonset')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: '#daemonset-animejs-wifi-1',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#daemonset-animejs-wifi-2',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#daemonset-animejs-wifi-3',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#daemonset-animejs-app1', '#daemonset-animejs-app2',],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#daemonset-animejs-wifi-1', '#daemonset-animejs-wifi-2', '#daemonset-animejs-wifi-3',],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#daemonset-animejs-solar3',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#daemonset-animejs-wifi-1', '#daemonset-animejs-wifi-2', '#daemonset-animejs-wifi-3',],
+    opacity: [0, 1],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#daemonset-animejs-app3',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#daemonset-animejs-wifi-1', '#daemonset-animejs-wifi-2', '#daemonset-animejs-wifi-3',],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#daemonset-animejs-solar4',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#daemonset-animejs-wifi-1', '#daemonset-animejs-wifi-2', '#daemonset-animejs-wifi-3',],
+    opacity: [0, 1],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#daemonset-animejs-app4',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#daemonset-animejs-wifi-1', '#daemonset-animejs-wifi-2', '#daemonset-animejs-wifi-3',],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>
