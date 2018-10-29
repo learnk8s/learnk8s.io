@@ -96,6 +96,8 @@ Kubernetes provides a layer of abstraction on all your compute resources - regar
 
 When you install Kubernetes on your infrastructure you select one computer as the **master** node, the rest of your fleet join the cluster as **worker** nodes. As you add or remove nodes to the cluster, Kubernetes keeps track of the available memory and CPU on each node. When your cluster is ready, you send a deployment request to the master node. Upon receiving the request, Kubernetes surveys the worker nodes for available memory and CPU and finds the best candidates to run your application. As a user, you don't have to worry about where your application is running; it's in the cluster. If a node running your application dies, its workload will immediately be moved to other nodes.
 
+{% include inline-subscribe-cta/index.html %}
+
 ### Size doesn't matter
 
 Interestingly, Kubernetes doesn't care what the size of a worker node is, as long as it offers memory and CPU. When a worker node with 4GB of memory and 2 CPUs registers to the cluster, the master node keeps track of the total available and spare capacities. It constantly monitors the current workload on each node and can decide if a given node has enough spare resources to run an application.
@@ -171,3 +173,21 @@ Kubernetes was designed to **abstract the size of nodes** and to seamlessly **mo
 But remember that **running your applications on Kubernetes doesn't make them horizontally scalable**. It is your **duty** to ensure that multiple copies of the application can run at the same time and can gracefully be shut down without dropping connections. More importantly, it is **critical that you actively test your availability**.
 
 Choosing spot instances will force you to practice some degree of **chaos engineering whilst slashing your bill**. If you are not on that Bandwagon you should try it now!
+
+## That's all folks!
+
+If you enjoyed this article, you might find interesting reading:
+
+- [Getting started with Docker and Kubernetes on Windows 10](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows) where you’ll get your hands dirty and install Docker and Kubernetes in your Windows environment.
+- [Scaling Microservices with Message Queues, Spring Boot and Kubernetes](http://learnk8s.io/blog/scaling-spring-boot-microservices/). Learn how to use the Horizontal Pod Autoscaler to dynamically resize your fleet of applications.
+
+{:.caution}
+## Become an expert at deploying and scaling applications in Kubernetes
+
+Get a head start with our hands-on courses and learn how to master scalability in the cloud with spot instances.
+
+Learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
