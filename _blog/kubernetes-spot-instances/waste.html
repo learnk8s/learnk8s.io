@@ -1,9 +1,8 @@
 {% include_relative waste.svg %}
 <script>
 (function() {
-  const svg = document.querySelector('#waste')
   const basicTimeline = anime.timeline({
-    autoplay: false,
+    autoplay: true,
     loop: true,
   });
   basicTimeline
@@ -59,8 +58,5 @@
     opacity: [1, 0],
     easing: 'easeOutExpo',
   })
-  onScrollIntoView(svg, function() {
-    setTimeout(basicTimeline.play, 1000)
-  });
 })();
 </script>
