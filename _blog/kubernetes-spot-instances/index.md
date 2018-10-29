@@ -9,18 +9,20 @@ description: "Virtual clouds are great, but they can be expensive. In this artic
 excerpt: "Virtual clouds are great, but they can be expensive. In this article we will review a bold alternative way to provide cheaper compute resource on your cloud. We will also see how Kubernetes and a bit of chaos can actually make things better in the end"
 
 author: "César Tron-Lozai"
+
+js:
+  - anime.min.js
+  - isScrolledIntoView.js
 ---
 
-## Cloud computing
-
-The last decades have seen a global shift from on-premise data centres to the provisioning of Virtual Machines (VMs) from mainstream cloud providers such as Amazon Web Services, Azure, Google Cloud Platform. Running and managing your own physical machines is hard and costly; chances are you’ll never be as successful and efficient as any of the top cloud providers. And what's not to love when you can leverage a mature platform and features such as:
+The last decades have seen a global shift from on-premise data centres to the provisioning of Virtual Machines (VMs) from mainstream cloud providers such as Amazon Web Services, Azure, Google Cloud Platform. Running and managing your own physical machines is hard and costly; chances are you'll never be as successful and efficient as any of the top cloud providers. And what's not to love when you can leverage a mature platform and features such as:
 
 * **Vertical scalability** - You can get instances of different sizes
 * **Horizontal scalability** - You can get (almost) as many instances as you want
 * **Flexible pricing** - You only pay for what you use
-* **Logistics cost** - You don’t have to physically maintain any server (heat control, electricity, backup, storage cost, fire prevention etc…)
+* **Logistics cost** - You don't have to physically maintain any server (heat control, electricity, backup, storage cost, fire prevention etc…)
 * **Availability** - Provision VM in separate data centres
-* **Reliability** - If you pay for an instance you’ll keep it until you are done. Should it go down you’ll immediately (+- 5min) get a replacement
+* **Reliability** - If you pay for an instance you'll keep it until you are done. Should it go down you'll immediately (+- 5min) get a replacement
 
 In this article, we will explore the different pricing models of a typical cloud provider. We will focus on one strategy and see how it could **cut your bill by up to  80%** if you are willing to trade in reliability. Finally, we will see how Kubernetes makes that lack of reliability irrelevant and allows you to run a cheap yet highly available cluster.
 
@@ -29,9 +31,9 @@ In this article, we will explore the different pricing models of a typical cloud
 The typical pricing model for cloud providers is based on a pay-as-you-go scheme.
 Compute resources come in different sizes (i.e. memory, CPU, disk etc..) and an hourly cost. **You get billed for the amount of time the instance is running**.
 
-This flexibility of pricing is great and fair, but you have to be careful with what you consume. If you leave instances running while you don’t need them anymore you’ll be throwing money out of the window.
+This flexibility of pricing is great and fair, but you have to be careful with what you consume. If you leave instances running while you don't need them anymore you'll be throwing money out of the window.
 
-*However let’s say you can foresee utilisation of a VM for a whole year. Shouldn’t you be able to get a bulk discount on your bill?*
+*However let's say you can foresee utilisation of a VM for a whole year. Shouldn't you be able to get a bulk discount on your bill?*
 
 ## Reserved Instances
 
@@ -56,7 +58,7 @@ AWS call them [Spot Instances](https://aws.amazon.com/ec2/spot/), Azure [Low-pri
 
 A typical cloud provider buys loads of powerful servers organised in large data centres. To maximise the utilisation of hardware they divide those computers into smaller virtual machines.
 
-`[PLACEHOLDER] - We could have drawing that shows bare metal servers split into VMS of different sizes`
+{% include_relative split.html %}
 
 **Because they promise horizontal scalability to everyone, they need to keep a lot of unutilised hardware in case someone suddenly needs additional compute units. That, however, leaves a lot of resources unused.**
 
@@ -70,15 +72,17 @@ From that follows the big question:
 
 ## Embracing failure
 
-Observations from systems at scale have proven that your application **will eventually go down**. Hard-drives, networks, JVMs, etc,  they **all** fail if you give them enough time and requests. Your main weapon against failure is **replication** and **redundancy**. If you run several copies of each component, it might be resilient to a certain number of failures. The amount of failure you can recover from will depend on how much redundancy you are willing to put in place. But don’t forget that redundancy means more compute resources. And more compute resources leads to a higher bill.
+Observations from systems at scale have proven that your application **will eventually go down**. Hard-drives, networks, JVMs, etc,  they **all** fail if you give them enough time and requests. Your main weapon against failure is **replication** and **redundancy**. If you run several copies of each component, it might be resilient to a certain number of failures. The amount of failure you can recover from will depend on how much redundancy you are willing to put in place. But don't forget that redundancy means more compute resources. And more compute resources leads to a higher bill.
 
-Another point to consider is the dynamic aspect of spot instances. Being based on idle resources, the size of instances available to you will **depend on what is currently unpopular**. In other words, *beggars can’t be choosers*.
-Perhaps this week you can pick up cheap 2GB memory instances, which is great if it is the amount of memory which your application requires. What should you do next week if those instances become unavailable, and you can only buy instances with memory starting from 4GB of memory? Of course, you could use those instances but you’d be paying twice the price and the extra memory would be wasted.
+Another point to consider is the dynamic aspect of spot instances. Being based on idle resources, the size of instances available to you will **depend on what is currently unpopular**. In other words, *beggars can't be choosers*.
+Perhaps this week you can pick up cheap 2GB memory instances, which is great if it is the amount of memory which your application requires. What should you do next week if those instances become unavailable, and you can only buy instances with memory starting from 4GB of memory? Of course, you could use those instances but you'd be paying twice the price and the extra memory would be wasted.
+
+{% include_relative waste.html %}
 
 Spot instances are an excellent deal but the downsides might not be acceptable. How can you cope with random nodes disappearing without notice? How should your infrastructure handle nodes of ever-changing sizes?
 
 What you need is a tool that constantly monitors nodes and automatically manages redundancy. This tool should scale and spread the components of applications on your infrastructure; when a node is lost or created, the infrastructure is rebalanced.
-It seems that one wouldn’t be able to manage a serious cloud infrastructure without such a tool. Chances are someone already built it. You are in luck, Google faced those issues years ago and have since open-sourced their solution to the problem: **Kubernetes**.
+It seems that one wouldn't be able to manage a serious cloud infrastructure without such a tool. Chances are someone already built it. You are in luck, Google faced those issues years ago and have since open-sourced their solution to the problem: **Kubernetes**.
 
 ## Kubernetes
 
@@ -86,14 +90,16 @@ It seems that one wouldn’t be able to manage a serious cloud infrastructure wi
 In a traditional infrastructure - say the early 2000s - you had a **fixed** number of servers and a **predictable** amount of resources. Cloud infrastructure - especially with spot instances - have completely changed the game. Kubernetes was developed to oversee the increasing complexity of managing ever-changing compute resources.
 Kubernetes provides a layer of abstraction on all your compute resources - regardless of how many, regardless of their sizes. You only have to interact with a **single** entity: **the cluster**. Your cluster could be formed of 10 small virtual machines or 2 big bare metal servers, the end result is the same: *a single point of interaction that manages and scales workload on your nodes*.
 
-`[PLACEHOLDER] - We could have drawing that shows multiple nodes being abstracted being a single cluster entity`
+{% include_relative united.html %}
 
-When you install Kubernetes on your infrastructure you select one computer as the **master** node, the rest of your fleet join the cluster as **worker** nodes. As you add or remove nodes to the cluster, Kubernetes keeps track of the available memory and CPU on each node. When your cluster is ready, you send a deployment request to the master node. Upon receiving the request, Kubernetes surveys the worker nodes for available memory and CPU and finds the best candidates to run your application. As a user, you don’t have to worry about where your application is running; it’s in the cluster. If a node running your application dies, its workload will immediately be moved to other nodes.
+When you install Kubernetes on your infrastructure you select one computer as the **master** node, the rest of your fleet join the cluster as **worker** nodes. As you add or remove nodes to the cluster, Kubernetes keeps track of the available memory and CPU on each node. When your cluster is ready, you send a deployment request to the master node. Upon receiving the request, Kubernetes surveys the worker nodes for available memory and CPU and finds the best candidates to run your application. As a user, you don't have to worry about where your application is running; it's in the cluster. If a node running your application dies, its workload will immediately be moved to other nodes.
 
-### Size doesn’t matter
+### Size doesn't matter
 
-Interestingly, Kubernetes doesn’t care what the size of a worker node is, as long as it offers memory and CPU. When a worker node with 4GB of memory and 2 CPUs registers to the cluster, the master node keeps track of the total available and spare capacities. It constantly monitors the current workload on each node and can decide if a given node has enough spare resources to run an application.
-This is one of Kubernetes true beauty. You can forget how many individual nodes joined the cluster and how big they are: you only see a single unified entity. But if you’re interested to know how big is your cluster you can sum the memory and CPU of all nodes and this will tell you how much total capacity your cluster has. If you have one 4GB/1vCPU and one 8GB/2vCPUs instances, you simply have a cluster with 12GB and 3 vCPUs.
+Interestingly, Kubernetes doesn't care what the size of a worker node is, as long as it offers memory and CPU. When a worker node with 4GB of memory and 2 CPUs registers to the cluster, the master node keeps track of the total available and spare capacities. It constantly monitors the current workload on each node and can decide if a given node has enough spare resources to run an application.
+This is one of Kubernetes true beauty. You can forget how many individual nodes joined the cluster and how big they are: you only see a single unified entity. But if you're interested to know how big is your cluster you can sum the memory and CPU of all nodes and this will tell you how much total capacity your cluster has. If you have one 4GB/1vCPU and one 8GB/2vCPUs instances, you simply have a cluster with 12GB and 3 vCPUs.
+
+{% include_relative resources.html %}
 
 The other noteworthy feature in Kubernetes is that nodes are monitored for uptime.
 
@@ -106,11 +112,11 @@ The Master node runs a series of synchronisation loops which follow a simple pri
 
 Imagine you have 3 nodes and 3 replicas of an application, one running on each node. When a node running on a spot instance is reclaimed by the cloud provider, the application on that node is lost. Kubernetes realises that you only have 2 replicas running instead of 3 and immediately starts another copy in one of the two remaining nodes (if space is available of course).
 
-`[PLACEHOLDER] - We could show a gif showing pods being moved from a node after it dies`
+{% include_relative reschedule.html %}
 
 ### When spot instances work in your favour
 
-In the last decade, our industry has massively adopted **microservices architecture**. Some would argue it is a fad, others that it is just SOA rebranded. I would argue that the **most important revolution** which came with microservices architecture, wasn’t that we decided to write smaller applications, but was the **shift from preventing failures to embracing failures**.
+In the last decade, our industry has massively adopted **microservices architecture**. Some would argue it is a fad, others that it is just SOA rebranded. I would argue that the **most important revolution** which came with microservices architecture, wasn't that we decided to write smaller applications, but was the **shift from preventing failures to embracing failures**.
 
 The biggest insight from the likes of Netflix, Google and Amazon, is that at scale, things go wrong. Even on the best and most expensive hardware, the probability of failure is strictly bigger than zero.
 
@@ -122,11 +128,11 @@ The biggest insight from the likes of Netflix, Google and Amazon, is that at sca
 
 *And what better way to kill node at random times if not spot instances?*
 
-**So not only you’re saving 80% of your cloud bill because you’re leveraging spare resources, but you’re also continuously testing your infrastructure for resilience.**
+**So not only you're saving 80% of your cloud bill because you're leveraging spare resources, but you're also continuously testing your infrastructure for resilience.**
 
-The precious reliability you obtained from reserved instances isn’t that much important anymore. In fact, you don’t actually care if your cloud provider reclaims your nodes unexpectedly; if you have a modern and resilient architecture you just won’t even notice.
+The precious reliability you obtained from reserved instances isn't that much important anymore. In fact, you don't actually care if your cloud provider reclaims your nodes unexpectedly; if you have a modern and resilient architecture you just won't even notice.
 
-**Reduced bill and chaos engineering. That’s a win-win.**
+**Reduced bill and chaos engineering. That's a win-win.**
 
 ## Spot instances hot tips
 
@@ -136,11 +142,9 @@ If you wish to try spot instances in your Kubernetes clusters, here there are fe
 
 Pick unpopular instance types. For instance, *m4* instances on Amazon Web Services are cheap because the *m5* instance family has recently been released. This made the *m4* instances go out of fashion meaning lower demand and better price for you!
 
-`[PLACEHOLDER] - If you have any inspiration for a drawing that show VMS on a shelf with different price tags, and perhaps something to show the cheaper ones are not popular. I may be asking too much :D`
-
 ### Maximum bid price (AWS only)
 
-While Azure’s Low Priority VM and Google Preemptible VMs have a fixed price, Spot instance prices are determined with a bidding process. As a user, you specify the maximum price per hour you are willing to pay. If AWS have enough spare VMs to serve everyone, everyone gets their instance at a low price. However, the price will get higher as demand increases.
+While Azure's Low Priority VM and Google Preemptible VMs have a fixed price, Spot instance prices are determined with a bidding process. As a user, you specify the maximum price per hour you are willing to pay. If AWS have enough spare VMs to serve everyone, everyone gets their instance at a low price. However, the price will get higher as demand increases.
 
 Choosing the maximum bid price allows you to choose how much **reliability you are willing to trade in**. A **low bid** will ensure your **bill stays low** but will increase the **likelihood of losing a node**. A **high bid** (for example equal to the on-demand price) will **reduce node failures** but means you might pay the same as on-demand price, i.e. with no discount.
 
@@ -150,7 +154,7 @@ That also depends on what you are doing. If you want to do non-critical work at 
 
 ### Monitor everything
 
-If you don’t want to impact your availability you need to pay close attention to what is happening to your spot instances. For example, you can set up email alerts when an instance goes down.
+If you don't want to impact your availability you need to pay close attention to what is happening to your spot instances. For example, you can set up email alerts when an instance goes down.
 
 In AWS you should also monitor how much you pay. If the bid price ends up being close to the on-demand price, you should probably find another instance type. Remember that **Kubernetes helps you with that**. Having 3 instances with 8GB of memory is almost identical to having 6 instances with 4GB. Be smart!
 
@@ -162,6 +166,6 @@ Have an alternative means of providing instances. For example, if you are provis
 
 Kubernetes was designed to **abstract the size of nodes** and to seamlessly **move components between nodes**. This makes it the perfect candidate to work with **spot instances**. A cluster built on top of spot instances will **scarcely be less reliable** than a cluster built on reserved virtual machines. When shopping for nodes for your Kubernetes cluster, reliability should not be your primary concern. You should focus on **cheap memory and CPU**! This echoes one of the key founding principles at Google: **You don't need reliable hardware with good enough software!**
 
-But remember that **running your applications on Kubernetes doesn’t make them horizontally scalable**. It is your **duty** to ensure that multiple copies of the application can run at the same time and can gracefully be shut down without dropping connections. More importantly, it is **critical that you actively test your availability**.
+But remember that **running your applications on Kubernetes doesn't make them horizontally scalable**. It is your **duty** to ensure that multiple copies of the application can run at the same time and can gracefully be shut down without dropping connections. More importantly, it is **critical that you actively test your availability**.
 
 Choosing spot instances will force you to practice some degree of **chaos engineering whilst slashing your bill**. If you are not on that Bandwagon you should try it now!

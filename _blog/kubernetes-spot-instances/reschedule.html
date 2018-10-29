@@ -1,0 +1,63 @@
+{% include_relative reschedule.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#reschedule')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: '#reschedule-animejs-up2',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#reschedule-animejs-down',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#reschedule-animejs-server',
+    opacity: [1, 0.2],
+    easing: 'easeOutExpo',
+  })
+  .add({})
+  .add({
+    targets: '#reschedule-animejs-app3',
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#reschedule-animejs-app5',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>
