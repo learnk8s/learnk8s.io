@@ -3,13 +3,15 @@ layout: post
 title: "Embracing Chaos and cutting costs: how to leverage spot instances in the cloud with Kubernetes"
 date: 2018-10-29 00:00:00
 categories: kubernetes "chaos engineering" "spot instance"
-
+image: /blog/kubernetes-spot-instances/cheap-cluster.jpg
 description: "Virtual clouds are great, but they can be expensive. In this article we will review a bold alternative way to provide cheaper compute resource on your cloud. We will also see how Kubernetes and a bit of chaos can actually make things better in the end"
-
 excerpt: "Virtual clouds are great, but they can be expensive. In this article we will review a bold alternative way to provide cheaper compute resource on your cloud. We will also see how Kubernetes and a bit of chaos can actually make things better in the end"
-
 author: "César Tron-Lozai"
-
+open_graph:
+  type: article
+  title: "Embracing Chaos and cutting costs: how to leverage spot instances in the cloud with Kubernetes"
+  image: /blog/kubernetes-spot-instances/cheap-cluster.jpg
+  description: "Virtual clouds are great, but they can be expensive. In this article we will review a bold alternative way to provide cheaper compute resource on your cloud. We will also see how Kubernetes and a bit of chaos can actually make things better in the end"
 js:
   - anime.min.js
   - isScrolledIntoView.js
