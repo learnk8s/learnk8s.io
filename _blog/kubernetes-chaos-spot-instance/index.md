@@ -27,13 +27,13 @@ In this article, we will explore the different pricing models of a typical cloud
 ## Pay-as-you-go
 
 The typical pricing model for cloud providers is based on a pay-as-you-go scheme.
-Compute resources come in different size (i.e. memory, CPU, disk etc..) and an hourly cost. **You get billed for the amount of time the instance is running**.
+Compute resources come in different sizes (i.e. memory, CPU, disk etc..) and an hourly cost. **You get billed for the amount of time the instance is running**.
 
 This flexibility of pricing is great and fair, but you have to be careful with what you consume. If you leave instances running while you don’t need them anymore you’ll be throwing money out of the window.
 
 *However let’s say you can foresee utilisation of a VM for a whole year. Shouldn’t you be able to get a bulk discount on your bill?*
 
-## Reserved instances
+## Reserved Instances
 
 With reserved instances, you need to **commit** to compute resources for at least a whole year, and if you really love commitment, up to five years. You may decide to pay an amount of the bill upfront. The discount that you get will depend on how long you are willing to commit and how much you can pay upfront. For example on Amazon Web Services, the *m4.large* instance type can be discounted as follow:
 
@@ -58,7 +58,7 @@ A typical cloud provider buys loads of powerful servers organised in large data 
 
 `[PLACEHOLDER] - We could have drawing that shows bare metal servers split into VMS of different sizes`
 
-**Because they promise everyone horizontal scalability, they need to keep a lot of unutilised hardware in case someone suddenly needs additional compute units. That, however, leaves a lot of resources unused.**
+**Because they promise horizontal scalability to everyone, they need to keep a lot of unutilised hardware in case someone suddenly needs additional compute units. That, however, leaves a lot of resources unused.**
 
 The idea behind spot instances is to allow users to tap into those spare resources at a much lower cost with the caveat that you might lose the instance at any moment. If you are running a spot instance and the cloud provider suddenly need that resource to accommodate demand from on-demand or reserved customers, you will immediately lose your instance.
 
@@ -86,7 +86,7 @@ It seems that one wouldn’t be able to manage a serious cloud infrastructure wi
 In a traditional infrastructure - say the early 2000s - you had a **fixed** number of servers and a **predictable** amount of resources. Cloud infrastructure - especially with spot instances - have completely changed the game. Kubernetes was developed to oversee the increasing complexity of managing ever-changing compute resources.
 Kubernetes provides a layer of abstraction on all your compute resources - regardless of how many, regardless of their sizes. You only have to interact with a **single** entity: **the cluster**. Your cluster could be formed of 10 small virtual machines or 2 big bare metal servers, the end result is the same: *a single point of interaction that manages and scales workload on your nodes*.
 
-`[PLACEHOLDER] - We could have drawing that shows multiple node being abstracted being a single cluster entity`
+`[PLACEHOLDER] - We could have drawing that shows multiple nodes being abstracted being a single cluster entity`
 
 When you install Kubernetes on your infrastructure you select one computer as the **master** node, the rest of your fleet join the cluster as **worker** nodes. As you add or remove nodes to the cluster, Kubernetes keeps track of the available memory and CPU on each node. When your cluster is ready, you send a deployment request to the master node. Upon receiving the request, Kubernetes surveys the worker nodes for available memory and CPU and finds the best candidates to run your application. As a user, you don’t have to worry about where your application is running; it’s in the cluster. If a node running your application dies, its workload will immediately be moved to other nodes.
 
@@ -140,7 +140,7 @@ Pick unpopular instance types. For instance, *m4* instances on Amazon Web Servic
 
 ### Maximum bid price (AWS only)
 
-While Azure’s Low Priority VM and Google Preemptible VMs have a fixed price, Spot instance prices are determined with a bidding process. As a user, you specify the maximum price per hour you are willing to pay. If AWS have enough spare VMs to serve everyone, everyone gets their instance at a low price. However, price will get higher as demand increases.
+While Azure’s Low Priority VM and Google Preemptible VMs have a fixed price, Spot instance prices are determined with a bidding process. As a user, you specify the maximum price per hour you are willing to pay. If AWS have enough spare VMs to serve everyone, everyone gets their instance at a low price. However, the price will get higher as demand increases.
 
 Choosing the maximum bid price allows you to choose how much **reliability you are willing to trade in**. A **low bid** will ensure your **bill stays low** but will increase the **likelihood of losing a node**. A **high bid** (for example equal to the on-demand price) will **reduce node failures** but means you might pay the same as on-demand price, i.e. with no discount.
 
@@ -160,7 +160,7 @@ Have an alternative means of providing instances. For example, if you are provis
 
 ## Summary
 
-Kubernetes was designed to **abstract the size of nodes** and to seamlessly **move components between nodes**. This makes it the perfect candidate to work with **spot instances**. A cluster built on top of spot instances will **scarcely be less reliable** than a cluster built on reserved virtual machines. When shopping for nodes for your Kubernetes cluster, reliability should not be your primary concern. You should focus on **cheap memory and CPU**! This echoes one of the key founding principle at Google: **You don't need reliable hardware with good enough software!**
+Kubernetes was designed to **abstract the size of nodes** and to seamlessly **move components between nodes**. This makes it the perfect candidate to work with **spot instances**. A cluster built on top of spot instances will **scarcely be less reliable** than a cluster built on reserved virtual machines. When shopping for nodes for your Kubernetes cluster, reliability should not be your primary concern. You should focus on **cheap memory and CPU**! This echoes one of the key founding principles at Google: **You don't need reliable hardware with good enough software!**
 
 But remember that **running your applications on Kubernetes doesn’t make them horizontally scalable**. It is your **duty** to ensure that multiple copies of the application can run at the same time and can gracefully be shut down without dropping connections. More importantly, it is **critical that you actively test your availability**.
 
