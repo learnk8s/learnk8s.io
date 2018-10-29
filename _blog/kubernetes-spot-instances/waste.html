@@ -1,0 +1,66 @@
+{% include_relative waste.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#waste')
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+    loop: true,
+  });
+  basicTimeline
+  .add({
+    targets: '#waste-animejs-vm-small',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#waste-animejs-app-small',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#waste-animejs-waste-pattern-small',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#waste-animejs-up', '#waste-animejs-waste-small'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({})
+  .add({
+    targets: ['#waste-animejs-waste-pattern-small', '#waste-animejs-waste-small', '#waste-animejs-vm-small', '#waste-animejs-app-small', '#waste-animejs-up'],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  .add({
+    targets: '#waste-animejs-vm-large',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#waste-animejs-app-large',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#waste-animejs-waste-pattern-large',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#waste-animejs-down', '#waste-animejs-waste-large'],
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({})
+  .add({
+    targets: ['#waste-animejs-waste-pattern-large', '#waste-animejs-waste-large', '#waste-animejs-vm-large', '#waste-animejs-app-large', '#waste-animejs-down'],
+    opacity: [1, 0],
+    easing: 'easeOutExpo',
+  })
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+})();
+</script>
