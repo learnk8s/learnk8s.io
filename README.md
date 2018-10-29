@@ -37,7 +37,7 @@ If the above fails, then no image will be shown on top of the Author's name.
 
 ### Post Excerpt
 
-You can specify the article's excerpt to be displayed in the article list 
+You can specify the article's excerpt to be displayed in the article list
 page by adding and setting the front-matter property:
 
 `excerpt: "Your brief description"`
@@ -46,30 +46,30 @@ Please check how it looks and fits on the page once set.
 
 ### Links
 
-If you need to include an external link, you can use an available `include 
+If you need to include an external link, you can use an available `include
 directive` as opposed to standard HTML. To do so, simply add the following to
  your article:
- 
+
 ```
-{% include link.external.html href="http://example.com" text="Text you want 
+{% include link.external.html href="http://example.com" text="Text you want
 to show" %}
 ```
 
 ___Optional arguments:___
 
-As you might of assumed the `href` ad the `text` arguments are required in 
-order for link to be shown and to be directed appropriately. You can pass 
+As you might of assumed the `href` ad the `text` arguments are required in
+order for link to be shown and to be directed appropriately. You can pass
 additional arguments for the `title` and the `rel` options as follows:
 
 1) Rel
 
-The default setting if not stated is `rel=nofollow`. Setting this attribute 
+The default setting if not stated is `rel=nofollow`. Setting this attribute
 will override the default setting. For example, this setting:
 
 ```
-{% include link.external.html href="http://example.com" text="Text you want 
+{% include link.external.html href="http://example.com" text="Text you want
 to show" rel="noopener" %}
-``` 
+```
 
 will result as:
 
@@ -79,11 +79,11 @@ will result as:
 
 2) Title
 
-If you do not specify a title, the text will be used by default. You can 
+If you do not specify a title, the text will be used by default. You can
 override the default title by setting it, Like so:
 
 ```html
-<a href="http://example.com" title="Your desired title">Text you want to 
+<a href="http://example.com" title="Your desired title">Text you want to
 show</a>
 ```
 
@@ -112,7 +112,7 @@ When you paste your text, Grammarly sends the content to its servers and runs a 
 After you cloned the repository, cd in the project directory and run:
 
 ```bash
-$ docker run -ti --rm -v ${PWD}:/app -p 4000:4000 ruby bash
+$ docker run -ti --rm -v ${PWD}:/app -e LANG=C.UTF-8 -p 4000:4000 ruby bash
 ```
 
 You can install the dependencies with:
