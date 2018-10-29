@@ -4,9 +4,9 @@ title: ???
 date: 2018-10-29 00:00:00
 categories: kubernetes "chaos engineering" "spot instance"
 
-description: "??"
+description: "Virtual clouds are great, but they can be expensive. In this article we will review a bold alternative way to provide cheaper compute resource on your cloud. We will also see how Kubernetes and a bit of chaos can actually make things better in the end"
 
-excerpt: "??"
+excerpt: "Virtual clouds are great, but they can be expensive. In this article we will review a bold alternative way to provide cheaper compute resource on your cloud. We will also see how Kubernetes and a bit of chaos can actually make things better in the end"
 
 author: "César Tron-Lozai"
 ---
@@ -52,9 +52,11 @@ With reserved instances, you are basically **trading flexibility for cash**. Tho
 
 ## Spot Instances
 
-AWS call them “spot instances”, Azure and Google.  We will call them “spot instances” as it seems to be the most common terminology. Though their inner workings differ a little they stem from the same rationale.
+AWS call them [Spot Instances](https://aws.amazon.com/ec2/spot/), Azure [Low-priority VM](https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-use-low-priority) and Google [Preemptible VM](https://cloud.google.com/compute/docs/instances/preemptible).  We will call them “spot instances” as it seems to be the most common terminology. Though their inner workings differ a little they stem from the same rationale.
 
 A typical cloud provider buys loads of powerful servers organised in large data centres. To maximise the utilisation of hardware they divide those computers into smaller virtual machines.
+
+`[PLACEHOLDER] - We could have drawing that shows bare metal servers split into VMS of different sizes`
 
 **Because they promise everyone horizontal scalability, they need to keep a lot of unutilised hardware in case someone suddenly needs additional compute units. That, however, leaves a lot of resources unused.**
 
@@ -84,6 +86,8 @@ It seems that one wouldn’t be able to manage a serious cloud infrastructure wi
 In a traditional infrastructure - say the early 2000s - you had a **fixed** number of servers and a **predictable** amount of resources. Cloud infrastructure - especially with spot instances - have completely changed the game. Kubernetes was developed to oversee the increasing complexity of managing ever-changing compute resources.
 Kubernetes provides a layer of abstraction on all your compute resources - regardless of how many, regardless of their sizes. You only have to interact with a **single** entity: **the cluster**. Your cluster could be formed of 10 small virtual machines or 2 big bare metal servers, the end result is the same: *a single point of interaction that manages and scales workload on your nodes*.
 
+`[PLACEHOLDER] - We could have drawing that shows multiple node being abstracted being a single cluster entity`
+
 When you install Kubernetes on your infrastructure you select one computer as the **master** node, the rest of your fleet join the cluster as **worker** nodes. As you add or remove nodes to the cluster, Kubernetes keeps track of the available memory and CPU on each node. When your cluster is ready, you send a deployment request to the master node. Upon receiving the request, Kubernetes surveys the worker nodes for available memory and CPU and finds the best candidates to run your application. As a user, you don’t have to worry about where your application is running; it’s in the cluster. If a node running your application dies, its workload will immediately be moved to other nodes.
 
 ### Size doesn’t matter
@@ -101,6 +105,8 @@ The Master node runs a series of synchronisation loops which follow a simple pri
 ### Kubernetes neatly solves your challenge with spot instances.
 
 Imagine you have 3 nodes and 3 replicas of an application, one running on each node. When a node running on a spot instance is reclaimed by the cloud provider, the application on that node is lost. Kubernetes realises that you only have 2 replicas running instead of 3 and immediately starts another copy in one of the two remaining nodes (if space is available of course).
+
+`[PLACEHOLDER] - We could show a gif showing pods being moved from a node after it dies`
 
 ### When spot instances work in your favour
 
@@ -130,6 +136,8 @@ If you wish to try spot instances in your Kubernetes clusters, here there are fe
 
 Pick unpopular instance types. For instance, *m4* instances on Amazon Web Services are cheap because the *m5* instance family has recently been released. This made the *m4* instances go out of fashion meaning lower demand and better price for you!
 
+`[PLACEHOLDER] - If you have any inspiration for a drawing that show VMS on a shelf with different price tags, and perhaps something to show the cheaper ones are not popular. I may be asking too much :D`
+
 ### Maximum bid price (AWS only)
 
 While Azure’s Low Priority VM and Google Preemptible VMs have a fixed price, Spot instance prices are determined with a bidding process. As a user, you specify the maximum price per hour you are willing to pay. If AWS have enough spare VMs to serve everyone, everyone gets their instance at a low price. However, price will get higher as demand increases.
@@ -154,6 +162,6 @@ Have an alternative means of providing instances. For example, if you are provis
 
 Kubernetes was designed to **abstract the size of nodes** and to seamlessly **move components between nodes**. This makes it the perfect candidate to work with **spot instances**. A cluster built on top of spot instances will **scarcely be less reliable** than a cluster built on reserved virtual machines. When shopping for nodes for your Kubernetes cluster, reliability should not be your primary concern. You should focus on **cheap memory and CPU**! This echoes one of the key founding principle at Google: **You don't need reliable hardware with good enough software!**
 
-But remember that running your applications on Kubernetes doesn’t make them horizontally scalable. It is your **duty** to ensure that multiple copies of the application can run at the same time and can gracefully be shut down without dropping connections. More importantly, it is **critical that you actively test your availability**.
+But remember that **running your applications on Kubernetes doesn’t make them horizontally scalable**. It is your **duty** to ensure that multiple copies of the application can run at the same time and can gracefully be shut down without dropping connections. More importantly, it is **critical that you actively test your availability**.
 
 Choosing spot instances will force you to practice some degree of **chaos engineering whilst slashing your bill**. If you are not on that Bandwagon you should try it now!
