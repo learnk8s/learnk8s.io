@@ -3,21 +3,15 @@ layout: post
 title: Kubernetes on solar plants
 date: 2018-10-26 15:49:00
 author: "Daniele Polencic"
-
 description: ""
-
 excerpt: ""
-
 categories: kubernetes iot "internet of things" "solar plant" "clean energy"
-
-image:
-
+image: /blog/kubernetes-on-solar-plants/solar_panel.png
 open_graph:
   type: article
   title: Kubernetes on solar plants
-  image:
+  image: /blog/kubernetes-on-solar-plants/solar_panel.png
   description:
-
 js:
   - anime.min.js
   - isScrolledIntoView.js
@@ -266,6 +260,8 @@ Excellent setup if you consider that you started from zero.
 
 Now you that you know what Kubernetes is capable of and how it can scale your internet of things, what's next?
 
+{% include inline-subscribe-cta/index.html %}
+
 ## Running Kubernetes in cars
 
 In June 2018 Redmonk wrote an article suggesting that [Toyota runs Kubernetes in their cars](https://redmonk.com/jgovernor/2018/06/28/rancher-labs-treating-cattle-like-cattle/).
@@ -321,3 +317,26 @@ Hundreds of days of development saved because you can reuse a proven tool.
 While Kubernetes was initially designed to run in data centres, its applications go well beyond the cloud, and it won't take long before the news come out of kubernetes used in another internet of things setup.
 
 And I can't wait to hear what you're going to build next with it.
+
+## That's all folks!
+
+Thanks to [Aled James](https://www.linkedin.com/in/aledjames/), and [XXXX](https://) for their feedback!
+
+If you enjoyed this article, you might find interesting reading:
+
+- [What is Kubernetes? Optimise your hosting costs and efficiency](https://learnk8s.io/blog/what-is-kubernetes) and learn how Kubernetes works and why it was invented in the first place
+- [Kubernetes Chaos Engineering: Lessons Learned — Part 1](https://learnk8s.io/blog/kubernetes-chaos-engineering-lessons-learned) what happens when things go wrong in Kubernetes? Can Kubernetes recover from failure and self-heal?
+
+
+{:.caution}
+## Become an expert at deploying and scaling applications in Kubernetes
+
+Are you building a solar plant? Maybe a car? Or just want to deploy web applications at scale?
+
+Get a head start with our hands-on courses and learn how to master Kubernetes.
+
+Learn how to:
+
+{% include promo-workshop/index.html %}
+
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})
