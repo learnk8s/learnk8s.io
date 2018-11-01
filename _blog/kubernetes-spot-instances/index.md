@@ -4,14 +4,13 @@ title: "Embracing failures and cutting infrastructure costs: Spot instances in K
 date: 2018-10-29 00:00:00
 categories: kubernetes "chaos engineering" "spot instance"
 image: /blog/kubernetes-spot-instances/cheap-cluster.jpg
-description: "Virtual clouds are great, but they can be expensive. In this article, we will review a bold alternative way to provide cheaper compute resource on your cloud. We will also see how Kubernetes and a bit of chaos can actually make things better in the end."
-excerpt: "Virtual clouds are great, but they can be expensive. In this article, we will review a bold alternative way to provide cheaper compute resource on your cloud. We will also see how Kubernetes and a bit of chaos can actually make things better in the end."
+description: "Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances."
 author: "César Tron-Lozai"
 open_graph:
   type: article
   title: "Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes"
   image: /blog/kubernetes-spot-instances/cheap-cluster.jpg
-  description: "Virtual clouds are great, but they can be expensive. In this article, we will review a bold alternative way to provide cheaper compute resource on your cloud. We will also see how Kubernetes and a bit of chaos can actually make things better in the end."
+  description: "Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances."
 js:
   - anime.min.js
   - isScrolledIntoView.js
