@@ -1,7 +1,6 @@
 ---
 layout: post
-title: "Embracing failures and cutting infrastructure costs: Spot instances in
-Kubernetes"
+title: "Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes"
 date: 2018-10-29 00:00:00
 categories: kubernetes "chaos engineering" "spot instance"
 image: /blog/kubernetes-spot-instances/cheap-cluster.jpg
@@ -10,8 +9,7 @@ excerpt: "Virtual clouds are great, but they can be expensive. In this article, 
 author: "César Tron-Lozai"
 open_graph:
   type: article
-  title: "Embracing failures and cutting infrastructure costs: Spot instances in
-  Kubernetes"
+  title: "Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes"
   image: /blog/kubernetes-spot-instances/cheap-cluster.jpg
   description: "Virtual clouds are great, but they can be expensive. In this article, we will review a bold alternative way to provide cheaper compute resource on your cloud. We will also see how Kubernetes and a bit of chaos can actually make things better in the end."
 js:
@@ -98,9 +96,8 @@ What you need is a tool that continually monitors nodes and automatically manage
 
 It seems that one wouldn't be able to manage a consequent cloud infrastructure without such a tool. Chances are someone already built it. You are in luck, Google faced those issues years ago and have since open-sourced their solution to the problem: **Kubernetes**.
 
-## Kubernetes
+## Abstracting the data centre into a single computer
 
-### The cluster
 In a traditional infrastructure - say the early 2000s - you had a **fixed** number of servers and a **predictable** amount of resources.
 
 Cloud infrastructure - especially with spot instances - have completely changed the game. Kubernetes was developed to oversee the increasing complexity of managing ever-changing compute resources.
@@ -119,8 +116,6 @@ As a user, you don't have to worry about where your application is running; it's
 
 {% include inline-subscribe-cta/index.html %}
 
-### Size doesn't matter
-
 Interestingly, Kubernetes doesn't care what the size of a worker node is, as long as it offers memory and CPU.
 
 When a worker node with 4GB of memory and 2 CPUs registers to the cluster, the master node keeps track of the total available and spare capacities. It continually monitors the current workload on each node and can decide if a given node has enough available resources to run an application.
@@ -135,20 +130,19 @@ The other noteworthy feature in Kubernetes is that nodes are monitored for uptim
 
 *If a node is lost, Kubernetes will remove its memory and CPU from the cluster and migrate all applications to other worker nodes.*
 
-### Dynamic cluster
+## Self-healing infrastructure with Kubernetes
+
 The Master node runs a series of synchronisation loops which follow a simple principle: as a user, you specify the desired state, e.g. “I want 3 instances of my application”.
 
 The master node regularly checks the current state, compares it with the desired state and make any required adjustment. For example, if a master node notices that only 2 instances of an application are running, but you requested three, it immediately starts another one.
 
 Most of Kubernetes components are designed this way: a control loop that constantly regulates the current state around the desired state.
 
-### Kubernetes neatly solves your challenge with spot instances.
-
 Imagine you have 3 nodes and 3 replicas of an application, one running on each node. When a node running on a spot instance is reclaimed by the cloud provider, the application on that node is lost. Kubernetes realises that you only have 2 replicas running instead of 3 and immediately starts another copy in one of the two remaining nodes (if space is available of course).
 
 {% include_relative reschedule.html %}
 
-### When spot instances work in your favour
+## Spot instances and Kubernetes: a match made in heaven
 
 In the last decade, our industry has massively adopted **microservices architecture**. Some would argue it is a fad, others that it is just SOA rebranded. I would say that the **most important revolution** which came with microservices architecture, wasn't that we decided to write smaller applications, but was the **shift from preventing failures to embracing failures**.
 
