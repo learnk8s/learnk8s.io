@@ -143,7 +143,7 @@ Imagine you have 3 nodes and 3 replicas of an application, one running on each n
 
 ## Spot instances and Kubernetes: a match made in heaven
 
-In the last decade, our industry has massively adopted **microservices architecture**. Some would argue it is a fad, others that it is just SOA rebranded. I would say that the **most important revolution** which came with microservices architecture, wasn't that we decided to write smaller applications, but was the **shift from preventing failures to embracing failures**.
+In the last decade, our industry has massively adopted microservices architecture. Some would argue it is a fad, others that it is just SOA rebranded. I would say that the most important revolution which came with microservices architecture, wasn't that we decided to write smaller applications, but was the **shift from preventing failures to embracing failures**.
 
 The most significant insight from the likes of Netflix, Google and Amazon, is that at scale, things go wrong. Even on the best and most expensive hardware, the probability of failure is strictly larger than zero.
 
@@ -151,11 +151,11 @@ The most significant insight from the likes of Netflix, Google and Amazon, is th
 
 **You test the failover with chaos engineering.**
 
-**Chaos engineering** recommends that you actively create failures in your infrastructure to ensure you are resilient indeed. If you need to remember a single thing it is that **availability and reliability can only be achieved if you test them actively**. If you want to make sure your application is highly available, you need to kill nodes regularly.
+Chaos engineering recommends that you actively create failures in your infrastructure to ensure you are resilient indeed. If you need to remember a single thing it is that **availability and reliability can only be achieved if you test them actively**. If you want to make sure your application is highly available, you need to kill nodes regularly.
 
 *And what better way to kill node at random times if not spot instances?*
 
-**So not only you're saving 80% of your cloud bill because you're leveraging spare resources, but you're also continuously testing your infrastructure for resilience.**
+So not only you're saving 80% of your cloud bill because you're leveraging spare resources, but you're also continuously testing your infrastructure for resilience.
 
 The precious reliability you obtained from reserved instances isn't that much important anymore. In fact, you don't actually care if your cloud provider reclaims your nodes unexpectedly; if you have modern and resilient architecture, you just won't even notice.
 
@@ -181,7 +181,9 @@ That also depends on what you are doing. If you want to do non-critical work at 
 
 ### Monitor everything
 
-If you don't want to impact your availability you need to pay close attention to what is happening to your spot instances. For example, you can set up email alerts when an instance goes down.
+Appropriate monitoring will tell you if your system recovered properly after a node failure. If your application did not cope with losing a spot instance in your cluster, you need to know pretty quickly.
+
+At the beginning of your journey with spot instances, you could set up email notifications when your cloud provider reclaims one of your nodes. As your system gets more robust and you get more confident you probably won't need those anymore.
 
 On AWS you could try the [Spot Termination Notice Handler](https://github.com/mumoshu/kube-spot-termination-notice-handler) which can be notified of spot instance termination before it happens, leaving you time to reschedule your app onto other nodes gracefully.
 
