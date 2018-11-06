@@ -43,7 +43,7 @@ If the solar panel is dropping in efficiency, an operator can be alerted to take
 
 In larger plants, the solar arrays' data are passed through a wired network, but it's not uncommon to see those embedded computers connecting wirelessly.
 
-**Imagine controlling your solar panels over 5G:** the beauty of not having to deal with extra cables and the horror of long responses <!-- Unsure why long responses would occur -->, dropped connections and timeouts.
+**Imagine controlling your solar panels over 5G:** the beauty of not having to deal with extra cables and the horror of long responses, dropped connections and timeouts.
 
 {% include_relative over_the_air.html %}
 
@@ -53,7 +53,7 @@ In a setup like that, deploying and managing applications becomes a real challen
 
 If you're managing hundreds or thousands of devices, it's not practical to attend every device in person in order to install software and firmware updates.
 
-You should design a system that can be updated remotely. <!-- Removed text as it's saying the same thing twice -->
+You should design a system that can be updated remotely.
 
 {% include_relative ota_updates.html %}
 
@@ -159,7 +159,7 @@ When you update your package and wish to redistribute it, you can only ship the 
 
 {% include_relative layers.html %}
 
-When the delta is received, the new package is recomputed from the diff, unzipped and run as a separate process. <!-- this is cool - have you seen https://www.balena.io/os/docs/ ?-->
+When the delta is received, the new package is recomputed from the diff, unzipped and run as a separate process.
 
 Linux containers and Kubernetes are an excellent platform to run applications on your internet of things.
 
@@ -191,8 +191,6 @@ Kubernetes is excellent for deploying containers in a way that maximises the eff
 
 When you deploy three instances of an application, those are scheduled to maximise efficiency.
 
-Kubernetes by default will try to spread the containers across all nodes, and try to pack your nodes as dense as possible <!-- this statement is a little contradictory, maybe delete this line? -->.
-
 There's no guarantee that three instances of your applications will end up on five different devices.
 
 {% include_relative allocations.html %}
@@ -215,13 +213,13 @@ The most straightforward strategy is a _[Deployment](https://kubernetes.io/docs/
 
 In a _Deployment_, you specify the number of instances of your application and Kubernetes will find the space to allocate them.
 
-This is the most common deployment type, but while it's useful for cloud deployments where we don't care which specific node is running our application (we just care that it's being run by _something_), this is less useful in the embedded world.
+This is the most common deployment type, but while it's useful for cloud deployments where you don't care which specific node is running our application (you just care that it's being run by _something_), this is less useful in the embedded world.
 
-Other srategies include _[StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)_ and _[ReplicaSet](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)_. <!-- is a StatefulSet comparable here? -->
+Other srategies include _[StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)_ and _[ReplicaSet](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)_.
 
 Each of them comes with different trade-offs, but doesn't serve our goal of having our application run on every available node.
 
-For this we need a _[DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)_, a strategy that deploys one application per node.
+For this you need a _[DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)_, a strategy that deploys one application per node.
 
 If you add a new IoT-connected solar panel to the cluster, Kubernetes will automatically schedule and deploy the application on that embedded device (node) too.
 
@@ -232,11 +230,11 @@ So far so good.
 You have:
 
 - packaged applications as Linux containers
-- a centralised way to distribute software securely <!-- and incrementally -->
+- a centralised way to distribute software securely and incrementally
 - strategies to deploy applications across all devices (to prioritise hardware access), or across as few as possible (to maximise efficiency)
 - a reliable platform that self-heals when there are failures
 
-Considering that we started from nothing, we're now in a pretty good place.
+Considering that you started from nothing, you're now in a pretty good place.
 
 Now you that you know what Kubernetes is capable of and how it can scale your internet of things, what's next?
 
@@ -320,13 +318,3 @@ Learn how to:
 {% include promo-workshop/index.html %}
 
 P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})
-
-### Notes for Daniele
-
-Really interesting article! Didn't have to do very much to it. Removed most sentences starting with "and", and all paragraphs starting with "and". Otherwise have just amended some of the sentences to be more idiomatic and removed some sentences which were repeating previous content.
-
-Beautiful graphics!
-
-On the theme of k8s and IoT, have you seen [Adventures of the Kubernetes Vacuum Robots](https://blog.jetstack.io/blog/vacuum-robots/)?
-
-The only other thing to look at for the final draft would be to consider when you want to be using the first-person plural and when you want to use the second-person plural.
