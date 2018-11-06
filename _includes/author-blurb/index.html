@@ -1,7 +1,10 @@
 {% if page.author %}
 {% assign url_friendly_name = page.author | replace: ' ', '_' | downcase %}
-<a href="/about-us#{{url_friendly_name}}" title="{{page.author}}"
-   class="link">
+  {% if page.author_link %}
+<a href="{{page.author_link}}" title="{{page.author}}" class="link">
+  {% else %}
+<a href="/about-us#{{url_friendly_name}}" title="{{page.author}}" class="link">
+  {% endif %}
     {% if page.author_avatar %}
     <img src="/assets/authors/{{ page.author_avatar }}" alt="" class="br-100 w3 dib">
     {% else %}
