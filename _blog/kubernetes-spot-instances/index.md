@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes"
-date: 2018-10-29 00:00:00
+date: 2018-11-6 08:00:00
 categories: kubernetes "chaos engineering" "spot instance"
 image: /blog/kubernetes-spot-instances/cheap-cluster.jpg
 description: "Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances."
