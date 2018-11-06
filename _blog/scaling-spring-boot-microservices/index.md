@@ -869,7 +869,7 @@ And while you can roll out your deployment scripts, it's easier to leverage a co
 
 Thanks to [Nathan Cashmore](https://www.linkedin.com/in/nathancashmore/), and [Andy Griffiths](https://andrewgriffithsonline.com/) for their feedback!
 
-If you enjoyed this article, you might find interesting reading:
+If you enjoyed this article, you might find the following articles interesting:
 
 - [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images) and learn how to build and deploy Docker images quicker.
 - [Kubernetes Chaos Engineering: Lessons Learned — Part 1](https://learnk8s.io/blog/kubernetes-chaos-engineering-lessons-learned) what happens when things go wrong in Kubernetes? Can Kubernetes recover from failure and self-heal?

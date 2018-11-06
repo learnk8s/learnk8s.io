@@ -454,7 +454,7 @@ It's still early days and the community has still time to mature, but you should
 
 Many thanks to [Andy Griffiths](https://andrewgriffithsonline.com/), [John Topley](http://johntopley.com/) and [Walter Miani](https://www.linkedin.com/in/waltermiani/) for reading a draft of this post and offering some invaluable suggestions.
 
-If you enjoyed this article, you might find interesting reading:
+If you enjoyed this article, you might find the following articles interesting:
 
 - [Getting started with Docker and Kubernetes on Windows 10](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows) where you’ll get your hands dirty and install Docker and Kubernetes in your Windows environment.
 - [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images). Docker images don't have to be large. Learn how to put your Docker images on a diet!
