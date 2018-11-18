@@ -5,14 +5,10 @@ layout: default
   {% include navbar/index.html %}
 </div>
 
-<aside class="sm-transform sm-floating w4 hidden-sm hidden-xs" id="social-share-container">
-  {% include social-share/index.html %}
-</aside>
 <script>
   {% for js in page.js %}
     {% include_relative {{js}} %}
   {% endfor %}
-  {% include social-share/socialSharing.js %}
 </script>
 
 <div class="tc mb4 db mw4 center" id="author-blurb">
@@ -34,7 +30,3 @@ layout: default
 {% endif %}
 
 {% include footer/index.html %}
-
-<section class="hidden-md" id="bottom-social-share-container">
-    {% include social-share/index.html %}
-</section>
