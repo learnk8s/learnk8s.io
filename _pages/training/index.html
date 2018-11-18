@@ -238,7 +238,7 @@ open_graph:
       </div>
       <div class="price pv2 w-90 center w-10-l">
         <p class="ma0 mv1 ttu b black-20 f6">Price</p>
-        <p class="ma0 f4 black-70">{{ event.price }} <span class="f7 v-mid">+&nbsp;VAT</span></p>
+        <p class="ma0 f4 black-70 relative dib">{{ event.price }} <span class="f7 v-mid absolute right--2 top-0">+VAT</span></p>
       </div>
       <div class="buy_now tc w-100 w-auto-l">
           <a href="mailto:hello@learnk8s.io?subject={{ "Kubernetes training course enquiry" | uri_escape }}&body={{ event.buy_now_link | uri_escape }}" target="_blank" class="link dib white bg-blue br1 pa3 b f5 shadow-3 ph4 mv2 mr2">Get in touch &#8594;</a>
