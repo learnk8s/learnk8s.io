@@ -55,14 +55,14 @@ events:
     month: oct
     title: Advanced Kubernetes training
     course_length: 3 days
-    location: London
+    location: London, UK
     price: £1950
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 17th of October.\n\nKind regards,"
   - day: 13
     month: dec
     title: Deploying and scaling applications in Kubernetes
     course_length: 2 days
-    location: London, Skills Matter
+    location: London, UK
     location_link: https://goo.gl/maps/QEJnGGv5aRm
     price: £1225
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 13th of December.\n\nKind regards,"
@@ -77,14 +77,14 @@ events:
     month: jan
     title: Advanced Kubernetes training
     course_length: 3 days
-    location: London
+    location: London, UK
     price: £1950
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 30th of January.\n\nKind regards,"
   - day: 28
     month: feb
     title: Deploying and scaling applications in Kubernetes
     course_length: 2 days
-    location: London, Skills Matter
+    location: London, UK
     location_link: https://goo.gl/maps/QEJnGGv5aRm
     price: £1225
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 28th of February.\n\nKind regards,"
@@ -99,7 +99,7 @@ events:
     month: mar
     title: Advanced Kubernetes training
     course_length: 3 days
-    location: London
+    location: London, UK
     price: £1950
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 20th of March.\n\nKind regards,"
   - day: 15
@@ -113,7 +113,7 @@ events:
     month: jun
     title: Deploying and scaling applications in Kubernetes
     course_length: 2 days
-    location: London, Skills Matter
+    location: London, UK
     location_link: https://goo.gl/maps/QEJnGGv5aRm
     price: £1225
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 6th of June.\n\nKind regards,"
@@ -230,10 +230,10 @@ open_graph:
       </div>
       <div class="location w-90 center w-20-l pv2">
         <p class="ma0 mv1 ttu b black-20 f6 v-mid">Location</p>
-        {% unless event.location == 'Online' %}
-        <a href="{{ event.location_link }}" class="link db navy underline">{{ event.location }}</a>
+        {% if event.location == 'Online' %}
+        <p class="link db navy">{{ event.location }} <span class="w1 v-mid dib"><img inline src="/training/slack_in_colours.svg" alt="Slack"></span></p>
         {% else %}
-        <a href="{{ event.location_link }}" class="link db navy">{{ event.location }} <span class="w1 v-mid dib"><img inline src="/training/slack_in_colours.svg" alt="Slack"></span></a>
+        <p class="link db navy underline">{{ event.location }}</p>
         {% endunless %}
       </div>
       <div class="price pv2 w-90 center w-10-l">
