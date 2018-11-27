@@ -56,7 +56,10 @@ events:
     title: Advanced Kubernetes training
     course_length: 3 days
     location: London, UK
-    price: £1950
+    price_gbp: £1950
+    price_eur: 2200€
+    price_usd: $2490
+    price_sgd: S$3400
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 17th of October.\n\nKind regards,"
   - day: 13
     month: dec
@@ -64,21 +67,30 @@ events:
     course_length: 2 days
     location: London, UK
     location_link: https://goo.gl/maps/QEJnGGv5aRm
-    price: £1225
+    price_gbp: £1225
+    price_eur: 1390€
+    price_usd: $1590
+    price_sgd: S$2190
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 13th of December.\n\nKind regards,"
   - day: 23
     month: jan
     title: Advanced Kubernetes training
     course_length: 3 days
     location: Online
-    price: £1950
+    price_gbp: £1950
+    price_eur: 2200€
+    price_usd: $2490
+    price_sgd: S$3400
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 23rd of January.\n\nKind regards,"
   - day: 30
     month: jan
     title: Advanced Kubernetes training
     course_length: 3 days
     location: London, UK
-    price: £1950
+    price_gbp: £1950
+    price_eur: 2200€
+    price_usd: $2490
+    price_sgd: S$3400
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 30th of January.\n\nKind regards,"
   - day: 28
     month: feb
@@ -86,28 +98,40 @@ events:
     course_length: 2 days
     location: London, UK
     location_link: https://goo.gl/maps/QEJnGGv5aRm
-    price: £1225
+    price_gbp: £1225
+    price_eur: 1390€
+    price_usd: $1590
+    price_sgd: S$2190
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 28th of February.\n\nKind regards,"
   - day: 20
     month: mar
     title: Advanced Kubernetes training
     course_length: 3 days
     location: Online
-    price: £1950
+    price_gbp: £1950
+    price_eur: 2200€
+    price_usd: $2490
+    price_sgd: S$3400
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 20th of March.\n\nKind regards,"
   - day: 27
     month: mar
     title: Advanced Kubernetes training
     course_length: 3 days
     location: London, UK
-    price: £1950
+    price_gbp: £1950
+    price_eur: 2200€
+    price_usd: $2490
+    price_sgd: S$3400
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 20th of March.\n\nKind regards,"
   - day: 15
     month: may
     title: Advanced Kubernetes training
     course_length: 3 days
     location: Online
-    price: £1950
+    price_gbp: £1950
+    price_eur: 2200€
+    price_usd: $2490
+    price_sgd: S$3400
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 15th of May.\n\nKind regards,"
   - day: 6
     month: jun
@@ -115,7 +139,10 @@ events:
     course_length: 2 days
     location: London, UK
     location_link: https://goo.gl/maps/QEJnGGv5aRm
-    price: £1225
+    price_gbp: £1225
+    price_eur: 1390€
+    price_usd: $1590
+    price_sgd: S$2190
     buy_now_link: "Hello learnk8s,\n\nI'd like to know more about the Kubernetes course that it will be held on the 6th of June.\n\nKind regards,"
 open_graph:
   title: Kubernetes training
@@ -217,7 +244,18 @@ open_graph:
 
 <section id="start" class="w-90 center pt3 pb3 pb5-l">
   <h2 class="navy f4 f3-l">Upcoming events</h2>
-  <ul class="list pl0 pt3">
+  <p>Currency</p>
+  <input class="dn" checked="checked" id="usd" type="radio" name="currency" />
+  <input class="dn" id="gbp" type="radio" name="currency" />
+  <input class="dn" id="eur" type="radio" name="currency" />
+  <input class="dn" id="sgd" type="radio" name="currency" />
+  <ul class="legend list pl0 flex">
+    <li class="usd dib pa2 navy bb bw1 b--near-white bg-weird-blue br1 br--left"><label for="usd">USD</label></li>
+    <li class="gbp dib pa2 navy bb bw1 b--near-white bg-weird-blue"><label for="gbp">GBP</label></li>
+    <li class="eur dib pa2 navy bb bw1 b--near-white bg-weird-blue"><label for="eur">EUR</label></li>
+    <li class="sgd dib pa2 navy bb bw1 b--near-white bg-weird-blue br1 br--right"><label for="sgd">SGD</label></li>
+  </ul>
+  <ul class="events list pl0 pt3">
     {% for event in page.events %}
     <li class="mv3 bg-weird-blue flex justify-between items-center-l flex-wrap pb3 pb0-l">
       <div class="date bg-learnk8s-blue w3-l h3 white tc b w-100">
@@ -238,7 +276,12 @@ open_graph:
       </div>
       <div class="price pv2 w-90 center w-10-l">
         <p class="ma0 mv1 ttu b black-20 f6">Price</p>
-        <p class="ma0 f4 black-70 relative dib">{{ event.price }} <span class="f7 v-mid absolute right--2 top-0">+VAT</span></p>
+        <ul class="list pl0 ma0">
+          <li class="usd ma0 f4 black-70 relative dib">{{ event.price_usd }} <span class="f7 v-mid absolute right--2 top-0">+TAX</span></li>
+          <li class="gbp ma0 f4 black-70 relative dib">{{ event.price_gbp }} <span class="f7 v-mid absolute right--2 top-0">+VAT</span></li>
+          <li class="eur ma0 f4 black-70 relative dib">{{ event.price_eur }} <span class="f7 v-mid absolute right--2 top-0">+VAT</span></li>
+          <li class="sgd ma0 f4 black-70 relative dib">{{ event.price_sgd }} <span class="f7 v-mid absolute right--2 top-0">+TAX</span></li>
+        </ul>
       </div>
       <div class="buy_now tc w-100 w-auto-l">
           <a href="mailto:hello@learnk8s.io?subject={{ "Kubernetes training course enquiry" | uri_escape }}&body={{ event.buy_now_link | uri_escape }}" target="_blank" class="link dib white bg-blue br1 pa3 b f5 shadow-3 ph4 mv2 mr2">Get in touch &#8594;</a>
@@ -265,3 +308,129 @@ open_graph:
 {% include consultation/index.html %}
 
 {% include footer/index.html %}
+
+<style>
+.events .usd,
+.events .gbp,
+.events .eur,
+.events .sgd {
+  display: none;
+}
+
+#usd:checked ~ .legend .usd,
+#gbp:checked ~ .legend .gbp,
+#eur:checked ~ .legend .eur,
+#sgd:checked ~ .legend .sgd {
+  font-weight: bold;
+  color: white;
+  background-color: #3a89c9;
+  border-bottom-color: #19507C;
+}
+
+#usd:checked ~ .events .usd,
+#gbp:checked ~ .events .gbp,
+#eur:checked ~ .events .eur,
+#sgd:checked ~ .events .sgd {
+  display: inline-block;
+}
+</style>
+<script>
+const currency = getCurrency(getLocale());
+setCurrency(currency);
+
+function setCurrency(currency) {
+  switch (currency) {
+  case 'EUR':
+    return [].slice.call(document.querySelectorAll('[data-price-eur]')).forEach(function (price) {
+      price.innerText = price.dataset.priceEur
+    })
+  case 'SGD':
+    return [].slice.call(document.querySelectorAll('[data-price-sgd]')).forEach(function (price) {
+      price.innerText = price.dataset.priceSgd
+    })
+  case 'GBP':
+    return [].slice.call(document.querySelectorAll('[data-price-gbp]')).forEach(function (price) {
+      price.innerText = price.dataset.priceGbp
+    })
+  case 'USD':
+  default:
+    return [].slice.call(document.querySelectorAll('[data-price-usd]')).forEach(function (price) {
+      price.innerText = price.dataset.priceUsd
+    })
+  }
+}
+
+function getCountryCode (localeString) {
+    var components = localeString.split("_");
+    if (components.length == 2) {
+        return components.pop();
+    }
+    components = localeString.split("-");
+    if (components.length == 2) {
+        return components.pop();
+    }
+    return localeString;
+}
+
+function getCurrency (locale) {
+    var countryCode = getCountryCode(locale).toUpperCase();
+    var map={AD:"EUR",AE:"AED",AF:"AFN",AG:"XCD",AI:"XCD",AL:"ALL",AM:"AMD",AN:"ANG",AO:"AOA",AR:"ARS",AS:"USD",AT:"EUR",AU:"AUD",AW:"AWG",AX:"EUR",AZ:"AZN",BA:"BAM",BB:"BBD",BD:"BDT",BE:"EUR",BF:"XOF",BG:"BGN",BH:"BHD",BI:"BIF",BJ:"XOF",BL:"EUR",BM:"BMD",BN:"BND",BO:"BOB",BQ:"USD",BR:"BRL",BS:"BSD",BT:"BTN",BV:"NOK",BW:"BWP",BY:"BYR",BZ:"BZD",CA:"CAD",CC:"AUD",CD:"CDF",CF:"XAF",CG:"XAF",CH:"CHF",CI:"XOF",CK:"NZD",CL:"CLP",CM:"XAF",CN:"CNY",CO:"COP",CR:"CRC",CU:"CUP",CV:"CVE",CW:"ANG",CX:"AUD",CY:"EUR",CZ:"CZK",DE:"EUR",DJ:"DJF",DK:"DKK",DM:"XCD",DO:"DOP",DZ:"DZD",EC:"USD",EE:"EUR",EG:"EGP",EH:"MAD",ER:"ERN",ES:"EUR",ET:"ETB",FI:"EUR",FJ:"FJD",FK:"FKP",FM:"USD",FO:"DKK",FR:"EUR",GA:"XAF",GB:"GBP",GD:"XCD",GE:"GEL",GF:"EUR",GG:"GBP",GH:"GHS",GI:"GIP",GL:"DKK",GM:"GMD",GN:"GNF",GP:"EUR",GQ:"XAF",GR:"EUR",GS:"GBP",GT:"GTQ",GU:"USD",GW:"XOF",GY:"GYD",HK:"HKD",HM:"AUD",HN:"HNL",HR:"HRK",HT:"HTG",HU:"HUF",ID:"IDR",IE:"EUR",IL:"ILS",IM:"GBP",IN:"INR",IO:"USD",IQ:"IQD",IR:"IRR",IS:"ISK",IT:"EUR",JE:"GBP",JM:"JMD",JO:"JOD",JP:"JPY",KE:"KES",KG:"KGS",KH:"KHR",KI:"AUD",KM:"KMF",KN:"XCD",KP:"KPW",KR:"KRW",KW:"KWD",KY:"KYD",KZ:"KZT",LA:"LAK",LB:"LBP",LC:"XCD",LI:"CHF",LK:"LKR",LR:"LRD",LS:"LSL",LT:"LTL",LU:"EUR",LV:"LVL",LY:"LYD",MA:"MAD",MC:"EUR",MD:"MDL",ME:"EUR",MF:"EUR",MG:"MGA",MH:"USD",MK:"MKD",ML:"XOF",MM:"MMK",MN:"MNT",MO:"MOP",MP:"USD",MQ:"EUR",MR:"MRO",MS:"XCD",MT:"EUR",MU:"MUR",MV:"MVR",MW:"MWK",MX:"MXN",MY:"MYR",MZ:"MZN",NA:"NAD",NC:"XPF",NE:"XOF",NF:"AUD",NG:"NGN",NI:"NIO",NL:"EUR",NO:"NOK",NP:"NPR",NR:"AUD",NU:"NZD",NZ:"NZD",OM:"OMR",PA:"PAB",PE:"PEN",PF:"XPF",PG:"PGK",PH:"PHP",PK:"PKR",PL:"PLN",PM:"EUR",PN:"NZD",PR:"USD",PS:"ILS",PT:"EUR",PW:"USD",PY:"PYG",QA:"QAR",RE:"EUR",RO:"RON",RS:"RSD",RU:"RUB",RW:"RWF",SA:"SAR",SB:"SBD",SC:"SCR",SD:"SDG",SE:"SEK",SG:"SGD",SH:"SHP",SI:"EUR",SJ:"NOK",SK:"EUR",SL:"SLL",SM:"EUR",SN:"XOF",SO:"SOS",SR:"SRD",ST:"STD",SV:"SVC",SX:"ANG",SY:"SYP",SZ:"SZL",TC:"USD",TD:"XAF",TF:"EUR",TG:"XOF",TH:"THB",TJ:"TJS",TK:"NZD",TL:"USD",TM:"TMT",TN:"TND",TO:"TOP",TR:"TRY",TT:"TTD",TV:"AUD",TW:"TWD",TZ:"TZS",UA:"UAH",UG:"UGX",UM:"USD",US:"USD",UY:"UYU",UZ:"UZS",VA:"EUR",VC:"XCD",VE:"VEF",VG:"USD",VI:"USD",VN:"VND",VU:"VUV",WF:"XPF",WS:"WST",YE:"YER",YT:"EUR",ZA:"ZAR",ZM:"ZMK",ZW:"ZWL"};
+    if (countryCode in map) {
+        return map[countryCode];
+    }
+    return null;
+}
+
+function getLocale (locale) {
+  if (locale) return locale
+
+  if (window.chrome && window.chrome.runtime && typeof window.chrome.runtime.getManifest === 'function') {
+    locale = window.chrome.runtime.getManifest()
+    if (locale && locale.current_locale) {
+      return locale.current_locale
+    }
+  }
+
+  locale = (window.navigator && (
+    (window.navigator.languages && window.navigator.languages[0]) ||
+    window.navigator.language ||
+    window.navigator.userLanguage
+  ))
+
+  if (!locale && window.navigator && window.navigator.userAgent) {
+    locale = window.navigator.userAgent.match(/;.(\w+-\w+)/i)
+    if (locale) return locale[1]
+  }
+
+  if (!locale) {
+    locale = (window.clientInformation || Object.create(null)).language
+  }
+
+  if (!locale) {
+    if (window.Intl && typeof window.Intl.DateTimeFormat === 'function') {
+      locale = window.Intl.DateTimeFormat().resolvedOptions && window.Intl.DateTimeFormat().resolvedOptions().locale
+    }
+    if (!locale && ['LANG', 'LANGUAGE'].some(Object.hasOwnProperty, process.env)) {
+      return (process.env.LANG || process.env.LANGUAGE || String())
+        .replace(/[.:].*/, '')
+        .replace('_', '-')
+    }
+  }
+  return locale
+}
+
+var locale2 = function (locale) {
+  return formatLocale(getLocale(locale))
+}
+
+function formatLocale (locale) {
+  if (typeof locale !== 'string') return locale
+  // 'en-US-u-VA-posix'.split('-').slice(0, 2)
+  // ["en", "US"]
+  return locale.split('-').slice(0, 2).map(function (chunk, index) {
+    // en[0]-US[1] <- chunk[1].toUpperCase()
+    if (index !== 0 && chunk.length === 2) return chunk.toUpperCase()
+    return chunk
+  }).join('-')
+}
+</script>
