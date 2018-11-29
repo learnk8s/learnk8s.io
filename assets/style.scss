@@ -11,20 +11,33 @@
   background-color: #569AD1;
 }
 
+.trapezoid-1,
 .trapezoid-2 {
-  background-position: left top;
-  background-size: 130% 130%;
-  background-repeat: no-repeat;
-  padding-bottom: 30%;
-  margin-bottom: -30%;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon fill='%23569AD1' height='100px' width='100px' points='100,0 0,75 0,0'/%3E%3C/svg%3E");
+  position: relative;
+  background-color: transparent;
 }
 
-.trapezoid-1 {
-  background-position: left top;
-  background-size: 100% 100%;
+.trapezoid-1::after,
+.trapezoid-2::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  content: ' ';
+  background-position: left bottom;
+  background-size: cover;
   background-repeat: no-repeat;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon fill='%23569AD1' height='100px' width='100px' points='270,0 0,100 0,0'/%3E%3C/svg%3E");
+}
+
+.trapezoid-2::after {
+  height: 155%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Cpolygon points='100 0 0 0 0 200 100 142 100 0' fill='%23569ad1'/%3E%3C/svg%3E");
+}
+
+.trapezoid-1::after {
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Cpolygon points='100 0 0 0 0 200 100 190 100 0' fill='%23569ad1'/%3E%3C/svg%3E");
 }
 
 .hero,
