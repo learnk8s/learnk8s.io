@@ -12,7 +12,7 @@ site_name: "learnk8s.io"
 email: "hello@learnk8s.io"
 ---
 
-<div class="intro careers white pt3 pt0-ns pb2 pb4-ns">
+<div class="trapezoid-1 white pt3 pt0-ns pb2 pb4-ns">
 
   {% include navbar/index.html %}
 
