@@ -36,7 +36,7 @@ open_graph:
     <ul class="list pl0 flex-l items-start-l justify-around-l ph3">
       {% for block in page.blocks %}
       <li class="bg-white br2 relative pt4 w-100 mw6-m center-m w-30-l mv5">
-        <div class="w3 bg-white br-100 shadow-1 absolute top--2 left-0 absolute-center">{% include_relative {{ block.image }} %}</div>
+        <div class="w3 h3 bg-white br-100 shadow-1 absolute top--2 left-0 absolute-center">{% include_relative {{ block.image }} %}</div>
         <h2 class="navy normal tc">{{ block.title }}</h2>
         <p class="lh-copy black-70 ph4 measure-narrow">{{ block.description }}</p>
         <div class="tc bg-evian br2 br--bottom pv3"><a href="{{ block.link_call_to_action }}" class="link navy b">{{ block.call_to_action }}</a></div>
@@ -48,7 +48,7 @@ open_graph:
 
 <section class="w-100 cf pv3 pv4-m pv5-l ph3">
   <div class="left fl-ns w-50-ns tc mv4 ph3">
-    <h2 class="navy">Join us on Slack <span class="w2 dib v-mid"><img inline src="/contact-us/slack_in_colours.svg" alt="Slack"></span></h2>
+    <h2 class="navy">Join us on Slack <span class="w2 dib v-mid"><img src="{% link _pages/contact-us/slack_in_colours.svg %}" alt="Slack"></span></h2>
     <p class="measure black-70 center">If you have technical questions, chat live with developers in #dev. <a href="https://learnk8s-slack-invite.herokuapp.com" class="link underline navy">Join now</a></p>
   </div>
   <div class="right fl-ns w-50-ns tc bl-ns b--light-gray mv4 ph3">

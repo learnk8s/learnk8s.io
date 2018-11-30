@@ -81,10 +81,10 @@ open_graph:
       <p class="black-70 mt0">{{ person.role }}</p>
       <p class="black-70 lh-copy">{{ person.bio }}</p>
       <div class="cf">
-        {% if person.github %}<a href="{{person.github}}" target="_blank" rel="noopener" class="link fl w2">{% include_relative github.svg %}</a>{% endif %}
-        {% if person.linkedin %}<a href="{{person.linkedin}}" target="_blank" rel="noopener" class="link fl w2">{% include_relative linkedin.svg %}</a>{% endif %}
-        {% if person.twitter %}<a href="{{person.twitter}}" target="_blank" rel="noopener" class="link fl w2">{% include_relative twitter.svg %}</a>{% endif %}
-        {% if person.website %}<a href="{{person.website}}" target="_blank" rel="noopener" class="link fl w2">{% include_relative world.svg %}</a>{% endif %}
+        {% if person.github %}<a href="{{person.github}}" target="_blank" rel="noopener" class="link fl w2 h2">{% include_relative github.svg %}</a>{% endif %}
+        {% if person.linkedin %}<a href="{{person.linkedin}}" target="_blank" rel="noopener" class="link fl w2 h2">{% include_relative linkedin.svg %}</a>{% endif %}
+        {% if person.twitter %}<a href="{{person.twitter}}" target="_blank" rel="noopener" class="link fl w2 h2">{% include_relative twitter.svg %}</a>{% endif %}
+        {% if person.website %}<a href="{{person.website}}" target="_blank" rel="noopener" class="link fl w2 h2">{% include_relative world.svg %}</a>{% endif %}
       </div>
     </li>
     {% endfor %}
