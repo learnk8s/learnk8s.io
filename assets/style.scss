@@ -78,10 +78,6 @@ $evian: #F7F9FC;
   }
 }
 
-.w6 {
-  width: 32rem;
-}
-
 .triangle-1 {
   position: relative;
   z-index: 1
@@ -99,6 +95,43 @@ $evian: #F7F9FC;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon fill='%23569AD1' height='100px' width='100px' points='0,100 100,0 100,100'/%3E%3C/svg%3E");
   top: 0;
   left: 0;
+}
+
+$illustration_ratio: 0.1;
+
+@function multiply($value1, $value2) {
+  @return $value1 * $value2;
+}
+
+.i-medium-cargo {
+  width: #{multiply($illustration_ratio, 150)}rem
+}
+.i-loading-cargos {
+  width: #{multiply($illustration_ratio, 350)}rem
+}
+.i-training {
+  width: #{multiply($illustration_ratio, 350)}rem
+}
+.i-together {
+  width: #{multiply($illustration_ratio, 175)}rem
+}
+.i-containers {
+  width: #{multiply($illustration_ratio, 150)}rem
+}
+.i-cat-and-dog {
+  width: #{multiply($illustration_ratio, 130)}rem
+}
+.i-whiteboard {
+  width: #{multiply($illustration_ratio, 100)}rem
+}
+.i-team {
+  width: #{multiply($illustration_ratio, 150)}rem
+}
+.i-small-cargo {
+  width: #{multiply($illustration_ratio, 110)}rem
+}
+.i-more-cargo-loading {
+  width: #{multiply($illustration_ratio, 110)}rem
 }
 
 .illustration-containers {

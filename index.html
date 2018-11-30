@@ -17,67 +17,81 @@ benefits:
       <h2 class="f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l">The fastest way to become an expert in deploying applications at scale.</h2>
       <a href="#start" class="link dib blue bg-white br1 pa3 b f5 shadow-3 mt4 ml3 ph4 ml4-ns mb3">Get started &#8594;</a>
     </div>
-    <div class="dn db-l w6 absolute bottom-0 right-1"><img src="{% link assets/loading_cargos.svg %}" alt="Shipping cargo"/></div>
+    <div class="dn db-l i-loading-cargos absolute bottom-0 right-1"><img src="{% link assets/loading_cargos.svg %}" alt="Shipping cargo"/></div>
   </section>
+
+  <div class="w-40 dn db-l relative">
+    <div class="i-medium-cargo absolute top-0 right--1"><img src="{% link assets/medium_cargo.svg %}" alt="Shipping cargo"/></div>
+  </div>
+
 </div>
 
-<section class="cf w-100 content ph3 ph4-ns relative z3">
-  <div class="left fl-l w-50-l">
-    <div class="dn db-l illustration ml3 ml5-l ml6-l"><img src="{% link assets/medium_cargo.svg %}" alt="Shipping cargo"/></div>
-  </div>
-  <div id="start" class="right fl-l w-50-l center pt3-m pt5-l measure relative">
-    <h2 class="f3 navy f2-l measure-narrow">Learn Kubernetes the <span class="strike">hard</span> smart way</h2>
-    <p class="lh-copy f4-l black-70">Kubernetes is particularly well known for having a steep learning curve. It's also very early days and the technology is changing a fast pace. So how do you quickly get up to speed when everything around it is moving quickly? At learnk8s we have the best resources to master Kubernetes so that you can:</p>
-    <ul class="list black-70 pl0 pt2">
-      {% for text in page.benefits %}
-      <li class="mv3 flex">
-          <div class="v-top w-10"><img src="{% link assets/tick.svg %}" alt="Tick"></div>
-          <div class="v-top pl3 w-90">
-            <p class="mv0 f4-l lh-copy">{{ text }}</p>
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
-    <div class="dn db-l illustration absolute illustration-containers"><img src="{% link assets/containers.svg %}" alt="Shipping containers"/></div>
+<section class="w-100 ph3 ph4-ns relative z3">
+  <div id="start" class="pt3-m pt5-l flex items-center">
+
+    <div class="w-50-l">
+        <div class="dn db-l i-containers center"><img src="{% link assets/containers.svg %}" alt="Shipping containers"/></div>
+    </div>
+
+    <div class="w-50-l center">
+      <h2 class="f3 navy f2-l measure-narrow">Learn Kubernetes the <span class="strike">hard</span> smart way</h2>
+      <div class="measure-wide">
+        <p class="lh-copy f4-l black-70">Kubernetes is particularly well known for having a steep learning curve. It's also very early days and the technology is changing a fast pace. So how do you quickly get up to speed when everything around it is moving quickly? At learnk8s we have the best resources to master Kubernetes so that you can:</p>
+        <ul class="list black-70 pl0 pt2">
+          {% for text in page.benefits %}
+          {% include list/item.html content=text %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<section class="triangle-1 tr">
-  <div class="illustration dib mr4"><img src="{% link assets/small_cargo.svg %}" alt="Shipping cargo"/></div>
-</section>
+{% include interlude/index.html %}
 
 <section class="pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100">
-  <div class="content measure-wide">
-    <h2 class="f3 navy f2-l">Kubernetes in production video course</h2>
-    <p class="f4-l lh-copy black-70">Comprehensive video course in the many uses of Kubernetes. From playing to developing, testing to deploying, we'll cover it all in a way that is easy to understand. Master application deployment and scaling from the comfort of your home. There's no deadline: enjoy watching the videos at your pace as many time as you want.</p>
-    <button class="link dib white bg-black-30 br1 pa3 b f5 shadow-3 mv3">Coming soon</button>
+
+  <div class="ph3">
+    <div class="content measure-wide">
+      <h2 class="f3 navy f2-l">Kubernetes in production video course</h2>
+      <p class="f4-l lh-copy black-70 measure-wide">Comprehensive video course in the many uses of Kubernetes. From playing to developing, testing to deploying, we'll cover it all in a way that is easy to understand. Master application deployment and scaling from the comfort of your home. There's no deadline: enjoy watching the videos at your pace as many time as you want.</p>
+      <button class="link dib white bg-black-30 br1 pa3 b f5 shadow-3 mv3">Coming soon</button>
+    </div>
   </div>
-  <div class="w-40-ns pl5 dn db-ns overflow-x-hidden">
-    <div class="illustration overflow-y-hidden"><img src="{% link assets/cat_and_dog.svg %}" alt="Learn at your own pace"/></div>
-  </div>
+
+  <div class="i-cat-and-dog ml7-l dn db-ns"><img src="{% link assets/cat_and_dog.svg %}" alt="Learn at your own pace"/></div>
+
 </section>
 
 <section class="pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100 bg-evian">
-  <div class="w-40-ns dn db-ns overflow-x-hidden">
-    <div class="illustration mb2 fr mr4-m mr6-l"><img src="{% link assets/whiteboard.svg %}" alt="Instructor-led training"/></div>
+
+  <div class="tc">
+    <div class="i-whiteboard mr7-l dib"><img src="{% link assets/whiteboard.svg %}" alt="Instructor-led training"/></div>
   </div>
-  <div class="content measure-wide">
-    <h2 class="f3 navy f2-l">Quickstart Kubernetes training</h2>
-    <p class="f4-l lh-copy black-70">Hands-on modular courses that will train you how to deploy Kubernetes, how to get it into production, and how to operate and manage it efficiently and effectively. The training course  draws from the real world examples making it perfect to quickly get up to speed with containers and Kubernetes.</p>
-    <a href="{% link _pages/training/index.html %}" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Get started &#8594;</a>
+
+  <div class="ph3">
+    <div class="measure-wide">
+      <h2 class="f3 navy f2-l">Quickstart Kubernetes training</h2>
+      <p class="f4-l lh-copy black-70">Hands-on modular courses that will train you how to deploy Kubernetes, how to get it into production, and how to operate and manage it efficiently and effectively. The training course  draws from the real world examples making it perfect to quickly get up to speed with containers and Kubernetes.</p>
+      <a href="{% link _pages/training/index.html %}" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Get started &#8594;</a>
+    </div>
   </div>
+
 </section>
 
-
 <section class="pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100">
-  <div class="content measure-wide">
-    <h2 class="f3 navy f2-l">Enterprise-ready Kubernetes consulting</h2>
-    <p class="f4-l lh-copy black-70">Have you already built a Kubernetes cluster, but want the confidence it won't die when you move into prod? Our engineers have deployed production-ready Kubernetes for the hottest start-ups and the largest Enterprises. Their wide variety of experience will enable you to get the most out of Kubernetes and make sure you avoid unnecessary issues and pitfalls.</p>
-    <a href="{% link _pages/consulting/index.html %}" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Get started &#8594;</a>
+
+  <div class="ph3">
+    <div class="measure-wide">
+      <h2 class="f3 navy f2-l">Enterprise-ready Kubernetes consulting</h2>
+      <p class="f4-l lh-copy black-70">Have you already built a Kubernetes cluster, but want the confidence it won't die when you move into prod? Our engineers have deployed production-ready Kubernetes for the hottest start-ups and the largest Enterprises. Their wide variety of experience will enable you to get the most out of Kubernetes and make sure you avoid unnecessary issues and pitfalls.</p>
+      <a href="{% link _pages/consulting/index.html %}" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3">Get started &#8594;</a>
+    </div>
   </div>
-  <div class="w-40-ns pl5 dn db-ns overflow-x-hidden">
-    <div class="illustration"><img src="{% link assets/team.svg %}" alt="Consulting"/></div>
-  </div>
+
+  <div class="i-team ml7-l dn db-ns"><img src="{% link assets/team.svg %}" alt="Consulting"/></div>
+
 </section>
 
 {% include consultation/index.html %}
