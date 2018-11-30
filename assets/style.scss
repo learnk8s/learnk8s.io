@@ -3,105 +3,83 @@
 @import 'tachyons-sass/tachyons.scss';
 @import '../_blog/kubernetes-deploy-laravel-the-easy-way/style.scss';
 
+::root {
+  --sky: #569AD1
+}
+
 .logo {
   fill: white;
 }
 
 .bg-sky {
-  background-color: #569AD1;
+  background-color: var(--sky)
 }
 
 .trapezoid-1,
-.trapezoid-2 {
+.trapezoid-2,
+.trapezoidr-1 {
   position: relative;
+  z-index: 0;
   background-color: transparent;
 }
 
 .trapezoid-1::after,
-.trapezoid-2::after {
+.trapezoid-2::after,
+.trapezoidr-1::after {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 0;
+  z-index: -1;
   width: 100%;
   content: ' ';
-  background-position: left bottom;
   background-size: cover;
   background-repeat: no-repeat;
 }
 
 .trapezoid-2::after {
+  background-position: left bottom;
   height: 155%;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Cpolygon points='100 0 0 0 0 200 100 142 100 0' fill='%23569ad1'/%3E%3C/svg%3E");
 }
 
 .trapezoid-1::after {
+  background-position: left bottom;
   height: 100%;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Cpolygon points='100 0 0 0 0 200 100 190 100 0' fill='%23569ad1'/%3E%3C/svg%3E");
+}
+
+.trapezoidr-1::after {
+  background-position: left top;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 200'%3E%3Cpolygon points='100,4 0,0 0,200 100,200' fill='%23569ad1'/%3E%3C/svg%3E");
 }
 
 .w6 {
   width: 32rem;
 }
 
-.hero,
-.nav,
-.content {
+.triangle-1 {
   position: relative;
-  z-index: 10;
+  z-index: 1
+}
+
+.triangle-1::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-position: right bottom;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon fill='%23569AD1' height='100px' width='100px' points='0,100 100,0 100,100'/%3E%3C/svg%3E");
+  top: 0;
+  left: 0;
 }
 
 .illustration-containers {
   left: -100%;
   bottom: 6em;
-}
-
-.interlude {
-  position: relative;
-  overflow: hidden;
-}
-
-.interlude .illustration {
-  position: relative;
-  z-index: 10;
-}
-
-.interlude::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  transform: skewY(-5deg);
-  background-color: #3a89c9;
-  transform-origin: top right;
-  top: 0;
-  left: 0;
-  margin-top: 1rem;
-}
-
-.consultation {
-  position: relative;
-  overflow: hidden;
-}
-
-.consultation::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  transform: skewY(4deg);
-  background-color: #3a89c9;
-  transform-origin: top left;
-  top: 0;
-  left: 0;
-  margin-top: 1rem;
-}
-
-.consultation > div {
-  position: relative;
-  z-index: 10;
 }
 
 .illustration {
@@ -129,9 +107,6 @@
   .illustration {
     width: 25rem;
   }
-  .interlude::before {
-    margin-top: 2rem;
-  }
 }
 
 @media #{$breakpoint-medium} {
@@ -140,9 +115,6 @@
 @media #{$breakpoint-large} {
   .illustration {
     width: 40rem;
-  }
-  .interlude::before {
-    margin-top: 3rem;
   }
   .consultation::before {
     transform: skewY(2deg);

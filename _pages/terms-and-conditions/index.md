@@ -16,7 +16,7 @@ email: "hello@learnk8s.io"
 
   {% include navbar/index.html %}
 
-  <section class="hero ph5-l">
+  <section class="ph5-l">
     <div class="w-100">
       <h1 class="f1 pl3 pl4-ns f-subheadline-l">General terms and conditions</h1>
       <h2 class="f4 normal measure-narrow lh-copy ph3 ph4-ns f3-l pb4">Effective from 10 May 2018</h2>
