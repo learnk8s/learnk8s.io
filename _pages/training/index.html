@@ -135,28 +135,28 @@ open_graph:
         <ul class="list w-60-m center-m mw6 bg-white black-70 ph3 pv1 shadow-1 mh3 mh4-ns mt4">
           <li class="flex items-center justify-between ph2 bb b--light-gray">
             <p class="ttu">On-site</p>
-            <div class="w2"><img inline src="/training/tick.svg" alt="Tick"></div>
+            <div class="w2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
           </li>
           <li class="flex items-center justify-between ph2 bb b--light-gray">
-            <p class="ttu v-mid mt2 mb1">Remote <span class="dib w2 v-mid"><img inline src="/training/slack_in_colours.svg" alt="Slack"></span></p>
-            <div class="w2"><img inline src="/training/tick.svg" alt="Tick"></div>
+            <p class="ttu v-mid mt2 mb1">Remote <span class="dib w2 v-mid"><img src="/training/slack_in_colours.svg" alt="Slack"></span></p>
+            <div class="w2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
           </li>
           <li class="flex items-center justify-between ph2">
             <p class="ttu">T&M / project based</p>
-            <div class="w2"><img inline src="/training/tick.svg" alt="Tick"></div>
+            <div class="w2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
           </li>
         </ul>
         <div class="dn db-l mw6 mh3 mh4-ns tc">
-          <div class="logo w3 dib"><img inline src="/training/down_arrow_white.svg" alt="Down"></div>
+          <div class="logo w3 dib"><img src="{% link _pages/training/down_arrow_white.svg %}" alt="Down"></div>
         </div>
       </div>
-    <div class="dn db-l w6 absolute bottom-0 right-1"><img inline src="/training/training.svg" alt="Training"></div>
+    <div class="dn db-l w6 absolute bottom-0 right-1"><img src="{% link _pages/training/training.svg %}" alt="Training"></div>
     </section>
   </div>
 
 <section class="content ph3 ph4-ns flex-l items-end-l justify-center-l pt5-ns relative z3">
   <div class="left dn db-l w-30-l">
-    <div class="illustration fr"><img inline src="/training/more_cargo_loading.svg" alt="Cargo loading"></div>
+    <div class="illustration fr"><img src="{% link _pages/training/more_cargo_loading.svg %}" alt="Cargo loading"></div>
   </div>
   <div class="right measure center pt3">
     <h2 class="f3 navy f2-l measure-narrow">Hands-on courses</h2>
@@ -164,7 +164,7 @@ open_graph:
     <ul class="list black-70 pl0 pt2">
       {% for text in page.benefits %}
       <li class="mv3 flex">
-          <div class="v-top w-10"><img inline src="/training/tick.svg" alt="Tick"></div>
+          <div class="v-top w-10"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
           <div class="v-top pl3 w-90">
             <p class="mv0 f4-l lh-copy">{{ text }}</p>
           </div>
@@ -175,7 +175,7 @@ open_graph:
 </section>
 
 <section class="triangle-1 tr">
-  <div class="illustration dib mr4"><img inline src="/training/small_cargo.svg" alt="Cargo"></div>
+  <div class="illustration dib mr4"><img src="{% link _pages/training/small_cargo.svg %}" alt="Cargo"></div>
 </section>
 
 <section class="cf pt5">
@@ -191,7 +191,7 @@ open_graph:
             <p class="lh-copy pt3">You will learn:</p>
             {% for text in package.benefits %}
             <li class="mv3">
-              <div class="dtc v-top w2"><img inline src="/training/tick.svg" alt="Tick"></div>
+              <div class="dtc v-top w2 h2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
               <div class="dtc v-top pl3">
                 <p class="mv0 f4-l lh-copy">{{ text }}</p>
               </div>
@@ -199,7 +199,7 @@ open_graph:
             {% endfor %}
             {% if package.special_benefit %}
             <li class="mv3 pt3">
-              <div class="dtc v-top w2"><img inline src="/training/plus.svg" alt="Tick"></div>
+              <div class="dtc v-top w2 h2"><img src="{% link _pages/training/plus.svg %}" alt="Tick"></div>
               <div class="dtc v-top pl3">
                 <p class="mv0 f4-l lh-copy">{{ package.special_benefit }}</p>
               </div>
@@ -231,7 +231,7 @@ open_graph:
       <div class="location w-90 center w-20-l pv2">
         <p class="ma0 mv1 ttu b black-20 f6 v-mid">Location</p>
         {% if event.location == 'Online' %}
-        <p class="link db navy">{{ event.location }} <span class="w1 v-mid dib"><img inline src="/training/slack_in_colours.svg" alt="Slack"></span></p>
+        <p class="link db navy">{{ event.location }} <span class="w1 v-mid dib"><img src="/training/slack_in_colours.svg" alt="Slack"></span></p>
         {% else %}
         <p class="link db navy underline">{{ event.location }}</p>
         {% endif %}
