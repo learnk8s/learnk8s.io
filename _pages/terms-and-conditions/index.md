@@ -24,7 +24,7 @@ email: "hello@learnk8s.io"
   </section>
 </div>
 
-<section class="bg-almost-white black-70 relative z-999 w-90-m w-70-l center pa3 pa4-ns mb3 mb5-ns lh-copy">
+<section class="bg-black-02 black-70 relative z-999 w-90-m w-70-l center pa3 pa4-ns mb3 mb5-ns lh-copy">
   <div markdown="1">
 ### 1. Who are we?
 Welcome to {{ page.full_company_name }} and our Site, {{ page.site_name }}, which we own and operate. {{ page.full_company_name }} is a company registered in England and Wales under registration number 08578228. Our registered office is 8b Accommodation Road, London, NW11 8ED United Kingdom. Our VAT number is GB 179048575.
