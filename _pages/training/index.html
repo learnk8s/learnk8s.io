@@ -135,48 +135,46 @@ open_graph:
         <ul class="list w-60-m center-m mw6 bg-white black-70 ph3 pv1 shadow-1 mh3 mh4-ns mt4">
           <li class="flex items-center justify-between ph2 bb b--light-gray">
             <p class="ttu">On-site</p>
-            <div class="w2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
+            <div class="w2 h2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
           </li>
           <li class="flex items-center justify-between ph2 bb b--light-gray">
             <p class="ttu v-mid mt2 mb1">Remote <span class="dib w2 v-mid"><img src="/training/slack_in_colours.svg" alt="Slack"></span></p>
-            <div class="w2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
+            <div class="w2 h2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
           </li>
           <li class="flex items-center justify-between ph2">
             <p class="ttu">T&M / project based</p>
-            <div class="w2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
+            <div class="w2 h2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
           </li>
         </ul>
         <div class="dn db-l mw6 mh3 mh4-ns tc">
-          <div class="logo w3 dib"><img src="{% link _pages/training/down_arrow_white.svg %}" alt="Down"></div>
+          <div class="w3 h3 dib"><img src="{% link _pages/training/down_arrow_white.svg %}" alt="Down"></div>
         </div>
       </div>
-    <div class="dn db-l w6 absolute bottom-0 right-1"><img src="{% link _pages/training/training.svg %}" alt="Training"></div>
+    <div class="dn db-l i-training absolute bottom-0 right-1"><img src="{% link _pages/training/training.svg %}" alt="Training"></div>
     </section>
   </div>
 
-<section class="content ph3 ph4-ns flex-l items-end-l justify-center-l pt5-ns relative z3">
-  <div class="left dn db-l w-30-l">
-    <div class="illustration fr"><img src="{% link _pages/training/more_cargo_loading.svg %}" alt="Cargo loading"></div>
+<section class="content ph3 ph4-ns flex items-center justify-center pt5-ns relative z3">
+
+  <div class="dn db-l w-50-l center">
+    <div class="i-more-cargo-loading center"><img src="{% link _pages/training/more_cargo_loading.svg %}" alt="Cargo loading"></div>
   </div>
-  <div class="right measure center pt3">
+
+  <div class="w-50-l center pt3">
     <h2 class="f3 navy f2-l measure-narrow">Hands-on courses</h2>
-    <p class="lh-copy f4-l black-70">These courses are great if you wish to:</p>
-    <ul class="list black-70 pl0 pt2">
-      {% for text in page.benefits %}
-      <li class="mv3 flex">
-          <div class="v-top w-10"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
-          <div class="v-top pl3 w-90">
-            <p class="mv0 f4-l lh-copy">{{ text }}</p>
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
+    <div class="measure-wide">
+      <p class="lh-copy f4-l black-70">These courses are great if you wish to:</p>
+      <ul class="list black-70 pl0 pt2">
+        {% for text in page.benefits %}
+        {% include list/item.html content=text %}
+        {% endfor %}
+      </ul>
+    </div>
   </div>
+
 </section>
 
-<section class="triangle-1 tr">
-  <div class="illustration dib mr4"><img src="{% link _pages/training/small_cargo.svg %}" alt="Cargo"></div>
-</section>
+{% include interlude/index.html %}
 
 <section class="cf pt5">
   {% for package in page.packages %}
@@ -190,20 +188,10 @@ open_graph:
         <ul class="list pl0 black-70">
             <p class="lh-copy pt3">You will learn:</p>
             {% for text in package.benefits %}
-            <li class="mv3">
-              <div class="dtc v-top w2 h2"><img src="{% link _pages/training/tick.svg %}" alt="Tick"></div>
-              <div class="dtc v-top pl3">
-                <p class="mv0 f4-l lh-copy">{{ text }}</p>
-              </div>
-            </li>
+            {% include list/item.html content=text %}
             {% endfor %}
             {% if package.special_benefit %}
-            <li class="mv3 pt3">
-              <div class="dtc v-top w2 h2"><img src="{% link _pages/training/plus.svg %}" alt="Tick"></div>
-              <div class="dtc v-top pl3">
-                <p class="mv0 f4-l lh-copy">{{ package.special_benefit }}</p>
-              </div>
-            </li>
+            {% include list/special_item.html content=package.special_benefit %}
             {% endif %}
           </ul>
           <div class="tc">
