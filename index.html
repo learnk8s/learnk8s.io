@@ -11,13 +11,13 @@ benefits:
 
   {% include navbar/index.html %}
 
-  <section class="hero flex-ns items-start-ns ph5-l pt5-l">
+  <section class="hero flex-ns items-start-ns ph5-l pv5-l">
     <div class="w-70-l">
-      <h1 class="f1 pl3 pl4-ns pt4-l f-subheadline-l">Mastering Kubernetes</h1>
+      <h1 class="f1 pl3 pl4-ns pt4-l f-subheadline-l lh-solid">Mastering Kubernetes</h1>
       <h2 class="f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l">The fastest way to become an expert in deploying applications at scale.</h2>
       <a href="#start" class="link dib blue bg-white br1 pa3 b f5 shadow-3 mt4 ml3 ph4 ml4-ns mb3">Get started &#8594;</a>
     </div>
-    <div class="dn illustration db-l mt4">{% include homepage/loading_cargos.svg %}</div>
+    <div class="dn db-l w6 absolute bottom-0 right-1">{% include homepage/loading_cargos.svg %}</div>
   </section>
 </div>
 
@@ -30,9 +30,9 @@ benefits:
     <p class="lh-copy f4-l black-70">Kubernetes is particularly well known for having a steep learning curve. It's also very early days and the technology is changing a fast pace. So how do you quickly get up to speed when everything around it is moving quickly? At learnk8s we have the best resources to master Kubernetes so that you can:</p>
     <ul class="list black-70 pl0 pt2">
       {% for text in page.benefits %}
-      <li class="mv3">
-          <div class="dtc v-top w2">{% include homepage/tick.svg %}</div>
-          <div class="dtc v-top pl3">
+      <li class="mv3 flex">
+          <div class="v-top w-10">{% include homepage/tick.svg %}</div>
+          <div class="v-top pl3 w-90">
             <p class="mv0 f4-l lh-copy">{{ text }}</p>
           </div>
         </li>
