@@ -3,16 +3,29 @@
 @import 'tachyons-sass/tachyons.scss';
 @import '../_blog/kubernetes-deploy-laravel-the-easy-way/style.scss';
 
-::root {
-  --sky: #569AD1
+:root {
+  --sky: #569AD1;
+  --evian: #F7F9FC;
 }
 
-.logo {
-  fill: white;
+.sky {
+  color: var(--sky)
 }
 
 .bg-sky {
   background-color: var(--sky)
+}
+
+.b--sky {
+  border-color: var(--sky)
+}
+
+.bg-evian {
+  background-color: var(--evian)
+}
+
+.bg-black-02 {
+  background-color: rgba(0, 0, 0, 0.02)
 }
 
 .trapezoid-1,
@@ -77,6 +90,10 @@
   left: 0;
 }
 
+.logo {
+  fill: white;
+}
+
 .illustration-containers {
   left: -100%;
   bottom: 6em;
@@ -84,18 +101,6 @@
 
 .illustration {
   width: 20rem;
-}
-
-.bg-weird-blue {
-  background-color: #F7F9FC;
-}
-
-.bg-almost-white {
-  background-color: #FCFCFC;
-}
-
-.bg-learnk8s-blue {
-  background-color: #3a89c9;
 }
 
 .absolute-center {
