@@ -134,6 +134,14 @@ $illustration_ratio: 0.1;
   width: #{multiply($illustration_ratio, 110)}rem
 }
 
+.reverse-dim {
+  opacity: 0.7;
+  transition: opacity 0.5 ease-in;
+}
+.reverse-dim:hover {
+  opacity: 1;
+}
+
 .illustration-containers {
   left: -100%;
   bottom: 6em;
