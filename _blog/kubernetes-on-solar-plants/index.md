@@ -298,7 +298,7 @@ And I can't wait to hear what you're going to build next with it.
 
 ## That's all folks!
 
-Thanks to [Aled James](https://www.linkedin.com/in/aledjames/) (University of Bristol), and [XXXX](https://) for their feedback!
+Thanks to [Aled James](https://www.linkedin.com/in/aledjames/) (University of Bristol), and [Joe Heck](https://twitter.com/heckj) for their feedback!
 
 If you enjoyed this article, you might find the following articles interesting:
 
