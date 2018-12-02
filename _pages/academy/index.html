@@ -1,0 +1,541 @@
+---
+layout: default
+title: Mastering Kubernetes video course
+benefits:
+  - Gain hands-on experience in deploying and scaling applications
+  - Level up your expertise by solving challenges from real-world use cases
+  - Learn best practices from the experts and how to do things the Kubernetes way™️
+  - Speak the Kubernetes jargon and talk to the rest of the Cloud Native community
+  - Gain valuable knowledge by getting your hands dirty and trying things for yourself
+  - Become an expert faster with laser-focused materials and labs (no fluff!)
+  - Help to shape your company's roadmap to cloud-native technologies
+  - Empower your team to operate and use Kubernetes like experts
+  - Quickly onboard new members your team to the same level as everyone else
+features:
+  - Standardise your tools, workflows and deployments under a single tool
+  - Master architecting services that span multiple clouds and data centres for resilience and failover
+  - Secure your Kubernetes cluster by breaking it
+  - Package, deploy and scale applications in Kubernetes
+  - Design cloud provider agnostic clusters
+  - Leverage he strength and avoid the weaknesses of the major Kubernetes managed service offerings (AKS, EKS, GKE)
+  - Deploy applications in production with zero downtime
+  - Monitor, log and debug production issues in Kubernetes
+  - Deploy stateful workloads such as databases
+  - Implement a CI/CD delivery pipeline that leverages containers and Kubernetes for speed and reliability
+faqs:
+  - title: I'm starting out. Is this right for me?
+    content: Of course. The academy and our online courses are meant for developers that have little to no experience in containers nor Kubernetes.
+  - title: What happens after I buy the access for the course?
+    content: You'll be given an account where you can access the course at any time and from any web browser (desktop, tablet, or mobile). You can login and start learning Kubernetes.
+  - title: Are the instructor-led session recorded?
+    content: No, the instructor-led session are live. You will have time to book a session and listen to one of our instructors introducing the module. After that, you'll continue with the material and the challenges in your own time.
+  - title: What version of k8s was this created for?
+    content: The material was authored for Minikube 0.30, Kubernetes 1.13, Helm 2.12.0
+  - title: What if I'm not thrilled?
+    content: "We want to make sure you get real value out of this so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to <a href=\"mailto:hello@learnk8s.io\" class=\"link navy underline\">hello@learnk8s.io</a> with a copy of your receipt and I will refund you."
+  - title: Do you offer a student discount?
+    content: "Absolutely! <a href=\"https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform\" class=\"link underline navy\">Fill out this form</a> with some proof that you are a student and we'll send you a discount code. This applies to anyone in any type of schooling, including evening classes and coding bootcamps!"
+  - title: I have another question!
+    content: "Sure - send an email to <a href=\"mailto:hello@learnk8s.io\" class=\"link navy underline\">hello@learnk8s.io</a>."
+modules:
+  - name: Docker fundamentals
+    description: "Kubernetes doesn't know how to deploy Java, Node.js, or .NET applications. The only thing it can deal with is Linux containers. But how do these Linux containers work? Why should you care? Are those necessary to master Kubernetes?"
+    topics:
+      - title: Containers vs VMs
+        image: /academy/docker_vs.png
+      - title: Understanding process isolation
+        image: /academy/docker_isolation.png
+      - title: Is Docker the only one?
+        image: /academy/docker_docker.png
+      - title: Running containers
+        image: /academy/docker_running.png
+      - title: Using Docker registries
+        image: /academy/docker_registries.png
+      - title: Mounting volumes
+        image: /academy/docker_volumes.png
+      - title: Building Docker images
+        image: /academy/docker_building.png
+      - title: Exposing ports
+        image: /academy/docker_exposing.png
+      - title: Managing containers lifecycle
+        image: /academy/docker_lifecycle.png
+      - title: Injecting environment variables
+        image: /academy/docker_injecting.png
+      - title: Debugging running containers
+        image: /academy/docker_debugging.png
+  - name: Zero to Kubernetes
+    description: "Learn the basics of Kubernetes and deploy your first application to minikube — a Kubernetes cluster for local development. Learn how to declare resources in YAML files, how to send those to the cluster and retrieve them. Understand how Kubernetes reconciles the desired state of the infrastructure."
+    topics:
+      - title: Managing containers at scale
+        image: /academy/02k8s_scale.png
+      - title: The battle of container orchestrators
+        image: /academy/02k8s_battle.png
+      - title: Visualising the data centre as a single VM
+        image: /academy/02k8s_single.png
+      - title: The best tetris player
+        image: /academy/02k8s_tetris.png
+      - title: Exploring an API over your infrastructure
+        image: /academy/02k8s_swagger.png
+      - title: What are Pods, Services, and Igresses?
+        image: /academy/02k8s_basics.png
+      - title: Creating a Deployment
+        image: /academy/02k8s_deployment.png
+      - title: Creating a local cluster with minikube
+        image: /academy/02k8s_minikube.png
+      - title: Exploring ReplicaSets
+        image: /academy/02k8s_replicaset.png
+      - title: What is a Pod?
+        image: /academy/02k8s_pod.png
+      - title: Scaling applications
+        image: /academy/02k8s_scaling.png
+      - title: Starting a local cluster
+        image: /academy/02k8s_local.png
+      - title: Deploying containers
+        image: /academy/02k8s_deploying.png
+      - title: Exposing Deployments
+        image: /academy/02k8s_expose.png
+      - title: Scaling Deployments
+        image: /academy/02k8s_replicas.png
+      - title: Testing resilience
+        image: /academy/02k8s_resilience.png
+  - name: Deployment strategies
+    description: "Every time you deploy new features in production you don't want to stop your service, load a new version and remove the holding page. Ideally, you should be able to transition to a new version of your application without anyone noticing any downtime. You can leverage Kubernetes to do that."
+    topics:
+      - title: Monitoring for uptime
+        image: /academy/strategies_uptime.png
+      - title: Liveness probe
+        image: /academy/strategies_liveness.png
+      - title: Readiness probe
+        image: /academy/strategies_readiness.png
+      - title: Executing zero downtime deployments
+        image: /academy/strategies_rolling.png
+      - title: Releasing features with canary deployments
+        image: /academy/strategies_canary.png
+      - title: Releasing features with blue-green deployments
+        image: /academy/strategies_bg.png
+      - title: Using labels and selectors
+        image: /academy/strategies_selectors.png
+      - title: Preparing for rollbacks
+        image: /academy/strategies_rollbacks.png
+      - title: Monitoring rolling updates
+        image: /academy/strategies_rollout.png
+      - title: Reconfiguring Services on the fly
+        image: /academy/strategies_fly.png
+      - title: Balancing canary deployments
+        image: /academy/strategies_balancing.png
+      - title: Testing blue-green deployments
+        image: /academy/strategies_swap.png
+  - name: Kubernetes architecture
+    description: "When you deploy applications to Kubernetes you don't decide in which server a container is scheduled. Kubernetes abstracts your data centre into a single entity, and you don’t get to worry about the underlying resources. But how does Kubernetes work its magic?"
+    topics:
+      - title: Single and multi-node clusters
+        image: /academy/architecture_multinode.png
+      - title: Exploring the control plane
+        image: /academy/architecture_controlplane.png
+      - title: Persisting changes in etcd
+        image: /academy/architecture_etcd.png
+      - title: Syncing changes with RAFT
+        image: /academy/architecture_raft.png
+      - title: Event-based architecture
+        image: /academy/architecture_event.png
+      - title: Understanding the kubelet
+        image: /academy/architecture_kubelet.png
+      - title: Verifying "no single point of failure"
+        image: /academy/architecture_nofailure.png
+      - title: Setting up a multi-master cliuster
+        image: /academy/architecture_multi.png
+      - title: Exploring multi-master setup in EKS
+        image: /academy/architecture_eks.png
+      - title: Exploring multi-master setup in Monzo
+        image: /academy/architecture_monzo.png
+      - title: Creating a 3 node cluster with kubeadm
+        image: /academy/architecture_kubeadm.png
+      - title: Installing an overlay network
+        image: /academy/architecture_overlay.png
+      - title: Installing an Ingress controller
+        image: /academy/architecture_ingress.png
+      - title: Exploring the API without kubectl
+        image: /academy/architecture_api.png
+      - title: Taking down the cluster one node at the time
+        image: /academy/architecture_break.png
+  - name: Kubernetes networking
+    description: "How do you route traffic from the internet to your applications? How can you secure your communication with TLS? How about path routing to different services? In this module, you will explore how the traffic is routed in the cluster."
+    topics:
+      - title: Understanding network requirements
+        image: /academy/networking_requirements.png
+      - title: Exploring Endpoints
+        image: /academy/networking_endpoints.png
+      - title: Balancing in-cluster traffic
+        image: /academy/networking_balancing.png
+      - title: Routing traffic with kube-proxy
+        image: /academy/networking_kube-proxy.png
+      - title: "CRI, CNI, CSI: interfaces for the kubelet"
+        image: /academy/networking_interfaces.png
+      - title: Routing traffic to services with kube-proxy
+        image: /academy/networking_routing.png
+      - title: Choosing between latency and load balancing
+        image: /academy/networking_latency.png
+      - title: Pros and cons of the 4 types of Services
+        image: /academy/networking_4.png
+      - title: Discovering Services
+        image: /academy/networking_discovery.png
+      - title: Routing traffic with an Ingress controller
+        image: /academy/networking_ingress.png
+      - title: End-to-end traffic journey
+        image: /academy/networking_e2e.png
+      - title: Inspecting endpoints
+        image: /academy/networking_inspecting.png
+      - title: Tampering routing tables
+        image: /academy/networking_tampering.png
+      - title: Exposing applications
+        image: /academy/networking_exposing.png
+      - title: Creating an Ingress controller
+        image: /academy/networking_controller.png
+      - title: Debugging an Ingress controller
+        image: /academy/networking_debugging.png
+      - title: Leveraging service discovery
+        image: /academy/networking_dig.png
+  - name: Managing state
+    description: "How does Kubernetes store files and state? Can you host databases in it? Should you? Can you extract configurations and share them with different deployments? How do you make sure that your storage layer is replicated and persisted even if a node becomes unavailable?"
+    topics:
+      - title: Managing configurations
+        image: /academy/state_configuration.png
+      - title: Managing secrets
+        image: /academy/state_secret.png
+      - title: Creating Persistent Volumes
+        image: /academy/state_pv.png
+      - title: Creating Persistent Volume Claims
+        image: /academy/state_pvc.png
+      - title: Provisioning volumes dynamically
+        image: /academy/state_dynamic.png
+      - title: Managing stateful applications
+        image: /academy/state_stateful.png
+      - title: Creating volumes on bare metal
+        image: /academy/state_metal.png
+      - title: Deploying a database
+        image: /academy/state_mysql.png
+      - title: Persiting changes with Persitent Volumes
+        image: /academy/state_persist.png
+      - title: Persiting changes with StorageClass
+        image: /academy/state_storageclass.png
+      - title: Storing credentials in a Secret
+        image: /academy/state_credentials.png
+  - name: Helm
+    description: "Resources in Kubernetes are described as YAML files. If you wish to have the same resources for different environments such as development, preproduction and production you may be tempted to copy the files three times. Or you could use a templating engine. Learn how to do precisely that with Helm — the Kubernetes package manager."
+    topics:
+      - title: Templating resources
+        image: /academy/helm_templating.png
+      - title: Understading the Helm architecture
+        image: /academy/helm_architecture.png
+      - title: Creating reusable templates
+        image: /academy/helm_reusable.png
+      - title: Templating resources with Go and Sprig
+        image: /academy/helm_sprig.png
+      - title: Managing releases with Helm
+        image: /academy/helm_releases.png
+      - title: Writing helper functions
+        image: /academy/helm_helper.png
+      - title: Managing releases for different environments
+        image: /academy/helm_envs.png
+      - title: Reverting changes with rollbacks
+        image: /academy/helm_rollbacks.png
+      - title: Depending on other charts
+        image: /academy/helm_dependency.png
+      - title: Storing reusable templates in repositories
+        image: /academy/helm_repos.png
+      - title: Installing Helm
+        image: /academy/helm_installing.png
+      - title: Creating charts
+        image: /academy/helm_chart.png
+      - title: Deploying charts with dry-runs
+        image: /academy/helm_dry-run.png
+      - title: Writing helpers
+        image: /academy/helm_helper2.png
+      - title: Understading charts lifecycle
+        image: /academy/helm_lifecycle.png
+extra_modules:
+  - title: Multi-cloud, multi data centre
+    description: Learn how to design clusters that span multiple cloud providers for resilience, disaster recovery or just saving money.
+    image: /academy/extra_multicloud.png
+  - title: EKS, AKS, GKE
+    description: Discover the nitty-gritty details of how AKS, EKS and GKE work and their strength and limitations.
+    image: /academy/extra_managed.png
+  - title: Security
+    description: Wear your black hat and try to break the cluster. Study mitigation and countermeasure to secure your cluster against malicious attacks.
+    image: /academy/extra_security.png
+  - title: Advanced networking
+    description: Dive into the specifics of network interfaces, IP addresses and network topologies in this session about advanced Kubernetes networking.
+    image: /academy/extra_networking.png
+  - title: Advanced scheduling
+    description: Master advanced placements of workloads in your infrastructure. Learn how to schedule machine learning deployments to nodes with GPU or how you can segregate workloads for regions (useful if you need to comply with policies and regulations).
+    image: /academy/extra_scheduling.png
+  - title: CI/CD pipelines
+    description: Learn how to design CI/CD pipelines that leverage containers and Kubernetes. Ship software quicker, more reliably and cheaply.
+    image: /academy/extra_pipeline.png
+open_graph:
+  title: Mastering Kubernetes online course
+  description: With a focus on simplicity and readability, this course will have you deploying and scaling applications in no time!
+  type: product
+  image: /assets/open_graph_preview.png
+---
+
+<div class="trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns">
+
+  {% include navbar/index.html %}
+
+  <section class="ph5-l pt5-l">
+    <h1 class="f1 mt1-l pt2-l f-subheadline-l ph4 w-60 lh-solid">Self-paced Kubernetes online course</h1>
+    <h2 class="f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l">Become an expert in deploying applications at scale.</h2>
+    <div class="dn db-l i-training absolute bottom-0 right-1"><img src="{% link _pages/academy/training.svg %}" alt="Training"></div>
+    <div class="dn db-l measure mh3 mh4-ns tc">
+        <div class="w3 h3 dib"><img src="{% link _pages/academy/down_arrow_white.svg %}" alt="Down"></div>
+      </div>
+  </section>
+</div>
+
+<section class="ph3 ph4-ns flex items-center relative z3">
+
+  <div class="dn db-l w-50-l">
+    <div class="i-together center"><img src="/academy/together.svg" alt="Team"></div>
+  </div>
+
+  <div class="w-50-l center pt3">
+    <h2 class="f3 navy f2-l measure-narrow">Learn Kubernetes at your pace</h2>
+    <div class="measure-wide">
+      <p class="lh-copy f4-l black-70">With a focus on simplicity and readability, this course will have you deploying and scaling applications in no time!</p>
+      <ul class="list black-70 pl0 pt2">
+        {% for text in page.benefits %}
+        {% include list/item.html content=text %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+{% include interlude/index.html %}
+
+<section class="w-100 ph3 ph4-ns flex items-center justify-center pb4">
+
+  <div class="center pt3">
+    <h2 class="f3 navy f2-l measure-narrow">You will learn how to</h2>
+    <div class="measure-wide">
+      <ul class="list black-70 pl0 pt2">
+        {% for text in page.features %}
+        {% include list/item.html content=text %}
+        {% endfor %}
+        {% include list/special_item.html content="Everything you need to pass your certification as a Certified Kubernetes Administrator (CKA) and Kubernetes Application Developer (CKAD)" %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="dn db-l center">
+    <div class="i-together center"><img src="/academy/together.svg" alt="Team"></div>
+  </div>
+
+</section>
+
+<section class="trapezoidr-1 white lh-copy">
+  <div class="pt5-m pt5 pb4 ph3 measure-wide center">
+    <p class="f3 mb1 mt0 lh-copy">"The training is very well prepared and also very well performed."</p>
+    <p class="f4 i mb2">— Przemek Anuszek, Senior engineer</p>
+  </div>
+</section>
+
+<section class="bg-evian pt4">
+  <p class="f2 navy b tc">What's inside</p>
+  <p class="lh-copy f4 black-70 measure center tc">Inside this course, you'll find all the know-how, scripts, documents, templates, code, and more you need to learn Kubernetes and its ecosystem.</p>
+
+  <div class="ma3 ma5-l pa3 pa5-l bg-white shadow-1">
+
+    {% for module in page.modules %}
+    <div class="flex-l">
+
+      <div class="w-30-l">
+        <h2 class="navy b lh-solid">{{ forloop.index }}. {{ module.name }}</h2>
+        <p class="lh-copy black-70 measure">{{ module.description }}</p>
+      </div>
+
+
+      <div class="w-70-l">
+        <ul class="list pa2 flex flex-wrap">
+          {% for topic in module.topics %}
+          <li class="w-50 w-20-l pa3 pt0">
+            <img src="{{ topic.image }}" alt="{{ topic.title }}" class="br1 grow reverse-dim"/>
+            <h3 class="f6 navy">{{ topic.title }}</h3>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+    {% endfor %}
+
+    <div class="flex-l">
+
+      <div class="w-30-l">
+        <h2 class="navy b lh-solid">Extras</h2>
+        <p class="lh-copy black-70 measure">You can tune in to the following live classes.</p>
+      </div>
+
+
+      <div class="w-70-l">
+        <ul class="list pa2">
+          {% for module in page.extra_modules %}
+          <li class="w-100 pa3 pt0 flex-l items-start">
+            <div class="w-20-l">
+              <img src="{{ module.image }}" alt="{{ module.title }}" class="br1 grow reverse-dim"/>
+            </div>
+            <div class="w-80-l ml4-l">
+              <h3 class="f5 navy">{{ module.title }}</h3>
+              <p class="measure-wide lh-copy">{{ module.description }}</p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="pt5-m pt4 pb5 ph3 measure-wide center black-80">
+    <p class="f3 mb1 mt0 lh-copy">I cemented my understanding of Kubernetes and can now use that to start implementing and furthering my understanding with real examples and workflows. Next stop, production experience.</p>
+    <p class="f4 i mb2">— David Heward, Senior DevOps engineer</p>
+  </div>
+
+</section>
+
+<section class="cf pt5">
+
+  <div class="fl-ns w-50-ns">
+    <div class="mv3 mh3 ml4-ns mr2-ns bg-black-02">
+      <div class="header ph3 pt1 bb b--light-gray">
+          <h2 class="navy tc mb1">Basic package</h2>
+          <h3 class="normal black-70 tc mt0">6 modules</h3>
+      </div>
+      <div class="content ph3 pb4">
+        <p class="navy tc f2">£599 / $749 / 649€</p>
+        <ul class="list pl0 black-70">
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">12 months access</p>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">Docker fundamentals module</p>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">Access to instructor-led webinar for 6 modules</p>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">Access to the material for 6 modules</p>
+          <ol class="pl3">
+            <li class="mv2">Getting started with Kubernetes</li>
+            <li class="mv2">Deployment strategies</li>
+            <li class="mv2">Kubernetes architecture</li>
+            <li class="mv2">Kubernetes networking</li>
+            <li class="mv2">Managing state</li>
+            <li class="mv2">Helm</li>
+          </ol>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy"><span class="b">All source code</span> — build files, scripts and files for each module</p>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">Access to all interactive challenges</p>
+          {% include list/item_raw_close.html %}
+        </ul>
+        <div class="tc">
+{% capture mailto_basic %}
+Hello,
+
+I'd like to buy the access to the Learnk8s academy — basic package.
+
+Thanks,
+{% endcapture %}
+          <a href="mailto:hello@learnk8s.io?subject={{ "Kubernetes Academy access" | uri_escape }}&body={{ mailto_basic | uri_escape }}" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4">Buy now &#8594;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fl-ns w-50-ns">
+    <div class="mv3 mh3 ml2-ns mr4-ns bg-evian">
+      <div class="header ph3 pt1 bb b--light-gray">
+          <h2 class="navy tc mb1">Business package</h2>
+          <h3 class="normal black-70 tc mt0">6 modules + extras</h3>
+      </div>
+      <div class="content ph3 pb4">
+        <p class="navy tc f2">£799 / $999 / 899€</p>
+        <ul class="list pl0 black-70">
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">12 months access</p>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">Docker fundamentals module</p>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">Access to instructor-led webinar for all modules</p>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">Access to the material for all modules</p>
+          <ol class="pl3">
+            <li class="mv2">Getting started with Kubernetes</li>
+            <li class="mv2">Deployment strategies</li>
+            <li class="mv2">Kubernetes architecture</li>
+            <li class="mv2">Kubernetes networking</li>
+            <li class="mv2">Managing state</li>
+            <li class="mv2">Helm</li>
+            <li class="mv2">Scaling applications</li>
+          </ol>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">Access to instructor-led extra modules</p>
+          <ol class="pl3">
+            <li class="mv2">Multi cloud, multi data centre</li>
+            <li class="mv2">Managed services (EKS, AKS, GKE)</li>
+            <li class="mv2">Security</li>
+            <li class="mv2">Advanced networking</li>
+            <li class="mv2">Advanced scheduling</li>
+            <li class="mv2">CI/CD pipelines</li>
+          </ol>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy"><span class="b">All source code</span> — build files, scripts and files for each module</p>
+          {% include list/item_raw_close.html %}
+          {% include list/item_raw_open.html %}
+          <p class="mv0 f4-l lh-copy b">Access to all interactive challenges</p>
+          {% include list/item_raw_close.html %}
+        </ul>
+        <div class="tc">
+{% capture mailto_business %}
+Hello,
+
+I'd like to buy the access to the Learnk8s academy — business package.
+
+Thanks,
+{% endcapture %}
+          <a href="mailto:hello@learnk8s.io?subject={{ "Kubernetes Academy access" | uri_escape }}&body={{ mailto_business | uri_escape }}" class="link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4">Buy now &#8594;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+{% include train-your-team/index.html %}
+
+<section class="ph3 measure-wide pv4 center">
+  <h3 class="f3 f2-l navy pb3">Frequently asked questions</h3>
+  <ul class="list pl0">
+    {% for faq in page.faqs %}
+    <li>
+      <h4 class="navy f4 f3-l mb2">{{ faq.title }}</h4>
+      <p class="lh-copy black-70">{{ faq.content }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% include consultation/index.html %}
+
+{% include footer/index.html %}
