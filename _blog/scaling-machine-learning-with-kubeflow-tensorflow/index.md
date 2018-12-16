@@ -100,9 +100,10 @@ You might have heard of:
 
 - [Google Cloud Machine Learning](https://cloud.google.com/ml-engine/)
 - [Machine learning on AWS](https://aws.amazon.com/machine-learning/)
+- [Azure Machine Learning Studio](https://azure.microsoft.com/en-gb/services/machine-learning-studio/)
 - [Scale](https://www.scaleapi.com/) the API for training data
 
-They are all valid solutions, but they tend to run in public clouds, and you can't quickly move to another once you committed to one.
+They are all valid solutions, but they tend to run in public clouds. Additionally, you can't quickly move to another once you committed to one.
 
 ## Kubeflow — an open source machine learning platform
 
@@ -110,23 +111,27 @@ An excellent alternative for training and evaluating your models in public and p
 
 Kubeflow is designed to make your machine learning experiments portable and scalable.
 
-You start by creating Jupyter notebooks in the cloud.
+You start by creating [Jupyter](https://jupyter.org/) notebooks in the cloud.
 
-Since you can rent kit by the hours, you can run your experiment on large compute resources with dedicated hardware such as GPUs and TPUs.
+Since you can rent kit by the hour, you can run your experiment on large compute resources with dedicated hardware such as GPUs and TPUs.
 
 When you sense that you have hit a breakthrough, you can scale your model to run on thousands of machines.
 
 Kubeflow optimises your model and breaks it down into smaller tasks that can be processed in parallel.
 
+![Model Before]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/model_before.png %})
+
 Then, it distributes the tasks to several computers and waits until the results are ready.
 
-You can easily rent servers to run thousands of jobs and train your model order of magnitude quicker than you're used to!
+![Model After]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/model_after.png %})
+
+You can easily rent servers to run thousands of jobs allowing you to train your model orders of magnitude quicker than you're used to!
 
 When the results are collected, you can use Kubeflow built-in web server to offer an API to query the model.
 
-No need to create your web server and plug in the algorithm. Kubeflow offers that out of the box.
+No need to create your own web server and plug in the algorithm. Kubeflow offers that out of the box.
 
-But things get even better.
+Things get even better.
 
 Kubeflow can run parametrised jobs.
 
@@ -145,7 +150,7 @@ Let me recap what Kubeflow does for you:
 
 Exciting!
 
-All the annoying tasks that were not data science are just removed from the equation.
+All those annoying tasks that take you away from data science are removed from the equation.
 
 You can finally focus on what you know best: the data science!
 
