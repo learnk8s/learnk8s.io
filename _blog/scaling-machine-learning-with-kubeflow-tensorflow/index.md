@@ -6,6 +6,9 @@ open_graph:
   description: Get in touch and let us know how we can help.
   type: business.business
   image: /assets/open_graph_preview.png
+js:
+  - anime.min.js
+  - isScrolledIntoView.js
 ---
 
 Gathering facts and data to understand better the world we live has become the new norm.
@@ -70,7 +73,7 @@ As a data scientist, your expertise and duties span several disciplines.
 
 A data scientist expects that you will focus on a handful of things such as writing an algorithm, training the model, testing and evaluating the outcome of the model.
 
-![Data Science Expectations]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/datascience_expectation.png %})
+![Data Science Expectations]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/core.png %})
 
 The reality, however, is very sobering.
 
@@ -78,7 +81,7 @@ You have to deal with a myriad of things.
 
 From setting up the infrastructure that can serve the required models, to configuring monitoring tools, tuning resource management, supporting batched jobs and the list goes on!
 
-![Data Science Reality]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/datascience_reality.png %})
+{% include_relative complexity.html %}
 
 To become a data scientist, one has to quickly grasp and specialise other aspects of software development, operations and infrastructure management.
 
@@ -119,11 +122,9 @@ When you sense that you have hit a breakthrough, you can scale your model to run
 
 Kubeflow optimises your model and breaks it down into smaller tasks that can be processed in parallel.
 
-![Model Before]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/model_before.png %})
-
 Then, it distributes the tasks to several computers and waits until the results are ready.
 
-![Model After]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/model_after.png %})
+{% include_relative break.html %}
 
 You can easily rent servers to run thousands of jobs allowing you to train your model orders of magnitude quicker than you're used to!
 
@@ -138,6 +139,8 @@ Kubeflow can run parametrised jobs.
 That's great news if you need to tune your hyperparameters.
 
 Instead of starting a single job and having it broken down to smaller tasks, you can submit several jobs and let Kubeflow optimise the processing for you.
+
+{% include_relative hyper.html %}
 
 And while you wait, you can observe the progress of each model on the built-in dashboard.
 
@@ -168,6 +171,8 @@ It can also do other things such as automatically adding more nodes as you run o
 
 It's good practice to start your cluster with a single compute resource and let Kubernetes add more as jobs are submitted.
 
+{% include_relative more.html %}
+
 _But what's so special about Kubernetes?_
 
 Kubernetes is cloud provider independent.
@@ -175,6 +180,8 @@ Kubernetes is cloud provider independent.
 You can install Kubernetes on Amazon Web Services, Azure or your private cloud.
 
 If you decide to move to another cloud, you can install Kubernetes and continue using the same resources and code.
+
+{% include_relative independent.html %}
 
 But Kubernetes doesn't know how to do machine learning.
 
@@ -196,7 +203,7 @@ You should also pay attention to the Tensorflow API that you use.
 
 TensorFlow exposes three different kinds of APIs: low, mid and high-level APIs.
 
-![TensorFlow programming stack]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/tensorflow_programming_environment.png %})
+{% include_relative tensor.html %}
 
 When you use the high-level APIs such as the [Estimators API](https://www.TensorFlow.org/programmers_guide/estimators) you benefit from:
 

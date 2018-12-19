@@ -1,0 +1,90 @@
+{% include_relative more.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#more')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  let basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  function playGame(targets, moveX, moveY) {
+    return function(timeline) {
+      return timeline.add({
+        targets,
+        translateX: [moveX[0], moveX[0]],
+        translateY: [moveY[0], moveY[0]],
+        opacity: [0, 1],
+        easing: 'easeInExpo',
+      })
+      .add({
+        targets,
+        translateX: [moveX[0], moveX[1]],
+        translateY: [moveY[0], moveY[0]],
+        easing: 'easeInExpo',
+        duration: 200,
+      })
+      .add({
+        targets,
+        translateX: [moveX[1], moveX[1]],
+        translateY: [moveY[0], moveY[1]],
+        easing: 'easeInExpo',
+        duration: 300,
+      })
+    }
+  }
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  playGame('#more-animejs-block-1', [346, 306], [0, 254])(basicTimeline)
+  playGame('#more-animejs-block-2', [384, 401], [0, 231])(basicTimeline)
+  playGame('#more-animejs-block-3', [377, 437], [0, 302])(basicTimeline)
+  playGame('#more-animejs-block-4', [386, 437], [0, 199])(basicTimeline)
+  playGame('#more-animejs-block-5', [390, 469], [0, 278])(basicTimeline)
+  playGame('#more-animejs-block-6', [379, 306], [0, 206])(basicTimeline)
+  playGame('#more-animejs-block-7', [384, 354], [0, 136])(basicTimeline)
+  playGame('#more-animejs-block-8', [390, 306], [0, 183])(basicTimeline)
+  playGame('#more-animejs-block-9', [346, 391], [0, 206])(basicTimeline)
+  playGame('#more-animejs-block-10', [371, 391], [0, 136])(basicTimeline)
+  basicTimeline.add({
+    targets: '#more-animejs-server2',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#more-animejs-server3',
+    opacity: [0, 1],
+    easing: 'easeInExpo',
+  })
+  playGame('#more-animejs-block-11', [110, 74], [0, 314])(basicTimeline)
+  playGame('#more-animejs-block-12', [158, 75], [0, 289])(basicTimeline)
+  playGame('#more-animejs-block-13', [154, 100], [0, 211])(basicTimeline)
+  playGame('#more-animejs-block-14', [145, 131], [0, 266])(basicTimeline)
+  playGame('#more-animejs-block-15', [605, 539], [0, 302])(basicTimeline)
+  playGame('#more-animejs-block-16', [611, 587], [0, 232])(basicTimeline)
+  playGame('#more-animejs-block-17', [614, 623], [0, 247])(basicTimeline)
+  playGame('#more-animejs-block-18', [617, 654], [0, 325])(basicTimeline)
+  basicTimeline.add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>

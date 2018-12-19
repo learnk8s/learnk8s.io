@@ -1,0 +1,145 @@
+{% include_relative hyper.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#hyper')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: ['#hyper-animejs-block-4', '#hyper-animejs-block-5'],
+    translateX: (el, index) => {
+      switch (index) {
+        case 0:
+          return [325, 95]
+        case 1:
+          return [123, 65]
+        }
+    },
+    translateY: (el, index) => {
+      switch (index) {
+        case 0:
+          return [120, 333]
+        case 1:
+          return [60, 288]
+        }
+    },
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#hyper-animejs-block-3', '#hyper-animejs-block-8'],
+    translateX: (el, index) => {
+      switch (index) {
+        case 0:
+          return [400, 280]
+        case 1:
+          return [213, 250]
+        }
+    },
+    translateY: (el, index) => {
+      switch (index) {
+        case 0:
+          return [120, 333]
+        case 1:
+          return [60, 288]
+        }
+    },
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#hyper-animejs-block-1', '#hyper-animejs-block-7', '#hyper-animejs-block-10'],
+    translateX: (el, index) => {
+      switch (index) {
+        case 0:
+          return [325, 465]
+        case 1:
+          return [183, 435]
+        case 2:
+          return [557, 465]
+        }
+    },
+    translateY: (el, index) => {
+      switch (index) {
+        case 0:
+          return [45, 333]
+        case 1:
+          return [60, 288]
+        case 2:
+          return [120, 299]
+        }
+    },
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: ['#hyper-animejs-block-2', '#hyper-animejs-block-6', '#hyper-animejs-block-9'],
+    translateX: (el, index) => {
+      switch (index) {
+        case 0:
+          return [400, 650]
+        case 1:
+          return [153, 620]
+        case 2:
+          return [557, 650]
+        }
+    },
+    translateY: (el, index) => {
+      switch (index) {
+        case 0:
+          return [45, 333]
+        case 1:
+          return [60, 288]
+        case 2:
+          return [86, 299]
+        }
+    },
+    easing: 'easeInExpo',
+  })
+  // .add({
+  //   targets: '#hyper-animejs-block-1',
+  //   fill: '#86B8B1',
+  //   easing: 'linear',
+  // })
+  // .add({
+  //   targets: '#hyper-animejs-block-2',
+  //   fill: '#86B8B1',
+  //   easing: 'linear',
+  // })
+  // .add({
+  //   targets: '#hyper-animejs-block-3',
+  //   fill: '#86B8B1',
+  //   easing: 'linear',
+  // })
+  // .add({
+  //   targets: '#hyper-animejs-block-4',
+  //   fill: '#86B8B1',
+  //   easing: 'linear',
+  // })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>

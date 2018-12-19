@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 443" id="tensor">
+  <g fill="none" fill-rule="evenodd">
+    <rect width="800" height="443" fill="#FFF"/>
+    <g id="tensor-animejs-high" transform="translate(46 49)">
+      <text fill="#4A4A4A" font-size="17.57" font-weight="bold" class="sans-serif">
+        <tspan x="0" y="23">High-Level</tspan> <tspan x="0" y="44">TensorFlow APIs</tspan>
+      </text>
+      <g transform="translate(174)">
+        <rect width="301" height="57" fill="#FF5A00" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="105.134" y="33">Estimators</tspan>
+        </text>
+      </g>
+    </g>
+    <g id="tensor-animejs-mid" transform="translate(46 119)">
+      <text fill="#4A4A4A" font-size="17.57" font-weight="bold" class="sans-serif">
+        <tspan x="0" y="25">Mid-Level</tspan> <tspan x="0" y="46">TensorFlow APIs</tspan>
+      </text>
+      <g transform="translate(393)">
+        <rect width="82" height="57" fill="#FF5A00" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="9.453" y="33">Metrics</tspan>
+        </text>
+      </g>
+      <g transform="translate(174)">
+        <rect width="82" height="57" fill="#FF5A00" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="13.011" y="33">Layers</tspan>
+        </text>
+      </g>
+      <g transform="translate(271)">
+        <rect width="108" height="57" fill="#FF5A00" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="16.743" y="33">Datasets</tspan>
+        </text>
+      </g>
+    </g>
+    <g id="tensor-animejs-low" transform="translate(46 189)">
+      <text fill="#4A4A4A" font-size="17.57" font-weight="bold" class="sans-serif">
+        <tspan x="0" y="24">Low-Level</tspan> <tspan x="0" y="45">TensorFlow APIs</tspan>
+      </text>
+      <g transform="translate(174)">
+        <rect width="301" height="57" fill="#FF5A00" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="121.202" y="33">Python</tspan>
+        </text>
+      </g>
+      <g transform="translate(485)">
+        <rect width="68" height="57" fill="#FF5A00" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="17.448" y="33">C++</tspan>
+        </text>
+        <rect width="68" height="57" fill="#1A263A" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="17.448" y="33">C++</tspan>
+        </text>
+      </g>
+      <g transform="translate(563)">
+        <rect width="68" height="57" fill="#FF5A00" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="17.448" y="33">C++</tspan>
+        </text>
+        <rect width="68" height="57" fill="#FF5A00" fill-rule="nonzero" rx="3"/>
+        <rect width="68" height="57" fill="#1A263A" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="14.962" y="33">Java</tspan>
+        </text>
+      </g>
+      <g transform="translate(641)">
+        <rect width="68" height="57" fill="#FF5A00" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="17.448" y="33">C++</tspan>
+        </text>
+        <rect width="68" height="57" fill="#FF5A00" fill-rule="nonzero" rx="3"/>
+        <rect width="68" height="57" fill="#1A263A" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="22.465" y="33">Go</tspan>
+        </text>
+      </g>
+    </g>
+    <g id="tensor-animejs-kernel" transform="translate(46 259)">
+      <text fill="#4A4A4A" font-size="17.57" font-weight="bold" class="sans-serif">
+        <tspan x="0" y="25">TensorFlow</tspan> <tspan x="0" y="46">Kernel</tspan>
+      </text>
+      <g transform="translate(174)">
+        <rect width="535" height="57" fill="#FF8D00" fill-rule="nonzero" rx="3"/>
+        <text fill="#FFF" font-size="17.57" font-weight="bold" class="sans-serif">
+          <tspan x="96.386" y="33">Tensorflow Distributed Execution Engine</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>
