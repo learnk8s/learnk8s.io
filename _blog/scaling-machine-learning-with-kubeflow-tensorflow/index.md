@@ -1,11 +1,18 @@
 ---
 layout: post
-title: Scaling Machine Learning in the Cloud with Kubernetes
+title: Scaling Jupyter notebooks in the cloud with Kubernetes
+date: 2018-11-6 08:00:00
+author: "Salman Iqbal"
+author_link: https://twitter.com/soulmaniqbal
+categories: kubernetes tensorflow kubeflow "deep learning" "machine learning"
+image:
+excerpt:
+description:
 open_graph:
-  title: Contact us
-  description: Get in touch and let us know how we can help.
-  type: business.business
-  image: /assets/open_graph_preview.png
+  title: Scaling Jupyter notebooks in the cloud with Kubernetes
+  description:
+  type: article
+  image:
 js:
   - anime.min.js
   - isScrolledIntoView.js
@@ -260,6 +267,8 @@ You could visualise the detail of your distributed TensorFlow jobs with [Tensorb
 
 Tensorboard is particularly useful when you wish to monitor and optimise your models for parameter sweeping.
 
+![Hyperparameter sweeping with Tensorboard]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/tensorboard.gif %})
+
 With an eye glance, you can tell which parameters are performing better and where you should focus your attention.
 
 ## Summary
@@ -271,3 +280,29 @@ With Kubernetes you can offload most of the infrastructure-heavy operations such
 Tensorflow has an efficient collection of tools that are neatly designed to work in concert.
 
 And finally, Kubeflow is the glue that makes it possible to leverage the best of both worlds.
+
+If you are interested in a step-by-step tutorial on how to configure Kubeflow in your cluster you should stay tuned!
+
+In the next espisode you will dive into the details of configuring the cluster and running deep learning jobs at scale.
+
+If you want to be notified when the article is ready, you should [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})
+
+## That's all folks!
+
+Thanks to [XXX](https://), and [XXX](https://) for their feedback!
+
+If you enjoyed this article, you might find the following articles interesting:
+
+- [What is Kubernetes? Optimise your hosting costs and efficiency](https://learnk8s.io/blog/what-is-kubernetes) and learn how Kubernetes works and why it was invented in the first place
+- [Scaling Microservices with Message Queues, Spring Boot and Kubernetes](http://learnk8s.io/blog/scaling-spring-boot-microservices/). Learn how to use the Horizontal Pod Autoscaler to dynamically resize your fleet of applications.
+
+{:.caution}
+## Become an expert at deploying and scaling applications in Kubernetes
+
+Are you building a solar plant? Maybe a car? Or just want to deploy web applications at scale?
+
+Get a head start with our hands-on courses and learn how to master Kubernetes.
+
+Learn how to:
+
+{% include promo-workshop/index.html %}
