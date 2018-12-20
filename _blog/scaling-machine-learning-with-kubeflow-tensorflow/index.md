@@ -1,16 +1,16 @@
 ---
 layout: post
-title: Scaling Jupyter notebooks in the cloud with Kubernetes
+title: Scaling Jupyter notebooks with Kubernetes and Tensorflow
 date: 2018-11-6 08:00:00
 author: "Salman Iqbal"
 author_link: https://twitter.com/soulmaniqbal
 categories: kubernetes tensorflow kubeflow "deep learning" "machine learning"
 image:
-excerpt:
-description:
+excerpt: One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.
+description: One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.
 open_graph:
-  title: Scaling Jupyter notebooks in the cloud with Kubernetes
-  description:
+  title: Scaling Jupyter notebooks with Kubernetes and Tensorflow
+  description: One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.
   type: article
   image:
 js:
@@ -18,13 +18,13 @@ js:
   - isScrolledIntoView.js
 ---
 
-Gathering facts and data to understand better the world we live has become the new norm.
+Gathering facts and data to understand better the world we live in has become the new norm.
 
 From self-driving cars to smart personal assistants, data and data science is everywhere.
 
 Even the phones that we carry in our pockets now feature dedicated units for machine learning.
 
-In fact, there has never been more need for more performant and efficient system to ingest and extract meanings out of large volumes of numbers.
+In fact, there has never been more need for a more performant and efficient system to ingest and extract meanings out of large volumes of numbers.
 
 The challenges for data scientists and engineers is how to design pipelines and processes that can operate at scale and in real-time.
 
@@ -281,9 +281,9 @@ Tensorflow has an efficient collection of tools that are neatly designed to work
 
 And finally, Kubeflow is the glue that makes it possible to leverage the best of both worlds.
 
-If you are interested in a step-by-step tutorial on how to configure Kubeflow in your cluster you should stay tuned!
+If you are interested in a step-by-step tutorial on how to configure Kubeflow in your cluster, you should stay tuned!
 
-In the next espisode you will dive into the details of configuring the cluster and running deep learning jobs at scale.
+In the next episode, you will dive into the details of configuring the cluster and running deep learning jobs at scale.
 
 If you want to be notified when the article is ready, you should [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})
 
@@ -294,7 +294,7 @@ Thanks to [XXX](https://), and [XXX](https://) for their feedback!
 If you enjoyed this article, you might find the following articles interesting:
 
 - [What is Kubernetes? Optimise your hosting costs and efficiency](https://learnk8s.io/blog/what-is-kubernetes) and learn how Kubernetes works and why it was invented in the first place
-- [Scaling Microservices with Message Queues, Spring Boot and Kubernetes](http://learnk8s.io/blog/scaling-spring-boot-microservices/). Learn how to use the Horizontal Pod Autoscaler to dynamically resize your fleet of applications.
+- [Scaling Microservices with Message Queues, Spring Boot and Kubernetes](http://learnk8s.io/blog/scaling-spring-boot-microservices/). Learn how to use the Horizontal Pod Autoscaler to resize your fleet of applications dynamically.
 
 {:.caution}
 ## Become an expert at deploying and scaling applications in Kubernetes

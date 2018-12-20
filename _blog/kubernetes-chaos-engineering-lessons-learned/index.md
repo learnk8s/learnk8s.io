@@ -349,7 +349,7 @@ Many thanks to [Manabu Sakai](https://twitter.com/manabusakai)'s blog post that 
 If you enjoyed this article, you might find the following articles interesting:
 
 - [3 simple tricks for smaller Docker images](https://learnk8s.io/blog/smaller-docker-images) and learn how to build and deploy Docker images quicker.
-- [Scaling Microservices with Message Queues, Spring Boot and Kubernetes](http://learnk8s.io/blog/scaling-spring-boot-microservices/). Learn how to use the Horizontal Pod Autoscaler to dynamically resize your fleet of applications.
+- [Scaling Microservices with Message Queues, Spring Boot and Kubernetes](http://learnk8s.io/blog/scaling-spring-boot-microservices/). Learn how to use the Horizontal Pod Autoscaler to resize your fleet of applications dynamically.
 
 {:.caution}
 ## Become an expert at deploying and scaling applications in Kubernetes
