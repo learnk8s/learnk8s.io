@@ -196,6 +196,8 @@ It can only speak infrastructure.
 
 _So how can you train model with it?_
 
+{% include inline-subscribe-cta/index.html %}
+
 ## Training models with Tensorflow
 
 Kubeflow uses Tensorflow to break down your models into smaller tasks that can be parallelised using Kubernetes.
