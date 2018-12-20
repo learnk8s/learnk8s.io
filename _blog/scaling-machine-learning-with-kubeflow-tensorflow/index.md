@@ -196,7 +196,7 @@ It can only speak infrastructure.
 
 _So how can you train model with it?_
 
-## Tensorflow
+## Training models with Tensorflow
 
 Kubeflow uses Tensorflow to break down your models into smaller tasks that can be parallelised using Kubernetes.
 
@@ -235,7 +235,7 @@ And in combination with Kubernetes, you scale it to thousands of computer.
 
 _Once the model is trained at scale, what do you do with it?_
 
-## Tensorflow serving
+## Creating APIs from your models with Tensorflow serving
 
 You can expose your model as an API without writing any code.
 
