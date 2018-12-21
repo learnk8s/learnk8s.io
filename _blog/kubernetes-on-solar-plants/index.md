@@ -183,7 +183,7 @@ If one of the application fails, perhaps because of a memory leak, Kubernetes wi
 
 Kubernetes is designed with the understanding that nodes cannot be expected to continue working forever, so has a design that is self-healing; it is always observing the current state of the infrastructure and takes action whenever it detects that this doesn't match the desired state of the infrastructure.
 
-Where it finds a discrepancy, for example if there isn't enough capacity to run all of your apps, it will ask the cloud provider to provision more compute resources.
+Where it finds a discrepancy, for example, if there isn't enough capacity to run all of your apps, it will ask the cloud provider to provision more compute resources.
 
 {% include_relative scaling.html %}
 
@@ -215,7 +215,7 @@ In a _Deployment_, you specify the number of instances of your application and K
 
 This is the most common deployment type, but while it's useful for cloud deployments where you don't care which specific node is running our application (you just care that it's being run by _something_), this is less useful in the embedded world.
 
-Other srategies include _[StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)_ and _[ReplicaSet](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)_.
+Other strategies include _[StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)_ and _[ReplicaSet](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)_.
 
 Each of them comes with different trade-offs, but doesn't serve our goal of having our application run on every available node.
 
