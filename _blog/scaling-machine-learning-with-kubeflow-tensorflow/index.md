@@ -5,14 +5,14 @@ date: 2018-11-6 08:00:00
 author: "Salman Iqbal"
 author_link: https://twitter.com/soulmaniqbal
 categories: kubernetes tensorflow kubeflow "deep learning" "machine learning"
-image:
+image: /blog/scaling-machine-learning-with-kubeflow-tensorflow/kubeflow.png
 excerpt: One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.
 description: One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.
 open_graph:
   title: Scaling Jupyter notebooks with Kubernetes and Tensorflow
   description: One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.
   type: article
-  image:
+  image: /blog/scaling-machine-learning-with-kubeflow-tensorflow/kubeflow.png
 js:
   - anime.min.js
   - isScrolledIntoView.js
@@ -291,7 +291,7 @@ If you want to be notified when the article is ready, you should [subscribe to t
 
 ## That's all folks!
 
-Thanks to [XXX](https://), and [XXX](https://) for their feedback!
+Thanks to [Leonardo De Marchi](http://www.ideai.io) (lead instructor @ideai.io) for his feedback!
 
 If you enjoyed this article, you might find the following articles interesting:
 
