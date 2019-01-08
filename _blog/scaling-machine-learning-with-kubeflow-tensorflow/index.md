@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Scaling Jupyter notebooks with Kubernetes and Tensorflow
-date: 2018-11-6 08:00:00
+date: 2019-01-09 08:00:00
 author: "Salman Iqbal"
 author_link: https://twitter.com/soulmaniqbal
 categories: kubernetes tensorflow kubeflow "deep learning" "machine learning"
@@ -74,11 +74,9 @@ Perhaps you could use a workstation in the cloud so that even your colleagues ca
 
 ## The whole setup is too complex
 
-Provisioning clusters in the cloud, designing the infrastructure to ingest and extract meaningful data, researching and training models.
+As a data scientist, your expertise and duties span several disciplines, such as provisioning clusters, researching and training models, designing the infrastructure to ingest and extract meaningful information and so on.
 
-As a data scientist, your expertise and duties span several disciplines.
-
-A data scientist expects that you will focus on a handful of things such as writing an algorithm, training the model, testing and evaluating the outcome of the model.
+On the other hand data scientists need to focus on a handful of things such as creating, testing and evaluating models to deliver the results that the business expect from them.
 
 ![Data Science Expectations]({% link _blog/scaling-machine-learning-with-kubeflow-tensorflow/core.png %})
 
@@ -90,7 +88,7 @@ From setting up the infrastructure that can serve the required models, to config
 
 {% include_relative complexity.html %}
 
-To become a data scientist, one has to quickly grasp and specialise other aspects of software development, operations and infrastructure management.
+To become a data scientist, one has to quickly grasp and master other aspects of software development, operations and infrastructure management.
 
 Even if you don't want to, unfortunately.
 
@@ -102,7 +100,7 @@ _What if you could leverage an existing platform for scaling your models without
 
 _What if you could train and evaluate your model in the cloud as you do locally?_
 
-You could finally focus on what you do best: the data science!
+You could finally focus on what you do best: data science!
 
 Few competing solutions provide an easy entry to a data farm.
 
@@ -117,7 +115,7 @@ They are all valid solutions, but they tend to run in public clouds. Additionall
 
 ## Kubeflow — an open source machine learning platform
 
-An excellent alternative for training and evaluating your models in public and private clouds is to use [Kubeflow](https://github.com/kubeflow/kubeflow) — an open-source toolkit to distribute machine learning.
+An excellent alternative for training and evaluating your models in public and private clouds is to use [Kubeflow](https://github.com/kubeflow/kubeflow) — an open-source toolkit for distributed machine learning.
 
 Kubeflow is designed to make your machine learning experiments portable and scalable.
 
