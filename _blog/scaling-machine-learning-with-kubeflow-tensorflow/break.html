@@ -1,0 +1,114 @@
+{% include_relative break.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#break')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  const basicTimeline = anime.timeline({
+    autoplay: false,
+  });
+  basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: ['#break-animejs-block-1', '#break-animejs-block-2', '#break-animejs-block-3', '#break-animejs-block-4'],
+    translateX: (el, index) => {
+      switch (index) {
+        case 0:
+          return [325, 85]
+        case 1:
+          return [400, 270]
+        case 2:
+          return [400, 455]
+        case 3:
+          return [325, 640]
+        }
+    },
+    translateY: (el, index) => {
+      switch (index) {
+        case 0:
+          return [45, 120]
+        case 1:
+          return [45, 120]
+        case 2:
+          return [120, 120]
+        case 3:
+          return [120, 120]
+        }
+    },
+    easing: 'easeInExpo',
+  })
+  .add({})
+  .add({
+    targets: ['#break-animejs-block-1', '#break-animejs-block-2', '#break-animejs-block-3', '#break-animejs-block-4'],
+    translateX: (el, index) => {
+      switch (index) {
+        case 0:
+          return [85, 85]
+        case 1:
+          return [270, 270]
+        case 2:
+          return [455, 455]
+        case 3:
+          return [640, 640]
+        }
+    },
+    translateY: (el, index) => {
+      switch (index) {
+        case 0:
+          return [120, 330]
+        case 1:
+          return [120, 330]
+        case 2:
+          return [120, 330]
+        case 3:
+          return [120, 330]
+        }
+    },
+    easing: 'easeInExpo',
+  })
+  .add({
+    targets: '#break-animejs-block-1',
+    fill: '#86B8B1',
+    easing: 'linear',
+  })
+  .add({
+    targets: '#break-animejs-block-2',
+    fill: '#86B8B1',
+    easing: 'linear',
+  })
+  .add({
+    targets: '#break-animejs-block-3',
+    fill: '#86B8B1',
+    easing: 'linear',
+  })
+  .add({
+    targets: '#break-animejs-block-4',
+    fill: '#86B8B1',
+    easing: 'linear',
+  })
+  .add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>

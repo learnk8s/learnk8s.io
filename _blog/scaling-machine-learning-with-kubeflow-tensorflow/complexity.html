@@ -1,0 +1,52 @@
+{% include_relative complexity.svg %}
+<script>
+(function() {
+  const svg = document.querySelector('#complexity')
+  const wrapper = document.createElement('div')
+  wrapper.classList = 'relative'
+  const restart = document.createElement('div')
+  restart.classList = 'restart'
+  restart.innerHTML = '<span>Restart</span>'
+  wrap(svg, wrapper)
+  wrapper.appendChild(restart)
+  let basicTimeline = anime.timeline({
+    autoplay: false,
+  })
+  basicTimeline = basicTimeline
+  .add({
+    begin: function() {
+      wrapper.onclick = function() {}
+      restart.classList.add('inactive')
+    }
+  })
+  .add({
+    targets: '#complexity-animejs-core',
+    scale: [3, 1],
+    translateX: [24, 272],
+    translateY: [0, 183],
+    easing: 'linear',
+  })
+  for (let i = 1; i < 9; i += 1) {
+    basicTimeline = basicTimeline
+    .add({
+      targets: '#complexity-animejs-more' + i,
+      opacity: [0, 1],
+      easing: 'easeInExpo',
+    })
+  }
+  basicTimeline.add({
+    complete: function() {
+      wrapper.onclick = basicTimeline.restart
+      restart.classList.remove('inactive')
+    }
+  })
+  wrapper.onclick = basicTimeline.restart
+  onScrollIntoView(svg, function() {
+    setTimeout(basicTimeline.play, 1000)
+  });
+  function wrap(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+  }
+})();
+</script>
