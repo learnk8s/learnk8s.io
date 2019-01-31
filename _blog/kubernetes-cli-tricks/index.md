@@ -218,7 +218,7 @@ Note two things about using the `custom-columns` in general:
 
 Again, you can find out the nature of each field in a resource object (whether it's an object or a list, which sub-fields it contains, etc.) with the `kubectl explain` command.
 
-## Switching Contexts and Namespaces
+## Kubeconfig Contexts and Namespaces
 
 `kubectl` depends on a type of configuration file called **kubeconfig file** (described [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) and [here](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) in the docs). A kubeconfig file contains all the information that `kubectl` needs to connect and authenticate to a Kubernetes cluster (more precisely, to the API server of a Kubernetes cluster).
 
@@ -269,16 +269,208 @@ kubectl config use-context <name>
 
 Note that the command to change the current context physically changes the *current context* field in the kubeconfig file.
 
-These commands work well, but they are a bit bulky, aren't they? Especially, because you probably have to use them frequently to quickly orientate yourself in your `kubectl` environment.
+These commands work well, but they are a bit bulky, aren't they? Especially, because you probably have to use them frequently to quickly orientate yourself in your `kubectl` environment. Furthermore, managed Kubernetes services like [EKS](https://aws.amazon.com/eks/) from AWS or [GKE](https://cloud.google.com/kubernetes-engine/) from GCP generate rather long context names, and copy-pasting them into the `kubectl config use-context` command is tedious and time-consuming.
 
-Furthermore, managed Kubernetes services like [EKS](https://aws.amazon.com/eks/) from AWS or [GKE](https://cloud.google.com/kubernetes-engine/) from GCP generate rather long context names, and copy-pasting them into the command for changing the current context is tedious and time-consuming.
+So, let's define some shell aliases that allow performing these tasks with a minimum of typing. In particular, we will define the following aliases (they all start with `k` to indicate that they belong to `kubectl`):
 
-Let's define some shell aliases that allow performing these tasks with a minimum of typing. Here are the aliases in action:
+- `kgc` (**g**et **c**ontext): get the current context
+- `klc` (**l**ist **c**ontexts): list all contexts, marking the current one
+- `kcc` (**c**hange **c**ontext): change the current context by interactively selecting it
+
+Here are the aliases in action:
 
 ![](todo.gif)
 
+And here are the definitions of the aliases:
+
+~~~bash
+alias kgc='kubectl config current-context'
+alias klc='kubectl config get-contexts -o name | sed "s/^/  /;\|$(kgc)|s/ /*/"'
+alias kcc='kubectl config use-context "$(klc | fzf -e | sed "s/^..//")"'
+~~~
+
+> Note that all the aliases presented in this section work for both, Bash and zsh.
+
+Let's go through them one by one. The `kgc` alias prints out the name of the current context:
+
+~~~bash
+alias kgc='kubectl config current-context'
+~~~
+
+There's nothing complicted here. The alias just wraps a plain command into a shorter alias.
+
+Next, the `klc` alias lists all the contexts that are defined in the kubeconfig file and indicates which of them is the current context with a `*` character:
+
+~~~
+$ klc
+* arn:aws:eks:us-east-1:202449302273:cluster/test-cluster
+  arn:aws:eks:us-east-2:202449302273:cluster/eks-sent2vec
+~~~
+
+And here is the defnition of the alias:
+
+~~~bash
+alias klc='kubectl config get-contexts -o name | sed "s/^/  /;\|$(kgc)|s/ /*/"'
+~~~
+
+That looks a bit more interesting. The alias first lists the names of all the contexts (with the `kubectl config get-contexts`) commands, and then uses *sed* to add a `*` in front of the current context.
+
+Let's look at the *sed* command in more detail. It consists actually of two commands, separated by a semicolon. The first command looks as follows:
+
+~~~sed
+s/^/  /
+~~~
+
+This simply adds two spaces to the beginning of each context name. This is to make all contexts nicely aligned when one of them will get an astriks in front of it.
+
+The second command looks as follows:
+
+~~~
+\|$(kgc)|s/ /*/
+~~~
+
+The `\|$(kgc)|` part is the so-called "address" part of the *sed* command. It selects the lines to which the subsequent `s/ /*/` function applies. In that case, the address is a regular expression, and the `\|` and `|` are the delimiters of this regular expression. The regular expression itself is the output of the `kgc` alias that we just defined above, and which prints out the name of the current context. Thus, what this command effectively does is selecting the line with the current context and applying the `s/ /*/` function to it. This function simply replaces the first space with an asteriks, thus effectively "marking" the current context with a `*`.
+
+You might wonder about the strange regular expression delimiters `\|` and `|`. In fact, the default delimiters are `/` slashes. However, it is possible that context names include slashes themselves (this is, for example, the case in the context names generated by [Amazon EKS](https://aws.amazon.com/eks/)), and this would break the *sed* command. However, *sed* allows to use other charactes as delimiters. In this caes, I chose the `|` vertical bar, which is more likely to not occur in any context name. The backslash in `\|` is required in front of the first occurrence of the delimiter.
+
+Let's look at the last of the three aliases. `kcc` lets you change the current context by interactively selecting it from the list of available contexts:
+
+~~~
+$ kcc
+>   arn:aws:eks:us-east-2:202449302273:cluster/eks-sent2vec
+  * arn:aws:eks:us-east-1:202449302273:cluster/test-cluster
+  2/2
+>
+~~~
+
+Now, how does *that* work? It's not magic, but the result of simple shell alias using a powerful tool. Here is the definition:
+
+~~~bash
+alias kcc='kubectl config use-context "$(klc | fzf -e | sed "s/^..//")"'
+~~~
+
+The first thing you might wonder is, where does the user-interface letting you select a context by typing parts of its name come from? The answer is, from a tool called [`fzf`](https://github.com/junegunn/fzf) (meaning *fuzzy finder*).
+
+`fzf` is a simple as it is ingenious. It reads lines from standard input and then displays you an interface that lets you type a search term, which `fzf` matches to the available lines in real time. When you press the *Return* key, `fzf` writes the currently selected line to standard output. That's what `fzf` does from a high-level view, and it allows a huge range of amazing applications.
+
+You need to install `fzf` on your system at this point. It can be easily installed with Homebrew or by cloning the Git repository and installing from sources, as explained in the instructions [here](https://github.com/junegunn/fzf#installation).
+
+Once you have `fzf` installed, let's go back to the `kcc` alias. It uses the `kubectl config use-context` command, which changes the current context to the context received as argument. The crucial point is how the alias produces this argument (which must be the name of the new context). The argument is the output of the following chain of commands:
+
+~~~bash
+klc | fzf -e | sed "s/^..//"
+~~~
+
+First, it uses the `klc` alias that was just defined above. It produces a list of all the available contexts (the current context marked with an asteriks).
+
+This list is then read by `fzf`, which lets you select one of these contexts by typing part of its name. The `-e` option of `fzf` enables *exact* matching, that is, your search term matches only if it *literally* occurs in one of the items (by default, `fzf` uses *fuzzy* matching). Whether you prefer exact matching or fuzzy matchine is a matter of taste, and you can adapt the command accordingly. You can see all the options of `fzf` in `man fzf`.
+
+When you confirm your selection in the `fzf` finder interface, `fzf` writes the selected context to standard output, which in this case is a pipe. There, it is read by *sed*, which deletes the first two characters of this string. This is necessary, because the `klc` alias at the beginning of the chain adds two spaces, or an asteriks and a space, to the beginning of each context, and these need to be removed in order to form a valid context name.
+
+That's how these aliases work. If you have `fzf` installed, then you can copy these aliases to your `~/.bashrc` or `~/.zshrc` file and start using the immediately!
+
+> As you can see, some aliases have invocations of other aliases in their definition. For this reason, if you rename an alias, you have to make sure to also rename all its invocations in other alias definitions. Similarly, if you change the order of the aliases, you have to make sure that all invocations of an alias come after its definition.
+
 
 ### Changing Namespaces
+
+As was explained at the beginning of this section, a context is a triple of a *cluster*, a *user*, and a *namespace*. If you wanted to use a given cluster with a given user, but with a different namespace, then you could just define a new context (with the same cluster and user, but with a different namespace) in the kubeconfig file. If you then need to switch between these namespaces, you could just switch between the correspnding contexts.
+
+However, in practice, people often tend to have only a single context per cluster in their local kubeconfig configuration. They usually connect to a cluster using the same kubeconfig user, but what's more variable for a given cluster are the namespaces. Someone might need to do some work in the *dev* namespace of a cluster in one moment, and then in the *prod* namespace of the same cluster in another moment.
+
+Since this is a common use case, let's define aliases for managing namespaces, analogous to the aliases for managing contexts from the previous sub-section.
+
+In particular, we are going to define the following aliases:
+
+- `kgn` (**g**et **n**namespace): get the namespace of the current context
+- `kln` (**l**ist **n**amespaces): list all namespaces of the cluster referenced by the current context
+- `kcn` (**c**hange **n**amespace): change the namespace of the current context
+
+> Note that while the context aliases from the previous subsection work on the total set of contexts, the aliases here work on the *namespace* attribute of the *current context* (and each context consists of a *namespace*, *cluster*, and *user* attribute).
+
+Here are the aliases in action:
+
+![](todo.gif)
+
+And here are the definitions of the aliases:
+
+TODO: change `kgn` to `ksn`, because the former clashes with an alias of kubectl-aliases
+
+~~~bash
+alias kgn='kubectl config get-contexts --no-headers "$(kgc)" | awk "{print \$5}" | sed "s/^$/default/"'
+alias kln='kubectl get -o name ns | sed "s|^.*/|  |;\|$(kgn)|s/ /*/"'
+alias kcn='kubectl config set-context --current --namespace "$(kln | fzf -e | sed "s/^..//")"'
+~~~
+
+Let's go through these aliases one by one.
+
+The `kgn` alias prints the namespace of the current context:
+
+~~~
+$ kgn
+default
+~~~
+
+Here is the definition:
+
+~~~bash
+alias kgn='kubectl config get-contexts --no-headers "$(kgc)" | awk "{print \$5}" | sed "s/^$/default/"'
+~~~
+
+First of all, the alias uses the `kubectl config get-contexts` command to produce a single line with the full information about the *current context* only. This is achieved by disabling headers in the output and passing the name of the current context as argument to the command. Note that the name of the current context is obtained through the `kgc` alias from the last sub-section.
+
+The `kubectl config get-contexts` command outputs information about contexts in a plain text table with five columns. The fifth of these columns contains the namespace of the context. For this reason, the alias passes the output of this command to *awk*, which prints the fifth column only.
+
+Usually, the output of *awk* would now be the name of the namespace already. However, the namespace attribute is *optional* for contexts. If it is omitted in the context definition in the kubeconfig file, then the namespace defaults to the *default* namespace. If this is the case, then the fifth column of the `kubectl config get-contexts` command is empty. For this reason, the output of *awk* is passed to *sed*, which tests if it is empty, and if so, replaces it with the name of the *default* namespace.
+
+The `kln` alias lists all the namespaces of the cluster referenced by the current context, and it marks the namespace that is set in the current context:
+
+~~~
+$ kln
+* default
+  kube-public
+  kube-system
+~~~
+
+Here is the definition:
+
+~~~bash
+alias kln='kubectl get -o name ns | sed "s|^.*/|  |;\|$(kgn)|s/ /*/"'
+~~~
+
+The alias uses the `kubectl get` command to get the names of all namespace in the cluster referenced by the current context. Note that this command makes a request to the API server of the cluster, and thus is subject to the network latency between you and the cluster. Therefore, this alias may take longer to complete than the other aliases presented so far, because the other aliases worked only on local data.
+
+The *sed* expression of the alias takes care of marking the namespace of the current context with an asteriks. It is very similar to the *sed* expression of the `klc` alias (listing contexts). One difference is the `s|^.*/|  |` command, which replaces everything from the beginning of the line up to and including the first slash with two spaces. This is necessary, because the `kubectl get -o name ns` command outputs the namespaces in the format `namespace/<name>`, that is, including the resource object type. This first *sed* command strips off the `namespace/` part from these strings.
+
+The second *sed* command then selects the line that matches the namespace of the current context (obtained with the `kgn` alias defined above), and replaces its first space with an asteriks to mark it.
+
+The last alias, `kcn`, allows you to interactively change the namespae of the current context:
+
+~~~
+$ kcn
+>   kube-system
+    kube-public
+  * default
+  3/3
+>
+~~~
+
+Here is its definition:
+
+~~~bash
+alias kcn='kubectl config set-context --current --namespace "$(kln | fzf -e | sed "s/^..//")"'
+~~~
+
+The alias uses the `kubectl config set-context` command to modify the definition of the current context in the kubeconfig file. The `--current` option selects the current context, and the `--namespace` option sets the namespace attribute of this context to the value of its argument.
+
+This argument, which must be the name of the new namespace, is the output of the `kln | fzf -e | sed "s/^..//"` expression. It is similar to the corresponding expression in the `kcc` alias (changing current context). The `kln` alias is used to produce a list of all namespaces, which is passed to `fzf` to let you select one of them, and finally *sed* removes the first two characters that were used for aligning the items.
+
+Note that since this alias uses the `kln` alias, it might also take longer to complete than the other aliases, because `kln` makes a request to the API server of the cluster.
+
+As with the context aliases, you can add these aliases to your `~/.bashrc` or `~/.zshrc` file and start using them immediately.
+
+### A Related Tool
+
 
 
 ## More Fuzzy Finding
