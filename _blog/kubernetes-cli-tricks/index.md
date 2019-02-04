@@ -4,6 +4,7 @@ title: Kubernetes Command-Line Tricks
 date: 2019-01-24 12:00:00
 author: Daniel Weibel
 author_link: https://medium.com/@weibeld
+image: /blog/kubernetes-cli-tricks/magic.jpg
 categories: kubernetes kubectl command-line shell bash
 excerpt: fooo bar
 js:
@@ -12,14 +13,8 @@ js:
 open_graph:
   title: Kubernetes Command-Line Tricks
   type: article
-  image: 
+  image: /blog/kubernetes-cli-tricks/magic.jpg
 ---
-
-
-<!--more-->
-
-
-## What is `kubectl`?
 
 You probably know what you can do with `kubectl`, namely controlling and managing a Kubernetes cluster. But do you know what `kubectl` actually *is* from a technical point of view? The following diagram gives an overview:
 
@@ -29,7 +24,7 @@ To understand what `kubectl` is, you also need to have a rough idea how a Kubern
 
 Each component has a very specific job. For example, the **[etcd](https://coreos.com/etcd/) storage** component stores all the resource specifications that have been defined for a cluster (e.g. deployments, services, etc.). The **scheduler** component assigns pending pods to worker nodes for execution. The **kubelet** component, which runs on each worker node, runs the container(s) of a pod that has been assigned to its node by the scheduler.
 
-However, there is one very central component: the **API server**. The API server is the switching point for all interactions between components within the cluster, as well as the main entry point for interactions from outside the cluster. The individual components in a cluster don't talk to each other directly, but they communicate via the API server. Similarly, an external user (such as you) interacts with a cluster through the API server. 
+However, there is one very central component: the **API server**. The API server is the switching point for all interactions between components within the cluster, as well as the main entry point for interactions from outside the cluster. The individual components in a cluster don't talk to each other directly, but they communicate via the API server. Similarly, an external user (such as you) interacts with a cluster through the API server.
 
 The API server defines an HTTP REST API through which all these interactions happen. This is commonly known as the **Kubernetes API** and it is described [here](https://kubernetes.io/docs/reference/using-api/api-overview/) in the docs. Since it is a REST API, all Kubernetes operations are implemented as CRUD operations (create, read, update, delete) on Kubernetes **resource objects** (which are stored in the etcd component). The full specifications of these resource objects for the currently latest version of Kubernetes can be found [here](https://kubernetes.io/docs/reference/kubernetes-api/).
 
@@ -89,7 +84,7 @@ And that's it! After starting a new shell (or sourcing `~/.bashrc`), `kubectl` c
 
 On macOS, the story is (unfortunately) a bit more complicated. The reason for this is that Apple includes a completely outdated version of Bash in macOS. In particular, this is version 3.2 which dates from 2007 (you can test it on your Mac by running `bash --version`). Apple does this for licensing reasons: Bash 3.2 is the last version that uses the GPLv2 license, whereas later versions use GPLv3, and Apple is unwilling to accept GPLv3.
 
-The problem is that the `kubectl` completion script (that you generate with `kubectl completion bash`) does not work properly with Bash 3.2. It requires at least Bash 4.1. 
+The problem is that the `kubectl` completion script (that you generate with `kubectl completion bash`) does not work properly with Bash 3.2. It requires at least Bash 4.1.
 
 The only solution to this problem is to install a newer version of Bash on your Mac (the currently latest version is 5.0). This is actually not difficult and I wrote an entire article about it [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba). I recommend you to follow the steps in this article before proceeding.
 
@@ -142,7 +137,7 @@ This tip will prove useful for many of the subsequent tips in this post.
 
 As mentioned, you manage a Kubernetes cluster by applying CRUD operations on Kubernetes resource objects (for example, through `kubectl`). Each resource object has a specific hierarchical structure, which is described in the Kubernetes [API reference](https://kubernetes.io/docs/reference/kubernetes-api/). Often you need to know the structure of, say, a *pod*, to know the fields and sub-fields it has. However, hitting the web documentation each time to find this out is a tedious and time-consuming process.
 
-This is where `kubectl explain` comes in. This command contains the same information as the API reference web documentation, but it lets you access it conveniently from your command-line. 
+This is where `kubectl explain` comes in. This command contains the same information as the API reference web documentation, but it lets you access it conveniently from your command-line.
 
 For example, if you want to know which top-level fields the *pod* object has, you can issue the following command:
 
