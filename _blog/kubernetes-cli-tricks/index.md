@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Kubernetes Command-Line Tricks
+title: Advanced kubectl tips and tricks for power users
 date: 2019-01-24 12:00:00
 author: Daniel Weibel
 author_link: https://medium.com/@weibeld
@@ -11,7 +11,7 @@ js:
   - anime.min.js
   - isScrolledIntoView.js
 open_graph:
-  title: Kubernetes Command-Line Tricks
+  title: Advanced kubectl tips and tricks for power users
   type: article
   image: /blog/kubernetes-cli-tricks/magic.jpg
 ---
