@@ -33,7 +33,7 @@ All the source code for this application has been written in C#, built using dot
 The core focus has been to make the code readable to understand what is being achieved.
 To keep it simple, factors such as security have been left out, this will be addressed within future posts for best practices.
 
-## The case for Containers
+## The Case For Containers
 
 So why do we need to focus on containers when we're talking about scalability with orchestrator's?
 Aren't the orchestrator's powerful enough to manage my application regardless of what is running within it?
@@ -84,3 +84,20 @@ For this demo, all our code is written using C# and dotnet core.
 4) RabbitMQ
 5) C# Console Application
 6) MVC Website
+
+### Do I need to do anything differently if the code is in a container?
+
+If you can build and run your code locally, you'll be able to run it within a container.
+If you're running an application and you have to manually kill threads locally, will this work within a container?
+Yes, it will!  But your going to find problems down the line.
+
+### TopTip: When you build something, learn how to kill it
+
+Regardless of what part of your system this relates to, you should be able to create and delete parts of your system.
+For example, if you're creating a cluster, you should be able to have a command that can delete your cluster.
+If you create a console application, you should manage the `Ctrl + C` or `SIGTERM` event.
+Normally, containers will give containers 30 seconds notice before terminating an application.
+If you have a console application that is processing a lead, how do you manage this when the orchestrator fires the `Ctrl + C` event?
+Do you delete the process or wait for it to complete?  These are the decisions you should be making prior to moving to a container.
+Also, this will empower your team later on, as you'll know how to manage when you have an actual fire.
+
