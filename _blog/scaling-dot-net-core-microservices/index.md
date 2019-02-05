@@ -35,8 +35,8 @@ To keep it simple, factors such as security have been left out, this will be add
 
 ## The case for Containers
 
-So why do we need to focus on containers when we're talking about scalability with orchestrators?
-Aren't the orchestrators powerful enough to manage my application regardless of what is running within it?
+So why do we need to focus on containers when we're talking about scalability with orchestrator's?
+Aren't the orchestrator's powerful enough to manage my application regardless of what is running within it?
 
 The containers run microservices, if we implement bad code and practices, these will just grow when scaling the application.
 
@@ -59,7 +59,7 @@ Once the ticket is processed, the customer is redirected to a success page.
 
 ### Causes for concern
 
-When running the application locally, there are six services that are required:
+When running the application locally, there are six different services that are required:
 
 1) Front end website
 2) API
@@ -68,3 +68,19 @@ When running the application locally, there are six services that are required:
 5) Worker
 6) Worker monitor
 
+Looking at out application, lets assume that there is only a single instance of each of the services running.
+Is it a problem that the worker can only process a single ticket every 5 seconds?
+I'l be fine if we had a ticket once every 5 seconds, but usually people want to get a ticket at the same time.
+How long should we allow a user to wait prior to the ticket being completed?
+Should we scale the number of workers based on the number of tickets within the message queue?
+
+### Technology choices
+
+For this demo, all our code is written using C# and dotnet core.
+
+1) MVC Website
+2) MVC API
+3) Mongo DB
+4) RabbitMQ
+5) C# Console Application
+6) MVC Website
