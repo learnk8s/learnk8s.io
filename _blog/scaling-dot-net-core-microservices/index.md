@@ -133,7 +133,7 @@ When you have lots of images that need to run together then one option is Docker
 
 So far, everything we've spoken about has been based on a single computer.  Now I can guess what you're thinking...
 
-> But if all my code is running in production on one box, what happens when that dies?
+> But if all my code is running in production on one box, what happens when that dies?  
 > *Everyone, all the time.*
 
 If you're dependent on any one thing then you're getting ready for a bad time.
@@ -143,3 +143,60 @@ Orchestrator's are based on a declarative state, this means you declare of how m
 So if I want four instances of my website running, I'll get four.  If one instance dies another one will spin up.
 If another instance comes back to life and I have five websites running, then Kubernetes will send a kill command to one of the instances and get it back to four.
 This happens 24/7, without human interaction allowing you to stay asleep and enjoy your life away from a computer.
+
+### Setup the Application
+
+We pass `yaml` files to Kubernetes via `kubectl` to declare what state we want our application to run within.
+Lets get the application up and running, then we'll look into a solution for our scaling issue.
+
+### Minikube Vs Cloud
+
+Minikube creates a local Kubernetes cluster on your computer that you can manage yourself.
+How much does Minikube cost?  Nothing!  You're running it locally so this is one less thing to worry about.
+You shouldn't use Minikube to manage an actual deployment, I'd love to see a blog post about it.
+
+### Running in the Cloud
+
+Within this example we're going to use the Azure Kubernetes Service, or AKS for short.
+Kubernetes provides and abstraction on top of the cloud providers.
+We don't have to understand how to do all the buts under the hood, all we need to understand is how to manage Kubernetes.
+
+So lets setup our first AKS cluster
+
+```bash
+TODO: Azure client setup
+```
+
+```bash
+TODO: Setup the application
+```
+
+### How do I access the application
+
+We've had successful messages but how do we access the web application as a public user?
+We can look at our services to find an IP address that we could use.
+
+## Its time to scale
+
+We've got our application working in the cloud and have seen the power of `kubectl`, but we're essentially where we are when we started.
+Each of the services that we're running are within a single instance.
+LEts address that by updating our deployments to make sure we have at least 2 instances of each service running.  Why at least two?  The US Marines have a saying:
+
+> One is none, two is one.  
+> US Marines
+
+The basis of this means that you can never trust having a single instance, you need at least two to have the basics constantly being provided.
+
+```bash
+TODO: Deployments that scale
+```
+
+This is great as we can scale our application, but what happens when we want more than two instances?
+Throughout the day, you might expect to get peak traffic and trough traffic times.
+If the ticketing site was setup for a gig and tickets went on sale at 9am, we'd want more instances running at 9am that morning, not 9pm in the evening.
+
+### Horizontal Pod Autoscaling (HPA)
+
+What if we could monitor a metric, and then scale when the metric exceeds a certain value.
+Using tools like prometheus, we can scrape metric end points which can then be monitored by Kubernetes.
+Creating a HPA we have 
