@@ -194,7 +194,7 @@ You specify a comma-separated list of `<COL>:<PATH>` pairs, where `<COL>` is a c
 This is best explained with an example:
 
 ~~~bash
-$ kubectl get -o custom-columns='POD:.metadata.name,IMAGES:.spec.containers[*].image' pods
+$ kubectl get -o custom-columns="POD:.metadata.name,IMAGES:.spec.containers[*].image" pods
 POD                       IMAGES
 engine-544b6b6467-22qr6   foo/engine:0.0.1,foo/sidecar:0.0.1
 engine-544b6b6467-lw5t8   foo/engine:0.0.1,foo/sidecar:0.0.1
@@ -202,9 +202,15 @@ engine-544b6b6467-tvgmg   foo/engine:0.0.1,foo/sidecar:0.0.1
 web-ui-6db964458-8pdw4    foo/web-ui:0.0.1
 ~~~
 
-The above command displays the container images in each pod in the cluster (default namespace).
+This command displays the container images of each pod in the default namespace of the cluster.
 
 The output has two columns. The first column (entitled `POD`) contains the name of each pod, which is defined in the `pod.metadata.name` field of a pod resource object. The second column (entitled `IMAGES`) contains the names of all the container images in this pod, which are defined in the `pod.spec.containers[*].image` fields.
+
+For convenience, you can wrap this command in a shell alias, so that you can easily execute it, for example as `kgi` (standing for **k**ubectl **g**et **i**mages):
+
+~~~bash
+alias kgi='kubectl get -o custom-columns="POD:.metadata.name,IMAGES:.spec.containers[*].image" pods'
+~~~
 
 Note two things about using the `custom-columns` in general:
 
@@ -213,7 +219,7 @@ Note two things about using the `custom-columns` in general:
 
 Again, you can find out the nature of each field in a resource object (whether it's an object or a list, which sub-fields it contains, etc.) with the `kubectl explain` command.
 
-## Kubeconfig Contexts and Namespaces
+## Contexts and Namespaces
 
 `kubectl` depends on a type of configuration file called **kubeconfig file** (described [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) and [here](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) in the docs). A kubeconfig file contains all the information that `kubectl` needs to connect and authenticate to a Kubernetes cluster (more precisely, to the API server of a Kubernetes cluster).
 
@@ -487,13 +493,13 @@ But there's a better solution. There's a project called [*kubectl-aliases*](http
 
 > All aliases in *kubectl-aliases* work with both, Bash and Zsh.
 
-To install the project, just download the `.kubectl_aliases` file from the  GitHub repository [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba), and source it in your `~/*rc` file:
+To install the project, just download the `.kubectl_aliases` file (which contains all the alias definitions) from the  GitHub repository [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba), and source it in your `~/*rc` file:
 
 ~~~bash
 source ~/.kubectl_aliases
 ~~~
 
-You might wonder how you could possibly remember 800 aliases? Well, actually you don't need to. The aliases of *kubectl-aliases* are all auto-generated according to a simple scheme, which is shown in the following figure (taken from a [blog post](https://ahmet.im/blog/kubectl-aliases/) of the maker of the project):
+You might wonder how you could possibly remember 800 aliases? Well, actually you don't need to. The aliases in `.kubectl_aliases` are all auto-generated according to a simple scheme, which is shown in the following figure (taken from a [blog post](https://ahmet.im/blog/kubectl-aliases/) of the maker of the project):
 
 ![](kubectl-aliases.png)
 
@@ -508,7 +514,7 @@ And so on, for all the possible combinations. So, if you want to list all pods, 
 
 Nothing prevents you from using these aliases only as parts of your commands. For example, you can use `k` at any place where you would type `kubectl` otherwise. This means, you can type `k api-resources` (since there's no alias for this command as a whole). Or you can type `kg roles` (since there are no aliases defined for *role* resources). Just look at the command an alias stands for, and you can append further arguments to the alias at will. This allows you to minimise typing even fore use cases that are not explicitly covered by *kubectl-aliases*.
 
-If you use Zsh, it comes even better. The `kubectl` command completion works with the aliases too. That means, you can type, for example, `kgpo [tab][tab]` and Zsh will complete the available pod names for you. Like this, you can combine two typing reduction mechanisms (aliases and completion) to an "ultra typing reduction" workflow.
+If you use Zsh, it gets even better. The `kubectl` command completion works with the aliases too. That means, you can type, for example, `kgpo [tab][tab]` and Zsh will complete the available pod names for you. Like this, you can combine two typing reduction mechanisms (aliases and completion) to an "ultra typing reduction" workflow.
 
 If you use Bash, the bad news is that completion for aliases doesn't work by default. The good news is that you can make it working quite easily, which is explained in the following. This will allow you to have your "ultra typing reduction" workflow" also on Bash.
 
@@ -538,9 +544,7 @@ Installing *complete-alias* is done by simply downloading the project's [main fi
 source ~/.complete_alias
 ~~~
 
-Just make sure this comes *after* the command for sourcing the *bash-completion* file.
-
-Now, to enable completion for all the aliases of *kubectl-aliases*, you have to execute a command like `complete -F _complete_alias <alias>` for every alias of *kubectl-aliases*. You can do this by adding the following snippet to your `~/.bashrc` file (where `~/.kubectl_aliases` is the location of your *kubectl-aliases* file):
+Now, to enable completion for all the aliases of *kubectl-aliases*, you have to execute a command like `complete -F _complete_alias <alias>` for every alias of *kubectl-aliases*. You can do this by adding the following snippet to your `~/.bashrc` file (adapt `~/.kubectl_aliases` to the location of your *kubectl-aliases* file):
 
 ~~~bash
 for _a in $(sed '/^alias /!d;s/^alias //;s/=.*$//' ~/.kubectl_aliases); do
@@ -582,5 +586,109 @@ In case you wonder how the `_complete_alias` function can enable appropriate com
 
 <!--## Kubernetes Shells-->
 
-## Plugins
+## Extend kubectl with plugins
 
+Plugins are a `kubectl` feature that only few people know about. They have existed for a while, but the plugin system has been completely redesigned in **version 1.12** (released in September 2018) of `kubectl`. With the new plugin system, you can add custom sub-commands to `kubectl` as shown below:
+
+![](screencast-plugin-hello-world.gif)
+
+It is extremely easy to add plugins to `kubectl` and it can be explained in a single sentence:
+
+*Any executable with a name of `kubectl-<name>` (where `<name>` is any string) in any directory of your `PATH` is detected by `kubectl` as a plugin and made available as `kubectl <name>`.*
+
+For example, to create a hello-world plugin as shown above, all you have to do is the following:
+
+- Create an executable file named `kubectl-hello` (don't forget to set its executable flag with `chmod +x`):
+    ~~~bash
+    #!/bin/bash
+    echo "Hello, I'm a kubectl plugin!"
+    ~~~
+- Place the file in any directory of your `PATH`
+
+That's all! Now you can invoke the plugin with `kubectl hello`.
+
+The executable can be of any type: a shell script, a compiled C program, a Python script, and so on, there are no requirements. There is no interface against which you have to program, no plugin manifest to create, and no registration process. The only requirements are that the name of the executable starts with `kubectl-` and that it's located somewhere in your `PATH`.
+
+What technically happens when you run `kubectl hello` is that `kubectl` executes the corresponding `kubectl-hello` exectuable. The exectuable can do anything it wants, it doesn't even have to be related to Kubernetes (as the above example shows).
+
+Any arguments that you pass to a plugin are passed as-is to the executable. For example, if you run `kubectl hello -o opt` then the `-o` and `opt` arguments are passed to the `kubectl-hello` executable as if it was invoked with `kubectl-hello -o opt`. Furthermore, the plugin executable runs in the same environment as `kubectl`. That means, any environment variables that are available to `kubectl`, are also available to the plugin executable.
+
+There are the following further naming details for plugin executables:
+
+- An exectuable named `kubectl-foo-bar` is made available as `kubectl foo bar`.
+    - This allows you to create plugins with apparent sub-commands.
+- An exectuable named `kubectl-foo_bar` (note the underscore) is made available as `kubectl foo_bar` *and* `kubectl foo-bar`.
+    - This allows you to create plugins with dashes in their name.
+
+Last, but not least, `kubectl` provides the following command:
+
+~~~bash
+kubectl plugin list
+~~~
+
+This command lists all the plugins that `kubectl` detects in the `PATH` of your system. This gives you an overview of which plugins are available for you to use.
+
+The above command also includes warnings in case a plugin overshadows a native `kubectl` command or another plugin (you *can't* overwrite native `kubectl` commands with plugins, and if you have multiple plugins with the same name, the one used by `kubectl` is the one encountered first in the `PATH`).
+
+You can find the official description of the plugin mechanism [here](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/) in the Kubernetes docs.
+
+### Why plugins?
+
+So, if plugins are just execuables that are invoked by `kubectl`, why even bother with creating a plugin and not just executing the executable yourself? Instead of creating an executable named `kubectl-hello` and execute it as `kubectl hello`, you could just create an executable named `hello` and execute it directly. There would be effectively no difference.
+
+The main argument for plugins is to avoid "command overload" (something like app overload on smartphones). `kubectl` lends itself to create tools around it, and without plugins, each of these tools is a separate command. This clutters your system with many, possibly cryptically named, commands. On the other hand, if you design these tools as plugins, you have them all under the `kubectl` "namespace", and additionally you can get an overview of them with the `kubectl plugins list` command.
+
+Furthermore, if you distribute a tool to other users, distributing it as a plugin reduces the risk of name clashes with existing tools on the users' system.
+
+At the present time, the plugin mechanism does unfortunately not yet support **completion**. That means, you always have to fully type the plugin names, and can't complete them (e.g. `kubectl h[tab]`) like native `kubectl` sub-commands (see section [Shell Completion](#shell-completion)). However, there is an open [feature request](https://github.com/kubernetes/kubectl/issues/585) for this on GitHub, so hopefully we will see this feature some time in the future.
+
+### Creating plugins
+
+So far in this article, you have created a couple of convenience tools around kubectl. One example is the `kgi` alias from section [Custom Output Format](#custom-output-format) that displays the container image names of each pod in your cluster. As a reminder, this alias was defined as follows:
+
+~~~bash
+alias kgi='kubectl get -o custom-columns="POD:.metadata.name,IMAGES:.spec.containers[*].image" pods'
+~~~
+
+What about making this tool a kubectl plugin? For example, appropriately named `img`, so that you can run it as `kubectl img`?
+
+That's definitely a good idea, and probably better than having the cryptic `kgi` alias around. All you have to do for this is to create a shell script named `kubectl-img` as follows:
+
+~~~bash
+#!/bin/bash
+kubectl get -o custom-columns="POD:.metadata.name,IMAGES:.spec.containers[*].image" pods
+~~~
+
+Make the script executable:
+
+~~~bash
+chmod +x kubectl-img
+~~~
+
+And move it to any directory in your `PATH` (you could for example create a `~/.kubectl-plugins` directory, add it to the `PATH`, and collect all the kubectl plugin exectuables there).
+
+Now you can test whether the installation succeeed:
+
+~~~bash
+kubectl plugin list
+~~~
+
+And, if yes, you can start using your plugin:
+
+~~~bash
+kubectl img
+~~~
+
+Some other tools presented in this blog post include the aliases for changing the context and namespace from section [Contexts and Namespaces](contexts-and-namespaces). You could transform these tools into kubectl plugins exactly like the example above.
+
+I already did this, and created two plugins named `ctx` and `ns` for changing the context and namespace, respectively. You can find them on GitHub under [kubectl-ctx](https://github.com/weibeld/kubectl-ctx) and [kubectl-ns](https://github.com/weibeld/kubectl-ns). To install them, you simply need to download the exectuables and save them in any directory in your `PATH`.
+
+A nice thing when writing kubectl plugins is that you know that kubectl is installed on the user's system. This allows you to invoke kubectl from the plugin code, as in the examples above. In fact, many tasks can be solved by writing plugins as shell scripts that include invocations of kubectl.
+
+However, nothing stops you from writing plugins that get their task done without the help of kubectl (for example, if kubectl doesn't provide the functionality you need). For example, if your plugin needs to access the cluster, you could do it through one of the Kubernetes [client libraries](https://kubernetes.io/docs/reference/using-api/client-libraries/) that exist for different programming languages.
+
+If you use Go to write your plugin, then Kubernetes has you covered especially well. Kubectl uses a Go library called [*cli-runtime*](https://github.com/kubernetes/cli-runtime) under the hood for implementing its commands. This library provides many helper functions for interacting with the API server and the local *kubeconfig* configuration. If you write a plugin in Go, then you can use this same library too. There is also an official [example plugin](https://github.com/kubernetes/sample-cli-plugin) that uses this library.
+
+But remember that this is not a requirement. A plugin doesn't need to use this library, neither does it need to be written in Go. It can be any exectuable written in any programming or scripting language.
+
+### krew: a plugin package manager for kubectl
