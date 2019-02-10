@@ -1,6 +1,6 @@
 [build]
   base    = "."
   publish = "_site"
-  command = "npm install && jekyll build && npm run minify"
+  command = "npm install && jekyll build && npm run minify && npm run build"
 [context.deploy-preview]
-  command = "npm install && jekyll build && npm run minify && echo -e \"\nDisallow: /\" >> _site/robots.txt"
+  command = "npm install && jekyll build && npm run minify && echo -e \"\nDisallow: /\" >> _site/robots.txt && npm run build"

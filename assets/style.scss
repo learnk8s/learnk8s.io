@@ -467,3 +467,47 @@ green     #859900  operators, other keywords
   font-weight: normal;
   @extend .black-70, .absolute;
 }
+
+.module .details.toggle-collapse {
+  height: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.controls .close {
+  display: inline-block;
+}
+
+.controls .open {
+  display: none;
+}
+
+.module .controls.toggle-collapse .close {
+  display: none;
+}
+.module .controls.toggle-collapse .open {
+  display: inline-block;
+}
+
+.events .namerica,
+.events .europe,
+.events .asia {
+  display: none;
+}
+
+#namerica:checked ~ .legend .namerica,
+#all:checked ~ .legend .all,
+#europe:checked ~ .legend .europe,
+#asia:checked ~ .legend .asia {
+  font-weight: bold;
+  color: white;
+  background-color: #3a89c9;
+  border-bottom-color: #19507C;
+}
+
+#all:checked ~ .events li,
+#namerica:checked ~ .events .namerica,
+#europe:checked ~ .events .europe,
+#asia:checked ~ .events .asia {
+  display: block;
+}

@@ -3,15 +3,28 @@
   "version": "1.0.0",
   "description": "learnk8s.io static website",
   "scripts": {
-    "minify": "for i in `find _site -name \"*.html\" -type f`; do inline-source --root ./_site $i $i; done"
+    "minify": "for i in `find _site -name \"*.html\" -type f`; do inline-source --root ./_site $i $i; done",
+    "build": "npx ts-node --files src/index.tsx"
   },
   "author": "Learnk8s",
   "license": "MIT",
   "dependencies": {
+    "@types/marked": "^0.6.0",
+    "@types/md5": "^2.1.33",
+    "@types/react": "^16.8.2",
+    "@types/react-dom": "^16.8.0",
+    "@types/shelljs": "^0.8.2",
     "cheerio": "^1.0.0-rc.2",
+    "dayjs": "^1.8.5",
     "inline-source-cli": "^1.2.0",
-    "shelljs": "^0.8.1",
-    "tachyons-sass": "^4.9.0"
+    "marked": "^0.6.0",
+    "md5": "^2.2.1",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "shelljs": "^0.8.3",
+    "tachyons-sass": "^4.9.0",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.3.1"
   },
   "devDependencies": {}
 }
