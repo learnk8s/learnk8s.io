@@ -5,7 +5,7 @@
   "scripts": {
     "minify": "for i in `find _site -name \"*.html\" -type f`; do inline-source --root ./_site $i $i; done"
   },
-  "author": "Daniele Polencic",
+  "author": "Learnk8s",
   "license": "MIT",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
