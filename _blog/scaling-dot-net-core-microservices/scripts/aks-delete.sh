@@ -1,4 +1,4 @@
-#1 /bin/bash
+#! /bin/bash
 
 source variables.sh
 
