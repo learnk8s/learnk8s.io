@@ -29,7 +29,7 @@ Twitter recently created a valid point about Kubernetes:
 This is true, just because we *can* do this doesn't mean we have to do it.
 
 All the source code for this application has been written in C#, built using dotnet core to deploy onto Linux.
-The core focus has been to make the code readable to understand what is being achieved.
+The core focus has been to make the code readable to ubrew nderstand what is being achieved.
 To keep it simple, factors such as security have been left out, this will be addressed within future posts for best practices.
 
 ## Case Study
@@ -161,7 +161,10 @@ Within this example we're going to use the Azure Kubernetes Service, or AKS for 
 Kubernetes provides and abstraction on top of the cloud providers.
 We don't have to understand how to do all the buts under the hood, all we need to understand is how to manage Kubernetes.
 
-So lets setup our first AKS cluster
+So lets setup our first AKS cluster.
+
+To do this, you need to have access to the `azure-cli`, [click here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) to find relevant documentation to install locally.
+Alternatively, you can use the azure client via the [Azure Portal](https://portal.azure.com).
 
 ```bash
 TODO: Azure client setup
