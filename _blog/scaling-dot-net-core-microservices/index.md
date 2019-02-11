@@ -166,12 +166,73 @@ So lets setup our first AKS cluster.
 To do this, you need to have access to the `azure-cli`, [click here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) to find relevant documentation to install locally.
 Alternatively, you can use the azure client via the [Azure Portal](https://portal.azure.com).
 
-```bash
-TODO: Azure client setup
-```
+To keep track of some of the values we're going to be passing through the scripts, a `variables.sh` has been created to export names:
+
+`variables.sh`
 
 ```bash
-TODO: Setup the application
+$ export RESOURCE_GROUP=ticketingGroup
+$ export CLUSTER_NAME=ticketingAKSCluster
+$ export AKS_VM_GROUP=MC_${RESOURCE_GROUP}_${CLUSTER_NAME}_EASTUS
+```
+
+No we can create our AKS cluster using the following script:
+
+`aks-setup.sh`
+
+```bash
+# Provision AKS Cluster
+
+source variables.sh
+
+set -x
+
+az group create --name ${RESOURCE_GROUP} --location eastus
+az aks create \
+    --resource-group ${RESOURCE_GROUP} \
+    --name ${CLUSTER_NAME} \
+    --node-count 2 \
+    --enable-addons monitoring \
+    --generate-ssh-keys
+az aks install-cli
+$ az aks get-credentials --resource-group ${RESOURCE_GROUP} --name ${CLUSTER_NAME}
+Merged "ticketingAKSCluster" as current context in /Users/denhamparry/.kube/config
+$ kubectl get nodes
+NAME                       STATUS    ROLES     AGE       VERSION
+aks-nodepool1-17629832-0   Ready     agent     8m        v1.9.11
+aks-nodepool1-17629832-1   Ready     agent     8m        v1.9.11
+```
+
+We've created a resource group named `ticketingGroup`, this will allow us to delete all associated resources at the end of the tutorial.
+An AKS cluster called `ticketingAKSCluster` which has 2 nodes.
+We make sure `kubectl` has been setup locally and then get credentials to the cluster.
+Finally, we check to see that the nodes are ready.
+
+### Setup Helm
+
+TODO: Send link to install Helm locally.
+
+Now we need to create a `tiller` on our cluster:
+
+`helm-setup.sh`
+
+```bash
+$ kubectl -n kube-system create serviceaccount tiller
+serviceaccount "tiller" created
+$ kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+clusterrolebinding "tiller" created
+$ helm init --service-account tiller
+$HELM_HOME has been configured at /Users/denhamparry/.helm.
+
+Tiller (the Helm server-side component) has been installed into your Kubernetes Cluster.
+
+Please note: by default, Tiller is deployed with an insecure 'allow unauthenticated users' policy.
+To prevent this, run `helm init` with the --tiller-tls-verify flag.
+For more information on securing your installation see: https://docs.helm.sh/using_helm/#securing-your-helm-installation
+Happy Helming!
+$ kubectl get pods --namespace kube-system
+NAME                                   READY     STATUS              RESTARTS   AGE
+tiller-deploy-9bdb7c6bc-86cwt          0/1       ContainerCreating   0          0s
 ```
 
 ### How do I access the application
