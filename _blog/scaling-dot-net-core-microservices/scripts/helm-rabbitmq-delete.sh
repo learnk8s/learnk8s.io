@@ -1,3 +1,3 @@
 #! /bin/bash
 
-helm delete ticketing-queue
+helm del --purge ticketing-queue
