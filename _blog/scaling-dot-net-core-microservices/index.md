@@ -212,6 +212,8 @@ Finally, we check to see that the nodes are ready.
 
 TODO: Send link to install Helm locally.
 
+* [Reference](https://www.digitalocean.com/community/tutorials/how-to-install-software-on-kubernetes-clusters-with-the-helm-package-manager#step-2-—-installing-tiller).
+
 Now we need to create a `tiller` on our cluster:
 
 `helm-setup.sh`
@@ -233,6 +235,75 @@ Happy Helming!
 $ kubectl get pods --namespace kube-system
 NAME                                   READY     STATUS              RESTARTS   AGE
 tiller-deploy-9bdb7c6bc-86cwt          0/1       ContainerCreating   0          0s
+```
+
+### Helm - RabbitMQ
+
+```bash
+$ helm install --name ticketing-queue stable/rabbitmq
+NAME:   ticketing-queue
+LAST DEPLOYED: Tue Feb 12 09:28:56 2019
+NAMESPACE: default
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/ServiceAccount
+NAME                      SECRETS  AGE
+ticketing-queue-rabbitmq  1        1s
+
+==> v1/Role
+NAME                                      AGE
+ticketing-queue-rabbitmq-endpoint-reader  1s
+
+==> v1/RoleBinding
+NAME                                      AGE
+ticketing-queue-rabbitmq-endpoint-reader  1s
+
+==> v1/Service
+NAME                               TYPE       CLUSTER-IP   EXTERNAL-IP  PORT(S)                                AGE
+ticketing-queue-rabbitmq-headless  ClusterIP  None         <none>       4369/TCP,5672/TCP,25672/TCP,15672/TCP  1s
+ticketing-queue-rabbitmq           ClusterIP  10.0.44.105  <none>       4369/TCP,5672/TCP,25672/TCP,15672/TCP  1s
+
+==> v1beta2/StatefulSet
+NAME                      DESIRED  CURRENT  AGE
+ticketing-queue-rabbitmq  1        1        1s
+
+==> v1/Pod(related)
+NAME                        READY  STATUS             RESTARTS  AGE
+ticketing-queue-rabbitmq-0  0/1    ContainerCreating  0         1s
+
+==> v1/Secret
+NAME                      TYPE    DATA  AGE
+ticketing-queue-rabbitmq  Opaque  2     2s
+
+==> v1/ConfigMap
+NAME                             DATA  AGE
+ticketing-queue-rabbitmq-config  2     1s
+
+
+NOTES:
+
+** Please be patient while the chart is being deployed **
+
+Credentials:
+
+    Username      : user
+    echo "Password      : $(kubectl get secret --namespace default ticketing-queue-rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)"
+    echo "ErLang Cookie : $(kubectl get secret --namespace default ticketing-queue-rabbitmq -o jsonpath="{.data.rabbitmq-erlang-cookie}" | base64 --decode)"
+
+RabbitMQ can be accessed within the cluster on port  at ticketing-queue-rabbitmq.default.svc.cluster.local
+
+To access for outside the cluster, perform the following steps:
+
+To Access the RabbitMQ AMQP port:
+
+    kubectl port-forward --namespace default svc/ticketing-queue-rabbitmq 5672:5672
+    echo "URL : amqp://127.0.0.1:5672/"
+
+To Access the RabbitMQ Management interface:
+
+    kubectl port-forward --namespace default svc/ticketing-queue-rabbitmq 15672:15672
+    echo "URL : http://127.0.0.1:15672/"
 ```
 
 ### How do I access the application
