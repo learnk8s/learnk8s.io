@@ -306,6 +306,60 @@ To Access the RabbitMQ Management interface:
     echo "URL : http://127.0.0.1:15672/"
 ```
 
+### Helm - Mongo DB
+
+```bash
+$ helm install --name ticketing-db stable/mongodb
+NAME:   ticketing-db
+LAST DEPLOYED: Tue Feb 12 09:39:34 2019
+NAMESPACE: default
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/Pod(related)
+NAME                                   READY  STATUS   RESTARTS  AGE
+ticketing-db-mongodb-7775d8c89b-hxhp8  0/1    Pending  0         1s
+
+==> v1/Secret
+NAME                  TYPE    DATA  AGE
+ticketing-db-mongodb  Opaque  1     1s
+
+==> v1/PersistentVolumeClaim
+NAME                  STATUS   VOLUME   CAPACITY  ACCESS MODES  STORAGECLASS  AGE
+ticketing-db-mongodb  Pending  default  1s
+
+==> v1/Service
+NAME                  TYPE       CLUSTER-IP    EXTERNAL-IP  PORT(S)    AGE
+ticketing-db-mongodb  ClusterIP  10.0.139.226  <none>       27017/TCP  1s
+
+==> v1beta1/Deployment
+NAME                  DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE
+ticketing-db-mongodb  1        1        1           0          1s
+
+
+NOTES:
+
+
+** Please be patient while the chart is being deployed **
+
+MongoDB can be accessed via port 27017 on the following DNS name from within your cluster:
+
+    ticketing-db-mongodb.default.svc.cluster.local
+
+To get the root password run:
+
+    export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace default ticketing-db-mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
+
+To connect to your database run the following command:
+
+    kubectl run --namespace default ticketing-db-mongodb-client --rm --tty -i --restart='Never' --image bitnami/mongodb --command -- mongo admin --host ticketing-db-mongodb --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD
+
+To connect to your database from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace default svc/ticketing-db-mongodb 27017:27017 &
+    mongo --host 127.0.0.1 --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
+```
+
 ### How do I access the application
 
 We've had successful messages but how do we access the web application as a public user?
