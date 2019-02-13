@@ -592,35 +592,37 @@ Plugins are a `kubectl` feature that only few people know about. They have exist
 
 ![](screencast-plugin-hello-world.gif)
 
-It is extremely easy to add plugins to `kubectl` and it can be explained in a single sentence:
+Plugins are described [here](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/) in the Kubernetes documentation.
 
-*Any executable with a name of `kubectl-<name>` (where `<name>` is any string) in any directory of your `PATH` is detected by `kubectl` as a plugin and made available as `kubectl <name>`.*
+It is very easy to install kubectl plugins, and it can be explained in a single sentence (there are some further minor details to this, which are explained later): 
 
-For example, to create a hello-world plugin as shown above, all you have to do is the following:
+*Any executable named `kubectl-<name>` (where `<name>` is any string) in any directory of your `PATH` is detected by `kubectl` as a plugin and made available as `kubectl <name>`.*
 
-- Create an executable file named `kubectl-hello` (don't forget to set its executable flag with `chmod +x`):
+The executable can be of any type: a shell script, a compiled C program, a Python script, and so on, there are no requirements. There is no interface against which you have to program, no plugin manifest to create, and no registration process. The only requirements are that the name of the executable starts with `kubectl-` and that it's located somewhere in your `PATH`.
+
+For example, to create a "Hello World" plugin as shown above, all you have to do is the following:
+
+- Create an executable file named `kubectl-hello`, for example as a shell script (don't forget to set its executable flag with `chmod +x`):
     ~~~bash
     #!/bin/bash
     echo "Hello, I'm a kubectl plugin!"
     ~~~
 - Place the file in any directory of your `PATH`
 
-That's all! Now you can invoke the plugin with `kubectl hello`.
+That's all! Now you can invoke your plugin with `kubectl hello`.
 
-The executable can be of any type: a shell script, a compiled C program, a Python script, and so on, there are no requirements. There is no interface against which you have to program, no plugin manifest to create, and no registration process. The only requirements are that the name of the executable starts with `kubectl-` and that it's located somewhere in your `PATH`.
+What technically happens when you run `kubectl hello` is that `kubectl` executes the corresponding `kubectl-hello` executable. The executable can do anything it wants, it doesn't even have to be related to Kubernetes (as the above example shows).
 
-What technically happens when you run `kubectl hello` is that `kubectl` executes the corresponding `kubectl-hello` exectuable. The exectuable can do anything it wants, it doesn't even have to be related to Kubernetes (as the above example shows).
+Any arguments that you pass to a plugin are passed as-is to the executable. For example, if you run `kubectl hello -o opt` then the `-o` and `opt` arguments are passed to the `kubectl-hello` executable as the first and second arguments, as if it was invoked with `kubectl-hello -o opt`. Furthermore, the plugin executable runs in the same environment as `kubectl`. That means, any environment variables that are available to `kubectl`, are also available to the plugin executable.
 
-Any arguments that you pass to a plugin are passed as-is to the executable. For example, if you run `kubectl hello -o opt` then the `-o` and `opt` arguments are passed to the `kubectl-hello` executable as if it was invoked with `kubectl-hello -o opt`. Furthermore, the plugin executable runs in the same environment as `kubectl`. That means, any environment variables that are available to `kubectl`, are also available to the plugin executable.
+There are the following further details about kubectl plugins:
 
-There are the following further naming details for plugin executables:
-
-- An exectuable named `kubectl-foo-bar` is made available as `kubectl foo bar`.
-    - This allows you to create plugins with apparent sub-commands.
-- An exectuable named `kubectl-foo_bar` (note the underscore) is made available as `kubectl foo_bar` *and* `kubectl foo-bar`.
+- If the executable is named `kubectl-foo-bar`, it is made available as `kubectl foo bar`.
+    - This allows you to create plugins that appear to have sub-commands.
+- If the executable is named `kubectl-foo_bar` (note the underscore), it is made available as `kubectl foo_bar` *and* `kubectl foo-bar`.
     - This allows you to create plugins with dashes in their name.
 
-Last, but not least, `kubectl` provides the following command:
+Kubectl provides a single native command that is related to plugins:
 
 ~~~bash
 kubectl plugin list
@@ -628,67 +630,136 @@ kubectl plugin list
 
 This command lists all the plugins that `kubectl` detects in the `PATH` of your system. This gives you an overview of which plugins are available for you to use.
 
-The above command also includes warnings in case a plugin overshadows a native `kubectl` command or another plugin (you *can't* overwrite native `kubectl` commands with plugins, and if you have multiple plugins with the same name, the one used by `kubectl` is the one encountered first in the `PATH`).
-
-You can find the official description of the plugin mechanism [here](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/) in the Kubernetes docs.
+The above command also includes warnings if a plugin has the same name as a native `kubectl` command (in which case the plugin will be ignored) or if there are multiple plugins with the same name (in which case, the plugin that appears first in the `PATH` will be used.
 
 ### Why plugins?
 
-So, if plugins are just execuables that are invoked by `kubectl`, why even bother with creating a plugin and not just executing the executable yourself? Instead of creating an executable named `kubectl-hello` and execute it as `kubectl hello`, you could just create an executable named `hello` and execute it directly. There would be effectively no difference.
+So, if plugins are just executables that are invoked by `kubectl`, why even bother with creating a plugin and not just executing the executable yourself? Instead of creating an executable named `kubectl-hello` and run it as `kubectl hello`, you could just create an executable named `hello` and execute it directly. There would be effectively no difference.
 
-The main argument for plugins is to avoid "command overload" (something like app overload on smartphones). `kubectl` lends itself to create tools around it, and without plugins, each of these tools is a separate command. This clutters your system with many, possibly cryptically named, commands. On the other hand, if you design these tools as plugins, you have them all under the `kubectl` "namespace", and additionally you can get an overview of them with the `kubectl plugins list` command.
+The main argument to use the plugin system is to avoid "command overload" (something like app overload on smartphones). Kubectl lends itself to create tools around it, and without plugins, each of these tools is a separate command. This clutters your system with many, often cryptically named, commands. If you design these tools as plugins, you have them all under the `kubectl` "namespace", which makes it easier to remember and give meaningful names to them. In addition, you can get an overview of all the plugins you are using at any time with the `kubectl plugins list` command.
 
-Furthermore, if you distribute a tool to other users, distributing it as a plugin reduces the risk of name clashes with existing tools on the users' system.
+Furthermore, if you want to distribute a tool to other users, distributing it as a plugin reduces the risk of name clashes with existing tools on the users' system.
 
-At the present time, the plugin mechanism does unfortunately not yet support **completion**. That means, you always have to fully type the plugin names, and can't complete them (e.g. `kubectl h[tab]`) like native `kubectl` sub-commands (see section [Shell Completion](#shell-completion)). However, there is an open [feature request](https://github.com/kubernetes/kubectl/issues/585) for this on GitHub, so hopefully we will see this feature some time in the future.
+At the present time, the plugin mechanism does unfortunately not yet support **completion**. That means, you always have to fully type the plugin names, and can't complete them like native `kubectl` sub-commands (e.g. `kubectl h[tab]` does not complete to `kubectl hello`). However, there is an open [feature request](https://github.com/kubernetes/kubectl/issues/585) for this on GitHub, so hopefully we will see this feature some time in the future.
 
-### Creating plugins
+### Creating and installing plugins
 
-So far in this article, you have created a couple of convenience tools around kubectl. One example is the `kgi` alias from section [Custom Output Format](#custom-output-format) that displays the container image names of each pod in your cluster. As a reminder, this alias was defined as follows:
+So far in this article, you have created a couple of convenience tools around kubectl. One example is the `kgi` alias from section [Custom Output Format](#custom-output-format) that displays the container image names n each pod of your cluster. As a reminder, this alias was defined as follows:
 
 ~~~bash
 alias kgi='kubectl get -o custom-columns="POD:.metadata.name,IMAGES:.spec.containers[*].image" pods'
 ~~~
 
-What about making this tool a kubectl plugin? For example, appropriately named `img`, so that you can run it as `kubectl img`?
+What about making this tool a  plugin named `img`, so that you can execute it as `kubectl img`? That's definitely a good alternative to having the cryptic `kgi` alias around.
 
-That's definitely a good idea, and probably better than having the cryptic `kgi` alias around. All you have to do for this is to create a shell script named `kubectl-img` as follows:
+All you have to do transform this command to a plugin is the following:
 
-~~~bash
-#!/bin/bash
-kubectl get -o custom-columns="POD:.metadata.name,IMAGES:.spec.containers[*].image" pods
-~~~
+- Add the alias command to a shell script named `kubectl-img`:
+    ~~~bash
+    #!/bin/bash
+    kubectl get -o custom-columns="POD:.metadata.name,IMAGES:.spec.containers[*].image" pods
+    ~~~
+- Make `kubectl-img` executable:
+    ~~~bash
+    chmod +x kubectl-img
+    ~~~
+- Move `kubectl-img` to any directory in your `PATH`
+- Verify the installation by checking that the plugin is listed in the output of the following command:
+    ~~~bash
+    kubectl plugin list
+    ~~~
 
-Make the script executable:
+That's it! Now you should be able to execute your container image listing plugin with `kubectl img`.
 
-~~~bash
-chmod +x kubectl-img
-~~~
+Some other tools that you created in this article include the aliases for changing the context and namespace from section [Contexts and Namespaces](contexts-and-namespaces). You can transform these tools into plugins exactly like the example above.
 
-And move it to any directory in your `PATH` (you could for example create a `~/.kubectl-plugins` directory, add it to the `PATH`, and collect all the kubectl plugin exectuables there).
+Alternatively, I did this already and created two plugins named `ctx` and `ns`, for changing the context and namespace, respectively. You can find them on GitHub:
 
-Now you can test whether the installation succeeed:
+- [weibeld/kubectl-ctx](https://github.com/weibeld/kubectl-ctx)
+- [weibeld/kubectl-ns](https://github.com/weibeld/kubectl-ns)
 
-~~~bash
-kubectl plugin list
-~~~
+You can install these plugins on your system by simply downloading the [kubectl-ctx](https://raw.githubusercontent.com/weibeld/kubectl-ctx/master/kubectl-ctx) or [kubectl-ns](https://raw.githubusercontent.com/weibeld/kubectl-ns/master/kubectl-ns) and place it in any directory in your `PATH`.
 
-And, if yes, you can start using your plugin:
+If you end up installing many plugins, a possible approach for keeping things organised is to create a dedicated directory, e.g. `~/.kubectl-plugins`, add it to your `PATH`, and then install all plugin executables there.
 
-~~~bash
-kubectl img
-~~~
+### How to write plugins
 
-Some other tools presented in this blog post include the aliases for changing the context and namespace from section [Contexts and Namespaces](contexts-and-namespaces). You could transform these tools into kubectl plugins exactly like the example above.
+The plugins you saw so far are simple shell scripts that include invocations of kubectl. So there, you have basically a sub-command of kubectl that invokes the main command. This is completely legitimate, and made possible by the fact that a plugin executable can be sure that kubectl is installed on the local system (otherwise, the plugin executable couldn't be used as a kubectl plugin).
 
-I already did this, and created two plugins named `ctx` and `ns` for changing the context and namespace, respectively. You can find them on GitHub under [kubectl-ctx](https://github.com/weibeld/kubectl-ctx) and [kubectl-ns](https://github.com/weibeld/kubectl-ns). To install them, you simply need to download the exectuables and save them in any directory in your `PATH`.
+In fact, many common use cases can be solved by plugins that are implemented as shell scripts that carry out kubectl command.
 
-A nice thing when writing kubectl plugins is that you know that kubectl is installed on the user's system. This allows you to invoke kubectl from the plugin code, as in the examples above. In fact, many tasks can be solved by writing plugins as shell scripts that include invocations of kubectl.
+However, for more complex use cases, nothing stops you from writing plugins as real programs that get their job done without kubectl. If your plugin needs to interact with the Kubernetes API server, you can use one of the Kubernetes [client libraries](https://kubernetes.io/docs/reference/using-api/client-libraries/) (note that kubectl itself is nothing but a program that uses a Kubernetes client library to interact with the Kubernetes API server, namely the [client-go](https://github.com/kubernetes/client-go) library).
 
-However, nothing stops you from writing plugins that get their task done without the help of kubectl (for example, if kubectl doesn't provide the functionality you need). For example, if your plugin needs to access the cluster, you could do it through one of the Kubernetes [client libraries](https://kubernetes.io/docs/reference/using-api/client-libraries/) that exist for different programming languages.
+If you decide to write your plugin in Go, then Kubernetes has you covered especially well. Kubernetes provides a library called [*cli-runtime*](https://github.com/kubernetes/cli-runtime) which includes helper functionality for interacting with the API server, working with local *kubeconfig* configuration, and more. This library is used by kubectl itself to implement its sub-commands, and if you write a plugin in Go, then you can use it too. There exists also an [example plugin](https://github.com/kubernetes/sample-cli-plugin) that uses this library.
 
-If you use Go to write your plugin, then Kubernetes has you covered especially well. Kubectl uses a Go library called [*cli-runtime*](https://github.com/kubernetes/cli-runtime) under the hood for implementing its commands. This library provides many helper functions for interacting with the API server and the local *kubeconfig* configuration. If you write a plugin in Go, then you can use this same library too. There is also an official [example plugin](https://github.com/kubernetes/sample-cli-plugin) that uses this library.
+But remember that this is not a requirement. A plugin does neither have to use the *cli-runtime* library, nor does it have to be written in Go. It can be *any* executable.
 
-But remember that this is not a requirement. A plugin doesn't need to use this library, neither does it need to be written in Go. It can be any exectuable written in any programming or scripting language.
+### krew: a package manager for kubectl plugins
 
-### krew: a plugin package manager for kubectl
+So far you have seen that you can create and install your own plugins or you can install plugins that others created. If you want to do the latter, you might have the followin questions:
+
+- Where can I find available plugins?
+- How do I have to install each plugin?
+- How can I keep installed plugins up-to-date?
+
+There is a community project called [*krew*](https://github.com/GoogleContainerTools/krew) that attempts to solve these problems. *Krew* is a package manager for kubectl plugins (its name is a reference to [*brew*](https://brew.sh/), a package manager for macOS). 
+
+*Krew* maintains an index of kubectl plugins to which plugin developers can add their plugins. As a plugin user, you can easily discover all the plugins in this index and install (and upgrade) them in standardised procedure.
+
+
+The *krew* tool is provided as a kubectl plugin itself. You can install it as described [here](https://github.com/GoogleContainerTools/krew#installation) in the official instructions.
+
+Once installed, you can use *krew* as follows:
+
+- List all plugins in the *krew* index:
+    ~~~bash
+    kubectl krew search
+    ~~~
+- List all plugins that match a search query:
+    ~~~bash
+    kubectl krew search <query>
+    ~~~
+- Get information about a specific plugin:
+    ~~~bash
+    kubectl krew info <plugin>
+    ~~~
+- Install a specific plugin:
+    ~~~bash
+    kubectl krew install <plugin>
+    ~~~
+- List all plugins installed with *krew*:
+    ~~~bash
+    kubectl krew list
+    ~~~
+- Upgrade all plugins (if new versions are available):
+    ~~~bash
+    kubectl krew upgrade 
+    ~~~
+- Uninstall a specific plugin:
+    ~~~bash
+    kubectl krew remove <plugin>
+    ~~~
+
+As you can see, this makes it really easy to manage kubectl plugins on your system. Note that using *krew* doesn't exclude the installation of plugins in the conventional way. If you use *krew*, you can still install plugins that are not in the *krew* index by simply copying their executables to your `PATH`. These plugins will not be listed by `kubectl krew list`, but they will be listed by the native `kubectl plugin list`.
+
+As a side note, *krew* is still in an early stage (like the plugin system as a whole), and at the moment there are about 30 plugins in the *krew* index. However, the project has gained promising traction, and there have even been [attempts](https://github.com/kubernetes/community/pull/2340) to add it natively to kubectl. So, it is definitely worth keeping an eye on!
+
+#### Distribute your own plugins via krew
+
+If you created a plugin and want to add it to the *krew* index, so that other users can discover and install it via *krew*, you can do that. The instructions for this can be found in the [developer guide](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md) of the *krew* documentation.
+
+In short, you have create two artefacts for publishing your plugin to *krew*:
+
+- A `.zip` or `.tar.gz` archive containing the executables of your plugin (possibly for different platforms)
+- A *krew* [plugin manifest](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md#writing-a-plugin-manifest) YAML file
+
+The **archive** with the executables must be publicly downloadable via a URL. You can achieve this, for example, by adding it as a binary to a GitHub [release](https://help.github.com/articles/creating-releases/).
+
+The **plugin manifest** must contain all the required information for *krew* to install the plugin. This includes the URL of the archive with the executables, and the names of the executables to install for each platform. The plugin manifest is what will be uploaded to the *krew* index.
+
+To publish your plugin to the *krew* index, you have to create a pull request to the [krew-index](https://github.com/GoogleContainerTools/krew-index) repository adding your plugin manifest to the [`plugins`](https://github.com/GoogleContainerTools/krew-index/tree/master/plugins) directory of this repository. This is were the manifests of all the plugins in the *krew* index are maintained.
+
+Once the pull request is accepted, you plugin will be publicly listed by `kubectl krew search` and users can install it with `kubectl install <plugin>`. If you create a new version of your plugin, you have to update your plugin manifest in the krew-index repository with a new pull request.
+
+Again, the detailed instructions for publishing plugins to *krew* can be found in the *krew* [developer guide](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md).
+
