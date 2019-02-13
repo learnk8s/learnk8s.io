@@ -3,7 +3,9 @@ import { LinkedNode, Page, TrainingPage } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, InlineMarkdown, SpecialListItem, Testimonal} from './layout'
 import dayjs from 'dayjs'
 import {Image, Img, Script, Javascript} from './assets'
-import { PrimaryButton } from './homepage';
+import { PrimaryButton } from './homepage'
+import { Course, CourseInstance, Boolean } from 'schema-dts'
+import { JsonLd } from 'react-schemaorg'
 
 const benefits = [
   '**Get started with Kubernetes in your next project** and you need to quickly get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices',
@@ -189,13 +191,58 @@ export const assets = {
     previewState: Image({url: 'assets/training/state.png', description: 'Managing state with Kubernetes'}),
     previewTemplating: Image({url: 'assets/training/templating.png', description: 'Templating Kubernetes resources'}),
     previewOptionals: Image({url: 'assets/training/optionals.png', description: 'Optional modules'}),
-    toggle: Javascript({script: `(${CreateToggle.toString()})()`})
+    toggle: Javascript({script: `(${CreateToggle.toString()})()`}),
+    openGraphPreview: Image({url: '', description: 'Learnk8s preview'}),
   },
   layout: layoutAssets,
 }
 
 export const Training: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<TrainingPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
   return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+    <JsonLd<Course> item={{
+      '@type': 'Course',
+      '@context': 'https://schema.org',
+      name: 'Advanced Kubernetes training',
+      description: 'Learn how to deploy and scale applications with Kubernetes.',
+      educationalCredentialAwarded: 'CKA or CKAD (optional)',
+      hasCourseInstance: events.map(it => ({
+        '@type': 'CourseInstance',
+        name: it.title,
+        description: 'Learn how to deploy and scale applications with Kubernetes.',
+        courseMode: (function(location): string {
+          switch(location) {
+            case Location.ONLINE:
+              return 'online'
+            default:
+              return 'full-time'
+          }
+        })(it.location),
+        duration: (function(days): any {
+          switch(days) {
+            case Days.TWO_DAYS:
+              return 'P2D'
+            default:
+            case Days.THREE_DAYS:
+              return 'P3D'
+          }
+        })(it.courseInDays),
+        inLanguage: 'English',
+        startDate: it.date.toISOString(),
+        endDate: it.date.add(3, ('days' as any)).toISOString(),
+        location: {
+          address: it.location
+        },
+        isAccessibleForFree: Boolean.False,
+        offers: {
+          '@type': 'Offer',
+          price: it.price
+        },
+        image: currentPage.payload.pageDetails.image,
+        performer: {
+          name: 'Learnk8s'
+        }
+      } as CourseInstance)),
+    }}></JsonLd>
     <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
 
       <Navbar root={root} assets={assets.layout}/>

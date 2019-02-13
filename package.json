@@ -21,6 +21,8 @@
     "md5": "^2.2.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
+    "react-schemaorg": "^0.1.0",
+    "schema-dts": "^0.3.1",
     "shelljs": "^0.8.3",
     "tachyons-sass": "^4.9.0",
     "ts-node": "^8.0.2",
