@@ -16,32 +16,37 @@ open_graph:
   image: /blog/kubernetes-cli-tricks/magic.jpg
 ---
 
-You probably know what you can do with `kubectl`, namely controlling and managing a Kubernetes cluster. But do you know what `kubectl` actually *is* from a technical point of view? The following diagram gives an overview:
+## Understanding what kubectl is
+
+You probably know what you can do with kubectl, namely controlling and managing a Kubernetes cluster. But do you know what kubectl actually is from a technical point of view? The following diagram gives an overview:
 
 ![](what-is-kubectl.png)
 
-To understand what `kubectl` is, you also need to have a rough idea how a Kubernetes cluster works. Kubernetes itself consists of various independent **components**. Some of them are control plane components and they usually run on one or more dedicated master nodes of the cluster. Other components run on each worker node of a cluster.
+To understand what kubectl is, you also need to have a rough idea how Kubernetes works.
 
-Each component has a very specific job. For example, the **[etcd](https://coreos.com/etcd/) storage** component stores all the resource specifications that have been defined for a cluster (e.g. deployments, services, etc.). The **scheduler** component assigns pending pods to worker nodes for execution. The **kubelet** component, which runs on each worker node, runs the container(s) of a pod that has been assigned to its node by the scheduler.
+Kubernetes itself consists of a set of independent **components** that run on different nodes of a cluster. A subset of these components are **control plane components** and they usually run on one or more dedicated nodes that only run control plane components and don't execute any workloads. These nodes are called master nodes. The remaining components are **worker nodes components**, and they run on those nodes of the cluster that execute the application workloads. These nodes are called worker nodes.
 
-However, there is one very central component: the **API server**. The API server is the switching point for all interactions between components within the cluster, as well as the main entry point for interactions from outside the cluster. The individual components in a cluster don't talk to each other directly, but they communicate via the API server. Similarly, an external user (such as you) interacts with a cluster through the API server.
+Each component has a very specific job. For example, the **[etcd](https://coreos.com/etcd/)** component (a control plane component) stores all the resource specifications that have been defined for the cluster, such as pods and services. The **scheduler** component (a control plane component) assigns pending pods to worker nodes for execution. The **kubelet** component (a worker node component) is responsible for running the container(s) of a pod that has been assigned to its node by the scheduler.
 
-The API server defines an HTTP REST API through which all these interactions happen. This is commonly known as the **Kubernetes API** and it is described [here](https://kubernetes.io/docs/reference/using-api/api-overview/) in the docs. Since it is a REST API, all Kubernetes operations are implemented as CRUD operations (create, read, update, delete) on Kubernetes **resource objects** (which are stored in the etcd component). The full specifications of these resource objects for the currently latest version of Kubernetes can be found [here](https://kubernetes.io/docs/reference/kubernetes-api/).
+However, there is one very important component that I didn't mention yet: the **API server**. The API server is the switching point for all interactions between components within the cluster, as well as the main entry point for interactions from outside the cluster. The individual components in a cluster don't talk to each other directly, but they only talk to the API server (in fact components don't even know about each others' existence). Similarly, an external user (such as you) interacts with a Kubernetes cluster by talking to the API server.
 
-This means that, as a cluster user, you control a Kubernetes cluster by making HTTP calls to the REST API of your cluster's API server. You could do this with a tool like `curl`. Or, since this is tedious and error-prone, you could use a tool that provides you a nice interface and carries out these HTTP API calls for you behind the scenes. And that's exactly what `kubectl` is.
+The API server defines an **HTTP REST API** through which all these interactions happen. This is commonly known as the [Kubernetes API](https://kubernetes.io/docs/reference/using-api/api-overview/). All Kubernetes operations are implemented as **CRUD** operations (create, read, update, delete) on Kubernetes **resources**. Everything, from a pod to a service to a deployment or namespace is a Kubernetes resource, and all Kubernetes operations are CRUD operations on these resources, carried out through the HTTP REST API of the API server. You can find the full list of these resources with all their fields for the latest version of Kubernetes (currently v1.13) [here](https://kubernetes.io/docs/reference/kubernetes-api/).
 
-`kubectl` is essentially a command-line tool that carries out HTTP calls to the API server on your behalf. It allows you to do everything that you could also do by directly calling the API (e.g. with `curl`), but in a more user-friendly way (plus it allows you to do some additional management tasks).
+And now you can see what **kubectl** is: kubectl is a command-line tool that carries out HTTP requests to the API server. If you run `kubectl get pods`, then kubectl issues an HTTP request that corresponds to a *read* operation on the *pod* resources to the API server
 
-Technically, `kubectl` is a Go program, and it uses a library called [client-go](https://github.com/kubernetes/client-go) to make the calls to the Kubernetes API. The client-go library is the official Kubernetes API client library for Go. There exist Kubernetes API client libraries for various other programming languages (see [here](https://kubernetes.io/docs/reference/using-api/client-libraries/)), and you are free to use these libraries in your own programs that need to access a Kubernetes cluster.
+So, if kubectl just makes HTTP requests to the API server, couldn't you also access this API directly? Sure. Nothing stops you from making raw HTTP requests to the API server with a tool like `curl`. If you know the relevant API endpoints and request formats, then you could fully control your cluster that way without ever using kubectl. However, this would be a lot of work and pretty error-prone. The whole point of kubectl is to make it easier for you to interact with the Kubernetes API server.
 
-The important point to remember from this section is that a Kubernetes cluster is controlled through an HTTP REST API provided by an API server, and `kubectl` is one of the means through which you can access this API.
+However, what's more common than accessing the API server directly is to use one of the Kubernetes [client libraries](https://kubernetes.io/docs/reference/using-api/client-libraries/) that exist for different programming languages. These are API client libraries that allow you to carry out requests to the API server programmatically. This allows you to write programs that communicate with the Kubernetes API server, just like kubectl.
 
-The remainder of this article presents a collection of "tricks" that help you make your usage of `kubectl` as efficient as possible.
+In fact, kubectl is nothing else than a program that uses a Kubernetes client library to communicate with the Kubernetes API server. In particular, kubectl is a Go program that uses the [client-go](https://github.com/kubernetes/client-go) library.
 
+The take-away message here is that, regarding cluster control, the crucial point is the HTTP REST API provided by the API server. Everything happens through this API. Kubectl is one of the means to access this API, but there are others, for example issuing raw HTTP requests (e.g. with `curl`) or using a Kubernetes client library. In the end, all these means are equivalent, that is, they all allow you to do the same things.
+
+Now that you have a good idea of what kubectl is, let's look at a series of tips and tricks to make your usage of kubectl more efficient.
 
 ## Shell Completion
 
-One of the most obvious, but often overlooked, tricks to make your `kubectl` usage more efficient is shell completion. This is a feature that `kubectl` provides for the **Bash** and **zsh** shells (see [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)). It allows you to auto-complete `kubectl` sub-commands, options, and arguments, including hard-to-type things like pod or node names. This can save you really a lot of typing or copy-pasting!
+One of the most obvious, but often overlooked, tricks to make your kubectl usage more efficient is shell completion. This is a feature that kubectl provides for the **Bash** and **zsh** shells (see [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)). It allows you to auto-complete kubectl sub-commands, options, and arguments, including hard-to-type things like pod or node names. This can save you really a lot of typing or copy-pasting!
 
 Here is a small demonstration of shell completion in action:
 
@@ -53,12 +58,12 @@ The setup procedure for shell completion depends on whether you use Bash or zsh 
 
 ### General Notes
 
-- The completion functionality for `kubectl` is provided by a **completion script**. This is a shell script that instructs the shell how completion should work for this command. `kubectl` outputs this script for the Bash and zsh shells with the command `kubectl completion bash` and `kubectl completion zsh`, respectively. You have to source this script for enabling completion.
-- For Bash, the `kubectl` completion script depends on a third-party project called [**bash-completion**](https://github.com/scop/bash-completion). You need to install this project on your system to make `kubectl` completion work for Bash.
+- The completion functionality for kubectl is provided by a **completion script**. This is a shell script that instructs the shell how completion should work for this command. kubectl outputs this script for the Bash and zsh shells with the command `kubectl completion bash` and `kubectl completion zsh`, respectively. You have to source this script for enabling completion.
+- For Bash, the kubectl completion script depends on a third-party project called [**bash-completion**](https://github.com/scop/bash-completion). You need to install this project on your system to make kubectl completion work for Bash.
 
 ### Bash on Linux
 
-As mentioned, for Bash you first have to install a project called [bash-completion](https://github.com/scop/bash-completion). This project provides Bash functions that are used by the `kubectl` completion script (that is, the output of `kubectl completion bash`).
+As mentioned, for Bash you first have to install a project called [bash-completion](https://github.com/scop/bash-completion). This project provides Bash functions that are used by the kubectl completion script (that is, the output of `kubectl completion bash`).
 
 You can install bash-completion as follows:
 
@@ -72,19 +77,19 @@ This creates the file `/etc/bash_completion`, which you have to source in your `
 source /etc/bash_completion
 ~~~
 
-Now, you just need to make sure the `kubectl` completion script is sourced in every shell session. You can do this by adding the following command to your `~/.bashrc` file (after the above command):
+Now, you just need to make sure the kubectl completion script is sourced in every shell session. You can do this by adding the following command to your `~/.bashrc` file (after the above command):
 
 ~~~bash
 source <(kubectl completion bash)
 ~~~
 
-And that's it! After starting a new shell (or sourcing `~/.bashrc`), `kubectl` completion should work.
+And that's it! After starting a new shell (or sourcing `~/.bashrc`), kubectl completion should work.
 
 ### Bash on macOS
 
 On macOS, the story is (unfortunately) a bit more complicated. The reason for this is that Apple includes a completely outdated version of Bash in macOS. In particular, this is version 3.2 which dates from 2007 (you can test it on your Mac by running `bash --version`). Apple does this for licensing reasons: Bash 3.2 is the last version that uses the GPLv2 license, whereas later versions use GPLv3, and Apple is unwilling to accept GPLv3.
 
-The problem is that the `kubectl` completion script (that you generate with `kubectl completion bash`) does not work properly with Bash 3.2. It requires at least Bash 4.1.
+The problem is that the kubectl completion script (that you generate with `kubectl completion bash`) does not work properly with Bash 3.2. It requires at least Bash 4.1.
 
 The only solution to this problem is to install a newer version of Bash on your Mac (the currently latest version is 5.0). This is actually not difficult and I wrote an entire article about it [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba). I recommend you to follow the steps in this article before proceeding.
 
@@ -106,17 +111,17 @@ The above command will prompt you in the "Caveats" section to add the following 
 
 You have to do this in order to enable the bash-completion functionality.
 
-After that, you just need to source the `kubectl` completion script, which you can do by adding the following command to your `~/.bashrc` file (after the above command):
+After that, you just need to source the kubectl completion script, which you can do by adding the following command to your `~/.bashrc` file (after the above command):
 
 ~~~bash
 source <(kubectl completion bash)
 ~~~
 
-And that's it! After starting a new shell, `kubectl` completion should be working.
+And that's it! After starting a new shell, kubectl completion should be working.
 
 ### zsh
 
-With zsh, the setup procedure is the same for macOS and Linux, and furthermore, it doesn't depend on a third-party project like bash-completion. So, all you have to do is to source the `kubectl` completion script.
+With zsh, the setup procedure is the same for macOS and Linux, and furthermore, it doesn't depend on a third-party project like bash-completion. So, all you have to do is to source the kubectl completion script.
 
 You can do this by adding the following to your `~/.zshrc` file:
 
@@ -135,7 +140,7 @@ compinit
 
 This tip will prove useful for many of the subsequent tips in this post.
 
-As mentioned, you manage a Kubernetes cluster by applying CRUD operations on Kubernetes resource objects (for example, through `kubectl`). Each resource object has a specific hierarchical structure, which is described in the Kubernetes [API reference](https://kubernetes.io/docs/reference/kubernetes-api/). Often you need to know the structure of, say, a *pod*, to know the fields and sub-fields it has. However, hitting the web documentation each time to find this out is a tedious and time-consuming process.
+As mentioned, you manage a Kubernetes cluster by applying CRUD operations on Kubernetes resource objects (for example, through kubectl). Each resource object has a specific hierarchical structure, which is described in the Kubernetes [API reference](https://kubernetes.io/docs/reference/kubernetes-api/). Often you need to know the structure of, say, a *pod*, to know the fields and sub-fields it has. However, hitting the web documentation each time to find this out is a tedious and time-consuming process.
 
 This is where `kubectl explain` comes in. This command contains the same information as the API reference web documentation, but it lets you access it conveniently from your command-line.
 
@@ -221,7 +226,7 @@ Again, you can find out the nature of each field in a resource object (whether i
 
 ## Contexts and Namespaces
 
-`kubectl` depends on a type of configuration file called **kubeconfig file** (described [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) and [here](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) in the docs). A kubeconfig file contains all the information that `kubectl` needs to connect and authenticate to a Kubernetes cluster (more precisely, to the API server of a Kubernetes cluster).
+kubectl depends on a type of configuration file called **kubeconfig file** (described [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) and [here](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) in the docs). A kubeconfig file contains all the information that kubectl needs to connect and authenticate to a Kubernetes cluster (more precisely, to the API server of a Kubernetes cluster).
 
 <!--If you use a managed Kubernetes service (such as [EKS](https://aws.amazon.com/eks/) from AWS or [GKE](https://cloud.google.com/kubernetes-engine/) from GCP), the kubeconfig file can be created or updated automatically with the information of a new cluster by a dedicated command (`aws eks update-kubeconfig` for EKS and `gcloud container clusters get-credentials` for GKE, respectively). -->
 
@@ -241,23 +246,23 @@ A kubeconfig file contains the following pieces of information:
 - **Current context**
     - The name of the context that is currently active
 
-Our main interest here is in the contexts. Each context consists of a cluster, a user, and a namespace. When `kubectl` is invoked, it always uses one of the contexts defined in the kubeconfig file. Concretely, if `kubectl` uses, say, the context *MyContext*, this means the following:
+Our main interest here is in the contexts. Each context consists of a cluster, a user, and a namespace. When kubectl is invoked, it always uses one of the contexts defined in the kubeconfig file. Concretely, if kubectl uses, say, the context *MyContext*, this means the following:
 
-- `kubectl` connects to the API server URL defined in the *cluster* of *MyContext*
-- `kubectl` authenticates to the API server using the credentials in the *user* of *MyContext*
-- `kubectl` performs any Kubernetes operation in the namespace defined in the *namespace* of *MyContext*
+- kubectl connects to the API server URL defined in the *cluster* of *MyContext*
+- kubectl authenticates to the API server using the credentials in the *user* of *MyContext*
+- kubectl performs any Kubernetes operation in the namespace defined in the *namespace* of *MyContext*
 
-The context that `kubectl` uses is the one set in the **current context** field of the kubeconfig file. The value of this field can be easily changed. This allows you to apply the next invocation of `kubectl` to another cluster, or to the same cluster but authenticate with a different user, or to the same cluster with the same user but using a different namespace, and so on, and so on. By defining appropriate contexts, you can cover any use case of how to connect to which cluster.
+The context that kubectl uses is the one set in the **current context** field of the kubeconfig file. The value of this field can be easily changed. This allows you to apply the next invocation of kubectl to another cluster, or to the same cluster but authenticate with a different user, or to the same cluster with the same user but using a different namespace, and so on, and so on. By defining appropriate contexts, you can cover any use case of how to connect to which cluster.
 
 ### Managing Contexts
 
-So, when you're working with `kubectl`, you might have a couple of questions:
+So, when you're working with kubectl, you might have a couple of questions:
 
 - What is the current context?
 - Which contexts exist?
 - How can I change the current context?
 
-Fortunately, `kubectl` provides commands that address these questions:
+Fortunately, kubectl provides commands that address these questions:
 
 ~~~bash
 # What is the current context?
@@ -270,9 +275,9 @@ kubectl config use-context <name>
 
 Note that the command to change the current context physically changes the *current context* field in the kubeconfig file.
 
-These commands work well, but they are a bit bulky, aren't they? Especially, because you probably have to use them frequently to quickly orientate yourself in your `kubectl` environment. Furthermore, managed Kubernetes services like [EKS](https://aws.amazon.com/eks/) from AWS or [GKE](https://cloud.google.com/kubernetes-engine/) from GCP generate rather long context names, and copy-pasting them into the `kubectl config use-context` command is tedious and time-consuming.
+These commands work well, but they are a bit bulky, aren't they? Especially, because you probably have to use them frequently to quickly orientate yourself in your kubectl environment. Furthermore, managed Kubernetes services like [EKS](https://aws.amazon.com/eks/) from AWS or [GKE](https://cloud.google.com/kubernetes-engine/) from GCP generate rather long context names, and copy-pasting them into the `kubectl config use-context` command is tedious and time-consuming.
 
-So, let's define some shell aliases that allow performing these tasks with a minimum of typing. In particular, we will define the following aliases (they all start with `k` to indicate that they belong to `kubectl`):
+So, let's define some shell aliases that allow performing these tasks with a minimum of typing. In particular, we will define the following aliases (they all start with `k` to indicate that they belong to kubectl):
 
 - `ksc` (**s**show **c**ontext): show the current context
 - `klc` (**l**ist **c**ontexts): list all contexts, marking the current one
@@ -485,11 +490,11 @@ However, there's one notable difference. The scripts for `kubectx` and `kubens` 
 Shell aliases are generally used to abbreviate long commands (including sub-commands, options, arguments, etc.) to short "alias" strings. Then, all you have to do is to type the alias string, and the shell expands the alias and executes the corresponding command, just as if you typed the long command yourself. Defining aliases pays off particularly for frequently used commands.
 
 
-With `kubectl` you naturally use certain commands very frequently (for example, `kubectl get pods`). So, it would be nice to define aliases for these commands, right? You would just need to figure out which commands you use most frequently, choose an alias name for each one, and then define the aliases in your `~/.bashrc` or `~/.zshrc` file (for example, as `alias kgpo='kubectl get pods'`).
+With kubectl you naturally use certain commands very frequently (for example, `kubectl get pods`). So, it would be nice to define aliases for these commands, right? You would just need to figure out which commands you use most frequently, choose an alias name for each one, and then define the aliases in your `~/.bashrc` or `~/.zshrc` file (for example, as `alias kgpo='kubectl get pods'`).
 
 > In the following, the notation `~/*rc` is used to refer to either `~/.bashrc` or `~/.zshrc`.
 
-But there's a better solution. There's a project called [*kubectl-aliases*](https://github.com/ahmetb/kubectl-aliases) which defines **800 aliases** for frequently used `kubectl` commands. You can just include these alias definitions in your `~/*rc` file and start using them immediately.
+But there's a better solution. There's a project called [*kubectl-aliases*](https://github.com/ahmetb/kubectl-aliases) which defines **800 aliases** for frequently used kubectl commands. You can just include these alias definitions in your `~/*rc` file and start using them immediately.
 
 > All aliases in *kubectl-aliases* work with both, Bash and Zsh.
 
@@ -505,16 +510,16 @@ You might wonder how you could possibly remember 800 aliases? Well, actually you
 
 All aliases start with `k`, and then you can append components from left to right, according to the above figure (the `sys` component is optional). Here are some example aliases and the commands that they stand for:
 
-- `k` &#10230; `kubectl`
+- `k` &#10230; kubectl
 - `kg` &#10230; `kubectl get`
 - `kgpo` &#10230; `kubectl get pods`
 - `kgpooyaml` &#10230; `kubectl get pods -o yaml`
 
 And so on, for all the possible combinations. So, if you want to list all pods, you can just type `kgpo`. If you want to get a specific pod, you can type `kgpo <pod>` (where `<pod>` is the name of the pod you want to retrieve). If you want to get the YAML specification of a specific pod, you can type `kgpooyaml <pod>`.
 
-Nothing prevents you from using these aliases only as parts of your commands. For example, you can use `k` at any place where you would type `kubectl` otherwise. This means, you can type `k api-resources` (since there's no alias for this command as a whole). Or you can type `kg roles` (since there are no aliases defined for *role* resources). Just look at the command an alias stands for, and you can append further arguments to the alias at will. This allows you to minimise typing even fore use cases that are not explicitly covered by *kubectl-aliases*.
+Nothing prevents you from using these aliases only as parts of your commands. For example, you can use `k` at any place where you would type kubectl otherwise. This means, you can type `k api-resources` (since there's no alias for this command as a whole). Or you can type `kg roles` (since there are no aliases defined for *role* resources). Just look at the command an alias stands for, and you can append further arguments to the alias at will. This allows you to minimise typing even fore use cases that are not explicitly covered by *kubectl-aliases*.
 
-If you use Zsh, it gets even better. The `kubectl` command completion works with the aliases too. That means, you can type, for example, `kgpo [tab][tab]` and Zsh will complete the available pod names for you. Like this, you can combine two typing reduction mechanisms (aliases and completion) to an "ultra typing reduction" workflow.
+If you use Zsh, it gets even better. The kubectl command completion works with the aliases too. That means, you can type, for example, `kgpo [tab][tab]` and Zsh will complete the available pod names for you. Like this, you can combine two typing reduction mechanisms (aliases and completion) to an "ultra typing reduction" workflow.
 
 If you use Bash, the bad news is that completion for aliases doesn't work by default. The good news is that you can make it working quite easily, which is explained in the following. This will allow you to have your "ultra typing reduction" workflow" also on Bash.
 
@@ -588,7 +593,7 @@ In case you wonder how the `_complete_alias` function can enable appropriate com
 
 ## Extend kubectl with plugins
 
-Plugins are a `kubectl` feature that only few people know about. They have existed for a while, but the plugin system has been completely redesigned in **version 1.12** (released in September 2018) of `kubectl`. With the new plugin system, you can add custom sub-commands to `kubectl` as shown below:
+Plugins are a kubectl feature that only few people know about. They have existed for a while, but the plugin system has been completely redesigned in **version 1.12** (released in September 2018) of kubectl. With the new plugin system, you can add custom sub-commands to kubectl as shown below:
 
 ![](screencast-plugin-hello-world.gif)
 
@@ -596,7 +601,7 @@ Plugins are described [here](https://kubernetes.io/docs/tasks/extend-kubectl/kub
 
 It is very easy to install kubectl plugins, and it can be explained in a single sentence (there are some further minor details to this, which are explained later): 
 
-*Any executable named `kubectl-<name>` (where `<name>` is any string) in any directory of your `PATH` is detected by `kubectl` as a plugin and made available as `kubectl <name>`.*
+*Any executable named `kubectl-<name>` (where `<name>` is any string) in any directory of your `PATH` is detected by kubectl as a plugin and made available as `kubectl <name>`.*
 
 The executable can be of any type: a shell script, a compiled C program, a Python script, and so on, there are no requirements. There is no interface against which you have to program, no plugin manifest to create, and no registration process. The only requirements are that the name of the executable starts with `kubectl-` and that it's located somewhere in your `PATH`.
 
@@ -611,9 +616,9 @@ For example, to create a "Hello World" plugin as shown above, all you have to do
 
 That's all! Now you can invoke your plugin with `kubectl hello`.
 
-What technically happens when you run `kubectl hello` is that `kubectl` executes the corresponding `kubectl-hello` executable. The executable can do anything it wants, it doesn't even have to be related to Kubernetes (as the above example shows).
+What technically happens when you run `kubectl hello` is that kubectl executes the corresponding `kubectl-hello` executable. The executable can do anything it wants, it doesn't even have to be related to Kubernetes (as the above example shows).
 
-Any arguments that you pass to a plugin are passed as-is to the executable. For example, if you run `kubectl hello -o opt` then the `-o` and `opt` arguments are passed to the `kubectl-hello` executable as the first and second arguments, as if it was invoked with `kubectl-hello -o opt`. Furthermore, the plugin executable runs in the same environment as `kubectl`. That means, any environment variables that are available to `kubectl`, are also available to the plugin executable.
+Any arguments that you pass to a plugin are passed as-is to the executable. For example, if you run `kubectl hello -o opt` then the `-o` and `opt` arguments are passed to the `kubectl-hello` executable as the first and second arguments, as if it was invoked with `kubectl-hello -o opt`. Furthermore, the plugin executable runs in the same environment as kubectl. That means, any environment variables that are available to kubectl, are also available to the plugin executable.
 
 There are the following further details about kubectl plugins:
 
@@ -628,19 +633,19 @@ Kubectl provides a single native command that is related to plugins:
 kubectl plugin list
 ~~~
 
-This command lists all the plugins that `kubectl` detects in the `PATH` of your system. This gives you an overview of which plugins are available for you to use.
+This command lists all the plugins that kubectl detects in the `PATH` of your system. This gives you an overview of which plugins are available for you to use.
 
-The above command also includes warnings if a plugin has the same name as a native `kubectl` command (in which case the plugin will be ignored) or if there are multiple plugins with the same name (in which case, the plugin that appears first in the `PATH` will be used.
+The above command also includes warnings if a plugin has the same name as a native kubectl command (in which case the plugin will be ignored) or if there are multiple plugins with the same name (in which case, the plugin that appears first in the `PATH` will be used.
 
 ### Why plugins?
 
-So, if plugins are just executables that are invoked by `kubectl`, why even bother with creating a plugin and not just executing the executable yourself? Instead of creating an executable named `kubectl-hello` and run it as `kubectl hello`, you could just create an executable named `hello` and execute it directly. There would be effectively no difference.
+So, if plugins are just executables that are invoked by kubectl, why even bother with creating a plugin and not just executing the executable yourself? Instead of creating an executable named `kubectl-hello` and run it as `kubectl hello`, you could just create an executable named `hello` and execute it directly. There would be effectively no difference.
 
-The main argument to use the plugin system is to avoid "command overload" (something like app overload on smartphones). Kubectl lends itself to create tools around it, and without plugins, each of these tools is a separate command. This clutters your system with many, often cryptically named, commands. If you design these tools as plugins, you have them all under the `kubectl` "namespace", which makes it easier to remember and give meaningful names to them. In addition, you can get an overview of all the plugins you are using at any time with the `kubectl plugins list` command.
+The main argument to use the plugin system is to avoid "command overload" (something like app overload on smartphones). Kubectl lends itself to create tools around it, and without plugins, each of these tools is a separate command. This clutters your system with many, often cryptically named, commands. If you design these tools as plugins, you have them all under the kubectl "namespace", which makes it easier to remember and give meaningful names to them. In addition, you can get an overview of all the plugins you are using at any time with the `kubectl plugins list` command.
 
 Furthermore, if you want to distribute a tool to other users, distributing it as a plugin reduces the risk of name clashes with existing tools on the users' system.
 
-At the present time, the plugin mechanism does unfortunately not yet support **completion**. That means, you always have to fully type the plugin names, and can't complete them like native `kubectl` sub-commands (e.g. `kubectl h[tab]` does not complete to `kubectl hello`). However, there is an open [feature request](https://github.com/kubernetes/kubectl/issues/585) for this on GitHub, so hopefully we will see this feature some time in the future.
+At the present time, the plugin mechanism does unfortunately not yet support **completion**. That means, you always have to fully type the plugin names, and can't complete them like native kubectl sub-commands (e.g. `kubectl h[tab]` does not complete to `kubectl hello`). However, there is an open [feature request](https://github.com/kubernetes/kubectl/issues/585) for this on GitHub, so hopefully we will see this feature some time in the future.
 
 ### Creating and installing plugins
 
