@@ -16,7 +16,7 @@ open_graph:
   image: /blog/kubernetes-cli-tricks/magic.jpg
 ---
 
-## Understanding what kubectl is
+## Understand what kubectl is
 
 You probably know what you can do with kubectl, namely controlling and managing a Kubernetes cluster. But do you know what kubectl actually is from a technical point of view? The following diagram gives an overview:
 
@@ -44,7 +44,7 @@ The take-away message here is that, regarding cluster control, the crucial point
 
 Now that you have a good idea of what kubectl is, let's look at a series of tips and tricks to make your usage of kubectl more efficient.
 
-## Shell Completion
+## Save typing with command completion
 
 One of the most obvious, but often overlooked, tricks to make your kubectl usage more efficient is shell completion. This is a feature that kubectl provides for the **Bash** and **zsh** shells (see [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)). It allows you to auto-complete kubectl sub-commands, options, and arguments, including hard-to-type things like pod or node names. This can save you really a lot of typing or copy-pasting!
 
@@ -136,7 +136,7 @@ autoload -Uz compinit
 compinit
 ~~~
 
-## `kubectl explain`
+## Quickly access resource documentation
 
 This tip will prove useful for many of the subsequent tips in this post.
 
@@ -173,7 +173,7 @@ kubectl api-resources
 In the output of this command, the resource object names are in plural. However, you can also use the singular version of each name for the `kubectl explain` command.
 
 
-## Custom Output Format
+## Get the information you need with custom output formats
 
 When you execute a `kubectl get` command, retrievng one or more resource objects from the cluster, the default output is a table-like plain text format. Below is an example:
 
@@ -224,7 +224,7 @@ Note two things about using the `custom-columns` in general:
 
 Again, you can find out the nature of each field in a resource object (whether it's an object or a list, which sub-fields it contains, etc.) with the `kubectl explain` command.
 
-## Contexts and Namespaces
+## Quickly change contexts and namespaces
 
 kubectl depends on a type of configuration file called **kubeconfig file** (described [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) and [here](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) in the docs). A kubeconfig file contains all the information that kubectl needs to connect and authenticate to a Kubernetes cluster (more precisely, to the API server of a Kubernetes cluster).
 
@@ -485,7 +485,7 @@ However, there's one notable difference. The scripts for `kubectx` and `kubens` 
 
 <!--## More Fuzzy Finding-->
 
-## Save even more typing with aliases
+## Save more typing with shell aliases
 
 Shell aliases are generally used to abbreviate long commands (including sub-commands, options, arguments, etc.) to short "alias" strings. Then, all you have to do is to type the alias string, and the shell expands the alias and executes the corresponding command, just as if you typed the long command yourself. Defining aliases pays off particularly for frequently used commands.
 
