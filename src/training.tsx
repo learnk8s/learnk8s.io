@@ -385,11 +385,11 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
               <p className='ttu'>Private courses</p>
               <div className='w2 h2'><Img image={assets.page.tick}/></div>
             </li>
-            <li className='flex items-center justify-between ph2'>
+            <li className='flex items-center justify-between ph2 bb b--light-gray'>
               <p className='ttu'>Public courses</p>
               <div className='w2 h2'><Img image={assets.page.tick}/></div>
             </li>
-            <li className='flex items-center justify-between ph2 bb b--light-gray'>
+            <li className='flex items-center justify-between ph2'>
               <p className='ttu v-mid mt2 mb1'>Online courses <span className='dib w2 v-mid'><Img image={assets.page.slack}/></span></p>
               <div className='w2 h2'><Img image={assets.page.tick}/></div>
             </li>
