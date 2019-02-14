@@ -548,7 +548,7 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
           </ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewTemplating} title='Optionals' description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}>
+        <DashboardModule className='w-40-l' preview={assets.page.previewOptionals} title='Optionals' description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}>
           <p className='lh-copy measure-wide'>You can pick and choose from the modules below. Looking for something in particular? <a className='link underline' href={mailto(customRequest)}>Get in touch!</a></p>
           <ul>
             <li className='lh-copy mv1'>Advanced networking</li>
