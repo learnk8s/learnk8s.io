@@ -1,11 +1,11 @@
-import React, { Children } from 'react'
-import { LinkedNode, Page, TrainingPage } from './sitemap'
+import React from 'react'
+import { LinkedNode, Page, TrainingPage, getFullUrl, findOrPanic, PageName } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, InlineMarkdown, SpecialListItem, Testimonal} from './layout'
-import dayjs from 'dayjs'
 import {Image, Img, Script, Javascript} from './assets'
 import { PrimaryButton } from './homepage'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
+import moment from 'moment'
 
 const benefits = [
   '**Get started with Kubernetes in your next project** and you need to quickly get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices',
@@ -47,7 +47,7 @@ function mailto({subject, body}: {subject: string, body: string}) {
   return `mailto:hello@learnk8s.io?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 }
 
-const publicCourseEnquiry = (date: dayjs.Dayjs, location: Location) => ({
+const publicCourseEnquiry = (date: moment.Moment, location: Location) => ({
   subject: 'Kubernetes training — Public course enquiry',
   body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')} in ${location}.\n\nKind regards,\n`})
 
@@ -71,25 +71,10 @@ enum Language {
   ITALIAN = 'Italian',
 }
 
-enum Country {
+enum Continent {
   NORTH_AMERICA = 'namerica',
   EUROPE = 'europe',
   ASIA = 'asia',
-}
-
-enum Location {
-  ONLINE = 'Online',
-  CARDIFF = 'Cardiff, UK',
-  LONDON = 'London, UK',
-  MILAN = 'Milan, Italy',
-  SAN_FRANCISCO = 'San Francisco, US',
-  TORONTO = 'Toronto, Canada',
-  SINGAPORE = 'Singapore',
-}
-
-enum Days {
-  TWO_DAYS = '2 days',
-  THREE_DAYS = '3 days',
 }
 
 enum CourseName {
@@ -105,128 +90,221 @@ enum CurrencyCode {
   CAD = 'CAD',
 }
 
-interface CourseEvents {
-  date: dayjs.Dayjs
-  title: CourseName
-  courseInDays: Days
-  location: Location
-  price: string
-  startsAt: string
-  country: Country
-  language: Language
-  currencyCode: CurrencyCode
-  totalPrice: number
+interface Location {
+  address: string
+  country: string
+  continent: Continent
 }
 
-const events: CourseEvents[] = [
+interface Offer {
+  price: number
+  currency: CurrencyCode
+  locale: string
+}
+
+enum CourseCode {
+  BASIC = 'K8SBASIC',
+  ADVANCED = 'K8SADVANCED',
+}
+
+interface CourseEvent {
+  startAt: moment.Moment
+  duration: moment.Duration
+  canBookInAdvanceFrom: moment.Duration
+  location: Location
+  offer: Offer
+  language: Language
+  details: CourseDetails
+}
+
+interface CourseDetails {
+  title: CourseName
+  code: CourseCode
+}
+
+const LondonOnline: Location = {
+  address: 'Online',
+  country: '',
+  continent: Continent.EUROPE
+}
+const London: Location = {
+  address: 'London',
+  country: 'UK',
+  continent: Continent.EUROPE
+}
+const Singapore: Location = {
+  address: 'Singapore',
+  country: '',
+  continent: Continent.ASIA
+}
+const Milan: Location = {
+  address: 'Milan',
+  country: 'Italy',
+  continent: Continent.EUROPE
+}
+const SanFrancisco: Location = {
+  address: 'San Francisco',
+  country: 'California',
+  continent: Continent.NORTH_AMERICA
+}
+const Cardiff: Location = {
+  address: 'Cardiff',
+  country: 'Wales',
+  continent: Continent.EUROPE
+}
+const Toronto: Location = {
+  address: 'Toronto',
+  country: 'Canada',
+  continent: Continent.NORTH_AMERICA
+}
+const BasicDetails = {
+  title: CourseName.BASIC,
+  code: CourseCode.BASIC,
+}
+const AdvancedDetails = {
+  title: CourseName.ADVANCED,
+  code: CourseCode.ADVANCED,
+}
+
+interface KubernetesCourse {
+  name: string
+  code: CourseCode
+  description: string
+  events: CourseEvent[]
+}
+
+const courses: KubernetesCourse[] = [
   {
-    date: dayjs('2019-02-25'),
-    title: CourseName.BASIC,
-    courseInDays: Days.TWO_DAYS,
-    location: Location.LONDON,
-    price: '£1225',
-    startsAt: '9:30 am GMT (London)',
-    country: Country.EUROPE,
-    language: Language.ENGLISH,
-    currencyCode: CurrencyCode.GBP,
-    totalPrice: 1225,
+    name: 'Advanced Kubernetes training',
+    code: CourseCode.ADVANCED,
+    description: 'Learn how to deploy and scale applications with Kubernetes.',
+    events: [
+    {
+      startAt: moment('2019-03-04T09:30:00+01:00'),
+      duration: moment.duration(3, 'days'),
+      canBookInAdvanceFrom: moment.duration(90, 'days'),
+      details: AdvancedDetails,
+      location: Milan,
+      offer: {
+        price: 2050,
+        currency: CurrencyCode.EUR,
+        locale: 'it-IT',
+      },
+      language: Language.ITALIAN,
+    },
+    {
+      startAt: moment('2019-03-20T09:30:00+00:00'),
+      duration: moment.duration(3, 'days'),
+      canBookInAdvanceFrom: moment.duration(90, 'days'),
+      details: AdvancedDetails,
+      location: LondonOnline,
+      offer: {
+        price: 1950,
+        currency: CurrencyCode.GBP,
+        locale: 'en-GB',
+      },
+      language: Language.ENGLISH,
+    },
+    {
+      startAt: moment('2019-03-25T09:30:00-08:00'),
+      duration: moment.duration(3, 'days'),
+      canBookInAdvanceFrom: moment.duration(90, 'days'),
+      details: AdvancedDetails,
+      location: SanFrancisco,
+      offer: {
+        price: 2250,
+        currency: CurrencyCode.USD,
+        locale: 'it-IT',
+      },
+      language: Language.ENGLISH,
+    },
+    {
+      startAt: moment('2019-03-27T09:30:00+00:00'),
+      duration: moment.duration(3, 'days'),
+      canBookInAdvanceFrom: moment.duration(90, 'days'),
+      details: AdvancedDetails,
+      location: London,
+      offer: {
+        price: 1950,
+        currency: CurrencyCode.GBP,
+        locale: 'en-GB',
+      },
+      language: Language.ENGLISH,
+    },
+    {
+      startAt: moment('2019-04-29T09:30:00+08:00'),
+      duration: moment.duration(3, 'days'),
+      canBookInAdvanceFrom: moment.duration(90, 'days'),
+      details: AdvancedDetails,
+      location: Singapore,
+      offer: {
+        price: 3400,
+        currency: CurrencyCode.SGD,
+        locale: 'en-SG',
+      },
+      language: Language.ENGLISH,
+    },
+    {
+      startAt: moment('2019-04-29T09:30:00+00:00'),
+      duration: moment.duration(3, 'days'),
+      canBookInAdvanceFrom: moment.duration(90, 'days'),
+      details: AdvancedDetails,
+      location: Cardiff,
+      offer: {
+        price: 1950,
+        currency: CurrencyCode.GBP,
+        locale: 'en-GB',
+      },
+      language: Language.ENGLISH,
+    },
+    {
+      startAt: moment('2019-05-13T09:30:00-05:00'),
+      duration: moment.duration(3, 'days'),
+      canBookInAdvanceFrom: moment.duration(90, 'days'),
+      details: AdvancedDetails,
+      location: Toronto,
+      offer: {
+        price: 3300,
+        currency: CurrencyCode.CAD,
+        locale: 'en-CA',
+      },
+      language: Language.ENGLISH,
+    },
+    {
+      startAt: moment('2019-05-22T09:30:00+00:00'),
+      duration: moment.duration(3, 'days'),
+      canBookInAdvanceFrom: moment.duration(90, 'days'),
+      details: AdvancedDetails,
+      location: LondonOnline,
+      offer: {
+        price: 1950,
+        currency: CurrencyCode.GBP,
+        locale: 'en-GB',
+      },
+      language: Language.ENGLISH,
+    }
+    ]
   },
   {
-    date: dayjs('2019-03-4'),
-    title: CourseName.ADVANCED,
-    courseInDays: Days.THREE_DAYS,
-    location: Location.MILAN,
-    price: '2050€',
-    startsAt: '9:30 am CET (Rome)',
-    country: Country.EUROPE,
-    language: Language.ITALIAN,
-    currencyCode: CurrencyCode.EUR,
-    totalPrice: 2050,
+    name: 'Deploying and scaling applications in Kubernetes',
+    code: CourseCode.BASIC,
+    description: 'Learn how to deploy and scale applications with Kubernetes.',
+    events: [
+      {
+        startAt: moment('2019-02-25T09:30:00+00:00'),
+        duration: moment.duration(2, 'days'),
+        canBookInAdvanceFrom: moment.duration(90, 'days'),
+        location: London,
+        offer: {
+          price: 1225,
+          currency: CurrencyCode.GBP,
+          locale: 'en-GB',
+        },
+        language: Language.ENGLISH,
+        details: BasicDetails,
+      },
+    ]
   },
-  {
-    date: dayjs('2019-03-20'),
-    title: CourseName.ADVANCED,
-    courseInDays: Days.THREE_DAYS,
-    location: Location.ONLINE,
-    price: '£1950',
-    startsAt: '9:30 am GMT (London)',
-    country: Country.EUROPE,
-    language: Language.ENGLISH,
-    currencyCode: CurrencyCode.GBP,
-    totalPrice: 1950,
-  },
-  {
-    date: dayjs('2019-03-25'),
-    title: CourseName.ADVANCED,
-    courseInDays: Days.THREE_DAYS,
-    location: Location.SAN_FRANCISCO,
-    price: '$2550',
-    startsAt: '9:30 am PST (San Francisco)',
-    country: Country.NORTH_AMERICA,
-    language: Language.ENGLISH,
-    currencyCode: CurrencyCode.USD,
-    totalPrice: 2250,
-  },
-  {
-    date: dayjs('2019-03-27'),
-    title: CourseName.ADVANCED,
-    courseInDays: Days.THREE_DAYS,
-    location: Location.LONDON,
-    price: '£1950',
-    startsAt: '9:30 am GMT (London)',
-    country: Country.EUROPE,
-    language: Language.ENGLISH,
-    currencyCode: CurrencyCode.GBP,
-    totalPrice: 1950,
-  },
-  {
-    date: dayjs('2019-04-29'),
-    title: CourseName.ADVANCED,
-    courseInDays: Days.THREE_DAYS,
-    location: Location.SINGAPORE,
-    price: 'S$3400',
-    startsAt: '9:30 am GST (Singapore)',
-    country: Country.ASIA,
-    language: Language.ENGLISH,
-    currencyCode: CurrencyCode.SGD,
-    totalPrice: 3400,
-  },
-  {
-    date: dayjs('2019-04-29'),
-    title: CourseName.ADVANCED,
-    courseInDays: Days.THREE_DAYS,
-    location: Location.CARDIFF,
-    price: '£1950',
-    startsAt: '9:30 am GST (London)',
-    country: Country.EUROPE,
-    language: Language.ENGLISH,
-    currencyCode: CurrencyCode.GBP,
-    totalPrice: 1950,
-  },
-  {
-    date: dayjs('2019-05-13'),
-    title: CourseName.ADVANCED,
-    courseInDays: Days.THREE_DAYS,
-    location: Location.TORONTO,
-    price: 'C$3300',
-    startsAt: '9:30 am EST (Toronto)',
-    country: Country.NORTH_AMERICA,
-    language: Language.ENGLISH,
-    currencyCode: CurrencyCode.CAD,
-    totalPrice: 3300,
-  },
-  {
-    date: dayjs('2019-05-15'),
-    title: CourseName.ADVANCED,
-    courseInDays: Days.THREE_DAYS,
-    location: Location.ONLINE,
-    price: '£1950',
-    startsAt: '9:30 am GMT (London)',
-    country: Country.EUROPE,
-    language: Language.ENGLISH,
-    currencyCode: CurrencyCode.GBP,
-    totalPrice: 1950,
-  }
 ]
 
 export const assets = {
@@ -245,61 +323,55 @@ export const assets = {
     previewTemplating: Image({url: 'assets/training/templating.png', description: 'Templating Kubernetes resources'}),
     previewOptionals: Image({url: 'assets/training/optionals.png', description: 'Optional modules'}),
     toggle: Javascript({script: `(${CreateToggle.toString()})()`}),
-    openGraphPreview: Image({url: '', description: 'Learnk8s preview'}),
   },
   layout: layoutAssets,
 }
 
 export const Training: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<TrainingPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
   return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
-    <JsonLd<Course> item={{
-      '@type': 'Course',
-      '@context': 'https://schema.org',
-      name: 'Advanced Kubernetes training',
-      description: 'Learn how to deploy and scale applications with Kubernetes.',
-      educationalCredentialAwarded: 'CKA or CKAD (optional)',
-      hasCourseInstance: events.map(it => ({
-        '@type': 'CourseInstance',
-        name: it.title,
-        description: 'Learn how to deploy and scale applications with Kubernetes.',
-        courseMode: (function(location): string {
-          switch(location) {
-            case Location.ONLINE:
-              return 'online'
-            default:
-              return 'full-time'
-          }
-        })(it.location),
-        duration: (function(days): any {
-          switch(days) {
-            case Days.TWO_DAYS:
-              return 'P2D'
-            default:
-            case Days.THREE_DAYS:
-              return 'P3D'
-          }
-        })(it.courseInDays),
-        inLanguage: it.language,
-        startDate: it.date.toISOString(),
-        endDate: it.date.add(3, ('days' as any)).toISOString(),
-        location: {
-          '@type': 'Place',
-          address: it.location,
-        },
-        isAccessibleForFree: Boolean.False,
-        offers: {
-          '@type': 'Offer',
-          availability: ItemAvailabilityEnum.InStock,
-          price: it.totalPrice,
-          priceCurrency: it.currencyCode,
-        },
-        image: `${siteUrl}${currentPage.payload.pageDetails.image}`,
+    {courses.map(course => {
+      return <JsonLd<Course> item={{
+        '@type': 'Course',
+        '@context': 'https://schema.org',
+        name: course.name,
+        courseCode: course.code,
+        description: course.description,
+        educationalCredentialAwarded: 'CKA or CKAD (optional)',
         provider: {
           '@type': 'Organization',
           name: 'Learnk8s',
-        }
-      } as CourseInstance)),
-    }}></JsonLd>
+        },
+        hasCourseInstance: course.events.map(it => ({
+          '@type': 'CourseInstance',
+          name: it.details.title,
+          description: 'Learn how to deploy and scale applications with Kubernetes.',
+          courseMode: 'full-time',
+          duration: it.duration.toISOString() as any,
+          inLanguage: it.language,
+          startDate: it.startAt.toISOString(),
+          endDate: it.startAt.clone().add(it.duration).toISOString(),
+          location: {
+            '@type': 'Place',
+            name: it.location.address,
+            address: it.location.address,
+          },
+          isAccessibleForFree: Boolean.False,
+          offers: {
+            '@type': 'Offer',
+            availability: ItemAvailabilityEnum.InStock,
+            price: it.offer.price,
+            priceCurrency: it.offer.currency,
+            validFrom: it.startAt.clone().subtract(it.canBookInAdvanceFrom).toISOString(),
+            url: `${siteUrl}${getFullUrl(findOrPanic(root, PageName.TRAINING))}`
+          },
+          image: `${siteUrl}${currentPage.payload.pageDetails.image}`,
+          performer: {
+            '@type': 'Organization',
+            name: 'Learnk8s',
+          }
+        } as CourseInstance)),
+      }}></JsonLd>
+    })}
     <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
 
       <Navbar root={root} assets={assets.layout}/>
@@ -510,25 +582,25 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
         <li className='asia dib pa2 navy bb bw1 b--near-white bg-evian br1 br--right'><label htmlFor='asia'>Asia</label></li>
       </ul>
 
-      <ul className='events list pl0 pt3'>{events.map(it => {
-        return <li className={it.country}>
+      <ul className='events list pl0 pt3'>{courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[]).sort((a, b) => a.startAt.valueOf() - b.startAt.valueOf()).map(it => {
+        return <li className={it.location.continent}>
           <div className='mv3 flex-ns items-start pb3 pb0-l'>
             <div className='date bg-sky w3 h3 white tc b'>
-              <p className='f2 ma0'>{it.date.format('D')}</p>
-              <p className='ttu ma0'>{it.date.format('MMM')}</p>
+              <p className='f2 ma0'>{it.startAt.format('D')}</p>
+              <p className='ttu ma0'>{it.startAt.format('MMM')}</p>
             </div>
             <div className='bg-evian ph4 pt2 flex-auto'>
-              <h3 className='f3 ma0 mt3 mb2'>{it.title}</h3>
-              <h4 className='normal black-70 mt1 mb4'>{it.courseInDays} course</h4>
+              <h3 className='f3 ma0 mt3 mb2'>{it.details.title}</h3>
+              <h4 className='normal black-70 mt1 mb4'>{it.duration.asDays()} days course</h4>
               <p className='ma0 mv3'><span className='ttu b black-20 f6 v-mid'>Location:</span> <span></span>&nbsp;
-              {it.location === Location.ONLINE ?
-                <span className='link dib navy v-mid'>{it.location} <span className='w1 v-mid dib'><Img image={assets.page.slack}/></span></span> :
-                <span className='link dib navy underline v-mid'>{it.location}</span>
+              {it.location.address === 'Online' ?
+                <span className='link dib navy v-mid'>{it.location.address} <span className='w1 v-mid dib'><Img image={assets.page.slack}/></span></span> :
+                <span className='link dib navy underline v-mid'>{it.location.address}{it.location.country ? `, ${it.location.country}` : null}</span>
               }
               </p>
-              <p className='ma0 mv3'><span className='ttu b black-20 f6'>Starts at</span> <span className='f5 black-70 dib'>{it.startsAt}</span></p>
-              <p className='ma0 mv3'><span className='ttu b black-20 f6'>Price</span> <span className='f4 black-70 relative dib'>{it.price} <span className='f7 v-mid absolute right--2 top-0'>+TAX</span></span></p>
-              <p><PrimaryButton text='Get in touch &#8594;' mailto={mailto(publicCourseEnquiry(it.date, it.location))}/></p>
+              <p className='ma0 mv3'><span className='ttu b black-20 f6'>Starts at</span> <span className='f5 black-70 dib'>{it.startAt.format('h:mm A Z')}</span></p>
+              <p className='ma0 mv3'><span className='ttu b black-20 f6'>Price</span> <span className='f4 black-70 relative dib'>{it.offer.price.toLocaleString(it.offer.locale, {style: 'currency', currency: it.offer.currency})} <span className='f7 v-mid absolute right--2 top-0'>+TAX</span></span></p>
+              <p><PrimaryButton text='Get in touch &#8594;' mailto={mailto(publicCourseEnquiry(it.startAt, it.location))}/></p>
             </div>
           </div>
         </li>
@@ -602,24 +674,35 @@ export const DashboardModule: React.StatelessComponent<{title: string, descripti
 }
 
 function CreateToggle() {
+  function doesntExist<T>(it: T): boolean {
+    return !it;
+  }
   function Toggle(element: Element) {
-    const target = element.getAttribute('data-toggle')
+    var target = element.getAttribute('data-toggle')
     if (!target) {
       return
     }
-    const targetElements = target.split(',').map(selector => document.querySelector(selector))
-    if (targetElements.some(it => !it)) {
+    var targetElements = target.split(',').map(function(selector) {
+      return document.querySelector(selector)
+    })
+    if (targetElements.some(doesntExist)) {
       return
     }
     if (targetElements[0]!.classList.contains('toggle-collapse')) {
-      targetElements.forEach(it => it!.classList.remove('toggle-collapse'))
+      targetElements.forEach(function(it) {
+        return it!.classList.remove('toggle-collapse')
+      })
     } else {
-      targetElements.forEach(it => it!.classList.add('toggle-collapse'))
+      targetElements.forEach(function (it) {
+        return it!.classList.add('toggle-collapse')
+      })
     }
   }
 
-  document.querySelectorAll('[data-toggle]').forEach(element => {
-    element.addEventListener('click', () => Toggle(element))
+  document.querySelectorAll('[data-toggle]').forEach(function(element) {
+    element.addEventListener('click', function() {
+      Toggle(element)
+    })
   })
   document.querySelectorAll('[data-toggle-collapsed]').forEach(Toggle)
 }
