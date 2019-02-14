@@ -4,7 +4,7 @@ import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as la
 import dayjs from 'dayjs'
 import {Image, Img, Script, Javascript} from './assets'
 import { PrimaryButton } from './homepage'
-import { Course, CourseInstance, Boolean } from 'schema-dts'
+import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 
 const benefits = [
@@ -66,6 +66,11 @@ const customRequest = {
   body: `Hi Learnk8s,\n\nI'd like to know if you cover _______ in your course.\n\nBest regards,\n`
 }
 
+enum Language {
+  ENGLISH = 'English',
+  ITALIAN = 'Italian',
+}
+
 enum Country {
   NORTH_AMERICA = 'namerica',
   EUROPE = 'europe',
@@ -92,6 +97,14 @@ enum CourseName {
   ADVANCED = 'Advanced Kubernetes training',
 }
 
+enum CurrencyCode {
+  USD = 'USD',
+  GBP = 'GBP',
+  EUR = 'EUR',
+  SGD = 'SGD',
+  CAD = 'CAD',
+}
+
 interface CourseEvents {
   date: dayjs.Dayjs
   title: CourseName
@@ -100,6 +113,9 @@ interface CourseEvents {
   price: string
   startsAt: string
   country: Country
+  language: Language
+  currencyCode: CurrencyCode
+  totalPrice: number
 }
 
 const events: CourseEvents[] = [
@@ -111,6 +127,9 @@ const events: CourseEvents[] = [
     price: '£1225',
     startsAt: '9:30 am GMT (London)',
     country: Country.EUROPE,
+    language: Language.ENGLISH,
+    currencyCode: CurrencyCode.GBP,
+    totalPrice: 1225,
   },
   {
     date: dayjs('2019-03-4'),
@@ -120,6 +139,9 @@ const events: CourseEvents[] = [
     price: '2050€',
     startsAt: '9:30 am CET (Rome)',
     country: Country.EUROPE,
+    language: Language.ITALIAN,
+    currencyCode: CurrencyCode.EUR,
+    totalPrice: 2050,
   },
   {
     date: dayjs('2019-03-20'),
@@ -129,6 +151,9 @@ const events: CourseEvents[] = [
     price: '£1950',
     startsAt: '9:30 am GMT (London)',
     country: Country.EUROPE,
+    language: Language.ENGLISH,
+    currencyCode: CurrencyCode.GBP,
+    totalPrice: 1950,
   },
   {
     date: dayjs('2019-03-25'),
@@ -138,6 +163,9 @@ const events: CourseEvents[] = [
     price: '$2550',
     startsAt: '9:30 am PST (San Francisco)',
     country: Country.NORTH_AMERICA,
+    language: Language.ENGLISH,
+    currencyCode: CurrencyCode.USD,
+    totalPrice: 2250,
   },
   {
     date: dayjs('2019-03-27'),
@@ -147,6 +175,9 @@ const events: CourseEvents[] = [
     price: '£1950',
     startsAt: '9:30 am GMT (London)',
     country: Country.EUROPE,
+    language: Language.ENGLISH,
+    currencyCode: CurrencyCode.GBP,
+    totalPrice: 1950,
   },
   {
     date: dayjs('2019-04-29'),
@@ -156,6 +187,9 @@ const events: CourseEvents[] = [
     price: 'S$3400',
     startsAt: '9:30 am GST (Singapore)',
     country: Country.ASIA,
+    language: Language.ENGLISH,
+    currencyCode: CurrencyCode.SGD,
+    totalPrice: 3400,
   },
   {
     date: dayjs('2019-04-29'),
@@ -165,6 +199,9 @@ const events: CourseEvents[] = [
     price: '£1950',
     startsAt: '9:30 am GST (London)',
     country: Country.EUROPE,
+    language: Language.ENGLISH,
+    currencyCode: CurrencyCode.GBP,
+    totalPrice: 1950,
   },
   {
     date: dayjs('2019-05-13'),
@@ -174,6 +211,9 @@ const events: CourseEvents[] = [
     price: 'C$3300',
     startsAt: '9:30 am EST (Toronto)',
     country: Country.NORTH_AMERICA,
+    language: Language.ENGLISH,
+    currencyCode: CurrencyCode.CAD,
+    totalPrice: 3300,
   },
   {
     date: dayjs('2019-05-15'),
@@ -183,6 +223,9 @@ const events: CourseEvents[] = [
     price: '£1950',
     startsAt: '9:30 am GMT (London)',
     country: Country.EUROPE,
+    language: Language.ENGLISH,
+    currencyCode: CurrencyCode.GBP,
+    totalPrice: 1950,
   }
 ]
 
@@ -236,20 +279,24 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
               return 'P3D'
           }
         })(it.courseInDays),
-        inLanguage: 'English',
+        inLanguage: it.language,
         startDate: it.date.toISOString(),
         endDate: it.date.add(3, ('days' as any)).toISOString(),
         location: {
-          address: it.location
+          '@type': 'Place',
+          address: it.location,
         },
         isAccessibleForFree: Boolean.False,
         offers: {
           '@type': 'Offer',
-          price: it.price
+          availability: ItemAvailabilityEnum.InStock,
+          price: it.totalPrice,
+          priceCurrency: it.currencyCode,
         },
-        image: currentPage.payload.pageDetails.image,
-        performer: {
-          name: 'Learnk8s'
+        image: `${siteUrl}${currentPage.payload.pageDetails.image}`,
+        provider: {
+          '@type': 'Organization',
+          name: 'Learnk8s',
         }
       } as CourseInstance)),
     }}></JsonLd>
