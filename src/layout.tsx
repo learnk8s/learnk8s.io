@@ -186,6 +186,9 @@ const inlineRenderer = new marked.Renderer()
 inlineRenderer.paragraph = (text) => {
   return text
 }
+inlineRenderer.link = (href: string, title: string, text: string) => {
+  return `<a href="${href}" class="link underline navy">${text}</a>`
+}
 
 export const InlineMarkdown: React.StatelessComponent<{content: string}> = ({content}) => {
   return <span dangerouslySetInnerHTML={{__html: marked(content, {renderer: inlineRenderer})}}></span>
@@ -199,3 +202,44 @@ export const Testimonal: React.StatelessComponent<{quote: string, author: string
     </div>
   </section>
 }
+
+export interface MailTo {
+  subject: string
+  body: string
+  email: string
+}
+
+export function mailto({subject, body, email}: MailTo) {
+  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+}
+
+export const YourTeam: React.StatelessComponent<{mailto: string}> = ({mailto}) => {
+  return <section className='trapezoidr-1 white flex-l items-end-l justify-around-l'>
+    <div className='pt5-m pt4 pb4 ph3'>
+      <h2 className='f2 mb2'>Need to train your team?</h2>
+      <h3 className='normal mb1 measure-wide mt0 lh-copy'>We offer flexible, cost-effective group membership for businesses, schools or government organisations.</h3>
+    </div>
+    <div className='ph3 pb4'>
+      <a href={mailto} className='link dib blue bg-white br1 pa3 b f5 shadow-3 ph4'>Get in touch &#8594;</a>
+    </div>
+  </section>
+}
+
+export interface FAQ {
+  title: string
+  content: string
+}
+
+export const FAQs: React.StatelessComponent<{faqs: FAQ[]}> = ({faqs}) => {
+  return <section className='ph3 measure-wide pv4 center'>
+    <h3 className='f3 f2-l navy pb3'>Frequently asked questions</h3>
+    <ul className='list pl0'>{faqs.map((it, index) => {
+      return <li key={index}>
+        <h4 className='navy f4 f3-l mb2'>{it.title}</h4>
+        <p className='lh-copy black-70'><InlineMarkdown content={it.content}/></p>
+      </li>
+    })}
+    </ul>
+    </section>
+}
+

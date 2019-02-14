@@ -24,7 +24,7 @@ export const assets = {
 
 export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<HP>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
   return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
-      <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
+    <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
 
       <Navbar root={root} assets={assets.layout}/>
 
@@ -54,7 +54,7 @@ export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, current
           <h2 className='f3 navy f2-l measure-narrow'>Learn Kubernetes the <span className='strike'>hard</span> smart way</h2>
           <div className='measure-wide'>
             <p className='lh-copy f4-l black-70'>Kubernetes is particularly well known for having a steep learning curve. It's also very early days, and the technology is changing at a fast pace. So how do you quickly get up to speed when everything around it is moving quickly? At learnk8s we have the best resources to master Kubernetes so that you can:</p>
-            <ul className='list black-70 pl0 pt2'>{benefits.map(it => <ListItem assets={assets.layout}>{it}</ListItem>)}</ul>
+            <ul className='list black-70 pl0 pt2'>{benefits.map((it, index) => <ListItem key={index} assets={assets.layout}>{it}</ListItem>)}</ul>
           </div>
         </div>
 

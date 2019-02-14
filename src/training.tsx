@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinkedNode, Page, TrainingPage, getFullUrl, findOrPanic, PageName } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, InlineMarkdown, SpecialListItem, Testimonal} from './layout'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, InlineMarkdown, SpecialListItem, Testimonal, mailto, MailTo, YourTeam, FAQs, FAQ} from './layout'
 import {Image, Img, Script, Javascript} from './assets'
 import { PrimaryButton } from './homepage'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
@@ -16,54 +16,48 @@ const benefits = [
   'Become a **Certified Kubernetes Administrator** (CKA) or **Certified Kubernetes Application Developer** (CKAD)',
 ]
 
-const faqs = [
-  {
-    title: 'Who is this workshop for?',
-    content: 'Intended for Software developers, Architects and Deployment engineers seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerized applications.',
-  },
-  {
-    title: 'Are there any joining instructions?',
-    content: 'You will receive the joining instructions with all the material needed to run the course after you sign up for a particular course.',
-  },
-  {
-    title: 'What version of k8s was this created for?',
-    content: 'The material was authored for Minikube 0.28, Kubernetes 1.10, Helm 2.9',
-  },
-  {
-    title: `What if I'm not thrilled?`,
-    content: `We want to make sure you get real value out of this so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to <a href=\'mailto:hello@learnk8s.io\' className=\'link navy underline\'>hello@learnk8s.io</a> with a copy of your receipt and I will refund you.`
-  },
-  {
-    title: 'Do you offer a student discount?',
-    content: `Absolutely! <a href=\'https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform\' className=\'link underline navy\'>Fill out this form</a> with some proof that you are a student and we'll send you a discount code. This applies to anyone in any type of schooling, including evening classes and coding bootcamps!`
-  },
-  {
-    title: 'I have another question!',
-    content: `Sure - send an email to <a href=\'mailto:hello@learnk8s.io\' className=\'link navy underline\'>hello@learnk8s.io</a>.`
-  },
-]
+const faqs: FAQ[] = [{
+  title: 'Who is this workshop for?',
+  content: 'Intended for Software developers, Architects and Deployment engineers seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerized applications.',
+}, {
+  title: 'Are there any joining instructions?',
+  content: 'You will receive the joining instructions with all the material needed to run the course after you sign up for a particular course.',
+}, {
+  title: 'What version of Kubernetes was this created for?',
+  content: 'The material was authored for Minikube 0.28, Kubernetes 1.10, Helm 2.9',
+}, {
+  title: `What if I'm not thrilled?`,
+  content: `We want to make sure you get real value out of this so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt and I will refund you.`
+}, {
+  title: 'Do you offer a student discount?',
+  content: `Absolutely! [Fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform) with some proof that you are a student and we'll send you a discount code. This applies to anyone in any type of schooling, including evening classes and coding bootcamps!`
+}, {
+  title: 'I have another question!',
+  content: `Sure - send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io).`
+}]
 
-function mailto({subject, body}: {subject: string, body: string}) {
-  return `mailto:hello@learnk8s.io?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-}
-
-const publicCourseEnquiry = (date: moment.Moment, location: Location) => ({
+const publicCourseEnquiry = (date: moment.Moment, location: Location): MailTo => ({
   subject: 'Kubernetes training — Public course enquiry',
-  body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')} in ${location}.\n\nKind regards,\n`})
+  body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')} in ${location}.\n\nKind regards,\n`,
+  email: 'hello@learnk8s.io',
+})
 
-const privateGroupEnquiry = {
+const privateGroupEnquiry: MailTo = {
   subject: 'Advanced Kubernetes training — Private group enquiry',
-  body: `Hi Learnk8s,\n\nWe wish to train ___(number) people to Kubernetes and containers in ____(month). Can you help?\n\nBest regards,\n`
+  body: `Hi Learnk8s,\n\nWe wish to train ___(number) people to Kubernetes and containers in ____(month). Can you help?\n\nBest regards,\n`,
+  email: 'hello@learnk8s.io',
 }
 
-const newLocationEnquiry = {
+const newLocationEnquiry: MailTo = {
   subject: 'Advanced Kubernetes training — New location enquiry',
-  body: `Hi Learnk8s,\n\nI'd like to know when you plan to visit ________.\n\nBest regards,\n`
+  body: `Hi Learnk8s,\n\nI'd like to know when you plan to visit ________.\n\nBest regards,\n`,
+  email: 'hello@learnk8s.io',
 }
 
-const customRequest = {
+const customRequest: MailTo = {
   subject: 'Advanced Kubernetes training — Module enquiry',
-  body: `Hi Learnk8s,\n\nI'd like to know if you cover _______ in your course.\n\nBest regards,\n`
+  body: `Hi Learnk8s,\n\nI'd like to know if you cover _______ in your course.\n\nBest regards,\n`,
+  email: 'hello@learnk8s.io',
 }
 
 enum Language {
@@ -329,8 +323,8 @@ export const assets = {
 
 export const Training: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<TrainingPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
   return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
-    {courses.map(course => {
-      return <JsonLd<Course> item={{
+    {courses.map((course, index) => {
+      return <JsonLd<Course> key={index} item={{
         '@type': 'Course',
         '@context': 'https://schema.org',
         name: course.name,
@@ -411,7 +405,7 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
       <h2 className='f3 navy f2-l measure-narrow'>Instructor-led, hands-on courses</h2>
       <div className='measure-wide'>
         <p className='lh-copy f4-l black-70'>These courses are great if you wish to:</p>
-        <ul className='list black-70 pl0 pt2'>{benefits.map(it => <ListItem assets={assets.layout}><InlineMarkdown content={it} /></ListItem>)}</ul>
+        <ul className='list black-70 pl0 pt2'>{benefits.map((it, index) => <ListItem key={index} assets={assets.layout}><InlineMarkdown content={it} /></ListItem>)}</ul>
       </div>
       </div>
     </section>
@@ -607,38 +601,17 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
       })}</ul>
 
       <p className='f2 navy b tc mb2 pt4-ns pt2'>Your city is not on the list?</p>
-      <p className='lh-copy f4 black-70 measure center tc'>Don't worry. We run in-person class rooms in Europe, North America and Asia. If your city is not on the list, drop us a line at <a className='link underline' href={mailto(newLocationEnquiry)}>hello@learnk8s.io</a> and will try to make it happen.</p>
+      <p className='lh-copy f4 black-70 measure center tc'>Don't worry. We run in-person classrooms in Europe, North America and Asia. If your city is not on the list, drop us a line at <a className='link underline' href={mailto(newLocationEnquiry)}>hello@learnk8s.io</a> and will try to make it happen.</p>
     </section>
 
-    <YourTeam />
+    <YourTeam mailto={mailto(privateGroupEnquiry)}/>
 
-    <section className='ph3 measure-wide pv4 center'>
-      <h3 className='f3 f2-l navy pb3'>Frequently asked questions</h3>
-      <ul className='list pl0'>{faqs.map(it => {
-        return <li>
-          <h4 className='navy f4 f3-l mb2'>{it.title}</h4>
-          <p className='lh-copy black-70' dangerouslySetInnerHTML={{__html: it.content}}></p>
-        </li>
-      })}
-      </ul>
-    </section>
+    <FAQs faqs={faqs}/>
 
     <Consultation />
     <Footer root={root} assets={assets.layout}/>
     <Script script={assets.page.toggle}></Script>
   </Layout>
-}
-
-export const YourTeam: React.StatelessComponent<{}> = ({children}) => {
-  return <section className='trapezoidr-1 white flex-l items-end-l justify-around-l'>
-    <div className='pt5-m pt4 pb4 ph3'>
-      <h2 className='f2 mb2'>Need to train your team?</h2>
-      <h3 className='normal mb1 measure-wide mt0 lh-copy'>We offer flexible, cost-effective group membership for businesses, schools or government organisations.</h3>
-    </div>
-    <div className='ph3 pb4'>
-      <a href={mailto(privateGroupEnquiry)} className='link dib blue bg-white br1 pa3 b f5 shadow-3 ph4'>Get in touch &#8594;</a>
-    </div>
-  </section>
 }
 
 export const PackageFeatures: React.StatelessComponent<{description: string, benefits: string[], assets: typeof layoutAssets}> = ({benefits, description, children, assets}) => {

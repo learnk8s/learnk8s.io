@@ -2,6 +2,7 @@ import { LinkedNode, Page, PageType, getFullUrl, sitemap, TrainingPage } from '.
 import * as Sitemap from './sitemap'
 import { Homepage, assets as assetsHomepage } from './homepage'
 import { Training, assets as assetsTraining } from './training'
+import { Academy, assets as assetsAcademy } from './academy'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
 import { writeFileSync } from 'fs'
@@ -31,6 +32,10 @@ function render(node: LinkedNode<Page>, root: LinkedNode<Page>, {siteUrl}: {site
     }
     case PageType.TRAINING: {
       writeFileSync(path, renderToStaticMarkup(<Training root={root} currentPage={node as LinkedNode<TrainingPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsTraining)} />))
+      return
+    }
+    case PageType.ACADEMY: {
+      writeFileSync(path, renderToStaticMarkup(<Academy root={root} currentPage={node as LinkedNode<Sitemap.AcademyPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsAcademy)} />))
       return
     }
     default:
