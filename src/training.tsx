@@ -563,7 +563,7 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
       </div>
 
       <div className='pt5-m pb4 pb5-ns ph3 measure-wide center'>
-        <p className='f3 mb1 mt0 lh-copy'>&ldquo;A really enjoyable 3-day workshop on Kubernetes. I cemented my understanding of Kubernetes and can now start implementing and furthering my understanding with real examples and workflows. Next stop, production experience.&rdquo;</p>
+        <p className='f3 mb1 mt0 lh-copy'>&ldquo;A really enjoyable 3-day workshop on Kubernetes. I cemented my understanding of Kubernetes and can now start implementing and furthering my knowledge with real examples and workflows. Next stop, production experience.&rdquo;</p>
         <p className='f4 i mb2'>— David Heward, Senior Devops Engineer</p>
       </div>
     </section>
