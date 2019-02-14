@@ -74,6 +74,7 @@ enum Country {
 
 enum Location {
   ONLINE = 'Online',
+  CARDIFF = 'Cardiff, UK',
   LONDON = 'London, UK',
   MILAN = 'Milan, Italy',
   SAN_FRANCISCO = 'San Francisco, US',
@@ -148,7 +149,7 @@ const events: CourseEvents[] = [
     country: Country.EUROPE,
   },
   {
-    date: dayjs('2019-04-15'),
+    date: dayjs('2019-04-29'),
     title: CourseName.ADVANCED,
     courseInDays: Days.THREE_DAYS,
     location: Location.SINGAPORE,
@@ -157,13 +158,22 @@ const events: CourseEvents[] = [
     country: Country.ASIA,
   },
   {
+    date: dayjs('2019-04-29'),
+    title: CourseName.ADVANCED,
+    courseInDays: Days.THREE_DAYS,
+    location: Location.CARDIFF,
+    price: '£1950',
+    startsAt: '9:30 am GST (London)',
+    country: Country.EUROPE,
+  },
+  {
     date: dayjs('2019-05-13'),
     title: CourseName.ADVANCED,
     courseInDays: Days.THREE_DAYS,
     location: Location.TORONTO,
     price: 'C$3300',
     startsAt: '9:30 am EST (Toronto)',
-    country: Country.EUROPE,
+    country: Country.NORTH_AMERICA,
   },
   {
     date: dayjs('2019-05-15'),
@@ -331,7 +341,7 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
     </ul>
     </section>
 
-    <Testimonal quote='The training is very well prepared and also very well performed.' author='Przemek Anuszek, Senior engineer' />
+    <Testimonal quote='It is an excellent course covering a wide range of Kubernetes concepts, that will give you more than enough knowledge to go back to experiment and be productive with Kubernetes.' author='Luke Anderson, Senior IT Engineer' />
 
     <section className='bg-evian pt4' id='start'>
       <p className='f2 navy b tc ph3'>Advanced Kubernetes course modules</p>
@@ -434,8 +444,8 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
       </div>
 
       <div className='pt5-m pb4 pb5-ns ph3 measure-wide center'>
-        <p className='f3 mb1 mt0 lh-copy'>&ldquo;The training is very well prepared and also very well performed.&rdquo;</p>
-        <p className='f4 i mb2'>— Przemek Anuszek, Senior engineer</p>
+        <p className='f3 mb1 mt0 lh-copy'>&ldquo;A really enjoyable 3-day workshop on Kubernetes. I cemented my understanding of Kubernetes and can now start implementing and furthering my understanding with real examples and workflows. Next stop, production experience.&rdquo;</p>
+        <p className='f4 i mb2'>— David Heward, Senior Devops Engineer</p>
       </div>
     </section>
 
