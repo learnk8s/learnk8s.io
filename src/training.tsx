@@ -699,10 +699,10 @@ function CreateToggle() {
     }
   }
 
-  document.querySelectorAll('[data-toggle]').forEach(function(element) {
+  [].slice.call(document.querySelectorAll('[data-toggle]')).forEach(function(element: Element) {
     element.addEventListener('click', function() {
       Toggle(element)
     })
-  })
-  document.querySelectorAll('[data-toggle-collapsed]').forEach(Toggle)
+  });
+  [].slice.call(document.querySelectorAll('[data-toggle-collapsed]')).forEach(Toggle)
 }
