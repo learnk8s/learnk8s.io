@@ -9,32 +9,42 @@ export const assets = {
     down: Image({url: 'assets/academy/down_arrow_white.svg', description: 'Down'}),
     together: Image({url: 'assets/academy/together.svg', description: 'Team'}),
     tick: Image({url: 'assets/academy/tick.svg', description: 'Tick'}),
+    preview: Javascript({script: `(${Scroll.toString()})()`}),
   },
-  layout: layoutAssets
+  modules: {
+    docker: {
+      1: Image({url: 'assets/academy/preview1.png', description: 'Preview1'}),
+      2: Image({url: 'assets/academy/preview2.png', description: 'Preview2'}),
+      3: Image({url: 'assets/academy/preview3.png', description: 'Preview3'}),
+    }
+  },
+  layout: layoutAssets,
 }
 
 interface AcademyModule {
   name: string
   description: string
-  topics: string[]
+  topics: Topic[]
+}
+
+interface Topic {
+  name: string
+  image: (a: typeof assets.modules) => Image
 }
 
 const modules: AcademyModule[] = [{
   name: 'Docker fundamentals',
   description: `Kubernetes doesn't know how to deploy Java, Node.js, or .NET applications. The only thing it can deal with is Linux containers. But how do these Linux containers work? Why should you care? Are those necessary to master Kubernetes?`,
-  topics: [
-    'Containers VS VMs',
-    'Understanding process isolation',
-    'Is Docker the one?',
-    'Running containers',
-    'Using Docker registries',
-    'Mounting volumes',
-    'Building Docker images',
-    'Exposing ports',
-    'Managing containers lifecycle',
-    'Injecting environment variables',
-    'Debugging running containers',
-  ],
+  topics: [{
+    name: 'Containers VS VMs',
+    image: (a: typeof assets.modules) => a.docker[1],
+  },{
+    name: 'Understanding process isolation',
+    image: (a: typeof assets.modules) => a.docker[2],
+  }, {
+    name: 'Is Docker the one?',
+    image: (a: typeof assets.modules) => a.docker[3],
+  }],
 }, {
   name: 'Zero to Kubernetes',
   description: 'Learn the basics of Kubernetes and deploy your first application to minikube — a Kubernetes cluster for local development. Learn how to declare resources in YAML files, how to send those to the cluster and retrieve them. Understand how Kubernetes reconciles the desired state of the infrastructure.',
@@ -216,13 +226,7 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
             </div>
 
             <div className="w-70-l">
-              <ul className="list pa2 flex flex-wrap">
-                {it.topics.map((it, index) => {
-                  return <li key={index} className="w-50 w-20-l pa3 pt0">
-                    <h3 className="f6 navy">{it}</h3>
-                  </li>
-                })}
-              </ul>
+              <Preview modules={it.topics} assets={assets.modules}/>
             </div>
 
           </div>
@@ -241,7 +245,7 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
               {extraModules.map((it, index) => {
                 return <li key={index} className="w-100 pa3 pt0 flex-l items-start">
                 <div className="w-20-l">
-                  <img src="{{ module.image }}" alt="{{ module.title }}" className="br1 grow reverse-dim"/>
+                  <img src="module.image" alt="{{ module.title }}" className="br1 grow reverse-dim"/>
                 </div>
                 <div className="w-80-l ml4-l">
                   <h3 className="f5 navy">{it.name}</h3>
@@ -361,6 +365,7 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
 
     <Consultation />
     <Footer root={root} assets={assets.layout}/>
+    <Script script={assets.page.preview}></Script>
   </Layout>
 }
 
@@ -369,4 +374,77 @@ export const Item: React.StatelessComponent<{tick: Image}> = ({children, tick}) 
     <div className="v-top tc"><Img image={tick} className='w2 h2'/></div>
     <div className="v-top pl3 w-90">{children}</div>
   </li>
+}
+
+export const Preview: React.StatelessComponent<{modules: Topic[], assets: typeof assets.modules}> = ({assets, modules}) => {
+  return <div className='preview-js'>
+    <div className='academy-js flex w-100'>
+      <div className='left-pane-js w-30 bg-evian ph4 pv2'>
+        <div className='mt3 pt3 h1 bg-navy'></div>
+        <div className='pr3'>
+        {RandomBlocks({blocks: [
+          [0, 3, 2, 1, 0],
+          [1, 0, 2, 0, 1],
+        ]})}
+        </div>
+      </div>
+      <div className='w-70 bg-black-05'>
+        <div className='bg-sky h2'></div>
+        <div className='right-pane-js overflow-auto'>
+          <div className='content-js w-80 center mv4'>
+            <div className='w-40 mt3 pt3 h1 bg-black-50 mb3'></div>
+            <div className='bg-black-20 pa1 mv2 mr5'></div>
+            <div className='bg-black-20 pa1 mv2 mr3'></div>
+            <div className='pv2'>{modules[0] ? <Img image={modules[0].image(assets)} className='br1'/> : null}</div>
+            <div className='bg-black-20 pa1 mv2 mr5'></div>
+            <div className='bg-black-20 pa1 mv2'></div>
+            <div className='w-20 bg-black-20 pa1 mv2 mr3'></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul className='topics-js flex flex-wrap list pl0'>
+      {modules.slice(1).map((it, index) => {
+        return <li key={index} className="w-50 w-20-l pa3 pt0">
+          <Img image={it.image(assets)} className='br1 grow reverse-dim'/>
+          <h3 className="f6 navy">{it.name}</h3>
+        </li>
+      })}
+    </ul>
+  </div>
+}
+
+export const RandomBlocks = ({blocks}: {blocks: number[][]}) => {
+  return blocks.map((it, index) => {
+    const [firstLength] = it
+    return [
+      <div className={`bg-sky h1 pa1 mt4 mb2 mr${5 - firstLength}`}></div>
+    ].concat(it.slice(1).map(it => {
+      return <div className={`bg-black-10 h1 mv2 mr${5 - it}`}></div>
+    }))
+  })
+}
+
+function Scroll() {
+  var previews = [].slice.call(document.querySelectorAll('.preview-js')) as HTMLElement[]
+  previews.forEach(it => {
+    var rightPane = it.querySelector('.right-pane-js')
+    if (!rightPane || !(rightPane instanceof HTMLElement)) return
+    var height = rightPane.offsetHeight
+    rightPane.style.height = `${height}px`
+    var content = rightPane.querySelector('.content-js')
+    if (!content) return
+    content.appendChild(createBlock())
+    content.appendChild(createBlock())
+    content.appendChild(createBlock())
+    content.appendChild(createBlock())
+    content.appendChild(createBlock())
+    content.appendChild(createBlock())
+    content.appendChild(createBlock())
+  })
+  function createBlock() {
+    var node = document.createElement('div')
+    node.classList.add('bg-black-20', 'pa1', 'mv2', 'mr5')
+    return node
+  }
 }
