@@ -218,14 +218,14 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
       <div className="ma3 ma5-l pa3 pa5-l bg-white shadow-1">
 
         {modules.map((it, index) => {
-          return <div key={index} className="flex-l">
+          return <div key={index} className="flex-l justify-between">
 
             <div className="w-30-l">
               <h2 className="navy b lh-solid">{index + 1}. {it.name}</h2>
               <p className="lh-copy black-70 measure">{it.description}</p>
             </div>
 
-            <div className="w-70-l">
+            <div className="w-60-l">
               <Preview modules={it.topics} assets={assets.modules}/>
             </div>
 
@@ -389,9 +389,12 @@ export const Preview: React.StatelessComponent<{modules: Topic[], assets: typeof
         </div>
       </div>
       <div className='w-70 bg-black-05'>
-        <div className='bg-sky h2'></div>
-        <div className='right-pane-js overflow-auto'>
-          <div className='content-js w-80 center mv4'>
+        <div className='bg-sky h2 w-100'></div>
+        <div className='relative'>
+          <div className='bg-black-05 ph1 h-100 absolute top-0 right-0 z-1'></div>
+          <div className='progress-bar-js bg-black-10 ph1 h4 absolute top-0 right-0 z-3'></div>
+          <div className='right-pane-js overflow-hidden'>
+          <div className='scrollable-content-js w-80 center mv4'>
             <div className='w-40 mt3 pt3 h1 bg-black-50 mb3'></div>
             <div className='bg-black-20 pa1 mv2 mr5'></div>
             <div className='bg-black-20 pa1 mv2 mr3'></div>
@@ -401,12 +404,13 @@ export const Preview: React.StatelessComponent<{modules: Topic[], assets: typeof
             <div className='w-20 bg-black-20 pa1 mv2 mr3'></div>
           </div>
         </div>
+        </div>
       </div>
     </div>
     <ul className='topics-js flex flex-wrap list pl0'>
-      {modules.slice(1).map((it, index) => {
-        return <li key={index} className="w-50 w-20-l pa3 pt0">
-          <Img image={it.image(assets)} className='br1 grow reverse-dim'/>
+      {modules.map((it, index) => {
+        return <li key={index} className="topic-js w-50 w-20-l pa3 pt0">
+          <Img image={it.image(assets)} className='topic-image-js br1 grow reverse-dim'/>
           <h3 className="f6 navy">{it.name}</h3>
         </li>
       })}
@@ -418,7 +422,7 @@ export const RandomBlocks = ({blocks}: {blocks: number[][]}) => {
   return blocks.map((it, index) => {
     const [firstLength] = it
     return [
-      <div className={`bg-sky h1 pa1 mt4 mb2 mr${5 - firstLength}`}></div>
+      <div className={`title-js bg-sky h1 pa1 mt4 mb2 mr${5 - firstLength}`}></div>
     ].concat(it.slice(1).map(it => {
       return <div className={`bg-black-10 h1 mv2 mr${5 - it}`}></div>
     }))
@@ -432,19 +436,81 @@ function Scroll() {
     if (!rightPane || !(rightPane instanceof HTMLElement)) return
     var height = rightPane.offsetHeight
     rightPane.style.height = `${height}px`
-    var content = rightPane.querySelector('.content-js')
-    if (!content) return
-    content.appendChild(createBlock())
-    content.appendChild(createBlock())
-    content.appendChild(createBlock())
-    content.appendChild(createBlock())
-    content.appendChild(createBlock())
-    content.appendChild(createBlock())
-    content.appendChild(createBlock())
+    var scrollableContent = rightPane.querySelector('.scrollable-content-js')
+    var topics = it.querySelector('.topics-js')
+    if (!scrollableContent || !topics) return
+    var topicImages = [].slice.call(topics.querySelectorAll('.topic-image-js')) as HTMLImageElement[]
+    topicImages.slice(1).forEach(it => {
+      scrollableContent!.appendChild(createBlock(`w-${random(3, 8)}0`))
+      scrollableContent!.appendChild(createBlock(`w-${random(3, 8)}0`))
+      scrollableContent!.appendChild(createBlock(`w-${random(3, 8)}0`))
+      scrollableContent!.appendChild(createTitle(`w-${random(4, 6)}0`))
+      scrollableContent!.appendChild(createBlock(`w-${random(3, 8)}0`))
+      scrollableContent!.appendChild(createBlock(`w-${random(3, 8)}0`))
+      scrollableContent!.appendChild(createImage(it.src, it.alt))
+    })
+    scrollableContent.appendChild(createBlock('w-50'))
+    scrollableContent.appendChild(createBlock('w-80'))
+    scrollableContent.appendChild(createBlock('w-60'))
+    scrollableContent.appendChild(createBlock('w-30'))
+    var titles = [].slice.call(it.querySelectorAll('.title-js')) as HTMLElement[]
+    if (titles.length < 2) return
+    var progressBar = it.querySelector('.progress-bar-js') as HTMLElement
+    rightPane.addEventListener('scroll', event => setTimeout(() => {
+      checkScroll(rightPane as HTMLElement, titles[0], titles[1])
+      if (!progressBar) return
+      checkProgress((rightPane as HTMLElement).scrollTop, (rightPane as HTMLElement).offsetHeight, (scrollableContent as HTMLElement).offsetHeight, progressBar)
+    }, 0))
+    checkScroll(rightPane as HTMLElement, titles[0], titles[1])
+    var items = [].slice.call(topics.querySelectorAll('.topic-js')) as HTMLElement[]
+    items.forEach((it, index) => {
+      var fn = () => {
+        var start = (rightPane as HTMLElement).scrollTop
+        var end = (rightPane as HTMLElement).offsetHeight * index * 1.1
+        var increment = (end - start) / 100
+        for(var i = 0; i < 100; i++) {
+          setTimeout((scrollTop: number) => {
+            rightPane!.scrollTop = scrollTop
+          }, i * 10, start + (i * increment))
+        }
+      }
+      // TODO: padding hack + smooth scrolling on enter without glitches
+      // it.addEventListener('mouseenter', fn)
+      it.addEventListener('click', fn)
+    })
   })
-  function createBlock() {
+  function createBlock(...classNames: string[]) {
     var node = document.createElement('div')
-    node.classList.add('bg-black-20', 'pa1', 'mv2', 'mr5')
+    node.classList.add('bg-black-20', 'pa1', 'mv2', ...classNames)
     return node
+  }
+  function createImage(src: string, alt: string) {
+    var node = document.createElement('img') as HTMLImageElement
+    node.src = src
+    node.alt = alt
+    return node
+  }
+  function createTitle(...classNames: string[]) {
+    var node = document.createElement('div')
+    node.classList.add('mt5', 'pt3', 'h1', 'bg-black-50', 'mb3', ...classNames)
+    return node
+  }
+  function random(min: number, max: number): number {
+    return Math.round(((Math.random() * (max - min)) + min))
+  }
+  function checkScroll(target: HTMLElement, sectionA: HTMLElement, sectionB: HTMLElement) {
+    var classes = ['bl', 'bw3', 'b--navy']
+    if (target.scrollTop > (target.offsetHeight) * 0.5) {
+      sectionA.classList.remove(...classes)
+      sectionB.classList.add(...classes)
+    } else {
+      sectionB.classList.remove(...classes)
+      sectionA.classList.add(...classes)
+    }
+  }
+  function checkProgress(scrollTop: number, windowHeight: number, totalHeight: number, progressBar: HTMLElement) {
+    var progressLength = windowHeight - progressBar.offsetHeight
+    var percentageCompleted = Math.min((scrollTop) / totalHeight, 1)
+    progressBar.style.top = `${progressLength * percentageCompleted}px`
   }
 }
