@@ -464,37 +464,37 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
       <div className='ma3 ma5-l flex-l flex-wrap justify-center'>
         <DashboardModule className='w-40-l' preview={assets.page.previewDocker} title={`1. ${material.docker.name}`} description={material.docker.description}>
           <p className='lh-copy measure-wide'>You will learn how to package and run applications in Docker containers. The module covers the following topics:</p>
-          <ul>{material.docker.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
+          <ul>{Object.values(material.docker.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
         <DashboardModule className='w-40-l' preview={assets.page.previewZero} title={`2. ${material.zeroToKubernetes.name}`} description={material.zeroToKubernetes.description}>
           <p className='lh-copy measure-wide'>You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the following topics:</p>
-          <ul>{material.zeroToKubernetes.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
+          <ul>{Object.values(material.zeroToKubernetes.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
         <DashboardModule className='w-40-l' preview={assets.page.previewDeployments} title={`3. ${material.deploymentStrategies.name}`} description={material.deploymentStrategies.description}>
           <p className='lh-copy measure-wide'>You will learn different techniques to deploy your applications with zero downtime. The module covers the following topics:</p>
-          <ul>{material.deploymentStrategies.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
+          <ul>{Object.values(material.deploymentStrategies.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
         <DashboardModule className='w-40-l' preview={assets.page.previewArchitecture} title={`4. ${material.architecture.name}`} description={material.architecture.description}>
           <p className='lh-copy measure-wide'>You will learn the core components in Kubernetes and how they work. The module covers the following topics:</p>
-          <ul>{material.architecture.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
+          <ul>{Object.values(material.architecture.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
         <DashboardModule className='w-40-l' preview={assets.page.previewNetworking} title={`5. ${material.networking.name}`} description={material.networking.description}>
           <p className='lh-copy measure-wide'>You will learn how the traffic flows inside the cluster. You will also learn how to expose your apps to the public internet. The module covers the following topics:</p>
-          <ul>{material.networking.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
+          <ul>{Object.values(material.networking.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
         <DashboardModule className='w-40-l' preview={assets.page.previewState} title={`6. ${material.managingState.name}`} description={material.managingState.description}>
           <p className='lh-copy measure-wide'>You will learn how to persist data in Kubernetes. The module covers the following topics:</p>
-          <ul>{material.managingState.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
+          <ul>{Object.values(material.managingState.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
         <DashboardModule className='w-40-l' preview={assets.page.previewTemplating} title={`7. ${material.templating.name}`} description={material.templating.description}>
           <p className='lh-copy measure-wide'>You will learn how to template resources for different environments. The module covers the following topics:</p>
-          <ul>{material.templating.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
+          <ul>{Object.values(material.templating.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
         <DashboardModule className='w-40-l' preview={assets.page.previewOptionals} title='Optionals' description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}>

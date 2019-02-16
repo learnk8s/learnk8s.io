@@ -37,13 +37,13 @@ const modules: AcademyModule[] = [{
   name: material.docker.name,
   description: material.docker.description,
   topics: [{
-    name: material.docker.topics[0],
+    name: material.docker.topics.build,
     image: (a: typeof assets.modules) => a.docker[0],
   },{
-    name: material.docker.topics[1],
+    name: material.docker.topics.registries,
     image: (a: typeof assets.modules) => a.docker[1],
   }, {
-    name: material.docker.topics[2],
+    name: material.docker.topics.environment,
     image: (a: typeof assets.modules) => a.docker[2],
   }],
 }, {
