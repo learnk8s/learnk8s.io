@@ -6,7 +6,6 @@ author: Daniel Weibel
 author_link: https://medium.com/@weibeld
 image: /blog/kubernetes-cli-tricks/magic.jpg
 categories: kubernetes kubectl command-line shell bash
-excerpt: fooo bar
 js:
   - anime.min.js
   - isScrolledIntoView.js
@@ -16,13 +15,17 @@ open_graph:
   image: /blog/kubernetes-cli-tricks/magic.jpg
 ---
 
-## Understand what kubectl is
+If you use Kubernetes, you use kubectl. And you probably use it *a lot*. If you spend so much time using a certain tool, it's worth knowing it very well and being able to use it *efficiently* and *effectively*. This article presents a series of tips and tricks to power-up your usage of kubectl, and along the way, giving you a deeper understanding of the kubectl/Kubernetes ecosystem. The ultimate goal of this article is not only to make your daily work with Kubernetes more professional, but also more fun and enjoyable!
 
-You probably know what you can do with kubectl, namely controlling and managing a Kubernetes cluster. But do you know what kubectl actually is from a technical point of view? The following diagram gives an overview:
+<!--more-->
+
+## What is kubectl?
+
+In order to use a took efficiently and effectively, you need to understand what it is an how it works. The following diagram gives an overview of where kubectl is in the Kubernetes ecosystem:
 
 ![](what-is-kubectl.png)
 
-To understand what kubectl is, you also need to have a rough idea how Kubernetes works.
+To understand the role of kubectl, you also need to have a basic understanding of how Kubernetes works.
 
 Kubernetes itself consists of a set of independent **components** that run on different nodes of a cluster. A subset of these components are **control plane components** and they usually run on one or more dedicated nodes that only run control plane components and don't execute any workloads. These nodes are called master nodes. The remaining components are **worker nodes components**, and they run on those nodes of the cluster that execute the application workloads. These nodes are called worker nodes.
 
@@ -136,42 +139,55 @@ autoload -Uz compinit
 compinit
 ~~~
 
-## Quickly access resource documentation
+## Quickly access resource documentation with `kubectl explain`
 
-This tip will prove useful for many of the subsequent tips in this post.
+As mentioned, the core of Kubernetes consists of resources. You manage a Kubernetes cluster by applying CRUD operations on resources that are stored in the control plane of the cluster (more precisely, in the etcd component). Resources have a hierarchical structure (consisting of fields and sub-fields) that is specified in the [API reference](https://kubernetes.io/docs/reference/kubernetes-api/).
 
-As mentioned, you manage a Kubernetes cluster by applying CRUD operations on Kubernetes resource objects (for example, through kubectl). Each resource object has a specific hierarchical structure, which is described in the Kubernetes [API reference](https://kubernetes.io/docs/reference/kubernetes-api/). Often you need to know the structure of, say, a *pod*, to know the fields and sub-fields it has. However, hitting the web documentation each time to find this out is a tedious and time-consuming process.
+When you create, read, or update a resource, you need to know the structure of this resource (for example, if you want to specify or retrieve the image of a container in a pod, you need to know that this information is located in the `pod.spec.containters.image` field).
 
-This is where `kubectl explain` comes in. This command contains the same information as the API reference web documentation, but it lets you access it conveniently from your command-line.
+You could do this by consulting the API reference on the web, but this is a time-consuming and tedious process. Looking up this information should be faster and more integrated in your workflow.
 
-For example, if you want to know which top-level fields the *pod* object has, you can issue the following command:
+This is where `kubectl explain` comes in. This command provides the complete API reference right in your terminal.
+
+For example, if you want to know the fields of a pod, you can run:
 
 ~~~bash
 kubectl explain pod
 ~~~
 
-If you're interested in the *spec* field of a *pod* object, you can get this information as follows:
+This command shows you all top-level fields of a pod including their type and a description.
+
+You can then drill down into any fields that you're interested in to get their documentation, for example:
 
 ~~~bash
 kubectl explain pod.spec
+kubectl explain pod.spec.containers
+kubectl explain pod.spec.containers.image
 ~~~
 
-And so on, up to any level of nestings.
+The information shown by `kubectl explain` is identical to the information in the [API reference](https://kubernetes.io/docs/reference/kubernetes-api/) on the web. The only difference is that with `kubectl explain`, you have it right at your fingertips.
 
-By default, `kubectl explain` displays only one level of fields. You can print out the entire hierarchy of fields with the `--recursive` flag:
+By default, `kubectl explain` displays only one level of fields. You can recursively display the entire tree of fields (including the type of each field but omitting the description) with the `--recursive` flag:
 
 ~~~bash
-kubectl explain pod.spec.affinity --recursive
+kubectl explain pod.spec --recursive
 ~~~
 
-In case you wonder which top-level resource objects you can use for the `kubectl explain` command, you can print out the entire list with the following command:
+In case you're not sure about the top-level resource names that you can use with `kubectl explain` (e.g. *pod*, *service*), you can display all of them with the following command:
 
 ~~~bash
 kubectl api-resources
 ~~~
 
-In the output of this command, the resource object names are in plural. However, you can also use the singular version of each name for the `kubectl explain` command.
+Note that this command displays the resource names in their plural form (e.g. *services* instead of *service*). It also displays the short name for those resources that have a short name (e.g. *svc* for the service resource). You can use any of these options with `kubectl explain`.
 
+For example, the following invocations are all equivalent:
+
+~~~bash
+kubectl explain svc.spec
+kubectl explain service.spec
+kubectl explain services.spec
+~~~
 
 ## Get the information you need with custom output formats
 
