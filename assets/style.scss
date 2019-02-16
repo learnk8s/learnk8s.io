@@ -511,3 +511,8 @@ green     #859900  operators, other keywords
 #asia:checked ~ .events .asia {
   display: block;
 }
+
+.padding-hack-75 {
+  height: 0;
+  padding-bottom: 75%;
+}

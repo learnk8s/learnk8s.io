@@ -6,6 +6,7 @@ import { PrimaryButton } from './homepage'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import moment from 'moment'
+import { material } from './material'
 
 const benefits = [
   '**Get started with Kubernetes in your next project** and you need to quickly get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices',
@@ -321,7 +322,7 @@ export const assets = {
   layout: layoutAssets,
 }
 
-export const Training: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<TrainingPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
+export const Training: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<TrainingPage>, siteUrl: string, assets: typeof assets, material: typeof material}> = ({assets, root, siteUrl, currentPage, material}) => {
   return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
     {courses.map((course, index) => {
       return <JsonLd<Course> key={index} item={{
@@ -461,97 +462,51 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
       <p className='lh-copy f4 black-70 measure center tc ph3'>The advanced course is made 6 core modules that are designed to last 2 full days. You're recommended to select 4 optional modules for the third day, but you choose more if you wish.</p>
 
       <div className='ma3 ma5-l flex-l flex-wrap justify-center'>
-        <DashboardModule className='w-40-l' preview={assets.page.previewDocker} title='1. Linux containers and Kubernetes' description={`Kubernetes doesn't know how to deploy Java, Node.js, or .NET applications. The only thing it can deal with is Linux containers. But how do these Linux containers work? Why should you care? Are those necessary to master Kubernetes?`}>
+        <DashboardModule className='w-40-l' preview={assets.page.previewDocker} title={`1. ${material.docker.name}`} description={material.docker.description}>
           <p className='lh-copy measure-wide'>You will learn how to package and run applications in Docker containers. The module covers the following topics:</p>
-          <ul>
-            <li className='lh-copy mv1'>Running containers</li>
-            <li className='lh-copy mv1'>Docker registries</li>
-            <li className='lh-copy mv1'>Mounting volumes</li>
-            <li className='lh-copy mv1'>Building Docker images</li>
-            <li className='lh-copy mv1'>Exposing ports</li>
-            <li className='lh-copy mv1'>Containers lifecycle</li>
-            <li className='lh-copy mv1'>Injecting environment variables</li>
-            <li className='lh-copy mv1'>Debugging running containers</li>
-          </ul>
+          <ul>{material.docker.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewZero} title='2. Zero to k8s' description='Learn the basics of Kubernetes and deploy your first application to minikube — a Kubernetes cluster for local development. Learn how to declare resources in YAML files, how to send those to the cluster and retrieve them. Understand how Kubernetes reconciles the desired state of the infrastructure.'>
+        <DashboardModule className='w-40-l' preview={assets.page.previewZero} title={`2. ${material.zeroToKubernetes.name}`} description={material.zeroToKubernetes.description}>
           <p className='lh-copy measure-wide'>You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the following topics:</p>
-          <ul>
-            <li className='lh-copy mv1'>Creating a local cluster</li>
-            <li className='lh-copy mv1'>Creating deployments</li>
-            <li className='lh-copy mv1'>Exposing applications</li>
-            <li className='lh-copy mv1'>Scaling apps</li>
-            <li className='lh-copy mv1'>Test failover</li>
-          </ul>
+          <ul>{material.zeroToKubernetes.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewDeployments} title='3. Deployment strategies' description={`Every time you deploy new features in production you don't want to stop your service, load a new version and remove the holding page. Ideally, you should be able to transition to a new version of your application without anyone noticing any downtime. You can leverage Kubernetes to do that.`}>
+        <DashboardModule className='w-40-l' preview={assets.page.previewDeployments} title={`3. ${material.deploymentStrategies.name}`} description={material.deploymentStrategies.description}>
           <p className='lh-copy measure-wide'>You will learn different techniques to deploy your applications with zero downtime. The module covers the following topics:</p>
-          <ul>
-            <li className='lh-copy mv1'>Rolling updates</li>
-            <li className='lh-copy mv1'>Services and selectors</li>
-            <li className='lh-copy mv1'>Canary deployments</li>
-            <li className='lh-copy mv1'>Blue-green deployments</li>
-            <li className='lh-copy mv1'>Rollbacks</li>
-          </ul>
+          <ul>{material.deploymentStrategies.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewArchitecture} title='4. Kubernetes Architecture' description={`When you deploy applications to Kubernetes you don't decide in which server a container is scheduled. Kubernetes abstracts your data centre into a single entity, and you don't get to worry about the underlying resources. But how does Kubernetes work its magic?`}>
+        <DashboardModule className='w-40-l' preview={assets.page.previewArchitecture} title={`4. ${material.architecture.name}`} description={material.architecture.description}>
           <p className='lh-copy measure-wide'>You will learn the core components in Kubernetes and how they work. The module covers the following topics:</p>
-          <ul>
-            <li className='lh-copy mv1'>Creating a three nodes cluster</li>
-            <li className='lh-copy mv1'>The control plane</li>
-            <li className='lh-copy mv1'>The kubelet: the Kubernetes agent</li>
-            <li className='lh-copy mv1'>The API server</li>
-            <li className='lh-copy mv1'>Testing resiliency</li>
-          </ul>
+          <ul>{material.architecture.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewNetworking} title='5. Networking in Kubernetes' description={`How do you route traffic from the internet to your applications? How can you secure your communication with TLS? How about path routing to different services? In this module, you will explore how the traffic is routed in the cluster.`}>
+        <DashboardModule className='w-40-l' preview={assets.page.previewNetworking} title={`5. ${material.networking.name}`} description={material.networking.description}>
           <p className='lh-copy measure-wide'>You will learn how the traffic flows inside the cluster. You will also learn how to expose your apps to the public internet. The module covers the following topics:</p>
-          <ul>
-            <li className='lh-copy mv1'>Exploring the Endpoints</li>
-            <li className='lh-copy mv1'>In-cluster load balancing</li>
-            <li className='lh-copy mv1'>kube-proxy</li>
-            <li className='lh-copy mv1'>The four kind of Services</li>
-            <li className='lh-copy mv1'>Installing and debugging the Ingress</li>
-            <li className='lh-copy mv1'>Service discovery</li>
-          </ul>
+          <ul>{material.networking.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewState} title='6. Managing state in Kubernetes' description={`How does Kubernetes store files and state? Can you host databases in it? Should you? Can you extract configurations and share them with different deployments? How do you make sure that your storage layer is replicated and persisted even if a node becomes unavailable?`}>
+        <DashboardModule className='w-40-l' preview={assets.page.previewState} title={`6. ${material.managingState.name}`} description={material.managingState.description}>
           <p className='lh-copy measure-wide'>You will learn how to persist data in Kubernetes. The module covers the following topics:</p>
-          <ul>
-            <li className='lh-copy mv1'>Managing configurations</li>
-            <li className='lh-copy mv1'>Managing secrets</li>
-            <li className='lh-copy mv1'>Persisting changes</li>
-            <li className='lh-copy mv1'>Dynamic volume provisioning</li>
-            <li className='lh-copy mv1'>Stateful workloads</li>
-          </ul>
+          <ul>{material.managingState.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewTemplating} title='7. Templating' description={`Resources in Kubernetes are described as YAML files. If you wish to have the same resources for different environments such as development, preproduction and production you may be tempted to copy the files three times. Or you could use a templating engine. Learn how to do precisely that with Helm — the Kubernetes package manager.`}>
+        <DashboardModule className='w-40-l' preview={assets.page.previewTemplating} title={`7. ${material.templating.name}`} description={material.templating.description}>
           <p className='lh-copy measure-wide'>You will learn how to template resources for different environments. The module covers the following topics:</p>
-          <ul>
-            <li className='lh-copy mv1'>Creating reusable templates</li>
-            <li className='lh-copy mv1'>Helm's templating engine</li>
-            <li className='lh-copy mv1'>Releases lifecycle</li>
-            <li className='lh-copy mv1'>Writing helpers</li>
-            <li className='lh-copy mv1'>Rollbacks</li>
-          </ul>
+          <ul>{material.templating.topics.map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
         <DashboardModule className='w-40-l' preview={assets.page.previewOptionals} title='Optionals' description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}>
           <p className='lh-copy measure-wide'>You can pick and choose from the modules below. Looking for something in particular? <a className='link underline' href={mailto(customRequest)}>Get in touch!</a></p>
           <ul>
-            <li className='lh-copy mv1'>Advanced networking</li>
-            <li className='lh-copy mv1'>Security</li>
-            <li className='lh-copy mv1'>Autoscaling</li>
-            <li className='lh-copy mv1'>Advanced scheduling</li>
-            <li className='lh-copy mv1'>Multi-cloud, multi-data centre deployments</li>
-            <li className='lh-copy mv1'>Service meshes</li>
-            <li className='lh-copy mv1'>Extending and customising Kubernetes</li>
+            <li className='lh-copy mv1'>{material.advancedNetworking.name}</li>
+            <li className='lh-copy mv1'>{material.security.name}</li>
+            <li className='lh-copy mv1'>{material.autoscaling.name}</li>
+            <li className='lh-copy mv1'>{material.advancedScheduling.name}</li>
+            <li className='lh-copy mv1'>{material.multiCloud.name}</li>
+            <li className='lh-copy mv1'>{material.serviceMeshes.name}</li>
+            <li className='lh-copy mv1'>{material.extensions.name}</li>
           </ul>
         </DashboardModule>
       </div>

@@ -2,6 +2,7 @@ import React from 'react'
 import { LinkedNode, Page, getFullUrl, findOrPanic, PageName, AcademyPage } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ} from './layout'
 import {Image, Img, Script, Javascript} from './assets'
+import {material} from './material'
 
 export const assets = {
   page: {
@@ -13,9 +14,9 @@ export const assets = {
   },
   modules: {
     docker: {
-      1: Image({url: 'assets/academy/preview1.png', description: 'Preview1'}),
-      2: Image({url: 'assets/academy/preview2.png', description: 'Preview2'}),
-      3: Image({url: 'assets/academy/preview3.png', description: 'Preview3'}),
+      0: Image({url: 'assets/academy/preview1.png', description: 'Preview1'}),
+      1: Image({url: 'assets/academy/preview2.png', description: 'Preview2'}),
+      2: Image({url: 'assets/academy/preview3.png', description: 'Preview3'}),
     }
   },
   layout: layoutAssets,
@@ -33,67 +34,67 @@ interface Topic {
 }
 
 const modules: AcademyModule[] = [{
-  name: 'Docker fundamentals',
-  description: `Kubernetes doesn't know how to deploy Java, Node.js, or .NET applications. The only thing it can deal with is Linux containers. But how do these Linux containers work? Why should you care? Are those necessary to master Kubernetes?`,
+  name: material.docker.name,
+  description: material.docker.description,
   topics: [{
-    name: 'Containers VS VMs',
-    image: (a: typeof assets.modules) => a.docker[1],
+    name: material.docker.topics[0],
+    image: (a: typeof assets.modules) => a.docker[0],
   },{
-    name: 'Understanding process isolation',
-    image: (a: typeof assets.modules) => a.docker[2],
+    name: material.docker.topics[1],
+    image: (a: typeof assets.modules) => a.docker[1],
   }, {
-    name: 'Is Docker the one?',
-    image: (a: typeof assets.modules) => a.docker[3],
+    name: material.docker.topics[2],
+    image: (a: typeof assets.modules) => a.docker[2],
   }],
 }, {
-  name: 'Zero to Kubernetes',
-  description: 'Learn the basics of Kubernetes and deploy your first application to minikube — a Kubernetes cluster for local development. Learn how to declare resources in YAML files, how to send those to the cluster and retrieve them. Understand how Kubernetes reconciles the desired state of the infrastructure.',
+  name: material.zeroToKubernetes.name,
+  description: material.zeroToKubernetes.description,
   topics: [],
 }, {
-  name: 'Deployment strategies',
-  description: `Every time you deploy new features in production you don't want to stop your service, load a new version and remove the holding page. Ideally, you should be able to transition to a new version of your application without anyone noticing any downtime. You can leverage Kubernetes to do that.`,
+  name: material.deploymentStrategies.name,
+  description: material.deploymentStrategies.description,
   topics: [],
 }, {
-  name: 'Kubernetes architecture',
-  description: `When you deploy applications to Kubernetes, you don't decide in which server a container is scheduled. Kubernetes abstracts your data centre into a single entity, and you don’t get to worry about the underlying resources. But how does Kubernetes work its magic?`,
+  name: material.architecture.name,
+  description: material.architecture.name,
   topics: [],
 }, {
-  name: 'Kubernetes networking',
-  description: `How do you route traffic from the internet to your applications? How can you secure your communication with TLS? How about path routing to different services? In this module, you will explore how the traffic is routed in the cluster.`,
+  name: material.networking.name,
+  description: material.networking.description,
   topics: [],
 }, {
-  name: 'Managing state',
-  description: `How does Kubernetes store files and state? Can you host databases in it? Should you? Can you extract configurations and share them with different deployments? How do you make sure that your storage layer is replicated and persisted even if a node becomes unavailable?`,
+  name: material.managingState.name,
+  description: material.managingState.description,
   topics: [],
 }, {
-  name: 'Templating Kubernetes resources',
-  description: `Resources in Kubernetes are described as YAML files. If you wish to have the same resources for different environments such as development, preproduction and production you may be tempted to copy the files three times. Or you could use a templating engine. Learn how to do precisely that with Helm — the Kubernetes package manager.`,
+  name: material.templating.name,
+  description: material.templating.description,
   topics: [],
 }]
 
 const extraModules: AcademyModule[] = [{
-  name: 'Multi-cloud, multi-data centre',
-  description: 'Learn how to design clusters that span multiple cloud providers for resilience, disaster recovery or just saving money.',
+  name: material.multiCloud.name,
+  description: material.multiCloud.description,
   topics: [],
 }, {
-  name: 'EKS, AKS, GKE',
-  description: 'Discover the nitty-gritty details of how AKS, EKS and GKE work and their strength and limitations.',
+  name: material.managedServices.name,
+  description: material.managedServices.description,
   topics: [],
 }, {
-  name: 'Security',
-  description: 'Wear your black hat and try to break the cluster. Study mitigation and countermeasure to secure your cluster against malicious attacks.',
+  name: material.security.name,
+  description: material.security.description,
   topics: [],
 }, {
-  name: 'Advanced networking',
-  description: 'Dive into the specifics of network interfaces, IP addresses and network topologies in this session about advanced Kubernetes networking.',
+  name: material.advancedNetworking.name,
+  description: material.advancedNetworking.description,
   topics: [],
 }, {
-  name: 'Advanced scheduling',
-  description: 'Master advanced placements of workloads in your infrastructure. Learn how to schedule machine learning deployments to nodes with GPU or how you can segregate workloads for regions (useful if you need to comply with policies and regulations).',
+  name: material.advancedScheduling.name,
+  description: material.advancedScheduling.description,
   topics: [],
 }, {
-  name: 'CI/CD pipelines',
-  description: 'Learn how to design CI/CD pipelines that leverage containers and Kubernetes. Ship software quicker, more reliably and cheaply.',
+  name: material.pipelines.name,
+  description: material.pipelines.description,
   topics: [],
 }]
 
@@ -398,7 +399,7 @@ export const Preview: React.StatelessComponent<{modules: Topic[], assets: typeof
             <div className='w-40 mt3 pt3 h1 bg-black-50 mb3'></div>
             <div className='bg-black-20 pa1 mv2 mr5'></div>
             <div className='bg-black-20 pa1 mv2 mr3'></div>
-            <div className='pv2'>{modules[0] ? <Img image={modules[0].image(assets)} className='br1'/> : null}</div>
+            <div className='pv2'>{modules[0] ? <div className='relative padding-hack-75'><Img image={modules[0].image(assets)} className='br1 absolute top-0 left-0'/></div> : null}</div>
             <div className='bg-black-20 pa1 mv2 mr5'></div>
             <div className='bg-black-20 pa1 mv2'></div>
             <div className='w-20 bg-black-20 pa1 mv2 mr3'></div>
@@ -410,7 +411,7 @@ export const Preview: React.StatelessComponent<{modules: Topic[], assets: typeof
     <ul className='topics-js flex flex-wrap list pl0'>
       {modules.map((it, index) => {
         return <li key={index} className="topic-js w-50 w-20-l pa3 pt0">
-          <Img image={it.image(assets)} className='topic-image-js br1 grow reverse-dim'/>
+          <div className='relative padding-hack-75'><Img image={it.image(assets)} className='topic-image-js br1 grow reverse-dim absolute top-0 left-0'/></div>
           <h3 className="f6 navy">{it.name}</h3>
         </li>
       })}
@@ -464,18 +465,11 @@ function Scroll() {
     checkScroll(rightPane as HTMLElement, titles[0], titles[1])
     var items = [].slice.call(topics.querySelectorAll('.topic-js')) as HTMLElement[]
     items.forEach((it, index) => {
-      var fn = () => {
-        var start = (rightPane as HTMLElement).scrollTop
-        var end = (rightPane as HTMLElement).offsetHeight * index * 1.1
-        var increment = (end - start) / 100
-        for(var i = 0; i < 100; i++) {
-          setTimeout((scrollTop: number) => {
-            rightPane!.scrollTop = scrollTop
-          }, i * 10, start + (i * increment))
-        }
-      }
-      // TODO: padding hack + smooth scrolling on enter without glitches
-      // it.addEventListener('mouseenter', fn)
+      var fn = () => rightPane!.scrollTo({
+        top: (rightPane as HTMLElement).offsetHeight * index * 1.1,
+        behavior: 'smooth',
+      })
+      it.addEventListener('mouseenter', fn)
       it.addEventListener('click', fn)
     })
   })

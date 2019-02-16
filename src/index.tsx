@@ -9,6 +9,7 @@ import { writeFileSync } from 'fs'
 import { resolve } from 'path'
 import { optimiseAssets } from './assets';
 import { mkdir } from 'shelljs'
+import { material } from './material'
 
 export function run(options: {siteUrl: string}) {
   return function mount(root: LinkedNode<Page>) {
@@ -31,7 +32,7 @@ function render(node: LinkedNode<Page>, root: LinkedNode<Page>, {siteUrl}: {site
       return
     }
     case PageType.TRAINING: {
-      writeFileSync(path, renderToStaticMarkup(<Training root={root} currentPage={node as LinkedNode<TrainingPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsTraining)} />))
+      writeFileSync(path, renderToStaticMarkup(<Training root={root} currentPage={node as LinkedNode<TrainingPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsTraining)} material={material} />))
       return
     }
     case PageType.ACADEMY: {
