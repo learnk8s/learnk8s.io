@@ -143,7 +143,7 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
 
     </section>
 
-    <Testimonal author='Przemek Anuszek, Senior engineer' quote='The training is very well prepared and also very well performed.'/>
+    <Testimonal author='Marcello Teodori, Architect' quote='This is the course you have to do to put all the pieces in the right place and challenge yourself to really master your knowledge of Kubernetes. Wish I had done it long ago.'/>
 
     <section className='bg-evian pt4'>
       <p className='f2 navy b tc'>What's inside</p>
@@ -237,8 +237,8 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
       </div>
 
       <div className='pt5-m pt4 pb5 ph3 measure-wide center black-80'>
-        <p className='f3 mb1 mt0 lh-copy'>I cemented my understanding of Kubernetes and can now use that to start implementing and furthering my knowledge with real examples and workflows. Next stop, production experience.</p>
-        <p className='f4 i mb2'>— David Heward, Senior DevOps Engineer</p>
+        <p className='f3 mb1 mt0 lh-copy'>The course is totally worth the money and time, if you have a team that is getting started with Kubernetes and want to validate the approach that you are taking as well as to level up your knowledge on K8s, this is the way to go.</p>
+        <p className='f4 i mb2'>— Salaboy, Activiti Cloud Team Lead</p>
       </div>
 
     </section>
