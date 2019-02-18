@@ -1,9 +1,9 @@
 import React from 'react'
-import { LinkedNode, Page, getFullUrl, findOrPanic, PageName, AcademyPage } from './sitemap'
+import { LinkedNode, Page, AcademyPage } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight} from './layout'
 import {Image, Img, Script, Javascript, ExternalJavascript, ExternalScript} from './assets'
 import {material, assets as materialAssets} from './material'
-import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
+import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 
 export const assets = (vendorId: string) => ({
@@ -77,17 +77,25 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
       <section className='ph5-l pt5-l'>
         <h1 className='f1 mt1-l pt2-l f-subheadline-l ph4 w-60 lh-solid'>Self-paced Kubernetes online course</h1>
         <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l'>Become an expert in deploying applications at scale.</h2>
-        <div className='dn db-l i-training absolute bottom-0 right-1'><Img image={assets.page.training}/></div>
+        <div className='dn db-l absolute bottom-0 right-1'>
+          <div className='i-training relative'>
+            <Img image={assets.page.training} className='absolute top-0 right-0'/>
+          </div>
+        </div>
         <div className='dn db-l measure mh3 mh4-ns tc'>
             <div className='w3 h3 dib'><Img image={assets.page.down}/></div>
         </div>
       </section>
     </div>
 
-    <section className='ph3 ph4-ns flex items-center relative z3'>
+    <section className='ph3 ph4-ns flex items-center justify-center relative z3'>
 
-      <div className='dn db-l w-50-l'>
-        <div className='i-together center'><Img image={assets.page.together}/></div>
+      <div className='w-50-l dn db-l tc'>
+        <div className='dib'>
+          <div className='i-together relative'>
+            <Img image={assets.page.together} className='absolute top-0 right-0'/>
+          </div>
+        </div>
       </div>
 
       <div className='w-50-l center pt3'>
@@ -137,8 +145,10 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
         </div>
       </div>
 
-      <div className='dn db-l center'>
-        <div className='i-together center'><Img image={assets.page.together}/></div>
+      <div className='dn db-l center tc'>
+        <div className='i-together dib relative'>
+          <Img image={assets.page.together} className='absolute top-0 right-0'/>
+        </div>
       </div>
 
     </section>

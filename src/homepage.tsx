@@ -34,11 +34,19 @@ export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, current
           <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l'>The fastest way to become an expert in deploying applications at scale.</h2>
           <a href='#start' className='link dib blue bg-white br1 pa3 b f5 shadow-3 mt4 ml3 ph4 ml4-ns mb3'>Get started &#8594;</a>
         </div>
-        <div className='dn db-l i-loading-cargos absolute bottom-0 right-1'><Img image={assets.page.loadingCargos} /></div>
+        <div className='dn db-l absolute bottom-0 right-1'>
+          <div className='i-loading-cargos relative'>
+            <Img image={assets.page.loadingCargos} className='absolute top-0 right-0'/>
+          </div>
+        </div>
       </section>
 
       <div className='w-40 dn db-l relative'>
-        <div className='i-medium-cargo absolute top-0 right--1'><Img image={assets.page.mediumCargo} /></div>
+        <div className='absolute top-0 right--1'>
+          <div className='i-medium-cargo relative'>
+            <Img image={assets.page.mediumCargo} className='absolute top-0 right-0'/>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -46,8 +54,12 @@ export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, current
     <section className='w-100 ph3 ph4-ns relative z3'>
       <div id='start' className='pt3-m pt5-l flex items-center'>
 
-        <div className='w-50-l'>
-            <div className='dn db-l i-containers center'><Img image={assets.page.containers} /></div>
+        <div className='w-50-l tc'>
+          <div className='dn dib-l'>
+            <div className='i-containers relative'>
+              <Img image={assets.page.containers} className='absolute top-0 right-0'/>
+            </div>
+          </div>
         </div>
 
         <div className='w-50-l center'>
@@ -73,14 +85,22 @@ export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, current
         </div>
       </div>
 
-      <div className='i-cat-and-dog ml7-l dn db-ns'><Img image={assets.page.catAndDog} /></div>
+      <div className='ml7-l dn db-ns'>
+        <div className='i-cat-and-dog relative'>
+          <Img image={assets.page.catAndDog} className='absolute top-0 right-0'/>
+        </div>
+      </div>
 
     </section>
 
     <section className='pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100 bg-evian'>
 
       <div className='tc'>
-        <div className='i-whiteboard mr7-l dib'><Img image={assets.page.whiteboard} /></div>
+        <div className='mr7-l dib'>
+          <div className='i-whiteboard relative'>
+            <Img image={assets.page.whiteboard} className='absolute top-0 right-0'/>
+          </div>
+        </div>
       </div>
 
       <div className='ph3'>
@@ -103,7 +123,11 @@ export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, current
         </div>
       </div>
 
-      <div className='i-team ml7-l dn db-ns'><Img image={assets.page.team} /></div>
+      <div className='ml7-l dn db-ns'>
+        <div className='i-team relative'>
+          <Img image={assets.page.team} className='absolute top-0 right-0'/>
+        </div>
+      </div>
 
     </section>
 
