@@ -243,3 +243,30 @@ export const FAQs: React.StatelessComponent<{faqs: FAQ[]}> = ({faqs}) => {
     </section>
 }
 
+export const PackageLeft: React.StatelessComponent<{heading: string, subheading: string}> = ({children, heading, subheading}) => {
+  return <li className='fl-ns w-50-ns'>
+    <div className={`mv3 mh3 ml4-ns mr2-ns bg-black-02`}>
+      <div className='header ph3 pt1 bb b--light-gray'>
+          <h2 className='navy tc mb1'>{heading}</h2>
+          <h3 className='normal black-70 tc mt0'>{subheading}</h3>
+      </div>
+      {children}
+    </div>
+  </li>
+}
+
+export const PackageRight: React.StatelessComponent<{heading: string, subheading: string}> = ({children, heading, subheading}) => {
+  return <li className='fl-ns w-50-ns mt5-ns'>
+    <div className={`mv3 mh3 ml2-ns mr4-ns bg-evian`}>
+      <div className='header ph3 pt1 bb b--light-gray'>
+          <h2 className='navy tc mb1'>{heading}</h2>
+          <h3 className='normal black-70 tc mt0'>{subheading}</h3>
+      </div>
+      {children}
+    </div>
+  </li>
+}
+
+export const PackageList: React.StatelessComponent<{}> = ({children}) => {
+  return <ul className='cf pl0 list'>{children}</ul>
+}

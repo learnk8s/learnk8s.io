@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinkedNode, Page, TrainingPage, getFullUrl, findOrPanic, PageName } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, InlineMarkdown, SpecialListItem, Testimonal, mailto, MailTo, YourTeam, FAQs, FAQ} from './layout'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, InlineMarkdown, SpecialListItem, Testimonal, mailto, MailTo, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight} from './layout'
 import {Image, Img, Script, Javascript} from './assets'
 import { PrimaryButton } from './homepage'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
@@ -413,46 +413,34 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
 
     <Interlude assets={assets.layout}/>
 
-    <section className='cf pt5'>
-    <ul className='pl0 list'>
-    <li className='fl-ns w-50-ns'>
-        <div className={`mv3 mh3 ml4-ns mr2-ns bg-black-02`}>
-          <div className='header ph3 pt1 bb b--light-gray'>
-              <h2 className='navy tc mb1'>Advanced Kubernetes Course</h2>
-              <h3 className='normal black-70 tc mt0'>Most popular option — 3 days course</h3>
-          </div>
+    <section className='pt5'>
+      <PackageList>
+        <PackageLeft heading='Advanced Kubernetes Course' subheading='Most popular option — 3 days course'>
           <PackageFeatures assets={assets.layout} description='The course lasts three days and you can choose from Kubernetes core modules and a selection of popular optional module. You will learn how to:' benefits={[
-                  'Package applications in Linux containers',
-                  'Deploy containers in Kubernetes',
-                  'Zero downtime deployment strategies in Kubernetes',
-                  'How to expose services to the public internet',
-                  'The Kubernetes architecture and core components',
-                  'The Kubernetes networking model',
-                  'Autoscaling the cluster and the applicaions',
-                  'Secure your cluster and your network',
-                  'Design automated processes to leverage Kubernetes and continuon integration',
-          ]}/>
+                      'Package applications in Linux containers',
+                      'Deploy containers in Kubernetes',
+                      'Zero downtime deployment strategies in Kubernetes',
+                      'How to expose services to the public internet',
+                      'The Kubernetes architecture and core components',
+                      'The Kubernetes networking model',
+                      'Autoscaling the cluster and the applicaions',
+                      'Secure your cluster and your network',
+                      'Design automated processes to leverage Kubernetes and continuon integration',
+              ]}/>
           <p className='tc pb4'><PrimaryButton text='Learn more ⇢' anchor='#start'></PrimaryButton></p>
-        </div>
-      </li>
-      <li className='fl-ns w-50-ns mt5-ns'>
-        <div className={`mv3 mh3 ml2-ns mr4-ns bg-evian`}>
-          <div className='header ph3 pt1 bb b--light-gray'>
-              <h2 className='navy tc mb1'>Kubernetes Private Training</h2>
-              <h3 className='normal black-70 tc mt0'>Make your own course</h3>
-          </div>
+        </PackageLeft>
+        <PackageRight heading='Kubernetes Private Training' subheading='Make your own course'>
           <PackageFeatures assets={assets.layout} description='The private training course is excellent if you wish to customise your learning path to adopt Kubernetes.' benefits={[
-            'Pick the modules relevant to your team',
-            'Deep dive into the content with a three, four or five days course',
-            'Delivered on site, remotely or in a cozy meeting room',
-            'Classes from 10+ delegates',
-          ]}>
+                'Pick the modules relevant to your team',
+                'Deep dive into the content with a three, four or five days course',
+                'Delivered on site, remotely or in a cozy meeting room',
+                'Classes from 10+ delegates',
+              ]}>
             <SpecialListItem assets={assets.layout}><span className='b'>Perfect for the Certified Kubernetes Administrator (CKA) exam</span> (exam not included and optional)</SpecialListItem>
           </PackageFeatures>
           <p className='tc pb4'><PrimaryButton text='Get in touch ⇢' mailto={mailto(privateGroupEnquiry)}></PrimaryButton></p>
-        </div>
-      </li>
-    </ul>
+        </PackageRight>
+      </PackageList>
     </section>
 
     <Testimonal quote='It is an excellent course covering a wide range of Kubernetes concepts, that will give you more than enough knowledge to go back to experiment and be productive with Kubernetes.' author='Luke Anderson, Senior IT Engineer' />
@@ -584,21 +572,22 @@ export const PackageFeatures: React.StatelessComponent<{description: string, ben
 export const DashboardModule: React.StatelessComponent<{title: string, description: string, preview: Image, className?: string}> = ({children, title, description, preview, className}) => {
   const id = title.toLowerCase().replace(/[^\w]+/g, '-')
   return <div className={`mh3 ${className}`}><div className='module bl bw3 b--sky pt1 pb3 ph4 shadow-2 mv4 bg-white'>
-    <p className='f3 navy b bb b--black-20 pb3'>{title}</p>
-    <div className=''>
-      <div className='w-80 center'>
-        <Img image={preview} />
-      </div>
+      <p className='f3 navy b bb b--black-20 pb3'>{title}</p>
       <div className=''>
-        <p className='f5 lh-copy measure-wide'>{description}</p>
-        <div className={`controls controls-${id}`}>
-          <button className='open dib ba b--sky sky pv2 ph3 b f5 br2 hover-bg-evian pointer bg-white' data-toggle={`.details-${id},.controls-${id}`} data-toggle-collapsed>View details</button>
-          <button className='close dib ba b--light-gray gray pv2 ph3 b f5 br2 ml2 bg-light-gray hover-bg-moon-gray hover-dark-gray pointer' data-toggle={`.details-${id},.controls-${id}`}>Hide details</button>
+        <div className='w-80 center'>
+          <Img image={preview} />
         </div>
-        <div className={`details details-${id}`}>{children}</div>
+        <div className=''>
+          <p className='f5 lh-copy measure-wide'>{description}</p>
+          <div className={`controls controls-${id}`}>
+            <button className='open dib ba b--sky sky pv2 ph3 b f5 br2 hover-bg-evian pointer bg-white' data-toggle={`.details-${id},.controls-${id}`} data-toggle-collapsed>View details</button>
+            <button className='close dib ba b--light-gray gray pv2 ph3 b f5 br2 ml2 bg-light-gray hover-bg-moon-gray hover-dark-gray pointer' data-toggle={`.details-${id},.controls-${id}`}>Hide details</button>
+          </div>
+          <div className={`details details-${id}`}>{children}</div>
+        </div>
       </div>
     </div>
-  </div></div>
+  </div>
 }
 
 function CreateToggle() {

@@ -1,8 +1,10 @@
 import React from 'react'
 import { LinkedNode, Page, getFullUrl, findOrPanic, PageName, AcademyPage } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ} from './layout'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight} from './layout'
 import {Image, Img, Script, Javascript} from './assets'
 import {material, assets as materialAssets} from './material'
+import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
+import { JsonLd } from 'react-schemaorg'
 
 export const assets = {
   page: {
@@ -16,50 +18,13 @@ export const assets = {
   layout: layoutAssets,
 }
 
-interface AcademyModule {
-  name: string
-  description: string
-  topics: Topic[]
-}
-
-interface Topic {
-  name: string
-  image: (a: typeof materialAssets) => Image
-}
-
-const extraModules: AcademyModule[] = [{
-  name: material.multiCloud.name,
-  description: material.multiCloud.description,
-  topics: [],
-}, {
-  name: material.managedServices.name,
-  description: material.managedServices.description,
-  topics: [],
-}, {
-  name: material.security.name,
-  description: material.security.description,
-  topics: [],
-}, {
-  name: material.advancedNetworking.name,
-  description: material.advancedNetworking.description,
-  topics: [],
-}, {
-  name: material.advancedScheduling.name,
-  description: material.advancedScheduling.description,
-  topics: [],
-}, {
-  name: material.pipelines.name,
-  description: material.pipelines.description,
-  topics: [],
-}]
-
 const individualPackage: MailTo = {
   subject: 'Learnk8s Academy',
   body: `Hi Learnk8s,\n\nLet me know when the Academy is ready.\n\nThanks,\n`,
   email: 'hello@learnk8s.io',
 }
 
-const businessPackage: MailTo = {
+const enterprisePackage: MailTo = {
   subject: 'Learnk8s Academy',
   body: `Hi Learnk8s,\n\nLet me know when the Academy is ready. I'd like to buy lincenses in bulk for ______ users.\n\nKind regards,\n`,
   email: 'hello@learnk8s.io',
@@ -93,6 +58,18 @@ const faqs: FAQ[] = [{
 
 export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<AcademyPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
   return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+    <JsonLd<Course> item={{
+      '@type': 'Course',
+      '@context': 'https://schema.org',
+      name: 'Learnk8s Academy',
+      courseMode: 'online',
+      courseCode: 'K8SACADEMY',
+      description: 'Self-paced Kubernetes online course: become an expert in deploying applications at scale.',
+      educationalCredentialAwarded: 'CKA or CKAD (optional)',
+      provider: {
+        '@type': 'Organization',
+        name: 'Learnk8s',
+      }}}></JsonLd>
     <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
       <Navbar root={root} assets={assets.layout}/>
 
@@ -265,95 +242,70 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
 
     </section>
 
-    <section className='cf pt5'>
+    <section className='pv5'>
 
-      <div className='fl-ns w-50-ns'>
-        <div className='mv3 mh3 ml4-ns mr2-ns bg-black-02'>
-          <div className='header ph3 pt1 bb b--light-gray'>
-              <h2 className='navy tc mb1'>Basic package</h2>
-              <h3 className='normal black-70 tc mt0'>6 modules</h3>
+      <PackageList>
+        <PackageLeft heading='Individual' subheading='Full membership plan'>
+          <p className='navy tc f2'>£799 / $999 / 899€</p>
+          <ul className='list pl0 black-70'>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>12 months access</p>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>Docker fundamentals module</p>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>Access to the material for all modules</p>
+              <ol className='pl3'>
+                <li className='mv2'>Getting started with Kubernetes</li>
+                <li className='mv2'>Deployment strategies</li>
+                <li className='mv2'>Kubernetes architecture</li>
+                <li className='mv2'>Kubernetes networking</li>
+                <li className='mv2'>Managing state</li>
+                <li className='mv2'>Helm</li>
+                <li className='mv2'>Advanced networking</li>
+              </ol>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy'><span className='b'>All source code</span> — build files, scripts and files for each module</p>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>Access to all interactive challenges</p>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy'><span className='b'>All source code</span> — build files, scripts and files for each module</p>
+            </Item>
+          </ul>
+          <div className='tc'>
+            <a href={mailto(individualPackage)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Request an invite &#8594;</a>
           </div>
-          <div className='content ph3 pb4'>
-            <p className='navy tc f2'>£599 / $749 / 649€</p>
-            <ul className='list pl0 black-70'>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>12 months access</p>
-              </Item>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Docker fundamentals module</p>
-              </Item>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Access to the material for all modules</p>
-                <ol className='pl3'>
-                  <li className='mv2'>Getting started with Kubernetes</li>
-                  <li className='mv2'>Deployment strategies</li>
-                  <li className='mv2'>Kubernetes architecture</li>
-                  <li className='mv2'>Kubernetes networking</li>
-                  <li className='mv2'>Managing state</li>
-                  <li className='mv2'>Helm</li>
-                  <li className='mv2'>Advanced networking</li>
-                </ol>
-              </Item>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy'><span className='b'>All source code</span> — build files, scripts and files for each module</p>
-              </Item>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Access to all interactive challenges</p>
-              </Item>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy'><span className='b'>All source code</span> — build files, scripts and files for each module</p>
-              </Item>
-            </ul>
-            <div className='tc'>
-              <a href={mailto(individualPackage)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Register your interest &#8594;</a>
-            </div>
+        </PackageLeft>
+        <PackageRight heading='Enterprise' subheading='From 10+ users'>
+          <ul className='list pl0 black-70'>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>All individual plan features</p>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>Dedicated customer support</p>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>Dedicated playground for challenges</p>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>Analytics and reports</p>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>Custom topics</p>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>Host the Academy on your cloud</p>
+            </Item>
+          </ul>
+          <div className='tc'>
+            <a href={mailto(enterprisePackage)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Get in touch &#8594;</a>
           </div>
-        </div>
-      </div>
-
-      <div className='fl-ns w-50-ns'>
-        <div className='mv3 mh3 ml2-ns mr4-ns bg-evian'>
-          <div className='header ph3 pt1 bb b--light-gray'>
-              <h2 className='navy tc mb1'>Business package</h2>
-              <h3 className='normal black-70 tc mt0'>6 modules + extras</h3>
-          </div>
-          <div className='content ph3 pb4'>
-            <p className='navy tc f2'>£799 / $999 / 899€</p>
-            <ul className='list pl0 black-70'>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>12 months access</p>
-              </Item>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Docker fundamentals module</p>
-              </Item>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Access to the material for all modules</p>
-                <ol className='pl3'>
-                  <li className='mv2'>Getting started with Kubernetes</li>
-                  <li className='mv2'>Deployment strategies</li>
-                  <li className='mv2'>Kubernetes architecture</li>
-                  <li className='mv2'>Kubernetes networking</li>
-                  <li className='mv2'>Managing state</li>
-                  <li className='mv2'>Helm</li>
-                  <li className='mv2'>Advanced networking</li>
-                </ol>
-              </Item>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy'><span className='b'>All source code</span> — build files, scripts and files for each module</p>
-              </Item>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Access to all interactive challenges</p>
-              </Item>
-              <Item tick={assets.page.tick}>
-                <p className='mv0 f4-l lh-copy'><span className='b'>All source code</span> — build files, scripts and files for each module</p>
-              </Item>
-            </ul>
-            <div className='tc'>
-              <a href={mailto(businessPackage)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Register your interest &#8594;</a>
-            </div>
-          </div>
-        </div>
-      </div>
+        </PackageRight>
+      </PackageList>
 
     </section>
 
@@ -445,8 +397,6 @@ export const ComingSoon: React.StatelessComponent<{name: string, description: st
   </li>
 }
 
-
-
 export const RandomBlocks = ({blocks}: {blocks: number[][]}) => {
   return blocks.map((it, index) => {
     const [firstLength] = it
@@ -500,11 +450,13 @@ function Scroll() {
     }, 0))
     checkScroll(rightPane as HTMLElement, titles[0], titles[1])
     var items = [].slice.call(topics.querySelectorAll('.topic-js')) as HTMLElement[]
-    items.forEach((it, index) => {
-      var fn = () => rightPane!.scrollTo({
-        top: ((scrollableContent as HTMLElement).offsetHeight / items.length) * index * 1.05,
-        behavior: 'smooth',
-      })
+    items.forEach(function(it, index) {
+      var fn = function() {
+        rightPane!.scrollTo({
+          top: ((scrollableContent as HTMLElement).offsetHeight / items.length) * index * 1.05,
+          behavior: 'smooth',
+        })
+      }
       it.addEventListener('mouseenter', fn)
       it.addEventListener('click', fn)
     })
