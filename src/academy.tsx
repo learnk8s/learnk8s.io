@@ -1,32 +1,34 @@
 import React from 'react'
 import { LinkedNode, Page, getFullUrl, findOrPanic, PageName, AcademyPage } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight} from './layout'
-import {Image, Img, Script, Javascript} from './assets'
+import {Image, Img, Script, Javascript, ExternalJavascript, ExternalScript} from './assets'
 import {material, assets as materialAssets} from './material'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 
-export const assets = {
+export const assets = (vendorId: string) => ({
   page: {
     training: Image({url: 'assets/academy/training.svg', description: 'Training'}),
     down: Image({url: 'assets/academy/down_arrow_white.svg', description: 'Down'}),
     together: Image({url: 'assets/academy/together.svg', description: 'Team'}),
     tick: Image({url: 'assets/academy/tick.svg', description: 'Tick'}),
     preview: Javascript({script: `(${Scroll.toString()})()`}),
+    paddle: ExternalJavascript({url: 'https://cdn.paddle.com/paddle/paddle.js'}),
+    paddleVendor: Javascript({script: `Paddle.Setup({vendor: ${vendorId}});`}),
   },
   material: materialAssets,
   layout: layoutAssets,
-}
+})
 
 const individualPackage: MailTo = {
   subject: 'Learnk8s Academy',
-  body: `Hi Learnk8s,\n\nLet me know when the Academy is ready.\n\nThanks,\n`,
+  body: `Hi Learnk8s,\n\nI'd like to have access to the Academy.\n\nThanks,\n`,
   email: 'hello@learnk8s.io',
 }
 
 const enterprisePackage: MailTo = {
   subject: 'Learnk8s Academy',
-  body: `Hi Learnk8s,\n\nLet me know when the Academy is ready. I'd like to buy lincenses in bulk for ______ users.\n\nKind regards,\n`,
+  body: `Hi Learnk8s,\n\nI'd like to discuss buying ___ licenses in bulk for the Learnk8s Academy.\n\nKind regards,\n`,
   email: 'hello@learnk8s.io',
 }
 
@@ -56,7 +58,7 @@ const faqs: FAQ[] = [{
   content: `Sure - send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io).`
 }]
 
-export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<AcademyPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
+export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<AcademyPage>, siteUrl: string, assets: ReturnType<typeof assets>}> = ({assets, root, siteUrl, currentPage}) => {
   return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
     <JsonLd<Course> item={{
       '@type': 'Course',
@@ -245,7 +247,9 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
 
       <PackageList>
         <PackageLeft heading='Individual' subheading='Full membership plan'>
-          <p className='navy tc f2'>£799 / $999 / 899€</p>
+          <p className='navy tc f2'>
+            <span className='dib relative'><span className='paddle-net' data-product='549763'>$999</span> <span className='f7 v-mid absolute right--2 top-0'>+TAX</span></span>
+          </p>
           <ul className='list pl0 black-70'>
             <Item tick={assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>12 months access</p>
@@ -315,6 +319,8 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
     <Consultation />
     <Footer root={root} assets={assets.layout}/>
     <Script script={assets.page.preview}></Script>
+    <ExternalScript script={assets.page.paddle}></ExternalScript>
+    <Script script={assets.page.paddleVendor}></Script>
   </Layout>
 }
 
