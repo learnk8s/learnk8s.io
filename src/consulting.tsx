@@ -2,7 +2,9 @@ import React from 'react'
 import { LinkedNode, Page, ConsultingPage } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, mailto, MailTo} from './layout'
 import { Image, Img } from './assets'
-import { PrimaryButton } from './homepage';
+import { PrimaryButton } from './homepage'
+import { ProfessionalService} from 'schema-dts'
+import { JsonLd } from 'react-schemaorg'
 
 export const assets = {
   page: {
@@ -12,6 +14,7 @@ export const assets = {
     containers: Image({url: 'assets/consulting/containers.svg', description: 'Containers'}),
     cloudProviders: Image({url: 'assets/consulting/managed-services.svg', description: 'AKS, EKS and GKE'}),
     team: Image({url: 'assets/consulting/team.svg', description: 'Team'}),
+    logoConsulting: Image({url: 'assets/consulting/learnk8s-consulting.svg', description: 'Learnk8s consulting'}),
   },
   layout: layoutAssets,
 }
@@ -36,6 +39,26 @@ const cloudDevelopmentEnquiry: MailTo = {
 
 export const Consulting: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<ConsultingPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
   return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+    <JsonLd<ProfessionalService> item={{
+      '@type': 'ProfessionalService',
+      '@context': 'https://schema.org',
+      name: 'Learnk8s',
+      image: `${siteUrl}${assets.page.logoConsulting.url}`,
+      address: [
+        'London, UK',
+        'Milan, Italy',
+        'Singapore'
+      ],
+      telephone: [
+        '+44 07583438976',
+        '+39 02 8088 8106',
+      ],
+      priceRange: [
+        '1200GBP - 2400GBP per day',
+        '1300EUR - 2600EUR al giorno',
+        '2100SGD - 4200SGD per day',
+      ]
+    }}></JsonLd>
     <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
 
       <Navbar root={root} assets={assets.layout}/>

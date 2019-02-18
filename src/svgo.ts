@@ -71,7 +71,10 @@ const svgo = new SVGO({
 })
 
 const files = ls([
+  'assets/academy/*.svg',
+  'assets/consulting/*.svg',
   'assets/material/*.svg',
+  'assets/training/*.svg',
 ]).map(svgFileName => {
   const svgContent = cat(svgFileName).toString()
   return svgo.optimize(svgContent).then(svgo => {
