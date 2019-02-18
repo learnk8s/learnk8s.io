@@ -29,7 +29,7 @@ To understand the role of kubectl, you also need to have a basic understanding o
 
 Kubernetes itself consists of a set of independent **components** that run on different nodes of a cluster. A subset of these components are **control plane components** and they usually run on one or more dedicated nodes that only run control plane components and don't execute any workloads. These nodes are called master nodes. The remaining components are **worker nodes components**, and they run on those nodes of the cluster that execute the application workloads. These nodes are called worker nodes.
 
-Each component has a very specific job. For example, the **[etcd](https://coreos.com/etcd/)** component (a control plane component) stores all the resource specifications that have been defined for the cluster, such as pods and services. The **scheduler** component (a control plane component) assigns pending pods to worker nodes for execution. The **kubelet** component (a worker node component) is responsible for running the container(s) of a pod that has been assigned to its node by the scheduler.
+Each component has a very specific job. For example, the **etcd** component ([etcd](https://coreos.com/etcd/) is a distributed key-value store) in the control plane stores all the resource specifications that have been defined for the cluster, such as pods and services. The **scheduler** component (a control plane component) assigns pending pods to worker nodes for execution. The **kubelet** component (a worker node component) is responsible for running the container(s) of a pod that has been assigned to its node by the scheduler.
 
 However, there is one very important component that I didn't mention yet: the **API server**. The API server is the switching point for all interactions between components within the cluster, as well as the main entry point for interactions from outside the cluster. The individual components in a cluster don't talk to each other directly, but they only talk to the API server (in fact components don't even know about each others' existence). Similarly, an external user (such as you) interacts with a Kubernetes cluster by talking to the API server.
 
@@ -179,7 +179,7 @@ In case you're not sure about the top-level resource names that you can use with
 kubectl api-resources
 ~~~
 
-Note that this command displays the resource names in their plural form (e.g. *services* instead of *service*). It also displays the short name for those resources that have a short name (e.g. *svc* for the service resource). You can use any of these options with `kubectl explain`.
+Note that this command displays the resource names in their plural form (e.g. *services* instead of *service*). It also displays the short name for those resources that have a short name (e.g. *svc* for the service resource). You can use any of these forms for `kubectl explain`.
 
 For example, the following invocations are all equivalent:
 
@@ -189,9 +189,9 @@ kubectl explain service.spec
 kubectl explain services.spec
 ~~~
 
-## Get the information you need with custom output formats
+## Display the information you need with custom output formats
 
-When you execute a `kubectl get` command, retrievng one or more resource objects from the cluster, the default output is a table-like plain text format. Below is an example:
+When you retrieve resources from the API server with the `kubectl get` command, then kubectl, by default, displays these resources to you in a format like in the following example:
 
 ~~~bash
 $ kubectl get pods
@@ -202,7 +202,44 @@ engine-544b6b6467-tvgmg   1/1     Running   0          78d
 web-ui-6db964458-8pdw4    1/1     Running   0          78d
 ~~~
 
-As you can see, each object is represented by a few fields. However, the above command actually retrieves the *full* specification of each object from the cluster (coming straight out of the etcd storage via the API server). Thus, you are not confined to view only these few default fields, but you can customise the output to display whatever fields you're interested in.
+
+Each resource is represented as a row in a table consisting of some few attributes of the resource (in the case of pods shown above, these attributes are the name of the pod, the number of containers in the pod and the number thereof that are ready, the status of the pod, and the age of the pod).
+
+The table format is great for human readers, because it makes information recognisable at a single glance. But the selection of attributes that are displayed seems pretty arbitrary. Indeed, this selection of attributes is mainly a nice guess of kubectl about what might interest you most about this resource type.
+
+But are you always just interested in what kubectl thinks is best for you? Definitely not, and you are by no means restricted to it. In this section you will learn how you can display *any* attributes of a resource, while still maintaining the practical human-readable table format.
+
+To this end, you first have to understand what actually happens when you execute a `kubectl get` command.
+
+### How kubectl gets and displays resources
+
+The following diagram gives an overview of what happens when you retrieve a set of resources with kubectl:
+
+![](output-formats.png)
+
+From a bird's-eye view, when you run a `kubectl get` command, kubectl makes an HTTP request to the API server for getting the requested resources (for example, all pods in the current namespace). The API server retrieves the requested resources from the etcd storage and returns them to kubectl, which outputs them to you in one of various output formats. But let's take a step back.
+
+What is "a resource in the etcd storage" actually? When you *create* a resource, you usually do so by creating a YAML or JSON specification of the resource (according to the specification of each resource type that you can find in the API reference on the [web](https://kubernetes.io/docs/reference/kubernetes-api/) or in `kubectl explain`), and supply this specification to the `kubectl create` (or `kubectl apply`) command.
+
+Kubectl then sends this specification to the API server with an appropriate HTTP request. The API server converts the specifciation to the storage format and saves it in the etcd storage. The storage format for resources in the etcd storage can be either JSON or [protobuf](https://developers.google.com/protocol-buffers/).
+
+So, this is what "a resource in the etcd storage is": a JSON or protobuf version of the YAML or JSON resource specification that you initially defined.
+
+Now, when you *get* resources wiht kubectl, the API server retrieves the requested resources from etcd, converts them to JSON (if they are not already), and sends them back to kubectl. This means that what kubectl gets when you retrieve a resource is basically the same thing that you defined when you created the resource.
+
+> Note that Kubernetes components can (and do) edit resources in the etcd storage. For this reason, when you *get* a resource, it usually has more fields than you defined wen you *created* the resource. This is particularly true for status fields that are created and updated by Kubernetes components while the resource is stored in etcd.
+
+Kubectl then displays the received data to you in whatever output format you specified to the `kubectl get` command.
+
+One of these output formats is JSON (which you can specify with the `-o json` option). In this case, kubectl just dumps the entire received JSON data to the screen. Another common output format is YAML (which you can specify with the `-o yaml` option). In this case, kubectl first converts the received JSON to YAML and then prints it to the screen.
+
+However, the default output format (when you don't specify any `-o` option) is the human-readable table format that was shown at the beginning. And now you should see how this format comes about. Basically, kubectl just picks some of the resource fields in the received JSON (ignoring all the others) and prints them out as a table.
+
+This means that, even with the default format, the full data of the resources is actually there, but kubectl just shows fraction of it to you. But what kubectl can do, you can do too! In the next section you will learn how to define a custom output format in which *you* can define which data to pick and display in the output table.
+
+### The custom-columns output format
+
+<!--As you can see, each object is represented by a few fields. However, the above command actually retrieves the *full* specification of each object from the cluster (coming straight out of the etcd storage via the API server). Thus, you are not confined to view only these few default fields, but you can customise the output to display whatever fields you're interested in.-->
 
 The way to do this is to use the `custom-columns` output format (see [here](https://kubernetes.io/docs/reference/kubectl/overview/#custom-columns)). It is used in the following way:
 
