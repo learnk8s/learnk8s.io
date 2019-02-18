@@ -62,7 +62,6 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
       '@type': 'Course',
       '@context': 'https://schema.org',
       name: 'Learnk8s Academy',
-      courseMode: 'online',
       courseCode: 'K8SACADEMY',
       description: 'Self-paced Kubernetes online course: become an expert in deploying applications at scale.',
       educationalCredentialAwarded: 'CKA or CKAD (optional)',
