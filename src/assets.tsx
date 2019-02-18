@@ -6,6 +6,7 @@ import md5 from 'md5'
 enum AssetsType {
   IMAGE = 'IMAGE',
   JAVASCRIPT = 'JAVASCRIPT',
+  EXTERNAL_JAVASCRIPT = 'EXTERNAL_JAVASCRIPT',
 }
 
 export interface Image {
@@ -35,6 +36,19 @@ export const Script: React.StatelessComponent<{script: Javascript}> = ({script})
   return <script dangerouslySetInnerHTML={{__html: script.script}}></script>
 }
 
+export interface ExternalJavascript {
+  url: string
+  type: AssetsType.EXTERNAL_JAVASCRIPT
+}
+
+export function ExternalJavascript(js: {url: string}): ExternalJavascript {
+  return {...js, type: AssetsType.EXTERNAL_JAVASCRIPT}
+}
+
+export const ExternalScript: React.StatelessComponent<{script: ExternalJavascript}> = ({script}) => {
+  return <script src={script.url}></script>
+}
+
 export function optimiseAssets<T extends NestedAssets>(assets: T): T {
   mkdir('-p', '_site/a')
   return Object.keys(assets).reduce((acc, key) => {
@@ -51,6 +65,10 @@ export function optimiseAssets<T extends NestedAssets>(assets: T): T {
           acc[key] = assets[key]
           break
         }
+        case AssetsType.EXTERNAL_JAVASCRIPT: {
+          acc[key] = assets[key]
+          break
+        }
         default: {
           break
         }
@@ -62,7 +80,7 @@ export function optimiseAssets<T extends NestedAssets>(assets: T): T {
   }, {} as T)
 }
 
-type Assets = Image | Javascript
+type Assets = Image | Javascript | ExternalJavascript
 
 interface NestedAssets {
   [name: string]: NestedAssets | Assets

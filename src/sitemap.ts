@@ -136,7 +136,7 @@ export const sitemap = [
   createNode<AcademyPage>({
     type: PageType.ACADEMY,
     friendlyName: PageName.ACADEMY,
-    url: '/acaedemy',
+    url: '/academy',
     title: 'Kubernetes Academy ♦︎ Learnk8s',
     pageDetails: {
       title: 'Kubernetes Online Course',
