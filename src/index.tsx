@@ -32,7 +32,7 @@ function render(node: LinkedNode<Page>, root: LinkedNode<Page>, {siteUrl}: {site
       return
     }
     case PageType.TRAINING: {
-      writeFileSync(path, renderToStaticMarkup(<Training root={root} currentPage={node as LinkedNode<TrainingPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsTraining)} material={material} />))
+      writeFileSync(path, renderToStaticMarkup(<Training root={root} currentPage={node as LinkedNode<TrainingPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsTraining)} />))
       return
     }
     case PageType.ACADEMY: {
