@@ -100,11 +100,11 @@ export const Footer: React.StatelessComponent<{root: LinkedNode<Page>, assets: t
       <div className='pt3 pt0-ns'>
         <h2 className='ttu f6'>Follow us</h2>
         <ul className='list pl0'>
-          <li className='dib'><a href='https://github.com/learnk8s' className='link dib w2 h2 icon'><GithubLogo /></a></li>
-          <li className='dib'><a href='https://twitter.com/learnk8s' className='link dib w2 h2 icon'><TwitterLogo /></a></li>
-          <li className='dib'><a href='skype:daniele.polencic?chat' className='link dib w2 h2 icon'><SkypeLogo /></a></li>
-          <li className='dib'><a href='https://www.linkedin.com/company/learnk8s/' className='link dib w2 h2 icon'><LinkedInLogo /></a></li>
-          <li className='dib'><a href='https://learnk8s-slack-invite.herokuapp.com' className='link dib w2 h2 icon'><SlackLogo /></a></li>
+          <li className='dib'><a href='https://github.com/learnk8s' className='link dib w2 h2 icon' title='Learnk8s on GitHub'><GithubLogo /></a></li>
+          <li className='dib'><a href='https://twitter.com/learnk8s' className='link dib w2 h2 icon' title='Learnk8s on Twitter'><TwitterLogo /></a></li>
+          <li className='dib'><a href='skype:daniele.polencic?chat' className='link dib w2 h2 icon' title='Learnk8s on Skype'><SkypeLogo /></a></li>
+          <li className='dib'><a href='https://www.linkedin.com/company/learnk8s/' className='link dib w2 h2 icon' title='Learnk8s on LinkedIn'><LinkedInLogo /></a></li>
+          <li className='dib'><a href='https://learnk8s-slack-invite.herokuapp.com' className='link dib w2 h2 icon' title='Learnk8s on Slack'><SlackLogo /></a></li>
         </ul>
       </div>
     </section>
@@ -175,9 +175,13 @@ export const SpecialListItem: React.StatelessComponent<{assets: typeof assets}> 
   </li>
 }
 
-export const Interlude: React.StatelessComponent<{assets: typeof assets}> = ({children, assets}) => {
+export const Interlude: React.StatelessComponent<{assets: typeof assets}> = ({assets}) => {
   return <section className='triangle-1 tr'>
-    <div className='i-small-cargo dib mr4'><Img image={assets.smallCargo} /></div>
+    <div className='dib mr4'>
+      <div className='i-small-cargo relative'>
+        <Img image={assets.smallCargo} className='absolute top-0 right-0'/>
+      </div>
+    </div>
   </section>
 }
 

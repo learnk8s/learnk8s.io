@@ -104,34 +104,59 @@ $illustration_ratio: 0.1;
 }
 
 .i-medium-cargo {
-  width: #{multiply($illustration_ratio, 150)}rem
+  width: #{multiply($illustration_ratio, 150)}rem;
+  height: 0;
+  padding-bottom: 80%;
 }
 .i-loading-cargos {
-  width: #{multiply($illustration_ratio, 350)}rem
+  width: #{multiply($illustration_ratio, 350)}rem;
+  height: 0;
+  padding-bottom: 100%;
 }
 .i-training {
-  width: #{multiply($illustration_ratio, 350)}rem
+  width: #{multiply($illustration_ratio, 350)}rem;
+  height: 0;
+  padding-bottom: 100%;
 }
 .i-together {
-  width: #{multiply($illustration_ratio, 175)}rem
+  width: #{multiply($illustration_ratio, 175)}rem;
+  height: 0;
+  padding-bottom: 154.28%;
 }
 .i-containers {
-  width: #{multiply($illustration_ratio, 150)}rem
+  width: #{multiply($illustration_ratio, 150)}rem;
+  height: 0;
+  padding-bottom: 46.67%;
 }
 .i-cat-and-dog {
-  width: #{multiply($illustration_ratio, 130)}rem
+  width: #{multiply($illustration_ratio, 130)}rem;
+  height: 0;
+  padding-bottom: 84.61%;
 }
 .i-whiteboard {
-  width: #{multiply($illustration_ratio, 100)}rem
+  width: #{multiply($illustration_ratio, 100)}rem;
+  height: 0;
+  padding-bottom: 148.75%;
 }
 .i-team {
-  width: #{multiply($illustration_ratio, 150)}rem
+  width: #{multiply($illustration_ratio, 150)}rem;
+  height: 0;
+  padding-bottom: 100%;
 }
 .i-small-cargo {
-  width: #{multiply($illustration_ratio, 110)}rem
+  width: #{multiply($illustration_ratio, 110)}rem;
+  height: 0;
+  padding-bottom: 81.82%;
 }
 .i-more-cargo-loading {
-  width: #{multiply($illustration_ratio, 110)}rem
+  width: #{multiply($illustration_ratio, 110)}rem;
+  height: 0;
+  padding-bottom: 63.07%;
+}
+.i-cloud-providers {
+  width: 30rem;
+  height: 0;
+  padding-bottom: 75%;
 }
 
 .reverse-dim {
@@ -515,4 +540,9 @@ green     #859900  operators, other keywords
 .padding-hack-75 {
   height: 0;
   padding-bottom: 75%;
+}
+
+.padding-hack-100 {
+  height: 0;
+  padding-bottom: 100%;
 }

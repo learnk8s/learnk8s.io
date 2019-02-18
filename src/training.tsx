@@ -373,7 +373,7 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
 
       <section className='flex-ns items-start-ns ph5-l pt5-l'>
         <div className='w-100 w-70-l'>
-          <h1 className='f1 pl3 pl4-ns pt4-l f-subheadline-l'>Kubernetes training</h1>
+          <h1 className='f1 pl3 pl4-ns pt4-l f-subheadline-l'>Kubernetes instructor-led training</h1>
           <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l'>Learn how to deploy and scale applications with Kubernetes.</h2>
           <ul className='list w-60-m center-m mw6 bg-white black-70 ph3 pv1 shadow-1 mh3 mh4-ns mt4'>
             <li className='flex items-center justify-between ph2 bb b--light-gray'>
@@ -393,21 +393,30 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
             <div className='w3 h3 dib'><Img image={assets.page.downArrow}/></div>
           </div>
         </div>
-        <div className='dn db-l i-training absolute bottom-0 right-1'><Img image={assets.page.training}/></div>
+        <div className='dn db-l absolute bottom-0 right-1'>
+          <div className='i-training relative'>
+            <Img image={assets.page.training} className='absolute top-0 right-0'/>
+          </div>
+        </div>
       </section>
     </div>
 
     <section className='content ph3 ph4-ns flex items-center justify-center pt5-ns relative z3'>
-      <div className='dn db-l w-50-l center'>
-      <div className='i-more-cargo-loading center'><Img image={assets.page.cargoLoading}/></div>
+
+      <div className='w-50-l dn db-l tc'>
+        <div className='dib'>
+          <div className='i-more-cargo-loading relative'>
+            <Img image={assets.page.cargoLoading} className='absolute top-0 right-0'/>
+          </div>
+        </div>
       </div>
 
       <div className='w-50-l center pt3'>
-      <h2 className='f3 navy f2-l measure-narrow'>Instructor-led, hands-on courses</h2>
-      <div className='measure-wide'>
-        <p className='lh-copy f4-l black-70'>These courses are great if you wish to:</p>
-        <ul className='list black-70 pl0 pt2'>{benefits.map((it, index) => <ListItem key={index} assets={assets.layout}><InlineMarkdown content={it} /></ListItem>)}</ul>
-      </div>
+        <h2 className='f3 navy f2-l measure-narrow'>Instructor-led, hands-on courses</h2>
+        <div className='measure-wide'>
+          <p className='lh-copy f4-l black-70'>These courses are great if you wish to:</p>
+          <ul className='list black-70 pl0 pt2'>{benefits.map((it, index) => <ListItem key={index} assets={assets.layout}><InlineMarkdown content={it} /></ListItem>)}</ul>
+        </div>
       </div>
     </section>
 
@@ -575,7 +584,9 @@ export const DashboardModule: React.StatelessComponent<{title: string, descripti
       <p className='f3 navy b bb b--black-20 pb3'>{title}</p>
       <div className=''>
         <div className='w-80 center'>
-          <Img image={preview} />
+          <div className='padding-hack-75 relative'>
+            <Img image={preview} className='absolute top-0 right-0'/>
+          </div>
         </div>
         <div className=''>
           <p className='f5 lh-copy measure-wide'>{description}</p>
