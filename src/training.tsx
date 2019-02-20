@@ -188,7 +188,7 @@ const courses: KubernetesCourse[] = [
       language: Language.ITALIAN,
     },
     {
-      startAt: moment('2019-03-20T09:30:00+00:00'),
+      startAt: moment('2019-03-13T09:30:00+00:00'),
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -214,7 +214,7 @@ const courses: KubernetesCourse[] = [
       language: Language.ENGLISH,
     },
     {
-      startAt: moment('2019-03-27T09:30:00+00:00'),
+      startAt: moment('2019-03-20T09:30:00+00:00'),
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
