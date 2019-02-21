@@ -360,6 +360,18 @@ To connect to your database from outside the cluster execute the following comma
     mongo --host 127.0.0.1 --authenticationDatabase admin -p $MONGODB_ROOT_PASSWORD
 ```
 
+### Kubernetes: Ticketing.API
+
+TODO: Add notes for updating API config file.
+
+```bash
+$ kubectl apply -f ticketing.api
+configmap "ticketingapi-configmap" created
+deployment "ticketingapi" created
+secret "ticketingapi-secret" created
+service "ticketingapi" created
+```
+
 ### How do I access the application
 
 We've had successful messages but how do we access the web application as a public user?
