@@ -10,6 +10,7 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - src
 sass:
   load_paths:
     - node_modules
