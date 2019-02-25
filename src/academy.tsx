@@ -276,12 +276,6 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
             <Item tick={assets.page.tick}>
               <p className='mv0 f4-l lh-copy'><span className='b'>All source code</span> — build files, scripts and files for each module</p>
             </Item>
-            <Item tick={assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>Access to all interactive challenges</p>
-            </Item>
-            <Item tick={assets.page.tick}>
-              <p className='mv0 f4-l lh-copy'><span className='b'>All source code</span> — build files, scripts and files for each module</p>
-            </Item>
           </ul>
           <div className='tc'>
             <a href='https://academy.learnk8s/payment' className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Buy now &#8594;</a>
