@@ -20,12 +20,6 @@ export const assets = (vendorId: string) => ({
   layout: layoutAssets,
 })
 
-const individualPackage: MailTo = {
-  subject: 'Learnk8s Academy',
-  body: `Hi Learnk8s,\n\nI'd like to have access to the Academy.\n\nThanks,\n`,
-  email: 'hello@learnk8s.io',
-}
-
 const enterprisePackage: MailTo = {
   subject: 'Learnk8s Academy',
   body: `Hi Learnk8s,\n\nI'd like to discuss buying ___ licenses in bulk for the Learnk8s Academy.\n\nKind regards,\n`,
