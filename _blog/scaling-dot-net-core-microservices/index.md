@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Scaling Microservices with Message Queues, DotNet Core and Kubernetes
-date: 2019-03-01 08:00:00
+date: 2019-02-24 08:00:00
 author: "Lewis Denham-Parry"
 author_link: https://twitter.com/soulmaniqbal
 categories: kubernetes microservices "message queues" "dotnet core"
@@ -15,7 +15,7 @@ open_graph:
   image: /to/add
 ---
 
-There are many challenges when working as a developer within an organisation.  Usually its linked to the following cycle:
+There are many challenges when working as a developer within an organisation. Usually its linked to the following cycle:
 
 1) Ship your code as quickly as possible.
 2) Scale your product to meet the demand created.
@@ -23,13 +23,13 @@ There are many challenges when working as a developer within an organisation.  U
 
 Twitter recently created a valid point about Kubernetes:
 
-> I know I can run different languages in different containers, but this makes it hard to learn when I don't know several languages...  
+> I know I can run different languages in different containers, but this makes it hard to learn when I don't know several languages...
 > *Someone, Internet 2019.*
 
 This is true, just because we *can* do this doesn't mean we have to do it.
 
 All the source code for this application has been written in C#, built using dotnet core to deploy onto Linux.
-The core focus has been to make the code readable to ubrew nderstand what is being achieved.
+The core focus has been to make the code readable to understand what is being achieved.
 To keep it simple, factors such as security have been left out, this will be addressed within future posts for best practices.
 
 ## Case Study
@@ -45,12 +45,12 @@ Once the ticket is processed, the customer is redirected to a success page.
 
 When running the application locally, there are six different services that are required:
 
-1) Front end website
-2) API
-3) Database
-4) Message Queue
-5) Worker
-6) Worker monitor
+1. Front end website
+1. API
+1. Database
+1. Message Queue
+1. Worker
+1. Worker monitor
 
 Looking at out application, lets assume that there is only a single instance of each of the services running.
 Is it a problem that the worker can only process a single ticket every 5 seconds?
@@ -62,18 +62,18 @@ Should we scale the number of workers based on the number of tickets within the 
 
 For this demo, all our code is written using C# and dotnet core.
 
-1) MVC Website
-2) MVC API
-3) Mongo DB
-4) RabbitMQ
-5) C# Console Application
-6) MVC Website
+1. MVC Website
+1. MVC API
+1. Mongo DB
+1. RabbitMQ
+1. C# Console Application
+1. MVC Website
 
 ### Running locally
 
 Using `tmux`, we can see 6 windows running each of the services we mentioned.
 All dotnet core services were started with `dotnet run` within the project directory.
-What happens if one of the services stops?  For example, let say that the worker service stops.
+What happens if one of the services stops? For example, let say that the worker service stops.
 The website would be able to submit a ticket to the API, and the API would put the ticket into the database.
 The API would then send the ticket to the queue, but nothing would be subscribed to pick up that ticket and process it.
 Also, we have a lot to do to get the service up and running locally, are we expecting to do this to debug the application locally?
@@ -133,7 +133,7 @@ When you have lots of images that need to run together then one option is Docker
 
 So far, everything we've spoken about has been based on a single computer.  Now I can guess what you're thinking...
 
-> But if all my code is running in production on one box, what happens when that dies?  
+> But if all my code is running in production on one box, what happens when that dies?
 > *Everyone, all the time.*
 
 If you're dependent on any one thing then you're getting ready for a bad time.
@@ -212,7 +212,7 @@ Finally, we check to see that the nodes are ready.
 
 TODO: Send link to install Helm locally.
 
-* [Reference](https://www.digitalocean.com/community/tutorials/how-to-install-software-on-kubernetes-clusters-with-the-helm-package-manager#step-2-—-installing-tiller).
+* [Reference](https://www.digitalocean.com/community/tutorials/how-to-install-software-on-kubernetes-clusters-with-the-helm-package-manager).
 
 Now we need to create a `tiller` on our cluster:
 
@@ -383,7 +383,7 @@ We've got our application working in the cloud and have seen the power of `kubec
 Each of the services that we're running are within a single instance.
 LEts address that by updating our deployments to make sure we have at least 2 instances of each service running.  Why at least two?  The US Marines have a saying:
 
-> One is none, two is one.  
+> One is none, two is one.
 > US Marines
 
 The basis of this means that you can never trust having a single instance, you need at least two to have the basics constantly being provided.
@@ -400,4 +400,4 @@ If the ticketing site was setup for a gig and tickets went on sale at 9am, we'd 
 
 What if we could monitor a metric, and then scale when the metric exceeds a certain value.
 Using tools like prometheus, we can scrape metric end points which can then be monitored by Kubernetes.
-Creating a HPA we have 
+Creating a HPA we have
