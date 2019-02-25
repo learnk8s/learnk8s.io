@@ -290,7 +290,7 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
             </Item>
           </ul>
           <div className='tc'>
-            <a href={mailto(individualPackage)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Request an invite &#8594;</a>
+            <a href='https://academy.learnk8s/payment' className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Buy now &#8594;</a>
           </div>
         </PackageLeft>
         <PackageRight heading='Enterprise' subheading='From 10+ users'>
@@ -309,6 +309,9 @@ export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentP
             </Item>
             <Item tick={assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>Custom topics</p>
+            </Item>
+            <Item tick={assets.page.tick}>
+              <p className='mv0 f4-l lh-copy b'>Live classes and webinars</p>
             </Item>
             <Item tick={assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>Host the Academy on your cloud</p>
