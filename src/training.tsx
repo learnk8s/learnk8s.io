@@ -5,7 +5,7 @@ import {Image, Img, Script, Javascript} from './assets'
 import { PrimaryButton } from './homepage'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { material } from './material'
 
 const benefits = [
@@ -102,9 +102,18 @@ enum CourseCode {
   ADVANCED = 'K8SADVANCED',
 }
 
+enum TimeZone {
+  LONDON = 'Europe/London',
+  SAN_FRANCISCO = 'America/Los_Angeles',
+  TORONTO = 'America/Toronto',
+  SINGAPORE = 'Asia/Singapore',
+  ROME = 'Europe/Rome',
+}
+
 interface CourseEvent {
   startAt: moment.Moment
   duration: moment.Duration
+  timezone: TimeZone
   canBookInAdvanceFrom: moment.Duration
   location: Location
   offer: Offer
@@ -176,6 +185,7 @@ const courses: KubernetesCourse[] = [
     events: [
     {
       startAt: moment('2019-03-04T09:30:00+01:00'),
+      timezone: TimeZone.ROME,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -190,6 +200,7 @@ const courses: KubernetesCourse[] = [
     {
       startAt: moment('2019-03-13T09:30:00+00:00'),
       duration: moment.duration(3, 'days'),
+      timezone: TimeZone.LONDON,
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
       location: LondonOnline,
@@ -201,7 +212,8 @@ const courses: KubernetesCourse[] = [
       language: Language.ENGLISH,
     },
     {
-      startAt: moment('2019-03-25T09:30:00-08:00'),
+      startAt: moment('2019-03-25T09:30:00-07:00'),
+      timezone: TimeZone.SAN_FRANCISCO,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -215,6 +227,7 @@ const courses: KubernetesCourse[] = [
     },
     {
       startAt: moment('2019-03-20T09:30:00+00:00'),
+      timezone: TimeZone.LONDON,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -228,6 +241,7 @@ const courses: KubernetesCourse[] = [
     },
     {
       startAt: moment('2019-04-29T09:30:00+08:00'),
+      timezone: TimeZone.SINGAPORE,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -240,7 +254,8 @@ const courses: KubernetesCourse[] = [
       language: Language.ENGLISH,
     },
     {
-      startAt: moment('2019-04-29T09:30:00+00:00'),
+      startAt: moment('2019-04-29T09:30:00+01:00'),
+      timezone: TimeZone.LONDON,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -253,7 +268,8 @@ const courses: KubernetesCourse[] = [
       language: Language.ENGLISH,
     },
     {
-      startAt: moment('2019-05-13T09:30:00-05:00'),
+      startAt: moment('2019-05-13T09:30:00-04:00'),
+      timezone: TimeZone.TORONTO,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -266,7 +282,8 @@ const courses: KubernetesCourse[] = [
       language: Language.ENGLISH,
     },
     {
-      startAt: moment('2019-05-22T09:30:00+00:00'),
+      startAt: moment('2019-05-22T09:30:00+01:00'),
+      timezone: TimeZone.LONDON,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -278,26 +295,6 @@ const courses: KubernetesCourse[] = [
       },
       language: Language.ENGLISH,
     }
-    ]
-  },
-  {
-    name: 'Deploying and scaling applications in Kubernetes',
-    code: CourseCode.BASIC,
-    description: 'Learn how to deploy and scale applications with Kubernetes.',
-    events: [
-      {
-        startAt: moment('2019-02-25T09:30:00+00:00'),
-        duration: moment.duration(2, 'days'),
-        canBookInAdvanceFrom: moment.duration(90, 'days'),
-        location: London,
-        offer: {
-          price: 1225,
-          currency: CurrencyCode.GBP,
-          locale: 'en-GB',
-        },
-        language: Language.ENGLISH,
-        details: BasicDetails,
-      },
     ]
   },
 ]
@@ -544,7 +541,7 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
                 <span className='link dib navy underline v-mid'>{it.location.address}{it.location.country ? `, ${it.location.country}` : null}</span>
               }
               </p>
-              <p className='ma0 mv3'><span className='ttu b black-20 f6'>Starts at</span> <span className='f5 black-70 dib'>{it.startAt.format('h:mm A Z')}</span></p>
+              <p className='ma0 mv3'><span className='ttu b black-20 f6'>Starts at</span> <span className='f5 black-70 dib'>{it.startAt.tz(it.timezone).format('h:mm A z')}</span></p>
               <p className='ma0 mv3'><span className='ttu b black-20 f6'>Price</span> <span className='f4 black-70 relative dib'>{it.offer.price.toLocaleString(it.offer.locale, {style: 'currency', currency: it.offer.currency})} <span className='f7 v-mid absolute right--2 top-0'>+TAX</span></span></p>
               <p><PrimaryButton text='Get in touch &#8594;' mailto={mailto(publicCourseEnquiry(it.startAt, it.location))}/></p>
             </div>
