@@ -526,24 +526,31 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
       </ul>
 
       <ul className='events list pl0 pt3'>{courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[]).sort((a, b) => a.startAt.valueOf() - b.startAt.valueOf()).map(it => {
+        const id = `e-${it.startAt.toISOString()}-${it.location.address}`.toLowerCase().replace(/[^\w]+/g, '-')
         return <li className={it.location.continent}>
-          <div className='mv3 flex-ns items-start pb3 pb0-l'>
+          <div className='mv3 flex-ns items-start pb3 pb0-l module'>
             <div className='date bg-sky w3 h3 white tc b'>
               <p className='f2 ma0'>{it.startAt.format('D')}</p>
               <p className='ttu ma0'>{it.startAt.format('MMM')}</p>
             </div>
-            <div className='bg-evian ph4 pt2 flex-auto'>
-              <h3 className='f3 ma0 mt3 mb2'>{it.details.title}</h3>
+            <div className='bg-evian ph4 pt2 flex-auto relative'>
+              <h3 className='f3 ma0 mt3 mb2'>{it.details.title} — {it.location.address}</h3>
               <h4 className='normal black-70 mt1 mb4'>{it.duration.asDays()} days course</h4>
-              <p className='ma0 mv3'><span className='ttu b black-20 f6 v-mid'>Location:</span> <span></span>&nbsp;
-              {it.location.address === 'Online' ?
-                <span className='link dib navy v-mid'>{it.location.address} <span className='w1 v-mid dib'><Img image={assets.page.slack}/></span></span> :
-                <span className='link dib navy underline v-mid'>{it.location.address}{it.location.country ? `, ${it.location.country}` : null}</span>
-              }
-              </p>
-              <p className='ma0 mv3'><span className='ttu b black-20 f6'>Starts at</span> <span className='f5 black-70 dib'>{it.startAt.tz(it.timezone).format('h:mm A z')}</span></p>
-              <p className='ma0 mv3'><span className='ttu b black-20 f6'>Price</span> <span className='f4 black-70 relative dib'>{it.offer.price.toLocaleString(it.offer.locale, {style: 'currency', currency: it.offer.currency})} <span className='f7 v-mid absolute right--2 top-0'>+TAX</span></span></p>
-              <p><PrimaryButton text='Get in touch &#8594;' mailto={mailto(publicCourseEnquiry(it.startAt, it.location))}/></p>
+              <div className={`controls controls-${id} absolute top-1 right-1`}>
+                <button className='open bg-sky pa2 white f7 tc lh-solid bn br1' data-toggle={`.details-${id},.controls-${id}`} data-toggle-collapsed>▼</button>
+                <button className='close bg-sky pa2 white f7 tc lh-solid bn br1' data-toggle={`.details-${id},.controls-${id}`}>▲</button>
+              </div>
+              <div className={`details details-${id}`}>
+                <p className='ma0 mv3'><span className='ttu b black-20 f6 v-mid'>Location:</span> <span></span>&nbsp;
+                {it.location.address === 'Online' ?
+                  <span className='link dib navy v-mid'>{it.location.address} <span className='w1 v-mid dib'><Img image={assets.page.slack}/></span></span> :
+                  <span className='link dib navy underline v-mid'>{it.location.address}{it.location.country ? `, ${it.location.country}` : null}</span>
+                }
+                </p>
+                <p className='ma0 mv3'><span className='ttu b black-20 f6'>Starts at</span> <span className='f5 black-70 dib'>{it.startAt.tz(it.timezone).format('h:mm A z')}</span></p>
+                <p className='ma0 mv3'><span className='ttu b black-20 f6'>Price</span> <span className='f4 black-70 relative dib'>{it.offer.price.toLocaleString(it.offer.locale, {style: 'currency', currency: it.offer.currency})} <span className='f7 v-mid absolute right--2 top-0'>+TAX</span></span></p>
+                <p><PrimaryButton text='Get in touch &#8594;' mailto={mailto(publicCourseEnquiry(it.startAt, it.location))}/></p>
+              </div>
             </div>
           </div>
         </li>
