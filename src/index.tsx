@@ -10,10 +10,18 @@ import { writeFileSync } from 'fs'
 import { resolve } from 'path'
 import { optimiseAssets } from './assets'
 import { mkdir } from 'shelljs'
+import { syncEvents } from './eventbrite'
+import eventbrite from 'eventbrite'
+import { ok } from 'assert'
 
 export function run(options: Settings) {
   return function mount(root: LinkedNode<Page>) {
     renderTree(root, root)
+    if (!!options.eventBriteToken && !!options.eventBriteOrg) {
+      syncEvents(console.log, eventbrite({token: options.eventBriteToken}), options.eventBriteOrg, options.canPublishEvents)
+    } else {
+      console.log('Skipping Eventbrite publishing')
+    }
   }
 
   function renderTree(node: LinkedNode<Page>, root: LinkedNode<Page>) {
@@ -55,9 +63,19 @@ function assertUnreachable(x: never): never {
 interface Settings {
   siteUrl: string
   vendorId: string
+  eventBriteToken: string
+  eventBriteOrg: string
+  canPublishEvents: boolean
 }
+
+ok(process.env.ENVENTBRITE_TOKEN, `Missing Oauth token for Eventbrite https://www.eventbrite.com/platform/api#/introduction/authentication`)
+ok(process.env.ENVENTBRITE_ORG, `Missing the organization ID for Eventbrite https://www.eventbrite.com/platform/api#/reference/organization/list/list-your-organizations`)
+
 
 run({
   siteUrl: 'https://learnk8s.io',
   vendorId: '38628',
+  eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
+  eventBriteOrg: process.env.ENVENTBRITE_ORG as string,
+  canPublishEvents: process.env.NODE_ENV === 'production',
 })(sitemap)

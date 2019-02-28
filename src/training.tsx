@@ -7,6 +7,7 @@ import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dt
 import { JsonLd } from 'react-schemaorg'
 import moment from 'moment-timezone'
 import { material } from './material'
+import { cat } from 'shelljs';
 
 const benefits = [
   '**Get started with Kubernetes in your next project** and you need to quickly get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices',
@@ -37,7 +38,7 @@ const faqs: FAQ[] = [{
   content: `Sure - send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io).`
 }]
 
-const publicCourseEnquiry = (date: moment.Moment, location: Location): MailTo => ({
+const publicCourseEnquiry = (date: moment.Moment, location: Venue): MailTo => ({
   subject: 'Kubernetes training — Public course enquiry',
   body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')} in ${location}.\n\nKind regards,\n`,
   email: 'hello@learnk8s.io',
@@ -70,6 +71,7 @@ enum Continent {
   NORTH_AMERICA = 'namerica',
   EUROPE = 'europe',
   ASIA = 'asia',
+  ONLINE = 'online',
 }
 
 enum CourseName {
@@ -77,7 +79,7 @@ enum CourseName {
   ADVANCED = 'Advanced Kubernetes training',
 }
 
-enum CurrencyCode {
+export enum CurrencyCode {
   USD = 'USD',
   GBP = 'GBP',
   EUR = 'EUR',
@@ -85,10 +87,14 @@ enum CurrencyCode {
   CAD = 'CAD',
 }
 
-interface Location {
-  address: string
-  country: string
+export interface Venue {
+  address: string | null
+  country: string | null
+  countryCode: string | null
+  city: string | null
+  postcode: string | null
   continent: Continent
+  name: string
 }
 
 interface Offer {
@@ -102,7 +108,7 @@ enum CourseCode {
   ADVANCED = 'K8SADVANCED',
 }
 
-enum TimeZone {
+export enum TimeZone {
   LONDON = 'Europe/London',
   SAN_FRANCISCO = 'America/Los_Angeles',
   TORONTO = 'America/Toronto',
@@ -110,15 +116,18 @@ enum TimeZone {
   ROME = 'Europe/Rome',
 }
 
-interface CourseEvent {
+export interface CourseEvent {
+  code: string
   startAt: moment.Moment
   duration: moment.Duration
   timezone: TimeZone
   canBookInAdvanceFrom: moment.Duration
-  location: Location
+  location: Venue
   offer: Offer
   language: Language
   details: CourseDetails
+  description: string
+  eventbriteLogoId: string
 }
 
 interface CourseDetails {
@@ -126,44 +135,70 @@ interface CourseDetails {
   code: CourseCode
 }
 
-const LondonOnline: Location = {
-  address: 'Online',
-  country: '',
-  continent: Continent.EUROPE
-}
-const London: Location = {
-  address: 'London',
-  country: 'UK',
-  continent: Continent.EUROPE
-}
-const Singapore: Location = {
-  address: 'Singapore',
-  country: '',
-  continent: Continent.ASIA
-}
-const Milan: Location = {
-  address: 'Milan',
-  country: 'Italy',
-  continent: Continent.EUROPE
-}
-const SanFrancisco: Location = {
-  address: 'San Francisco',
-  country: 'California',
-  continent: Continent.NORTH_AMERICA
-}
-const Cardiff: Location = {
-  address: 'Cardiff',
-  country: 'Wales',
-  continent: Continent.EUROPE
-}
-const Toronto: Location = {
-  address: 'Toronto',
-  country: 'Canada',
-  continent: Continent.NORTH_AMERICA
-}
-const BasicDetails = {
-  title: CourseName.BASIC,
-  code: CourseCode.BASIC,
+export const venues = {
+  Online: {
+    address: null,
+    city: null,
+    country: null,
+    countryCode: null,
+    postcode: null,
+    continent: Continent.ONLINE,
+    name: 'Online',
+  },
+  London: {
+    name: 'CitizenM Hotel',
+    address: '20 Lavington St',
+    city: 'London',
+    country: 'UK',
+    countryCode: 'GB',
+    postcode: 'SE1 0NZ',
+    continent: Continent.EUROPE
+  },
+  Singapore: {
+    name: 'JustCo Singapore',
+    address: null,
+    country: 'Singapore',
+    countryCode: 'SG',
+    city: 'Singapore',
+    postcode: null,
+    continent: Continent.ASIA
+  },
+  Milan: {
+    name: 'Milano',
+    address: null,
+    postcode: null,
+    city: 'Milan',
+    country: 'Italy',
+    countryCode: 'IT',
+    continent: Continent.EUROPE
+  },
+  SanFrancisco: {
+    name: 'San Francisco',
+    city: 'San Francisco',
+    postcode: null,
+    address: null,
+    country: 'California',
+    countryCode: 'US',
+    continent: Continent.NORTH_AMERICA
+  },
+  Cardiff: {
+    name: 'Cardiff',
+    city: 'Cardiff',
+    postcode: null,
+    address: null,
+    country: 'Wales',
+    countryCode: 'GB',
+    continent: Continent.EUROPE
+  },
+  Toronto: {
+    name: 'Toronto',
+    city: 'Toronto',
+    country: 'Canada',
+    countryCode: 'CA',
+    address: null,
+    postcode: null,
+    continent: Continent.NORTH_AMERICA
+  }
 }
 const AdvancedDetails = {
   title: CourseName.ADVANCED,
@@ -177,125 +212,148 @@ interface KubernetesCourse {
   events: CourseEvent[]
 }
 
-const courses: KubernetesCourse[] = [
+export const courses: KubernetesCourse[] = [
   {
     name: 'Advanced Kubernetes training',
     code: CourseCode.ADVANCED,
     description: 'Learn how to deploy and scale applications with Kubernetes.',
     events: [
     {
+      code: 'LK8S|MILAN|20190304',
       startAt: moment('2019-03-04T09:30:00+01:00'),
       timezone: TimeZone.ROME,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
-      location: Milan,
+      location: venues.Milan,
       offer: {
         price: 2050,
         currency: CurrencyCode.EUR,
         locale: 'it-IT',
       },
       language: Language.ITALIAN,
+      description: cat(`${__dirname}/description_it.html`).toString(),
+      eventbriteLogoId: '53323631',
     },
     {
+      code: 'LK8S|ONLINE|20190313',
       startAt: moment('2019-03-13T09:30:00+00:00'),
       duration: moment.duration(3, 'days'),
       timezone: TimeZone.LONDON,
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
-      location: LondonOnline,
+      location: venues.Online,
       offer: {
         price: 1950,
         currency: CurrencyCode.GBP,
         locale: 'en-GB',
       },
       language: Language.ENGLISH,
+      description: cat(`${__dirname}/description_en.html`).toString(),
+      eventbriteLogoId: '48505063',
     },
     {
+      code: 'LK8S|SANFRANCISCO|20190325',
       startAt: moment('2019-03-25T09:30:00-07:00'),
       timezone: TimeZone.SAN_FRANCISCO,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
-      location: SanFrancisco,
+      location: venues.SanFrancisco,
       offer: {
         price: 2250,
         currency: CurrencyCode.USD,
         locale: 'it-IT',
       },
       language: Language.ENGLISH,
+      description: cat(`${__dirname}/description_en.html`).toString(),
+      eventbriteLogoId: '48505063',
     },
     {
+      code: 'LK8S|LONDON|20190320',
       startAt: moment('2019-03-20T09:30:00+00:00'),
       timezone: TimeZone.LONDON,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
-      location: London,
+      location: venues.London,
       offer: {
         price: 1950,
         currency: CurrencyCode.GBP,
         locale: 'en-GB',
       },
       language: Language.ENGLISH,
+      description: cat(`${__dirname}/description_en.html`).toString(),
+      eventbriteLogoId: '48505063',
     },
     {
+      code: 'LK8S|SINGAPORE|20190429',
       startAt: moment('2019-04-29T09:30:00+08:00'),
       timezone: TimeZone.SINGAPORE,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
-      location: Singapore,
+      location: venues.Singapore,
       offer: {
         price: 3400,
         currency: CurrencyCode.SGD,
         locale: 'en-SG',
       },
       language: Language.ENGLISH,
+      description: cat(`${__dirname}/description_en.html`).toString(),
+      eventbriteLogoId: '48505063',
     },
     {
+      code: 'LK8S|CARDIFF|20190429',
       startAt: moment('2019-04-29T09:30:00+01:00'),
       timezone: TimeZone.LONDON,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
-      location: Cardiff,
+      location: venues.Cardiff,
       offer: {
         price: 1950,
         currency: CurrencyCode.GBP,
         locale: 'en-GB',
       },
       language: Language.ENGLISH,
+      description: cat(`${__dirname}/description_en.html`).toString(),
+      eventbriteLogoId: '48505063',
     },
     {
+      code: 'LK8S|TORONTO|20190513',
       startAt: moment('2019-05-13T09:30:00-04:00'),
       timezone: TimeZone.TORONTO,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
-      location: Toronto,
+      location: venues.Toronto,
       offer: {
         price: 3300,
         currency: CurrencyCode.CAD,
         locale: 'en-CA',
       },
       language: Language.ENGLISH,
+      description: cat(`${__dirname}/description_en.html`).toString(),
+      eventbriteLogoId: '48505063',
     },
     {
+      code: 'LK8S|TORONTO|20190522',
       startAt: moment('2019-05-22T09:30:00+01:00'),
       timezone: TimeZone.LONDON,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
-      location: LondonOnline,
+      location: venues.Online,
       offer: {
         price: 1950,
         currency: CurrencyCode.GBP,
         locale: 'en-GB',
       },
       language: Language.ENGLISH,
-    }
-    ]
+      description: cat(`${__dirname}/description_en.html`).toString(),
+      eventbriteLogoId: '48505063',
+    }]
   },
 ]
 
@@ -344,8 +402,8 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
           endDate: it.startAt.clone().add(it.duration).toISOString(),
           location: {
             '@type': 'Place',
-            name: it.location.address,
-            address: it.location.address,
+            name: it.location.name,
+            address: it.location.continent === Continent.ONLINE ? 'Online' : `${it.location.city}, ${it.location.country}`,
           },
           isAccessibleForFree: Boolean.False,
           offers: {
