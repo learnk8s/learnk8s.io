@@ -165,7 +165,7 @@ function upsertTicket({endpoint, currencyCode, price}: {endpoint: string, curren
 }
 
 function publishEvent({eventId}: {eventId: string}, sdk: Sdk) {
-  return sdk.request(`/events/${eventId}/publish/`)
+  return sdk.request(`/events/${eventId}/publish/`, {method: 'POST'})
   .catch(err => console.log(err))
 }
 

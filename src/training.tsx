@@ -338,7 +338,7 @@ export const courses: KubernetesCourse[] = [
       eventbriteLogoId: '48505063',
     },
     {
-      code: 'LK8S|TORONTO|20190522',
+      code: 'LK8S|LONDON|20190522',
       startAt: moment('2019-05-22T09:30:00+01:00'),
       timezone: TimeZone.LONDON,
       duration: moment.duration(3, 'days'),
@@ -592,7 +592,7 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
               <p className='ttu ma0'>{it.startAt.format('MMM')}</p>
             </div>
             <div className='bg-evian ph4 pt2 flex-auto relative'>
-              <h3 className='f3 ma0 mt3 mb2'>{it.details.title} — {it.location.address}</h3>
+              <h3 className='f3 ma0 mt3 mb2'>{it.details.title} — {it.location.continent === Continent.ONLINE ? 'Online' : it.location.city}</h3>
               <h4 className='normal black-70 mt1 mb4'>{it.duration.asDays()} days course</h4>
               <div className={`controls controls-${id} absolute top-1 right-1`}>
                 <button className='open bg-sky pa2 white f7 tc lh-solid bn br1' data-toggle={`.details-${id},.controls-${id}`} data-toggle-collapsed>▼</button>
@@ -602,7 +602,7 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
                 <p className='ma0 mv3'><span className='ttu b black-20 f6 v-mid'>Location:</span> <span></span>&nbsp;
                 {it.location.continent === Continent.ONLINE ?
                   <span className='link dib navy v-mid'>Online <span className='w1 v-mid dib'><Img image={assets.page.slack}/></span></span> :
-                  <span className='link dib navy underline v-mid'>{it.location.city}{it.location.country}</span>
+                  <span className='link dib navy underline v-mid'>{it.location.city}, {it.location.country}</span>
                 }
                 </p>
                 <p className='ma0 mv3'><span className='ttu b black-20 f6'>Starts at</span> <span className='f5 black-70 dib'>{it.startAt.tz(it.timezone).format('h:mm A z')}</span></p>

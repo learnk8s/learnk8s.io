@@ -71,7 +71,6 @@ interface Settings {
 ok(process.env.ENVENTBRITE_TOKEN, `Missing Oauth token for Eventbrite https://www.eventbrite.com/platform/api#/introduction/authentication`)
 ok(process.env.ENVENTBRITE_ORG, `Missing the organization ID for Eventbrite https://www.eventbrite.com/platform/api#/reference/organization/list/list-your-organizations`)
 
-
 run({
   siteUrl: 'https://learnk8s.io',
   vendorId: '38628',
