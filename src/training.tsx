@@ -7,7 +7,10 @@ import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dt
 import { JsonLd } from 'react-schemaorg'
 import moment from 'moment-timezone'
 import { material } from './material'
-import { cat } from 'shelljs';
+import { cat } from 'shelljs'
+import marked from 'marked'
+
+const renderer = new marked.Renderer()
 
 const benefits = [
   '**Get started with Kubernetes in your next project** and you need to quickly get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices',
@@ -232,7 +235,7 @@ export const courses: KubernetesCourse[] = [
         locale: 'it-IT',
       },
       language: Language.ITALIAN,
-      description: cat(`${__dirname}/description_it.html`).toString(),
+      description: marked(cat(`${__dirname}/description_it.md`).toString(), {renderer}),
       eventbriteLogoId: '53323631',
     },
     {
@@ -249,7 +252,7 @@ export const courses: KubernetesCourse[] = [
         locale: 'en-GB',
       },
       language: Language.ENGLISH,
-      description: cat(`${__dirname}/description_en.html`).toString(),
+      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
       eventbriteLogoId: '48505063',
     },
     {
@@ -266,7 +269,7 @@ export const courses: KubernetesCourse[] = [
         locale: 'it-IT',
       },
       language: Language.ENGLISH,
-      description: cat(`${__dirname}/description_en.html`).toString(),
+      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
       eventbriteLogoId: '48505063',
     },
     {
@@ -283,7 +286,7 @@ export const courses: KubernetesCourse[] = [
         locale: 'en-GB',
       },
       language: Language.ENGLISH,
-      description: cat(`${__dirname}/description_en.html`).toString(),
+      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
       eventbriteLogoId: '48505063',
     },
     {
@@ -300,7 +303,7 @@ export const courses: KubernetesCourse[] = [
         locale: 'en-SG',
       },
       language: Language.ENGLISH,
-      description: cat(`${__dirname}/description_en.html`).toString(),
+      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
       eventbriteLogoId: '48505063',
     },
     {
@@ -317,7 +320,7 @@ export const courses: KubernetesCourse[] = [
         locale: 'en-GB',
       },
       language: Language.ENGLISH,
-      description: cat(`${__dirname}/description_en.html`).toString(),
+      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
       eventbriteLogoId: '48505063',
     },
     {
@@ -334,7 +337,7 @@ export const courses: KubernetesCourse[] = [
         locale: 'en-CA',
       },
       language: Language.ENGLISH,
-      description: cat(`${__dirname}/description_en.html`).toString(),
+      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
       eventbriteLogoId: '48505063',
     },
     {
@@ -351,7 +354,7 @@ export const courses: KubernetesCourse[] = [
         locale: 'en-GB',
       },
       language: Language.ENGLISH,
-      description: cat(`${__dirname}/description_en.html`).toString(),
+      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
       eventbriteLogoId: '48505063',
     }]
   },
