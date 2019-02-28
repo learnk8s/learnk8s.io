@@ -17,7 +17,7 @@ import { ok } from 'assert'
 export function run(options: Settings) {
   return function mount(root: LinkedNode<Page>) {
     renderTree(root, root)
-    if (!!options.eventBriteToken && !!options.eventBriteOrg) {
+    if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       syncEvents(console.log, eventbrite({token: options.eventBriteToken}), options.eventBriteOrg, options.canPublishEvents)
     } else {
       console.log('Skipping Eventbrite publishing')
