@@ -600,9 +600,9 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
               </div>
               <div className={`details details-${id}`}>
                 <p className='ma0 mv3'><span className='ttu b black-20 f6 v-mid'>Location:</span> <span></span>&nbsp;
-                {it.location.address === 'Online' ?
-                  <span className='link dib navy v-mid'>{it.location.address} <span className='w1 v-mid dib'><Img image={assets.page.slack}/></span></span> :
-                  <span className='link dib navy underline v-mid'>{it.location.address}{it.location.country ? `, ${it.location.country}` : null}</span>
+                {it.location.continent === Continent.ONLINE ?
+                  <span className='link dib navy v-mid'>Online <span className='w1 v-mid dib'><Img image={assets.page.slack}/></span></span> :
+                  <span className='link dib navy underline v-mid'>{it.location.city}{it.location.country}</span>
                 }
                 </p>
                 <p className='ma0 mv3'><span className='ttu b black-20 f6'>Starts at</span> <span className='f5 black-70 dib'>{it.startAt.tz(it.timezone).format('h:mm A z')}</span></p>
