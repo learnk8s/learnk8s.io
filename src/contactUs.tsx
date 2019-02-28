@@ -38,7 +38,7 @@ export const ContactUs: React.StatelessComponent<{root: LinkedNode<Page>, curren
             <a href='mailto:support@learnk8s.io' className='link navy b'>Contact support →</a>
           </Block>
           <Block
-            image={assets.page.lineChart}
+            image={assets.page.logo}
             title={`Media & press`}
             description={`Get learnk8s news, company info, and media resources.`}>
             <a href='mailto:hello@learnk8s.io' className='link navy b'>Contact us →</a>
