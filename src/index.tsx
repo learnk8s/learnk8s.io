@@ -9,6 +9,7 @@ import { Careers, assets as assetsCareers } from './careers'
 import { TermsAndConditions, assets as assetsTermsAndConditions } from './termsAndConditions'
 import { AboutUs, assets as assetsAboutUs } from './aboutUs'
 import { Newsletter, assets as assetsNewsletter } from './newsletter'
+import { Blog, assets as assetsBlog } from './blog'
 import { Redirect } from './redirect'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
@@ -81,6 +82,10 @@ function render(node: LinkedNode<Page>, root: LinkedNode<Page>, {siteUrl, vendor
       writeFileSync(path, renderToStaticMarkup(<Newsletter root={root} currentPage={node as LinkedNode<Sitemap.Newsletter>} siteUrl={siteUrl} assets={optimiseAssets(assetsNewsletter)} />))
       return
     }
+    case PageType.BLOG: {
+      writeFileSync(path, renderToStaticMarkup(<Blog root={root} currentPage={node as LinkedNode<Sitemap.Blog>} siteUrl={siteUrl} assets={optimiseAssets(assetsBlog)} />))
+      return
+    }
     default:
       // assertUnreachable(page)
   }
@@ -107,4 +112,4 @@ run({
   eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
   eventBriteOrg: process.env.ENVENTBRITE_ORG as string,
   canPublishEvents: process.env.NODE_ENV === 'production',
-})(sitemap)
+})(sitemap(optimiseAssets(Sitemap.sitemapAssets)))
