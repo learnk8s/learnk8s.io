@@ -1,7 +1,6 @@
 import React from 'react'
 import { LinkedNode, Page, TAndCsPage } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, assets as layoutAssets} from './layout'
-import {Image, Img} from './assets'
 import marked from 'marked'
 import { cat } from 'shelljs'
 
@@ -38,13 +37,4 @@ export const TermsAndConditions: React.StatelessComponent<{root: LinkedNode<Page
     <Consultation />
     <Footer root={root} assets={assets.layout}/>
   </Layout>
-}
-
-export const Block: React.StatelessComponent<{image: Image, title: string, description: string}> = ({title, description, children, image}) => {
-  return <li className='bg-white br2 relative pt4 w-100 mw6-m center-m w-30-l mv5'>
-    <div className='w3 h3 bg-white br-100 shadow-1 absolute top--2 left-0 absolute-center'><Img image={image}/></div>
-    <h2 className='navy normal tc'>{title}</h2>
-    <p className='lh-copy black-70 ph4 measure-narrow'>{description}</p>
-    <div className='tc bg-evian br2 br--bottom pv3'>{children}</div>
-  </li>
 }

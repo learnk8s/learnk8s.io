@@ -7,6 +7,7 @@ import { Consulting, assets as assetsConsulting } from './consulting'
 import { ContactUs, assets as assetsContactUs } from './contactUs'
 import { Careers, assets as assetsCareers } from './careers'
 import { TermsAndConditions, assets as assetsTermsAndConditions } from './termsAndConditions'
+import { AboutUs, assets as assetsAboutUs } from './aboutUs'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
 import { writeFileSync } from 'fs'
@@ -64,6 +65,10 @@ function render(node: LinkedNode<Page>, root: LinkedNode<Page>, {siteUrl, vendor
     }
     case PageType.T_AND_CS: {
       writeFileSync(path, renderToStaticMarkup(<TermsAndConditions root={root} currentPage={node as LinkedNode<Sitemap.TAndCsPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsTermsAndConditions)} />))
+      return
+    }
+    case PageType.ABOUT_US: {
+      writeFileSync(path, renderToStaticMarkup(<AboutUs root={root} currentPage={node as LinkedNode<Sitemap.AboutUsPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsAboutUs)} />))
       return
     }
     default:
