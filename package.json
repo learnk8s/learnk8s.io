@@ -21,6 +21,7 @@
     "@types/svgo": "^1.0.1",
     "cheerio": "^1.0.0-rc.2",
     "eventbrite": "^1.2.1",
+    "feed": "^2.0.2",
     "inline-source-cli": "^1.2.0",
     "marked": "^0.6.0",
     "md5": "^2.2.1",

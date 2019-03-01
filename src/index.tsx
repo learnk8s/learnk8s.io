@@ -20,6 +20,7 @@ import { mkdir } from 'shelljs'
 import { syncEvents } from './eventbrite'
 import eventbrite from 'eventbrite'
 import { ok } from 'assert'
+import {generateRSS} from './rss'
 
 export function run(options: Settings) {
   return function mount(root: LinkedNode<Page>) {
@@ -86,8 +87,16 @@ function render(node: LinkedNode<Page>, root: LinkedNode<Page>, {siteUrl, vendor
       writeFileSync(path, renderToStaticMarkup(<Blog root={root} currentPage={node as LinkedNode<Sitemap.Blog>} siteUrl={siteUrl} assets={optimiseAssets(assetsBlog)} />))
       return
     }
+    case PageType.RSS: {
+      writeFileSync(path, generateRSS(root, siteUrl))
+      return
+    }
+    case PageType.ARTICLE: {
+      // IGNORE
+      return
+    }
     default:
-      // assertUnreachable(page)
+      assertUnreachable(page)
   }
 }
 

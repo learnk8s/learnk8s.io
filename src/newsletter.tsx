@@ -11,7 +11,7 @@ export const assets = {
 }
 
 export const Newsletter: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<NS>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+  return <Layout root={root} siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
       <Navbar root={root} assets={assets.layout}/>

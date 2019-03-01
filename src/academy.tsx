@@ -53,7 +53,7 @@ const faqs: FAQ[] = [{
 }]
 
 export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<AcademyPage>, siteUrl: string, assets: ReturnType<typeof assets>}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+  return <Layout root={root} siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
     <JsonLd<Course> item={{
       '@type': 'Course',
       '@context': 'https://schema.org',
