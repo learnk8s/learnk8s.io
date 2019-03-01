@@ -409,7 +409,7 @@ export function sitemap(assets: typeof sitemapAssets) {
 
     createNode<RSS>({
       type: PageType.RSS,
-      url: '/.rss',
+      url: '/rss',
       friendlyName: PageName.RSS
     }),
 
