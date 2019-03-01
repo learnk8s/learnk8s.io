@@ -285,7 +285,7 @@ If you are interested in a step-by-step tutorial on how to configure Kubeflow in
 
 In the next episode, you will dive into the details of configuring the cluster and running deep learning jobs at scale.
 
-If you want to be notified when the article is ready, you should [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})
+If you want to be notified when the article is ready, you should [subscribe to the mailing list!](/newsletter)
 
 ## That's all folks!
 

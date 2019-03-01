@@ -347,4 +347,4 @@ In the rest of the course you will learn how to:
 
 {% include promo-workshop/index.html %}
 
-P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!]({% link _pages/newsletter/index.html %})
+P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)

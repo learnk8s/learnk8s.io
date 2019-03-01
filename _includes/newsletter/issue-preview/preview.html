@@ -1,7 +1,0 @@
-{% if page.preview-issue-number %}
-{% assign issue = '/newsletter/issue-' | append: page.preview-issue-number %}
-{% else %}
-{% assign issue = site.newsletter.last.url %}
-{% endif %}
-
-<iframe class="vh-75 w-100" src="{{ issue }}" frameborder="0" scrolling="yes" class="w-100"></iframe>
