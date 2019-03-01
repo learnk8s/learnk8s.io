@@ -5,6 +5,7 @@ import { Training, assets as assetsTraining } from './training'
 import { Academy, assets as assetsAcademy } from './academy'
 import { Consulting, assets as assetsConsulting } from './consulting'
 import { ContactUs, assets as assetsContactUs } from './contactUs'
+import { Careers, assets as assetsCareers } from './careers'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
 import { writeFileSync } from 'fs'
@@ -54,6 +55,10 @@ function render(node: LinkedNode<Page>, root: LinkedNode<Page>, {siteUrl, vendor
     }
     case PageType.CONTACT_US: {
       writeFileSync(path, renderToStaticMarkup(<ContactUs root={root} currentPage={node as LinkedNode<Sitemap.ContactUsPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsContactUs)} />))
+      return
+    }
+    case PageType.CAREERS: {
+      writeFileSync(path, renderToStaticMarkup(<Careers root={root} currentPage={node as LinkedNode<Sitemap.CareersPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsCareers)} />))
       return
     }
     default:
