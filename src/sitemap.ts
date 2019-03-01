@@ -30,6 +30,7 @@ export const enum PageType {
   REDIRECT = 'REDIRECT',
   ARTICLE = 'ARTICLE',
   RSS = 'RSS',
+  NOT_FOUND = 'NOT_FOUND',
 }
 
 export type Page =
@@ -45,7 +46,8 @@ export type Page =
   CareersPage |
   Redirect |
   ArticlePage |
-  RSS
+  RSS |
+  NotFoundPage
 
 export interface Homepage {
   type: PageType.HOMEPAGE
@@ -145,6 +147,12 @@ export interface RSS {
   type: PageType.RSS
   friendlyName: PageName.RSS
   url: string
+}
+
+export interface NotFoundPage {
+  type: PageType.NOT_FOUND
+  url: string
+  pageDetails: PageDetails
 }
 
 export const sitemapAssets = {
@@ -403,6 +411,17 @@ export function sitemap(assets: typeof sitemapAssets) {
       type: PageType.RSS,
       url: '/.rss',
       friendlyName: PageName.RSS
+    }),
+
+    createNode<NotFoundPage>({
+      type: PageType.NOT_FOUND,
+      url: '/404',
+      pageDetails: {
+        title: 'Not Found',
+        description: 'Page not found',
+        image: assets.openGraph.url,
+        url: '/404',
+      },
     }),
 
   ].reduce((root, it) => addChild(root, it), createNode<Homepage>({
