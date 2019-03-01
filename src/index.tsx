@@ -10,6 +10,7 @@ import { TermsAndConditions, assets as assetsTermsAndConditions } from './termsA
 import { AboutUs, assets as assetsAboutUs } from './aboutUs'
 import { Newsletter, assets as assetsNewsletter } from './newsletter'
 import { Blog, assets as assetsBlog } from './blog'
+import { NotFound, assets as assetsNotFound } from './404'
 import { Redirect } from './redirect'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
@@ -93,6 +94,10 @@ function render(node: LinkedNode<Page>, root: LinkedNode<Page>, {siteUrl, vendor
     }
     case PageType.ARTICLE: {
       // IGNORE
+      return
+    }
+    case PageType.NOT_FOUND: {
+      writeFileSync(`_site/404.html`, renderToStaticMarkup(<NotFound root={root} currentPage={node as LinkedNode<Sitemap.NotFoundPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsNotFound)} />))
       return
     }
     default:
