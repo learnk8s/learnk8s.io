@@ -455,3 +455,21 @@ export function getFullUrl(node: LinkedNode<Page>): string {
   }
   return finalUrl.startsWith('//') ? finalUrl.slice(1) : finalUrl
 }
+
+function renderTree(node: LinkedNode<Page>, root: LinkedNode<Page>, siteUrl: string): string[] {
+  return [
+    render(node, root, {siteUrl}),
+    ...node.children.reduce((acc, it) => acc.concat(renderTree(it as any, root, siteUrl)), [] as string[])
+  ]
+}
+
+function render(node: LinkedNode<Page>, root: LinkedNode<Page>, {siteUrl}: {siteUrl: string}) {
+  if (node.payload.type === PageType.REDIRECT) {
+    return ''
+  }
+  return `<url><loc>${siteUrl}${getFullUrl(node)}</loc><lastmod>${(new Date()).toISOString()}</lastmod></url>`
+}
+
+export function run(root: LinkedNode<Page>, siteUrl: string) {
+  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${renderTree(sitemap(sitemapAssets), sitemap(sitemapAssets), siteUrl).join('')}</urlset>`
+}
