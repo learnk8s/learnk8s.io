@@ -113,3 +113,5 @@ run({
   eventBriteOrg: process.env.ENVENTBRITE_ORG as string,
   canPublishEvents: process.env.NODE_ENV === 'production',
 })(sitemap(optimiseAssets(Sitemap.sitemapAssets)))
+
+writeFileSync('_site/sitemap.xml', Sitemap.run(sitemap(optimiseAssets(Sitemap.sitemapAssets)), 'https://learnk8s.io'))
