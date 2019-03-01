@@ -8,6 +8,7 @@ import { ContactUs, assets as assetsContactUs } from './contactUs'
 import { Careers, assets as assetsCareers } from './careers'
 import { TermsAndConditions, assets as assetsTermsAndConditions } from './termsAndConditions'
 import { AboutUs, assets as assetsAboutUs } from './aboutUs'
+import { Redirect } from './redirect'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
 import { writeFileSync } from 'fs'
@@ -69,6 +70,10 @@ function render(node: LinkedNode<Page>, root: LinkedNode<Page>, {siteUrl, vendor
     }
     case PageType.ABOUT_US: {
       writeFileSync(path, renderToStaticMarkup(<AboutUs root={root} currentPage={node as LinkedNode<Sitemap.AboutUsPage>} siteUrl={siteUrl} assets={optimiseAssets(assetsAboutUs)} />))
+      return
+    }
+    case PageType.REDIRECT: {
+      writeFileSync(path, renderToStaticMarkup(<Redirect root={root} currentPage={node as LinkedNode<Sitemap.Redirect>} siteUrl={siteUrl} />))
       return
     }
     default:

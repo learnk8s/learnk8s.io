@@ -25,6 +25,7 @@ export const enum PageType {
   CAREERS = 'CAREERS',
   T_AND_CS = 'T_AND_CS',
   NEWSLETTER = 'NEWSLETTER',
+  REDIRECT = 'REDIRECT',
 }
 
 export type Page =
@@ -37,7 +38,8 @@ export type Page =
   AboutUsPage |
   TAndCsPage |
   Newsletter |
-  CareersPage
+  CareersPage |
+  Redirect
 
 export interface Homepage {
   type: PageType.HOMEPAGE
@@ -117,6 +119,12 @@ export interface CareersPage {
   title: string
   url: string
   pageDetails: PageDetails
+}
+
+export interface Redirect {
+  type: PageType.REDIRECT
+  url: string
+  redirectTo: string
 }
 
 export const sitemap = [
@@ -236,6 +244,12 @@ export const sitemap = [
       image: '/assets/open_graph_preview.png',
       url: '/careers',
     },
+  }),
+
+  createNode<Redirect>({
+    type: PageType.REDIRECT,
+    url: '/infiniteconf2018',
+    redirectTo: '/blog/scaling-machine-learning-with-kubeflow-tensorflow'
   }),
 
 ].reduce((root, it) => addChild(root, it), createNode<Homepage>({
