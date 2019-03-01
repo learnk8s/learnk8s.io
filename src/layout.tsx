@@ -109,7 +109,7 @@ export const Footer: React.StatelessComponent<{root: LinkedNode<Page>, assets: t
       </div>
     </section>
     <section className='pt2 pt5-ns'>
-      <p className='f7 bt b--light-blue pv2 white-70'>Copyright &copy; learnk8s 2017-2019. Made with ❤︎ in London. View our <a className='link white-70' href='{% link _pages/terms-and-conditions/index.md %}'>Terms and Conditions</a> or Privacy Policy. Send us a note to <a href='mailto:hello@learnk8s.io' className='link white underline'>hello@learnk8s.io</a></p>
+      <p className='f7 bt b--light-blue pv2 white-70'>Copyright &copy; learnk8s 2017-2019. Made with ❤︎ in London. View our <a className='link white-70' href={getFullUrl(findOrPanic(root, PageName.T_AND_CS))}>Terms and Conditions</a> or Privacy Policy. Send us a note to <a href='mailto:hello@learnk8s.io' className='link white underline'>hello@learnk8s.io</a></p>
     </section>
   </footer>
 }
