@@ -110,7 +110,7 @@ export const AboutUs: React.StatelessComponent<{root: LinkedNode<Page>, currentP
 
 export const Profile: React.StatelessComponent<{profile: Image, name: string, bio: string, role: string}> = ({profile, name, role, bio, children}) => {
   return <li className="mw5 ma4" id={`${name.replace(/\s/gi, '_').toLowerCase()}`}>
-    <Img image={profile} className='db shadow-1 w-100'/>
+    <div className='relative padding-hack-100'><Img image={profile} className='db shadow-1 absolute top-0 left-0'/></div>
     <h2 className="f4 navy mb1">{name}</h2>
     <p className="black-70 mt0">{role}</p>
     <p className="black-70 lh-copy">{bio}</p>
