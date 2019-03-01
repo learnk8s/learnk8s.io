@@ -13,6 +13,7 @@ export const enum PageName {
   CAREERS = 'CAREERS',
   T_AND_CS = 'T_AND_CS',
   NEWSLETTER = 'NEWSLETTER',
+  RSS = 'RSS',
 }
 
 export const enum PageType {
@@ -28,6 +29,7 @@ export const enum PageType {
   NEWSLETTER = 'NEWSLETTER',
   REDIRECT = 'REDIRECT',
   ARTICLE = 'ARTICLE',
+  RSS = 'RSS',
 }
 
 export type Page =
@@ -42,7 +44,8 @@ export type Page =
   Newsletter |
   CareersPage |
   Redirect |
-  ArticlePage
+  ArticlePage |
+  RSS
 
 export interface Homepage {
   type: PageType.HOMEPAGE
@@ -136,6 +139,12 @@ export interface ArticlePage {
   url: string
   pageDetails: PageDetails
   publishedDate: string
+}
+
+export interface RSS {
+  type: PageType.RSS
+  friendlyName: PageName.RSS
+  url: string
 }
 
 export const sitemapAssets = {
@@ -388,6 +397,12 @@ export function sitemap(assets: typeof sitemapAssets) {
       type: PageType.REDIRECT,
       url: '/infiniteconf2018',
       redirectTo: '/blog/scaling-machine-learning-with-kubeflow-tensorflow'
+    }),
+
+    createNode<RSS>({
+      type: PageType.RSS,
+      url: '/.rss',
+      friendlyName: PageName.RSS
     }),
 
   ].reduce((root, it) => addChild(root, it), createNode<Homepage>({

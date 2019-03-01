@@ -1,6 +1,5 @@
 name: learnk8s
 url: https://learnk8s.io
-video_course: no
 exclude:
   - node_modules
   - yarn.lock
@@ -21,12 +20,6 @@ collections:
   blog:
     output: true
     permalink: /blog/:path
-  pages:
-    output: true
-    permalink: /:path
-  newsletter:
-    output: true
-    permalink: /newsletter/:path
 defaults:
   - scope:
       path: ""
@@ -35,5 +28,4 @@ defaults:
       layout: "newsletter"
 plugins:
   - jekyll-target-blank
-  - jekyll-sitemap
   - jekyll-redirect-from

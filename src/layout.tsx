@@ -17,7 +17,7 @@ export const assets = {
   smallCargo: Image({url: 'assets/small_cargo.svg', description: 'Small cargo'}),
 }
 
-export const Layout: React.StatelessComponent<{siteUrl: string, pageDetails: PageDetails}> = ({siteUrl, pageDetails, children}) => {
+export const Layout: React.StatelessComponent<{siteUrl: string, pageDetails: PageDetails, root: LinkedNode<Page>}> = ({siteUrl, pageDetails, children, root}) => {
   const gaId = 'GTM-5WCKPRL'
   return <html lang='en'>
   <head>
@@ -34,6 +34,7 @@ export const Layout: React.StatelessComponent<{siteUrl: string, pageDetails: Pag
     <link rel='icon' type='image/png' sizes='16x16' href='/assets/favicon-16x16.png'/>
     <link rel='manifest' href='/assets/manifest.json'/>
     <link rel='mask-icon' href='/assets/safari-pinned-tab.svg' color='#326ce5'/>
+    <link rel='alternate' type='application/rss+xml' title='Subscribe to Learnk8s RSS' href={`${siteUrl}${getFullUrl(findOrPanic(root, PageName.RSS))}`} />
     <meta name='theme-color' content='#ffffff'/>
     <meta property='og:site_name' content='Learnk8s' />
     <meta property='og:url' content={`${siteUrl}${pageDetails.url}`} />

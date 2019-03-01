@@ -381,7 +381,7 @@ export const assets = {
 }
 
 export const Training: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<TrainingPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+  return <Layout root={root} siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
     {courses.map((course, index) => {
       return <JsonLd<Course> key={index} item={{
         '@type': 'Course',
