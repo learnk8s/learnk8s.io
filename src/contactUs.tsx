@@ -7,7 +7,7 @@ export const assets = {
   page: {
     sales: Image({url: 'assets/contact-us/sales.svg', description: 'Man on the phone'}),
     lineChart: Image({url: 'assets/contact-us/line_chart.svg', description: 'Line chart'}),
-    logo: Image({url: 'assets/contact-us/logo.svg', description: 'Learnk8s logo'}),
+    logo: Image({url: 'assets/contact-us/square_logo.svg', description: 'Learnk8s logo'}),
     slack: Image({url: 'assets/contact-us/slack_in_colours.svg', description: 'Slack logo'}),
   },
   layout: layoutAssets
