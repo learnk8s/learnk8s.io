@@ -417,7 +417,7 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
             validFrom: it.startAt.clone().subtract(it.canBookInAdvanceFrom).toISOString(),
             url: `${siteUrl}${getFullUrl(findOrPanic(root, PageName.TRAINING))}`
           },
-          image: `${siteUrl}${currentPage.payload.pageDetails.image}`,
+          image: `${siteUrl}${currentPage.payload.pageDetails.openGraphImage}`,
           performer: {
             '@type': 'Organization',
             name: 'Learnk8s',

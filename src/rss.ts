@@ -23,7 +23,7 @@ export function generateRSS(root: LinkedNode<Page>, siteUrl: string) {
       id: `${siteUrl}${getFullUrl(it)}`,
       description: it.payload.pageDetails.description,
       content: it.payload.pageDetails.description,
-      image: `${siteUrl}${it.payload.pageDetails.image}`
+      image: `${siteUrl}${it.payload.pageDetails.openGraphImage}`
     })
   })
   return feed.atom1()

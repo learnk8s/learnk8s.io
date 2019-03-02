@@ -6,7 +6,7 @@ import marked from 'marked'
 export interface PageDetails {
   title: string
   description: string
-  image: string
+  openGraphImage: string
   url: string
 }
 
@@ -40,7 +40,7 @@ export const Layout: React.StatelessComponent<{siteUrl: string, pageDetails: Pag
     <meta property='og:url' content={`${siteUrl}${pageDetails.url}`} />
     <meta property='og:type' content='website' />
     <meta property='og:title' content={pageDetails.title} />
-    <meta property='og:image' content={pageDetails.image} />
+    <meta property='og:image' content={pageDetails.openGraphImage} />
     <meta property='og:description' content={pageDetails.description} />
     <script dangerouslySetInnerHTML={{__html: `(function (w, d, s, l, i) {
 w[l] = w[l] || []; w[l].push({

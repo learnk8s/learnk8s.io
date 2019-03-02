@@ -177,7 +177,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       pageDetails: {
         title: 'Kubernetes Training Courses',
         description: 'Join an instructor-led, hands-on course on how to quickly deploy applications in Kubernetes — without having to wade through mountains of documentation — and learn how to orchestrate and manage containers at scale.',
-        image: assets.openGraph.url,
+        openGraphImage: assets.openGraph.url,
         url: '/training',
       },
     }),
@@ -190,7 +190,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       pageDetails: {
         title: 'Kubernetes Online Course',
         description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
-        image: assets.openGraph.url,
+        openGraphImage: assets.openGraph.url,
         url: '/academy',
       },
     }),
@@ -203,7 +203,7 @@ export function sitemap(assets: typeof sitemapAssets) {
         pageDetails: {
           title: 'Getting started with Docker and Kubernetes on Windows 10',
           description: `Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
-          image: assets.k8sOnWindows.url,
+          openGraphImage: assets.k8sOnWindows.url,
           url: '/installing-docker-and-kubernetes-on-windows',
         },
         publishedDate: '2018-06-05',
@@ -215,7 +215,7 @@ export function sitemap(assets: typeof sitemapAssets) {
         pageDetails: {
           title: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1',
           description: `When you deploy an app in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or a VM. The cluster routes the traffic to the nodes using a network proxy. But what happens when network proxy crashes?`,
-          image: assets.chaos.url,
+          openGraphImage: assets.chaos.url,
           url: '/kubernetes-chaos-engineering-lessons-learned',
         },
         publishedDate: '2018-05-15',
@@ -227,7 +227,7 @@ export function sitemap(assets: typeof sitemapAssets) {
         pageDetails: {
           title: 'Kubernetes: deploy Laravel the easy way',
           description: `Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
-          image: assets.chaos.url,
+          openGraphImage: assets.chaos.url,
           url: '/kubernetes-deploy-laravel-the-easy-way',
         },
         publishedDate: '2018-04-25',
@@ -244,7 +244,7 @@ export function sitemap(assets: typeof sitemapAssets) {
         pageDetails: {
           title: 'Cloud infrastructure for the Internet of Things: Kubernetes on solar plants',
           description: `Solar panels are getting cheaper, and are becoming an economically viable source of renewable energy in many parts of the world. For solar panels to operate efficiently, they need to be kept clean and pointed at an optimal angle to the sun that balances power generation and prevents overheating. An embedded computer is in charge of monitoring metrics and driving the actuators. But when you have thousands of solar panels and embedded computers how do you orchestrate software updates, monitor uptime and secure communications?`,
-          image: assets.solar.url,
+          openGraphImage: assets.solar.url,
           url: '/kubernetes-on-solar-plants',
         },
         publishedDate: '2018-12-04',
@@ -256,7 +256,7 @@ export function sitemap(assets: typeof sitemapAssets) {
         pageDetails: {
           title: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes',
           description: `Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
-          image: assets.spot.url,
+          openGraphImage: assets.spot.url,
           url: '/kubernetes-spot-instances',
         },
         publishedDate: '2018-11-06',
@@ -268,7 +268,7 @@ export function sitemap(assets: typeof sitemapAssets) {
         pageDetails: {
           title: 'Scaling Jupyter notebooks with Kubernetes and Tensorflow',
           description: `One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.`,
-          image: assets.kubeflow.url,
+          openGraphImage: assets.kubeflow.url,
           url: '/scaling-machine-learning-with-kubeflow-tensorflow',
         },
         publishedDate: '2019-01-09',
@@ -280,7 +280,7 @@ export function sitemap(assets: typeof sitemapAssets) {
         pageDetails: {
           title: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
           description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
-          image: assets.springboot.url,
+          openGraphImage: assets.springboot.url,
           url: '/scaling-spring-boot-microservices',
         },
         publishedDate: '2018-07-11',
@@ -292,7 +292,7 @@ export function sitemap(assets: typeof sitemapAssets) {
         pageDetails: {
           title: '3 simple tricks for smaller Docker images',
           description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
-          image: assets.smaller.url,
+          openGraphImage: assets.smaller.url,
           url: '/smaller-docker-images',
         },
         publishedDate: '2018-02-12',
@@ -304,7 +304,7 @@ export function sitemap(assets: typeof sitemapAssets) {
         pageDetails: {
           title: 'What is Kubernetes? Optimise your hosting costs and efficiency',
           description: `In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month.`,
-          image: assets.kubebucks.url,
+          openGraphImage: assets.kubebucks.url,
           url: '/what-is-kubernetes',
         },
         publishedDate: '2018-09-04',
@@ -317,7 +317,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       pageDetails: {
         title: 'Blog',
         description: 'The fastest way to become an expert in deploying applications at scale with Kubernetes.',
-        image: assets.openGraph.url,
+        openGraphImage: assets.openGraph.url,
         url: '/blog',
       },
     })),
@@ -330,7 +330,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       pageDetails: {
         title: 'Contact us',
         description: 'Get in touch and let us know how we can help.',
-        image: assets.openGraph.url,
+        openGraphImage: assets.openGraph.url,
         url: '/contact-us',
       },
     }),
@@ -343,7 +343,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       pageDetails: {
         title: 'Terms and Conditions',
         description: 'Terms and Conditions.',
-        image: assets.openGraph.url,
+        openGraphImage: assets.openGraph.url,
         url: '/terms-and-conditions',
       },
     }),
@@ -356,7 +356,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       pageDetails: {
         title: 'Newsletter',
         description: 'Keep yourself up to date with the latest news from Learnk8s.',
-        image: assets.openGraph.url,
+        openGraphImage: assets.openGraph.url,
         url: '/newsletter',
       },
     }),
@@ -370,7 +370,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       pageDetails: {
         title: 'Consulting',
         description: 'Expertise in software development, strategy and operations to help you innovate at speed and scale.',
-        image: assets.openGraph.url,
+        openGraphImage: assets.openGraph.url,
         url: '/newsletter',
       },
     }),
@@ -383,7 +383,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       pageDetails: {
         title: 'Team',
         description: 'Experienced software consultants, specialising in Kubernetes.',
-        image: assets.openGraph.url,
+        openGraphImage: assets.openGraph.url,
         url: '/about-us',
       },
     }),
@@ -396,7 +396,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       pageDetails: {
         title: 'Careers',
         description: 'Help others learn Kubernetes.',
-        image: assets.openGraph.url,
+        openGraphImage: assets.openGraph.url,
         url: '/careers',
       },
     }),
@@ -419,7 +419,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       pageDetails: {
         title: 'Not Found',
         description: 'Page not found',
-        image: assets.openGraph.url,
+        openGraphImage: assets.openGraph.url,
         url: '/404',
       },
     }),
@@ -432,7 +432,7 @@ export function sitemap(assets: typeof sitemapAssets) {
     pageDetails: {
       title: 'Learnk8s — the Kubernetes training company',
       description: 'We help you get started on your Kubernetes journey through comprehensive online, in person or remote training.',
-      image: assets.openGraph.url,
+      openGraphImage: assets.openGraph.url,
       url: '/',
     },
   }))
