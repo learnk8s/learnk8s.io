@@ -390,13 +390,13 @@ green     #859900  operators, other keywords
   display: inline-block;
 }
 
-.events .namerica,
 .events .europe,
+.events .america,
 .events .asia {
   display: none;
 }
 
-#namerica:checked ~ .legend .namerica,
+#america:checked ~ .legend .america,
 #all:checked ~ .legend .all,
 #europe:checked ~ .legend .europe,
 #asia:checked ~ .legend .asia {
@@ -407,7 +407,7 @@ green     #859900  operators, other keywords
 }
 
 #all:checked ~ .events li,
-#namerica:checked ~ .events .namerica,
+#america:checked ~ .events .america,
 #europe:checked ~ .events .europe,
 #asia:checked ~ .events .asia {
   display: block;

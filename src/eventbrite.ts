@@ -1,4 +1,4 @@
-import { TimeZone, CurrencyCode, courses, CourseEvent, Venue, venues } from './training'
+import { Timezone, CurrencyCode, courses, CourseEvent, Venue, venues } from './training'
 import cheerio from 'cheerio'
 import moment from 'moment-timezone'
 import { Sdk } from 'eventbrite/lib/types'
@@ -200,7 +200,7 @@ interface EventEventBrite {
   }
   id: string
   start: {
-    timezone: TimeZone
+    timezone: Timezone
     utc: string
   }
   end: {

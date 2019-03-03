@@ -41,9 +41,9 @@ const faqs: FAQ[] = [{
   content: `Sure - send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io).`
 }]
 
-const publicCourseEnquiry = (date: moment.Moment, location: Venue): MailTo => ({
+const publicCourseEnquiry = (date: moment.Moment, venue: Venue): MailTo => ({
   subject: 'Kubernetes training — Public course enquiry',
-  body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')} in ${location.city || location.name}.\n\nKind regards,\n`,
+  body: `Hello Learnk8s,\n\nI'd like to know more about the ${isVenueOnline(venue) ? 'online ': ''}Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')}${isVenueOnline(venue) ? '' : `in ${venue.city || venue.name}`}.\n\nKind regards,\n`,
   email: 'hello@learnk8s.io',
 })
 
@@ -70,13 +70,6 @@ enum Language {
   ITALIAN = 'Italian',
 }
 
-enum Continent {
-  NORTH_AMERICA = 'namerica',
-  EUROPE = 'europe',
-  ASIA = 'asia',
-  ONLINE = 'online',
-}
-
 enum CourseName {
   BASIC = 'Deploying and scaling applications in Kubernetes',
   ADVANCED = 'Advanced Kubernetes training',
@@ -96,7 +89,6 @@ export interface Venue {
   countryCode: string | null
   city: string | null
   postcode: string | null
-  continent: Continent
   name: string
 }
 
@@ -111,7 +103,7 @@ enum CourseCode {
   ADVANCED = 'K8SADVANCED',
 }
 
-export enum TimeZone {
+export enum Timezone {
   LONDON = 'Europe/London',
   SAN_FRANCISCO = 'America/Los_Angeles',
   TORONTO = 'America/Toronto',
@@ -123,7 +115,7 @@ export interface CourseEvent {
   code: string
   startAt: moment.Moment
   duration: moment.Duration
-  timezone: TimeZone
+  timezone: Timezone
   canBookInAdvanceFrom: moment.Duration
   location: Venue
   offer: Offer
@@ -138,6 +130,10 @@ interface CourseDetails {
   code: CourseCode
 }
 
+function isVenueOnline(venue: Venue): boolean {
+  return venue.name === venues.Online.name
+}
+
 export const venues = {
   Online: {
     address: null,
@@ -145,7 +141,6 @@ export const venues = {
     country: null,
     countryCode: null,
     postcode: null,
-    continent: Continent.ONLINE,
     name: 'Online',
   },
   London: {
@@ -155,7 +150,6 @@ export const venues = {
     country: 'UK',
     countryCode: 'GB',
     postcode: 'SE1 0NZ',
-    continent: Continent.EUROPE
   },
   Singapore: {
     name: 'JustCo Singapore',
@@ -164,7 +158,6 @@ export const venues = {
     countryCode: 'SG',
     city: 'Singapore',
     postcode: null,
-    continent: Continent.ASIA
   },
   Milan: {
     name: 'Milano',
@@ -173,7 +166,6 @@ export const venues = {
     city: 'Milan',
     country: 'Italy',
     countryCode: 'IT',
-    continent: Continent.EUROPE
   },
   SanFrancisco: {
     name: 'San Francisco',
@@ -182,7 +174,6 @@ export const venues = {
     address: null,
     country: 'California',
     countryCode: 'US',
-    continent: Continent.NORTH_AMERICA
   },
   Cardiff: {
     name: 'Cardiff',
@@ -191,7 +182,6 @@ export const venues = {
     address: null,
     country: 'Wales',
     countryCode: 'GB',
-    continent: Continent.EUROPE
   },
   Toronto: {
     name: 'Toronto',
@@ -200,7 +190,6 @@ export const venues = {
     countryCode: 'CA',
     address: null,
     postcode: null,
-    continent: Continent.NORTH_AMERICA
   }
 }
 const AdvancedDetails = {
@@ -224,7 +213,7 @@ export const courses: KubernetesCourse[] = [
     {
       code: 'LK8S|MILAN|20190304',
       startAt: moment('2019-03-04T09:30:00+01:00'),
-      timezone: TimeZone.ROME,
+      timezone: Timezone.ROME,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -242,7 +231,7 @@ export const courses: KubernetesCourse[] = [
       code: 'LK8S|ONLINE|20190313',
       startAt: moment('2019-03-13T09:30:00+00:00'),
       duration: moment.duration(3, 'days'),
-      timezone: TimeZone.LONDON,
+      timezone: Timezone.LONDON,
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
       location: venues.Online,
@@ -258,7 +247,7 @@ export const courses: KubernetesCourse[] = [
     {
       code: 'LK8S|SANFRANCISCO|20190325',
       startAt: moment('2019-03-25T09:30:00-07:00'),
-      timezone: TimeZone.SAN_FRANCISCO,
+      timezone: Timezone.SAN_FRANCISCO,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -275,7 +264,7 @@ export const courses: KubernetesCourse[] = [
     {
       code: 'LK8S|LONDON|20190320',
       startAt: moment('2019-03-20T09:30:00+00:00'),
-      timezone: TimeZone.LONDON,
+      timezone: Timezone.LONDON,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -292,7 +281,7 @@ export const courses: KubernetesCourse[] = [
     {
       code: 'LK8S|SINGAPORE|20190429',
       startAt: moment('2019-04-29T09:30:00+08:00'),
-      timezone: TimeZone.SINGAPORE,
+      timezone: Timezone.SINGAPORE,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -309,7 +298,7 @@ export const courses: KubernetesCourse[] = [
     {
       code: 'LK8S|CARDIFF|20190429',
       startAt: moment('2019-04-29T09:30:00+01:00'),
-      timezone: TimeZone.LONDON,
+      timezone: Timezone.LONDON,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -326,7 +315,7 @@ export const courses: KubernetesCourse[] = [
     {
       code: 'LK8S|TORONTO|20190513',
       startAt: moment('2019-05-13T09:30:00-04:00'),
-      timezone: TimeZone.TORONTO,
+      timezone: Timezone.TORONTO,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -343,7 +332,7 @@ export const courses: KubernetesCourse[] = [
     {
       code: 'LK8S|LONDON|20190522',
       startAt: moment('2019-05-22T09:30:00+01:00'),
-      timezone: TimeZone.LONDON,
+      timezone: Timezone.LONDON,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
@@ -406,7 +395,7 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
           location: {
             '@type': 'Place',
             name: it.location.name,
-            address: it.location.continent === Continent.ONLINE ? 'Online' : `${it.location.city}, ${it.location.country}`,
+            address: isVenueOnline(it.location) ? 'Online' : `${it.location.city}, ${it.location.country}`,
           },
           isAccessibleForFree: Boolean.False,
           offers: {
@@ -576,26 +565,26 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
       <h2 className='navy f4 f3-l'>Upcoming events</h2>
 
       <input className='dn' defaultChecked id='all' type='radio' name='country' />
-      <input className='dn' id='namerica' type='radio' name='country' />
+      <input className='dn' id='america' type='radio' name='country' />
       <input className='dn' id='europe' type='radio' name='country' />
       <input className='dn' id='asia' type='radio' name='country' />
       <ul className='legend list pl0 flex'>
         <li className='all dib pa2 navy bb bw1 b--near-white bg-evian br1 br--left'><label htmlFor='all'>All</label></li>
-        <li className='namerica dib pa2 navy bb bw1 b--near-white bg-evian'><label htmlFor='namerica'>North America</label></li>
+        <li className='america dib pa2 navy bb bw1 b--near-white bg-evian'><label htmlFor='america'>North America</label></li>
         <li className='europe dib pa2 navy bb bw1 b--near-white bg-evian'><label htmlFor='europe'>Europe</label></li>
         <li className='asia dib pa2 navy bb bw1 b--near-white bg-evian br1 br--right'><label htmlFor='asia'>Asia</label></li>
       </ul>
 
       <ul className='events list pl0 pt3'>{courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[]).sort((a, b) => a.startAt.valueOf() - b.startAt.valueOf()).map(it => {
         const id = `e-${it.startAt.toISOString()}-${it.location.address}`.toLowerCase().replace(/[^\w]+/g, '-')
-        return <li className={it.location.continent}>
+        return <li className={`${it.timezone}`.split('/')[0].toLowerCase()}>
           <div className='mv3 flex-ns items-start pb3 pb0-l module'>
             <div className='date bg-sky w3 h3 white tc b'>
               <p className='f2 ma0'>{it.startAt.format('D')}</p>
               <p className='ttu ma0'>{it.startAt.format('MMM')}</p>
             </div>
             <div className='bg-evian ph4 pt2 flex-auto relative'>
-              <h3 className='f3 ma0 mt3 mb2'>{it.details.title} — {it.location.continent === Continent.ONLINE ? 'Online' : it.location.city}</h3>
+              <h3 className='f3 ma0 mt3 mb2'>{it.details.title} — {isVenueOnline(it.location) ? 'Online' : it.location.city}</h3>
               <h4 className='normal black-70 mt1 mb4'>{it.duration.asDays()} days course</h4>
               <div className={`controls controls-${id} absolute top-1 right-1`}>
                 <button className='open bg-sky pa2 white f7 tc lh-solid bn br1' data-toggle={`.details-${id},.controls-${id}`} data-toggle-collapsed>▼</button>
@@ -603,7 +592,7 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
               </div>
               <div className={`details details-${id}`}>
                 <p className='ma0 mv3'><span className='ttu b black-20 f6 v-mid'>Location:</span> <span></span>&nbsp;
-                {it.location.continent === Continent.ONLINE ?
+                {isVenueOnline(it.location) ?
                   <span className='link dib navy v-mid'>Online <span className='w1 v-mid dib'><Img image={assets.page.slack}/></span></span> :
                   <span className='link dib navy underline v-mid'>{it.location.city}, {it.location.country}</span>
                 }
