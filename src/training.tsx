@@ -587,32 +587,32 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
 export const CourseRow: React.StatelessComponent<{event: CourseEvent, slackIcon: Image}> =({event, slackIcon}) => {
   const id = `e-${event.startAt.toISOString()}-${event.location.address}`.toLowerCase().replace(/[^\w]+/g, '-')
   return <li className={`${event.timezone}`.split('/')[0].toLowerCase()}>
-          <div className='mv3 flex-ns items-start pb3 pb0-l module'>
-            <div className='date bg-sky w3 h3 white tc b'>
+    <div className='mv3 flex-ns items-start pb3 pb0-l module'>
+      <div className='date bg-sky w3 h3 white tc b'>
         <p className='f2 ma0'>{event.startAt.format('D')}</p>
         <p className='ttu ma0'>{event.startAt.format('MMM')}</p>
-            </div>
-            <div className='bg-evian ph4 pt2 flex-auto relative'>
+      </div>
+      <div className='bg-evian ph4 pt2 flex-auto relative'>
         <h3 className='f3 ma0 mt3 mb2'>{event.details.title} — {isVenueOnline(event.location) ? 'Online' : event.location.city}</h3>
         <h4 className='normal black-70 mt1 mb4'>{event.duration.asDays()} days course</h4>
-              <div className={`controls controls-${id} absolute top-1 right-1`}>
-                <button className='open bg-sky pa2 white f7 tc lh-solid bn br1' data-toggle={`.details-${id},.controls-${id}`} data-toggle-collapsed>▼</button>
-                <button className='close bg-sky pa2 white f7 tc lh-solid bn br1' data-toggle={`.details-${id},.controls-${id}`}>▲</button>
-              </div>
-              <div className={`details details-${id}`}>
-                <p className='ma0 mv3'><span className='ttu b black-20 f6 v-mid'>Location:</span> <span></span>&nbsp;
-          {isVenueOnline(event.location) ?
-            <span className='link dib navy v-mid'>Online <span className='w1 v-mid dib'><Img image={slackIcon}/></span></span> :
-            <span className='link dib navy underline v-mid'>{event.location.city}, {event.location.country}</span>
-                }
-                </p>
+        <div className={`controls controls-${id} absolute top-1 right-1`}>
+          <button className='open bg-sky pa2 white f7 tc lh-solid bn br1' data-toggle={`.details-${id},.controls-${id}`} data-toggle-collapsed>▼</button>
+          <button className='close bg-sky pa2 white f7 tc lh-solid bn br1' data-toggle={`.details-${id},.controls-${id}`}>▲</button>
+        </div>
+        <div className={`details details-${id}`}>
+          <p className='ma0 mv3'><span className='ttu b black-20 f6 v-mid'>Location:</span> <span></span>&nbsp;
+    {isVenueOnline(event.location) ?
+      <span className='link dib navy v-mid'>Online <span className='w1 v-mid dib'><Img image={slackIcon}/></span></span> :
+      <span className='link dib navy underline v-mid'>{event.location.city}, {event.location.country}</span>
+          }
+          </p>
           <p className='ma0 mv3'><span className='ttu b black-20 f6'>Starts at</span> <span className='f5 black-70 dib'>{event.startAt.tz(event.timezone).format('h:mm A z')}</span></p>
           <p className='ma0 mv3'><span className='ttu b black-20 f6'>Price</span> <span className='f4 black-70 relative dib'>{event.offer.price.toLocaleString(event.offer.locale, {style: 'currency', currency: event.offer.currency})} <span className='f7 v-mid absolute right--2 top-0'>+TAX</span></span></p>
           <p><PrimaryButton text='Get in touch &#8594;' mailto={mailto(publicCourseEnquiry(event.startAt, event.location))}/></p>
-              </div>
-            </div>
-          </div>
-        </li>
+        </div>
+      </div>
+    </div>
+  </li>
 }
 
 export const PackageFeatures: React.StatelessComponent<{description: string, benefits: string[], assets: typeof layoutAssets}> = ({benefits, description, children, assets}) => {

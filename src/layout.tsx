@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, getFullUrl, ArticlePage, ContactUsPage, AboutUsPage, TrainingPage, AcademyPage, ConsultingPage, NotFoundPage, Blog, CareersPage, Homepage, Newsletter, TermsAndConditionsPage, Website, getAbsoluteUrl } from './sitemap'
+import { LinkedNode, getFullUrl, ArticlePage, ContactUsPage, AboutUsPage, TrainingPage, AcademyPage, ConsultingPage, NotFoundPage, Blog, CareersPage, Homepage, Newsletter, TermsAndConditionsPage, Website, getAbsoluteUrl, LandingPage } from './sitemap'
 import {Image, Img} from './assets'
 import marked from 'marked'
 
@@ -28,7 +28,8 @@ type AllowedPages =
   CareersPage |
   Homepage |
   Newsletter |
-  TermsAndConditionsPage
+  TermsAndConditionsPage |
+  LandingPage
 
 export const Layout: React.StatelessComponent<{siteUrl: string, currentPage: LinkedNode<AllowedPages, object>, root: Website}> = ({siteUrl, currentPage, children, root}) => {
   const gaId = 'GTM-5WCKPRL'

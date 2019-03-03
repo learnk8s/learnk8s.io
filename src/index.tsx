@@ -11,6 +11,7 @@ import { AboutUs, assets as assetsAboutUs } from './aboutUs'
 import { Newsletter, assets as assetsNewsletter } from './newsletter'
 import { Blog, assets as assetsBlog } from './blog'
 import { NotFound, assets as assetsNotFound } from './404'
+import { Landing, assets as assetsLanding } from './landing'
 import { Redirect } from './redirect'
 import React from 'react'
 import {renderToStaticMarkup} from 'react-dom/server'
@@ -99,6 +100,10 @@ function render(node: LinkedNode<Page, object>, root: Sitemap.Website, {siteUrl,
     }
     case PageType.NOT_FOUND: {
       writeFileSync(`_site/404.html`, renderToStaticMarkup(<NotFound root={root} currentPage={node as LinkedNode<Sitemap.NotFoundPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsNotFound)} />))
+      return
+    }
+    case PageType.LANDING: {
+      writeFileSync(path, renderToStaticMarkup(<Landing root={root} currentPage={node as LinkedNode<Sitemap.LandingPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsLanding)} />))
       return
     }
     default:
