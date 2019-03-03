@@ -1,4 +1,4 @@
-import { Timezone, CurrencyCode, courses, CourseEvent, Venue, venues } from './training'
+import { Timezone, CurrencyCode, courses, CourseEvent, Venue, venues, isVenueOnline } from './training'
 import cheerio from 'cheerio'
 import moment from 'moment-timezone'
 import { Sdk } from 'eventbrite/lib/types'
@@ -53,7 +53,7 @@ async function syncVenues(organisationId: string, sdk: Sdk): Promise<VenueEventB
   return sdk.request(`/organizations/${organisationId}/venues/`)
   .then(res => {
     const response = res as ResponseVenues
-    const [toRemove, existing, toAdd] = diff<VenueEventBrite, Venue>(it => it.name, response.venues)(Object.values(venues).filter(it => it.name !== venues.Online.name))
+    const [toRemove, existing, toAdd] = diff<VenueEventBrite, Venue>(it => it.name, response.venues)(Object.values(venues).filter(it => !isVenueOnline(it)))
     return toAdd.length > 0 ? Promise.all(toAdd.map(it => addVenue(it, sdk, organisationId))).then(() => syncVenues(organisationId, sdk)) : response.venues
   })
 }
