@@ -1,5 +1,6 @@
 import { PageDetails } from './layout'
 import {Image} from './assets'
+import { Venue, Timezone, venues } from './training'
 
 export const enum PageType {
   HOMEPAGE = 'HOMEPAGE',
@@ -16,6 +17,7 @@ export const enum PageType {
   ARTICLE = 'ARTICLE',
   RSS = 'RSS',
   NOT_FOUND = 'NOT_FOUND',
+  LANDING = 'LANDING',
 }
 
 export type Page =
@@ -32,7 +34,8 @@ export type Page =
   Redirect |
   ArticlePage |
   RSS |
-  NotFoundPage
+  NotFoundPage |
+  LandingPage
 
 export interface Homepage {
   type: PageType.HOMEPAGE
@@ -128,6 +131,15 @@ export interface NotFoundPage {
   url: string
   seoTitle: string
   pageDetails: PageDetails
+}
+
+export interface LandingPage {
+  type: PageType.LANDING
+  url: string
+  seoTitle: string
+  pageDetails: PageDetails
+  location: Venue
+  timezone: Timezone
 }
 
 export const sitemapAssets = {
@@ -436,7 +448,97 @@ export function sitemap(assets: typeof sitemapAssets) {
         },
       }),
       children: {}
-    })
+    }),
+    london: createNode({
+      page: identity<LandingPage>({
+        type: PageType.LANDING,
+        url: '/london',
+        seoTitle: 'Kubernetes training in London ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Kubernetes training in London',
+          description: 'Become an expert in deploying application as scale with Kubernetes in London.',
+          openGraphImage: assets.openGraph.url,
+        },
+        location: venues.London,
+        timezone: Timezone.LONDON,
+      }),
+      children: {}
+    }),
+    toronto: createNode({
+      page: identity<LandingPage>({
+        type: PageType.LANDING,
+        url: '/toronto',
+        seoTitle: 'Kubernetes training in Toronto ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Kubernetes training in Toronto',
+          description: 'Become an expert in deploying application as scale with Kubernetes in Toronto.',
+          openGraphImage: assets.openGraph.url,
+        },
+        location: venues.Toronto,
+        timezone: Timezone.TORONTO,
+      }),
+      children: {}
+    }),
+    cardiff: createNode({
+      page: identity<LandingPage>({
+        type: PageType.LANDING,
+        url: '/cardiff',
+        seoTitle: 'Kubernetes training in Cardiff ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Kubernetes training in Cardiff',
+          description: 'Become an expert in deploying application as scale with Kubernetes in Cardiff.',
+          openGraphImage: assets.openGraph.url,
+        },
+        location: venues.Cardiff,
+        timezone: Timezone.LONDON,
+      }),
+      children: {}
+    }),
+    singapore: createNode({
+      page: identity<LandingPage>({
+        type: PageType.LANDING,
+        url: '/singapore',
+        seoTitle: 'Kubernetes training in Singapore ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Kubernetes training in Singapore',
+          description: 'Become an expert in deploying application as scale with Kubernetes in Singapore.',
+          openGraphImage: assets.openGraph.url,
+        },
+        location: venues.Singapore,
+        timezone: Timezone.SINGAPORE,
+      }),
+      children: {}
+    }),
+    sanFrancisco: createNode({
+      page: identity<LandingPage>({
+        type: PageType.LANDING,
+        url: '/san-francisco',
+        seoTitle: 'Kubernetes training in San Francisco ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Kubernetes training in San Francisco',
+          description: 'Become an expert in deploying application as scale with Kubernetes in San Francisco.',
+          openGraphImage: assets.openGraph.url,
+        },
+        location: venues.SanFrancisco,
+        timezone: Timezone.SAN_FRANCISCO,
+      }),
+      children: {}
+    }),
+    milan: createNode({
+      page: identity<LandingPage>({
+        type: PageType.LANDING,
+        url: '/milan',
+        seoTitle: 'Kubernetes training in Milano ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Kubernetes training in Milano',
+          description: 'Become an expert in deploying application as scale with Kubernetes in Milano.',
+          openGraphImage: assets.openGraph.url,
+        },
+        location: venues.Milan,
+        timezone: Timezone.ROME,
+      }),
+      children: {}
+    }),
   }})
 }
 
