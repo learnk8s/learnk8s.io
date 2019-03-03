@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, Page, AcademyPage } from './sitemap'
+import { LinkedNode, AcademyPage, Website } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight} from './layout'
 import {Image, Img, Script, Javascript, ExternalJavascript, ExternalScript} from './assets'
 import {material, assets as materialAssets} from './material'
@@ -52,8 +52,8 @@ const faqs: FAQ[] = [{
   content: `Sure - send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io).`
 }]
 
-export const Academy: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<AcademyPage>, siteUrl: string, assets: ReturnType<typeof assets>}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+export const Academy: React.StatelessComponent<{root: Website, currentPage: LinkedNode<AcademyPage, object>, siteUrl: string, assets: ReturnType<typeof assets>}> = ({assets, root, siteUrl, currentPage}) => {
+  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage}>
     <JsonLd<Course> item={{
       '@type': 'Course',
       '@context': 'https://schema.org',

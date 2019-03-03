@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, Page, Newsletter as NS } from './sitemap'
+import { LinkedNode, Newsletter as NS, Website } from './sitemap'
 import { Navbar, Footer, Layout, assets as layoutAssets} from './layout'
 import { Javascript, Script } from './assets'
 
@@ -10,8 +10,8 @@ export const assets = {
   layout: layoutAssets,
 }
 
-export const Newsletter: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<NS>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+export const Newsletter: React.StatelessComponent<{root: Website, currentPage: LinkedNode<NS, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
+  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage}>
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
       <Navbar root={root} assets={assets.layout}/>

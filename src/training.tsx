@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, Page, TrainingPage, getFullUrl, findOrPanic, PageName } from './sitemap'
+import { LinkedNode, TrainingPage, getAbsoluteUrl, Website } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, InlineMarkdown, SpecialListItem, Testimonal, mailto, MailTo, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight} from './layout'
 import {Image, Img, Script, Javascript} from './assets'
 import { PrimaryButton } from './homepage'
@@ -380,8 +380,8 @@ export const assets = {
   layout: layoutAssets,
 }
 
-export const Training: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<TrainingPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+export const Training: React.StatelessComponent<{root: Website, currentPage: LinkedNode<TrainingPage, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
+  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage}>
     {courses.map((course, index) => {
       return <JsonLd<Course> key={index} item={{
         '@type': 'Course',
@@ -415,7 +415,7 @@ export const Training: React.StatelessComponent<{root: LinkedNode<Page>, current
             price: it.offer.price,
             priceCurrency: it.offer.currency,
             validFrom: it.startAt.clone().subtract(it.canBookInAdvanceFrom).toISOString(),
-            url: `${siteUrl}${getFullUrl(findOrPanic(root, PageName.TRAINING))}`
+            url: getAbsoluteUrl(currentPage, siteUrl),
           },
           image: `${siteUrl}${currentPage.payload.pageDetails.openGraphImage}`,
           performer: {

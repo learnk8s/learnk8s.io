@@ -1,9 +1,9 @@
-import { LinkedNode, Page, findOrPanic, PageName, PageType, ArticlePage, getFullUrl } from './sitemap'
+import { getAbsoluteUrl, getBlogPosts, Website } from './sitemap'
 import { Feed } from 'feed'
 import moment = require('moment')
 
-export function generateRSS(root: LinkedNode<Page>, siteUrl: string) {
-  const articles = findOrPanic(root, PageName.BLOG).children.filter(it => it.payload.type === PageType.ARTICLE) as LinkedNode<ArticlePage>[]
+export function generateRSS(root: Website, siteUrl: string) {
+  const articles = getBlogPosts(root.children.blog)
   const feed = new Feed({
     title: 'Learnk8s',
     description: 'Learn Kubernetes',
@@ -18,9 +18,9 @@ export function generateRSS(root: LinkedNode<Page>, siteUrl: string) {
   articles.forEach(it => {
     feed.addItem({
       title: it.payload.pageDetails.title,
-      link: `${siteUrl}${getFullUrl(it)}`,
+      link: getAbsoluteUrl(it, siteUrl),
       date: moment(it.payload.publishedDate).toDate(),
-      id: `${siteUrl}${getFullUrl(it)}`,
+      id: getAbsoluteUrl(it, siteUrl),
       description: it.payload.pageDetails.description,
       content: it.payload.pageDetails.description,
       image: `${siteUrl}${it.payload.pageDetails.openGraphImage}`

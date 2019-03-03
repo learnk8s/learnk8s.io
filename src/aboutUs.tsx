@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, Page, AboutUsPage } from './sitemap'
+import { LinkedNode, AboutUsPage, Website } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, assets as layoutAssets} from './layout'
 import {Image, Img} from './assets'
 
@@ -17,8 +17,8 @@ export const assets = {
   layout: layoutAssets,
 }
 
-export const AboutUs: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<AboutUsPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+export const AboutUs: React.StatelessComponent<{root: Website, currentPage: LinkedNode<AboutUsPage, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
+  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage}>
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
       <Navbar root={root} assets={assets.layout}/>

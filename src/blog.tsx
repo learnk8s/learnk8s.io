@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, Page, Blog as B, getFullUrl, PageType, ArticlePage } from './sitemap'
+import { LinkedNode, Blog as B, getFullUrl, getBlogPosts, Website } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, assets as layoutAssets} from './layout'
 import {Image, Img} from './assets'
 import moment = require('moment')
@@ -9,8 +9,8 @@ export const assets = {
   layout: layoutAssets
 }
 
-export const Blog: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<B>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+export const Blog: React.StatelessComponent<{root: Website, currentPage: LinkedNode<B, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
+  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage}>
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
       <Navbar root={root} assets={assets.layout}/>
@@ -25,8 +25,7 @@ export const Blog: React.StatelessComponent<{root: LinkedNode<Page>, currentPage
 
     <section className='ph3 measure-wide pv4 center'>
       <ul className='list pl0'>
-        {(currentPage.children.slice(0)
-          .filter(it => it.payload.type === PageType.ARTICLE) as LinkedNode<ArticlePage>[])
+        {getBlogPosts(root.children.blog).slice(0)
           .sort((a, b) => {
             return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
           })

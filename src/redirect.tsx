@@ -1,15 +1,16 @@
 import React from 'react'
-import { LinkedNode, Page, Redirect as R } from './sitemap'
+import { LinkedNode, Redirect as R, getAbsoluteUrl, Website } from './sitemap'
 
-export const Redirect: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<R>, siteUrl: string}> = ({siteUrl, currentPage}) => {
+export const Redirect: React.StatelessComponent<{root: Website, currentPage: LinkedNode<R, object>, siteUrl: string}> = ({root, siteUrl, currentPage}) => {
+  const redirectUrl = getAbsoluteUrl(currentPage, siteUrl)
   return <html>
     <meta charSet='utf-8' />
     <title>Redirecting…</title>
-    <link rel='canonical' href={`${siteUrl}${currentPage.payload.redirectTo}`}/>
-    <script>location='{`${siteUrl}${currentPage.payload.redirectTo}`}'</script>
-    <meta httpEquiv='refresh' content={`0; url=${siteUrl}${currentPage.payload.redirectTo}`} />
+    <link rel='canonical' href={redirectUrl}/>
+    <script>location='{redirectUrl}'</script>
+    <meta httpEquiv='refresh' content={`0; url=${redirectUrl}`} />
     <meta name='robots' content='noindex'/>
     <h1>Redirecting…</h1>
-    <a href={`${siteUrl}${currentPage.payload.redirectTo}`}>Click here if you are not redirected.</a>
+    <a href={redirectUrl}>Click here if you are not redirected.</a>
   </html>
 }

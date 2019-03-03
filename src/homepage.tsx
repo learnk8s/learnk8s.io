@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, Page, getFullUrl, findOrPanic, PageName, Homepage as HP } from './sitemap'
+import { LinkedNode, getFullUrl, Homepage as HP, Website } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets} from './layout'
 import {Image, Img} from './assets'
 
@@ -22,8 +22,8 @@ export const assets = {
   layout: layoutAssets
 }
 
-export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<HP>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+export const Homepage: React.StatelessComponent<{root: Website, currentPage: LinkedNode<HP, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
+  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage}>
     <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
 
       <Navbar root={root} assets={assets.layout}/>
@@ -81,7 +81,7 @@ export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, current
         <div className='content measure-wide'>
           <h2 className='f3 navy f2-l'>Learnk8s Academy</h2>
           <p className='f4-l lh-copy black-70 measure-wide'>Learn Kubernetes online with hands-on material and instructor-led webinars. From playing to developing, testing to deploying, we'll cover it all in a way that is easy to understand. Master application deployment and scaling from the comfort of your home. There's no deadline: enjoy learning Kubernetes and solving challenges at your pace.</p>
-          <PrimaryButton node={findOrPanic(root, PageName.ACADEMY)} text='Learn more &#8594;'/>
+          <PrimaryButton href={getFullUrl(root.children.academy)} text='Learn more &#8594;'/>
         </div>
       </div>
 
@@ -107,7 +107,7 @@ export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, current
         <div className='measure-wide'>
           <h2 className='f3 navy f2-l'>Quickstart Kubernetes training</h2>
           <p className='f4-l lh-copy black-70'>Hands-on modular courses that will train you how to deploy Kubernetes, how to get it into production, and how to operate and manage it efficiently and effectively. The training course  draws from the real world examples making it perfect to quickly get up to speed with containers and Kubernetes.</p>
-          <PrimaryButton node={findOrPanic(root, PageName.TRAINING)} text='Get started &#8594;'/>
+          <PrimaryButton href={getFullUrl(root.children.training)} text='Get started &#8594;'/>
         </div>
       </div>
 
@@ -119,7 +119,7 @@ export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, current
         <div className='measure-wide'>
           <h2 className='f3 navy f2-l'>Enterprise-ready Kubernetes consulting</h2>
           <p className='f4-l lh-copy black-70'>Have you already built a Kubernetes cluster, but want the confidence it won't die when you move into prod? Our engineers have deployed production-ready Kubernetes for the hottest start-ups and the largest Enterprises. Their wide variety of experience will enable you to get the most out of Kubernetes and make sure you avoid unnecessary issues and pitfalls.</p>
-          <PrimaryButton node={findOrPanic(root, PageName.CONSULTING)} text='Get started &#8594;'/>
+          <PrimaryButton href={getFullUrl(root.children.consulting)} text='Get started &#8594;'/>
         </div>
       </div>
 
@@ -136,6 +136,6 @@ export const Homepage: React.StatelessComponent<{root: LinkedNode<Page>, current
   </Layout>
 }
 
-export const PrimaryButton: React.StatelessComponent<{node?: LinkedNode<Page>, text: string, anchor?: string, mailto?: string}> = ({anchor, node, text, mailto}) => {
-  return <a href={node ? getFullUrl(node) : anchor || mailto || ''} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3'>{text}</a>
+export const PrimaryButton: React.StatelessComponent<{text: string, anchor?: string, mailto?: string, href?: string}> = ({anchor, text, mailto, href}) => {
+  return <a href={href || anchor || mailto || ''} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3'>{text}</a>
 }

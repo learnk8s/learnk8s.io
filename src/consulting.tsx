@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, Page, ConsultingPage } from './sitemap'
+import { LinkedNode, ConsultingPage, Website } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, mailto, MailTo} from './layout'
 import { Image, Img } from './assets'
 import { PrimaryButton } from './homepage'
@@ -37,8 +37,8 @@ const cloudDevelopmentEnquiry: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-export const Consulting: React.StatelessComponent<{root: LinkedNode<Page>, currentPage: LinkedNode<ConsultingPage>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} pageDetails={currentPage.payload.pageDetails}>
+export const Consulting: React.StatelessComponent<{root: Website, currentPage: LinkedNode<ConsultingPage, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
+  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage}>
     <JsonLd<ProfessionalService> item={{
       '@type': 'ProfessionalService',
       '@context': 'https://schema.org',

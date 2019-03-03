@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, Page, findOrPanic, PageName, getFullUrl } from './sitemap'
+import { LinkedNode, getFullUrl, ArticlePage, ContactUsPage, AboutUsPage, TrainingPage, AcademyPage, ConsultingPage, NotFoundPage, Blog, CareersPage, Homepage, Newsletter, TermsAndConditionsPage, Website, getAbsoluteUrl } from './sitemap'
 import {Image, Img} from './assets'
 import marked from 'marked'
 
@@ -7,7 +7,6 @@ export interface PageDetails {
   title: string
   description: string
   openGraphImage: string
-  url: string
 }
 
 export const assets = {
@@ -17,13 +16,27 @@ export const assets = {
   smallCargo: Image({url: 'assets/small_cargo.svg', description: 'Small cargo'}),
 }
 
-export const Layout: React.StatelessComponent<{siteUrl: string, pageDetails: PageDetails, root: LinkedNode<Page>}> = ({siteUrl, pageDetails, children, root}) => {
+type AllowedPages =
+  ArticlePage |
+  ContactUsPage |
+  AboutUsPage |
+  TrainingPage |
+  AcademyPage |
+  ConsultingPage |
+  NotFoundPage |
+  Blog |
+  CareersPage |
+  Homepage |
+  Newsletter |
+  TermsAndConditionsPage
+
+export const Layout: React.StatelessComponent<{siteUrl: string, currentPage: LinkedNode<AllowedPages, object>, root: Website}> = ({siteUrl, currentPage, children, root}) => {
   const gaId = 'GTM-5WCKPRL'
   return <html lang='en'>
   <head>
     <meta charSet='utf-8' />
-    <title>{pageDetails.title}</title>
-    <meta name='description' content={pageDetails.description}/>
+    <title>{currentPage.payload.seoTitle}</title>
+    <meta name='description' content={currentPage.payload.pageDetails.description}/>
     <meta name='author' content='Learnk8s'/>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
     <meta httpEquiv='X-UA-Compatible' content='ie=edge'/>
@@ -34,14 +47,14 @@ export const Layout: React.StatelessComponent<{siteUrl: string, pageDetails: Pag
     <link rel='icon' type='image/png' sizes='16x16' href='/assets/favicon-16x16.png'/>
     <link rel='manifest' href='/assets/manifest.json'/>
     <link rel='mask-icon' href='/assets/safari-pinned-tab.svg' color='#326ce5'/>
-    <link rel='alternate' type='application/rss+xml' title='Subscribe to Learnk8s RSS' href={`${siteUrl}${getFullUrl(findOrPanic(root, PageName.RSS))}`} />
+    <link rel='alternate' type='application/rss+xml' title='Subscribe to Learnk8s RSS' href={getAbsoluteUrl(root.children.rss, siteUrl)} />
     <meta name='theme-color' content='#ffffff'/>
     <meta property='og:site_name' content='Learnk8s' />
-    <meta property='og:url' content={`${siteUrl}${pageDetails.url}`} />
+    <meta property='og:url' content={getAbsoluteUrl(currentPage, siteUrl)} />
     <meta property='og:type' content='website' />
-    <meta property='og:title' content={pageDetails.title} />
-    <meta property='og:image' content={pageDetails.openGraphImage} />
-    <meta property='og:description' content={pageDetails.description} />
+    <meta property='og:title' content={currentPage.payload.pageDetails.title} />
+    <meta property='og:image' content={currentPage.payload.pageDetails.openGraphImage} />
+    <meta property='og:description' content={currentPage.payload.pageDetails.description} />
     <script dangerouslySetInnerHTML={{__html: `(function (w, d, s, l, i) {
 w[l] = w[l] || []; w[l].push({
   'gtm.start':
@@ -61,41 +74,41 @@ w[l] = w[l] || []; w[l].push({
   </html>
 }
 
-export const Navbar: React.StatelessComponent<{root: LinkedNode<Page>, assets: typeof assets}> = ({assets, root}) => {
+export const Navbar: React.StatelessComponent<{root: Website, assets: typeof assets}> = ({assets, root}) => {
   return <nav className='nav cf bb-ns b--lightest-blue-ns pl3 ph0-m ph3l flex-ns items-center-ns bg-sky'>
-    <a href={getFullUrl(findOrPanic(root, PageName.HOMEPAGE))} className='logo fl-ns w-100 mw4 mw-none-ns dib w-20-m w-10-l pa2-ns'><Img image={assets.logo} /></a>
+    <a href={getFullUrl(root)} className='logo fl-ns w-100 mw4 mw-none-ns dib w-20-m w-10-l pa2-ns'><Img image={assets.logo} /></a>
     <ul className='list fl w-80-m w-90-l pa2 tr dn db-ns'>
-      <li className='dib ttu'><a href={getFullUrl(findOrPanic(root, PageName.ACADEMY))} className='link white mh3 dib f6 ribbon' title='Academy'>Academy</a></li>
-      <li className='dib ttu'><a href={getFullUrl(findOrPanic(root, PageName.TRAINING))} className='link white mh3 dib f6' title='Training'>Training</a></li>
-      <li className='dn dib-l ttu'><a href={getFullUrl(findOrPanic(root, PageName.BLOG))} className='link white mh3 dib f6' title='Blog'>Blog</a></li>
-      <li className='dn dib-l ttu'><a href={getFullUrl(findOrPanic(root, PageName.CONTACT_US))} className='link white mh3 dib f6' title='Contact us'>Contact us</a></li>
+      <li className='dib ttu'><a href={getFullUrl(root.children.academy)} className='link white mh3 dib f6 ribbon' title='Academy'>Academy</a></li>
+      <li className='dib ttu'><a href={getFullUrl(root.children.training)} className='link white mh3 dib f6' title='Training'>Training</a></li>
+      <li className='dn dib-l ttu'><a href={getFullUrl(root.children.blog)} className='link white mh3 dib f6' title='Blog'>Blog</a></li>
+      <li className='dn dib-l ttu'><a href={getFullUrl(root.children.contactUs)} className='link white mh3 dib f6' title='Contact us'>Contact us</a></li>
     </ul>
   </nav>
 }
 
-export const Footer: React.StatelessComponent<{root: LinkedNode<Page>, assets: typeof assets}> = ({assets, root}) => {
+export const Footer: React.StatelessComponent<{root: Website, assets: typeof assets}> = ({assets, root}) => {
   return <footer className='footer white ph3 ph4-ns pt4 pt5-ns pb3 bg-sky'>
     <section className='flex-ns items-start-ns justify-around-ns pr3-m pr7-l'>
       <div className='dn db-l'>
-        <a href={getFullUrl(findOrPanic(root, PageName.HOMEPAGE))} className='logo w4 db'><Img image={assets.logo} /></a>
+        <a href={getFullUrl(root)} className='logo w4 db'><Img image={assets.logo} /></a>
         <p>Learn Kubernetes the smart way</p>
       </div>
       <div className='dn db-ns'>
         <h2 className='ttu f6'>Services</h2>
         <ul className='list pl0'>
-          <li className='mv2'><a href={getFullUrl(findOrPanic(root, PageName.TRAINING))} className='link white'>Training</a></li>
-          <li className='mv2'><a href={getFullUrl(findOrPanic(root, PageName.ACADEMY))} className='link white'>Academy</a></li>
-          <li className='mv2'><a href={getFullUrl(findOrPanic(root, PageName.CONSULTING))} className='link white'>Consulting</a></li>
+          <li className='mv2'><a href={getFullUrl(root.children.training)} className='link white'>Training</a></li>
+          <li className='mv2'><a href={getFullUrl(root.children.academy)} className='link white'>Academy</a></li>
+          <li className='mv2'><a href={getFullUrl(root.children.consulting)} className='link white'>Consulting</a></li>
         </ul>
       </div>
       <div className=''>
         <h2 className='ttu f6'>Company</h2>
         <ul className='list pl0'>
-          <li className='mv2'><a href={getFullUrl(findOrPanic(root, PageName.CONTACT_US))} className='link white'>Contact us</a></li>
-          <li className='mv2'><a href={getFullUrl(findOrPanic(root, PageName.ABOUT_US))} className='link white'>Team</a></li>
-          <li className='mv2'><a href={getFullUrl(findOrPanic(root, PageName.CAREERS))} className='link white'>Careers</a></li>
-          <li className='mv2'><a href={getFullUrl(findOrPanic(root, PageName.BLOG))} className='link white'>Blog</a></li>
-          <li className='mv2'><a href={getFullUrl(findOrPanic(root, PageName.NEWSLETTER))} className='link white'>Newsletter</a></li>
+          <li className='mv2'><a href={getFullUrl(root.children.contactUs)} className='link white'>Contact us</a></li>
+          <li className='mv2'><a href={getFullUrl(root.children.aboutUs)} className='link white'>Team</a></li>
+          <li className='mv2'><a href={getFullUrl(root.children.careers)} className='link white'>Careers</a></li>
+          <li className='mv2'><a href={getFullUrl(root.children.blog)} className='link white'>Blog</a></li>
+          <li className='mv2'><a href={getFullUrl(root.children.newsletter)} className='link white'>Newsletter</a></li>
         </ul>
       </div>
       <div className='pt3 pt0-ns'>
@@ -110,7 +123,7 @@ export const Footer: React.StatelessComponent<{root: LinkedNode<Page>, assets: t
       </div>
     </section>
     <section className='pt2 pt5-ns'>
-      <p className='f7 bt b--light-blue pv2 white-70'>Copyright &copy; learnk8s 2017-2019. Made with ❤︎ in London. View our <a className='link white-70' href={getFullUrl(findOrPanic(root, PageName.T_AND_CS))}>Terms and Conditions</a> or Privacy Policy. Send us a note to <a href='mailto:hello@learnk8s.io' className='link white underline'>hello@learnk8s.io</a></p>
+      <p className='f7 bt b--light-blue pv2 white-70'>Copyright &copy; learnk8s 2017-2019. Made with ❤︎ in London. View our <a className='link white-70' href={getFullUrl(root.children.termsAndConditions)}>Terms and Conditions</a> or Privacy Policy. Send us a note to <a href='mailto:hello@learnk8s.io' className='link white underline'>hello@learnk8s.io</a></p>
     </section>
   </footer>
 }
