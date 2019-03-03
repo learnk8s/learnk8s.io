@@ -130,7 +130,7 @@ interface CourseDetails {
   code: CourseCode
 }
 
-function isVenueOnline(venue: Venue): boolean {
+export function isVenueOnline(venue: Venue): boolean {
   return venue.name === venues.Online.name
 }
 
