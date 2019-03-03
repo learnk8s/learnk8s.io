@@ -43,7 +43,7 @@ const faqs: FAQ[] = [{
 
 const publicCourseEnquiry = (date: moment.Moment, location: Venue): MailTo => ({
   subject: 'Kubernetes training — Public course enquiry',
-  body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')} in ${location}.\n\nKind regards,\n`,
+  body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')} in ${location.city || location.name}.\n\nKind regards,\n`,
   email: 'hello@learnk8s.io',
 })
 
