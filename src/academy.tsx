@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinkedNode, AcademyPage, Website } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight} from './layout'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight, Hero} from './layout'
 import {Image, Img, Script, Javascript, ExternalJavascript, ExternalScript} from './assets'
 import {material, assets as materialAssets} from './material'
 import { Course } from 'schema-dts'
@@ -68,18 +68,13 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
     <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
       <Navbar root={root} assets={assets.layout}/>
 
-      <section className='ph5-l pt5-l'>
-        <h1 className='f1 mt1-l pt2-l f-subheadline-l ph4 w-60 lh-solid'>Self-paced Kubernetes online course</h1>
-        <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l'>Become an expert in deploying applications at scale.</h2>
-        <div className='dn db-l absolute bottom-0 right-1'>
-          <div className='i-training relative'>
-            <Img image={assets.page.training} className='absolute top-0 right-0'/>
-          </div>
+      <Hero assets={assets.layout} image={assets.page.training} imageClass='i-training'>
+        <h1 className='f1 mt1-l pt5-l f-subheadline-l lh-solid'>Self-paced Kubernetes online course</h1>
+        <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>Become an expert in deploying applications at scale.</h2>
+        <div className='dn db-l pt5 mw6 mh3 mh4-ns tc'>
+          <div className='w3 h3 dib'><Img image={assets.page.down}/></div>
         </div>
-        <div className='dn db-l measure mh3 mh4-ns tc'>
-            <div className='w3 h3 dib'><Img image={assets.page.down}/></div>
-        </div>
-      </section>
+      </Hero>
     </div>
 
     <section className='ph3 ph4-ns flex items-center justify-center relative z3'>

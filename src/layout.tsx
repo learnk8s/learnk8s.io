@@ -288,3 +288,14 @@ export const PackageRight: React.StatelessComponent<{heading: string, subheading
 export const PackageList: React.StatelessComponent<{}> = ({children}) => {
   return <ul className='cf pl0 list'>{children}</ul>
 }
+
+export const Hero: React.StatelessComponent<{image: Image, assets: typeof assets, imageClass: string}> = ({children, image, assets, imageClass}) => {
+  return <section className='flex-ns items-center justify-center overflow-hidden center'>
+    <div className='mw7 ph4'>{children}</div>
+    <div className='dn db-l mw6'>
+      <div className={`${imageClass} relative`}>
+        <Img image={image} className='absolute top-0 right-0'/>
+      </div>
+    </div>
+  </section>
+}

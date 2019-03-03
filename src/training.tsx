@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinkedNode, TrainingPage, getAbsoluteUrl, Website } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, InlineMarkdown, SpecialListItem, Testimonal, mailto, MailTo, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight} from './layout'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, InlineMarkdown, SpecialListItem, Testimonal, mailto, MailTo, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight, Hero} from './layout'
 import {Image, Img, Script, Javascript} from './assets'
 import { PrimaryButton } from './homepage'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
@@ -418,34 +418,27 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
 
       <Navbar root={root} assets={assets.layout}/>
 
-      <section className='flex-ns items-start-ns ph5-l pt5-l'>
-        <div className='w-100 w-70-l'>
-          <h1 className='f1 pl3 pl4-ns pt4-l f-subheadline-l'>Kubernetes instructor-led training</h1>
-          <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l'>Learn how to deploy and scale applications with Kubernetes.</h2>
-          <ul className='list w-60-m center-m mw6 bg-white black-70 ph3 pv1 shadow-1 mh3 mh4-ns mt4'>
-            <li className='flex items-center justify-between ph2 bb b--light-gray'>
-              <p className='ttu'>Private courses</p>
-              <div className='w2 h2'><Img image={assets.page.tick}/></div>
-            </li>
-            <li className='flex items-center justify-between ph2 bb b--light-gray'>
-              <p className='ttu'>Public courses</p>
-              <div className='w2 h2'><Img image={assets.page.tick}/></div>
-            </li>
-            <li className='flex items-center justify-between ph2'>
-              <p className='ttu v-mid mt2 mb1'>Online courses <span className='dib w2 v-mid'><Img image={assets.page.slack}/></span></p>
-              <div className='w2 h2'><Img image={assets.page.tick}/></div>
-            </li>
-          </ul>
-          <div className='dn db-l mw6 mh3 mh4-ns tc'>
-            <div className='w3 h3 dib'><Img image={assets.page.downArrow}/></div>
-          </div>
+      <Hero assets={assets.layout} image={assets.page.training} imageClass='i-training'>
+        <h1 className='f1 f-subheadline-l'>Kubernetes <span className='no-wrap'>instructor-led</span> training</h1>
+        <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>Learn how to deploy and scale applications with Kubernetes.</h2>
+        <ul className='list w-60-m center-m mw6 bg-white black-70 ph3 pv1 shadow-1 mh3 mh4-ns mt4'>
+          <li className='flex items-center justify-between ph2 bb b--light-gray'>
+            <p className='ttu'>Private courses</p>
+            <div className='w2 h2'><Img image={assets.page.tick}/></div>
+          </li>
+          <li className='flex items-center justify-between ph2 bb b--light-gray'>
+            <p className='ttu'>Public courses</p>
+            <div className='w2 h2'><Img image={assets.page.tick}/></div>
+          </li>
+          <li className='flex items-center justify-between ph2'>
+            <p className='ttu v-mid mt2 mb1'>Online courses <span className='dib w2 v-mid'><Img image={assets.page.slack}/></span></p>
+            <div className='w2 h2'><Img image={assets.page.tick}/></div>
+          </li>
+        </ul>
+        <div className='dn db-l mw6 mh3 mh4-ns tc'>
+          <div className='w3 h3 dib'><Img image={assets.page.downArrow}/></div>
         </div>
-        <div className='dn db-l absolute bottom-0 right-1'>
-          <div className='i-training relative'>
-            <Img image={assets.page.training} className='absolute top-0 right-0'/>
-          </div>
-        </div>
-      </section>
+      </Hero>
     </div>
 
     <section className='content ph3 ph4-ns flex items-center justify-center pt5-ns relative z3'>

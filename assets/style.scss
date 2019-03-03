@@ -422,3 +422,11 @@ green     #859900  operators, other keywords
   height: 0;
   padding-bottom: 100%;
 }
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.translate-100-100 {
+  transform: translate(100%, 100%)
+}
