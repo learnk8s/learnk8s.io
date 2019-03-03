@@ -278,7 +278,7 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
             </Item>
           </ul>
           <div className='tc'>
-            <a href='https://academy.learnk8s/payment' className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Buy now &#8594;</a>
+            <a href='https://academy.learnk8s.io/payment' className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Buy now &#8594;</a>
           </div>
         </PackageLeft>
         <PackageRight heading='Enterprise' subheading='From 10+ users'>
