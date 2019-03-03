@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinkedNode, getFullUrl, Homepage as HP, Website } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets} from './layout'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, Hero} from './layout'
 import {Image, Img} from './assets'
 
 const benefits = [
@@ -28,27 +28,16 @@ export const Homepage: React.StatelessComponent<{root: Website, currentPage: Lin
 
       <Navbar root={root} assets={assets.layout}/>
 
-      <section className='flex-ns items-start-ns ph5-l pv5-l'>
-        <div className='w-70-l'>
-          <h1 className='f1 pl3 pl4-ns pt4-l f-subheadline-l lh-solid'>Mastering Kubernetes</h1>
-          <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l'>The fastest way to become an expert in deploying applications at scale.</h2>
-          <a href='#start' className='link dib blue bg-white br1 pa3 b f5 shadow-3 mt4 ml3 ph4 ml4-ns mb3'>Get started &#8594;</a>
-        </div>
-        <div className='dn db-l absolute bottom-0 right-1'>
-          <div className='i-loading-cargos relative'>
-            <Img image={assets.page.loadingCargos} className='absolute top-0 right-0'/>
-          </div>
-        </div>
-      </section>
-
-      <div className='w-40 dn db-l relative'>
-        <div className='absolute top-0 right--1'>
+      <Hero assets={assets.layout} image={assets.page.loadingCargos} imageClass='i-loading-cargos'>
+        <h1 className='f1 pl3 pl4-ns pt5-l f-subheadline-l lh-solid'>Mastering Kubernetes</h1>
+        <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l'>The fastest way to become an expert in deploying applications at scale.</h2>
+        <a href='#start' className='link dib blue bg-white br1 pa3 b f5 shadow-3 mt4 ml3 ph4 ml4-ns mb3 mb5-l'>Get started &#8594;</a>
+        <div className="dn db-l absolute bottom-0 left-0 translate-100-100">
           <div className='i-medium-cargo relative'>
             <Img image={assets.page.mediumCargo} className='absolute top-0 right-0'/>
           </div>
         </div>
-      </div>
-
+      </Hero>
     </div>
 
     <section className='w-100 ph3 ph4-ns relative z3'>
