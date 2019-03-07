@@ -60,7 +60,7 @@ The special thing about Kubernetes is that the same management API is used for i
 
 The full specification of this API for the currently latest version of Kubernetes (v1.13) can be found [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/). As you can see, the specification is organised as a list of resource types. These are the resources that can be created, read, updated, and deleted (CRUD) through the Kubernetes API.
 
-For each resource, the specification lists the **manifest** structure, as well as the **operations** that can be applied to this resource. For example, you can see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) that the *create* operation for a ReplicaSet is implemented by the following HTTP API endpoint:
+For each resource, the specification lists its **structure**, as well as the **operations** that can be applied to this resource. For example, you can see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) that the *create* operation for a ReplicaSet is implemented by the following HTTP API endpoint:
 
 ~~~
 POST /apis/apps/v1/namespaces/{namespace}/replicasets
@@ -183,72 +183,73 @@ No matter which approach you use, after restarting your shell, kubectl command c
 
 ### Zsh
 
-With zsh, the setup procedure is the same for macOS and Linux, and furthermore, it doesn't depend on a third-party project like bash-completion. So, all you have to do is to source the kubectl completion script.
-
-You can do this by adding the following to your `~/.zshrc` file:
+Setting up kubectl completion for Zsh is easy. All you have to do is to source the kubectl completion script for Zsh. You can do this by adding the following command to your `~/.zshrc` file:
 
 ~~~zsh
 source <(kubectl completion zsh)
 ~~~
 
-If you get an error like `complete:13: command not found: compdef` when you execute the above command, you have to enable the `compdef` builtin in your shell. You can do this by adding the following to the beginning of your `~/.zshrc` file:
+That's it! After restarting your shell, kubectl command completion should be working.
+
+If after restarting your shell, you get an error like `complete:13: command not found: compdef`, then you have to enable the `compdef` builtin in your shell. You can do this by adding the following to the beginning of your `~/.zshrc` file:
 
 ~~~zsh
 autoload -Uz compinit
 compinit
 ~~~
 
-## Quickly access resource documentation with `kubectl explain`
 
-As mentioned, the core of Kubernetes consists of resources. You manage a Kubernetes cluster by applying CRUD operations on resources that are stored in the control plane of the cluster (more precisely, in the etcd component). Resources have a hierarchical structure (consisting of fields and sub-fields) that is specified in the [API reference](https://kubernetes.io/docs/reference/kubernetes-api/).
+## 2. Quickly look up resource definitions
 
-When you create, read, or update a resource, you need to know the structure of this resource (for example, if you want to specify or retrieve the image of a container in a pod, you need to know that this information is located in the `pod.spec.containters.image` field).
+This tip will prove useful for many of the subsequent tips, and for your Kubernetes usage in general. When you define a YAML or JSON manifest for a resource (e.g. a Deployment or a Service), you need to know the structure of this resource.
 
-You could do this by consulting the API reference on the web, but this is a time-consuming and tedious process. Looking up this information should be faster and more integrated in your workflow.
+In general, resources have a hierarchical structure consisting of fields and sub-fields, each field must be of a specific data type, and some fields are mandatory whereas other are optional. One way to look up all this information is in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) on the web.
 
-This is where `kubectl explain` comes in. This command provides the complete API reference right in your terminal.
+However, there is a better and quicker way, namely the `kubectl explain` command. This command displays you the fields and sub-fields of each resource type, including a description and the data type of each field. The information displayed by `kubectl explain` is the same as in the API reference, but you get it right in your terminal.
 
-For example, if you want to know the fields of a pod, you can run:
-
-~~~bash
-kubectl explain pod
-~~~
-
-This command shows you all top-level fields of a pod including their type and a description.
-
-You can then drill down into any fields that you're interested in to get their documentation, for example:
+The usage of this command is as follows:
 
 ~~~bash
-kubectl explain pod.spec
-kubectl explain pod.spec.containers
-kubectl explain pod.spec.containers.image
+kubectl explain resource[.field][.field]...
 ~~~
 
-The information shown by `kubectl explain` is identical to the information in the [API reference](https://kubernetes.io/docs/reference/kubernetes-api/) on the web. The only difference is that with `kubectl explain`, you have it right at your fingertips.
-
-By default, `kubectl explain` displays only one level of fields. You can recursively display the entire tree of fields (including the type of each field but omitting the description) with the `--recursive` flag:
+For example, if you want to look up the fields of a Deployment (one level deep), you can do that as follows:
 
 ~~~bash
-kubectl explain pod.spec --recursive
+kubectl explain deployment
 ~~~
 
-In case you're not sure about the top-level resource names that you can use with `kubectl explain` (e.g. *pod*, *service*), you can display all of them with the following command:
+If you then want to drill down into the `spec` field of a Deployment, you can do it like that:
+
+~~~bash
+kubectl explain deployment.spec
+~~~
+
+And so on, for any fields and sub-fields.
+
+By default, `kubectl explain` displays only a single level of fields. You can recursively display all the fields and sub-fields (without their descriptions) with the `--recursive` flag. For example:
+
+~~~bash
+kubectl explain deployment.spec --recursive
+~~~
+
+In case you're not sure about which resources you can use with `kubectl explain`, you can display all of them with the following command:
 
 ~~~bash
 kubectl api-resources
 ~~~
 
-Note that this command displays the resource names in their plural form (e.g. *services* instead of *service*). It also displays the short name for those resources that have a short name (e.g. *svc* for the service resource). You can use any of these forms for `kubectl explain`.
+The above command displays the resource names in their plural forms (e.g. `deployments` instead of `deployment`). For applicable resources, it also displays their "shortname" (e.g. `deploy`). All of these name variants are in general equivalent for kubectl. That is, you can use any of these variants for `kubectl explain`.
 
-For example, the following invocations are all equivalent:
+For example, all the following commands are equivalent:
 
 ~~~bash
-kubectl explain svc.spec
-kubectl explain service.spec
-kubectl explain services.spec
+kubectl explain deployments.spec
+kubectl explain deployment.spec
+kubectl explain deploy.spec
 ~~~
 
-## Display the information you need with custom output formats
+## 3. Define custom output formats
 
 When you retrieve resources from the API server with the `kubectl get` command, then, by default, kubectl displays them in a human-readable table format like in the following example:
 
