@@ -15,37 +15,67 @@ open_graph:
   image: /blog/kubernetes-cli-tricks/magic.jpg
 ---
 
-If you use Kubernetes, you use kubectl. And you probably use it *a lot*. If you spend so much time using a certain tool, it's worth knowing it very well and being able to use it *efficiently* and *effectively*. This article presents a series of tips and tricks to power-up your usage of kubectl, and along the way, giving you a deeper understanding of the kubectl/Kubernetes ecosystem. The ultimate goal of this article is not only to make your daily work with Kubernetes more professional, but also more fun and enjoyable!
+If you work with Kubernetes, you most probably use kubectl. And you probably use it *a lot*. Whenever you spend a lot of time working with a specific tool, it is worth truly "mastering" it and using it efficiently.
+
+This article contains a set of tips and tricks to make your usage of kubectl more efficient. By the way, this article also aims at deepening your understanding of how Kubernetes works.
+
+The goal of all this is not only to make your daily work with Kubernetes more efficient, but also more enjoyable!
 
 <!--more-->
 
 ## What is kubectl?
 
-In order to use a took efficiently and effectively, you need to understand what it is an how it works. The following diagram gives an overview of where kubectl is in the Kubernetes ecosystem:
+Before focussing on how to *use* kubectl more efficienly, you should know what it actually *is*. The following diagram shows an overview of the Kubernetes internals and the role kubectl plays in there:
 
 ![](what-is-kubectl.png)
 
-To understand the role of kubectl, you also need to have a basic understanding of how Kubernetes works.
+As you can see, kubectl is in fact an HTTP-based client to the Kubernetes API. But what is the Kubernetes API? To understand this, let's briefly look at the Kubernetes internals.
 
-Kubernetes itself consists of a set of independent **components** that run on different nodes of a cluster. A subset of these components are **control plane components** and they usually run on one or more dedicated nodes that only run control plane components and don't execute any workloads. These nodes are called master nodes. The remaining components are **worker nodes components**, and they run on those nodes of the cluster that execute the application workloads. These nodes are called worker nodes.
+### Kubernetes internals
 
-Each component has a very specific job. For example, the **etcd** component ([etcd](https://coreos.com/etcd/) is a distributed key-value store) in the control plane stores all the resource specifications that have been defined for the cluster, such as pods and services. The **scheduler** component (a control plane component) assigns pending pods to worker nodes for execution. The **kubelet** component (a worker node component) is responsible for running the container(s) of a pod that has been assigned to its node by the scheduler.
+Kubernetes consists of a set of independent components that run on the nodes (i.e. machines) of the cluster. Each component runs as a separate operating system process.
 
-However, there is one very important component that I didn't mention yet: the **API server**. The API server is the switching point for all interactions between components within the cluster, as well as the main entry point for interactions from outside the cluster. The individual components in a cluster don't talk to each other directly, but they only talk to the API server (in fact components don't even know about each others' existence). Similarly, an external user (such as you) interacts with a Kubernetes cluster by talking to the API server.
+The most important Kubernetes components are shown in the above diagram. Some components run on the master nodes of the cluster (forming the cluster control plane) and others run on the worker nodes. In the following, they are listed again:
 
-The API server defines an **HTTP REST API** through which all these interactions happen. This is commonly known as the [Kubernetes API](https://kubernetes.io/docs/reference/using-api/api-overview/). All Kubernetes operations are implemented as **CRUD** operations (create, read, update, delete) on Kubernetes **resources**. Everything, from a pod to a service to a deployment or namespace is a Kubernetes resource, and all Kubernetes operations are CRUD operations on these resources, carried out through the HTTP REST API of the API server. You can find the full list of these resources with all their fields for the latest version of Kubernetes (currently v1.13) [here](https://kubernetes.io/docs/reference/kubernetes-api/).
+On master nodes:
 
-And now you can see what **kubectl** is: kubectl is a command-line tool that carries out HTTP requests to the API server. If you run `kubectl get pods`, then kubectl issues an HTTP request that corresponds to a *read* operation on the *pod* resources to the API server
+- **API server:** provides the Kubernetes API, manages etcd storage
+- **etcd:** storage backend (see [here](https://coreos.com/etcd/))
+- **Controller manager:** ensures status matches spec of all resources
+- **Scheduler:** schedules pods to worker nodes
 
-So, if kubectl just makes HTTP requests to the API server, couldn't you also access this API directly? Sure. Nothing stops you from making raw HTTP requests to the API server with a tool like `curl`. If you know the relevant API endpoints and request formats, then you could fully control your cluster that way without ever using kubectl. However, this would be a lot of work and pretty error-prone. The whole point of kubectl is to make it easier for you to interact with the Kubernetes API server.
+On worker nodes:
 
-However, what's more common than accessing the API server directly is to use one of the Kubernetes [client libraries](https://kubernetes.io/docs/reference/using-api/client-libraries/) that exist for different programming languages. These are API client libraries that allow you to carry out requests to the API server programmatically. This allows you to write programs that communicate with the Kubernetes API server, just like kubectl.
+- **kubelet:** controls execution of containers on worker node
 
-In fact, kubectl is nothing else than a program that uses a Kubernetes client library to communicate with the Kubernetes API server. In particular, kubectl is a Go program that uses the [client-go](https://github.com/kubernetes/client-go) library.
+To see how these components work together, let's see consider an example. Imagine you create a [ReplicaSet](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#replicaset-v1-apps) resource in your cluster (a ReplicaSet consists of a pod template and "replica count", that is, the number of replicas of this pod that should be running at all times) by preparing a YAML manifest of the resource and then creating it with `kubectl apply`.
 
-The take-away message here is that, regarding cluster control, the crucial point is the HTTP REST API provided by the API server. Everything happens through this API. Kubectl is one of the means to access this API, but there are others, for example issuing raw HTTP requests (e.g. with `curl`) or using a Kubernetes client library. In the end, all these means are equivalent, that is, they all allow you to do the same things.
+When you create the ReplicaSet resource, the **API server** saves its manifest in the **etcd** storage. This event triggers the ReplicaSet controller, a sub-process of the **controller manager**. It detects that there is now a ReplicaSet, but no corresponding pods, so it creates manifests for these pods and saves them in the etcd storage (through the API server). This in turn triggers the **scheduler**, as it sees that there now exists a number of pods that are not assigned to a worker node yet. Thus, it selects a worker node for each of these pods and adds the respective node names to the pod manifests in the etcd storage (through the API server). This in turn triggers the **kubelets** on the corresponding worker nodes, as they detect that a pod has been assigned to them. The kubelets then run the containers of these pods on their worker nodes.
 
-Now that you have a good idea of what kubectl is, let's look at a series of tips and tricks to make your usage of kubectl more efficient.
+### The Kubernetes API
+
+The Kubernetes API is an **HTTP REST API** provided by the API server, and *all* interactions between Kubernetes components happen as [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations through this API. That means, Kubernetes resources (such as ReplicaSets, pods, etc.) are created, read, updated, and deleted through this API (persisted in the etcd storage backend).
+
+The special thing about Kubernetes is that the same management API is used for internal operations as well as for users of the cluster. That means, kubectl talks to exactly the same API as the internal components, such as the scheduler or kubelet.
+
+The full specification of this API for the currently latest version of Kubernetes (v1.13) can be found [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/). As you can see, the specification is organised as a list of resource types. These are the resources that can be created, read, updated, and deleted (CRUD) through the Kubernetes API.
+
+For each resource, the specification lists the **manifest** structure, as well as the **operations** that can be applied to this resource. For example, you can see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) that the *create* operation for a ReplicaSet is implemented by the following HTTP API endpoint:
+
+~~~
+POST /apis/apps/v1/namespaces/{namespace}/replicasets
+~~~
+
+The body for this HTTP POST request must be a manifest of a ReplicaSet in one of the supported formats (YAML, JSON, or [protobuf](https://developers.google.com/protocol-buffers/)).
+
+So, when you execute a command like `kubectl create -f rs.yaml`, then kubectl makes the above API request behind the scenes. Similarly, internal Kubernetes components themselves use the same API endpoints when they have to create, read, update, or delete Kubernetes resources.
+
+Note that Kubernetes is organised in such a way that the whole cluster can be operated and used through CRUD operations on Kubernetes resources through the Kubernetes API.
+
+After this introductory section, you should now have a good understanding what kubectl in essence is. Namely a tool that carries out HTTP requests to the Kubernetes API on your behalf, allowing you to create, read, update, and delete Kubernetes resources.
+
+Let's now look at a series of tips and tricks to make your usage of kubectl more efficient.
+
 
 ## Save typing with command completion
 
