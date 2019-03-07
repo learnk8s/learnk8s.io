@@ -77,28 +77,37 @@ After this introductory section, you should now have a good understanding what k
 Let's now look at a series of tips and tricks to make your usage of kubectl more efficient.
 
 
-## Save typing with command completion
+## 1. Save typing with command completion
 
-One of the most obvious, but often overlooked, tricks to make your kubectl usage more efficient is shell completion. This is a feature that kubectl provides for the **Bash** and **zsh** shells (see [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)). It allows you to auto-complete kubectl sub-commands, options, and arguments, including hard-to-type things like pod or node names. This can save you really a lot of typing or copy-pasting!
+One of the most useful, but often overlooked, tricks to make your kubectl usage more efficient is shell completion. This feature is provided by kubectl for the [**Bash**](https://www.gnu.org/software/bash/) and [**Zsh**](https://www.zsh.org/) shells (see [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)).
 
-Here is a small demonstration of shell completion in action:
+Command completion allows you to auto-complete kubectl sub-commands, options, and arguments. This includes hard-to-type things like resource names, such as pod names or node names. This can save you a tremendous amount of typing and copy-pasting!
+
+Here is a small demonstration of kubectl command completion in action:
 
 ![](todo.gif)
 
-You use completion by hitting *Tab* to auto-complete the current word (if there is only a single match), and hitting *Tab* two times to display a list of all the possible completions (if there are multiple matches).
+<!--To use command completion, hit *Tab* to auto-complete the current word (if there is only a single match), and hit *Tab* two times to display a list of all the possible completions (if there are multiple matches).-->
 
-The setup procedure for shell completion depends on whether you use Bash or zsh and Linux or Mac. Each case is explained in the following. But first, some general notes that apply to all setups.
+Command completion works by the means of a **completion script** that defines the completion behaviour for a specific command. Kubectl can auto-generate its completion script for Bash and Zsh with the following command:
 
-### General Notes
+~~~bash
+kubectl completion <shell>
+~~~
 
-- The completion functionality for kubectl is provided by a **completion script**. This is a shell script that instructs the shell how completion should work for this command. kubectl outputs this script for the Bash and zsh shells with the command `kubectl completion bash` and `kubectl completion zsh`, respectively. You have to source this script for enabling completion.
-- For Bash, the kubectl completion script depends on a third-party project called [**bash-completion**](https://github.com/scop/bash-completion). You need to install this project on your system to make kubectl completion work for Bash.
+Where `<shell>` is either `bash` or `zsh`.
 
-### Bash on Linux
+In the end, this script must be sourced by your shell to enable command completion. However, the procedure to set everything up properly is different for Bash and Zsh, and furthermore, there is a small complication if you use Bash on macOS. The following sections cover all these cases and you can click on one of the links below to directly jump to the instructions for your scenario:
 
-As mentioned, for Bash you first have to install a project called [bash-completion](https://github.com/scop/bash-completion). This project provides Bash functions that are used by the kubectl completion script (that is, the output of `kubectl completion bash`).
+- [Setting up command completion for Bash](#bash)
+- [Setting up command completion for Bash on macOS](#bash-on-macos)
+- [Setting up command completion for Zsh](#zsh)
 
-You can install bash-completion as follows:
+### Bash
+
+For Bash, the kubectl completion script depends on a third-party project called [bash-completion](https://github.com/scop/bash-completion). You have to install this software on your system to make kubectl command completion work for Bash.
+
+There are bash-completion packages for many common package managers (see [here](https://github.com/scop/bash-completion#installation)). For example, if you use APT, you can install the package as follows:
 
 ~~~bash
 sudo apt-get install bash-completion
@@ -110,49 +119,69 @@ This creates the file `/etc/bash_completion`, which you have to source in your `
 source /etc/bash_completion
 ~~~
 
-Now, you just need to make sure the kubectl completion script is sourced in every shell session. You can do this by adding the following command to your `~/.bashrc` file (after the above command):
+Now, everything is set up for the kubectl completion script to work, and you just have to source this script itself in your `~/.bashrc` file. You can do this by adding the following command to your `~/.bashrc` file:
 
 ~~~bash
 source <(kubectl completion bash)
 ~~~
 
-And that's it! After starting a new shell (or sourcing `~/.bashrc`), kubectl completion should work.
+And that's it! After restarting your shell (or sourcing `~/.bashrc`), kubectl command completion should work.
+
+[Jump to the next section →](#quickly-access-resource-documentation-with-kubectl-explain)
 
 ### Bash on macOS
 
-On macOS, the story is (unfortunately) a bit more complicated. The reason for this is that Apple includes a completely outdated version of Bash in macOS. In particular, this is version 3.2 which dates from 2007 (you can test it on your Mac by running `bash --version`). Apple does this for licensing reasons: Bash 3.2 is the last version that uses the GPLv2 license, whereas later versions use GPLv3, and Apple is unwilling to accept GPLv3.
+Apple includes an old version of Bash in macOS, and unfortunately the kubectl completion script does not work with this version. In particular, macOS includes Bash 3.2, and the kubectl completion script requires at least Bash 4.1 (the current version of Bash is 5.0).
 
-The problem is that the kubectl completion script (that you generate with `kubectl completion bash`) does not work properly with Bash 3.2. It requires at least Bash 4.1.
+> In case you're interested why Apply includes such an old version of Bash in macOS (Bash 3.2 is from 2007): it is for licensing reasons. Bash 3.2 is the last version that uses the [GNU General Public License](https://en.wikipedia.org/wiki/GNU_General_Public_License) v2 (GPLv2), whereas later versions use GPLv3. Apple is generally unwilling to accept GPLv3.
 
-The only solution to this problem is to install a newer version of Bash on your Mac (the currently latest version is 5.0). This is actually not difficult and I wrote an entire article about it [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba). I recommend you to follow the steps in this article before proceeding.
+The only way around this is to install a newer version of Bash on macOS. This is something that is generally recommended if you use Bash on macOS, as it can save you from a lot of trouble when using shell scripts and software that is designed for newer versions of Bash.
 
-Once you have upgraded Bash to a newer version, you have to install bash-completion.
+Installing a newer version of Bash on macOS and making it the default shell is actually not difficult, and I wrote an entire article about it [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba). If you want to use kubectl command completion on macOS, then you should follow the steps in this article before proceeding.
 
-You can do this conveniently with the [Homebrew](https://brew.sh/) package manager:
+Once you have upgraded Bash to a newer version, you can set up kubectl command completion.
+
+For Bash, the kubectl command completion script depends on a third-party project called [bash-completion](https://github.com/scop/bash-completion). You have to install this software on your system in order to make kubectl command completion work.
+
+You can install bash-completion conveniently with the [Homebrew](https://brew.sh/) package manager:
 
 ~~~bash
 brew install bash-completion@2
 ~~~
 
-The `@2` at the end of the Homebrew formula stands for major version 2 of bash-completion. This version has to be used for Bash 4.1 and newer (which you are hopefully using by now).
+> The `@2` at the end of the Homebrew formula stands for version 2 of bash-completion. This version targets Bash 4.1 and later, whereas version 1 (without the `@2`) targets versions up to Bash 3.2. The kubectl completion script only works with version 2, that's why you had to install a newer version of Bash.
 
-The above command will prompt you in the "Caveats" section to add the following command to your `~/.bash_profile` or `~/.bashrc` file:
+The `brew install` command asks you in the "Caveats" section to add the following snippet to your `~/.bash_profile`:
 
 ~~~bash
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 ~~~
 
-You have to do this in order to enable the bash-completion functionality.
+I recommend adding it to your `~/.bashrc` file instead, so that bash-completion is also available in sub-shells.
 
-After that, you just need to source the kubectl completion script, which you can do by adding the following command to your `~/.bashrc` file (after the above command):
+Now all that is left to do is to ensure that the kubectl completion script is sourced in your shell. The simplest way to do this is by simply adding the following command to your `~/.bashrc` file:
 
 ~~~bash
 source <(kubectl completion bash)
 ~~~
 
-And that's it! After starting a new shell, kubectl completion should be working.
+Optionally, **if you installed kubectl with Homebrew** (`brew install kubernetes-cli`), you can achieve the same in another way (which will be useful for other commands that you installed with Homebrew too).
 
-### zsh
+Homebrew formulas install completion scripts (if any) to the `/usr/local/etc/bash_completion.d` directory. If you installed kubectl with Homebrew, then the kubectl completion script has been placed in this directory by the Homebrew formula. You can instruct bash-completion to source all the completion script in this directory by adding the following line to your `~/.bashrc` file (this is also indicated in the "Caveats" section of the `brew install` command for bash-completion):
+
+~~~bash
+export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+~~~
+
+You just have to make sure this line comes *before* the above line of the "Caveats" section in your `~/.bashrc` file.
+
+Once this is done, you don't need to source the kubectl completion script in your `~/.bashrc` file anymore. In addition, all completion scripts of other Homebrew formula will be automatically sourced too.
+
+No matter which approach you use, after restarting your shell, kubectl command completion should be working!
+
+[Jump to the next section →](#quickly-access-resource-documentation-with-kubectl-explain)
+
+### Zsh
 
 With zsh, the setup procedure is the same for macOS and Linux, and furthermore, it doesn't depend on a third-party project like bash-completion. So, all you have to do is to source the kubectl completion script.
 
