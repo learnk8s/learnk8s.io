@@ -191,7 +191,7 @@ kubectl explain services.spec
 
 ## Display the information you need with custom output formats
 
-When you retrieve resources from the API server with the `kubectl get` command, then kubectl, by default, displays these resources to you in a format like in the following example:
+When you retrieve resources from the API server with the `kubectl get` command, then, by default, kubectl displays them in a human-readable table format like in the following example:
 
 ~~~bash
 $ kubectl get pods
@@ -202,24 +202,91 @@ engine-544b6b6467-tvgmg   1/1     Running   0          78d
 web-ui-6db964458-8pdw4    1/1     Running   0          78d
 ~~~
 
+Each resource is represented by some few fields of the resource. This set of fields is specific to each resource type. For example, for pods (as shown above), it is the name of the pod, the number of containers in the pod and the number thereof that are ready, the status of the pod, and the time passed since the pod was created.
 
-Each resource is represented as a row in a table consisting of some few attributes of the resource (in the case of pods shown above, these attributes are the name of the pod, the number of containers in the pod and the number thereof that are ready, the status of the pod, and the age of the pod).
+This selection of fields seems pretty arbitrary. In fact, it's a guess of kubectl what might interest you most about each resource type. But what if you are, for example, interested in the container images of each pod? Can you tell kubectl to display this information?
 
-The table format is great for human readers, because it makes information recognisable at a single glance. But the selection of attributes that are displayed seems pretty arbitrary. Indeed, this selection of attributes is mainly a nice guess of kubectl about what might interest you most about this resource type.
+The answer is yes, and this section shows how. In particular, you will learn how you can display *any* fields of a resource in a human-readable table format, without the need to resort to machine-readable output formats like JSON or YAML.
 
-But are you always just interested in what kubectl thinks is best for you? Definitely not, and you are by no means restricted to it. In this section you will learn how you can display *any* attributes of a resource, while still maintaining the practical human-readable table format.
-
-To this end, you first have to understand what actually happens when you execute a `kubectl get` command.
+But to this end, you first have to understand what actually happens when you retrieve resources with kubectl.
 
 ### How kubectl gets and displays resources
 
-The following diagram gives an overview of what happens when you retrieve a set of resources with kubectl:
+The following diagram shows what happens when you execute a `kubectl get` command:
 
 ![](output-formats.png)
 
-From a bird's-eye view, when you run a `kubectl get` command, kubectl makes an HTTP request to the API server for getting the requested resources (for example, all pods in the current namespace). The API server retrieves the requested resources from the etcd storage and returns them to kubectl, which outputs them to you in one of various output formats. But let's take a step back.
+> See the [What is kubectl?](#what-is-kubectl) section for an overview of kubectl and the Kubernetes components shown in above diagram.
 
-What is "a resource in the etcd storage" actually? When you *create* a resource, you usually do so by creating a YAML or JSON specification of the resource (according to the specification of each resource type that you can find in the API reference on the [web](https://kubernetes.io/docs/reference/kubernetes-api/) or in `kubectl explain`), and supply this specification to the `kubectl create` (or `kubectl apply`) command.
+From a bird's-eye view, `kubectl get` causes kubectl to make an appropriate HTTP request to the API server (since Kubernetes uses a REST API, this is a GET request). The API server then retrieves the requested resources from the etcd storage and returns them as JSON to kubectl in the HTTP response. Kubectl then displays these resources in one of various output formats. But let's take a step back.
+
+What is "a resource in the etcd storage" actually? Remember that when you *create* a resource, you define a [specification](https://kubernetes.io/docs/reference/kubernetes-api/) of this resource in YAML or JSON and supply it to `kubectl create` (or `kubectl apply`).
+
+This command then orders the API server to create this resource. Since Kubernetes uses a REST API, this happens through a POST request that includes your resource specification.
+
+For the API server "creating a resource" means saving its specification in the etcd storage. The data format for resource specifications used in etcd is JSON or [protobuf](https://developers.google.com/protocol-buffers/). That means,
+
+
+When you *create* a resource, you usually do so by creating a YAML or JSON specification of the resource (according to the specification of each resource type that you can find in the API reference on the [web](https://kubernetes.io/docs/reference/kubernetes-api/) or in `kubectl explain`), and supply this specification to the `kubectl create` (or `kubectl apply`) command.
+
+<!--
+### What `kubectl get` gets from the API server
+
+- You can set the log level for kubectl with the `-v` option
+    - Default is 0 (`-v 0`), highest is 10 (`-v 10`)
+- If you set the log level to 9+, the output includes each request kubectl makes to the API server, including the full request and response bodies
+    - Thus, you can see what exactly the response to a `kubectl get` API request is
+- The response bodies to GET requests issued by `kubectl get` are:
+    - Always JSON
+    - For the default output format and `-o wide` with `--server-print=true` (this is the default)
+        - JSON object of kind *Table* that defines the columns and rows of the output table
+        - https://kubernetes.io/docs/reference/using-api/api-concepts/#receiving-resources-as-tables
+        - Since v1.10
+    - The above with `--server-print=false` and all other output formats:
+        - If retrieving multiple resources:
+            - JSON object representing resource of kind *XList* (e.g. *PodList*) according to [API reference](https://kubernetes.io/docs/reference/kubernetes-api/)
+            - Similar, but not identical, to the output with the `-o json` option (this output object is of kind *List*)
+            - In Kubernetes v1.13, for all resources except the following ones there exists a *XList* object (where *X* is the resource type):
+                - Container
+                - Volume
+                - Binding
+                - LocalSubjectAccessReview
+                - SelfSubjectAccessReview
+                - SelfSubjectRulesReview
+                - SubjectAccessReview
+                - TokenReview
+        - If retrieving a single resource
+            - JSON object representing a resource of kind *X* (e.g. *Pod*) according to [API reference](https://kubernetes.io/docs/reference/kubernetes-api/)
+            - Exactly the same as the output with the `-o json` option
+
+
+### When creating resources with kubectl: what is sent to the API server
+
+- The request bodies for POST request issued, for example, by `kubectl create` are:
+    - Always JSON
+    - A JSON representation fo the resource specification that is passed to `kubectl create` (no matter if the specification is in YAML or JSON)
+
+### Creating resources by talking to the API server directly
+
+- Start a proxy to the API server with kubectl: kubectl proxy
+    - API server can now be accessed as http://127.0.0.1:8001
+- Now, you can create resources as follows (example for a pod):
+    - `curl -H "Content-Type: <in>" -H "Accept: <out>" -d "$(cat file)" -X POST http://127.0.0.1:8001/api/v1/namespaces/default/pods`
+        - Where:
+            - `<in>` is the data type of the resource specification in `file`. It can be one of:
+            - `<out>` is the desired data type of the response
+            - Both `<in>` and `<out>` can be one of:
+                - `application/json` (default for `<out>`)
+                - `application/yaml`
+                - `application/vnd.kubernetes.protobuf`
+    - That means, the API server accepts resource specifications in three formats: JSON, YAML, and Protocol Buffers
+        - This is as explained in [Managing Kubernetes, Chapter 4](https://www.oreilly.com/library/view/managing-kubernetes/9781492033905/ch04.html) (Alternate Encodings)
+        - Protobuf support is a newer feature, see here: https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/protobuf.md
+    - On a POST request, the API server returns the completed specification of the created resource
+        - This returned specifications contains all the default and initialised values that were not present in the specification initially passed to the API server
+    - You can choose any combinations of input and output formats (i.e. `<in>` and `<out>`)
+        - For example, post a specification in YAML (set `<in>` to `application/yaml`) and get the response in Protocol Buffers (set `<out>` to `application/vnd.kubernetes.protobuf`
+-->
 
 Kubectl then sends this specification to the API server with an appropriate HTTP request. The API server converts the specifciation to the storage format and saves it in the etcd storage. The storage format for resources in the etcd storage can be either JSON or [protobuf](https://developers.google.com/protocol-buffers/).
 
@@ -229,13 +296,15 @@ Now, when you *get* resources wiht kubectl, the API server retrieves the request
 
 > Note that Kubernetes components can (and do) edit resources in the etcd storage. For this reason, when you *get* a resource, it usually has more fields than you defined wen you *created* the resource. This is particularly true for status fields that are created and updated by Kubernetes components while the resource is stored in etcd.
 
-Kubectl then displays the received data to you in whatever output format you specified to the `kubectl get` command.
+Kubectl then displays the received data to you in whatever output format you specified to the `kubectl get` command. You can specify the desired output format with the `-o` option.
 
-One of these output formats is JSON (which you can specify with the `-o json` option). In this case, kubectl just dumps the entire received JSON data to the screen. Another common output format is YAML (which you can specify with the `-o yaml` option). In this case, kubectl first converts the received JSON to YAML and then prints it to the screen.
+One of these output formats is JSON (`-o json`). In this case, kubectl just dumps the entire received JSON data to the screen. Another common output format is YAML (`-o yaml`). In this case, kubectl first converts the received JSON to YAML and then prints it to the screen.
 
-However, the default output format (when you don't specify any `-o` option) is the human-readable table format that was shown at the beginning. And now you should see how this format comes about. Basically, kubectl just picks some of the resource fields in the received JSON (ignoring all the others) and prints them out as a table.
+The default output format (when you don't specify any `-o` option) is the human-readable table format that was shown at the beginning. And now you should see how this format comes about. Basically, kubectl just picks some of the resource fields in the received JSON specification and prints them out as a table.
 
-This means that, even with the default format, the full data of the resources is actually there, but kubectl just shows fraction of it to you. But what kubectl can do, you can do too! In the next section you will learn how to define a custom output format in which *you* can define which data to pick and display in the output table.
+This means that, even with the default format, the full specifications of the resources are actually there, but kubectl just shows fraction of them to you.
+
+But what kubectl can do, you can do too! In the next subsection you will learn how to define a custom output format in which *you* define which data to pick and display in the output table.
 
 ### The custom-columns output format
 
