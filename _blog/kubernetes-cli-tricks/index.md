@@ -249,9 +249,9 @@ kubectl explain deployment.spec
 kubectl explain deploy.spec
 ~~~
 
-## 3. Define custom output formats
+## 3. Use custom output formats
 
-When you retrieve resources from the API server with the `kubectl get` command, then, by default, kubectl displays them in a human-readable table format like in the following example:
+When you use `kubectl get` to read Kubernetes resources, you get by default an output format like in the following example:
 
 ~~~bash
 $ kubectl get pods
@@ -262,32 +262,113 @@ engine-544b6b6467-tvgmg   1/1     Running   0          78d
 web-ui-6db964458-8pdw4    1/1     Running   0          78d
 ~~~
 
-Each resource is represented by some few fields of the resource. This set of fields is specific to each resource type. For example, for pods (as shown above), it is the name of the pod, the number of containers in the pod and the number thereof that are ready, the status of the pod, and the time passed since the pod was created.
+This format is practical for human consumption, but it displays only a limited amount of information for each resource instance. If you want more information, you could use the `-o json` or `-o yaml` option, but then kubectl displays the *full* definition of each resource, and that's probably more information than you want. Furthermore, JSON and YAML are intended for machine processing, and not as human-readable as the above table format.
 
-This selection of fields seems pretty arbitrary. In fact, it's a guess of kubectl what might interest you most about each resource type. But what if you are, for example, interested in the container images of each pod? Can you tell kubectl to display this information?
+The ["custom columns"](https://kubernetes.io/docs/reference/kubectl/overview/#custom-columns) output format displays resources in a human-readable table format (as above), but allows you to define the information displayed in the table yourself.
 
-The answer is yes, and this section shows how. In particular, you will learn how you can display *any* fields of a resource in a human-readable table format, without the need to resort to machine-readable output formats like JSON or YAML.
+You use the custom columns output format with the `-o custom-columns=<spec>` option. Here is an example:
 
-But to this end, you first have to understand what actually happens when you retrieve resources with kubectl.
+~~~bash
+kubectl get pods -o custom-columns='NAME:metadata.name,IMAGES:spec.containers[*].image'
+~~~
 
-### How kubectl gets and displays resources
+As you can see, the `<spec>` part of the `-o custom-columns` option is as follows:
 
-The following diagram shows what happens when you execute a `kubectl get` command:
+~~~
+NAME:metadata.name,IMAGES:spec.containers[*].image
+~~~
 
-![](output-formats.png)
+It specifies two columns, one entitled `NAME` and the other entitled `IMAGES`, and defines which resource field value(s) to display in these columns. If you run this command, the output will be something like this:
 
-> See the [What is kubectl?](#what-is-kubectl) section for an overview of kubectl and the Kubernetes components shown in above diagram.
+~~~
+NAME                       IMAGES
+rabbitmq-d4b77b989-t4wzm   rabbitmq:3.7.8-management,nginx
+test-pod                   nginx
+test-rc-hnhqm              nginx
+test-rc-zqz4n              nginx
+~~~
 
-From a bird's-eye view, `kubectl get` causes kubectl to make an appropriate HTTP request to the API server (since Kubernetes uses a REST API, this is a GET request). The API server then retrieves the requested resources from the etcd storage and returns them as JSON to kubectl in the HTTP response. Kubectl then displays these resources in one of various output formats. But let's take a step back.
+As you can see, the output shows the name of each pod as well as the image names of all the containers that run as part of this pod.
 
-What is "a resource in the etcd storage" actually? Remember that when you *create* a resource, you define a [specification](https://kubernetes.io/docs/reference/kubernetes-api/) of this resource in YAML or JSON and supply it to `kubectl create` (or `kubectl apply`).
+In general, the custom columns output format is used as follows:
 
-This command then orders the API server to create this resource. Since Kubernetes uses a REST API, this happens through a POST request that includes your resource specification.
+~~~
+-o custom-columns=<header>:<jsonpath>[,<header>:<jsonpath>]...
+~~~
 
-For the API server "creating a resource" means saving its specification in the etcd storage. The data format for resource specifications used in etcd is JSON or [protobuf](https://developers.google.com/protocol-buffers/). That means,
+That is, you specify a comma-separated list of `<header>:<jsonpath>` pairs, one for each column that you want in the output table.
 
+The `<header>` part is the header of the column and you can freely choose it (it may also be empty). The `<jsonpath>` part is a specifier based on [JSONPath](https://goessner.net/articles/JsonPath/index.html) that selects a field value (or collection of field values) to display in the column.
 
-When you *create* a resource, you usually do so by creating a YAML or JSON specification of the resource (according to the specification of each resource type that you can find in the API reference on the [web](https://kubernetes.io/docs/reference/kubernetes-api/) or in `kubectl explain`), and supply this specification to the `kubectl create` (or `kubectl apply`) command.
+### JSONPath expressions
+
+JSONPath is a language to extract data from JSON documents. In kubectl, JSONPath is used to specify fields of resources for display.
+
+For example, in the above command the JSONPath expression for the `NAME` column is:
+
+~~~
+metadata.name
+~~~
+
+If you look at the resource definition of a pod (which you can do either in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) or with `kubectl explain`), you see that the name of a pod is defined in the `metadata.name` field (see `kubectl explain pod.metadata.name`). Thus, if you want to display the name of a pod in the output table, you have to use this JSONPath expression.
+
+The JSONPath expression for the `IMAGES` column is:
+
+~~~
+spec.containers[*].image
+~~~
+
+This is also a valid JSONPath expression, but this time it contains an array operator. If you look at the definition of a pod, you see that the `spec.containers` field is a **list**, each element containing the definition of a container of this pod (see `kubectl explain pod.spec.containers`).
+
+When you encounter resource fields that are lists, then you can use the array operator `[]` in a JSONPath expression. The `*` is a wildcard array subscript operator that selects *all* elements of the array. Thus, in effect, this JSONPath expression the image names of *all* the containers in the pod, which will be displayed by kubectl as a comma-separated list.
+
+JSONPath can do more than only that. You can see its most important capabilites for example [here](https://goessner.net/articles/JsonPath/index.html#e3). However, for the kubectl custom columns output format, only a subset of these capabilites is supported. The supported capabilities are listed in the following with examples:
+
+~~~bash
+# Select all elements of a list
+kubectl get pods -o custom-columns='DATA:spec.containers[*].image'
+
+# Select a specific element of a list
+kubectl get pods -o custom-columns='DATA:spec.containers[0].image'
+
+# Select those elements of a list that match a filter expression
+kubectl get pods -o custom-columns='DATA:spec.containers[?(@.image!="nginx")].image'
+
+# Select all fields under a specific location, regardless their name
+kubectl get pods -o custom-columns='DATA:metadata.*'
+
+# Select all fields with a specific name, regardless their location
+kubectl get pods -o custom-columns='DATA:..image'
+~~~
+
+### What else you can do with custom columns output
+
+The uses cases of the custom column output format are endless. You can display any combination of data you want and thus creating your custom "reports" of what's going on in your cluster. Just follow these steps:
+
+1. Explore the definition of a resource
+    - In the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/)
+    - With `kubectl explain`
+    - In the YAML or JSON representation of a resource that you get with `kubectl get -o <yaml|json>`
+2. Create JSONPath expressions to extract the data you want to display
+3. Assemble the `-o custom-columns` option
+
+Here is another example:
+
+~~~bash
+$ kubectl get nodes -o custom-columns='NAME:metadata.name,ZONE:metadata.labels.failure-domain\.beta\.kubernetes\.io/zone'
+NAME                          ZONE
+ip-10-0-118-34.ec2.internal   us-east-1b
+ip-10-0-36-80.ec2.internal    us-east-1a
+ip-10-0-80-67.ec2.internal    us-east-1b
+~~~
+
+As you can see, this command displays which "zone" each node in the cluster is in. This applies if your cluster runs on a cloud infrastructure, such as AWS or GCP. In these environments, a "zone" is a replication area within a "region".
+
+The JSONPath expression for the `ZONE` column selects the value of a special label called [`failure-domain.beta.kubernetes.io/zone`](https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#failure-domainbetakubernetesiozone). This label is populated with the "zone" of the node, if the cluster runs on a cloud infrastructure.
+
+Labels are custom data and are not specified in the API reference or in `kubectl explain`. So to see the full range of data you can display, you can explore the YAML or JSON definitions of your resources that you get with `kubectl get -o yaml` or `kubectl get -o json`.
+
+This is just one of many examples of what you can do with the custom columns output format. Feel free to explore your resources and find new use cases!
 
 <!--
 ### What `kubectl get` gets from the API server
@@ -303,7 +384,7 @@ When you *create* a resource, you usually do so by creating a YAML or JSON speci
         - https://kubernetes.io/docs/reference/using-api/api-concepts/#receiving-resources-as-tables
         - Since v1.10
     - The above with `--server-print=false` and all other output formats:
-        - If retrieving multiple resources:
+        - List* operation:
             - JSON object representing resource of kind *XList* (e.g. *PodList*) according to [API reference](https://kubernetes.io/docs/reference/kubernetes-api/)
             - Similar, but not identical, to the output with the `-o json` option (this output object is of kind *List*)
             - In Kubernetes v1.13, for all resources except the following ones there exists a *XList* object (where *X* is the resource type):
@@ -315,10 +396,9 @@ When you *create* a resource, you usually do so by creating a YAML or JSON speci
                 - SelfSubjectRulesReview
                 - SubjectAccessReview
                 - TokenReview
-        - If retrieving a single resource
+        - Read operation:
             - JSON object representing a resource of kind *X* (e.g. *Pod*) according to [API reference](https://kubernetes.io/docs/reference/kubernetes-api/)
             - Exactly the same as the output with the `-o json` option
-
 
 ### When creating resources with kubectl: what is sent to the API server
 
@@ -346,65 +426,8 @@ When you *create* a resource, you usually do so by creating a YAML or JSON speci
         - This returned specifications contains all the default and initialised values that were not present in the specification initially passed to the API server
     - You can choose any combinations of input and output formats (i.e. `<in>` and `<out>`)
         - For example, post a specification in YAML (set `<in>` to `application/yaml`) and get the response in Protocol Buffers (set `<out>` to `application/vnd.kubernetes.protobuf`
+    - https://kubernetes.io/docs/reference/using-api/api-concepts/#alternate-representations-of-resources
 -->
-
-Kubectl then sends this specification to the API server with an appropriate HTTP request. The API server converts the specifciation to the storage format and saves it in the etcd storage. The storage format for resources in the etcd storage can be either JSON or [protobuf](https://developers.google.com/protocol-buffers/).
-
-So, this is what "a resource in the etcd storage is": a JSON or protobuf version of the YAML or JSON resource specification that you initially defined.
-
-Now, when you *get* resources wiht kubectl, the API server retrieves the requested resources from etcd, converts them to JSON (if they are not already), and sends them back to kubectl. This means that what kubectl gets when you retrieve a resource is basically the same thing that you defined when you created the resource.
-
-> Note that Kubernetes components can (and do) edit resources in the etcd storage. For this reason, when you *get* a resource, it usually has more fields than you defined wen you *created* the resource. This is particularly true for status fields that are created and updated by Kubernetes components while the resource is stored in etcd.
-
-Kubectl then displays the received data to you in whatever output format you specified to the `kubectl get` command. You can specify the desired output format with the `-o` option.
-
-One of these output formats is JSON (`-o json`). In this case, kubectl just dumps the entire received JSON data to the screen. Another common output format is YAML (`-o yaml`). In this case, kubectl first converts the received JSON to YAML and then prints it to the screen.
-
-The default output format (when you don't specify any `-o` option) is the human-readable table format that was shown at the beginning. And now you should see how this format comes about. Basically, kubectl just picks some of the resource fields in the received JSON specification and prints them out as a table.
-
-This means that, even with the default format, the full specifications of the resources are actually there, but kubectl just shows fraction of them to you.
-
-But what kubectl can do, you can do too! In the next subsection you will learn how to define a custom output format in which *you* define which data to pick and display in the output table.
-
-### The custom-columns output format
-
-<!--As you can see, each object is represented by a few fields. However, the above command actually retrieves the *full* specification of each object from the cluster (coming straight out of the etcd storage via the API server). Thus, you are not confined to view only these few default fields, but you can customise the output to display whatever fields you're interested in.-->
-
-The way to do this is to use the `custom-columns` output format (see [here](https://kubernetes.io/docs/reference/kubectl/overview/#custom-columns)). It is used in the following way:
-
-~~~
--o custom-columns=<COL>:<PATH>[,...]
-~~~
-
-You specify a comma-separated list of `<COL>:<PATH>` pairs, where `<COL>` is a column name (freely chosen by you), and `<PATH>` is a "path" in the hierarchical object specification to the field you wish to display in this column. `<PATH>` can refer to *any* field in an object (remember that you can inspect the field structure of any object with the `kubectl explain` command).
-
-This is best explained with an example:
-
-~~~bash
-$ kubectl get -o custom-columns="POD:.metadata.name,IMAGES:.spec.containers[*].image" pods
-POD                       IMAGES
-engine-544b6b6467-22qr6   foo/engine:0.0.1,foo/sidecar:0.0.1
-engine-544b6b6467-lw5t8   foo/engine:0.0.1,foo/sidecar:0.0.1
-engine-544b6b6467-tvgmg   foo/engine:0.0.1,foo/sidecar:0.0.1
-web-ui-6db964458-8pdw4    foo/web-ui:0.0.1
-~~~
-
-This command displays the container images of each pod in the default namespace of the cluster.
-
-The output has two columns. The first column (entitled `POD`) contains the name of each pod, which is defined in the `pod.metadata.name` field of a pod resource object. The second column (entitled `IMAGES`) contains the names of all the container images in this pod, which are defined in the `pod.spec.containers[*].image` fields.
-
-For convenience, you can wrap this command in a shell alias, so that you can easily execute it, for example as `kgi` (standing for **k**ubectl **g**et **i**mages):
-
-~~~bash
-alias kgi='kubectl get -o custom-columns="POD:.metadata.name,IMAGES:.spec.containers[*].image" pods'
-~~~
-
-Note two things about using the `custom-columns` in general:
-
-- Since the resource object itself (e.g. *pod*) is defined by the `kubectl get` command, you **don't** have to add it at the beginning of the path expressions (e.g. you write `.metadata` and **not** `pod.metadata`).
-- If a field is a list rather than a single object (like `pod.spec.containers`), then you have to use brackets `[]` and a subscript operator between them to specify to which objects of the list the path applies. You can use a number or a wildcard `*` as a subscript operator.
-
-Again, you can find out the nature of each field in a resource object (whether it's an object or a list, which sub-fields it contains, etc.) with the `kubectl explain` command.
 
 ## Quickly change contexts and namespaces
 
