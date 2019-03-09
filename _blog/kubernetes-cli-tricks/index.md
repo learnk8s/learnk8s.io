@@ -429,213 +429,112 @@ This is just one of many examples of what you can do with the custom columns out
     - https://kubernetes.io/docs/reference/using-api/api-concepts/#alternate-representations-of-resources
 -->
 
-## Quickly change contexts and namespaces
+## 4. Switch effortlessly between clusters and namespaces
 
-This tip (which are actually two tips) makes it easier for you to work with multiple clusters from your system, as well as working with multiple namespaces in the same cluster. It will enable you to effortlessly update your configuration so that subsequent kubectl commands apply to exactly the cluster or namespace you want.
+Kubectl uses a YAML configuration called **kubeconfig** to decide to which **cluster** to connect and how to connect to it (see [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) and [here](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/)) . You can have multiple clusters configured in your kubeconfig file, which allows you to easily switch between clusters by "pointing" kubectl to a new cluster (for example, do some work on cluster *A*, switch to cluster *B*, and do some work on cluster *B*).
 
-However, to this end, you need to understand the basics of said configuration, which is explained in the next section.
+Similarly, the kubeconfig file also contains the [**namespace**](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) that kubectl uses by default for any cluster. This allows you to switch between namespaces within a given cluster (for example, do some work in the *dev* namespace of a cluster, then switch to the *prod* namespace and do some work there).
 
-### What is kubeconfig?
+> The default kubeconfig file that kubectl looks for is `~/.kube/config`. However, you can also use a different filename, and you can have multiple kubeconfig files. In this case, you have to list the kubeconfig file(s) in the `KUBECONFIG` environment variable (see [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/#set-the-kubeconfig-environment-variable)). You can also explicitly specify the kubeconfig file for each invocation of kubectl with the `--kubeconfig` option.
 
-Did you ever wonder where kubectl gets connection parameters, such as the API server URL and authentication credentials, from? The answer is, from a local configuration called **kubeconfig**. Your kubeconfig contains all the information that a tool like kubectl (or a Kubernetes client library) needs to interact with an API server.
+This tip will show you different tools to switch between clusters and namespaces effortlessly. But to understand what these tools do, you should have a basic understanding of kubeconfig files.
 
-> Note that you can have multiple clusters configured in your kubeconfig, which allows you to work with multiple clusters from your system.
+### kubeconfig files
 
-Your kubeconfig is specified in one or more YAML files called **kubeconfig files**. The default kubeconfig file is `~/.kube/config`. You can have multiple kubeconfig files by listing them in them in the `KUBECONFIG` environment variable. If you have multiple kubeconfig files, then the effective kubeconfig configuration is the merge of all your kubeconfig files. All these things are described [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) and [here](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) in the Kubernetes documentation.
-
-So what does kubeconfig contain? The following figure shows the main kubeconfig components:
+The following diagram shows what a kubeconfig file contains and how kubectl uses it:
 
 ![kubeconfig](kubeconfig.png)
 
-As you can see, kubeconfig has the following four main components (in alphabetical order):
+As you can see, kubeconfig files are centred around so-called **contexts**. A context references a specific cluster, an authentication mechanism (user), and a namespace of the cluster.
 
-- Clusters
-- Contexts
-- Current context
-- Users
-
-The **clusters** component is a list of cluster entries. Each cluster entry corresponds to a Kubernetes cluster that you want to be able to access with kubectl. Technically, a cluster entry consists of the API server URL and possibly a server authentication certificate.
-
-The **users** component is a list of user entries. A user entry contains client authentication information. In other words, the information in a user entry allows to authenticate requests to an API server (which is defined in one of the cluster entries). The structure of the user entry is dictated by the [authentication strategy](https://kubernetes.io/docs/reference/access-authn-authz/authentication/) used by the API server. It can range from simple username/password credentials to more complex mechanisms.
-
-The **contexts** component is a list of context entries. Each context entry has exactly three elements:
-
-- Cluster
-- Namespace
-- User
-
-The **cluster** element is the name of one of the clusters in the clusters component. The **namespace** element is the name of a namespace of this cluster. And the **user** element is the name of one of the users in the users component.
-
-The purpose of a context is to bundle elements that are needed for a request (cluster, user, and namespace), so that they can referenced as a single entity.
-
-Finally, the **current context** component is simply a pointer to one of the contexts in the contexts component. This target context is generally known as the "current context* of the kubeconfig configuration.
-
-Whenever you use kubectl, it considers the **current context**. That means, when you issue a command like `kubectl get pods`, then kubectl connects to the cluster found in the **cluster** of the current context, authenticates the request using the credentials found in the **user** of the current context, and applies the Kubernetes operation to the Kubernetes namespace found in the **namespace** of the current context.
+At any time, one of these contexts is set as the **current context**. Whenever kubectl reads a kubeconfig file, it connects to the cluster of the current context (using the corresponding authentication mechanism) and it uses the namespace that is also set in the current context.
 
 > Note that it's possible to overwrite each of these elements for every kubectl command with the `--cluster`, `--namespace`, and `--user` options. You can also overwrite the current context with the `--context` option.
 
-### How are kubeconfig files created?
+That means, to switch to another cluster, you can just change the current context in your kubeconfig file, as shown in the following diagram:
 
-If you're already working with one or more clusters, then you must have a kubeconfig file (for example, the default `~/.kube/config`). Most probably you didn't write this file yourself, so how did it get there?
+![](kubeconfig-change-context.png)
 
-If you created your clusters with a managed Kubernetes service, such as [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com/eks/) or [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/), then it was either the cluster creation command or a dedicated command that created or updated your kubeconfig file.
+Once this is done, the next invocation of kubectl will use the new context and thus connect to your desired cluster.
 
-The dedicated commands that create or update a kubeconfig file with the information of a specific cluster are as follows for Amazon EKS and GKE, respectively:
+Similarly, to switch to another namespace in the same cluster, you can change the namespace entry of the current context, as shown here:
 
-- `aws eks update-kubeconfig -name <cluster>`
-- `gcloud container clusters get-credentials <cluster>`
+![](kubeconfig-change-namespace.png)
 
-What these commands do is adding a **cluster**, **user** and **context** element to your kubeconfig file. As explained in the last subsection, the **cluster** element contains the URL of the API server of the given cluster. The **user** element contains authentication credentials for this cluster. And the **context** element points to these new cluster and user elements and usually specifies the default namespace (the namespace element may be absent in a context, in which case, the default namespace is assumed).
+Now, the next time kubectl is invoked, it will apply its Kubernetes operations to the new namespace.
 
-The effect of all this is that you now have a new context in your kubeconfig file that you can use to connect to the new cluster.
+The tools that are presented in the next section all perform exactly these changes to your kubeconfig file.
 
-Apart from that, kubectl also provides native commands for editing kubeconfig files. These are:
+### Approaches to change contexts and namespaces
 
-- `kubectl config set-cluster`
-- `kubectl config set-context`
-- `kubectl config set-credential`
-- `kubectl config use-context`
+Here are the approaches and tools you can use to effortlessly switch between clusters and namespaces.
 
-However, you usually don't need to use these commands if you use managed Kubernetes services. And by no means you ever need create or update a kubeconfig manually.
+#### kubectx
 
-The next subsection explains why you might want to change the current context and how you can do it efficiently without manually editing the kubeconfig file.
+The most popular approach for these tasks is the [kubectx](https://github.com/ahmetb/kubectx/) project. This software provides two commands called `kubectx` and `kubens` which allow you to switch between contexts and namespaces, respectively. Under the hood, these commands perform exactly the operations that have been explained in the previous section.
 
-### Changing contexts
+You can install kubectx according to the instructions [here](https://github.com/ahmetb/kubectx/#installation) (it is distributed as a Homebrew formula, as well as a Debian package).
 
-Imagine you have a bunch of entries from different clusters in your kubeconfig file. At any point in time, you are using one specific context (that is, a combination of a cluster, user, and namespace). At some point, you will want to change to another context.
+A particularly useful feature of kubectx is the [**interactive mode**](https://github.com/ahmetb/kubectx/#interactive-mode). It allows you to select the target context or namespace interactively through a fuzzy search. This can be extremely useful if you have long and cryptic context names like the ones generated by managed Kubernetes services like [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com/eks/) or [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/).
 
-There are multiple reasons that you want to change to another context. The most common is probably that you want to work on another cluster. But it's also imaginable that you want to change to a context that uses the same cluster and namespace, but a different user (thus switching Kubernetes users). Or you may want to change to a context that uses the same cluster and user, but a different namespace (thus switching namespaces, which will be the topic of the [next section](#changing-namespaces)).
+The interactive mode depends on a third-party tool called [fzf](https://github.com/junegunn/fzf), which provides the fuzzy search interace. You must install fzf in order to use the interactive mode of kubectx.
 
-In any case, changing contexts is done by changing the value of the **current context** field in the kubeconfig file. This section shows you how you can do this efficiently.
+fzf (meaning *fuzzy finder*) is an extremely useful and versatile tool. In a nutshell, it reads lines from stdin, lets the user select one of these lines by a fuzzy search query, and writes the selected line to stdout. You will see fzf again in the alternative tools below.
 
-But before that, let's take a step back and think about the tasks that you typically have to do when you work with multiple contexts. They include the following:
+#### Aliases
 
-- Get the current context
-- List all contexts
-- Change the current context
+kubectx is a full-blown software package that allows you to make some edits to your kubeconfig files. But actually, you can achieve the same thing in a much simpler way by using native kubectl commands.
 
-All these tasks could be done by inspecting or editing your kubeconfig file. But that's tedious and we want to have it simpler.
+kubectl provides a whole suite of commands editing kubeconfig files. The relevant ones for switching between clusters and namespaces are those:
 
-If you look at kubectl, you see that it actually provides commands for exactly these tasks:
+- `kubectl config get-contexts`: list all contexts
+- `kubectl config current-context`: get the current context
+- `kubectl config use-context`: switch the current context
+- `kubectl config set-context`: edit a context
 
-- Get the current context
-    ~~~bash
-    kubectl config current-context
-    ~~~
-- List all contexts
-    ~~~bash
-    kubectl config get-contexts
-    ~~~
-- Change the current context
-    ~~~bash
-    kubectl config use-context <context>
-    ~~~
+However, using these commands directly is not very convenient. But what you can do is wrapping them into shell aliases so that you can execute them more easily. 
 
-That's already better than working on the kubeconfig file directly. However, using these commands is still not very efficient for reasons explained in the following.
+This also allows you to enhance them with additional tools to produce a streamlined user experience. In particular, you can combine them with [fzf](https://github.com/junegunn/fzf) (also used by kubectx) to allow you to select the target context and namespace interactively.
 
-First, the commands are relatively long to type (even with command completion it still takes some time to enter them). Second, for changing the context, you need to enter the name of the new context. Managed services like Amazon EKS and GKE create pretty long context names that are not easy to type. So, if you use these services, you would probably have to copy-paste the context names, which is very tedious. You could also use command completion for the context names, but if the contexts have common prefixes (which is often the case with auto-generated contexts), this is still not an optimal solution.
+Below is an example set of such aliases. There is an alias for each of those operations:
 
-Our ultimate solution is to create short shell aliases that address both of these problems. Below are the definitions of these aliases:
+- Get the current context/namespace (`kcc`/`kcn`)
+- List all contexts/namespaces (`klc`/`kln`)
+- Switch to another context/namespace (`ksc`/`ksn`)
 
 ~~~bash
-# Get current context
+# Contexts
 alias kcc='kubectl config current-context'
-# List all contexts
 alias klc='kubectl config get-contexts -o name | sed "s/^/  /;\|$(kcc)|s/ /*/"'
-# Change current context
 alias ksc='kubectl config use-context "$(klc | fzf -e | sed "s/^..//")"'
-~~~
-
-And here you can see them in action:
-
-![](todo.gif)
-
-As you can see, you can now carry out all tasks by just typing three letters, and you can select the new context with a convenient fuzzy search (how this works will be explained below).
-
-In general, the aliases build on the kubectl commands shown above and extend them with tools like *sed* and command substitution in classical UNIX manner (I'm omitting to explain the application of these tools in detail, because this is not specific to kubectl or Kubernetes).
-
-To use these aliases you just have to copy the alias definitions to your `~/.bashrc` or `~/.zshrc` file.
-
-> All aliases work for both Bash and Zsh.
-
-However, before you start using these aliases, some notes are necessary.
-
-First, some aliases have invocations of other aliases in their definition. This means that you must maintain the order of the alias definitions (every alias must be defined before it is invoked). Furthermore, if you rename an alias, you must rename all invocations of the alias too.
-
-Second, the `ksc` alias (changing context) depends on a tool called [*fzf*](https://github.com/junegunn/fzf). This tool provides the fuzzy search interface that allows you to select a context by typing any parts of its name. You must install *fzf* on your system according to the instructions [here](https://github.com/junegunn/fzf#installation) in order to use the `ksc` alias.
-
-*fzf* stands for *fuzzy finder* and is an amazingly useful and versatile tool. In essence, it reads lines from stdin, and lets the user select one of these lines with a fuzzy search. The selected line is then written to stdout. *fzf* has uses much beyond of what is shown here, and you will see it again in the next section about changing namespaces.
-
-
-### Changing namespaces
-
-Imagine you're working with a specific cluster in a specific namespace and now want to switch to another namespace (for example, from *dev* to *prod*). One solution would be to use the `--namespace` option with kubectl. But if you want to use the new namespace for more than a single operation, this is not an efficient solution.
-
-In that case, the way to go is to update your kubeconfig configuration so that the new namespace is permanently set (until you change it again).
-
-In general, there are two ways to achieve this:
-
-- Change to a context with the same cluster and user, but a different namespace (requires you to create this context first).
-- Change the namespace entry of the current context.
-
-Both are legitimate solutions. However, in practice, people often prefer the second solution. The reason is that it doesn't increase the number of contexts (that you need to deal with when you change contexts) and it keeps the kubeconfig file small. Furthermore, people often have a single context per cluster (as created by some managed Kubernetes service command) and this solution maintains this property.
-
-So, with this solution you are going to edit the **namespace** entry of the **context** pointed to by the **current context** field. Compare this with the solution for changing contexts from the last subsection where you edited the **current context** field.
-
-Before investigating how to implement this, let's look at the typical tasks that you have to do when working with multiple namespaces:
-
-- Get the current namespace
-- List all namespaces
-- Change the current namespace
-
-This is analogous to the context tasks from the last subsection. Also analogous to the contexts, we are going to implement these tasks as convenient shell aliases.
-
-The definitions of of these aliases are shown below:
-
-~~~bash
-# Get current namespace
-alias kcn='kubectl config get-contexts --no-headers "$(kubectl config current-context)" | awk "{print \$5}" | sed "s/^$/default/"'
-# List all namespaces
+# Namespaces
+alias kcn='kubectl config get-contexts --no-headers "$(kcc)" | awk "{print \$5}" | sed "s/^$/default/"'
 alias kln='kubectl get -o name ns | sed "s|^.*/|  |;\|$(kcn)|s/ /*/"'
-# Change current namespace
 alias ksn='kubectl config set-context --current --namespace "$(kln | fzf -e | sed "s/^..//")"'
 ~~~
 
-And here you can see them in action:
+Here you can see the aliases in action:
 
 ![](todo.gif)
 
-As you can see, the aliases work pretty similarly to the context aliases. Also, the design principles of these aliases are similar to the context aliases. In particular, native kubectl commands are used to get raw data, which is then processed with tools like *sed* and *awk*.
+To use the aliases yourself, you just need to copy their definitions to your `~/.bashrc` or `~/.zshrc` file (all aliases work for both Bash an Zsh). Note that these aliases also depend on fzf, so you have to [install it](https://github.com/junegunn/fzf#installation) in order to make them work.
 
-To use these aliases you just have to copy the alias definitions to your `~/.bashrc` or `~/.zshrc` file.
+#### Plugins
 
-> All aliases work for both Bash and Zsh.
+This approach anticipates something that will be explained in depth in a [later section](#extend-kubectl-with-plugins), namely kubectl plugins. Kubectl allows to install plugins that can be invoked like native commands. The mechanism is extremely easy. If you have an executable named `kubectl-foo`, and it is in your `PATH`, then you can invoke it as `kubectl foo`.
 
-Some notes about these aliases are appropriate too.
+It would be nice to have functionality for switching contexts and namespaces available as plugins. So you could, for example, change the context with `kubectl ctx` and change the namespace with `kubectl ns`. In this way, you don't need to use separate commands for these tasks (like with [kubectx](https://github.com/ahmetb/kubectx)), and the plugin names are probably easier to remember than the short alias names proposed above.
 
-First, the namespace aliases are a bit more complex than the context aliases. This is due to the fact that contexts are first-class citizens of kubeconfig (and have native kubectl commands to manage them), whereas namespaces are not. Rather, namespaces are a property of each cluster, and they are included in kubeconfig contexts mainly for convenience. 
+For this reason, I created two such plugins named [**kubectl-ctx**](https://github.com/weibeld/kubectl-ctx) and [**kubectl-ns**](https://github.com/weibeld/kubectl-ns). The installation is extremely easy. Just copy the shell script to any location in your `PATH`, make it executable, and that's it! Now you can change your context with `kubectl ctx` and change your namespace with `kubectl ns`.
 
-Second, as for the context aliases, some aliases have invocation of other aliases in their definition. So, you must maintain their relative order, and if you rename an alias, don't forget to rename all its invocations too. Furthermore, one of the aliases (`ksn` for switching to a new namespace) depends on [*fzf*](https://github.com/junegunn/fzf) too. So you must [install](https://github.com/junegunn/fzf#installation) this tool in order to use this alias.
+The implementation of the plugins is based on the alias commands from the last section, and also depends on fzf. So, you must [install fzf](https://github.com/junegunn/fzf#installation) in order to use the plugins.
 
-Third, the list of namespaces of a cluster must be obtained from the API server. It can't be obtained from the kubeconfig file like, for example, the list of contexts. This means that the `kln` alias (list namespaces) includes a network round-trip to the API server and thus may be much slower than the other aliases which only work on the local kubeconfig file.
+The [kubectl-ns](https://github.com/weibeld/kubectl-ns) plugin furthermore fixes a small annoyance that you might have noticed with the `kubens` command from [kubectx](https://github.com/ahmetb/kubectx) or the `kln` and `ksn` aliases from above. When you execute these commands, it might take a while until you see the list of namespaces that you can choose from. This is because the list of namespaces of a cluster is not locally saved and must be retrieved throught the Kubernetes API. That is, these commands include a round-trip to the API server, which is why they take longer to complete than the other commands.
 
-Last, since the `ksn` alias (changing namespaces) uses the `kln` alias (for presenting you with the full list of namespaces to choose from), the running time of `ksn` is at least as long as the one of `kln`.
+The kubectl-ns plugins fixes this by locally caching the list of namespaces of each cluster, so that the information is immediately available for subsequent requests.
 
-> The issue of long running times for getting the list of namespaces is alleviated by an alternative solution to manage namespaces that I provide [here](https://github.com/weibeld/kubectl-ns) as a kubectl plugin (see [*Extend kubectl with plugins*](#extend-kubectl-with-plugins)).
 
-### Alternative tools
-
-Switching contexts and namespaces is such a common task that others have addressed it too.
-
-A very popular solution is the [**kubectx**](https://github.com/ahmetb/kubectx) project. This project provides two commands, `kubectx` and `kubens`. These commands allow you to do basically the same things as our aliases, but with some additional bells and whistles.
-
-For example, `kubectx` provides completion of context names, a shortcut to switch back to the previous context, and sub-commands for renaming and deleting a context. `kubens` also provides completion of namespaces and a shortcut to switch back to the previous namespace.
-
-You can install and use `kubectx` and `kubens` as a more complete alternative to the aliases. However, one difference between the two solutions is worth pointing out: the source files of `kubectx` and `kubens` together have more than 400 lines of shell code, whereas our aliases make up just 6 (**six**) lines of code. If that isn't minimalistic! 😉
-
-I personally created two other tools called [**kubectl-ctx**](https://github.com/weibeld/kubectl-ctx) and [**kubectl-ns**](https://github.com/weibeld/kubectl-ns). These tools are based on the aliases from the last subsections, and they can be installed as kubectl plugins (kubectl plugins will be explained in the [*Extend kubectl with plugins*](#extend-kubectl-with-plugins) section). An advantage of kubectl-ns is that it locally caches the namespaces of each cluster so that the commands for listing and changing namespaces can omit requests to the API server and are thus much faster.
-
-## Save even more typing with more shell aliases
+## 5. Save more typing with auto-generated shell aliases
 
 Shell aliases are generally used to abbreviate long commands (including sub-commands, options, arguments, etc.) to short "alias" strings. Then, all you have to do is to type the alias string, and the shell expands the alias and executes the corresponding command, just as if you typed the long command yourself. Defining aliases pays off particularly for frequently used commands.
 
