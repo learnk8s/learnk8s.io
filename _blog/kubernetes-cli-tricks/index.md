@@ -533,72 +533,119 @@ The [kubectl-ns](https://github.com/weibeld/kubectl-ns) plugin furthermore fixes
 
 The kubectl-ns plugins fixes this by locally caching the list of namespaces of each cluster, so that the information is immediately available for subsequent requests.
 
+## 5. Save more typing with auto-generated aliases
 
-## 5. Save more typing with auto-generated shell aliases
+Shell aliases are a great way to save typing. You can wrap long and complicated commands in short aliases, and then execute them by just typing the alias name.
 
-Shell aliases are generally used to abbreviate long commands (including sub-commands, options, arguments, etc.) to short "alias" strings. Then, all you have to do is to type the alias string, and the shell expands the alias and executes the corresponding command, just as if you typed the long command yourself. Defining aliases pays off particularly for frequently used commands.
+> Note that in general you can do the same with shell functions as with shell aliases (and even in a more flexible way). However, aliases are still often used.
 
+Using aliases for kubectl makes a lot of sense, because commands can get quite long, and you use certain commands very frequently.
 
-With kubectl you naturally use certain commands very frequently (for example, `kubectl get pods`). So, it would be nice to define aliases for these commands, right? You would just need to figure out which commands you use most frequently, choose an alias name for each one, and then define the aliases in your `~/.bashrc` or `~/.zshrc` file (for example, as `alias kgpo='kubectl get pods'`).
+The [**kubectl-aliases**](https://github.com/ahmetb/kubectl-aliases) project takes this idea seriously. It defines about **800 aliases** for common kubectl commands. Among them ar alises like `k` for `kubectl` and `kding` for `kubectl describe ingress`. You can explore all the alias definitions [here](https://github.com/ahmetb/kubectl-aliases/blob/master/.kubectl_aliases).
 
-> In the following, the notation `~/*rc` is used to refer to either `~/.bashrc` or `~/.zshrc`.
+You must be wondering how you could possible remember 800 aliases? Well, actually you don't need to remember them, because they are all auto-generated according to a simple scheme, which is shown in the following table (taken from a [blog post](https://ahmet.im/blog/kubectl-aliases/) of the kubectl-aliases author):
 
-But there's a better solution. There's a project called [*kubectl-aliases*](https://github.com/ahmetb/kubectl-aliases) which defines **800 aliases** for frequently used kubectl commands. You can just include these alias definitions in your `~/*rc` file and start using them immediately.
+![](kubectl-aliases.png)
 
-> All aliases in *kubectl-aliases* work with both, Bash and Zsh.
+All aliases start with `k` (standing for `kubectl`) and then you can append optional components from left to right, as shown in the above table.
 
-To install the project, just download the `.kubectl_aliases` file (which contains all the alias definitions) from the  GitHub repository [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba), and source it in your `~/*rc` file:
+Here are some example aliases and the commands that they stand for:
+
+- `k` &#10230; `kubectl`
+- `kg` &#10230; `kubectl get`
+- `kgpo` &#10230; `kubectl get pods`
+- `kgpooyaml` &#10230; `kubectl get pods -o yaml`
+- `ksysgpooyaml` &#10230; `kubectl -n kube-system get pods -o yaml`
+
+If you get the hang of this scheme (explained also [here](https://github.com/ahmetb/kubectl-aliases#syntax-explanation)), you can easily deduce the alias name from the command that you want to execute.
+
+The nature of aliases allows to append any arguments to an alias on the command-line. If, for example, you want to get the YAML definition of a *specific* pod (not of all pods), you can just append the pod name to the `kgpooyaml` alias:
+
+~~~bash
+kgpooyaml test-pod
+~~~
+
+This will actually execute `kubectl get pods -o yaml test-pod`, which is a valid kubectl command that does exactly what you want. 
+
+You could also use, for example, the `kg` alias for resources for which no aliases exist. For example, if you want to get all ReplicaSets, you could run `kg replicasets` (or using the shortname `kg rs`). Or you could use the `k` alias to start *any* kubectl command, for example, `k explain pod`.
+
+### Installation
+
+The installation of kubectl-aliases is very easy. The only thing you have to do is download the [`.kubectl-aliases`](https://raw.githubusercontent.com/ahmetb/kubectl-aliases/master/.kubectl_aliases) file (which contains all the alias definitions), and source it in your `~/.bashrc` or `~/.zshrc` file:
 
 ~~~bash
 source ~/.kubectl_aliases
 ~~~
 
-You might wonder how you could possibly remember 800 aliases? Well, actually you don't need to. The aliases in `.kubectl_aliases` are all auto-generated according to a simple scheme, which is shown in the following figure (taken from a [blog post](https://ahmet.im/blog/kubectl-aliases/) of the maker of the project):
+> Note that all aliases work for both Bash and Zsh.
 
-![](kubectl-aliases.png)
+After restarting your shell, all the aliases should be ready to use!
 
-All aliases start with `k`, and then you can append components from left to right, according to the above figure (the `sys` component is optional). Here are some example aliases and the commands that they stand for:
+### Command completion
 
-- `k` &#10230; kubectl
-- `kg` &#10230; `kubectl get`
-- `kgpo` &#10230; `kubectl get pods`
-- `kgpooyaml` &#10230; `kubectl get pods -o yaml`
+The [first tip](#1-save-typing-with-command-completion) in this article was about enabling command completion, which allows you to auto-complete things like kubectl sub-commands, options, resource names, and other arguments. 
 
-And so on, for all the possible combinations. So, if you want to list all pods, you can just type `kgpo`. If you want to get a specific pod, you can type `kgpo <pod>` (where `<pod>` is the name of the pod you want to retrieve). If you want to get the YAML specification of a specific pod, you can type `kgpooyaml <pod>`.
+You probably expect command completion to also work with the aliases. Imagine you type the following:
 
-Nothing prevents you from using these aliases only as parts of your commands. For example, you can use `k` at any place where you would type kubectl otherwise. This means, you can type `k api-resources` (since there's no alias for this command as a whole). Or you can type `kg roles` (since there are no aliases defined for *role* resources). Just look at the command an alias stands for, and you can append further arguments to the alias at will. This allows you to minimise typing even fore use cases that are not explicitly covered by *kubectl-aliases*.
-
-If you use Zsh, it gets even better. The kubectl command completion works with the aliases too. That means, you can type, for example, `kgpo [tab][tab]` and Zsh will complete the available pod names for you. Like this, you can combine two typing reduction mechanisms (aliases and completion) to an "ultra typing reduction" workflow.
-
-If you use Bash, the bad news is that completion for aliases doesn't work by default. The good news is that you can make it working quite easily, which is explained in the following. This will allow you to have your "ultra typing reduction" workflow" also on Bash.
-
-### Making alias completion work with Bash
-
-The problem with Bash is that, unlike Zsh, it doesn't expand aliases before attempting command completion on them. So, for example, if you type `kgpo` and hit *Tab*, then Bash tries to find a completion specification for a command  called `kgpo`, which of course doesn't exist. The solution to this problem is a project called [*complete-alias*](https://github.com/cykerway/complete-alias).
-
-This project provides a Bash function called `_complete_alias`. If you specify this function as the completion specification of any alias (using the [`complete`](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html) builtin), it "magically" makes completion work (it's actually not "magic" and I will briefly explain how it works below).
-
-For example, if you want to enable completion for the `kgpo` alias, you have to execute the following command:
-
-~~~bash
-complete -F _complete_alias kgpo
+~~~
+kgpooyaml [tab][tab]
 ~~~
 
-And this works with *any* alias (hence, *complete-alias* is very useful in general, not just for *kubectl-aliases*).
+This should display all the pod names, exactly as if you typed `kubectl get pods -o yaml [tab][tab]`. There should be no difference regarding auto-completion whether you use aliases or the full commands.
 
-Let's first look at how to install *complete-alias*, and then how to run a sequence of commands like the above for every alias in *kubectl-aliases*.
+If you use **Zsh**, then there is good news for you. Command completion for aliases works exactly like that by default. So you can just go on auto-completing all the aliases as you would the full commands.
 
-Installing *complete-alias* itself is easy, but it depends on [*bash-completion*](https://github.com/scop/bash-completion) (presented earlier in this post). Most probably you have *bash-completion* already installed. If not, then you have to install it now according to the instructions given in section [*Shell Completion*](#shell-completion).
+If you use **Bash** (as probably the majority of people), then there is good and bad news. The bad news is that command completion for aliases doesn't work natively in Bash. The good news is that it can be made working quite easily, which is explained in the following section.
 
-> **Important note for macOS users:** Apple includes an outdated version of Bash (version 3.2) in macOS. With this version, you are restricted to an old version of *bash-completion* that does **not** work with *complete-alias*. This means, if you use the default version of Bash, the below instructions will **not** work for you. The solution is to install a newer version of Bash on your macOS and set it as your default shell. Instructions to do this can be found [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba).
+If you use Zsh, or don't care about command completion for aliases in Bash, you can [jump to the next tip →](#6-extending-kubectl-with-plugins).
 
-Installing *complete-alias* is done by simply downloading the project's [main file](https://raw.githubusercontent.com/cykerway/complete-alias/master/bash_completion.sh) (confusingly called `bash_completion.sh`) and source it in your `~/.bashrc` file. So, if you save the file, for example, as `~/.complete_alias`, then add the following command to your `~/.bashrc` file:
+### Make Bash completion work for aliases
+
+A general and reliable solution to make command completion work for aliases in Bash is the [**complete-alias**](https://github.com/cykerway/complete-alias) project. Technically, this software provides a Bash function called `_complete_alias`. If you set this function as the completion specification ([compspec](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html#Programmable-Completion)) of *any* alias, then it makes command completion "magically" work for this alias.
+
+Concretely, if you have an alias `foo`, then you just need to execute the following command (read [here](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html#Programmable-Completion-Builtins) about the `complete` builtin):
 
 ~~~bash
-source ~/.complete_alias
+complete -F _complete_alias foo
 ~~~
 
-Now, to enable completion for all the aliases of *kubectl-aliases*, you have to execute a command like `complete -F _complete_alias <alias>` for every alias of *kubectl-aliases*. You can do this by adding the following snippet to your `~/.bashrc` file (adapt `~/.kubectl_aliases` to the location of your *kubectl-aliases* file):
+And after that, command completion works for the `foo` alias exactly as it does for the alias command.
+
+Technically, the `_complete_alias` function looks at the aliased command, gets the completion suggestions for this command, and returns them to the shell. This is the reason that the same completion function can be used for *any* alias.
+
+The solution for our kubectl-aliases problem is to execute the above command for each alias of kubectl-aliases (a snippet that does this automatically will be shown further below).
+
+#### Install complete-alias
+
+complete-alias depends on the [**bash-completion**](https://github.com/scop/bash-completion) project. So, you first have to install bash-completion (if you haven't already), which you can do easily with various package managers.
+
+For example, on Debian-based systems:
+
+~~~bash
+sudo apt-get install bash-completion
+~~~
+
+Or on macOS:
+
+~~~bash
+brew install bash-completion@2
+~~~~
+
+> **Important note for macOS users:** complete-alias requires bash-completion 2 (indicated by the `@2` in the Homebrew formula). However, bash-completion 2 runs only on Bash 4.1+, and the default Bash version on macOS is 3.2. This means that complete-alias won't work on the default version of Bash on macOS. To make it work, you have to install a newer version of Bash, which is explained [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba). If you try to use complete-alias with bash-completion 1 and Bash 3.2, you will get an error of the form `_completion_loader: command not found`.
+
+Once bash-completion is installed, you can install **complete-alias**. All you have to do for this, is downloading the [`bash_completion.sh`](https://raw.githubusercontent.com/cykerway/complete-alias/master/bash_completion.sh) script and source it in your `~/.bashrc` file. So, for example:
+
+~~~bash
+source ~/bash_completion.sh
+~~~
+
+That's it! Now complete-alias is installed and ready to be used to enable command completion for your aliases.
+
+#### Enable completion for the kubectl aliases
+
+As mentioned, complete-alias provides the `_complete_alias` shell function, and you have to set this function as the completion function for all the aliases of kubectl-aliases.
+
+You can do this by adding the below snippet anywhere in your `~/.bashrc` file (just adapt the actual location of your `.kubectl-aliases` file):
 
 ~~~bash
 for _a in $(sed '/^alias /!d;s/^alias //;s/=.*$//' ~/.kubectl_aliases); do
@@ -606,9 +653,9 @@ for _a in $(sed '/^alias /!d;s/^alias //;s/=.*$//' ~/.kubectl_aliases); do
 done
 ~~~
 
-And that's it! Now completion should work with all the aliases. You can test it by typing, for example, `k [tab][tab]` or `kgpo [tab][tab]`.
+That's it!
 
-In case you wonder how the `_complete_alias` function can enable appropriate completion for *any* alias: this function internally expands the alias and looks at the aliased command. It then invokes *bash-completion* to retrieve the completion suggestions for the expanded command and return them to the shell.
+After restarting your shell, everything should be correctly configured so that you can now use command completion with all the 800 kubectl aliases!
 
 <!--
 - https://github.com/ahmetb/kubectl-aliases
@@ -638,9 +685,7 @@ In case you wonder how the `_complete_alias` function can enable appropriate com
     - Solution: install a newer version of Bash on macOS and use bash-completion 2.8
 -->
 
-<!--## Kubernetes Shells-->
-
-## Extend kubectl with plugins
+## 6. Extend kubectl with plugins
 
 Plugins are a kubectl feature that only few people know about. They have existed for a while, but the plugin system has been completely redesigned in **version 1.12** (released in September 2018) of kubectl. With the new plugin system, you can add custom sub-commands to kubectl as shown below:
 
