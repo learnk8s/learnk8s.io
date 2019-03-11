@@ -31,8 +31,8 @@ export async function syncEvents(log: (...args: any[]) => void, sdk: Sdk, organi
         log(`Event ${it.details.name.text} could not be found in the official list of events.`)
         return
       }
-      if (!isSameDescription(referenceEvent, it.details) || !isSameDate(referenceEvent, it.details)) {
-        log(`Updating description and starting date for ${it.details.name.text} (same desc: ${isSameDescription(referenceEvent, it.details)}, same date: ${isSameDate(referenceEvent, it.details)})`)
+      if (!isSameDescription(referenceEvent, it.details) || !isSameDate(referenceEvent, it.details) || !isSameVenue(referenceEvent, it.details, venues)) {
+        log(`Updating description and starting date for ${it.details.name.text} (same desc: ${isSameDescription(referenceEvent, it.details)}, same date: ${isSameDate(referenceEvent, it.details)}, same location: ${isSameVenue(referenceEvent, it.details, venues)})`)
         await upsertEvent(referenceEvent, venues, `/events/${it.id}/`, sdk)
       }
       if (!isSamePrice(referenceEvent, it.details)) {
@@ -42,10 +42,6 @@ export async function syncEvents(log: (...args: any[]) => void, sdk: Sdk, organi
           currencyCode: referenceEvent.offer.currency,
           price: referenceEvent.offer.price,
         }, sdk)
-      }
-      if (!isSameVenue(referenceEvent, it.details, venues)) {
-        log(`Updating event venue to ${referenceEvent.location.name} for ${venues.find(v => v.id === it.details.venue_id)}`)
-        await upsertEvent(referenceEvent, venues, `/events/${it.id}/`, sdk)
       }
     })
   } catch (error) {
@@ -90,6 +86,9 @@ function isSamePrice(a: CourseEvent, b: EventEventBrite) {
 }
 
 function isSameVenue(a: CourseEvent, b: EventEventBrite, venues: VenueEventBrite[]) {
+  if (isVenueOnline(a.location)) {
+    return true
+  }
   const venue = venues.find(it => it.name === a.location.name)
   if (!venue) {
     return false
