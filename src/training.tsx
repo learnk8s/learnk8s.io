@@ -190,7 +190,15 @@ export const venues = {
     countryCode: 'CA',
     address: null,
     postcode: null,
-  }
+  },
+  TorontoGK: {
+    name: 'Toronto Global Knowledge',
+    city: 'Toronto',
+    country: 'Canada',
+    countryCode: 'CA',
+    address: '2 Bloor Street East 31st Floor',
+    postcode: 'M4W 1A8',
+  },
 }
 const AdvancedDetails = {
   title: CourseName.ADVANCED,
@@ -302,7 +310,7 @@ export const courses: KubernetesCourse[] = [
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
-      location: venues.Toronto,
+      location: venues.TorontoGK,
       offer: {
         price: 3300,
         currency: CurrencyCode.CAD,
@@ -404,7 +412,7 @@ export const courses: KubernetesCourse[] = [
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
       details: AdvancedDetails,
-      location: venues.Toronto,
+      location: venues.TorontoGK,
       offer: {
         price: 3300,
         currency: CurrencyCode.CAD,

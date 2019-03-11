@@ -43,6 +43,10 @@ export async function syncEvents(log: (...args: any[]) => void, sdk: Sdk, organi
           price: referenceEvent.offer.price,
         }, sdk)
       }
+      if (!isSameVenue(referenceEvent, it.details, venues)) {
+        log(`Updating event venue to ${referenceEvent.location.name} for ${venues.find(v => v.id === it.details.venue_id)}`)
+        await upsertEvent(referenceEvent, venues, `/events/${it.id}/`, sdk)
+      }
     })
   } catch (error) {
     log('ERROR while running the main loop', error)
@@ -59,7 +63,7 @@ async function syncVenues(organisationId: string, sdk: Sdk): Promise<VenueEventB
 }
 
 async function getEventsFromEventBrite(organisationId: string, sdk: Sdk) {
-  const res = await sdk.request(`/organizations/${organisationId}/events?expand=ticket_classes`);
+  const res = await sdk.request(`/organizations/${organisationId}/events?expand=ticket_classes,venue`);
   const response = res as ResponseEvents;
   const events = response.events.map(it => {
     const $ = cheerio.load(it.description.html || '', { decodeEntities: false });
@@ -83,6 +87,14 @@ function isSameDate(a: CourseEvent, b: EventEventBrite) {
 function isSamePrice(a: CourseEvent, b: EventEventBrite) {
   if (b.ticket_classes.length === 0) return false
   return a.offer.price * 100 === b.ticket_classes[0].cost.value
+}
+
+function isSameVenue(a: CourseEvent, b: EventEventBrite, venues: VenueEventBrite[]) {
+  const venue = venues.find(it => it.name === a.location.name)
+  if (!venue) {
+    return false
+  }
+  return venue.id === b.venue_id
 }
 
 function upsertEvent(event: CourseEvent, venues: VenueEventBrite[], endpoint: string, sdk: Sdk) {
@@ -217,6 +229,7 @@ interface EventEventBrite {
       value: number
     }
   }[]
+  venue_id: string
 }
 
 interface VenueEventBrite {
