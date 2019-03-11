@@ -211,23 +211,6 @@ export const courses: KubernetesCourse[] = [
     description: 'Learn how to deploy and scale applications with Kubernetes.',
     events: [
     {
-      code: 'LK8S|MILAN|20190304',
-      startAt: moment('2019-03-04T09:30:00+01:00'),
-      timezone: Timezone.ROME,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Milan,
-      offer: {
-        price: 2050,
-        currency: CurrencyCode.EUR,
-        locale: 'it-IT',
-      },
-      language: Language.ITALIAN,
-      description: marked(cat(`${__dirname}/description_it.md`).toString(), {renderer}),
-      eventbriteLogoId: '53323631',
-    },
-    {
       code: 'LK8S|ONLINE|20190313',
       startAt: moment('2019-03-13T09:30:00+00:00'),
       duration: moment.duration(3, 'days'),

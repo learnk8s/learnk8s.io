@@ -39,4 +39,4 @@ You can find a list of [all the modules covered in Advanced Kubernetes Course](h
 You get all your money back if you cancel 14 days before the event starts.
 
 **How can I contact the organizer with any questions?**
-Please get in touch at (hello@learnk8s.io)[mailto:hello@learnk8s.io]
+Please get in touch at [hello@learnk8s.io](mailto:hello@learnk8s.io)
