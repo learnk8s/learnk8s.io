@@ -2,7 +2,7 @@ import React from 'react'
 import { LinkedNode, Redirect as R, getAbsoluteUrl, Website } from './sitemap'
 
 export const Redirect: React.StatelessComponent<{root: Website, currentPage: LinkedNode<R, object>, siteUrl: string}> = ({root, siteUrl, currentPage}) => {
-  const redirectUrl = getAbsoluteUrl(currentPage, siteUrl)
+  const redirectUrl = getAbsoluteUrl(currentPage.payload.redirectTo, siteUrl)
   return <html>
     <meta charSet='utf-8' />
     <title>Redirecting…</title>

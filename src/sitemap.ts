@@ -110,7 +110,7 @@ export interface CareersPage {
 export interface Redirect {
   type: PageType.REDIRECT
   url: string
-  redirectTo: string
+  redirectTo: LinkedNode<Page>
 }
 
 export interface ArticlePage {
@@ -159,6 +159,144 @@ function identity<T>(value: T): T {
 }
 
 export function sitemap(assets: typeof sitemapAssets) {
+  const deployLaravel = createNode({
+    page: identity<ArticlePage>({
+      type: PageType.ARTICLE,
+      url: '/kubernetes-deploy-laravel-the-easy-way',
+      seoTitle: 'Kubernetes: deploy Laravel the easy way ♦︎ Learnk8s',
+      pageDetails: {
+        title: 'Kubernetes: deploy Laravel the easy way',
+        description: `Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
+        openGraphImage: assets.chaos.url,
+      },
+      publishedDate: '2018-04-25',
+    }),
+    children: {}
+  })
+  const blogPosts = {
+    installingK8sOnWindows: createNode({
+      page: identity<ArticlePage>({
+        type: PageType.ARTICLE,
+        url: '/installing-docker-and-kubernetes-on-windows',
+        seoTitle: 'Getting started with Docker and Kubernetes on Windows 10 ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Getting started with Docker and Kubernetes on Windows 10',
+          description: `Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
+          openGraphImage: assets.k8sOnWindows.url,
+        },
+        publishedDate: '2018-06-05',
+      }),
+      children: {}
+    }),
+    chaosEngineering: createNode({
+      page: identity<ArticlePage>({
+        type: PageType.ARTICLE,
+        url: '/kubernetes-chaos-engineering-lessons-learned',
+        seoTitle: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1 ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1',
+          description: `When you deploy an app in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or a VM. The cluster routes the traffic to the nodes using a network proxy. But what happens when network proxy crashes?`,
+          openGraphImage: assets.chaos.url,
+        },
+        publishedDate: '2018-05-15',
+      }),
+      children: {}
+    }),
+    deployLaravel,
+    deployLaravelOld: createNode({
+      page: identity<Redirect>({
+        type: PageType.REDIRECT,
+        url: '/deploying-laravel-to-kubernetes',
+        redirectTo: deployLaravel,
+      }),
+      children: {}
+    }),
+    solarPlants: createNode({
+      page: identity<ArticlePage>({
+        type: PageType.ARTICLE,
+        url: '/kubernetes-on-solar-plants',
+        seoTitle: 'Cloud infrastructure for the Internet of Things: Kubernetes on solar plants ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Cloud infrastructure for the Internet of Things: Kubernetes on solar plants',
+          description: `Solar panels are getting cheaper, and are becoming an economically viable source of renewable energy in many parts of the world. For solar panels to operate efficiently, they need to be kept clean and pointed at an optimal angle to the sun that balances power generation and prevents overheating. An embedded computer is in charge of monitoring metrics and driving the actuators. But when you have thousands of solar panels and embedded computers how do you orchestrate software updates, monitor uptime and secure communications?`,
+          openGraphImage: assets.solar.url,
+        },
+        publishedDate: '2018-12-04',
+      }),
+      children: {}
+    }),
+    spotInstances: createNode({
+      page: identity<ArticlePage>({
+        type: PageType.ARTICLE,
+        url: '/kubernetes-spot-instances',
+        seoTitle: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes',
+          description: `Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
+          openGraphImage: assets.spot.url,
+        },
+        publishedDate: '2018-11-06',
+      }),
+      children: {}
+    }),
+    scalingTensorflow: createNode({
+      page: identity<ArticlePage>({
+        type: PageType.ARTICLE,
+        url: '/scaling-machine-learning-with-kubeflow-tensorflow',
+        seoTitle: 'Scaling Jupyter notebooks with Kubernetes and Tensorflow ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Scaling Jupyter notebooks with Kubernetes and Tensorflow',
+          description: `One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.`,
+          openGraphImage: assets.kubeflow.url,
+        },
+        publishedDate: '2019-01-09',
+      }),
+      children: {}
+    }),
+    scalingSpringBoot: createNode({
+      page: identity<ArticlePage>({
+        type: PageType.ARTICLE,
+        url: '/scaling-spring-boot-microservices',
+        seoTitle: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
+          description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
+          openGraphImage: assets.springboot.url,
+        },
+        publishedDate: '2018-07-11',
+      }),
+      children: {}
+    }),
+    smallerDockerImage: createNode({
+      page: identity<ArticlePage>({
+        type: PageType.ARTICLE,
+        url: '/smaller-docker-images',
+        seoTitle: '3 simple tricks for smaller Docker images ♦︎ Learnk8s',
+        pageDetails: {
+          title: '3 simple tricks for smaller Docker images',
+          description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
+          openGraphImage: assets.smaller.url,
+        },
+        publishedDate: '2018-02-12',
+      }),
+      children: {}
+    }),
+    whatIsKubernetes: createNode({
+      page: identity<ArticlePage>({
+        type: PageType.ARTICLE,
+        url: '/what-is-kubernetes',
+        seoTitle: 'What is Kubernetes? Optimise your hosting costs and efficiency ♦︎ Learnk8s',
+        pageDetails: {
+          title: 'What is Kubernetes? Optimise your hosting costs and efficiency',
+          description: `In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month.`,
+          openGraphImage: assets.kubebucks.url,
+        },
+        publishedDate: '2018-09-04',
+      }),
+      children: {}
+    })
+  }
+
   return createNode({
     page: identity<Homepage>({
       seoTitle: 'Learnk8s academy',
@@ -206,142 +344,7 @@ export function sitemap(assets: typeof sitemapAssets) {
           openGraphImage: assets.openGraph.url,
         },
       }),
-      children: {
-        installingK8sOnWindows: createNode({
-          page: identity<ArticlePage>({
-            type: PageType.ARTICLE,
-            url: '/installing-docker-and-kubernetes-on-windows',
-            seoTitle: 'Getting started with Docker and Kubernetes on Windows 10 ♦︎ Learnk8s',
-            pageDetails: {
-              title: 'Getting started with Docker and Kubernetes on Windows 10',
-              description: `Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
-              openGraphImage: assets.k8sOnWindows.url,
-            },
-            publishedDate: '2018-06-05',
-          }),
-          children: {}
-        }),
-        chaosEngineering: createNode({
-          page: identity<ArticlePage>({
-            type: PageType.ARTICLE,
-            url: '/kubernetes-chaos-engineering-lessons-learned',
-            seoTitle: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1 ♦︎ Learnk8s',
-            pageDetails: {
-              title: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1',
-              description: `When you deploy an app in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or a VM. The cluster routes the traffic to the nodes using a network proxy. But what happens when network proxy crashes?`,
-              openGraphImage: assets.chaos.url,
-            },
-            publishedDate: '2018-05-15',
-          }),
-          children: {}
-        }),
-        deployLaravel: createNode({
-          page: identity<ArticlePage>({
-            type: PageType.ARTICLE,
-            url: '/kubernetes-deploy-laravel-the-easy-way',
-            seoTitle: 'Kubernetes: deploy Laravel the easy way ♦︎ Learnk8s',
-            pageDetails: {
-              title: 'Kubernetes: deploy Laravel the easy way',
-              description: `Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
-              openGraphImage: assets.chaos.url,
-            },
-            publishedDate: '2018-04-25',
-          }),
-          children: {}
-        }),
-        deployLaravelOld: createNode({
-          page: identity<Redirect>({
-            type: PageType.REDIRECT,
-            url: '/deploying-laravel-to-kubernetes',
-            redirectTo: '/kubernetes-deploy-laravel-the-easy-way',
-          }),
-          children: {}
-        }),
-        solarPlants: createNode({
-          page: identity<ArticlePage>({
-            type: PageType.ARTICLE,
-            url: '/kubernetes-on-solar-plants',
-            seoTitle: 'Cloud infrastructure for the Internet of Things: Kubernetes on solar plants ♦︎ Learnk8s',
-            pageDetails: {
-              title: 'Cloud infrastructure for the Internet of Things: Kubernetes on solar plants',
-              description: `Solar panels are getting cheaper, and are becoming an economically viable source of renewable energy in many parts of the world. For solar panels to operate efficiently, they need to be kept clean and pointed at an optimal angle to the sun that balances power generation and prevents overheating. An embedded computer is in charge of monitoring metrics and driving the actuators. But when you have thousands of solar panels and embedded computers how do you orchestrate software updates, monitor uptime and secure communications?`,
-              openGraphImage: assets.solar.url,
-            },
-            publishedDate: '2018-12-04',
-          }),
-          children: {}
-        }),
-        spotInstances: createNode({
-          page: identity<ArticlePage>({
-            type: PageType.ARTICLE,
-            url: '/kubernetes-spot-instances',
-            seoTitle: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes ♦︎ Learnk8s',
-            pageDetails: {
-              title: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes',
-              description: `Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
-              openGraphImage: assets.spot.url,
-            },
-            publishedDate: '2018-11-06',
-          }),
-          children: {}
-        }),
-        scalingTensorflow: createNode({
-          page: identity<ArticlePage>({
-            type: PageType.ARTICLE,
-            url: '/scaling-machine-learning-with-kubeflow-tensorflow',
-            seoTitle: 'Scaling Jupyter notebooks with Kubernetes and Tensorflow ♦︎ Learnk8s',
-            pageDetails: {
-              title: 'Scaling Jupyter notebooks with Kubernetes and Tensorflow',
-              description: `One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.`,
-              openGraphImage: assets.kubeflow.url,
-            },
-            publishedDate: '2019-01-09',
-          }),
-          children: {}
-        }),
-        scalingSpringBoot: createNode({
-          page: identity<ArticlePage>({
-            type: PageType.ARTICLE,
-            url: '/scaling-spring-boot-microservices',
-            seoTitle: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes ♦︎ Learnk8s',
-            pageDetails: {
-              title: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
-              description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
-              openGraphImage: assets.springboot.url,
-            },
-            publishedDate: '2018-07-11',
-          }),
-          children: {}
-        }),
-        smallerDockerImage: createNode({
-          page: identity<ArticlePage>({
-            type: PageType.ARTICLE,
-            url: '/smaller-docker-images',
-            seoTitle: '3 simple tricks for smaller Docker images ♦︎ Learnk8s',
-            pageDetails: {
-              title: '3 simple tricks for smaller Docker images',
-              description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
-              openGraphImage: assets.smaller.url,
-            },
-            publishedDate: '2018-02-12',
-          }),
-          children: {}
-        }),
-        whatIsKubernetes: createNode({
-          page: identity<ArticlePage>({
-            type: PageType.ARTICLE,
-            url: '/what-is-kubernetes',
-            seoTitle: 'What is Kubernetes? Optimise your hosting costs and efficiency ♦︎ Learnk8s',
-            pageDetails: {
-              title: 'What is Kubernetes? Optimise your hosting costs and efficiency',
-              description: `In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month.`,
-              openGraphImage: assets.kubebucks.url,
-            },
-            publishedDate: '2018-09-04',
-          }),
-          children: {}
-        })
-      }
+      children: blogPosts
     }),
     contactUs: createNode({
       page: identity<ContactUsPage>({
@@ -425,7 +428,7 @@ export function sitemap(assets: typeof sitemapAssets) {
       page: identity<Redirect>({
         type: PageType.REDIRECT,
         url: '/infiniteconf2018',
-        redirectTo: '/scaling-machine-learning-with-kubeflow-tensorflow'
+        redirectTo: blogPosts.scalingTensorflow
       }),
       children: {}
     }),
@@ -544,7 +547,7 @@ export function sitemap(assets: typeof sitemapAssets) {
 
 export type Website = ReturnType<typeof sitemap>
 
-export interface LinkedNode<T, U extends object> {
+export interface LinkedNode<T, U = {}> {
   prev: LinkedNode<Page, any> | null
   next: LinkedNode<Page, any> | null
   payload: T
