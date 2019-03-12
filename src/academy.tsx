@@ -5,6 +5,7 @@ import {Image, Img, Script, Javascript, ExternalJavascript, ExternalScript} from
 import {material, assets as materialAssets} from './material'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
+import { PrimaryButton } from './homepage';
 
 export const assets = (vendorId: string) => ({
   page: {
@@ -242,7 +243,7 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
 
     </section>
 
-    <section className='pv5'>
+    <section className='pt5 pb4'>
 
       <PackageList>
         <PackageLeft heading='Individual' subheading='Full membership plan'>
@@ -306,6 +307,12 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
         </PackageRight>
       </PackageList>
 
+    </section>
+
+    <section className='tc mv4'>
+      <p className='f2 navy b tc'>Try before you buy</p>
+      <p className='lh-copy f4 black-70 measure center tc'>You can sign-up to a demo account and have look at the content and the structure of the course before you commit to it.</p>
+      <PrimaryButton text='Try now →' href='https://academy.learnk8s.io/trial'/>
     </section>
 
     <YourTeam mailto={mailto(privateGroupEnquiry)}/>
