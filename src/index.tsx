@@ -23,6 +23,7 @@ import { syncEvents } from './eventbrite'
 import eventbrite from 'eventbrite'
 import { ok } from 'assert'
 import {generateRSS} from './rss'
+import { renderWebAppManifest, assets as assetsLayout, renderBrowserConfig } from './layout'
 
 export function run(options: Settings) {
   return function mount(root: Sitemap.Website) {
@@ -43,55 +44,59 @@ export function run(options: Settings) {
 function render(node: LinkedNode<Page, object>, root: Sitemap.Website, {siteUrl, vendorId}: Settings) {
   const page = node.payload
   const fullUrl = getFullUrl(node)
-  const path = `_site${resolve('.', fullUrl, 'index.html')}`
-  mkdir('-p', `_site${resolve('.', fullUrl)}`)
+  function generatePath() {
+    const path = `_site${resolve('.', fullUrl, 'index.html')}`
+    mkdir('-p', `_site${resolve('.', fullUrl)}`)
+    return path
+  }
+
   switch (page.type) {
     case PageType.HOMEPAGE: {
-      writeFileSync(path, renderToStaticMarkup(<Homepage root={root} currentPage={node as LinkedNode<Sitemap.Homepage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsHomepage)} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<Homepage root={root} currentPage={node as LinkedNode<Sitemap.Homepage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsHomepage)} />))
       return
     }
     case PageType.TRAINING: {
-      writeFileSync(path, renderToStaticMarkup(<Training root={root} currentPage={node as LinkedNode<TrainingPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsTraining)} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<Training root={root} currentPage={node as LinkedNode<TrainingPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsTraining)} />))
       return
     }
     case PageType.ACADEMY: {
-      writeFileSync(path, renderToStaticMarkup(<Academy root={root} currentPage={node as LinkedNode<Sitemap.AcademyPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsAcademy(vendorId))} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<Academy root={root} currentPage={node as LinkedNode<Sitemap.AcademyPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsAcademy(vendorId))} />))
       return
     }
     case PageType.CONSULTING: {
-      writeFileSync(path, renderToStaticMarkup(<Consulting root={root} currentPage={node as LinkedNode<Sitemap.ConsultingPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsConsulting)} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<Consulting root={root} currentPage={node as LinkedNode<Sitemap.ConsultingPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsConsulting)} />))
       return
     }
     case PageType.CONTACT_US: {
-      writeFileSync(path, renderToStaticMarkup(<ContactUs root={root} currentPage={node as LinkedNode<Sitemap.ContactUsPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsContactUs)} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<ContactUs root={root} currentPage={node as LinkedNode<Sitemap.ContactUsPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsContactUs)} />))
       return
     }
     case PageType.CAREERS: {
-      writeFileSync(path, renderToStaticMarkup(<Careers root={root} currentPage={node as LinkedNode<Sitemap.CareersPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsCareers)} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<Careers root={root} currentPage={node as LinkedNode<Sitemap.CareersPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsCareers)} />))
       return
     }
     case PageType.TERMS_AND_CONDITIONS: {
-      writeFileSync(path, renderToStaticMarkup(<TermsAndConditions root={root} currentPage={node as LinkedNode<Sitemap.TermsAndConditionsPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsTermsAndConditions)} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<TermsAndConditions root={root} currentPage={node as LinkedNode<Sitemap.TermsAndConditionsPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsTermsAndConditions)} />))
       return
     }
     case PageType.ABOUT_US: {
-      writeFileSync(path, renderToStaticMarkup(<AboutUs root={root} currentPage={node as LinkedNode<Sitemap.AboutUsPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsAboutUs)} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<AboutUs root={root} currentPage={node as LinkedNode<Sitemap.AboutUsPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsAboutUs)} />))
       return
     }
     case PageType.REDIRECT: {
-      writeFileSync(path, renderToStaticMarkup(<Redirect root={root} currentPage={node as LinkedNode<Sitemap.Redirect, object>} siteUrl={siteUrl} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<Redirect root={root} currentPage={node as LinkedNode<Sitemap.Redirect, object>} siteUrl={siteUrl} />))
       return
     }
     case PageType.NEWSLETTER: {
-      writeFileSync(path, renderToStaticMarkup(<Newsletter root={root} currentPage={node as LinkedNode<Sitemap.Newsletter, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsNewsletter)} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<Newsletter root={root} currentPage={node as LinkedNode<Sitemap.Newsletter, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsNewsletter)} />))
       return
     }
     case PageType.BLOG: {
-      writeFileSync(path, renderToStaticMarkup(<Blog root={root} currentPage={node as LinkedNode<Sitemap.Blog, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsBlog)} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<Blog root={root} currentPage={node as LinkedNode<Sitemap.Blog, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsBlog)} />))
       return
     }
     case PageType.RSS: {
-      writeFileSync(path, generateRSS(root, siteUrl))
+      writeFileSync(generatePath(), generateRSS(root, siteUrl))
       return
     }
     case PageType.ARTICLE: {
@@ -103,7 +108,15 @@ function render(node: LinkedNode<Page, object>, root: Sitemap.Website, {siteUrl,
       return
     }
     case PageType.LANDING: {
-      writeFileSync(path, renderToStaticMarkup(<Landing root={root} currentPage={node as LinkedNode<Sitemap.LandingPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsLanding)} />))
+      writeFileSync(generatePath(), renderToStaticMarkup(<Landing root={root} currentPage={node as LinkedNode<Sitemap.LandingPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsLanding)} />))
+      return
+    }
+    case PageType.WEB_APP_MANIFEST: {
+      writeFileSync(`_site${resolve('.', fullUrl)}`, renderWebAppManifest(optimiseAssets(assetsLayout)))
+      return
+    }
+    case PageType.BROWSER_CONFIG: {
+      writeFileSync(`_site${resolve('.', fullUrl)}`, renderBrowserConfig(optimiseAssets(assetsLayout)))
       return
     }
     default:

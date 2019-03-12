@@ -18,6 +18,8 @@ export const enum PageType {
   RSS = 'RSS',
   NOT_FOUND = 'NOT_FOUND',
   LANDING = 'LANDING',
+  WEB_APP_MANIFEST = 'WEB_APP_MANIFEST',
+  BROWSER_CONFIG = 'BROWSER_CONFIG',
 }
 
 export type Page =
@@ -35,7 +37,9 @@ export type Page =
   ArticlePage |
   RSS |
   NotFoundPage |
-  LandingPage
+  LandingPage |
+  WebAppManifest |
+  BrowserConfig
 
 export interface Homepage {
   type: PageType.HOMEPAGE
@@ -140,6 +144,16 @@ export interface LandingPage {
   pageDetails: PageDetails
   location: Venue
   timezone: Timezone
+}
+
+export interface WebAppManifest {
+  type: PageType.WEB_APP_MANIFEST
+  url: string
+}
+
+export interface BrowserConfig {
+  type: PageType.BROWSER_CONFIG
+  url: string
 }
 
 export const sitemapAssets = {
@@ -542,6 +556,20 @@ export function sitemap(assets: typeof sitemapAssets) {
       }),
       children: {}
     }),
+    webAppManifest: createNode({
+      page: identity<WebAppManifest>({
+        type: PageType.WEB_APP_MANIFEST,
+        url: '/manifest.json'
+      }),
+      children: {}
+    }),
+    browserConfig: createNode({
+      page: identity<BrowserConfig>({
+        type: PageType.BROWSER_CONFIG,
+        url: '/browserconfig.xml'
+      }),
+      children: {}
+    })
   }})
 }
 

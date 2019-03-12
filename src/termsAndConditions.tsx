@@ -16,7 +16,7 @@ export const assets = {
 }
 
 export const TermsAndConditions: React.StatelessComponent<{root: Website, currentPage: LinkedNode<TermsAndConditionsPage, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage}>
+  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
       <Navbar root={root} assets={assets.layout}/>

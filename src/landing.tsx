@@ -42,7 +42,7 @@ export const Landing: React.StatelessComponent<{root: Website, currentPage: Link
   function onlyCityOrOnline(event: CourseEvent) {
     return (isVenueOnline(event.location) && event.timezone === currentPage.payload.timezone) || event.location.city === currentPage.payload.location.city
   }
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage}>
+  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
     {courses.map((course, index) => {
       return <JsonLd<Course> key={index} item={{
         '@type': 'Course',

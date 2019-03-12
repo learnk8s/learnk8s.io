@@ -14,6 +14,13 @@ export const assets = {
   tick: Image({url: 'assets/tick.svg', description: 'Tick'}),
   plus: Image({url: 'assets/plus.svg', description: 'Plus'}),
   smallCargo: Image({url: 'assets/small_cargo.svg', description: 'Small cargo'}),
+  appleTouchIcon: Image({url: 'assets/apple-touch-icon.png', description: 'Apple touch icon'}),
+  favicon16: Image({url: 'assets/favicon-32x32.png', description: 'Favicon'}),
+  favicon32: Image({url: 'assets/favicon-16x16.png', description: 'Favicon'}),
+  safariPinnedTab: Image({url: 'assets/safari-pinned-tab.svg', description: 'Safari Pinned Tab'}),
+  android192: Image({url: 'assets/android-chrome-192x192.png', description: 'Android Chrome'}),
+  android384: Image({url: 'assets/android-chrome-384x384.png', description: 'Android Chrome'}),
+  mstyle: Image({url: 'assets/mstile-150x150.png', description: 'MS Style'}),
 }
 
 type AllowedPages =
@@ -31,7 +38,7 @@ type AllowedPages =
   TermsAndConditionsPage |
   LandingPage
 
-export const Layout: React.StatelessComponent<{siteUrl: string, currentPage: LinkedNode<AllowedPages, object>, root: Website}> = ({siteUrl, currentPage, children, root}) => {
+export const Layout: React.StatelessComponent<{siteUrl: string, currentPage: LinkedNode<AllowedPages, object>, root: Website, assets: typeof assets}> = ({siteUrl, currentPage, children, root, assets}) => {
   const gaId = 'GTM-5WCKPRL'
   return <html lang='en'>
   <head>
@@ -43,11 +50,11 @@ export const Layout: React.StatelessComponent<{siteUrl: string, currentPage: Lin
     <meta httpEquiv='X-UA-Compatible' content='ie=edge'/>
     <meta name='twitter:card' content='summary' />
     <meta name='twitter:site' content='@learnk8s' />
-    <link rel='apple-touch-icon' sizes='180x180' href='/assets/apple-touch-icon.png'/>
-    <link rel='icon' type='image/png' sizes='32x32' href='/assets/favicon-32x32.png'/>
-    <link rel='icon' type='image/png' sizes='16x16' href='/assets/favicon-16x16.png'/>
-    <link rel='manifest' href='/assets/manifest.json'/>
-    <link rel='mask-icon' href='/assets/safari-pinned-tab.svg' color='#326ce5'/>
+    <link rel='apple-touch-icon' sizes='180x180' href={assets.appleTouchIcon.url}/>
+    <link rel='icon' type='image/png' sizes='32x32' href={assets.favicon32.url}/>
+    <link rel='icon' type='image/png' sizes='16x16' href={assets.favicon16.url}/>
+    <link rel='manifest' href={getFullUrl(root.children.webAppManifest)}/>
+    <link rel='mask-icon' href={assets.safariPinnedTab.url} color='#326ce5'/>
     <link rel='alternate' type='application/rss+xml' title='Subscribe to Learnk8s RSS' href={getAbsoluteUrl(root.children.rss, siteUrl)} />
     <meta name='theme-color' content='#ffffff'/>
     <meta property='og:site_name' content='Learnk8s' />
@@ -73,6 +80,39 @@ w[l] = w[l] || []; w[l].push({
     <div className='cf w-100 mw9-l center bg-white'>{children}</div>
   </body>
   </html>
+}
+
+export function renderWebAppManifest<A extends typeof assets>(assets: A) {
+  return JSON.stringify({
+    name: '',
+    icons: [
+      {
+        src: assets.android192.url,
+        sizes: '192x192',
+        type: 'image/png'
+      },
+      {
+        src: assets.android384.url,
+        sizes: '384x384',
+        type: 'image/png'
+      }
+    ],
+    theme_color: '#ffffff',
+    background_color: '#ffffff',
+    display: 'standalone'
+  })
+}
+
+export function renderBrowserConfig<A extends typeof assets>(assets: A) {
+  return `<?xml version="1.0" encoding="utf-8"?>
+  <browserconfig>
+    <msapplication>
+      <tile>
+        <square150x150logo src="${assets.mstyle.url}"/>
+        <TileColor>#326ce5</TileColor>
+      </tile>
+    </msapplication>
+  </browserconfig>`
 }
 
 export const Navbar: React.StatelessComponent<{root: Website, assets: typeof assets}> = ({assets, root}) => {

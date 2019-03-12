@@ -38,7 +38,7 @@ const cloudDevelopmentEnquiry: MailTo = {
 }
 
 export const Consulting: React.StatelessComponent<{root: Website, currentPage: LinkedNode<ConsultingPage, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage}>
+  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
     <JsonLd<ProfessionalService> item={{
       '@type': 'ProfessionalService',
       '@context': 'https://schema.org',
