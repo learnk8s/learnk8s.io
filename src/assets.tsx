@@ -2,6 +2,10 @@ import React from 'react'
 import { extname } from 'path'
 import { mkdir, cp, cat } from 'shelljs'
 import md5 from 'md5'
+import { existsSync } from 'fs'
+import { ok } from 'assert'
+
+const cache: {[name: string]: boolean} = {}
 
 enum AssetsType {
   IMAGE = 'IMAGE',
@@ -16,7 +20,15 @@ export interface Image {
 }
 
 export function Image(image: {url: string, description: string}): Image {
-  return {...image, type: AssetsType.IMAGE}
+  const digest = md5(cat(image.url).toString())
+  if (digest in cache) {
+    return {...image, type: AssetsType.IMAGE, url: `/a/${digest}${extname(image.url)}`}
+  }
+  mkdir('-p', '_site/a')
+  ok(existsSync(image.url), `Image ${image.url} doesn't exist.`)
+  cp(image.url, `_site/a/${digest}${extname(image.url)}`)
+  cache[digest] = true
+  return {...image, type: AssetsType.IMAGE, url: `/a/${digest}${extname(image.url)}`}
 }
 
 export const Img: React.StatelessComponent<{image: Image, className?: string}> = ({image, className}) => {
@@ -47,41 +59,4 @@ export function ExternalJavascript(js: {url: string}): ExternalJavascript {
 
 export const ExternalScript: React.StatelessComponent<{script: ExternalJavascript}> = ({script}) => {
   return <script src={script.url}></script>
-}
-
-export function optimiseAssets<T extends NestedAssets>(assets: T): T {
-  mkdir('-p', '_site/a')
-  return Object.keys(assets).reduce((acc, key) => {
-    if (assets[key].hasOwnProperty('type')) {
-      switch((assets[key] as Assets).type) {
-        case AssetsType.IMAGE: {
-          const asset = assets[key] as Image
-          const digest = md5(cat(asset.url).toString())
-          cp(asset.url, `_site/a/${digest}${extname(asset.url)}`)
-          acc[key] = {...asset, url: `/a/${digest}${extname(asset.url)}`}
-          break
-        }
-        case AssetsType.JAVASCRIPT: {
-          acc[key] = assets[key]
-          break
-        }
-        case AssetsType.EXTERNAL_JAVASCRIPT: {
-          acc[key] = assets[key]
-          break
-        }
-        default: {
-          break
-        }
-      }
-    } else {
-      acc[key] = optimiseAssets(assets[key] as NestedAssets)
-    }
-    return acc
-  }, {} as T)
-}
-
-type Assets = Image | Javascript | ExternalJavascript
-
-interface NestedAssets {
-  [name: string]: NestedAssets | Assets
 }

@@ -1,17 +1,33 @@
 import React from 'react'
-import { LinkedNode, CareersPage, Website } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, assets as layoutAssets} from './layout'
+import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
+import { Navbar, Consultation, Footer, Layout } from './layout'
+import {Image} from './assets'
+import { renderToStaticMarkup } from 'react-dom/server'
 
-export const assets = {
-  page: {},
-  layout: layoutAssets,
+export const Details = {
+  type: identity<'careers'>('careers'),
+  url: '/careers',
+  seoTitle: 'Team ♦︎ Learnk8s',
+  title: 'Careers',
+  description: 'Help others learn Kubernetes.',
+  openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
 }
 
-export const Careers: React.StatelessComponent<{root: Website, currentPage: LinkedNode<CareersPage, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
+function identity<T>(value: T): T {
+  return value
+}
+
+export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
+  return renderToStaticMarkup(<Layout
+    website={website}
+    seoTitle={currentNode.payload.seoTitle}
+    title={currentNode.payload.title}
+    description={currentNode.payload.description}
+    openGraphImage={currentNode.payload.openGraphImage}
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
-      <Navbar root={root} assets={assets.layout}/>
+      <Navbar root={website} />
 
       <section className='ph5-l'>
         <div className='w-100'>
@@ -48,6 +64,6 @@ export const Careers: React.StatelessComponent<{root: Website, currentPage: Link
     </section>
 
     <Consultation />
-    <Footer root={root} assets={assets.layout}/>
-  </Layout>
+    <Footer root={website} />
+  </Layout>)
 }

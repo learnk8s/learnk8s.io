@@ -449,11 +449,6 @@ const content = {
   },
 }
 
-Object.values(content).forEach(mod => Object.values(mod.topics).forEach(topic => {
-  ok(topic.image, `Image doesn't exist for ${topic.title}`)
-  ok(existsSync(topic.image.url), `File ${topic.image.url} doesn't exist.`)
-}))
-
 export const assets: {
   [section in (keyof typeof content)]: {
     [topic in keyof typeof content[section]['topics']]: Image

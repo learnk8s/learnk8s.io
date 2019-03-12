@@ -1,22 +1,33 @@
 import React from 'react'
-import { LinkedNode, ConsultingPage, Website } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, mailto, MailTo} from './layout'
+import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude , mailto, MailTo} from './layout'
 import { Image, Img } from './assets'
 import { PrimaryButton } from './homepage'
 import { ProfessionalService} from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
+import { renderToStaticMarkup } from 'react-dom/server'
 
-export const assets = {
-  page: {
-    kcsp: Image({url: 'assets/consulting/kcsp.png', description: 'Kubernetes Certified Service Provider'}),
-    cka: Image({url: 'assets/consulting/cka.png', description: 'Certified Kubernetes administrator'}),
-    cargoLoading: Image({url: 'assets/consulting/more_cargo_loading.svg', description: 'Loading cargos'}),
-    containers: Image({url: 'assets/consulting/containers.svg', description: 'Containers'}),
-    cloudProviders: Image({url: 'assets/consulting/managed-services.svg', description: 'AKS, EKS and GKE'}),
-    team: Image({url: 'assets/consulting/team.svg', description: 'Team'}),
-    logoConsulting: Image({url: 'assets/consulting/learnk8s-consulting.svg', description: 'Learnk8s consulting'}),
-  },
-  layout: layoutAssets,
+export const Assets = {
+  kcsp: Image({url: 'assets/consulting/kcsp.png', description: 'Kubernetes Certified Service Provider'}),
+  cka: Image({url: 'assets/consulting/cka.png', description: 'Certified Kubernetes administrator'}),
+  cargoLoading: Image({url: 'assets/consulting/more_cargo_loading.svg', description: 'Loading cargos'}),
+  containers: Image({url: 'assets/consulting/containers.svg', description: 'Containers'}),
+  cloudProviders: Image({url: 'assets/consulting/managed-services.svg', description: 'AKS, EKS and GKE'}),
+  team: Image({url: 'assets/consulting/team.svg', description: 'Team'}),
+  logoConsulting: Image({url: 'assets/consulting/learnk8s-consulting.svg', description: 'Learnk8s consulting'}),
+}
+
+export const Details = {
+  type: identity<'consulting'>('consulting'),
+  url: '/consulting',
+  seoTitle: 'Consulting ♦︎ Learnk8s',
+  title: 'Consulting',
+  description: 'Expertise in software development, strategy and operations to help you innovate at speed and scale.',
+  openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
+}
+
+function identity<T>(value: T): T {
+  return value
 }
 
 const continuousDeliveryEnquiry: MailTo = {
@@ -37,13 +48,19 @@ const cloudDevelopmentEnquiry: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-export const Consulting: React.StatelessComponent<{root: Website, currentPage: LinkedNode<ConsultingPage, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
+export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
+  return renderToStaticMarkup(<Layout
+    website={website}
+    seoTitle={currentNode.payload.seoTitle}
+    title={currentNode.payload.title}
+    description={currentNode.payload.description}
+    openGraphImage={currentNode.payload.openGraphImage}
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
     <JsonLd<ProfessionalService> item={{
       '@type': 'ProfessionalService',
       '@context': 'https://schema.org',
       name: 'Learnk8s',
-      image: `${siteUrl}${assets.page.logoConsulting.url}`,
+      image: `${siteUrl}${Assets.logoConsulting.url}`,
       address: [
         'London, UK',
         'Milan, Italy',
@@ -61,7 +78,7 @@ export const Consulting: React.StatelessComponent<{root: Website, currentPage: L
     }}></JsonLd>
     <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
 
-      <Navbar root={root} assets={assets.layout}/>
+      <Navbar root={website} />
 
       <section className="flex-ns items-center-ns ph5-l pt5-l">
 
@@ -73,10 +90,10 @@ export const Consulting: React.StatelessComponent<{root: Website, currentPage: L
 
         <div className="dn db-l mt4 tr">
           <div className='padding-hack-100 relative'>
-            <Img image={assets.page.kcsp}></Img>
+            <Img image={Assets.kcsp}></Img>
           </div>
           <div className='padding-hack-100 relative'>
-            <Img image={assets.page.cka}></Img>
+            <Img image={Assets.cka}></Img>
           </div>
         </div>
 
@@ -89,7 +106,7 @@ export const Consulting: React.StatelessComponent<{root: Website, currentPage: L
       <div className='w-50-l dn db-l tc'>
         <div className='dib'>
           <div className='i-more-cargo-loading relative'>
-            <Img image={assets.page.cargoLoading} className='absolute top-0 right-0'/>
+            <Img image={Assets.cargoLoading} className='absolute top-0 right-0'/>
           </div>
         </div>
       </div>
@@ -99,17 +116,17 @@ export const Consulting: React.StatelessComponent<{root: Website, currentPage: L
         <div className="measure-wide">
           <p className="lh-copy f4-l black-70">Accelerate your development by leveraging learnk8s expertise in deploying production-ready Kubernetes for the hottest start-ups and the largest enterprises. Our engineers will help you:</p>
           <ul className="list black-70 pl0 pt2">
-            <ListItem assets={assets.layout}>Validate your Kubernetes setup and identify opportunities for resource optimisation and cost-savings</ListItem>
-            <ListItem assets={assets.layout}>Inspect security risks and propose mitigations for sensitive data</ListItem>
-            <ListItem assets={assets.layout}>Refine your CI/CD pipeline to speed up your software delivieries</ListItem>
-            <ListItem assets={assets.layout}>Test the cluster for reselience and scaling under high traffic</ListItem>
+            <ListItem>Validate your Kubernetes setup and identify opportunities for resource optimisation and cost-savings</ListItem>
+            <ListItem>Inspect security risks and propose mitigations for sensitive data</ListItem>
+            <ListItem>Refine your CI/CD pipeline to speed up your software delivieries</ListItem>
+            <ListItem>Test the cluster for reselience and scaling under high traffic</ListItem>
           </ul>
         </div>
       </div>
 
     </section>
 
-    <Interlude assets={assets.layout}/>
+     <Interlude />
 
     <section className="pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100">
 
@@ -123,7 +140,7 @@ export const Consulting: React.StatelessComponent<{root: Website, currentPage: L
 
       <div className="ml7-l dn db-ns">
         <div className='i-containers relative'>
-          <Img image={assets.page.containers} className='absolute top-0 right-0'/>
+          <Img image={Assets.containers} className='absolute top-0 right-0'/>
         </div>
       </div>
 
@@ -133,7 +150,7 @@ export const Consulting: React.StatelessComponent<{root: Website, currentPage: L
 
       <div className="dn db-ns mr7-l">
         <div className='i-cloud-providers relative'>
-          <Img image={assets.page.cloudProviders} className='absolute top-0 right-0'/>
+          <Img image={Assets.cloudProviders} className='absolute top-0 right-0'/>
         </div>
       </div>
 
@@ -159,13 +176,13 @@ export const Consulting: React.StatelessComponent<{root: Website, currentPage: L
 
       <div className="ml7-l dn db-ns">
         <div className='i-team relative'>
-          <Img image={assets.page.team} className='absolute top-0 right-0'/>
+          <Img image={Assets.team} className='absolute top-0 right-0'/>
         </div>
       </div>
 
     </section>
 
     <Consultation />
-    <Footer root={root} assets={assets.layout}/>
-  </Layout>
+    <Footer root={website} />
+  </Layout>)
 }

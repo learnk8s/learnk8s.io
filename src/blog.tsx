@@ -1,19 +1,35 @@
 import React from 'react'
-import { LinkedNode, Blog as B, getFullUrl, getBlogPosts, Website } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, assets as layoutAssets} from './layout'
+import { LinkedNode, getFullUrl, Sitemap, getAbsoluteUrl } from './sitemap'
+import { Navbar, Consultation, Footer, Layout } from './layout'
 import {Image, Img} from './assets'
 import moment = require('moment')
+import * as Redirect from './redirect'
+import { renderToStaticMarkup } from 'react-dom/server'
 
-export const assets = {
-  page: {},
-  layout: layoutAssets
+function identity<T>(value: T): T {
+  return value
 }
 
-export const Blog: React.StatelessComponent<{root: Website, currentPage: LinkedNode<B, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
+export const Details = {
+  type: identity<'blog'>('blog'),
+  url: '/blog',
+  seoTitle: 'Blog ♦︎ Learnk8s',
+  title: 'Blog',
+  description: 'The fastest way to become an expert in deploying applications at scale with Kubernetes.',
+  openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
+}
+
+export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
+  return renderToStaticMarkup(<Layout
+    website={website}
+    seoTitle={currentNode.payload.seoTitle}
+    title={currentNode.payload.title}
+    description={currentNode.payload.description}
+    openGraphImage={currentNode.payload.openGraphImage}
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
-      <Navbar root={root} assets={assets.layout}/>
+      <Navbar root={website} />
 
       <section className='ph5-l'>
         <div className='w-100'>
@@ -25,11 +41,11 @@ export const Blog: React.StatelessComponent<{root: Website, currentPage: LinkedN
 
     <section className='ph3 measure-wide pv4 center'>
       <ul className='list pl0'>
-        {getBlogPosts(root.children.blog).slice(0)
-          .sort((a, b) => {
+        {Object.values(website.children.blog.children).filter(it => it.payload.type !== Redirect.Type).slice(0)
+          .sort((a: any, b: any) => {
             return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
           })
-          .map(it => {
+          .map((it: any) => {
           return <li className='pv3'>
             <h2 className='mb0'><a href={getFullUrl(it)} className='link navy'>{it.payload.pageDetails.title}</a></h2>
             <p className='black-40 mt1'>{moment(it.payload.publishedDate).format('MMMM Do YYYY')}</p>
@@ -40,8 +56,8 @@ export const Blog: React.StatelessComponent<{root: Website, currentPage: LinkedN
     </section>
 
     <Consultation />
-    <Footer root={root} assets={assets.layout}/>
-  </Layout>
+    <Footer root={website} />
+  </Layout>)
 }
 
 export const Block: React.StatelessComponent<{image: Image, title: string, description: string}> = ({title, description, children, image}) => {

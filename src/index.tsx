@@ -1,32 +1,41 @@
-import { LinkedNode, Page, PageType, getFullUrl, sitemap, TrainingPage } from './sitemap'
-import * as Sitemap from './sitemap'
-import { Homepage, assets as assetsHomepage } from './homepage'
-import { Training, assets as assetsTraining } from './training'
-import { Academy, assets as assetsAcademy } from './academy'
-import { Consulting, assets as assetsConsulting } from './consulting'
-import { ContactUs, assets as assetsContactUs } from './contactUs'
-import { Careers, assets as assetsCareers } from './careers'
-import { TermsAndConditions, assets as assetsTermsAndConditions } from './termsAndConditions'
-import { AboutUs, assets as assetsAboutUs } from './aboutUs'
-import { Newsletter, assets as assetsNewsletter } from './newsletter'
-import { Blog, assets as assetsBlog } from './blog'
-import { NotFound, assets as assetsNotFound } from './404'
-import { Landing, assets as assetsLanding } from './landing'
-import { Redirect } from './redirect'
 import React from 'react'
-import {renderToStaticMarkup} from 'react-dom/server'
 import { writeFileSync } from 'fs'
 import { resolve } from 'path'
-import { optimiseAssets } from './assets'
 import { mkdir } from 'shelljs'
 import { syncEvents } from './eventbrite'
 import eventbrite from 'eventbrite'
 import { ok } from 'assert'
-import {generateRSS} from './rss'
-import { renderWebAppManifest, assets as assetsLayout, renderBrowserConfig } from './layout'
+import { Sitemap, LinkedNode, getFullUrl, runSiteMap } from './sitemap'
+
+import * as NotFound from './404'
+import * as AboutUs from './aboutUs'
+import * as Academy from './academy'
+import * as Blog from './blog'
+import * as BrowserConfig from './browserConfig'
+import * as Careers from './careers'
+import * as Consulting from './consulting'
+import * as ContactUs from './contactUs'
+import * as Homepage from './homepage'
+import * as Landing from './landing'
+import * as Newsletter from './newsletter'
+import * as Redirect from './redirect'
+import * as RSS from './rss'
+import * as TermsAndConditions from './termsAndConditions'
+import * as Training from './training'
+import * as WebAppManifest from './webAppManifest'
+
+import * as SmallerImages from './smallerImages'
+import * as DeployLaravel from './deployLaravel'
+import * as K8sOnWindows from './installingK8sOnWindows'
+import * as ChaosEngineering from './chaosEngineering'
+import * as SolarPlants from './solarPlants'
+import * as SpotInstances from './spotInstances'
+import * as ScalingTensorflow from './scalingTensorflow'
+import * as ScalingSpringBoot from './scalingSpringBoot'
+import * as WhatIsKubernetes from './whatIsK8s'
 
 export function run(options: Settings) {
-  return function mount(root: Sitemap.Website) {
+  return function mount(root: Sitemap) {
     renderTree(root, root)
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       syncEvents(console.log, eventbrite({token: options.eventBriteToken}), options.eventBriteOrg, options.canPublishEvents)
@@ -35,13 +44,13 @@ export function run(options: Settings) {
     }
   }
 
-  function renderTree(node: LinkedNode<Page, object>, root: Sitemap.Website) {
+  function renderTree(node: LinkedNode<any>, root: Sitemap) {
     render(node, root, options)
     Object.values(node.children).forEach(it => renderTree(it as any, root))
   }
 }
 
-function render(node: LinkedNode<Page, object>, root: Sitemap.Website, {siteUrl, vendorId}: Settings) {
+function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
   const page = node.payload
   const fullUrl = getFullUrl(node)
   function generatePath() {
@@ -51,72 +60,79 @@ function render(node: LinkedNode<Page, object>, root: Sitemap.Website, {siteUrl,
   }
 
   switch (page.type) {
-    case PageType.HOMEPAGE: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<Homepage root={root} currentPage={node as LinkedNode<Sitemap.Homepage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsHomepage)} />))
+    case Homepage.Details.type: {
+      writeFileSync(generatePath(), Homepage.render(root, node, siteUrl))
       return
     }
-    case PageType.TRAINING: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<Training root={root} currentPage={node as LinkedNode<TrainingPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsTraining)} />))
+    case Training.Details.type: {
+      writeFileSync(generatePath(), Training.render(root, node, siteUrl))
       return
     }
-    case PageType.ACADEMY: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<Academy root={root} currentPage={node as LinkedNode<Sitemap.AcademyPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsAcademy(vendorId))} />))
+    case Academy.Details.type: {
+      writeFileSync(generatePath(), Academy.render(root, node, siteUrl))
       return
     }
-    case PageType.CONSULTING: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<Consulting root={root} currentPage={node as LinkedNode<Sitemap.ConsultingPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsConsulting)} />))
+    case Consulting.Details.type: {
+      writeFileSync(generatePath(), Consulting.render(root, node, siteUrl))
       return
     }
-    case PageType.CONTACT_US: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<ContactUs root={root} currentPage={node as LinkedNode<Sitemap.ContactUsPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsContactUs)} />))
+    case ContactUs.Details.type: {
+      writeFileSync(generatePath(), ContactUs.render(root, node, siteUrl))
       return
     }
-    case PageType.CAREERS: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<Careers root={root} currentPage={node as LinkedNode<Sitemap.CareersPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsCareers)} />))
+    case Careers.Details.type: {
+      writeFileSync(generatePath(), Careers.render(root, node, siteUrl))
       return
     }
-    case PageType.TERMS_AND_CONDITIONS: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<TermsAndConditions root={root} currentPage={node as LinkedNode<Sitemap.TermsAndConditionsPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsTermsAndConditions)} />))
+    case TermsAndConditions.Details.type: {
+      writeFileSync(generatePath(), TermsAndConditions.render(root, node, siteUrl))
       return
     }
-    case PageType.ABOUT_US: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<AboutUs root={root} currentPage={node as LinkedNode<Sitemap.AboutUsPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsAboutUs)} />))
+    case AboutUs.Details.type: {
+      writeFileSync(generatePath(), AboutUs.render(root, node, siteUrl))
       return
     }
-    case PageType.REDIRECT: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<Redirect root={root} currentPage={node as LinkedNode<Sitemap.Redirect, object>} siteUrl={siteUrl} />))
+    case Redirect.Type: {
+      writeFileSync(generatePath(), Redirect.render(root, node, siteUrl))
       return
     }
-    case PageType.NEWSLETTER: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<Newsletter root={root} currentPage={node as LinkedNode<Sitemap.Newsletter, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsNewsletter)} />))
+    case Newsletter.Details.type: {
+      writeFileSync(generatePath(), Newsletter.render(root, node, siteUrl))
       return
     }
-    case PageType.BLOG: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<Blog root={root} currentPage={node as LinkedNode<Sitemap.Blog, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsBlog)} />))
+    case Blog.Details.type: {
+      writeFileSync(generatePath(), Blog.render(root, node, siteUrl))
       return
     }
-    case PageType.RSS: {
-      writeFileSync(generatePath(), generateRSS(root, siteUrl))
+    case RSS.Details.type: {
+      writeFileSync(generatePath(), RSS.render(root, node, siteUrl))
       return
     }
-    case PageType.ARTICLE: {
+    case SmallerImages.Details.type:
+    case DeployLaravel.Details.type:
+    case K8sOnWindows.Details.type:
+    case ChaosEngineering.Details.type:
+    case SolarPlants.Details.type:
+    case SpotInstances.Details.type:
+    case ScalingTensorflow.Details.type:
+    case ScalingSpringBoot.Details.type:
+    case WhatIsKubernetes.Details.type:
       // IGNORE
       return
-    }
-    case PageType.NOT_FOUND: {
-      writeFileSync(`_site/404.html`, renderToStaticMarkup(<NotFound root={root} currentPage={node as LinkedNode<Sitemap.NotFoundPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsNotFound)} />))
+    case NotFound.Details.type: {
+      writeFileSync(`_site/404.html`, NotFound.render(root, node, siteUrl))
       return
     }
-    case PageType.LANDING: {
-      writeFileSync(generatePath(), renderToStaticMarkup(<Landing root={root} currentPage={node as LinkedNode<Sitemap.LandingPage, object>} siteUrl={siteUrl} assets={optimiseAssets(assetsLanding)} />))
+    case Landing.Type: {
+      writeFileSync(generatePath(), Landing.render(root, node, siteUrl))
       return
     }
-    case PageType.WEB_APP_MANIFEST: {
-      writeFileSync(`_site${resolve('.', fullUrl)}`, renderWebAppManifest(optimiseAssets(assetsLayout)))
+    case WebAppManifest.Details.type: {
+      writeFileSync(generatePath(), WebAppManifest.render(root, node, siteUrl))
       return
     }
-    case PageType.BROWSER_CONFIG: {
-      writeFileSync(`_site${resolve('.', fullUrl)}`, renderBrowserConfig(optimiseAssets(assetsLayout)))
+    case BrowserConfig.Details.type: {
+      writeFileSync(generatePath(), BrowserConfig.render(root, node, siteUrl))
       return
     }
     default:
@@ -124,13 +140,12 @@ function render(node: LinkedNode<Page, object>, root: Sitemap.Website, {siteUrl,
   }
 }
 
-function assertUnreachable(x: never): never {
+function assertUnreachable(x: any): any {
   throw new Error('Did not expect to get here')
 }
 
 interface Settings {
   siteUrl: string
-  vendorId: string
   eventBriteToken: string
   eventBriteOrg: string
   canPublishEvents: boolean
@@ -141,10 +156,9 @@ ok(process.env.ENVENTBRITE_ORG, `Missing the organization ID for Eventbrite http
 
 run({
   siteUrl: 'https://learnk8s.io',
-  vendorId: '38628',
   eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
   eventBriteOrg: process.env.ENVENTBRITE_ORG as string,
   canPublishEvents: process.env.NODE_ENV === 'production',
-})(sitemap(optimiseAssets(Sitemap.sitemapAssets)))
+})(Sitemap)
 
-writeFileSync('_site/sitemap.xml', Sitemap.run(sitemap(optimiseAssets(Sitemap.sitemapAssets)), 'https://learnk8s.io'))
+writeFileSync('_site/sitemap.xml', runSiteMap(Sitemap, 'https://learnk8s.io'))

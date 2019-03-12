@@ -1,23 +1,40 @@
 import React from 'react'
-import { LinkedNode, ContactUsPage, Website } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, assets as layoutAssets} from './layout'
+import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
+import { Navbar, Consultation, Footer, Layout } from './layout'
 import {Image, Img} from './assets'
+import { renderToStaticMarkup } from 'react-dom/server'
 
-export const assets = {
-  page: {
-    sales: Image({url: 'assets/contact-us/sales.svg', description: 'Man on the phone'}),
-    lineChart: Image({url: 'assets/contact-us/line_chart.svg', description: 'Line chart'}),
-    logo: Image({url: 'assets/contact-us/square_logo.svg', description: 'Learnk8s logo'}),
-    slack: Image({url: 'assets/contact-us/slack_in_colours.svg', description: 'Slack logo'}),
-  },
-  layout: layoutAssets
+export const Assets = {
+  sales: Image({url: 'assets/contact-us/sales.svg', description: 'Man on the phone'}),
+  lineChart: Image({url: 'assets/contact-us/line_chart.svg', description: 'Line chart'}),
+  logo: Image({url: 'assets/contact-us/square_logo.svg', description: 'Learnk8s logo'}),
+  slack: Image({url: 'assets/contact-us/slack_in_colours.svg', description: 'Slack logo'}),
 }
 
-export const ContactUs: React.StatelessComponent<{root: Website, currentPage: LinkedNode<ContactUsPage, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
+export const Details = {
+  type: identity<'contactUs'>('contactUs'),
+  url: '/contact-us',
+  seoTitle: 'Contact us ♦︎ Learnk8s',
+  title: 'Contact us',
+  description: 'Get in touch and let us know how we can help.',
+  openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
+}
+
+function identity<T>(value: T): T {
+  return value
+}
+
+export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
+  return renderToStaticMarkup(<Layout
+    website={website}
+    seoTitle={currentNode.payload.seoTitle}
+    title={currentNode.payload.title}
+    description={currentNode.payload.description}
+    openGraphImage={currentNode.payload.openGraphImage}
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
-      <Navbar root={root} assets={assets.layout}/>
+      <Navbar root={website} />
 
       <section className='ph5-l'>
         <div className='w-100'>
@@ -26,19 +43,19 @@ export const ContactUs: React.StatelessComponent<{root: Website, currentPage: Li
         </div>
         <ul className='list pl0 flex-l items-start-l justify-around-l ph3'>
           <Block
-            image={assets.page.lineChart}
+            image={Assets.lineChart}
             title={`Sales`}
             description={`We'd love to talk about how we can work together.`}>
             <a href='mailto:sales@learnk8s.io' className='link navy b'>Contact sales →</a>
           </Block>
           <Block
-            image={assets.page.sales}
+            image={Assets.sales}
             title={`Help & support`}
             description={`We're here to help with any question.`}>
             <a href='mailto:support@learnk8s.io' className='link navy b'>Contact support →</a>
           </Block>
           <Block
-            image={assets.page.logo}
+            image={Assets.logo}
             title={`Media & press`}
             description={`Get learnk8s news, company info, and media resources.`}>
             <a href='mailto:hello@learnk8s.io' className='link navy b'>Contact us →</a>
@@ -50,7 +67,7 @@ export const ContactUs: React.StatelessComponent<{root: Website, currentPage: Li
 
     <section className='w-100 cf pv3 pv4-m pv5-l ph3'>
       <div className='left fl-ns w-50-ns tc mv4 ph3'>
-        <h2 className='navy'>Join us on Slack <span className='w2 dib v-mid'><Img image={assets.page.slack}/></span></h2>
+        <h2 className='navy'>Join us on Slack <span className='w2 dib v-mid'><Img image={Assets.slack}/></span></h2>
         <p className='measure black-70 center'>If you have technical questions, chat live with developers in #dev. <a href='https://learnk8s-slack-invite.herokuapp.com' className='link underline navy'>Join now</a></p>
       </div>
       <div className='right fl-ns w-50-ns tc bl-ns b--light-gray mv4 ph3'>
@@ -60,8 +77,8 @@ export const ContactUs: React.StatelessComponent<{root: Website, currentPage: Li
     </section>
 
     <Consultation />
-    <Footer root={root} assets={assets.layout}/>
-  </Layout>
+    <Footer root={website} />
+  </Layout>)
 }
 
 export const Block: React.StatelessComponent<{image: Image, title: string, description: string}> = ({title, description, children, image}) => {

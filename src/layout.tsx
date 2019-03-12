@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, getFullUrl, ArticlePage, ContactUsPage, AboutUsPage, TrainingPage, AcademyPage, ConsultingPage, NotFoundPage, Blog, CareersPage, Homepage, Newsletter, TermsAndConditionsPage, Website, getAbsoluteUrl, LandingPage } from './sitemap'
+import { getFullUrl, Sitemap } from './sitemap'
 import {Image, Img} from './assets'
 import marked from 'marked'
 
@@ -9,7 +9,7 @@ export interface PageDetails {
   openGraphImage: string
 }
 
-export const assets = {
+export const Assets = {
   logo: Image({url: 'assets/logo.svg', description: 'Learnk8s'}),
   tick: Image({url: 'assets/tick.svg', description: 'Tick'}),
   plus: Image({url: 'assets/plus.svg', description: 'Plus'}),
@@ -23,46 +23,46 @@ export const assets = {
   mstyle: Image({url: 'assets/mstile-150x150.png', description: 'MS Style'}),
 }
 
-type AllowedPages =
-  ArticlePage |
-  ContactUsPage |
-  AboutUsPage |
-  TrainingPage |
-  AcademyPage |
-  ConsultingPage |
-  NotFoundPage |
-  Blog |
-  CareersPage |
-  Homepage |
-  Newsletter |
-  TermsAndConditionsPage |
-  LandingPage
-
-export const Layout: React.StatelessComponent<{siteUrl: string, currentPage: LinkedNode<AllowedPages, object>, root: Website, assets: typeof assets}> = ({siteUrl, currentPage, children, root, assets}) => {
+export const Layout: React.StatelessComponent<{
+  website: Sitemap
+  seoTitle: string
+  title: string
+  description: string
+  openGraphImage: Image
+  absoluteUrl: string
+}> = ({
+  children,
+  website,
+  seoTitle,
+  title,
+  description,
+  openGraphImage,
+  absoluteUrl,
+}) => {
   const gaId = 'GTM-5WCKPRL'
   return <html lang='en'>
   <head>
     <meta charSet='utf-8' />
-    <title>{currentPage.payload.seoTitle}</title>
-    <meta name='description' content={currentPage.payload.pageDetails.description}/>
+    <title>{seoTitle}</title>
+    <meta name='description' content={description}/>
     <meta name='author' content='Learnk8s'/>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
     <meta httpEquiv='X-UA-Compatible' content='ie=edge'/>
     <meta name='twitter:card' content='summary' />
     <meta name='twitter:site' content='@learnk8s' />
-    <link rel='apple-touch-icon' sizes='180x180' href={assets.appleTouchIcon.url}/>
-    <link rel='icon' type='image/png' sizes='32x32' href={assets.favicon32.url}/>
-    <link rel='icon' type='image/png' sizes='16x16' href={assets.favicon16.url}/>
-    <link rel='manifest' href={getFullUrl(root.children.webAppManifest)}/>
-    <link rel='mask-icon' href={assets.safariPinnedTab.url} color='#326ce5'/>
-    <link rel='alternate' type='application/rss+xml' title='Subscribe to Learnk8s RSS' href={getAbsoluteUrl(root.children.rss, siteUrl)} />
+    <link rel='apple-touch-icon' sizes='180x180' href={Assets.appleTouchIcon.url}/>
+    <link rel='icon' type='image/png' sizes='32x32' href={Assets.favicon32.url}/>
+    <link rel='icon' type='image/png' sizes='16x16' href={Assets.favicon16.url}/>
+    <link rel='manifest' href={getFullUrl(website.children.webAppManifest)}/>
+    <link rel='mask-icon' href={Assets.safariPinnedTab.url} color='#326ce5'/>
+    <link rel='alternate' type='application/rss+xml' title='Subscribe to Learnk8s RSS' href={getFullUrl(website.children.rss)} />
     <meta name='theme-color' content='#ffffff'/>
     <meta property='og:site_name' content='Learnk8s' />
-    <meta property='og:url' content={getAbsoluteUrl(currentPage, siteUrl)} />
+    <meta property='og:url' content={absoluteUrl} />
     <meta property='og:type' content='website' />
-    <meta property='og:title' content={currentPage.payload.pageDetails.title} />
-    <meta property='og:image' content={currentPage.payload.pageDetails.openGraphImage} />
-    <meta property='og:description' content={currentPage.payload.pageDetails.description} />
+    <meta property='og:title' content={title} />
+    <meta property='og:image' content={openGraphImage.url} />
+    <meta property='og:description' content={description} />
     <script dangerouslySetInnerHTML={{__html: `(function (w, d, s, l, i) {
 w[l] = w[l] || []; w[l].push({
   'gtm.start':
@@ -82,42 +82,9 @@ w[l] = w[l] || []; w[l].push({
   </html>
 }
 
-export function renderWebAppManifest<A extends typeof assets>(assets: A) {
-  return JSON.stringify({
-    name: '',
-    icons: [
-      {
-        src: assets.android192.url,
-        sizes: '192x192',
-        type: 'image/png'
-      },
-      {
-        src: assets.android384.url,
-        sizes: '384x384',
-        type: 'image/png'
-      }
-    ],
-    theme_color: '#ffffff',
-    background_color: '#ffffff',
-    display: 'standalone'
-  })
-}
-
-export function renderBrowserConfig<A extends typeof assets>(assets: A) {
-  return `<?xml version="1.0" encoding="utf-8"?>
-  <browserconfig>
-    <msapplication>
-      <tile>
-        <square150x150logo src="${assets.mstyle.url}"/>
-        <TileColor>#326ce5</TileColor>
-      </tile>
-    </msapplication>
-  </browserconfig>`
-}
-
-export const Navbar: React.StatelessComponent<{root: Website, assets: typeof assets}> = ({assets, root}) => {
+export const Navbar: React.StatelessComponent<{root: Sitemap}> = ({root}) => {
   return <nav className='nav cf bb-ns b--lightest-blue-ns pl3 ph0-m ph3l flex-ns items-center-ns bg-sky'>
-    <a href={getFullUrl(root)} className='logo fl-ns w-100 mw4 mw-none-ns dib w-20-m w-10-l pa2-ns'><Img image={assets.logo} /></a>
+    <a href={getFullUrl(root)} className='logo fl-ns w-100 mw4 mw-none-ns dib w-20-m w-10-l pa2-ns'><Img image={Assets.logo} /></a>
     <ul className='list fl w-80-m w-90-l pa2 tr dn db-ns'>
       <li className='dib ttu'><a href={getFullUrl(root.children.academy)} className='link white mh3 dib f6 ribbon' title='Academy'>Academy</a></li>
       <li className='dib ttu'><a href={getFullUrl(root.children.training)} className='link white mh3 dib f6' title='Training'>Training</a></li>
@@ -127,11 +94,11 @@ export const Navbar: React.StatelessComponent<{root: Website, assets: typeof ass
   </nav>
 }
 
-export const Footer: React.StatelessComponent<{root: Website, assets: typeof assets}> = ({assets, root}) => {
+export const Footer: React.StatelessComponent<{root: Sitemap}> = ({root}) => {
   return <footer className='footer white ph3 ph4-ns pt4 pt5-ns pb3 bg-sky'>
     <section className='flex-ns items-start-ns justify-around-ns pr3-m pr7-l'>
       <div className='dn db-l'>
-        <a href={getFullUrl(root)} className='logo w4 db'><Img image={assets.logo} /></a>
+        <a href={getFullUrl(root)} className='logo w4 db'><Img image={Assets.logo} /></a>
         <p>Learn Kubernetes the smart way</p>
       </div>
       <div className='dn db-ns'>
@@ -212,29 +179,29 @@ export const Consultation: React.StatelessComponent<{}> = ({children}) => {
   </section>
 }
 
-export const ListItem: React.StatelessComponent<{assets: typeof assets}> = ({children, assets}) => {
+export const ListItem: React.StatelessComponent<{}> = ({children}) => {
   return <li className='mv3 flex justify-center'>
-    <div className='v-top tc'><Img image={assets.tick} className='w2 h2' /></div>
+    <div className='v-top tc'><Img image={Assets.tick} className='w2 h2' /></div>
     <div className='v-top pl3 w-90'>
       <p className='mv0 f4-l lh-copy'>{children}</p>
     </div>
   </li>
 }
 
-export const SpecialListItem: React.StatelessComponent<{assets: typeof assets}> = ({children, assets}) => {
+export const SpecialListItem: React.StatelessComponent<{}> = ({children}) => {
   return <li className='mv3 flex justify-center'>
-    <div className='v-top tc'><Img image={assets.plus} className='w2 h2' /></div>
+    <div className='v-top tc'><Img image={Assets.plus} className='w2 h2' /></div>
     <div className='v-top pl3 w-90'>
       <p className='mv0 f4-l lh-copy'>{children}</p>
     </div>
   </li>
 }
 
-export const Interlude: React.StatelessComponent<{assets: typeof assets}> = ({assets}) => {
+export const Interlude: React.StatelessComponent<{}> = ({}) => {
   return <section className='triangle-1 tr'>
     <div className='dib mr4'>
       <div className='i-small-cargo relative'>
-        <Img image={assets.smallCargo} className='absolute top-0 right-0'/>
+        <Img image={Assets.smallCargo} className='absolute top-0 right-0'/>
       </div>
     </div>
   </section>
@@ -330,7 +297,7 @@ export const PackageList: React.StatelessComponent<{}> = ({children}) => {
   return <ul className='cf pl0 list'>{children}</ul>
 }
 
-export const Hero: React.StatelessComponent<{image: Image, assets: typeof assets, imageClass: string}> = ({children, image, assets, imageClass}) => {
+export const Hero: React.StatelessComponent<{image: Image, imageClass: string}> = ({children, image, imageClass}) => {
   return <section className='flex-ns items-center justify-center overflow-hidden center'>
     <div className='mw7 ph4'>{children}</div>
     <div className='dn db-l mw6'>
