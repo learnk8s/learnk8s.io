@@ -1,11 +1,11 @@
-import { Timezone, CurrencyCode, courses, CourseEvent, Venue, venues, isVenueOnline } from './training'
 import cheerio from 'cheerio'
 import moment from 'moment-timezone'
 import { Sdk } from 'eventbrite/lib/types'
+import { CourseEvent, Courses, Venue, isVenueOnline, Venues, Timezone, CurrencyCode } from './courses'
 
 export async function syncEvents(log: (...args: any[]) => void, sdk: Sdk, organisationId: string, canPublish: boolean) {
   try {
-    const allEvents = courses.reduce((acc, it) => acc.concat(it.events), [] as CourseEvent[])
+    const allEvents = Courses.reduce((acc, it) => acc.concat(it.events), [] as CourseEvent[])
     const venues = await syncVenues(organisationId, sdk)
 
     const events = await getEventsFromEventBrite(organisationId, sdk);
@@ -53,7 +53,7 @@ async function syncVenues(organisationId: string, sdk: Sdk): Promise<VenueEventB
   return sdk.request(`/organizations/${organisationId}/venues/`)
   .then(res => {
     const response = res as ResponseVenues
-    const [toRemove, existing, toAdd] = diff<VenueEventBrite, Venue>(it => it.name, response.venues)(Object.values(venues).filter(it => !isVenueOnline(it)))
+    const [toRemove, existing, toAdd] = diff<VenueEventBrite, Venue>(it => it.name, response.venues)(Object.values(Venues).filter(it => !isVenueOnline(it)))
     return toAdd.length > 0 ? Promise.all(toAdd.map(it => addVenue(it, sdk, organisationId))).then(() => syncVenues(organisationId, sdk)) : response.venues
   })
 }

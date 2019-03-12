@@ -1,9 +1,19 @@
-import { getAbsoluteUrl, getBlogPosts, Website } from './sitemap'
+import { getAbsoluteUrl, Sitemap, LinkedNode } from './sitemap'
 import { Feed } from 'feed'
 import moment = require('moment')
+import * as Redirect from './redirect'
 
-export function generateRSS(root: Website, siteUrl: string) {
-  const articles = getBlogPosts(root.children.blog)
+export const Details = {
+  type: identity<'rss'>('rss'),
+  url: '/rss',
+}
+
+function identity<T>(value: T): T {
+  return value
+}
+
+export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
+  const articles = Object.values(website.children.blog.children).filter(it => it.payload.type !== Redirect.Type)
   const feed = new Feed({
     title: 'Learnk8s',
     description: 'Learn Kubernetes',
@@ -15,7 +25,7 @@ export function generateRSS(root: Website, siteUrl: string) {
     feed: 'https://example.com/atom',
     updated: new Date(),
   })
-  articles.forEach(it => {
+  articles.forEach((it: any) => {
     feed.addItem({
       title: it.payload.pageDetails.title,
       link: getAbsoluteUrl(it, siteUrl),

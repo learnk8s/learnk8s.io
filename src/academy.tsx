@@ -1,13 +1,14 @@
 import React from 'react'
-import { LinkedNode, AcademyPage, Website } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight, Hero} from './layout'
+import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude , SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight, Hero} from './layout'
 import {Image, Img, Script, Javascript, ExternalJavascript, ExternalScript} from './assets'
 import {material, assets as materialAssets} from './material'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import { PrimaryButton } from './homepage';
+import { PrimaryButton } from './homepage'
+import { renderToStaticMarkup } from 'react-dom/server'
 
-export const assets = (vendorId: string) => ({
+export const Assets = {
   page: {
     training: Image({url: 'assets/academy/training.svg', description: 'Training'}),
     down: Image({url: 'assets/academy/down_arrow_white.svg', description: 'Down'}),
@@ -15,11 +16,23 @@ export const assets = (vendorId: string) => ({
     tick: Image({url: 'assets/academy/tick.svg', description: 'Tick'}),
     preview: Javascript({script: `(${Scroll.toString()})()`}),
     paddle: ExternalJavascript({url: 'https://cdn.paddle.com/paddle/paddle.js'}),
-    paddleVendor: Javascript({script: `Paddle.Setup({vendor: ${vendorId}});`}),
+    paddleVendor: Javascript({script: `Paddle.Setup({vendor: ${'38628'}});`}),
   },
   material: materialAssets,
-  layout: layoutAssets,
-})
+}
+
+export const Details = {
+  type: identity<'academy'>('academy'),
+  url: '/academy',
+  seoTitle: 'Learnk8s Academy ♦︎ Learnk8s',
+  title: 'Kubernetes Online Course',
+  description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
+  openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
+}
+
+function identity<T>(value: T): T {
+  return value
+}
 
 const enterprisePackage: MailTo = {
   subject: 'Learnk8s Academy',
@@ -53,8 +66,14 @@ const faqs: FAQ[] = [{
   content: `Sure - send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io).`
 }]
 
-export const Academy: React.StatelessComponent<{root: Website, currentPage: LinkedNode<AcademyPage, object>, siteUrl: string, assets: ReturnType<typeof assets>}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
+export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
+  return renderToStaticMarkup(<Layout
+    website={website}
+    seoTitle={currentNode.payload.seoTitle}
+    title={currentNode.payload.title}
+    description={currentNode.payload.description}
+    openGraphImage={currentNode.payload.openGraphImage}
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
     <JsonLd<Course> item={{
       '@type': 'Course',
       '@context': 'https://schema.org',
@@ -67,13 +86,13 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
         name: 'Learnk8s',
       }}}></JsonLd>
     <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
-      <Navbar root={root} assets={assets.layout}/>
+      <Navbar root={website} />
 
-      <Hero assets={assets.layout} image={assets.page.training} imageClass='i-training'>
+      <Hero image={Assets.page.training} imageClass='i-training'>
         <h1 className='f1 mt1-l pt5-l f-subheadline-l lh-solid'>Self-paced Kubernetes online course</h1>
         <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>Become an expert in deploying applications at scale.</h2>
         <div className='dn db-l pt5 mw6 mh3 mh4-ns tc'>
-          <div className='w3 h3 dib'><Img image={assets.page.down}/></div>
+          <div className='w3 h3 dib'><Img image={Assets.page.down}/></div>
         </div>
       </Hero>
     </div>
@@ -83,7 +102,7 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
       <div className='w-50-l dn db-l tc'>
         <div className='dib'>
           <div className='i-together relative'>
-            <Img image={assets.page.together} className='absolute top-0 right-0'/>
+            <Img image={Assets.page.together} className='absolute top-0 right-0'/>
           </div>
         </div>
       </div>
@@ -103,14 +122,14 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
               'Help to shape your company\'s roadmap to cloud-native technologies',
               'Empower your team to operate and use Kubernetes like experts',
               'Quickly onboard new members your team to the same level as everyone else',
-            ].map((it, index) => <ListItem key={index} assets={assets.layout}>{it}</ListItem>)}
+            ].map((it, index) => <ListItem key={index}>{it}</ListItem>)}
           </ul>
         </div>
       </div>
 
     </section>
 
-    <Interlude assets={assets.layout}/>
+     <Interlude />
 
     <section className='w-100 ph3 ph4-ns flex items-center justify-center pb4'>
 
@@ -118,26 +137,24 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
         <h2 className='f3 navy f2-l measure-narrow'>You will learn how to</h2>
         <div className='measure-wide'>
           <ul className='list black-70 pl0 pt2'>
-            {[
-              'Standardise your tools, workflows and deployments under a single tool',
-              'Master architecting services that span multiple clouds and data centres for resilience and failover',
-              'Secure your Kubernetes cluster by breaking it',
-              'Package, deploy and scale applications in Kubernetes',
-              'Design cloud provider agnostic clusters',
-              'Leverage the strength and avoid the weaknesses of the major Kubernetes managed service offerings (AKS, EKS, GKE)',
-              'Deploy applications in production with zero downtime',
-              'Monitor, log and debug production issues in Kubernetes',
-              'Deploy stateful workloads such as databases',
-              'Implement a CI/CD delivery pipeline that leverages containers and Kubernetes for speed and reliability',
-            ].map((it, index) => <ListItem key={index} assets={assets.layout}>{it}</ListItem>)}
-            <SpecialListItem assets={assets.layout}>Everything you need to pass your certification as a Certified Kubernetes Administrator (CKA) and Kubernetes Application Developer (CKAD)</SpecialListItem>
+            <ListItem>Standardise your tools, workflows and deployments under a single tool</ListItem>
+            <ListItem>Master architecting services that span multiple clouds and data centres for resilience and failover</ListItem>
+            <ListItem>Secure your Kubernetes cluster by breaking it</ListItem>
+            <ListItem>Package, deploy and scale applications in Kubernetes</ListItem>
+            <ListItem>Design cloud provider agnostic clusters</ListItem>
+            <ListItem>Leverage the strength and avoid the weaknesses of the major Kubernetes managed service offerings (AKS, EKS, GKE)</ListItem>
+            <ListItem>Deploy applications in production with zero downtime</ListItem>
+            <ListItem>Monitor, log and debug production issues in Kubernetes</ListItem>
+            <ListItem>Deploy stateful workloads such as databases</ListItem>
+            <ListItem>Implement a CI/CD delivery pipeline that leverages containers and Kubernetes for speed and reliability</ListItem>
+            <SpecialListItem>Everything you need to pass your certification as a Certified Kubernetes Administrator (CKA) and Kubernetes Application Developer (CKAD)</SpecialListItem>
           </ul>
         </div>
       </div>
 
       <div className='dn db-l center tc'>
         <div className='i-together dib relative'>
-          <Img image={assets.page.together} className='absolute top-0 right-0'/>
+          <Img image={Assets.page.together} className='absolute top-0 right-0'/>
         </div>
       </div>
 
@@ -153,64 +170,64 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
 
         <Module name={material.docker.name} description={material.docker.description} topics={Object.values(material.docker.topics)}>
           <Preview>
-            <PreviewTopic title={material.docker.topics.isolation} image={assets.material.docker.isolation} />
-            <PreviewTopic title={material.docker.topics.docker} image={assets.material.docker.docker} />
-            <PreviewTopic title={material.docker.topics.architecture} image={assets.material.docker.architecture} />
-            <PreviewTopic title={material.docker.topics.port} image={assets.material.docker.port} />
+            <PreviewTopic title={material.docker.topics.isolation} image={Assets.material.docker.isolation} />
+            <PreviewTopic title={material.docker.topics.docker} image={Assets.material.docker.docker} />
+            <PreviewTopic title={material.docker.topics.architecture} image={Assets.material.docker.architecture} />
+            <PreviewTopic title={material.docker.topics.port} image={Assets.material.docker.port} />
           </Preview>
         </Module>
 
         <Module name={material.zeroToKubernetes.name} description={material.zeroToKubernetes.description} topics={Object.values(material.zeroToKubernetes.topics)}>
           <Preview>
-            <PreviewTopic title={material.zeroToKubernetes.topics.tetrisPlayer} image={assets.material.zeroToKubernetes.tetrisPlayer} />
-            <PreviewTopic title={material.zeroToKubernetes.topics.datacentreAsVM} image={assets.material.zeroToKubernetes.datacentreAsVM} />
-            <PreviewTopic title={material.zeroToKubernetes.topics.basics} image={assets.material.zeroToKubernetes.basics} />
-            <PreviewTopic title={material.zeroToKubernetes.topics.localCluster} image={assets.material.zeroToKubernetes.localCluster} />
+            <PreviewTopic title={material.zeroToKubernetes.topics.tetrisPlayer} image={Assets.material.zeroToKubernetes.tetrisPlayer} />
+            <PreviewTopic title={material.zeroToKubernetes.topics.datacentreAsVM} image={Assets.material.zeroToKubernetes.datacentreAsVM} />
+            <PreviewTopic title={material.zeroToKubernetes.topics.basics} image={Assets.material.zeroToKubernetes.basics} />
+            <PreviewTopic title={material.zeroToKubernetes.topics.localCluster} image={Assets.material.zeroToKubernetes.localCluster} />
           </Preview>
         </Module>
 
         <Module name={material.deploymentStrategies.name} description={material.deploymentStrategies.description} topics={Object.values(material.deploymentStrategies.topics)}>
           <Preview>
-            <PreviewTopic title={material.deploymentStrategies.topics.livenessProbe} image={assets.material.deploymentStrategies.livenessProbe} />
-            <PreviewTopic title={material.deploymentStrategies.topics.readinessProbe} image={assets.material.deploymentStrategies.readinessProbe} />
-            <PreviewTopic title={material.deploymentStrategies.topics.rollingUpdates} image={assets.material.deploymentStrategies.rollingUpdates} />
-            <PreviewTopic title={material.deploymentStrategies.topics.servicesAndSelectors} image={assets.material.deploymentStrategies.servicesAndSelectors} />
+            <PreviewTopic title={material.deploymentStrategies.topics.livenessProbe} image={Assets.material.deploymentStrategies.livenessProbe} />
+            <PreviewTopic title={material.deploymentStrategies.topics.readinessProbe} image={Assets.material.deploymentStrategies.readinessProbe} />
+            <PreviewTopic title={material.deploymentStrategies.topics.rollingUpdates} image={Assets.material.deploymentStrategies.rollingUpdates} />
+            <PreviewTopic title={material.deploymentStrategies.topics.servicesAndSelectors} image={Assets.material.deploymentStrategies.servicesAndSelectors} />
           </Preview>
         </Module>
 
         <Module name={material.architecture.name} description={material.architecture.description} topics={Object.values(material.architecture.topics)}>
           <Preview>
-            <PreviewTopic title={material.architecture.topics.controlPlane} image={assets.material.architecture.controlPlane} />
-            <PreviewTopic title={material.architecture.topics.monzo} image={assets.material.architecture.monzo} />
-            <PreviewTopic title={material.architecture.topics.raft} image={assets.material.architecture.raft} />
-            <PreviewTopic title={material.architecture.topics.clusters} image={assets.material.architecture.clusters} />
+            <PreviewTopic title={material.architecture.topics.controlPlane} image={Assets.material.architecture.controlPlane} />
+            <PreviewTopic title={material.architecture.topics.monzo} image={Assets.material.architecture.monzo} />
+            <PreviewTopic title={material.architecture.topics.raft} image={Assets.material.architecture.raft} />
+            <PreviewTopic title={material.architecture.topics.clusters} image={Assets.material.architecture.clusters} />
           </Preview>
         </Module>
 
         <Module name={material.networking.name} description={material.networking.description} topics={Object.values(material.networking.topics)}>
           <Preview>
-            <PreviewTopic title={material.networking.topics.networkRequirements} image={assets.material.networking.networkRequirements} />
-            <PreviewTopic title={material.networking.topics.kubeProxy} image={assets.material.networking.kubeProxy} />
-            <PreviewTopic title={material.networking.topics.latency} image={assets.material.networking.latency} />
-            <PreviewTopic title={material.networking.topics.e2e} image={assets.material.networking.e2e} />
+            <PreviewTopic title={material.networking.topics.networkRequirements} image={Assets.material.networking.networkRequirements} />
+            <PreviewTopic title={material.networking.topics.kubeProxy} image={Assets.material.networking.kubeProxy} />
+            <PreviewTopic title={material.networking.topics.latency} image={Assets.material.networking.latency} />
+            <PreviewTopic title={material.networking.topics.e2e} image={Assets.material.networking.e2e} />
           </Preview>
         </Module>
 
         <Module name={material.managingState.name} description={material.managingState.description} topics={Object.values(material.managingState.topics)}>
           <Preview>
-            <PreviewTopic title={material.managingState.topics.persistentVolumeClaims} image={assets.material.managingState.persistentVolumeClaims} />
-            <PreviewTopic title={material.managingState.topics.storageClass} image={assets.material.managingState.storageClass} />
-            <PreviewTopic title={material.managingState.topics.localVolumes} image={assets.material.managingState.localVolumes} />
-            <PreviewTopic title={material.managingState.topics.statefulSets} image={assets.material.managingState.statefulSets} />
+            <PreviewTopic title={material.managingState.topics.persistentVolumeClaims} image={Assets.material.managingState.persistentVolumeClaims} />
+            <PreviewTopic title={material.managingState.topics.storageClass} image={Assets.material.managingState.storageClass} />
+            <PreviewTopic title={material.managingState.topics.localVolumes} image={Assets.material.managingState.localVolumes} />
+            <PreviewTopic title={material.managingState.topics.statefulSets} image={Assets.material.managingState.statefulSets} />
           </Preview>
         </Module>
 
         <Module name={material.templating.name} description={material.templating.description} topics={Object.values(material.templating.topics)}>
           <Preview>
-            <PreviewTopic title={material.templating.topics.helm} image={assets.material.templating.helm} />
-            <PreviewTopic title={material.templating.topics.helmArchitecture} image={assets.material.templating.helmArchitecture} />
-            <PreviewTopic title={material.templating.topics.rollbacks} image={assets.material.templating.rollbacks} />
-            <PreviewTopic title={material.templating.topics.repositories} image={assets.material.templating.repositories} />
+            <PreviewTopic title={material.templating.topics.helm} image={Assets.material.templating.helm} />
+            <PreviewTopic title={material.templating.topics.helmArchitecture} image={Assets.material.templating.helmArchitecture} />
+            <PreviewTopic title={material.templating.topics.rollbacks} image={Assets.material.templating.rollbacks} />
+            <PreviewTopic title={material.templating.topics.repositories} image={Assets.material.templating.repositories} />
           </Preview>
         </Module>
 
@@ -223,12 +240,12 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
 
           <div className='w-60-l'>
             <ul className='list pa2'>
-              <ComingSoon name={material.advancedNetworking.name} description={material.advancedNetworking.description} image={assets.material.advancedNetworking.nodeNetwork}/>
-              <ComingSoon name={material.advancedScheduling.name} description={material.advancedScheduling.description} image={assets.material.advancedScheduling.antiAffinity}/>
-              <ComingSoon name={material.security.name} description={material.security.description} image={assets.material.security.rbac}/>
-              <ComingSoon name={material.multiCloud.name} description={material.multiCloud.description} image={assets.material.multiCloud.clusterFederation}/>
-              <ComingSoon name={material.managedServices.name} description={material.managedServices.description} image={assets.material.managedServices.managedServices}/>
-              <ComingSoon name={material.pipelines.name} description={material.pipelines.description} image={assets.material.pipelines.flow}/>
+              <ComingSoon name={material.advancedNetworking.name} description={material.advancedNetworking.description} image={Assets.material.advancedNetworking.nodeNetwork}/>
+              <ComingSoon name={material.advancedScheduling.name} description={material.advancedScheduling.description} image={Assets.material.advancedScheduling.antiAffinity}/>
+              <ComingSoon name={material.security.name} description={material.security.description} image={Assets.material.security.rbac}/>
+              <ComingSoon name={material.multiCloud.name} description={material.multiCloud.description} image={Assets.material.multiCloud.clusterFederation}/>
+              <ComingSoon name={material.managedServices.name} description={material.managedServices.description} image={Assets.material.managedServices.managedServices}/>
+              <ComingSoon name={material.pipelines.name} description={material.pipelines.description} image={Assets.material.pipelines.flow}/>
             </ul>
           </div>
 
@@ -251,13 +268,13 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
             <span className='dib relative'><span className='paddle-net' data-product='549763'>$999</span> <span className='f7 v-mid absolute right--2 top-0'>+TAX</span></span>
           </p>
           <ul className='list pl0 black-70'>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>12 months access</p>
             </Item>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>Docker fundamentals module</p>
             </Item>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>Access to the material for all modules</p>
               <ol className='pl3'>
                 <li className='mv2'>Getting started with Kubernetes</li>
@@ -269,7 +286,7 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
                 <li className='mv2'>Advanced networking</li>
               </ol>
             </Item>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy'><span className='b'>All source code</span> — build files, scripts and files for each module</p>
             </Item>
           </ul>
@@ -279,25 +296,25 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
         </PackageLeft>
         <PackageRight heading='Enterprise' subheading='From 10+ users'>
           <ul className='list pl0 black-70'>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>All individual plan features</p>
             </Item>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>Dedicated customer support</p>
             </Item>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>Dedicated playground for challenges</p>
             </Item>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>Analytics and reports</p>
             </Item>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>Custom topics</p>
             </Item>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>Live classes and webinars</p>
             </Item>
-            <Item tick={assets.page.tick}>
+            <Item tick={Assets.page.tick}>
               <p className='mv0 f4-l lh-copy b'>Host the Academy on your cloud</p>
             </Item>
           </ul>
@@ -320,11 +337,11 @@ export const Academy: React.StatelessComponent<{root: Website, currentPage: Link
     <FAQs faqs={faqs}/>
 
     <Consultation />
-    <Footer root={root} assets={assets.layout}/>
-    <Script script={assets.page.preview}></Script>
-    <ExternalScript script={assets.page.paddle}></ExternalScript>
-    <Script script={assets.page.paddleVendor}></Script>
-  </Layout>
+    <Footer root={website} />
+    <Script script={Assets.page.preview}></Script>
+    <ExternalScript script={Assets.page.paddle}></ExternalScript>
+    <Script script={Assets.page.paddleVendor}></Script>
+  </Layout>)
 }
 
 export const Item: React.StatelessComponent<{tick: Image}> = ({children, tick}) => {

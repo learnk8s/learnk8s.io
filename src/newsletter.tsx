@@ -1,20 +1,37 @@
 import React from 'react'
-import { LinkedNode, Newsletter as NS, Website } from './sitemap'
-import { Navbar, Footer, Layout, assets as layoutAssets} from './layout'
-import { Javascript, Script } from './assets'
+import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
+import { Navbar, Footer, Layout } from './layout'
+import { Javascript, Script, Image } from './assets'
+import { renderToStaticMarkup } from 'react-dom/server'
 
-export const assets = {
-  page: {
-    submit: Javascript({script: `(${SubmitWithAjax.toString()})()`}),
-  },
-  layout: layoutAssets,
+export const Assets = {
+  submit: Javascript({script: `(${SubmitWithAjax.toString()})()`}),
 }
 
-export const Newsletter: React.StatelessComponent<{root: Website, currentPage: LinkedNode<NS, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
+export const Details = {
+  type: identity<'newsletter'>('newsletter'),
+  url: '/newsletter',
+  seoTitle: 'Newsletter ♦︎ Learnk8s',
+  title: 'Newsletter',
+  description: 'Keep yourself up to date with the latest news from Learnk8s.',
+  openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
+}
+
+function identity<T>(value: T): T {
+  return value
+}
+
+export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
+  return renderToStaticMarkup(<Layout
+    website={website}
+    seoTitle={currentNode.payload.seoTitle}
+    title={currentNode.payload.title}
+    description={currentNode.payload.description}
+    openGraphImage={currentNode.payload.openGraphImage}
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
-      <Navbar root={root} assets={assets.layout}/>
+      <Navbar root={website} />
 
       <section className='ph5-l'>
         <div className='w-100 tc mt4'>
@@ -51,9 +68,9 @@ export const Newsletter: React.StatelessComponent<{root: Website, currentPage: L
 
     <hr className='pa3 bn'/>
 
-    <Footer root={root} assets={assets.layout}/>
-    <Script script={assets.page.submit}></Script>
-  </Layout>
+    <Footer root={website} />
+    <Script script={Assets.submit}></Script>
+  </Layout>)
 }
 
 function SubmitWithAjax() {

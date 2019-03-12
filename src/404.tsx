@@ -1,17 +1,34 @@
 import React from 'react'
-import { LinkedNode, NotFoundPage, Website } from './sitemap'
-import { Navbar, Footer, Layout, assets as layoutAssets} from './layout'
+import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
+import { Navbar, Footer, Layout} from './layout'
+import { Image } from './assets'
+import { renderToStaticMarkup } from 'react-dom/server'
 
-export const assets = {
-  page: {},
-  layout: layoutAssets,
+export const Details = {
+  type: identity<'notFound'>('notFound'),
+  url: '/404',
+  seoTitle: 'Oops! Not found',
+  title: 'Not Found',
+  description: 'Page not found',
+  openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
 }
 
-export const NotFound: React.StatelessComponent<{root: Website, currentPage: LinkedNode<NotFoundPage, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
+function identity<T>(value: T): T {
+  return value
+}
+
+export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
+  return renderToStaticMarkup(<Layout
+    website={website}
+    seoTitle={currentNode.payload.seoTitle}
+    title={currentNode.payload.title}
+    description={currentNode.payload.description}
+    openGraphImage={currentNode.payload.openGraphImage}
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
+
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
-      <Navbar root={root} assets={assets.layout}/>
+      <Navbar root={website} />
 
       <section className='ph5-l'>
         <div className='w-100'>
@@ -27,6 +44,6 @@ export const NotFound: React.StatelessComponent<{root: Website, currentPage: Lin
       <p className='lh-copy black-70'>Please get in touch <a href='mailto:hello@learnk8s.io' className='link navy underline'>hello@learnk8s.io</a>.</p>
     </section>
 
-    <Footer root={root} assets={assets.layout}/>
-  </Layout>
+    <Footer root={website} />
+  </Layout>)
 }

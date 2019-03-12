@@ -1,25 +1,14 @@
 import React from 'react'
-import { LinkedNode, TrainingPage, getAbsoluteUrl, Website } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, assets as layoutAssets, InlineMarkdown, SpecialListItem, Testimonal, mailto, MailTo, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight, Hero} from './layout'
-import {Image, Img, Script, Javascript} from './assets'
+import { LinkedNode, getAbsoluteUrl, Sitemap } from './sitemap'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude , InlineMarkdown, SpecialListItem, Testimonal, mailto, MailTo, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight, Hero} from './layout'
+import { Image, Img, Script, Javascript } from './assets'
 import { PrimaryButton } from './homepage'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import moment from 'moment-timezone'
 import { material } from './material'
-import { cat } from 'shelljs'
-import marked from 'marked'
-
-const renderer = new marked.Renderer()
-
-const benefits = [
-  '**Get started with Kubernetes in your next project** and you need to quickly get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices',
-  '**Design and architect micro services on Kubernetes** that leverage the strength of distributed systems',
-  '**Design applications that can be deployed on AWS, GCP, Azure, etc.**, without requiring changing any of the application or infrastrucure code',
-  '**Autoscale your clusters and applications as your service becomes more popular**',
-  '**Standarise your development environments and workflow** and design processes for continuous delivery and intregration with Kubernetes',
-  'Become a **Certified Kubernetes Administrator** (CKA) or **Certified Kubernetes Application Developer** (CKAD)',
-]
+import { Venue, isVenueOnline, Courses, CourseEvent } from './courses'
+import { renderToStaticMarkup } from 'react-dom/server'
 
 export const faqs: FAQ[] = [{
   title: 'Who is this workshop for?',
@@ -65,491 +54,45 @@ const customRequest: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-enum Language {
-  ENGLISH = 'English',
-  ITALIAN = 'Italian',
+export const Assets = {
+  tick: Image({url: 'assets/training/tick.svg', description: 'Tick'}),
+  slack: Image({url: 'assets/training/slack_in_colours.svg', description: 'Slack'}),
+  downArrow: Image({url: 'assets/training/down_arrow_white.svg', description: 'Down'}),
+  training: Image({url: 'assets/training/training.svg', description: 'Training'}),
+  cargoLoading: Image({url: 'assets/training/more_cargo_loading.svg', description: 'Cargo loading'}),
+  previewDocker: Image({url: 'assets/training/docker.png', description: 'Linux containers and Kubernetes'}),
+  previewZero: Image({url: 'assets/training/zero.png', description: 'Zero to Kubernetes'}),
+  previewDeployments: Image({url: 'assets/training/deploy.png', description: 'Deployment strategies'}),
+  previewArchitecture: Image({url: 'assets/training/architecture.png', description: 'Kubernetes architecture'}),
+  previewNetworking: Image({url: 'assets/training/networking.png', description: 'Kubernetes networking'}),
+  previewState: Image({url: 'assets/training/state.png', description: 'Managing state with Kubernetes'}),
+  previewTemplating: Image({url: 'assets/training/templating.png', description: 'Templating Kubernetes resources'}),
+  previewOptionals: Image({url: 'assets/training/optionals.png', description: 'Optional modules'}),
+  toggle: Javascript({script: `(${CreateToggle.toString()})()`}),
 }
 
-enum CourseName {
-  BASIC = 'Deploying and scaling applications in Kubernetes',
-  ADVANCED = 'Advanced Kubernetes training',
+export const Details = {
+  type: identity<'training'>('training'),
+  url: '/training',
+  seoTitle: 'Kubernetes Training Courses ♦︎ Learnk8s',
+  title: 'Kubernetes Training Courses',
+  description: 'Join an instructor-led, hands-on course on how to quickly deploy applications in Kubernetes — without having to wade through mountains of documentation — and learn how to orchestrate and manage containers at scale.',
+  openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
 }
 
-export enum CurrencyCode {
-  USD = 'USD',
-  GBP = 'GBP',
-  EUR = 'EUR',
-  SGD = 'SGD',
-  CAD = 'CAD',
+function identity<T>(value: T): T {
+  return value
 }
 
-export interface Venue {
-  address: string | null
-  country: string | null
-  countryCode: string | null
-  city: string | null
-  postcode: string | null
-  name: string
-}
-
-interface Offer {
-  price: number
-  currency: CurrencyCode
-  locale: string
-}
-
-enum CourseCode {
-  BASIC = 'K8SBASIC',
-  ADVANCED = 'K8SADVANCED',
-}
-
-export enum Timezone {
-  LONDON = 'Europe/London',
-  SAN_FRANCISCO = 'America/Los_Angeles',
-  TORONTO = 'America/Toronto',
-  SINGAPORE = 'Asia/Singapore',
-  ROME = 'Europe/Rome',
-}
-
-export interface CourseEvent {
-  code: string
-  startAt: moment.Moment
-  duration: moment.Duration
-  timezone: Timezone
-  canBookInAdvanceFrom: moment.Duration
-  location: Venue
-  offer: Offer
-  language: Language
-  details: CourseDetails
-  description: string
-  eventbriteLogoId: string
-}
-
-interface CourseDetails {
-  title: CourseName
-  code: CourseCode
-}
-
-export function isVenueOnline(venue: Venue): boolean {
-  return venue.name === venues.Online.name
-}
-
-export const venues = {
-  Online: {
-    address: null,
-    city: null,
-    country: null,
-    countryCode: null,
-    postcode: null,
-    name: 'Online',
-  },
-  London: {
-    name: 'CitizenM Hotel',
-    address: '20 Lavington St',
-    city: 'London',
-    country: 'UK',
-    countryCode: 'GB',
-    postcode: 'SE1 0NZ',
-  },
-  Singapore: {
-    name: 'JustCo Singapore',
-    address: null,
-    country: 'Singapore',
-    countryCode: 'SG',
-    city: 'Singapore',
-    postcode: null,
-  },
-  Milan: {
-    name: 'Milano',
-    address: null,
-    postcode: null,
-    city: 'Milan',
-    country: 'Italy',
-    countryCode: 'IT',
-  },
-  SanFrancisco: {
-    name: 'San Francisco',
-    city: 'San Francisco',
-    postcode: null,
-    address: null,
-    country: 'California',
-    countryCode: 'US',
-  },
-  Cardiff: {
-    name: 'Cardiff',
-    city: 'Cardiff',
-    postcode: null,
-    address: null,
-    country: 'Wales',
-    countryCode: 'GB',
-  },
-  Toronto: {
-    name: 'Toronto',
-    city: 'Toronto',
-    country: 'Canada',
-    countryCode: 'CA',
-    address: null,
-    postcode: null,
-  },
-  TorontoGK: {
-    name: 'Toronto Global Knowledge',
-    city: 'Toronto',
-    country: 'Canada',
-    countryCode: 'CA',
-    address: '2 Bloor Street East 31st Floor',
-    postcode: 'M4W 1A8',
-  },
-}
-const AdvancedDetails = {
-  title: CourseName.ADVANCED,
-  code: CourseCode.ADVANCED,
-}
-
-interface KubernetesCourse {
-  name: string
-  code: CourseCode
-  description: string
-  events: CourseEvent[]
-}
-
-export const courses: KubernetesCourse[] = [
-  {
-    name: 'Advanced Kubernetes training',
-    code: CourseCode.ADVANCED,
-    description: 'Learn how to deploy and scale applications with Kubernetes.',
-    events: [
-    {
-      code: 'LK8S|ONLINE|20190313',
-      startAt: moment('2019-03-13T09:30:00+00:00'),
-      duration: moment.duration(3, 'days'),
-      timezone: Timezone.LONDON,
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Online,
-      offer: {
-        price: 1950,
-        currency: CurrencyCode.GBP,
-        locale: 'en-GB',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|SANFRANCISCO|20190325',
-      startAt: moment('2019-03-25T09:30:00-07:00'),
-      timezone: Timezone.SAN_FRANCISCO,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.SanFrancisco,
-      offer: {
-        price: 2250,
-        currency: CurrencyCode.USD,
-        locale: 'it-IT',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|LONDON|20190320',
-      startAt: moment('2019-03-20T09:30:00+00:00'),
-      timezone: Timezone.LONDON,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.London,
-      offer: {
-        price: 1950,
-        currency: CurrencyCode.GBP,
-        locale: 'en-GB',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|SINGAPORE|20190429',
-      startAt: moment('2019-04-29T09:30:00+08:00'),
-      timezone: Timezone.SINGAPORE,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Singapore,
-      offer: {
-        price: 3400,
-        currency: CurrencyCode.SGD,
-        locale: 'en-SG',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|CARDIFF|20190429',
-      startAt: moment('2019-04-29T09:30:00+01:00'),
-      timezone: Timezone.LONDON,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Cardiff,
-      offer: {
-        price: 1950,
-        currency: CurrencyCode.GBP,
-        locale: 'en-GB',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|TORONTO|20190513',
-      startAt: moment('2019-05-13T09:30:00-04:00'),
-      timezone: Timezone.TORONTO,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.TorontoGK,
-      offer: {
-        price: 3300,
-        currency: CurrencyCode.CAD,
-        locale: 'en-CA',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|LONDON|20190522',
-      startAt: moment('2019-05-22T09:30:00+01:00'),
-      timezone: Timezone.LONDON,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Online,
-      offer: {
-        price: 1950,
-        currency: CurrencyCode.GBP,
-        locale: 'en-GB',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|SANFRANCISCO|20190603',
-      startAt: moment('2019-06-03T09:30:00-07:00'),
-      timezone: Timezone.SAN_FRANCISCO,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.SanFrancisco,
-      offer: {
-        price: 2250,
-        currency: CurrencyCode.USD,
-        locale: 'it-IT',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|LONDON|20190605',
-      startAt: moment('2019-06-05T09:30:00+01:00'),
-      timezone: Timezone.LONDON,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.London,
-      offer: {
-        price: 1950,
-        currency: CurrencyCode.GBP,
-        locale: 'en-GB',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|MILAN|20190610',
-      startAt: moment('2019-06-10T09:30:00+01:00'),
-      timezone: Timezone.ROME,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Milan,
-      offer: {
-        price: 2050,
-        currency: CurrencyCode.EUR,
-        locale: 'it-IT',
-      },
-      language: Language.ITALIAN,
-      description: marked(cat(`${__dirname}/description_it.md`).toString(), {renderer}),
-      eventbriteLogoId: '53323631',
-    },
-    {
-      code: 'LK8S|SINGAPORE|20190703',
-      startAt: moment('2019-07-03T09:30:00+08:00'),
-      timezone: Timezone.SINGAPORE,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Singapore,
-      offer: {
-        price: 3400,
-        currency: CurrencyCode.SGD,
-        locale: 'en-SG',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|TORONTO|20190904',
-      startAt: moment('2019-09-04T09:30:00-04:00'),
-      timezone: Timezone.TORONTO,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.TorontoGK,
-      offer: {
-        price: 3300,
-        currency: CurrencyCode.CAD,
-        locale: 'en-CA',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|LONDON|20190916',
-      startAt: moment('2019-09-16T09:30:00+01:00'),
-      timezone: Timezone.LONDON,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.London,
-      offer: {
-        price: 1950,
-        currency: CurrencyCode.GBP,
-        locale: 'en-GB',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|MILAN|20190923',
-      startAt: moment('2019-09-23T09:30:00+01:00'),
-      timezone: Timezone.ROME,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Milan,
-      offer: {
-        price: 2050,
-        currency: CurrencyCode.EUR,
-        locale: 'it-IT',
-      },
-      language: Language.ITALIAN,
-      description: marked(cat(`${__dirname}/description_it.md`).toString(), {renderer}),
-      eventbriteLogoId: '53323631',
-    },
-    {
-      code: 'LK8S|LONDON|20191002',
-      startAt: moment('2019-10-02T09:30:00+01:00'),
-      timezone: Timezone.LONDON,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Online,
-      offer: {
-        price: 1950,
-        currency: CurrencyCode.GBP,
-        locale: 'en-GB',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|CARDIFF|20191009',
-      startAt: moment('2019-10-09T09:30:00+01:00'),
-      timezone: Timezone.LONDON,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Cardiff,
-      offer: {
-        price: 1950,
-        currency: CurrencyCode.GBP,
-        locale: 'en-GB',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|SINGAPORE|20191009',
-      startAt: moment('2019-10-09T09:30:00+08:00'),
-      timezone: Timezone.SINGAPORE,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.Singapore,
-      offer: {
-        price: 3400,
-        currency: CurrencyCode.SGD,
-        locale: 'en-SG',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
-      code: 'LK8S|SANFRANCISCO|20191021',
-      startAt: moment('2019-10-21T09:30:00-07:00'),
-      timezone: Timezone.SAN_FRANCISCO,
-      duration: moment.duration(3, 'days'),
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: venues.SanFrancisco,
-      offer: {
-        price: 2250,
-        currency: CurrencyCode.USD,
-        locale: 'it-IT',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },]
-  },
-]
-
-export const assets = {
-  page: {
-    tick: Image({url: 'assets/training/tick.svg', description: 'Tick'}),
-    slack: Image({url: 'assets/training/slack_in_colours.svg', description: 'Slack'}),
-    downArrow: Image({url: 'assets/training/down_arrow_white.svg', description: 'Down'}),
-    training: Image({url: 'assets/training/training.svg', description: 'Training'}),
-    cargoLoading: Image({url: 'assets/training/more_cargo_loading.svg', description: 'Cargo loading'}),
-    previewDocker: Image({url: 'assets/training/docker.png', description: 'Linux containers and Kubernetes'}),
-    previewZero: Image({url: 'assets/training/zero.png', description: 'Zero to Kubernetes'}),
-    previewDeployments: Image({url: 'assets/training/deploy.png', description: 'Deployment strategies'}),
-    previewArchitecture: Image({url: 'assets/training/architecture.png', description: 'Kubernetes architecture'}),
-    previewNetworking: Image({url: 'assets/training/networking.png', description: 'Kubernetes networking'}),
-    previewState: Image({url: 'assets/training/state.png', description: 'Managing state with Kubernetes'}),
-    previewTemplating: Image({url: 'assets/training/templating.png', description: 'Templating Kubernetes resources'}),
-    previewOptionals: Image({url: 'assets/training/optionals.png', description: 'Optional modules'}),
-    toggle: Javascript({script: `(${CreateToggle.toString()})()`}),
-  },
-  layout: layoutAssets,
-}
-
-export const Training: React.StatelessComponent<{root: Website, currentPage: LinkedNode<TrainingPage, object>, siteUrl: string, assets: typeof assets}> = ({assets, root, siteUrl, currentPage}) => {
-  return <Layout root={root} siteUrl={siteUrl} currentPage={currentPage} assets={assets.layout}>
-    {courses.map((course, index) => {
+export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
+  return renderToStaticMarkup(<Layout
+  website={website}
+  seoTitle={currentNode.payload.seoTitle}
+  title={currentNode.payload.title}
+  description={currentNode.payload.description}
+  openGraphImage={currentNode.payload.openGraphImage}
+  absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
+    {Courses.map((course, index) => {
       return <JsonLd<Course> key={index} item={{
         '@type': 'Course',
         '@context': 'https://schema.org',
@@ -582,9 +125,9 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
             price: it.offer.price,
             priceCurrency: it.offer.currency,
             validFrom: it.startAt.clone().subtract(it.canBookInAdvanceFrom).toISOString(),
-            url: getAbsoluteUrl(currentPage, siteUrl),
+            url: getAbsoluteUrl(currentNode, siteUrl),
           },
-          image: `${siteUrl}${currentPage.payload.pageDetails.openGraphImage}`,
+          image: `${siteUrl}${currentNode.payload.openGraphImage}`,
           performer: {
             '@type': 'Organization',
             name: 'Learnk8s',
@@ -594,27 +137,27 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
     })}
     <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
 
-      <Navbar root={root} assets={assets.layout}/>
+      <Navbar root={website} />
 
-      <Hero assets={assets.layout} image={assets.page.training} imageClass='i-training'>
+      <Hero image={Assets.training} imageClass='i-training'>
         <h1 className='f1 f-subheadline-l'>Kubernetes <span className='no-wrap'>instructor-led</span> training</h1>
         <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>Learn how to deploy and scale applications with Kubernetes.</h2>
         <ul className='list w-60-m center-m mw6 bg-white black-70 ph3 pv1 shadow-1 mh3 mh4-ns mt4'>
           <li className='flex items-center justify-between ph2 bb b--light-gray'>
             <p className='ttu'>Private courses</p>
-            <div className='w2 h2'><Img image={assets.page.tick}/></div>
+            <div className='w2 h2'><Img image={Assets.tick}/></div>
           </li>
           <li className='flex items-center justify-between ph2 bb b--light-gray'>
             <p className='ttu'>Public courses</p>
-            <div className='w2 h2'><Img image={assets.page.tick}/></div>
+            <div className='w2 h2'><Img image={Assets.tick}/></div>
           </li>
           <li className='flex items-center justify-between ph2'>
-            <p className='ttu v-mid mt2 mb1'>Online courses <span className='dib w2 v-mid'><Img image={assets.page.slack}/></span></p>
-            <div className='w2 h2'><Img image={assets.page.tick}/></div>
+            <p className='ttu v-mid mt2 mb1'>Online courses <span className='dib w2 v-mid'><Img image={Assets.slack}/></span></p>
+            <div className='w2 h2'><Img image={Assets.tick}/></div>
           </li>
         </ul>
         <div className='dn db-l mw6 mh3 mh4-ns tc'>
-          <div className='w3 h3 dib'><Img image={assets.page.downArrow}/></div>
+          <div className='w3 h3 dib'><Img image={Assets.downArrow}/></div>
         </div>
       </Hero>
     </div>
@@ -624,7 +167,7 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
       <div className='w-50-l dn db-l tc'>
         <div className='dib'>
           <div className='i-more-cargo-loading relative'>
-            <Img image={assets.page.cargoLoading} className='absolute top-0 right-0'/>
+            <Img image={Assets.cargoLoading} className='absolute top-0 right-0'/>
           </div>
         </div>
       </div>
@@ -633,17 +176,24 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
         <h2 className='f3 navy f2-l measure-narrow'>Instructor-led, hands-on courses</h2>
         <div className='measure-wide'>
           <p className='lh-copy f4-l black-70'>These courses are great if you wish to:</p>
-          <ul className='list black-70 pl0 pt2'>{benefits.map((it, index) => <ListItem key={index} assets={assets.layout}><InlineMarkdown content={it} /></ListItem>)}</ul>
+          <ul className='list black-70 pl0 pt2'>
+            <ListItem><InlineMarkdown content={'**Get started with Kubernetes in your next project** and you need to quickly get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices'}/></ListItem>
+            <ListItem><InlineMarkdown content={'**Design and architect micro services on Kubernetes** that leverage the strength of distributed systems'}/></ListItem>
+            <ListItem><InlineMarkdown content={'**Design applications that can be deployed on AWS, GCP, Azure, etc.**, without requiring changing any of the application or infrastrucure code'}/></ListItem>
+            <ListItem><InlineMarkdown content={'**Autoscale your clusters and applications as your service becomes more popular**'}/></ListItem>
+            <ListItem><InlineMarkdown content={'**Standarise your development environments and workflow** and design processes for continuous delivery and intregration with Kubernetes'}/></ListItem>
+            <ListItem><InlineMarkdown content={'Become a **Certified Kubernetes Administrator** (CKA) or **Certified Kubernetes Application Developer** (CKAD)'}/></ListItem>
+          </ul>
         </div>
       </div>
     </section>
 
-    <Interlude assets={assets.layout}/>
+     <Interlude />
 
     <section className='pt5'>
       <PackageList>
         <PackageLeft heading='Advanced Kubernetes Course' subheading='Most popular option — 3 days course'>
-          <PackageFeatures assets={assets.layout} description='The course lasts three days and you can choose from Kubernetes core modules and a selection of popular optional module. You will learn how to:' benefits={[
+          <PackageFeatures description='The course lasts three days and you can choose from Kubernetes core modules and a selection of popular optional module. You will learn how to:' benefits={[
                       'Package applications in Linux containers',
                       'Deploy containers in Kubernetes',
                       'Zero downtime deployment strategies in Kubernetes',
@@ -657,13 +207,13 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
           <p className='tc pb4'><PrimaryButton text='Learn more ⇢' anchor='#start'></PrimaryButton></p>
         </PackageLeft>
         <PackageRight heading='Kubernetes Private Training' subheading='Make your own course'>
-          <PackageFeatures assets={assets.layout} description='The private training course is excellent if you wish to customise your learning path to adopt Kubernetes.' benefits={[
+          <PackageFeatures description='The private training course is excellent if you wish to customise your learning path to adopt Kubernetes.' benefits={[
                 'Pick the modules relevant to your team',
                 'Deep dive into the content with a three, four or five days course',
                 'Delivered on site, remotely or in a cozy meeting room',
                 'Classes from 10+ delegates',
               ]}>
-            <SpecialListItem assets={assets.layout}><span className='b'>Perfect for the Certified Kubernetes Administrator (CKA) exam</span> (exam not included and optional)</SpecialListItem>
+            <SpecialListItem><span className='b'>Perfect for the Certified Kubernetes Administrator (CKA) exam</span> (exam not included and optional)</SpecialListItem>
           </PackageFeatures>
           <p className='tc pb4'><PrimaryButton text='Get in touch ⇢' mailto={mailto(privateGroupEnquiry)}></PrimaryButton></p>
         </PackageRight>
@@ -677,42 +227,42 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
       <p className='lh-copy f4 black-70 measure center tc ph3'>The advanced course is made 6 core modules that are designed to last 2 full days. You're recommended to select 4 optional modules for the third day, but you choose more if you wish.</p>
 
       <div className='ma3 ma5-l flex-l flex-wrap justify-center'>
-        <DashboardModule className='w-40-l' preview={assets.page.previewDocker} title={`1. ${material.docker.name}`} description={material.docker.description}>
+        <DashboardModule className='w-40-l' preview={Assets.previewDocker} title={`1. ${material.docker.name}`} description={material.docker.description}>
           <p className='lh-copy measure-wide'>You will learn how to package and run applications in Docker containers. The module covers the following topics:</p>
           <ul>{Object.values(material.docker.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewZero} title={`2. ${material.zeroToKubernetes.name}`} description={material.zeroToKubernetes.description}>
+        <DashboardModule className='w-40-l' preview={Assets.previewZero} title={`2. ${material.zeroToKubernetes.name}`} description={material.zeroToKubernetes.description}>
           <p className='lh-copy measure-wide'>You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the following topics:</p>
           <ul>{Object.values(material.zeroToKubernetes.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewDeployments} title={`3. ${material.deploymentStrategies.name}`} description={material.deploymentStrategies.description}>
+        <DashboardModule className='w-40-l' preview={Assets.previewDeployments} title={`3. ${material.deploymentStrategies.name}`} description={material.deploymentStrategies.description}>
           <p className='lh-copy measure-wide'>You will learn different techniques to deploy your applications with zero downtime. The module covers the following topics:</p>
           <ul>{Object.values(material.deploymentStrategies.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewArchitecture} title={`4. ${material.architecture.name}`} description={material.architecture.description}>
+        <DashboardModule className='w-40-l' preview={Assets.previewArchitecture} title={`4. ${material.architecture.name}`} description={material.architecture.description}>
           <p className='lh-copy measure-wide'>You will learn the core components in Kubernetes and how they work. The module covers the following topics:</p>
           <ul>{Object.values(material.architecture.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewNetworking} title={`5. ${material.networking.name}`} description={material.networking.description}>
+        <DashboardModule className='w-40-l' preview={Assets.previewNetworking} title={`5. ${material.networking.name}`} description={material.networking.description}>
           <p className='lh-copy measure-wide'>You will learn how the traffic flows inside the cluster. You will also learn how to expose your apps to the public internet. The module covers the following topics:</p>
           <ul>{Object.values(material.networking.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewState} title={`6. ${material.managingState.name}`} description={material.managingState.description}>
+        <DashboardModule className='w-40-l' preview={Assets.previewState} title={`6. ${material.managingState.name}`} description={material.managingState.description}>
           <p className='lh-copy measure-wide'>You will learn how to persist data in Kubernetes. The module covers the following topics:</p>
           <ul>{Object.values(material.managingState.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewTemplating} title={`7. ${material.templating.name}`} description={material.templating.description}>
+        <DashboardModule className='w-40-l' preview={Assets.previewTemplating} title={`7. ${material.templating.name}`} description={material.templating.description}>
           <p className='lh-copy measure-wide'>You will learn how to template resources for different environments. The module covers the following topics:</p>
           <ul>{Object.values(material.templating.topics).map((it, index) => <li key={index} className='lh-copy mv1'>{it}</li>)}</ul>
         </DashboardModule>
 
-        <DashboardModule className='w-40-l' preview={assets.page.previewOptionals} title='Optionals' description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}>
+        <DashboardModule className='w-40-l' preview={Assets.previewOptionals} title='Optionals' description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}>
           <p className='lh-copy measure-wide'>You can pick and choose from the modules below. Looking for something in particular? <a className='link underline' href={mailto(customRequest)}>Get in touch!</a></p>
           <ul>
             <li className='lh-copy mv1'>{material.advancedNetworking.name}</li>
@@ -746,7 +296,7 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
         <li className='asia dib pa2 navy bb bw1 b--near-white bg-evian br1 br--right'><label htmlFor='asia'>Asia</label></li>
       </ul>
 
-      <ul className='events list pl0 pt3'>{courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[]).sort((a, b) => a.startAt.valueOf() - b.startAt.valueOf()).map(it => <CourseRow event={it} slackIcon={assets.page.slack}/>)}</ul>
+      <ul className='events list pl0 pt3'>{Courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[]).sort((a, b) => a.startAt.valueOf() - b.startAt.valueOf()).map(it => <CourseRow event={it} slackIcon={Assets.slack}/>)}</ul>
 
       <p className='f2 navy b tc mb2 pt4-ns pt2'>Your city is not on the list?</p>
       <p className='lh-copy f4 black-70 measure center tc'>Don't worry. We run in-person classrooms in Europe, North America and Asia. If your city is not on the list, drop us a line at <a className='link underline' href={mailto(newLocationEnquiry)}>hello@learnk8s.io</a> and will try to make it happen.</p>
@@ -757,9 +307,9 @@ export const Training: React.StatelessComponent<{root: Website, currentPage: Lin
     <FAQs faqs={faqs}/>
 
     <Consultation />
-    <Footer root={root} assets={assets.layout}/>
-    <Script script={assets.page.toggle}></Script>
-  </Layout>
+    <Footer root={website} />
+    <Script script={Assets.toggle}></Script>
+  </Layout>)
 }
 
 export const CourseRow: React.StatelessComponent<{event: CourseEvent, slackIcon: Image}> =({event, slackIcon}) => {
@@ -793,12 +343,12 @@ export const CourseRow: React.StatelessComponent<{event: CourseEvent, slackIcon:
   </li>
 }
 
-export const PackageFeatures: React.StatelessComponent<{description: string, benefits: string[], assets: typeof layoutAssets}> = ({benefits, description, children, assets}) => {
+export const PackageFeatures: React.StatelessComponent<{description: string, benefits: string[]}> = ({benefits, description, children}) => {
   return <div className='content ph4 pb4'>
     <div className='list pl0 black-70'>
       <p className='lh-copy pt3 f4-l measure center'>{description}</p>
       <ul className='list pl0'>
-        {benefits.map(benefit => <ListItem assets={assets}>{benefit}</ListItem>)}
+        {benefits.map(benefit => <ListItem>{benefit}</ListItem>)}
         {children}
       </ul>
     </div>
@@ -828,7 +378,7 @@ export const DashboardModule: React.StatelessComponent<{title: string, descripti
   </div>
 }
 
-export function CreateToggle() {
+function CreateToggle() {
   function doesntExist<T>(it: T): boolean {
     return !it;
   }
