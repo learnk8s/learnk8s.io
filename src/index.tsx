@@ -28,7 +28,7 @@ import * as SmallerImages from './smallerDockerImages/smallerImages'
 import * as DeployLaravel from './deployLaravel/deployLaravel'
 import * as K8sOnWindows from './k8sOnWindows/installingK8sOnWindows'
 import * as ChaosEngineering from './chaosEngineering/chaosEngineering'
-import * as SolarPlants from './solarPlants'
+import * as SolarPlants from './solarPlants/solarPlants'
 import * as SpotInstances from './spotInstances'
 import * as ScalingTensorflow from './scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot'
@@ -124,7 +124,10 @@ function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
       writeFileSync(generatePath(), `<!DOCTYPE html>${K8sOnWindows.render(root, node, siteUrl)}`)
       return
     }
-    case SolarPlants.Details.type:
+    case SolarPlants.Details.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${SolarPlants.render(root, node, siteUrl)}`)
+      return
+    }
     case SpotInstances.Details.type:
     case ScalingTensorflow.Details.type:
     case ScalingSpringBoot.Details.type:
