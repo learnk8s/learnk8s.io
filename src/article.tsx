@@ -172,10 +172,10 @@ export function Markdown(content: string): {html: string, css: string[], js: str
   }
   renderer.link = (href, title, text) => {
     const isLocal = !(/^http/.test(href))
-    const target = isLocal ? '_self' : '_blank'
+    const attributes = isLocal ? 'target="_self"' : 'target="_blank" rel="noreferrer"'
     return !!title ?
       `<a href="${href}" class="link dib white bg-blue br1 pv2 ph3 b f5 br2 mv3 hover-bg-dark-blue pointer">${text}</a>` :
-      `<a href="${href}" class="link navy underline hover-sky" target=${target}>${text}</a>`
+      `<a href="${href}" class="link navy underline hover-sky" ${attributes}>${text}</a>`
   }
   renderer.codespan = inlineRenderer.codespan = (code) => {
     return `<code class="code f5 lh-copy bg-near-white br2 pv1 ph2 fs-normal">${code}</code>`
