@@ -1,19 +1,3 @@
----
-layout: post
-title: Getting started with Docker and Kubernetes on Windows 10
-description: ""
-date: 2018-06-05 00:00:00
-categories: docker kubernetes windows
-excerpt: "Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. And it doesn't help that installing the software isn't exactly a walk in the park. In fact, you should already be a Docker and Kubernetes expert to navigate the options on how to install them. But don't worry! If you're just starting your journey with containers and Kubernetes on Windows this article is for you. You'll learn how to make the right choices when it comes to setting up your development environment on Windows."
-author: "Keith Mifsud"
-image: /blog/installing-docker-and-kubernetes-on-windows/k8s_on_win.jpg
-open_graph:
-  type: article
-  title: Getting started with Docker and Kubernetes on Windows 10
-  image: /blog/installing-docker-and-kubernetes-on-windows/k8s_on_win.jpg
-  description: "Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows."
----
-
 Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin.
 
 And it doesn't help that installing the software isn't exactly a walk in the park.
@@ -96,7 +80,7 @@ It's equally good news if you can't run Hyper-V since you can use VirtualBox.
 
 That's a lot of choices and trade-offs, so here's a summary of what was discussed:
 
-![Installing Docker and Kubernetes on Windows]({% link _blog/installing-docker-and-kubernetes-on-windows/diagram.png %})
+![Installing Docker and Kubernetes on Windows](diagram.png)
 
 ## Prerequisites
 
@@ -114,12 +98,15 @@ You're outsourcing all the hard work of provisioning software to someone else.
 
 Installing Chocolatey is easy. You can find the [full instructions on the official website](https://chocolatey.org/install). But in a nutshell, this what you have to do:
 
-1. Start `cmd.exe` as administrator
-2. Execute this long command:
+First, start `cmd.exe` as administrator
+
+Then execute this long command:
+
 ```powershell
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 ```
-3. Reload `cmd.exe`
+
+And finally, reload `cmd.exe`.
 
 If the installation was successful, you could now search for applications to install with:
 
@@ -135,7 +122,7 @@ choco install cmder -y
 
 Chocolatey installed the binary in `C:\tools`. If you wish to continue the tutorial using Cmder, you should start the binary as an administrator.
 
-![Cmder — a portable console emulator for Windows]({% link _blog/installing-docker-and-kubernetes-on-windows/cmder.png %})
+![Cmder — a portable console emulator for Windows](cmder.png)
 
 Looking nice!
 
@@ -151,7 +138,7 @@ choco install docker-for-windows -y
 
 Restart your laptop. Docker will ask you if you wish to enable Hyper-V.
 
-![Enabling Hyper-V with Docker]({% link _blog/installing-docker-and-kubernetes-on-windows/enable_hyperv.png %})
+![Enabling Hyper-V with Docker](enable_hyper_v.png)
 
 Yes, you do!
 
@@ -164,14 +151,14 @@ If you're unsure VT-X/AMD-v was enabled, don't worry. If you don't have it, Dock
 
 > Hardware assisted virtualization and data execution protection must be enabled in the BIOS.
 
-![You should enable VT-X/AMD-v]({% link _blog/installing-docker-and-kubernetes-on-windows/vtx_amdv.png %})
+![You should enable VT-X/AMD-v](error_assisted_virtualization_bios.png)
 
 Another common error has to do with the Hyper-V hypervisor not being enabled. If you experience this error:
 
 > Unable to start: The running command stopped because the preference variable "ErrorActionPreference" or common parameter is set to Stop: 'MobyLinuxVM' failed to start.
 > Failed to start the virtual machine 'MobyLinuxVM' because one of the Hyper-V components is not running.
 
-![You should enable Hyper-V with Docker for Windows]({% link _blog/installing-docker-and-kubernetes-on-windows/hyperv_not_running.png %})
+![You should enable Hyper-V with Docker for Windows](hypervisor_not_enabled.png)
 
 You should enable Hyper-V. Open a new command prompt as an administrator and type the following:
 
@@ -195,7 +182,7 @@ If your Docker daemon isn't running, you're probably banging your head against t
 
 > error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.37/containers/json: open //./pipe/docker_engine: The system cannot find the file specified. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.
 
-![Docker daemon failed to start]({% link _blog/installing-docker-and-kubernetes-on-windows/docker_error_connection.png %})
+![Docker daemon failed to start](powershell_failed_to_connect.png)
 
 The error above is suggesting that your Docker installation is not behaving normally and wasn't able to start.
 
@@ -227,7 +214,7 @@ Type the following command to list all the adapters:
 Get-NetAdapter
 ```
 
-![Get-NetAdapter on PowerShell]({% link _blog/installing-docker-and-kubernetes-on-windows/netadapter.png %})
+![Get-NetAdapter on PowerShell](netadapter.png)
 
 > If you're finding it hard to select an adapter, try picking one that has **Up** in the _Status_ column.
 
@@ -265,7 +252,7 @@ The extra verbose logging should help you get to the issue. In my particular cas
 
 Not very helpful. After enabling verbose logging the issue was more obvious:
 
-```text
+```
 + Hyper-V\Start-VM minikube
 + ~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : FromStdErr: (:) [Start-VM], VirtualizationException
@@ -284,11 +271,15 @@ You should be able to see a single node in Kubernetes.
 
 ### Running virtual machines on VirtualBox
 
-Since you enabled Hyper-V on your device, you won't be able to start any VM on VirtualBox. You can still try and launch your VM. You may experience the following error, though:
+Since you enabled Hyper-V on your device, you won't be able to start any virtual machine on VirtualBox.
+
+You can still try and launch your virtual machine.
+
+You may experience the following error, though:
 
 > Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart it for you.
 
-![Blue screen of death]({% link _blog/installing-docker-and-kubernetes-on-windows/bsod.png %})
+![Blue screen of death](bsod.png)
 
 **If you wish to use VirtualBox or any other executable that uses a Type-2 hypervisor, you should disable it and restart your computer first.**
 
@@ -379,7 +370,7 @@ _Why not having a single binary?_
 
 When you run Docker for Windows, you Docker CLI is connected to your local Docker daemon.
 
-![Docker for Windows]({% link _blog/installing-docker-and-kubernetes-on-windows/docker-architecture01.png %})
+![Docker for Windows](docker-architecture01.png)
 
 **But sometimes you don't have a Docker daemon.**
 
@@ -391,7 +382,7 @@ Precisely the case if you're running minikube.
 
 Your Docker CLI is connected remotely to a Docker daemon located inside the minikube virtual machine.
 
-![Minikube and Docker]({% link _blog/installing-docker-and-kubernetes-on-windows/docker-architecture02.png %})
+![Minikube and Docker](docker-architecture02.png)
 
 When you're running containers against a remote Docker daemon, you need to adjust your port bindings.
 
@@ -427,7 +418,7 @@ You need to visit the machine with the Docker daemon if you wish to see your run
 minikube ip
 ```
 
-You can visit http://your_minikube_ip:8080 and see the _"Welcome to Nginx"_ page.
+You can visit `http://your_minikube_ip:8080` and see the _"Welcome to Nginx"_ page.
 
 ## Testing your Docker installation
 
@@ -441,7 +432,7 @@ docker run -ti -p 8080:80 wordpress
 
 Once Docker has completed downloading all the package, you should visit [http://localhost:8080/](http://localhost:8080/).
 
-> Please note that, if you're running minikube as your remote Docker daemon, you should use http://minikube_ip:8080 as your URL.
+> Please note that, if you're running minikube as your remote Docker daemon, you should use `http://minikube_ip:8080` as your URL.
 
 You should be able to see the Wordpress installation Wizard.
 
@@ -451,13 +442,11 @@ Wordpress is serving traffic from within a container!
 
 > Please note that you won't be able to complete the Wordpress installation because there's no database.
 
-{% include inline-subscribe-cta/index.html %}
-
 ## Testing your Kubernetes cluster installation
 
 It's about time to test your local Kubernetes cluster. In this section, you will deploy the [Smashing.io dashboard](https://smashing.github.io/).
 
-![Smashing.io dashboard]({% link _blog/installing-docker-and-kubernetes-on-windows/dashing.png %})
+![Smashing.io dashboard](dashing.png)
 
 ### Deploy Smashing to Kubernetes
 
@@ -499,7 +488,7 @@ You can visit [the official Kubernetes dashboard](https://github.com/kubernetes/
 minikube dashboard
 ```
 
-![Kubernetes dashboard]({% link _blog/installing-docker-and-kubernetes-on-windows/dashboard-ui.png %})
+![Kubernetes dashboard](dashboard-ui.png)
 
 From there, you can explore your cluster and deploy applications.
 
@@ -512,14 +501,3 @@ Now you know all the options when it comes to installing Docker and Kubernetes o
 If you stumbled on an error not described in the article, feel free to get in touch on Twitter [@learnk8s](https://twitter.com/learnk8s) or [Slack](https://learnk8s-slack-invite.herokuapp.com/).
 
 And since you have a fully working environment, you should check out the tutorial on [how to deploy Laravel applications to Kubernetes](/kubernetes-deploy-laravel-the-easy-way).
-
-{:.caution}
-## Become an expert at deploying and scaling applications in Kubernetes
-
-This article is part of the learnk8s workshop "Deploying and Scaling applications in Kubernetes".
-
-In the rest of the course you will learn how to:
-
-{% include promo-workshop/index.html %}
-
-P.S. Don't miss the next experiment, insight, or *discount*: [subscribe to the mailing list!](/newsletter)
