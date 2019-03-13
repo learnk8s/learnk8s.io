@@ -68,7 +68,7 @@ export const Author: React.StatelessComponent<{name: string, link: string, avata
   </div>
 }
 
-export function Markdown(content: string): {html: string, css: string[], js: string[]} {
+export function Markdown(content: string, assetsPath: string): {html: string, css: string[], js: string[]} {
   const js: string[] = []
   const css: string[] = []
   const renderer = new marked.Renderer()
@@ -95,7 +95,7 @@ export function Markdown(content: string): {html: string, css: string[], js: str
     return `<p class="lh-copy measure-wide f5">${text}</p>`
   }
   renderer.image = (src, title, text) => {
-    const {url, description} = Image({url: src, description: title})
+    const {url, description} = Image({url: `${assetsPath}/${src}`, description: title})
     return `<img src="${url}" alt="${description}" class="db pv3"/>`
   }
   renderer.code = (code, langAndLines, escaped) => {
@@ -217,6 +217,7 @@ export function Markdown(content: string): {html: string, css: string[], js: str
 
 export const RelatedConentContainer: React.StatelessComponent<{}> = ({children}) => {
   return <div>
+    <h2 className='f2 pt4 pb2'>That's all folks!</h2>
     <p className='lh-copy measure-wide f4'>If you enjoyed this article, you might find the following articles interesting:</p>
     <ul className=''>
       {children}
