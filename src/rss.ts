@@ -1,4 +1,4 @@
-import { getAbsoluteUrl, Sitemap, LinkedNode } from './sitemap'
+import { getAbsoluteUrl, Sitemap, LinkedNode, getBlogPosts } from './sitemap'
 import { Feed } from 'feed'
 import moment = require('moment')
 import * as Redirect from './redirect'
@@ -13,7 +13,7 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const articles = Object.values(website.children.blog.children).filter(it => it.payload.type !== Redirect.Type)
+  const articles = getBlogPosts(website)
   const feed = new Feed({
     title: 'Learnk8s',
     description: 'Learn Kubernetes',
@@ -25,15 +25,15 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     feed: 'https://example.com/atom',
     updated: new Date(),
   })
-  articles.forEach((it: any) => {
+  articles.forEach(it => {
     feed.addItem({
-      title: it.payload.pageDetails.title,
+      title: it.payload.title,
       link: getAbsoluteUrl(it, siteUrl),
       date: moment(it.payload.publishedDate).toDate(),
       id: getAbsoluteUrl(it, siteUrl),
-      description: it.payload.pageDetails.description,
-      content: it.payload.pageDetails.description,
-      image: `${siteUrl}${it.payload.pageDetails.openGraphImage}`
+      description: it.payload.description,
+      content: it.payload.description,
+      image: `${siteUrl}${it.payload.openGraphImage}`
     })
   })
   return feed.atom1()

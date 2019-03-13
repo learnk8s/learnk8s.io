@@ -32,7 +32,7 @@ export const faqs: FAQ[] = [{
 
 const publicCourseEnquiry = (date: moment.Moment, venue: Venue): MailTo => ({
   subject: 'Kubernetes training — Public course enquiry',
-  body: `Hello Learnk8s,\n\nI'd like to know more about the ${isVenueOnline(venue) ? 'online ': ''}Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')}${isVenueOnline(venue) ? '' : `in ${venue.city || venue.name}`}.\n\nKind regards,\n`,
+  body: `Hello Learnk8s,\n\nI'd like to know more about the ${isVenueOnline(venue) ? 'online ': ''}Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')}${isVenueOnline(venue) ? '' : ` in ${venue.city || venue.name}`}.\n\nKind regards,\n`,
   email: 'hello@learnk8s.io',
 })
 

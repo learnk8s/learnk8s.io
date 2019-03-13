@@ -24,7 +24,7 @@ import * as TermsAndConditions from './termsAndConditions'
 import * as Training from './training'
 import * as WebAppManifest from './webAppManifest'
 
-import * as SmallerImages from './smallerImages'
+import * as SmallerImages from './smallerDockerImages/smallerImages'
 import * as DeployLaravel from './deployLaravel'
 import * as K8sOnWindows from './installingK8sOnWindows'
 import * as ChaosEngineering from './chaosEngineering'
@@ -108,7 +108,10 @@ function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
       writeFileSync(generatePath(), RSS.render(root, node, siteUrl))
       return
     }
-    case SmallerImages.Details.type:
+    case SmallerImages.Details.type: {
+      writeFileSync(generatePath(), SmallerImages.render(root, node, siteUrl))
+      return
+    }
     case DeployLaravel.Details.type:
     case K8sOnWindows.Details.type:
     case ChaosEngineering.Details.type:

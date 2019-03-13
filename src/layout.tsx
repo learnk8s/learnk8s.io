@@ -1,6 +1,6 @@
 import React from 'react'
 import { getFullUrl, Sitemap } from './sitemap'
-import {Image, Img} from './assets'
+import {Image, Img, CSSLink, CSSBundle} from './assets'
 import marked from 'marked'
 
 export interface PageDetails {
@@ -30,6 +30,7 @@ export const Layout: React.StatelessComponent<{
   description: string
   openGraphImage: Image
   absoluteUrl: string
+  cssBundle?: CSSBundle
 }> = ({
   children,
   website,
@@ -38,6 +39,7 @@ export const Layout: React.StatelessComponent<{
   description,
   openGraphImage,
   absoluteUrl,
+  cssBundle,
 }) => {
   const gaId = 'GTM-5WCKPRL'
   return <html lang='en'>
@@ -72,6 +74,7 @@ w[l] = w[l] || []; w[l].push({
     'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
 })(window, document, 'script', 'dataLayer', '${gaId}');`}}></script>
     <link rel='stylesheet' href='/assets/style.css'/>
+    {!!cssBundle ? <CSSLink css={cssBundle}/> : null}
   </head>
   <body className='bg-near-white sans-serif'>
     <noscript>
