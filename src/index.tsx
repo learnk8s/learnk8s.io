@@ -25,7 +25,7 @@ import * as Training from './training'
 import * as WebAppManifest from './webAppManifest'
 
 import * as SmallerImages from './smallerDockerImages/smallerImages'
-import * as DeployLaravel from './deployLaravel'
+import * as DeployLaravel from './deployLaravel/deployLaravel'
 import * as K8sOnWindows from './installingK8sOnWindows'
 import * as ChaosEngineering from './chaosEngineering'
 import * as SolarPlants from './solarPlants'
@@ -112,7 +112,10 @@ function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
       writeFileSync(generatePath(), `<!DOCTYPE html>${SmallerImages.render(root, node, siteUrl)}`)
       return
     }
-    case DeployLaravel.Details.type:
+    case DeployLaravel.Details.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${DeployLaravel.render(root, node, siteUrl)}`)
+      return
+    }
     case K8sOnWindows.Details.type:
     case ChaosEngineering.Details.type:
     case SolarPlants.Details.type:
