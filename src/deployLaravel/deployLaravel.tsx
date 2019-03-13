@@ -29,7 +29,7 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const {css, js, html} = Markdown(cat('src/deployLaravel/content.md').toString())
+  const {css, js, html} = Markdown(cat('src/deployLaravel/content.md').toString(), __dirname)
   return renderToStaticMarkup(<Article
     website={website}
     siteUrl={siteUrl}
@@ -107,8 +107,8 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     <JSScript js={JSBundle({
       scripts: js,
       paths: [
-        'src/smallerDockerImages/anime.min.js',
-        'src/smallerDockerImages/isScrolledIntoView.js',
+        'src/deployLaravel/anime.min.js',
+        'src/deployLaravel/isScrolledIntoView.js',
       ]
     })}/>
   </Article>)

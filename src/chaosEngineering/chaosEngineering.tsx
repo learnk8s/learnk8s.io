@@ -1,22 +1,22 @@
-import {Image, CSSBundle, JSBundle, JSScript} from '../assets'
+import {Image, CSSBundle, JSScript, JSBundle} from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, Markdown, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Markdown, Article, RelatedConentContainer, RelatedContentItem } from '../article'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { cat } from 'shelljs'
-import { ListItem } from '../layout'
-import { BlogPosting } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
+import { BlogPosting } from 'schema-dts'
+import { ListItem } from '../layout'
 
 export const Details = {
-  type: identity<'smaller_images'>('smaller_images'),
-  url: '/smaller-docker-images',
-  seoTitle: '3 simple tricks for smaller Docker images ♦︎ Learnk8s',
-  title: '3 simple tricks for smaller Docker images',
-  description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
-  openGraphImage: Image({url: 'src/smallerDockerImages/smaller_images.png', description: 'Docker whale'}),
-  publishedDate: '2018-02-12',
-  previewImage: Image({url: 'src/smallerDockerImages/smaller_images.png', description: '3 simple tricks for smaller Docker images'}),
+  type: identity<'chaosEngineering'>('chaosEngineering'),
+  url: '/kubernetes-chaos-engineering-lessons-learned',
+  seoTitle: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1 ♦︎ Learnk8s',
+  title: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1',
+  description: `When you deploy an app in Kubernetes, your code ends up running on one or more worker nodes. A node may be a physical machine or a VM. The cluster routes the traffic to the nodes using a network proxy. But what happens when network proxy crashes?`,
+  openGraphImage: Image({url: 'src/chaosEngineering/chaos-engineering-kubernetes.png', description: 'Chaos engineering'}),
+  publishedDate: '2018-05-15',
+  previewImage: Image({url: 'src/chaosEngineering/chaos-engineering-kubernetes.png', description: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1'}),
   author: {
     fullName: 'Daniele Polencic',
     avatar: Image({url: 'assets/authors/daniele_polencic.jpg', description: 'Daniele Polencic'}),
@@ -29,7 +29,7 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const {css, js, html} = Markdown(cat('src/smallerDockerImages/content.md').toString(), __dirname)
+  const {css, js, html} = Markdown(cat('src/chaosEngineering/content.md').toString(), __dirname)
   return renderToStaticMarkup(<Article
     website={website}
     siteUrl={siteUrl}
@@ -77,10 +77,10 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
     <RelatedConentContainer>
       <RelatedContentItem>
-        <a className='link navy underline hover-sky' href={getFullUrl(website.children.blog.children.installingK8sOnWindows)}>{website.children.blog.children.installingK8sOnWindows.payload.title}</a>
+        <a href={getFullUrl(website.children.blog.children.smallerDockerImage)} className='link navy underline hover-sky'>3 simple tricks for smaller Docker images</a> and learn how to build and deploy Docker images quicker.
       </RelatedContentItem>
       <RelatedContentItem>
-        <a className='link navy underline hover-sky' href={getFullUrl(website.children.blog.children.chaosEngineering)}>{website.children.blog.children.chaosEngineering.payload.title}</a>
+        <a href={getFullUrl(website.children.blog.children.scalingSpringBoot)} className='link navy underline hover-sky'>Scaling Microservices with Message Queues, Spring Boot and Kubernetes.</a> Learn how to use the Horizontal Pod Autoscaler to resize your fleet of applications dynamically.
       </RelatedContentItem>
     </RelatedConentContainer>
 
@@ -107,8 +107,8 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     <JSScript js={JSBundle({
       scripts: js,
       paths: [
-        'src/smallerDockerImages/anime.min.js',
-        'src/smallerDockerImages/isScrolledIntoView.js',
+        'src/chaosEngineering/anime.min.js',
+        'src/chaosEngineering/isScrolledIntoView.js',
       ]
     })}/>
   </Article>)
