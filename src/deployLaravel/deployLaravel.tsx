@@ -1,26 +1,26 @@
-import {Image, CSSBundle, JSBundle, JSScript} from '../assets'
+import {Image, CSSBundle, JSScript, JSBundle} from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, Markdown, RelatedConentContainer, RelatedContentItem } from '../article'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { cat } from 'shelljs'
-import { ListItem } from '../layout'
+import { Article, RelatedConentContainer, RelatedContentItem, Markdown } from '../article'
 import { BlogPosting } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
+import { ListItem } from '../layout';
+import { cat } from 'shelljs';
 
 export const Details = {
-  type: identity<'smaller_images'>('smaller_images'),
-  url: '/smaller-docker-images',
-  seoTitle: '3 simple tricks for smaller Docker images ♦︎ Learnk8s',
-  title: '3 simple tricks for smaller Docker images',
-  description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
-  openGraphImage: Image({url: 'src/smallerDockerImages/smaller_images.png', description: 'Docker whale'}),
-  publishedDate: '2018-02-12',
-  previewImage: Image({url: 'src/smallerDockerImages/smaller_images.png', description: '3 simple tricks for smaller Docker images'}),
+  type: identity<'deployLaravel'>('deployLaravel'),
+  url: '/kubernetes-deploy-laravel-the-easy-way',
+  seoTitle: 'Kubernetes: deploy Laravel the easy way ♦︎ Learnk8s',
+  title: 'Kubernetes: deploy Laravel the easy way',
+  description: `Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I’ll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
+  openGraphImage: Image({url: 'src/deployLaravel/laravel_k8s.jpg', description: 'Deploy Laravel on Kubernetes'}),
+  publishedDate: '2018-04-25',
+  previewImage: Image({url: 'src/deployLaravel/laravel_k8s.jpg', description: 'Deploy Laravel the easy way'}),
   author: {
-    fullName: 'Daniele Polencic',
-    avatar: Image({url: 'assets/authors/daniele_polencic.jpg', description: 'Daniele Polencic'}),
-    link: 'https://linkedin.com/in/danielepolencic'
+    fullName: 'Keith Mifsud',
+    avatar: Image({url: 'assets/authors/keith_mifsud.jpg', description: 'Keith Mifsud'}),
+    link: 'https://keith-mifsud.me/'
   },
 }
 
@@ -29,7 +29,7 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const {css, js, html} = Markdown(cat('src/smallerDockerImages/content.md').toString())
+  const {css, js, html} = Markdown(cat('src/deployLaravel/content.md').toString())
   return renderToStaticMarkup(<Article
     website={website}
     siteUrl={siteUrl}
@@ -77,10 +77,10 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
     <RelatedConentContainer>
       <RelatedContentItem>
-        <a className='link navy underline hover-sky' href={getFullUrl(website.children.blog.children.installingK8sOnWindows)}>{website.children.blog.children.installingK8sOnWindows.payload.title}</a>
+        You can use <a href={getFullUrl(website.children.blog.children.solarPlants)} className='link navy underline hover-sky'>Kubernetes to control IoT</a> devices such as Raspberry Pis and build your Internet of Things automated fleet.
       </RelatedContentItem>
       <RelatedContentItem>
-        <a className='link navy underline hover-sky' href={getFullUrl(website.children.blog.children.chaosEngineering)}>{website.children.blog.children.chaosEngineering.payload.title}</a>
+        Learn how you can use virtual machines that can disappear at any time to <a href={getFullUrl(website.children.blog.children.solarPlants)} className='link navy underline hover-sky'>lower your infrastructure costs</a>.
       </RelatedContentItem>
     </RelatedConentContainer>
 

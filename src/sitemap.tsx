@@ -17,7 +17,7 @@ import * as Training from './training'
 import * as WebAppManifest from './webAppManifest'
 
 import * as SmallerImages from './smallerDockerImages/smallerImages'
-import * as DeployLaravel from './deployLaravel'
+import * as DeployLaravel from './deployLaravel/deployLaravel'
 import * as K8sOnWindows from './installingK8sOnWindows'
 import * as ChaosEngineering from './chaosEngineering'
 import * as SolarPlants from './solarPlants'

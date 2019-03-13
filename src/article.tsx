@@ -224,8 +224,6 @@ export const RelatedConentContainer: React.StatelessComponent<{}> = ({children})
   </div>
 }
 
-export const RelatedContentItem: React.StatelessComponent<{link: string}> = ({link, children}) => {
-  return <li className='mv0 f4-l lh-copy'>
-    <a href={link} className='link navy underline hover-sky'>{children}</a>
-  </li>
+export const RelatedContentItem: React.StatelessComponent<{}> = ({children}) => {
+  return <li className='mv3 f4-l lh-copy'>{children}</li>
 }
