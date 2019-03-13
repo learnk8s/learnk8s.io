@@ -16,7 +16,7 @@ import * as TermsAndConditions from './termsAndConditions'
 import * as Training from './training'
 import * as WebAppManifest from './webAppManifest'
 
-import * as SmallerImages from './smallerImages'
+import * as SmallerImages from './smallerDockerImages/smallerImages'
 import * as DeployLaravel from './deployLaravel'
 import * as K8sOnWindows from './installingK8sOnWindows'
 import * as ChaosEngineering from './chaosEngineering'
@@ -27,12 +27,8 @@ import * as ScalingSpringBoot from './scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsK8s'
 
 import { Venues, Timezone } from './courses'
+import moment from 'moment-timezone'
 
-
-const deployLaravel = createNode({
-  page: DeployLaravel.Details,
-  children: {}
-})
 const blogPosts = {
   installingK8sOnWindows: createNode({
     page: K8sOnWindows.Details,
@@ -42,12 +38,8 @@ const blogPosts = {
     page: ChaosEngineering.Details,
     children: {}
   }),
-  deployLaravel,
-  deployLaravelOld: createNode({
-    page: Redirect.Details({
-      url: '/deploying-laravel-to-kubernetes',
-      redirectTo: deployLaravel,
-    }),
+  deployLaravel: createNode({
+    page: DeployLaravel.Details,
     children: {}
   }),
   solarPlants: createNode({
@@ -87,7 +79,16 @@ export const Sitemap = createNode({
       children: {}}),
     blog: createNode({
       page: Blog.Details,
-      children: blogPosts
+      children: {
+        ...blogPosts,
+        deployLaravelOld: createNode({
+          page: Redirect.Details({
+            url: '/deploying-laravel-to-kubernetes',
+            redirectTo: blogPosts.deployLaravel,
+          }),
+          children: {}
+        }),
+      }
     }),
     contactUs: createNode({
       page: ContactUs.Details,
@@ -235,6 +236,13 @@ export function getFullUrl(currentPage: LinkedNode<any>): string {
 
 export function getAbsoluteUrl(currentPage: LinkedNode<any>, siteUrl: string): string {
   return `${siteUrl}${getFullUrl(currentPage)}`
+}
+
+export function getBlogPosts(website: Sitemap): typeof blogPosts[keyof typeof blogPosts][] {
+  return Object.values(website.children.blog.children).filter(it => it.payload.type !== Redirect.Type).slice(0)
+  .sort((a: any, b: any) => {
+    return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
+  }) as any
 }
 
 function renderTree(node: LinkedNode<any, object>, siteUrl: string): string[] {

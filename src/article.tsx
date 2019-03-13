@@ -1,9 +1,10 @@
 import marked from 'marked'
 import * as React from 'react'
 import Prism from 'prismjs'
-import { Img, Image } from './assets'
+import { Img, Image, CSSBundle } from './assets'
 import { Sitemap } from './sitemap'
 import { Layout, Navbar, Footer} from './layout'
+import cheerio from 'cheerio'
 
 const loadLanguages = require('prismjs/components/')
 loadLanguages(['powershell', 'bash', 'docker', 'json', 'yaml', 'sql', 'ruby'])
@@ -19,6 +20,7 @@ export const Article: React.StatelessComponent<{
   authorFullName: string
   authorAvatar: Image
   authorLink: string
+  cssBundle?: CSSBundle
 }> = ({
   website,
   siteUrl,
@@ -30,6 +32,7 @@ export const Article: React.StatelessComponent<{
   authorFullName,
   authorAvatar,
   authorLink,
+  cssBundle,
   children,
 }) => {
   return <Layout
@@ -38,14 +41,15 @@ export const Article: React.StatelessComponent<{
   title={title}
   description={description}
   openGraphImage={openGraphImage}
-  absoluteUrl={absolutUrl}>
+  absoluteUrl={absolutUrl}
+  cssBundle={cssBundle}>
     <div className='white pv2 pv0-ns mb4 mb5-ns'>
       <Navbar root={website} />
     </div>
     <div className='tc mb4 db mw4 center'>
       <Author name={authorFullName} avatar={authorAvatar} link={authorLink} />
     </div>
-    <article className='ph3 pt0 pb4 article'>
+    <article className='ph3 pt0 pb4 mw7 center'>
       <h1 className='navy tc f2 f1-ns'>{title}</h1>
       <Img image={openGraphImage}/>
       <hr className='w3 center b--navy mv4 mb5-ns'/>
@@ -64,7 +68,9 @@ export const Author: React.StatelessComponent<{name: string, link: string, avata
   </div>
 }
 
-export const Markdown: React.StatelessComponent<{markdown: string}> = ({markdown}) => {
+export function Markdown(content: string): {html: string, css: string[], js: string[]} {
+  const js: string[] = []
+  const css: string[] = []
   const renderer = new marked.Renderer()
   const inlineRenderer = new marked.Renderer()
   renderer.heading = (text, level, raw) => {
@@ -99,13 +105,15 @@ export const Markdown: React.StatelessComponent<{markdown: string}> = ({markdown
     switch (lang) {
       case 'slideshow':
         return renderSlideshow(JSON.parse(code))
+      case 'include':
+        return includeModule(code)
       case 'eval':
         return code
       default:
         return decorateWithEditor(lang, code, lines)
     }
 
-    function renderSlideshow({slides, description}: {description: string, slides: {image: string, description: string}[]}) {
+    function renderSlideshow({slides, description}: {description: string, slides: {image: string, description: string}[]}): string {
       return `<div class="slideshow-js overflow-hidden">
   <ul class="pl0 list slider-js">
       ${slides.map(({image, description}, index) => {
@@ -124,16 +132,30 @@ export const Markdown: React.StatelessComponent<{markdown: string}> = ({markdown
 </div>`
     }
 
-    function decorateWithEditor(lang: string, code: string, lines?: string) {
-      return `<div class="">
+    function includeModule(module: string): string {
+      const $ = cheerio.load(module, {decodeEntities: false})
+      const style = $('style').html()
+      const script = $('script').html()
+      if (style) {
+        css.push(style)
+      }
+      if (script) {
+        js.push(script)
+      }
+      const html = $('template').html()
+      return html ? `<div class="mv4 mv5-l">${html}</div>` : ''
+    }
+
+    function decorateWithEditor(lang: string, code: string, lines?: string): string {
+      return `<div class="mv4 mv5-l">
   <header class="bg-light-gray flex pv2 pl1 br--top br2">
     <div class="w1 h1 ml1 bg-dark-red br-100"></div>
     <div class="w1 h1 ml1 bg-green br-100"></div>
     <div class="w1 h1 ml1 bg-yellow br-100"></div>
   </header>
   ${!!lang ?
-    `<pre class="code language-${lang} relative" ${lines ? `data-line="${lines}"` : ''}><code class="language-${lang}">${Prism.highlight(code, Prism.languages[lang])}</code>` :
-    `<pre class="code language-none relative"><code class="language-none">${code}</code></pre>`
+    `<pre class="code language-${lang} relative pa4 overflow-auto mv0 br2 br--bottom" ${lines ? `data-line="${lines}"` : ''}><code class="language-${lang}">${Prism.highlight(code, Prism.languages[lang])}</code>` :
+    `<pre class="code language-none relative pa4 overflow-auto mv0 br2 br--bottom"><code class="language-none">${code}</code></pre>`
   }
 </pre>
 </div>`
@@ -186,5 +208,24 @@ export const Markdown: React.StatelessComponent<{markdown: string}> = ({markdown
   renderer.table = (header: string, body: string) => {
     return `<table class="table w-100 f4 mv3 mv5-l" cellspacing="0"><thead>${header}</thead><tbody class="lh-copy">${body}</tbody></table>`
   }
-  return <div dangerouslySetInnerHTML={{__html: marked(markdown, {renderer})}}></div>
+  return {
+    html: marked(content, {renderer}),
+    css,
+    js,
+  }
+}
+
+export const RelatedConentContainer: React.StatelessComponent<{}> = ({children}) => {
+  return <div>
+    <p className='lh-copy measure-wide f4'>If you enjoyed this article, you might find the following articles interesting:</p>
+    <ul className=''>
+      {children}
+    </ul>
+  </div>
+}
+
+export const RelatedContentItem: React.StatelessComponent<{link: string}> = ({link, children}) => {
+  return <li className='mv0 f4-l lh-copy'>
+    <a href={link} className='link navy underline hover-sky'>{children}</a>
+  </li>
 }

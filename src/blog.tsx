@@ -1,5 +1,5 @@
 import React from 'react'
-import { LinkedNode, getFullUrl, Sitemap, getAbsoluteUrl } from './sitemap'
+import { LinkedNode, getFullUrl, Sitemap, getAbsoluteUrl, getBlogPosts } from './sitemap'
 import { Navbar, Consultation, Footer, Layout } from './layout'
 import {Image, Img} from './assets'
 import moment = require('moment')
@@ -41,15 +41,11 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
     <section className='ph3 measure-wide pv4 center'>
       <ul className='list pl0'>
-        {Object.values(website.children.blog.children).filter(it => it.payload.type !== Redirect.Type).slice(0)
-          .sort((a: any, b: any) => {
-            return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
-          })
-          .map((it: any) => {
+        {getBlogPosts(website).map(it => {
           return <li className='pv3'>
-            <h2 className='mb0'><a href={getFullUrl(it)} className='link navy'>{it.payload.pageDetails.title}</a></h2>
+            <h2 className='mb0'><a href={getFullUrl(it)} className='link navy'>{it.payload.title}</a></h2>
             <p className='black-40 mt1'>{moment(it.payload.publishedDate).format('MMMM Do YYYY')}</p>
-            <p className='lh-copy black-70'>{it.payload.pageDetails.description}</p>
+            <p className='lh-copy black-70'>{it.payload.description}</p>
           </li>
         })}
       </ul>

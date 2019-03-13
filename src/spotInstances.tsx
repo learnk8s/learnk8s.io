@@ -7,11 +7,9 @@ export const Details = {
   type: identity<'spotInstances'>('spotInstances'),
   url: '/kubernetes-spot-instances',
   seoTitle: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes ♦︎ Learnk8s',
-  pageDetails: {
-    title: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes',
-    description: `Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
-    openGraphImage: Image({url: '_blog/kubernetes-spot-instances/cheap-cluster.jpg', description: 'Serving cheaper servers'}),
-  },
+  title: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes',
+  description: `Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
+  openGraphImage: Image({url: '_blog/kubernetes-spot-instances/cheap-cluster.jpg', description: 'Serving cheaper servers'}),
   publishedDate: '2018-11-06',
   previewImage: Image({url: '_blog/kubernetes-spot-instances/cheap-cluster.jpg', description: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes'}),
   author: {
