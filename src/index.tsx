@@ -61,47 +61,47 @@ function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
 
   switch (page.type) {
     case Homepage.Details.type: {
-      writeFileSync(generatePath(), Homepage.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${Homepage.render(root, node, siteUrl)}`)
       return
     }
     case Training.Details.type: {
-      writeFileSync(generatePath(), Training.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${Training.render(root, node, siteUrl)}`)
       return
     }
     case Academy.Details.type: {
-      writeFileSync(generatePath(), Academy.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${Academy.render(root, node, siteUrl)}`)
       return
     }
     case Consulting.Details.type: {
-      writeFileSync(generatePath(), Consulting.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${Consulting.render(root, node, siteUrl)}`)
       return
     }
     case ContactUs.Details.type: {
-      writeFileSync(generatePath(), ContactUs.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${ContactUs.render(root, node, siteUrl)}`)
       return
     }
     case Careers.Details.type: {
-      writeFileSync(generatePath(), Careers.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${Careers.render(root, node, siteUrl)}`)
       return
     }
     case TermsAndConditions.Details.type: {
-      writeFileSync(generatePath(), TermsAndConditions.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${TermsAndConditions.render(root, node, siteUrl)}`)
       return
     }
     case AboutUs.Details.type: {
-      writeFileSync(generatePath(), AboutUs.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${AboutUs.render(root, node, siteUrl)}`)
       return
     }
     case Redirect.Type: {
-      writeFileSync(generatePath(), Redirect.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${Redirect.render(root, node, siteUrl)}`)
       return
     }
     case Newsletter.Details.type: {
-      writeFileSync(generatePath(), Newsletter.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${Newsletter.render(root, node, siteUrl)}`)
       return
     }
     case Blog.Details.type: {
-      writeFileSync(generatePath(), Blog.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${Blog.render(root, node, siteUrl)}`)
       return
     }
     case RSS.Details.type: {
@@ -109,7 +109,7 @@ function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
       return
     }
     case SmallerImages.Details.type: {
-      writeFileSync(generatePath(), SmallerImages.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${SmallerImages.render(root, node, siteUrl)}`)
       return
     }
     case DeployLaravel.Details.type:
@@ -123,11 +123,11 @@ function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
       // IGNORE
       return
     case NotFound.Details.type: {
-      writeFileSync(`_site/404.html`, NotFound.render(root, node, siteUrl))
+      writeFileSync(`_site/404.html`, `<!DOCTYPE html>${NotFound.render(root, node, siteUrl)}`)
       return
     }
     case Landing.Type: {
-      writeFileSync(generatePath(), Landing.render(root, node, siteUrl))
+      writeFileSync(generatePath(), `<!DOCTYPE html>${Landing.render(root, node, siteUrl)}`)
       return
     }
     case WebAppManifest.Details.type: {
