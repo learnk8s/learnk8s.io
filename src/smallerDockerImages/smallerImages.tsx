@@ -60,7 +60,10 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       publisher: {
         '@type': 'Organization',
         name: 'Learnk8s',
-        logo: `${siteUrl}${Image({url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo'}).url}`,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${siteUrl}${Image({url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo'}).url}`,
+        },
       },
       url: getAbsoluteUrl(currentNode, siteUrl),
       datePublished: currentNode.payload.publishedDate,
