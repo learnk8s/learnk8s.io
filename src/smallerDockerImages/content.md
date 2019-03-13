@@ -495,7 +495,7 @@ As an example, if an attacker was able to exploit a vulnerability in your app ru
 
 **If you're concerned about size at all costs, then you should switch to Alpine based images**.
 
-Those are generally very small but at the price of compatibility. Alpine uses a slightly different standard C library — muslc. You may experience some compatibility issues from time to time. More examples of that [here](https://github.com/grpc/grpc/issues/8528) and [here](https://github.com/grpc/grpc/issues/6126).
+Those are generally very small but at the price of compatibility. Alpine uses a slightly different standard C library — muslc. You may experience some compatibility issues from time to time. More examples of that [here "alpine-node docker image and google-cloud equals error loading ld-linux-x86-64.so.2"](https://github.com/grpc/grpc/issues/8528) and [here "Import error trying to run gRPC on alpine"](https://github.com/grpc/grpc/issues/6126).
 
 **The vanilla base image is perfect for testing and development**.
 
