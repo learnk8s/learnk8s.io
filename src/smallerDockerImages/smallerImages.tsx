@@ -94,7 +94,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       <div className='pt2 pb4'>
         <a href={getFullUrl(website.children.training)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3'>Become an expert →</a>
       </div>
-      <p>P.S. Don't miss the next experiment, insight, or <span className='b'>discount</span>: <a href={getFullUrl(website.children.newsletter)}>subscribe to the mailing list!</a></p>
+      <p className='lh-copy f5'>P.S. Don't miss the next experiment, insight, or <span className='b'>discount</span>: <a href={getFullUrl(website.children.newsletter)} className='link navy underline hover-sky'>subscribe to the mailing list!</a></p>
     </div>
 
     <JSScript js={JSBundle({
