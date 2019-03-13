@@ -18,7 +18,7 @@ import * as WebAppManifest from './webAppManifest'
 
 import * as SmallerImages from './smallerDockerImages/smallerImages'
 import * as DeployLaravel from './deployLaravel/deployLaravel'
-import * as K8sOnWindows from './installingK8sOnWindows'
+import * as K8sOnWindows from './k8sOnWindows/installingK8sOnWindows'
 import * as ChaosEngineering from './chaosEngineering/chaosEngineering'
 import * as SolarPlants from './solarPlants'
 import * as SpotInstances from './spotInstances'
