@@ -478,7 +478,7 @@ minikube service smashing
 
 You can visit the dashboard from Kubernetes! Hurrah!
 
-# A bird's eye view of Kubernetes
+## A bird's eye view of Kubernetes
 
 Minikube is packed with goodies.
 

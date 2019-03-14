@@ -11,8 +11,9 @@ import { ListItem } from '../layout'
 export const Details = {
   type: identity<'solarPlants'>('solarPlants'),
   url: '/kubernetes-on-solar-plants',
-  seoTitle: 'Cloud infrastructure for the Internet of Things: Kubernetes on solar plants ♦︎ Learnk8s',
+  seoTitle: 'Internet of Things on solar plants with Kubernetes ♦︎ Learnk8s',
   title: 'Cloud infrastructure for the Internet of Things: Kubernetes on solar plants',
+  shortDescription: `When you have thousands of solar panels and embedded computers how do you orchestrate software updates, monitor uptime and secure communications? Enter Kubernetes.`,
   description: `Solar panels are getting cheaper, and are becoming an economically viable source of renewable energy in many parts of the world. For solar panels to operate efficiently, they need to be kept clean and pointed at an optimal angle to the sun that balances power generation and prevents overheating. An embedded computer is in charge of monitoring metrics and driving the actuators. But when you have thousands of solar panels and embedded computers how do you orchestrate software updates, monitor uptime and secure communications?`,
   openGraphImage: Image({url: 'src/solarPlants/solar_panel.png', description: 'Solar panels and Kubernetes'}),
   publishedDate: '2018-12-04',
@@ -35,7 +36,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     siteUrl={siteUrl}
     seoTitle={currentNode.payload.seoTitle}
     title={currentNode.payload.title}
-    description={currentNode.payload.description}
+    description={currentNode.payload.shortDescription}
     openGraphImage={currentNode.payload.openGraphImage}
     absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
     authorFullName={currentNode.payload.author.fullName}

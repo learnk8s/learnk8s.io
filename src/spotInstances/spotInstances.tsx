@@ -12,8 +12,9 @@ import { ListItem } from '../layout'
 export const Details = {
   type: identity<'spotInstances'>('spotInstances'),
   url: '/kubernetes-spot-instances',
-  seoTitle: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes ♦︎ Learnk8s',
+  seoTitle: 'Spot instances in Kubernetes ♦︎ Learnk8s',
   title: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes',
+  shortDescription: `How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
   description: `Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
   openGraphImage: Image({url: 'src/spotInstances/cheap-cluster.jpg', description: 'Serving cheaper servers'}),
   publishedDate: '2018-11-06',
@@ -36,7 +37,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     siteUrl={siteUrl}
     seoTitle={currentNode.payload.seoTitle}
     title={currentNode.payload.title}
-    description={currentNode.payload.description}
+    description={currentNode.payload.shortDescription}
     openGraphImage={currentNode.payload.openGraphImage}
     absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
     authorFullName={currentNode.payload.author.fullName}

@@ -4,7 +4,7 @@
   "description": "learnk8s.io static website",
   "scripts": {
     "minify": "for i in `find _site -name \"*.html\" -type f`; do inline-source --root ./_site $i $i; done",
-    "build": "npx ts-node --files src/index.tsx",
+    "build": "npx ts-node --files src/index.tsx && cp favicon.ico _site",
     "svgo": "npx ts-node src/svgo.ts"
   },
   "author": "Learnk8s",

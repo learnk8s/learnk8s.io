@@ -16,7 +16,7 @@ export const Details = {
   url: '/contact-us',
   seoTitle: 'Contact us ♦︎ Learnk8s',
   title: 'Contact us',
-  description: 'Get in touch and let us know how we can help.',
+  description: 'Feel free to get in touch and let us know how we can help. ',
   openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
 }
 

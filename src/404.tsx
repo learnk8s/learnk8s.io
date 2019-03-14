@@ -9,7 +9,7 @@ export const Details = {
   url: '/404',
   seoTitle: 'Oops! Not found',
   title: 'Not Found',
-  description: 'Page not found',
+  description: 'We are sorry but he page you tried to visit does not exist',
   openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
 }
 
