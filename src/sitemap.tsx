@@ -23,7 +23,7 @@ import * as ChaosEngineering from './chaosEngineering/chaosEngineering'
 import * as SolarPlants from './solarPlants/solarPlants'
 import * as SpotInstances from './spotInstances/spotInstances'
 import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
-import * as ScalingSpringBoot from './scalingSpringBoot'
+import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 
 import { Venues, Timezone } from './courses'
