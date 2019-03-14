@@ -158,23 +158,6 @@ export const Courses: KubernetesCourse[] = [
     description: 'Learn how to deploy and scale applications with Kubernetes.',
     events: [
     {
-      code: 'LK8S|ONLINE|20190313',
-      startAt: moment('2019-03-13T09:30:00+00:00'),
-      duration: moment.duration(3, 'days'),
-      timezone: Timezone.LONDON,
-      canBookInAdvanceFrom: moment.duration(90, 'days'),
-      details: AdvancedDetails,
-      location: Venues.Online,
-      offer: {
-        price: 1950,
-        currency: CurrencyCode.GBP,
-        locale: 'en-GB',
-      },
-      language: Language.ENGLISH,
-      description: marked(cat(`${__dirname}/description_en.md`).toString(), {renderer}),
-      eventbriteLogoId: '48505063',
-    },
-    {
       code: 'LK8S|SANFRANCISCO|20190325',
       startAt: moment('2019-03-25T09:30:00-07:00'),
       timezone: Timezone.SAN_FRANCISCO,
@@ -227,7 +210,7 @@ export const Courses: KubernetesCourse[] = [
     },
     {
       code: 'LK8S|CARDIFF|20190429',
-      startAt: moment('2019-04-29T09:30:00+01:00'),
+      startAt: moment('2019-05-29T09:30:00+01:00'),
       timezone: Timezone.LONDON,
       duration: moment.duration(3, 'days'),
       canBookInAdvanceFrom: moment.duration(90, 'days'),
