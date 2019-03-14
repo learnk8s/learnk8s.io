@@ -12,8 +12,9 @@ import { ListItem } from '../layout'
 export const Details = {
   type: identity<'whatIsK8s'>('whatIsK8s'),
   url: '/what-is-kubernetes',
-  seoTitle: 'What is Kubernetes? Optimise your hosting costs and efficiency ♦︎ Learnk8s',
+  seoTitle: 'What is Kubernetes? ♦︎ Learnk8s',
   title: 'What is Kubernetes? Optimise your hosting costs and efficiency',
+  shortDescription: `The industry has experienced a shift towards developing smaller applications. But how does that impact the infrastructure? Don't end up paying the extra price in your cloud bill; learn how you can fix it with Kubernetes.`,
   description: `In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month.`,
   openGraphImage: Image({url: 'src/whatIsKubernetes/why-kube.png', description: 'Kubernetes bucks'}),
   publishedDate: '2018-09-04',
@@ -36,7 +37,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     siteUrl={siteUrl}
     seoTitle={currentNode.payload.seoTitle}
     title={currentNode.payload.title}
-    description={currentNode.payload.description}
+    description={currentNode.payload.shortDescription}
     openGraphImage={currentNode.payload.openGraphImage}
     absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
     authorFullName={currentNode.payload.author.fullName}

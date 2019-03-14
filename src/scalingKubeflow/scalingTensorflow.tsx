@@ -12,8 +12,9 @@ import { ListItem } from '../layout'
 export const Details = {
   type: identity<'scalingTensorflow'>('scalingTensorflow'),
   url: '/scaling-machine-learning-with-kubeflow-tensorflow',
-  seoTitle: 'Scaling Jupyter notebooks with Kubernetes and Tensorflow ♦︎ Learnk8s',
+  seoTitle: 'Scaling Jupyter notebooks with Kubernetes, Tensorflow ♦︎ Learnk8s',
   title: 'Scaling Jupyter notebooks with Kubernetes and Tensorflow',
+  shortDescription: `In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.`,
   description: `One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.`,
   openGraphImage: Image({url: 'src/scalingKubeflow/kubeflow.png', description: 'Big data'}),
   publishedDate: '2019-01-09',
@@ -36,7 +37,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     siteUrl={siteUrl}
     seoTitle={currentNode.payload.seoTitle}
     title={currentNode.payload.title}
-    description={currentNode.payload.description}
+    description={currentNode.payload.shortDescription}
     openGraphImage={currentNode.payload.openGraphImage}
     absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
     authorFullName={currentNode.payload.author.fullName}

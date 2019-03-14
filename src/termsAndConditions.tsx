@@ -17,7 +17,7 @@ export const Details = {
   url: '/terms-and-conditions',
   seoTitle: 'Terms and Conditions ♦︎ Learnk8s',
   title: 'Terms and Conditions',
-  description: 'Terms and Conditions.',
+  description: 'Terms and Conditions that applies to all services offered by Learnk8s',
   openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
 }
 

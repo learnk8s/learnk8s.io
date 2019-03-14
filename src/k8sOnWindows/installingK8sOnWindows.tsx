@@ -11,8 +11,9 @@ import { ListItem } from '../layout'
 export const Details = {
   type: identity<'k8sOnWindows'>('k8sOnWindows'),
   url: '/installing-docker-and-kubernetes-on-windows',
-  seoTitle: 'Getting started with Docker and Kubernetes on Windows 10 ♦︎ Learnk8s',
+  seoTitle: 'Getting started with Docker and Kubernetes on Win 10 ♦︎ Learnk8s',
   title: 'Getting started with Docker and Kubernetes on Windows 10',
+  shortDescription: `In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
   description: `Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
   openGraphImage: Image({url: 'src/k8sOnWindows/k8s_on_win.jpg', description: 'Getting started with Docker and Kubernetes on Windows 10'}),
   publishedDate: '2018-06-05',
@@ -35,7 +36,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     siteUrl={siteUrl}
     seoTitle={currentNode.payload.seoTitle}
     title={currentNode.payload.title}
-    description={currentNode.payload.description}
+    description={currentNode.payload.shortDescription}
     openGraphImage={currentNode.payload.openGraphImage}
     absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
     authorFullName={currentNode.payload.author.fullName}

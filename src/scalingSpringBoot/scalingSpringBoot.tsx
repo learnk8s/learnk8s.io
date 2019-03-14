@@ -12,7 +12,7 @@ import { ListItem } from '../layout';
 export const Details = {
   type: identity<'scalingSpringBoot'>('scalingSpringBoot'),
   url: '/scaling-spring-boot-microservices',
-  seoTitle: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes ♦︎ Learnk8s',
+  seoTitle: 'Scaling SpringBoot with Message Queues and Kubernetes ♦︎ Learnk8s',
   title: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
   description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
   openGraphImage: Image({url: 'src/scalingSpringBoot/autoscaling.png', description: 'Containers'}),

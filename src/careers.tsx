@@ -9,7 +9,7 @@ export const Details = {
   url: '/careers',
   seoTitle: 'Team ♦︎ Learnk8s',
   title: 'Careers',
-  description: 'Help others learn Kubernetes.',
+  description: 'Join Learnk8s and help others learn Docker and Kubernetes.',
   openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
 }
 
@@ -59,7 +59,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <li>You deployed and scaled applications on Kubernetes</li>
         <li>You're patient and understand the value in pair programming and knowledge sharing</li>
         <li>You fluent in either Java, Scala, Python or Node.js</li>
-        <li>You use CI/CD on a daily basis and can’t imagine a world without it</li>
+        <li>You use CI/CD on a daily basis and can't imagine a world without it</li>
       </ul>
       <h3 className='navy'>Arrangement & renumeration</h3>
       <p>This is an ongoing REMOTE engagement on a freelance basis. Please get in touch to discuss your rate.</p>
