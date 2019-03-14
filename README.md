@@ -1,91 +1,4 @@
-# learnk8s
-
-## How to create a blog post
-
-You should store posts in the `_blog` folder. Usually, Jekyll stores blog posts in the `_posts` folder. However, that prevents posts from having locally scoped assets such as images or code. In fact, you're only allowed to have flat files and not folders under `_posts`.
-
-> While [there's a plugin to work around the challenge of having locally scoped assets](https://github.com/nhoizey/jekyll-postfiles), it's not ideal. It breaks compatibility with other plugins, and it is difficult to reason about tags such as the include_relative. It's also not actively maintained.
-
-The name of the folder in `_blog` is also the slug of the post. The article should be named `index` — if you're using markdown, that's `index.md`.
-
-You can include resources with [the include_relative tag](https://jekyllrb.com/docs/includes/#including-files-relative-to-another-file).
-
-Using a non-standard approach to store blog posts has some pros and cons. Here's a list of cons:
-
-- The URL of the post is "<folder name>/index". The _link_ tag and generating permalink had to patched to play nicely.
-- All resources within the post folder are copied across.
-- You should iterate through the collection with `for item in site.<collection name>`
-- Drafts are not possibile with collections
-
-### Post Author
-
-You can specify the author's name for every blog post by setting the front-matter property like so:
-
-`author: "Author Name and Surname"`
-
-You can also set the author's avatar for every blog post by setting the front-matter property like so:
-
-`author_avatar: "author_name_and_surname.extension"`
-
-Jekyll will find the avatar image file in `/assets`
-
-Please note that if no `author` is specified, Jekyll will default to "Daniele Polencic".
-
-On the other hand, if an `author` is specified but `author_avatar` is not, then Jekyll will try to find the images in `/assets` by using the author's name in lowercase and replaces "spaces" with an underscore. It will also assume that the image the extension is ".jpg".
-
-If the above fails, then no image will be shown on top of the Author's name.
-
-### Post Excerpt
-
-You can specify the article's excerpt to be displayed in the article list
-page by adding and setting the front-matter property:
-
-`excerpt: "Your brief description"`
-
-Please check how it looks and fits on the page once set.
-
-### Links
-
-If you need to include an external link, you can use an available `include
-directive` as opposed to standard HTML. To do so, simply add the following to
- your article:
-
-```
-{% include link.external.html href="http://example.com" text="Text you want
-to show" %}
-```
-
-___Optional arguments:___
-
-As you might of assumed the `href` ad the `text` arguments are required in
-order for link to be shown and to be directed appropriately. You can pass
-additional arguments for the `title` and the `rel` options as follows:
-
-1) Rel
-
-The default setting if not stated is `rel=nofollow`. Setting this attribute
-will override the default setting. For example, this setting:
-
-```
-{% include link.external.html href="http://example.com" text="Text you want
-to show" rel="noopener" %}
-```
-
-will result as:
-
-```html
-<a href="http://example.com" rel="noopener">Text you want to show</a>
-```
-
-2) Title
-
-If you do not specify a title, the text will be used by default. You can
-override the default title by setting it, Like so:
-
-```html
-<a href="http://example.com" title="Your desired title">Text you want to
-show</a>
-```
+# Learnk8s website
 
 ## Checking your writing
 
@@ -112,26 +25,17 @@ When you paste your text, Grammarly sends the content to its servers and runs a 
 After you cloned the repository, cd in the project directory and run:
 
 ```bash
-$ docker run -ti --rm -v ${PWD}:/app -e LANG=C.UTF-8 -p 4000:4000 ruby bash
+npm install
 ```
 
-You can install the dependencies with:
+You can compile the website with:
 
 ```bash
-$ cd /app
-$ bundle install
+npx ts-node --files src/index.tsx
 ```
 
-You can run an incremental build with:
+You can serve the website with:
 
 ```bash
-$ bundle exec jekyll serve -H 0.0.0.0 --incremental
-```
-
-## Deployment
-
-The code is deployed on build with
-
-```bash
-$ yarn install && jekyll build && yarn minify
+npx http-serve _site -p 4000
 ```
