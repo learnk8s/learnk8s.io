@@ -44,8 +44,10 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     authorLink={currentNode.payload.author.link}
     cssBundle={CSSBundle({
       paths: [
-      'src/prism-solarizedlight.css',
-      'src/prism-line-highlight.css',
+        'node_modules/tachyons/css/tachyons.css',
+        'src/prism-solarizedlight.css',
+        'src/prism-line-highlight.css',
+        'assets/style.css',
       ],
       styles: css
     })}>

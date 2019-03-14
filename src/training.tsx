@@ -1,7 +1,7 @@
 import React from 'react'
 import { LinkedNode, getAbsoluteUrl, Sitemap } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude , InlineMarkdown, SpecialListItem, Testimonal, mailto, MailTo, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight, Hero} from './layout'
-import { Image, Img, Script, Javascript } from './assets'
+import { Image, Img, Script, Javascript, CSSBundle, JSScript, JSBundle } from './assets'
 import { PrimaryButton } from './homepage'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
@@ -91,7 +91,13 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
   title={currentNode.payload.title}
   description={currentNode.payload.description}
   openGraphImage={currentNode.payload.openGraphImage}
-  absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
+  absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+  cssBundle={CSSBundle({
+    paths: [
+      'node_modules/tachyons/css/tachyons.css',
+      'assets/style.css',
+    ],
+  })}>
     {Courses.map((course, index) => {
       return <JsonLd<Course> key={index} item={{
         '@type': 'Course',
@@ -308,7 +314,9 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
     <Consultation />
     <Footer root={website} />
-    <Script script={Assets.toggle}></Script>
+    <JSScript js={JSBundle({
+      scripts: `(${CreateToggle.toString()})()`,
+    })}/>
   </Layout>)
 }
 

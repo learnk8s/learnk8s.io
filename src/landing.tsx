@@ -1,7 +1,7 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
 import { Navbar, Footer, Layout , FAQs, Hero, Testimonal, mailto, MailTo, Interlude } from './layout'
-import { Image, Img, Javascript, Script } from './assets'
+import { Image, Img, Javascript, Script, CSSBundle, JSScript, JSBundle } from './assets'
 import { CourseRow, faqs, DashboardModule, PackageFeatures } from './training'
 import { material } from './material'
 import { PrimaryButton } from './homepage'
@@ -63,7 +63,13 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
     title={currentNode.payload.title}
     description={currentNode.payload.description}
     openGraphImage={currentNode.payload.openGraphImage}
-    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+    cssBundle={CSSBundle({
+      paths: [
+        'node_modules/tachyons/css/tachyons.css',
+        'assets/style.css',
+      ],
+    })}>
     {Courses.map((course, index) => {
       return <JsonLd<Course> key={index} item={{
         '@type': 'Course',
@@ -207,7 +213,9 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
     <FAQs faqs={faqs}/>
 
     <Footer root={website} />
-    <Script script={Assets.toggle}></Script>
+    <JSScript js={JSBundle({
+      scripts: `(${CreateToggle.toString()})()`,
+    })}/>
   </Layout>)
 
   function onlyCityOrOnline(event: CourseEvent) {

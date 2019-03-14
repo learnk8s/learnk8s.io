@@ -1,7 +1,7 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude , mailto, MailTo} from './layout'
-import { Image, Img } from './assets'
+import { Image, Img, CSSBundle } from './assets'
 import { PrimaryButton } from './homepage'
 import { ProfessionalService} from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
@@ -55,7 +55,13 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     title={currentNode.payload.title}
     description={currentNode.payload.description}
     openGraphImage={currentNode.payload.openGraphImage}
-    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+    cssBundle={CSSBundle({
+      paths: [
+        'node_modules/tachyons/css/tachyons.css',
+        'assets/style.css',
+      ],
+    })}>
     <JsonLd<ProfessionalService> item={{
       '@type': 'ProfessionalService',
       '@context': 'https://schema.org',
