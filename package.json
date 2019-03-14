@@ -26,6 +26,7 @@
     "cssnano": "^4.1.10",
     "eventbrite": "^1.2.1",
     "feed": "^2.0.2",
+    "http-server": "^0.11.1",
     "inline-source-cli": "^1.2.0",
     "marked": "^0.6.0",
     "md5": "^2.2.1",
