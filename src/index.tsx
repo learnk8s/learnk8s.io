@@ -33,6 +33,7 @@ import * as SpotInstances from './spotInstances/spotInstances'
 import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
+import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
@@ -174,6 +175,10 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     }
     case NotFound.Details.type: {
       writeFileSync(`_site/404.html`, `<!DOCTYPE html>${NotFound.render(root, node, siteUrl)}`)
+      return
+    }
+    case AdvancedKubectl.Details.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${AdvancedKubectl.render(root, node, siteUrl)}`)
       return
     }
     case WebAppManifest.Details.type: {
