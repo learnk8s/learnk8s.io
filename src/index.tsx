@@ -29,10 +29,10 @@ import * as DeployLaravel from './deployLaravel/deployLaravel'
 import * as K8sOnWindows from './k8sOnWindows/installingK8sOnWindows'
 import * as ChaosEngineering from './chaosEngineering/chaosEngineering'
 import * as SolarPlants from './solarPlants/solarPlants'
-import * as SpotInstances from './spotInstances'
+import * as SpotInstances from './spotInstances/spotInstances'
 import * as ScalingTensorflow from './scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot'
-import * as WhatIsKubernetes from './whatIsK8s'
+import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 
 export function run(options: Settings) {
   return function mount(root: Sitemap) {
@@ -128,10 +128,13 @@ function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
       writeFileSync(generatePath(), `<!DOCTYPE html>${SolarPlants.render(root, node, siteUrl)}`)
       return
     }
+    case WhatIsKubernetes.Details.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${WhatIsKubernetes.render(root, node, siteUrl)}`)
+      return
+    }
     case SpotInstances.Details.type:
     case ScalingTensorflow.Details.type:
     case ScalingSpringBoot.Details.type:
-    case WhatIsKubernetes.Details.type:
       // IGNORE
       return
     case NotFound.Details.type: {
