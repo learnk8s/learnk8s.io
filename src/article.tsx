@@ -7,7 +7,7 @@ import { Layout, Navbar, Footer} from './layout'
 import cheerio from 'cheerio'
 
 const loadLanguages = require('prismjs/components/')
-loadLanguages(['powershell', 'bash', 'docker', 'json', 'yaml', 'sql', 'ruby'])
+loadLanguages(['powershell', 'bash', 'docker', 'json', 'yaml', 'sql', 'ruby', 'java'])
 
 export const Article: React.StatelessComponent<{
   website: Sitemap

@@ -31,7 +31,7 @@ import * as ChaosEngineering from './chaosEngineering/chaosEngineering'
 import * as SolarPlants from './solarPlants/solarPlants'
 import * as SpotInstances from './spotInstances/spotInstances'
 import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
-import * as ScalingSpringBoot from './scalingSpringBoot'
+import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 
 export function run(options: Settings) {
@@ -140,9 +140,10 @@ function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
       writeFileSync(generatePath(), `<!DOCTYPE html>${ScalingTensorflow.render(root, node, siteUrl)}`)
       return
     }
-    case ScalingSpringBoot.Details.type:
-      // IGNORE
+    case ScalingSpringBoot.Details.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${ScalingSpringBoot.render(root, node, siteUrl)}`)
       return
+    }
     case NotFound.Details.type: {
       writeFileSync(`_site/404.html`, `<!DOCTYPE html>${NotFound.render(root, node, siteUrl)}`)
       return
