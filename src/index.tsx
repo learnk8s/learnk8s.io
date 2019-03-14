@@ -30,7 +30,7 @@ import * as K8sOnWindows from './k8sOnWindows/installingK8sOnWindows'
 import * as ChaosEngineering from './chaosEngineering/chaosEngineering'
 import * as SolarPlants from './solarPlants/solarPlants'
 import * as SpotInstances from './spotInstances/spotInstances'
-import * as ScalingTensorflow from './scalingTensorflow'
+import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 
@@ -136,7 +136,10 @@ function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
       writeFileSync(generatePath(), `<!DOCTYPE html>${SpotInstances.render(root, node, siteUrl)}`)
       return
     }
-    case ScalingTensorflow.Details.type:
+    case ScalingTensorflow.Details.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${ScalingTensorflow.render(root, node, siteUrl)}`)
+      return
+    }
     case ScalingSpringBoot.Details.type:
       // IGNORE
       return
