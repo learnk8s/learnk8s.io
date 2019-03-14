@@ -132,7 +132,10 @@ function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
       writeFileSync(generatePath(), `<!DOCTYPE html>${WhatIsKubernetes.render(root, node, siteUrl)}`)
       return
     }
-    case SpotInstances.Details.type:
+    case SpotInstances.Details.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${SpotInstances.render(root, node, siteUrl)}`)
+      return
+    }
     case ScalingTensorflow.Details.type:
     case ScalingSpringBoot.Details.type:
       // IGNORE
