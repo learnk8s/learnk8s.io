@@ -20,7 +20,7 @@ export const Article: React.StatelessComponent<{
   authorFullName: string
   authorAvatar: Image
   authorLink: string
-  cssBundle?: CSSBundle
+  cssBundle: CSSBundle
 }> = ({
   website,
   siteUrl,

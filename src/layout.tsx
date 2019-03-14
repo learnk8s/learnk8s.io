@@ -30,7 +30,7 @@ export const Layout: React.StatelessComponent<{
   description: string
   openGraphImage: Image
   absoluteUrl: string
-  cssBundle?: CSSBundle
+  cssBundle: CSSBundle
 }> = ({
   children,
   website,
@@ -73,8 +73,7 @@ w[l] = w[l] || []; w[l].push({
   j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
     'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
 })(window, document, 'script', 'dataLayer', '${gaId}');`}}></script>
-    <link rel='stylesheet' href='/assets/style.css'/>
-    {!!cssBundle ? <CSSLink css={cssBundle}/> : null}
+    <CSSLink css={cssBundle}/>
   </head>
   <body className='bg-near-white sans-serif'>
     <noscript>

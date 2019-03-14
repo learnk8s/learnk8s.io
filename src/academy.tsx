@@ -1,7 +1,7 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
 import { Navbar, Consultation, Footer, Layout, ListItem, Interlude , SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight, Hero} from './layout'
-import {Image, Img, Script, Javascript, ExternalJavascript, ExternalScript} from './assets'
+import {Image, Img, Script, Javascript, ExternalJavascript, ExternalScript, CSSBundle, JSScript, JSBundle} from './assets'
 import {material, assets as materialAssets} from './material'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
@@ -14,9 +14,7 @@ export const Assets = {
     down: Image({url: 'assets/academy/down_arrow_white.svg', description: 'Down'}),
     together: Image({url: 'assets/academy/together.svg', description: 'Team'}),
     tick: Image({url: 'assets/academy/tick.svg', description: 'Tick'}),
-    preview: Javascript({script: `(${Scroll.toString()})()`}),
     paddle: ExternalJavascript({url: 'https://cdn.paddle.com/paddle/paddle.js'}),
-    paddleVendor: Javascript({script: `Paddle.Setup({vendor: ${'38628'}});`}),
   },
   material: materialAssets,
 }
@@ -73,7 +71,13 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     title={currentNode.payload.title}
     description={currentNode.payload.description}
     openGraphImage={currentNode.payload.openGraphImage}
-    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+    cssBundle={CSSBundle({
+      paths: [
+        'node_modules/tachyons/css/tachyons.css',
+        'assets/style.css',
+      ],
+    })}>
     <JsonLd<Course> item={{
       '@type': 'Course',
       '@context': 'https://schema.org',
@@ -338,9 +342,13 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
     <Consultation />
     <Footer root={website} />
-    <Script script={Assets.page.preview}></Script>
     <ExternalScript script={Assets.page.paddle}></ExternalScript>
-    <Script script={Assets.page.paddleVendor}></Script>
+    <JSScript js={JSBundle({
+      scripts: [
+        `(${Scroll.toString()})()`,
+        `Paddle.Setup({vendor:${'38628'}});`
+      ],
+    })}/>
   </Layout>)
 }
 

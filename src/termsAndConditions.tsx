@@ -3,7 +3,7 @@ import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
 import { Navbar, Consultation, Footer, Layout } from './layout'
 import marked from 'marked'
 import { cat } from 'shelljs'
-import { Image } from './assets'
+import { Image, CSSBundle } from './assets'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 const renderer = new marked.Renderer()
@@ -32,7 +32,13 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     title={currentNode.payload.title}
     description={currentNode.payload.description}
     openGraphImage={currentNode.payload.openGraphImage}
-    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}>
+    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+    cssBundle={CSSBundle({
+      paths: [
+        'node_modules/tachyons/css/tachyons.css',
+        'assets/style.css',
+      ],
+    })}>
     <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
 
       <Navbar root={website} />

@@ -1,9 +1,12 @@
 import React from 'react'
 import { extname } from 'path'
-import { mkdir, cp, cat } from 'shelljs'
 import md5 from 'md5'
 import { existsSync, writeFileSync } from 'fs'
 import { ok } from 'assert'
+import postcss from 'postcss'
+import cssnano from 'cssnano'
+import shell, { cat, mkdir, cp } from 'shelljs'
+import {minify} from 'terser'
 
 enum AssetsType {
   IMAGE = 'IMAGE',
@@ -72,9 +75,16 @@ export function CSSBundle({paths, styles}: {paths?: string | string[], styles?: 
 }
 
 export const CSSLink: React.StatelessComponent<{css: CSSBundle}> = ({css}) => {
-  const content = cat(css.paths).toString().concat(css.styles.join('\n'))
+  const content = (css.paths.length === 0 ? '' : cat(css.paths)).toString().concat(css.styles.join('\n'))
   const digest = md5(content.toString())
-  writeFileSync(`_site/a/${digest}.css`, content)
+  postcss([cssnano])
+  .process(content, {from: 'src/style.css', to: `_site/a/${digest}.css`})
+  .then(result => {
+    (shell as any).ShellString(result).to(`_site/a/${digest}.css`)
+    if (result.map) {
+      (shell as any).ShellString(result).to(`_site/a/${digest}.css.map`)
+    }
+  })
   return <link rel='stylesheet' href={`/a/${digest}.css`}/>
 }
 
@@ -93,8 +103,12 @@ export function JSBundle({paths, scripts}: {paths?: string | string[], scripts?:
 }
 
 export const JSScript: React.StatelessComponent<{js: JSBundle}> = ({js}) => {
-  const content = cat(js.paths).toString().concat(js.scripts.join('\n'))
+  const content = (js.paths.length === 0 ? '' : cat(js.paths)).toString().concat(js.scripts.join('\n'))
   const digest = md5(content.toString())
-  writeFileSync(`_site/a/${digest}.js`, content)
+  const minifiedJs = minify(content)
+  if (minifiedJs.error) {
+    console.log('ERROR minifying', minifiedJs.error)
+  }
+  writeFileSync(`_site/a/${digest}.js`, minifiedJs.code)
   return <script src={`/a/${digest}.js`}></script>
 }

@@ -1,9 +1,0 @@
- {% assign url = 'https://twitter.com/intent/tweet?via=learnk8s&url=' | append: site.url | append: page.url | absolute_url
-%} {% assign url_query = '' %} {% if include.text && include.text != '' %} {% assign url_query = url_query | append: '&text='
-| append: include.text %} {% endif %} {% if include.pic_url && include.pic_url != '' %} {% assign url_query =url_query |
-append: ' pic.twitter.com/' | append: include.pic_url %} {% endif %} {% assign full_url = url | append: url_query %}
-
-<div class="tweet-this">
-  <a href="{{ full_url }}" class="ttu link dib twitter-blue br1 pv2 b f5 mv3 ph3">
-    <span class="favicon">{% include social-share/twitter/twitter-bird-white.svg %}</span> Tweet this</a>
-</div>
