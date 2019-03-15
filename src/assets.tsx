@@ -6,20 +6,12 @@ import { ok } from 'assert'
 import postcss from 'postcss'
 import cssnano from 'cssnano'
 import shell, { cat, mkdir, cp } from 'shelljs'
-import { minify } from 'terser'
-
-enum AssetsType {
-  IMAGE = 'IMAGE',
-  JAVASCRIPT = 'JAVASCRIPT',
-  EXTERNAL_JAVASCRIPT = 'EXTERNAL_JAVASCRIPT',
-  CSS = 'CSS',
-  JS = 'JS',
-}
+import {minify} from 'terser'
+const {render} = require('svg-term')
 
 export interface Image {
   url: string
   description: string
-  type: AssetsType.IMAGE
 }
 
 export function Image(image: { url: string; description: string }): Image {
@@ -27,20 +19,32 @@ export function Image(image: { url: string; description: string }): Image {
   mkdir('-p', '_site/a')
   ok(existsSync(image.url), `Image ${image.url} doesn't exist.`)
   cp(image.url, `_site/a/${digest}${extname(image.url)}`)
-  return { ...image, type: AssetsType.IMAGE, url: `/a/${digest}${extname(image.url)}` }
+  return {...image, url: `/a/${digest}${extname(image.url)}`}
 }
 
 export const Img: React.StatelessComponent<{ image: Image; className?: string }> = ({ image, className }) => {
   return <img src={image.url} alt={image.description} className={className || ''} />
 }
 
-export interface Javascript {
-  script: string
-  type: AssetsType.JAVASCRIPT
+export interface AsciiCast {
+  url: string
 }
 
-export function Javascript(js: { script: string }): Javascript {
-  return { ...js, type: AssetsType.JAVASCRIPT }
+export function AsciiCast({castPath}: {castPath: string}): AsciiCast {
+  ok(existsSync(castPath), `ASCIICast ${castPath} doesn't exist.`)
+  const digest = md5(castPath)
+  mkdir('-p', '_site/a')
+  const svg = render(cat(castPath).toString(), {window: true})
+  writeFileSync(`_site/a/${digest}.svg`, svg)
+  return {url: `/a/${digest}.svg`}
+}
+
+export interface Javascript {
+  script: string
+}
+
+export function Javascript(js: {script: string}): Javascript {
+  return {...js}
 }
 
 export const Script: React.StatelessComponent<{ script: Javascript }> = ({ script }) => {
@@ -49,11 +53,10 @@ export const Script: React.StatelessComponent<{ script: Javascript }> = ({ scrip
 
 export interface ExternalJavascript {
   url: string
-  type: AssetsType.EXTERNAL_JAVASCRIPT
 }
 
-export function ExternalJavascript(js: { url: string }): ExternalJavascript {
-  return { ...js, type: AssetsType.EXTERNAL_JAVASCRIPT }
+export function ExternalJavascript(js: {url: string}): ExternalJavascript {
+  return {...js}
 }
 
 export const ExternalScript: React.StatelessComponent<{ script: ExternalJavascript }> = ({ script }) => {
@@ -63,12 +66,10 @@ export const ExternalScript: React.StatelessComponent<{ script: ExternalJavascri
 export interface CSSBundle {
   paths: string[]
   styles: string[]
-  type: AssetsType.CSS
 }
 
 export function CSSBundle({ paths, styles }: { paths?: string | string[]; styles?: string | string[] }): CSSBundle {
   return {
-    type: AssetsType.CSS,
     paths: Array.isArray(paths) ? paths : paths ? [paths] : [],
     styles: Array.isArray(styles) ? styles : styles ? [styles] : [],
   }
@@ -91,12 +92,10 @@ export const CSSLink: React.StatelessComponent<{ css: CSSBundle }> = ({ css }) =
 export interface JSBundle {
   paths: string[]
   scripts: string[]
-  type: AssetsType.JS
 }
 
 export function JSBundle({ paths, scripts }: { paths?: string | string[]; scripts?: string | string[] }): JSBundle {
   return {
-    type: AssetsType.JS,
     paths: Array.isArray(paths) ? paths : paths ? [paths] : [],
     scripts: Array.isArray(scripts) ? scripts : scripts ? [scripts] : [],
   }

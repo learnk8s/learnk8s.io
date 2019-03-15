@@ -4,44 +4,158 @@ This article contains a set of tips and tricks to make your usage of kubectl mor
 
 The goal of all this is not only to make your daily work with Kubernetes more efficient, but also more enjoyable!
 
-## What is kubectl?
+## kubectl recap
 
-Before focussing on how to *use* kubectl more efficienly, you should know what it actually *is*. The following diagram shows an overview of the Kubernetes internals and the role kubectl plays in there:
+Before focussing on how to *use* kubectl more efficienly, let's do a recap.
 
-![](what-is-kubectl.png)
+When you ask Kubernetes to create a deployment, you use `kubectl` — a command line tool to interact with the cluster.
 
-As you can see, kubectl is in fact an HTTP-based client to the Kubernetes API. But what is the Kubernetes API? To understand this, let's briefly look at the Kubernetes internals.
+`kubectl` sends an API request with the content of the YAML file to the Kubernetes API.
+
+The API stores the state of the resource in a database.
+
+```slideshow
+{
+  "description": "Here's what happens when you type `kubectl create -f`",
+  "slides": [
+    {
+      "image": "kubectl-create-1.svg",
+      "description": "You use `kubectl create -f replicaset.yaml` to send a request to the master Node to deploy three replicas."
+    },
+    {
+      "image": "kubectl-create-2.svg",
+      "description": "Inside the master node, the API receives the request and the JSON payload — `kubectl` converted the YAML resource into JSON."
+    },
+    {
+      "image": "kubectl-create-3.svg",
+      "description": "The API server persists the object definition to the database."
+    },
+    {
+      "image": "kubectl-create-4.svg",
+      "description": "The database stores the document."
+    }
+  ]
+}
+```
+
+As you can see, `kubectl` is in fact an HTTP-based client to the Kubernetes API.
+
+_But what is the Kubernetes API?_
+
+To understand this, let's briefly look at the Kubernetes internals.
 
 ### Kubernetes internals
 
-Kubernetes consists of a set of independent components that run on the nodes (i.e. machines) of the cluster. Each component runs as a separate operating system process.
+Kubernetes consists of a set of independent components that run on the nodes (i.e. machines) of the cluster.
 
-The most important Kubernetes components are shown in the above diagram. Some components run on the master nodes of the cluster (forming the cluster control plane) and others run on the worker nodes. In the following, they are listed again:
+Each component runs as a separate operating system process.
 
-On master nodes:
+Some components run on the master nodes of the cluster (forming the cluster control plane) and others run on the worker nodes.
 
-- **API server:** provides the Kubernetes API, manages etcd storage
+On master nodes you can find:
+
+- the **API server:** provides the Kubernetes API, manages etcd storage
 - **etcd:** storage backend (see [here](https://coreos.com/etcd/))
-- **Controller manager:** ensures status matches spec of all resources
-- **Scheduler:** schedules pods to worker nodes
+- the **Controller manager:** ensures status matches spec of all resources
+- the **Scheduler:** schedules pods to worker nodes
 
-On worker nodes:
+The **kubelet:** controls execution of containers and is installed in every on worker node.
 
-- **kubelet:** controls execution of containers on worker node
+To see how these components work together, let's see consider an example.
 
-To see how these components work together, let's see consider an example. Imagine you create a [ReplicaSet](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#replicaset-v1-apps) resource in your cluster (a ReplicaSet consists of a pod template and "replica count", that is, the number of replicas of this pod that should be running at all times) by preparing a YAML manifest of the resource and then creating it with `kubectl apply`.
+Imagine you create a [ReplicaSet](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#replicaset-v1-apps) resource in your cluster (a ReplicaSet consists of a pod template and "replica count", that is, the number of replicas of this pod that should be running at all times) by preparing a YAML manifest of the resource and then creating it with `kubectl create`.
 
-When you create the ReplicaSet resource, the **API server** saves its manifest in the **etcd** storage. This event triggers the ReplicaSet controller, a sub-process of the **controller manager**. It detects that there is now a ReplicaSet, but no corresponding pods, so it creates manifests for these pods and saves them in the etcd storage (through the API server). This in turn triggers the **scheduler**, as it sees that there now exists a number of pods that are not assigned to a worker node yet. Thus, it selects a worker node for each of these pods and adds the respective node names to the pod manifests in the etcd storage (through the API server). This in turn triggers the **kubelets** on the corresponding worker nodes, as they detect that a pod has been assigned to them. The kubelets then run the containers of these pods on their worker nodes.
+When you create the ReplicaSet resource, the **API server** saves its manifest in the **etcd** storage.
+
+This event triggers the ReplicaSet controller, a sub-process of the **controller manager**.
+
+The controller detects that there is now a ReplicaSet, but no corresponding pods, so it creates manifests for these pods and saves them in the etcd storage (through the API server).
+
+This in turn triggers the **scheduler**, as it sees that there now exists a number of pods that are not assigned to a worker node yet.
+
+Thus, it selects a worker node for each of these pods and adds the respective node names to the pod manifests in the etcd storage (through the API server).
+
+```slideshow
+{
+  "description": "The controller manager creates the pods",
+  "slides": [
+    {
+      "image": "schedule-pods-1.svg",
+      "description": "You submitted a Deployment with `kubectl create -f replicaset.yaml` and the resource is stored in etcd."
+    },
+    {
+      "image": "schedule-pods-2.svg",
+      "description": "The controller manager listens for updates from etcd (through the API). When a ReplicaSet is created, the controller manager is notified."
+    },
+    {
+      "image": "schedule-pods-3.svg",
+      "description": "The controller manager creates enough pods to match the replicas in the ReplicaSet. The pods are stored in etcd in a _Pending_ state."
+    },
+    {
+      "image": "schedule-pods-4.svg",
+      "description": "The scheduler is notified when a pod is created. It then proceeds to find the best node to assign to the Pod."
+    },
+    {
+      "image": "schedule-pods-5.svg",
+      "description": "As soon as the pod is assigned to a node, its status goes from _Pending_ to _Scheduled_."
+    }
+  ]
+}
+```
+
+Not a single resource is created in the infrastructure at this point.
+
+All objects are safely stored in the database, but no container or Pods was created in any node.
+
+In each worker node in your Kubernetes cluster, there's a binary called the `kubelet`.
+
+The `kubelet` is the Kubernetes agent and is in charge of asking for updates to the master Node and create containers (among many other things).
+
+The kubelet then delegates running the containers of these pods on its worker node.
+
+```slideshow
+{
+  "description": "The kubelet creates the Pods in the Node",
+  "slides": [
+    {
+      "image": "kubelet-1.svg",
+      "description": "In each worker node there's a binary — the kubelet — that is in charge of talking to the master node."
+    },
+    {
+      "image": "kubelet-2.svg",
+      "description": "The `kubelet` continuously polls the master node for updates. It's interested in knowing if there's any pod assigned to its node."
+    },
+    {
+      "image": "kubelet-3.svg",
+      "description": "When a pod is assigned to the current node, the `kubelet` read the resource definition and delegates creating the container to the Docker daemon."
+    },
+    {
+      "image": "kubelet-4.svg",
+      "description": "The pod is finally _Running_."
+    }
+  ]
+}
+```
 
 ### The Kubernetes API
 
-The Kubernetes API is an **HTTP REST API** provided by the API server, and *all* interactions between Kubernetes components happen as [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations through this API. That means, Kubernetes resources (such as ReplicaSets, pods, etc.) are created, read, updated, and deleted through this API (persisted in the etcd storage backend).
+The Kubernetes API is an **HTTP REST API** provided by the API server, and *all* interactions between Kubernetes components happen as [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations through this API.
 
-The special thing about Kubernetes is that the same management API is used for internal operations as well as for users of the cluster. That means, kubectl talks to exactly the same API as the internal components, such as the scheduler or kubelet.
+That means, Kubernetes resources (such as ReplicaSets, pods, etc.) are created, read, updated, and deleted through this API (persisted in the etcd storage backend).
 
-The full specification of this API for the currently latest version of Kubernetes (v1.13) can be found [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/). As you can see, the specification is organised as a list of resource types. These are the resources that can be created, read, updated, and deleted (CRUD) through the Kubernetes API.
+The special thing about Kubernetes is that the same management API is used for internal operations as well as for users of the cluster.
 
-For each resource, the specification lists its **structure**, as well as the **operations** that can be applied to this resource. For example, you can see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) that the *create* operation for a ReplicaSet is implemented by the following HTTP API endpoint:
+In other words, kubectl talks to exactly the same API as the internal components, such as the scheduler or kubelet.
+
+The full specification of this API for the currently latest version of Kubernetes (v1.13) can be found [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/).
+
+As you can see, the specification is organised as a list of resource types.
+
+These are the resources that can be created, read, updated, and deleted (CRUD) through the Kubernetes API.
+
+For each resource, the specification lists its **structure**, as well as the **operations** that can be applied to this resource.
+
+For example, you can see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) that the *create* operation for a ReplicaSet is implemented by the following HTTP API endpoint:
 
 ~~~
 POST /apis/apps/v1/namespaces/{namespace}/replicasets
@@ -49,28 +163,35 @@ POST /apis/apps/v1/namespaces/{namespace}/replicasets
 
 The body for this HTTP POST request must be a manifest of a ReplicaSet in one of the supported formats (YAML, JSON, or [protobuf](https://developers.google.com/protocol-buffers/)).
 
-So, when you execute a command like `kubectl create -f rs.yaml`, then kubectl makes the above API request behind the scenes. Similarly, internal Kubernetes components themselves use the same API endpoints when they have to create, read, update, or delete Kubernetes resources.
+So, when you execute a command like `kubectl create -f replicaset.yaml`, then kubectl makes the above API request behind the scenes.
 
-Note that Kubernetes is organised in such a way that the whole cluster can be operated and used through CRUD operations on Kubernetes resources through the Kubernetes API.
+Similarly, internal Kubernetes components themselves use the same API endpoints when they have to create, read, update, or delete Kubernetes resources.
 
-After this introductory section, you should now have a good understanding what kubectl in essence is. Namely a tool that carries out HTTP requests to the Kubernetes API on your behalf, allowing you to create, read, update, and delete Kubernetes resources.
+> Please note that Kubernetes is organised in such a way that the whole cluster can be operated and used through CRUD operations on Kubernetes resources through the Kubernetes API.
 
 Let's now look at a series of tips and tricks to make your usage of kubectl more efficient.
 
-
 ## 1. Save typing with command completion
 
-One of the most useful, but often overlooked, tricks to make your kubectl usage more efficient is shell completion. This feature is provided by kubectl for the [**Bash**](https://www.gnu.org/software/bash/) and [**Zsh**](https://www.zsh.org/) shells (see [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)).
+One of the most useful, but often overlooked, tricks to make your kubectl usage more efficient is shell completion.
 
-Command completion allows you to auto-complete kubectl sub-commands, options, and arguments. This includes hard-to-type things like resource names, such as pod names or node names. This can save you a tremendous amount of typing and copy-pasting!
+This feature is provided by kubectl for the [**Bash**](https://www.gnu.org/software/bash/) and [**Zsh**](https://www.zsh.org/) shells (see [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)).
+
+Command completion allows you to auto-complete kubectl sub-commands, options, and arguments.
+
+This includes hard-to-type things like resource names, such as pod names or node names.
+
+_It can save you a tremendous amount of typing and copy-pasting!_
 
 Here is a small demonstration of kubectl command completion in action:
 
-![](todo.gif)
+![](autocompletion.cast)
 
 <!--To use command completion, hit *Tab* to auto-complete the current word (if there is only a single match), and hit *Tab* two times to display a list of all the possible completions (if there are multiple matches).-->
 
-Command completion works by the means of a **completion script** that defines the completion behaviour for a specific command. Kubectl can auto-generate its completion script for Bash and Zsh with the following command:
+Command completion works by the means of a **completion script** that defines the completion behaviour for a specific command.
+
+Kubectl can auto-generate its completion script for Bash and Zsh with the following command:
 
 ~~~bash
 kubectl completion <shell>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200px" height="900px" viewBox="0 0 1200 900" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>kubectl-create-2</title>
+    <desc>Created with Sketch.</desc>
+    <g id="kubectl-create-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Kubernetes-background" opacity="0.100000001" transform="translate(161.000000, 22.000000)" fill="#326CE5" fill-rule="nonzero" stroke="#FFFFFF" stroke-width="0.5">
+            <path d="M435.869595,1.32667485 C428.131508,1.71838151 420.549826,3.64631136 413.569329,6.99736199 L109.266049,153.105549 C93.3114261,160.76216 81.723056,175.242677 77.7810309,192.448385 L2.7073607,520.644292 C-0.795001289,535.921372 2.05478906,551.960827 10.607804,565.110301 C11.6343205,566.701404 12.7383294,568.241501 13.9158713,569.725067 L224.542467,832.884058 C235.586536,846.678057 252.331448,854.709893 270.038123,854.706426 L607.811261,854.62821 C625.511314,854.641173 642.255046,846.624296 653.306917,832.84495 L863.855676,569.64685 C874.905654,555.845938 879.04573,537.77975 875.103105,520.566075 L799.91268,192.370169 C795.970655,175.164461 784.382285,160.683944 768.427662,153.027333 L464.085464,6.99736199 C455.30505,2.7820061 445.602952,0.832126125 435.869595,1.32667485 Z" id="path3055"></path>
+        </g>
+        <g id="Green-arrow-right" transform="translate(0.000000, 414.000000)" fill="#B8E986">
+            <polygon id="Triangle" points="484 36 419 72 419 0"></polygon>
+            <polygon id="Rectangle" points="0 45 2.68613567e-15 25 465 25 465 45"></polygon>
+        </g>
+        <g id="Group-3" transform="translate(490.000000, 336.000000)">
+            <polygon id="Rectangle" fill="#53777A" points="0 0 220 0 220 228 0 228"></polygon>
+            <text id="API-SERVER" font-family="Arial-BoldMT, Arial" font-size="28" font-weight="bold" fill="#FFFFFF">
+                <tspan x="25.2001953" y="91">API SERVER</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
