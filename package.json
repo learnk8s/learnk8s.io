@@ -47,6 +47,7 @@
     "react-schemaorg": "^0.1.0",
     "schema-dts": "^0.3.1",
     "shelljs": "^0.8.3",
+    "svg-term": "^1.1.7",
     "svgo": "^1.1.1",
     "tachyons": "^4.11.1",
     "tachyons-sass": "^4.9.0",
