@@ -55,7 +55,7 @@ Some components run on the master nodes of the cluster (forming the cluster cont
 On master nodes you can find:
 
 - the **API server:** provides the Kubernetes API, manages etcd storage
-- **etcd:** storage backend (see [here](https://coreos.com/etcd/))
+- **etcd:** storage backend
 - the **Controller manager:** ensures status matches spec of all resources
 - the **Scheduler:** schedules pods to worker nodes
 
@@ -63,7 +63,7 @@ The **kubelet:** controls execution of containers and is installed in every on w
 
 To see how these components work together, let's see consider an example.
 
-Imagine you create a [ReplicaSet](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#replicaset-v1-apps) resource in your cluster (a ReplicaSet consists of a pod template and "replica count", that is, the number of replicas of this pod that should be running at all times) by preparing a YAML manifest of the resource and then creating it with `kubectl create`.
+Imagine you create a [ReplicaSet resource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#replicaset-v1-apps) in your cluster (a ReplicaSet consists of a pod template and "replica count", that is, the number of replicas of this pod that should be running at all times) by preparing a YAML manifest of the resource and then creating it with `kubectl create`.
 
 When you create the ReplicaSet resource, the **API server** saves its manifest in the **etcd** storage.
 
@@ -147,7 +147,7 @@ The special thing about Kubernetes is that the same management API is used for i
 
 In other words, kubectl talks to exactly the same API as the internal components, such as the scheduler or kubelet.
 
-The full specification of this API for the currently latest version of Kubernetes (v1.13) can be found [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/).
+The full specification of this API for the currently latest version of Kubernetes (v1.13) can be found on the official documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/).
 
 As you can see, the specification is organised as a list of resource types.
 
@@ -155,7 +155,7 @@ These are the resources that can be created, read, updated, and deleted (CRUD) t
 
 For each resource, the specification lists its **structure**, as well as the **operations** that can be applied to this resource.
 
-For example, you can see [here](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) that the *create* operation for a ReplicaSet is implemented by the following HTTP API endpoint:
+For example, [the create operation for a ReplicaSet]((https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps)) is implemented by the following HTTP API endpoint:
 
 ~~~
 POST /apis/apps/v1/namespaces/{namespace}/replicasets
@@ -175,7 +175,7 @@ Let's now look at a series of tips and tricks to make your usage of kubectl more
 
 One of the most useful, but often overlooked, tricks to make your kubectl usage more efficient is shell completion.
 
-This feature is provided by kubectl for the [**Bash**](https://www.gnu.org/software/bash/) and [**Zsh**](https://www.zsh.org/) shells (see [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)).
+This feature is provided by kubectl for the [**Bash**](https://www.gnu.org/software/bash/) and [**Zsh**](https://www.zsh.org/) shells (also [on the official documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)).
 
 Command completion allows you to auto-complete kubectl sub-commands, options, and arguments.
 
@@ -215,7 +215,7 @@ For Bash, the kubectl completion script depends on a third-party project called 
 
 You have to install this software on your system to make kubectl command completion work for Bash.
 
-There are bash-completion packages for many common package managers (see [here](https://github.com/scop/bash-completion#installation)).
+There are [bash-completion packages for many common package managers](https://github.com/scop/bash-completion#installation).
 
 For example, if you use APT, you can install the package as follows:
 
@@ -251,7 +251,7 @@ The only way around this is to install a newer version of Bash on macOS.
 
 This is something that is generally recommended if you use Bash on macOS, as it can save you from a lot of trouble when using shell scripts and software that is designed for newer versions of Bash.
 
-Installing a newer version of Bash on macOS and making it the default shell is actually not difficult, and I wrote an entire article about it [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba).
+Installing a newer version of Bash on macOS and making it the default shell is actually not difficult, and I wrote [an entire article about it](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba).
 
 If you want to use kubectl command completion on macOS, then you should follow the steps in this article before proceeding.
 
@@ -589,11 +589,15 @@ This is just one of many examples of what you can do with the custom columns out
 
 ## 4. Switch effortlessly between clusters and namespaces
 
-Kubectl uses a YAML configuration called **kubeconfig** to decide to which **cluster** to connect and how to connect to it (see [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) and [here](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/)) . You can have multiple clusters configured in your kubeconfig file, which allows you to easily switch between clusters by "pointing" kubectl to a new cluster (for example, do some work on cluster *A*, switch to cluster *B*, and do some work on cluster *B*).
+Kubectl uses a YAML configuration called **kubeconfig** to decide to [which cluster to connect](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) and [how to connect to it](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
 
-Similarly, the kubeconfig file also contains the [**namespace**](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) that kubectl uses by default for any cluster. This allows you to switch between namespaces within a given cluster (for example, do some work in the *dev* namespace of a cluster, then switch to the *prod* namespace and do some work there).
+You can have multiple clusters configured in your kubeconfig file, which allows you to easily switch between clusters by "pointing" kubectl to a new cluster (for example, do some work on cluster *A*, switch to cluster *B*, and do some work on cluster *B*).
 
-> The default kubeconfig file that kubectl looks for is `~/.kube/config`. However, you can also use a different filename, and you can have multiple kubeconfig files. In this case, you have to list the kubeconfig file(s) in the `KUBECONFIG` environment variable (see [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/#set-the-kubeconfig-environment-variable)). You can also explicitly specify the kubeconfig file for each invocation of kubectl with the `--kubeconfig` option.
+Similarly, the kubeconfig file also contains the [**namespace**](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) that kubectl uses by default for any cluster.
+
+This allows you to switch between namespaces within a given cluster (for example, do some work in the *dev* namespace of a cluster, then switch to the *prod* namespace and do some work there).
+
+> The default kubeconfig file that kubectl looks for is `~/.kube/config`. However, you can also use a different filename, and you can have multiple kubeconfig files. In this case, you have to list the kubeconfig file(s) in the `KUBECONFIG` environment variable. You can also explicitly specify the kubeconfig file for each invocation of kubectl with the `--kubeconfig` option.
 
 This tip will show you different tools to switch between clusters and namespaces effortlessly.
 
@@ -751,7 +755,7 @@ The [**kubectl-aliases**](https://github.com/ahmetb/kubectl-aliases) project tak
 
 Among them ar alises like `k` for `kubectl` and `kding` for `kubectl describe ingress`.
 
-You can explore all the alias definitions [here](https://github.com/ahmetb/kubectl-aliases/blob/master/.kubectl_aliases).
+You can explore all the alias definitions [in the official repository](https://github.com/ahmetb/kubectl-aliases/blob/master/.kubectl_aliases).
 
 You must be wondering how you could possible remember 800 aliases?
 
@@ -939,7 +943,7 @@ Technically, this software provides a Bash function called `_complete_alias`.
 
 If you set this function as the completion specification ([compspec](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html#Programmable-Completion)) of *any* alias, then it makes command completion "magically" work for this alias.
 
-Concretely, if you have an alias `foo`, then you just need to execute the following command (read [here](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html#Programmable-Completion-Builtins) about the `complete` builtin):
+Concretely, if you have an alias `foo`, then you just need to execute the following command (read can find more about the `complete` builtin [on the official GNU website](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html#Programmable-Completion-Builtins)):
 
 ~~~bash
 complete -F _complete_alias foo
@@ -971,7 +975,7 @@ Or on macOS:
 brew install bash-completion@2
 ~~~~
 
-> **Important note for macOS users:** complete-alias requires bash-completion 2 (indicated by the `@2` in the Homebrew formula). However, bash-completion 2 runs only on Bash 4.1+, and the default Bash version on macOS is 3.2. This means that complete-alias won't work on the default version of Bash on macOS. To make it work, you have to install a newer version of Bash, which is explained [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba). If you try to use complete-alias with bash-completion 1 and Bash 3.2, you will get an error of the form `_completion_loader: command not found`.
+> **Important note for macOS users:** complete-alias requires bash-completion 2 (indicated by the `@2` in the Homebrew formula). However, bash-completion 2 runs only on Bash 4.1+, and the default Bash version on macOS is 3.2. This means that complete-alias won't work on the default version of Bash on macOS. To make it work, you have to [install a newer version of Bash](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba). If you try to use complete-alias with bash-completion 1 and Bash 3.2, you will get an error of the form `_completion_loader: command not found`.
 
 Once bash-completion is installed, you can install **complete-alias**.
 
@@ -1029,7 +1033,7 @@ After restarting your shell, everything should be correctly configured so that y
 
 ## 6. Extend kubectl with plugins
 
-One thing that many people don't know is that kubectl includes a [plugin system](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/) that allows you to "extend" kubectl with custom commands.
+One thing that many people don't know is that [kubectl includes a plugin system](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/) that allows you to "extend" kubectl with custom commands.
 
 For example, you can install a plugin named `kubectl-hello` that you can then execute as `kubectl hello`:
 
@@ -1130,11 +1134,11 @@ This example plugin is just a simple shell script, but plugins can be arbitraril
 
 Nothing prevents you from implementing a plugin in Java or Go, possibly using a [Kubernetes client library](https://kubernetes.io/docs/reference/using-api/client-libraries/) (for Go there exists even a utility library called [cli-runtime](https://github.com/kubernetes/cli-runtime) specifically for kubectl plugins).
 
-Detailed information about creating plugins can be found [here](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/).
+Detailed information about creating plugins can be found [on the official website](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/).
 
 Feel free to distribute your plugins on GitHub if you think they might be useful for others too (just add the [kubectl-plugins](https://github.com/topics/kubectl-plugins) topic to make them easily discoverable).
 
-You can even try to add a plugin to the [krew index](https://github.com/GoogleContainerTools/krew-index) according to the instructions [here](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md) (it requires your plugin to be accepted by the krew maintainers).
+You can even try to [add a plugin to the krew index](https://github.com/GoogleContainerTools/krew-index) [according to the instructions here](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md) (it requires your plugin to be accepted by the krew maintainers).
 
 ### Command completion
 
