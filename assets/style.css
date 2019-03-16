@@ -25,6 +25,11 @@
   background-color: rgba(0, 0, 0, 0.02)
 }
 
+.hover-sky:hover,
+.hover-sky:focus {
+  color:var(--sky)
+}
+
 .trapezoid-1,
 .trapezoid-2,
 .trapezoidr-1 {
