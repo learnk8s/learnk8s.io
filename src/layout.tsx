@@ -31,65 +31,53 @@ export const Layout: React.StatelessComponent<{
   openGraphImage: Image
   absoluteUrl: string
   cssBundle: CSSBundle
-}> = ({ children, website, seoTitle, title, description, openGraphImage, absoluteUrl, cssBundle }) => {
-  const gaId = 'GTM-5WCKPRL'
-  return (
-    <html lang='en'>
-      <head>
-        <meta charSet='utf-8' />
-        <title>{seoTitle}</title>
-        <meta name='description' content={description} />
-        <meta name='author' content='Learnk8s' />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-        <meta httpEquiv='X-UA-Compatible' content='ie=edge' />
-        <meta name='twitter:card' content='summary' />
-        <meta name='twitter:site' content='@learnk8s' />
-        <link rel='apple-touch-icon' sizes='180x180' href={Assets.appleTouchIcon.url} />
-        <link rel='icon' type='image/png' sizes='32x32' href={Assets.favicon32.url} />
-        <link rel='icon' type='image/png' sizes='16x16' href={Assets.favicon16.url} />
-        <link rel='manifest' href={getFullUrl(website.children.webAppManifest)} />
-        <link rel='mask-icon' href={Assets.safariPinnedTab.url} color='#326ce5' />
-        <link
-          rel='alternate'
-          type='application/rss+xml'
-          title='Subscribe to Learnk8s RSS'
-          href={getFullUrl(website.children.rss)}
-        />
-        <meta name='theme-color' content='#ffffff' />
-        <meta property='og:site_name' content='Learnk8s' />
-        <meta property='og:url' content={absoluteUrl} />
-        <meta property='og:type' content='website' />
-        <meta property='og:title' content={title} />
-        <meta property='og:image' content={openGraphImage.url} />
-        <meta property='og:description' content={description} />
-        <meta name='pocket-site-verification' content='1476398dfb5a771a94da9466e0bb43' />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function (w, d, s, l, i) {
-w[l] = w[l] || []; w[l].push({
-  'gtm.start':
-    new Date().getTime(), event: 'gtm.js'
-}); var f = d.getElementsByTagName(s)[0],
-  j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-})(window, document, 'script', 'dataLayer', '${gaId}');`,
-          }}
-        />
-        <CSSLink css={cssBundle} />
-      </head>
-      <body className='bg-near-white sans-serif'>
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${gaId}`}
-            height='0'
-            width='0'
-            style={{ display: 'none', visibility: 'hidden' }}
-          />
-        </noscript>
-        <div className='cf w-100 mw9-l center bg-white'>{children}</div>
-      </body>
-    </html>
-  )
+}> = ({
+  children,
+  website,
+  seoTitle,
+  title,
+  description,
+  openGraphImage,
+  absoluteUrl,
+  cssBundle,
+}) => {
+  const gaId = 'UA-485266-17'
+  return <html lang='en'>
+  <head>
+    <meta charSet='utf-8' />
+    <title>{seoTitle}</title>
+    <meta name='description' content={description}/>
+    <meta name='author' content='Learnk8s'/>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
+    <meta httpEquiv='X-UA-Compatible' content='ie=edge'/>
+    <meta name='twitter:card' content='summary' />
+    <meta name='twitter:site' content='@learnk8s' />
+    <link rel='apple-touch-icon' sizes='180x180' href={Assets.appleTouchIcon.url}/>
+    <link rel='icon' type='image/png' sizes='32x32' href={Assets.favicon32.url}/>
+    <link rel='icon' type='image/png' sizes='16x16' href={Assets.favicon16.url}/>
+    <link rel='manifest' href={getFullUrl(website.children.webAppManifest)}/>
+    <link rel='mask-icon' href={Assets.safariPinnedTab.url} color='#326ce5'/>
+    <link rel='alternate' type='application/rss+xml' title='Subscribe to Learnk8s RSS' href={getFullUrl(website.children.rss)} />
+    <meta name='theme-color' content='#ffffff'/>
+    <meta property='og:site_name' content='Learnk8s' />
+    <meta property='og:url' content={absoluteUrl} />
+    <meta property='og:type' content='website' />
+    <meta property='og:title' content={title} />
+    <meta property='og:image' content={openGraphImage.url} />
+    <meta property='og:description' content={description} />
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+    <script dangerouslySetInnerHTML={{__html: `;(function () {
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${gaId}');
+})();`}}></script>
+    <CSSLink css={cssBundle}/>
+  </head>
+  <body className='bg-near-white sans-serif'>
+    <div className='cf w-100 mw9-l center bg-white'>{children}</div>
+  </body>
+  </html>
 }
 
 export const Navbar: React.StatelessComponent<{ root: Sitemap }> = ({ root }) => {
