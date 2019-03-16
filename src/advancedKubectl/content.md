@@ -685,7 +685,7 @@ Below is an example set of such aliases. There is an alias for each of those ope
 ~~~bash
 # Contexts
 alias kcc='kubectl config current-context'
-alias klc='kubectl config get-contexts -o name | sed "s/^/  /;\|$(kcc)|s/ /*/"'
+alias klc='kubectl config get-contexts -o name | sed "s/^/  /;\|^  $(kcc)$|s/ /*/"'
 alias ksc='kubectl config use-context "$(klc | fzf -e | sed "s/^..//")"'
 # Namespaces
 alias kcn='kubectl config get-contexts --no-headers "$(kcc)" | awk "{print \$5}" | sed "s/^$/default/"'
@@ -695,7 +695,7 @@ alias ksn='kubectl config set-context --current --namespace "$(kln | fzf -e | se
 
 Here you can see the aliases in action:
 
-![](todo.gif)
+![](aliases.cast)
 
 To use the aliases yourself, you just need to copy their definitions to your `~/.bashrc` or `~/.zshrc` file (all aliases work for both Bash an Zsh).
 
@@ -757,7 +757,7 @@ You must be wondering how you could possible remember 800 aliases?
 
 Well, actually you don't need to remember them, because they are all auto-generated according to a simple scheme.
 
-Here's an example for `kubectl get pods -o yaml`. Try to interactive with the letter below.
+Here's an example for `kubectl get pods -o yaml`. Try to interact with the letters below:
 
 ```include
 <template>
@@ -783,30 +783,101 @@ Another example is `kubect describe services all`:
   <li class="hover-sky relative hide-child pv2">all <span class="child absolute bottom--2 left-0 f2 no-wrap">--all-namespaces</li>
 </ul>
 <template>
-<script>
+<style>
 .no-wrap {
   white-space: nowrap;
 }
-</script>
+</style>
 ```
 
- which is shown in the following table (taken from a [blog post](https://ahmet.im/blog/kubectl-aliases/) of the kubectl-aliases author):
+The table below summarises the aliases and explores further examples:
 
-![](kubectl-aliases.png)
+```include
+<template>
+<div class="list pl0 flex flex-wrap f1">
+<div class="mv3 b tc order-last pointer ksysgdepowide w-50">ksysgdepowide</div>
+<div class="mv3 b tc order-last pointer krmcm w-50">krmcm</div>
+<div class="mv3 b tc order-last pointer kgpowall w-50">kgpowall</div>
+<div class="mv3 b tc order-last pointer kdsvcowide w-50">kdsvcowide</div>
+<ul class="abbreviations list pl0 flex justify-center items-center f4 b mv4 w-100">
+  <li class="mh2 relative">
+    <p class="absolute top--2 left-0 ttu black-50 f6 mv0">base</p>
+    <ul class="list pl0 flex flex-column">
+      <li><span class="alias-k sky">k</span>ubectl</li>
+    </ul>
+  </li>
+  <li class="mh2 relative">
+    <p class="absolute top--2 left-0 ttu black-50 f6 mv0">System?</p>
+    <ul class="list pl0 flex flex-column">
+      <li>-n=kube-<span class="alias-sys sky">sys</span>tem</li>
+    </ul>
+  <li class="mh2 relative">
+    <p class="absolute top--2 left-0 ttu black-50 f6 mv0">Operation</p>
+    <ul class="list pl0 flex flex-column">
+      <li><span class="alias-g sky">g</span>et</li>
+      <li><span class="alias-d sky">d</span>escribe</li>
+      <li><span class="alias-rm sky">rm</span>:delete</li>
+      <li><span class="sky">lo</span>gs</li>
+      <li><span class="sky">ex</span>ec</li>
+      <li><span class="sky">a</span>pply</li>
+    </ul>
+  </li>
+  <li class="mh2 relative">
+    <p class="absolute top--2 left-0 ttu black-50 f6 mv0">Resource</p>
+    <ul class="list pl0 flex flex-column">
+      <li><span class="alias-po sky">po</span>ds</li>
+      <li><span class="alias-dep sky">dep</span>loyment</li>
+      <li><span class="sky">sec</span>ret</li>
+      <li><span class="sky">ing</span>ress</li>
+      <li><span class="sky">no</span>de</li>
+      <li><span class="alias-svc sky">svc</span>:service</li>
+      <li><span class="sky">ns</span>:namespace</li>
+      <li><span class="alias-cm sky">cm</span>:configmap</li>
+    </ul>
+  </li>
+  <li class="mh2 relative">
+    <p class="absolute top--2 left-0 ttu black-50 f6 mv0">Flags</p>
+    <ul class="list pl0 flex flex-column">
+      <li><span class="sky">oyaml</span>:-o yaml</li>
+      <li><span class="sky">ojson</span>:-o json</li>
+      <li><span class="alias-owide sky">owide</span>:-o wide</li>
+      <li><span class="alias-all sky">all</span>:--all-namespaces</li>
+      <li><span class="sky">w</span>atch</li>
+      <li><span class="sky">f</span>ile</li>
+      <li><span class="sky">l</span>abel</li>
+    </ul>
+  </li>
+</ul>
+</div>
+<template>
+<style>
+.ksysgdepowide:hover ~ .abbreviations .alias-k,
+.ksysgdepowide:hover ~ .abbreviations .alias-sys,
+.ksysgdepowide:hover ~ .abbreviations .alias-g,
+.ksysgdepowide:hover ~ .abbreviations .alias-dep,
+.ksysgdepowide:hover ~ .abbreviations .alias-owide,
 
-All aliases start with `k` (standing for `kubectl`) and then you can append optional components from left to right, as shown in the above table.
+.krmcm:hover ~ .abbreviations .alias-k,
+.krmcm:hover ~ .abbreviations .alias-rm,
+.krmcm:hover ~ .abbreviations .alias-cm,
 
-Here are some example aliases and the commands that they stand for:
+.kgpowall:hover ~ .abbreviations .alias-k,
+.kgpowall:hover ~ .abbreviations .alias-g,
+.kgpowall:hover ~ .abbreviations .alias-po,
+.kgpowall:hover ~ .abbreviations .alias-all,
 
-- `k` &#10230; `kubectl`
-- `kg` &#10230; `kubectl get`
-- `kgpo` &#10230; `kubectl get pods`
-- `kgpooyaml` &#10230; `kubectl get pods -o yaml`
-- `ksysgpooyaml` &#10230; `kubectl -n kube-system get pods -o yaml`
+.kdsvcowide:hover ~ .abbreviations .alias-k,
+.kdsvcowide:hover ~ .abbreviations .alias-d,
+.kdsvcowide:hover ~ .abbreviations .alias-svc,
+.kdsvcowide:hover ~ .abbreviations .alias-owide {
+  color: #E7040F;
+}
+</style>
+```
 
-If you get the hang of this scheme (explained also [here](https://github.com/ahmetb/kubectl-aliases#syntax-explanation)), you can easily deduce the alias name from the command that you want to execute.
+The nature of aliases allows to append any arguments to an alias on the command-line.
 
-The nature of aliases allows to append any arguments to an alias on the command-line. If, for example, you want to get the YAML definition of a *specific* pod (not of all pods), you can just append the pod name to the `kgpooyaml` alias:
+If, for example, you want to get the YAML definition of a *specific* pod (not of all pods), you can just append the pod name to the `kgpooyaml` alias:
 
 ~~~bash
 kgpooyaml test-pod
@@ -814,7 +885,11 @@ kgpooyaml test-pod
 
 This will actually execute `kubectl get pods -o yaml test-pod`, which is a valid kubectl command that does exactly what you want.
 
-You could also use, for example, the `kg` alias for resources for which no aliases exist. For example, if you want to get all ReplicaSets, you could run `kg replicasets` (or using the shortname `kg rs`). Or you could use the `k` alias to start *any* kubectl command, for example, `k explain pod`.
+You could also use, for example, the `kg` alias for resources for which no aliases exist.
+
+For example, if you want to get all ReplicaSets, you could run `kg replicasets` (or using the shortname `kg rs`).
+
+Or you could use the `k` alias to start *any* kubectl command, for example, `k explain pod`.
 
 ### Installation
 
@@ -838,17 +913,31 @@ You probably expect command completion to also work with the aliases. Imagine yo
 kgpooyaml [tab][tab]
 ~~~
 
-This should display all the pod names, exactly as if you typed `kubectl get pods -o yaml [tab][tab]`. There should be no difference regarding auto-completion whether you use aliases or the full commands.
+This should display all the pod names, exactly as if you typed `kubectl get pods -o yaml [tab][tab]`.
 
-If you use **Zsh**, then there is good news for you. Command completion for aliases works exactly like that by default. So you can just go on auto-completing all the aliases as you would the full commands.
+There should be no difference regarding auto-completion whether you use aliases or the full commands.
 
-If you use **Bash** (as probably the majority of people), then there is good and bad news. The bad news is that command completion for aliases doesn't work natively in Bash. The good news is that it can be made working quite easily, which is explained in the following section.
+If you use **Zsh**, then there is good news for you.
+
+Command completion for aliases works exactly like that by default.
+
+So you can just go on auto-completing all the aliases as you would the full commands.
+
+If you use **Bash** (as probably the majority of people), then there is good and bad news.
+
+The bad news is that command completion for aliases doesn't work natively in Bash.
+
+The good news is that it can be made working quite easily, which is explained in the following section.
 
 If you use Zsh, or don't care about command completion for aliases in Bash, you can [jump to the next tip →](#6-extending-kubectl-with-plugins).
 
 ### Make Bash completion work for aliases
 
-A general and reliable solution to make command completion work for aliases in Bash is the [**complete-alias**](https://github.com/cykerway/complete-alias) project. Technically, this software provides a Bash function called `_complete_alias`. If you set this function as the completion specification ([compspec](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html#Programmable-Completion)) of *any* alias, then it makes command completion "magically" work for this alias.
+A general and reliable solution to make command completion work for aliases in Bash is the [**complete-alias**](https://github.com/cykerway/complete-alias) project.
+
+Technically, this software provides a Bash function called `_complete_alias`.
+
+If you set this function as the completion specification ([compspec](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html#Programmable-Completion)) of *any* alias, then it makes command completion "magically" work for this alias.
 
 Concretely, if you have an alias `foo`, then you just need to execute the following command (read [here](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html#Programmable-Completion-Builtins) about the `complete` builtin):
 
@@ -858,13 +947,17 @@ complete -F _complete_alias foo
 
 And after that, command completion works for the `foo` alias exactly as it does for the alias command.
 
-Technically, the `_complete_alias` function looks at the aliased command, gets the completion suggestions for this command, and returns them to the shell. This is the reason that the same completion function can be used for *any* alias.
+Technically, the `_complete_alias` function looks at the aliased command, gets the completion suggestions for this command, and returns them to the shell.
+
+This is the reason that the same completion function can be used for *any* alias.
 
 The solution for our kubectl-aliases problem is to execute the above command for each alias of kubectl-aliases (a snippet that does this automatically will be shown further below).
 
 #### Install complete-alias
 
-complete-alias depends on the [**bash-completion**](https://github.com/scop/bash-completion) project. So, you first have to install bash-completion (if you haven't already), which you can do easily with various package managers.
+complete-alias depends on the [**bash-completion**](https://github.com/scop/bash-completion) project.
+
+So, you first have to install bash-completion (if you haven't already), which you can do easily with various package managers.
 
 For example, on Debian-based systems:
 
@@ -880,7 +973,9 @@ brew install bash-completion@2
 
 > **Important note for macOS users:** complete-alias requires bash-completion 2 (indicated by the `@2` in the Homebrew formula). However, bash-completion 2 runs only on Bash 4.1+, and the default Bash version on macOS is 3.2. This means that complete-alias won't work on the default version of Bash on macOS. To make it work, you have to install a newer version of Bash, which is explained [here](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba). If you try to use complete-alias with bash-completion 1 and Bash 3.2, you will get an error of the form `_completion_loader: command not found`.
 
-Once bash-completion is installed, you can install **complete-alias**. All you have to do for this, is downloading the [`bash_completion.sh`](https://raw.githubusercontent.com/cykerway/complete-alias/master/bash_completion.sh) script and source it in your `~/.bashrc` file. So, for example:
+Once bash-completion is installed, you can install **complete-alias**.
+
+All you have to do for this, is downloading the [`bash_completion.sh`](https://raw.githubusercontent.com/cykerway/complete-alias/master/bash_completion.sh) script and source it in your `~/.bashrc` file. So, for example:
 
 ~~~bash
 source ~/bash_completion.sh
@@ -934,9 +1029,11 @@ After restarting your shell, everything should be correctly configured so that y
 
 ## 6. Extend kubectl with plugins
 
-One thing that many people don't know is that kubectl includes a [plugin system](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/) that allows you to "extend" kubectl with custom commands. For example, you can install a plugin named `kubectl-hello` that you can then execute as `kubectl hello`:
+One thing that many people don't know is that kubectl includes a [plugin system](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/) that allows you to "extend" kubectl with custom commands.
 
-![](screencast-plugin-hello-world.gif)
+For example, you can install a plugin named `kubectl-hello` that you can then execute as `kubectl hello`:
+
+![](kubectl-hello.cast)
 
 The kubectl plugin system has been introduced in kubectl v1.12 (released in September 2018), and it is currently (v1.13) in beta (which means that the feature is here to stay).
 
@@ -944,9 +1041,13 @@ The kubectl plugin system has been introduced in kubectl v1.12 (released in Sept
 
 ### Installing plugins
 
-Installing kubectl plugins is extremely easy. Plugins are distributed as executable files named `kubectl-x` (where `x` is the name of the plugin).
+Installing kubectl plugins is extremely straightforward.
 
-To install a plugin, all you have to do is to copy this file to any directory in your `PATH` and make sure it is executable. If that's the case, you can immediately start using the plugin as `kubectl x`.
+Plugins are distributed as executable files named `kubectl-x` (where `x` is the name of the plugin).
+
+To install a plugin, all you have to do is to copy this file to any directory in your `PATH` and make sure it is executable.
+
+If that's the case, you can immediately start using the plugin as `kubectl x`.
 
 To uninstall a plugin, simply delete the corresponding plugin file.
 
@@ -962,15 +1063,21 @@ This command also displays warnings if you have multiple plugins with the same n
 
 ### Disovering plugins
 
-One of the places to look for existing plugins is on GitHub, for example, in the [**kubectl-plugins**](https://github.com/topics/kubectl-plugins) topic. You will find several dozens of plugins there that might give you some inspiration of what else you can use kubectl for.
+One of the places to look for existing plugins is on GitHub, for example, in the [**kubectl-plugins**](https://github.com/topics/kubectl-plugins) topic.
+
+You will find several dozens of plugins there that might give you some inspiration of what else you can use kubectl for.
 
 Furthermore, there is a project called **krew** aiming at streamlining the discovery and installation of kubectl plugins, which is presented next.
 
 #### Using krew to discover and install kubectl plugins
 
-[Krew](https://github.com/GoogleContainerTools/krew) is a package manager for kubectl plugins (the name *krew* is a pun on the [*brew*](https://brew.sh/) package manager for macOS). It allows to browse kubectl plugins that are in the krew index and to install, upgrade, and uninstall them with a single command.
+[Krew](https://github.com/GoogleContainerTools/krew) is a package manager for kubectl plugins (the name *krew* is a pun on the [*brew*](https://brew.sh/) package manager for macOS).
 
-To use krew, you have to install it first. Krew is itself distributed as a plugin, and you can install it according to the instructions [here](https://github.com/GoogleContainerTools/krew/#installation).
+It allows to browse kubectl plugins that are in the krew index and to install, upgrade, and uninstall them with a single command.
+
+To use krew, you have to install it first.
+
+Krew is itself distributed as a plugin, and you can install it according to the instructions [on the official project](https://github.com/GoogleContainerTools/krew/#installation).
 
 Once krew is installed, you can invoke it as `kubectl krew`. You can browse the plugins in the krew index as follows:
 
@@ -990,17 +1097,25 @@ This command lists all the plugins that have been installed via krew:
 kubectl krew list
 ~~~
 
-Note that the above command does *not* list the plugins that have been installed manually (that is, not with krew). To list *all* plugins on your system, you can use the `kubectl plugin list` command.
+Note that the above command does *not* list the plugins that have been installed manually (that is, not with krew).
 
-In general, the use of krew does not prevent you from installing plugins manually (as shown [above](#installing-plugins)). Plugins installed by krew and plugins installed manually can live side by side on your system.
+To list *all* plugins on your system, you can use the `kubectl plugin list` command.
+
+In general, the use of krew does not prevent you from installing plugins manually.
+
+Plugins installed by krew and plugins installed manually can live side by side on your system.
 
 ### Creating your own plugins
 
-If you don't find an existing plugin that does what you want, you can create your own. Creating kubectl plugins is extremely easy.
+If you don't find an existing plugin that does what you want, you can create your own.
 
-A kubectl plugin can be any type of an executable file (a Bash script, a compiled C program, a Python script, etc.). The only requirement is that it is named `kubectl-x`, where `x` is the name of your plugin.
+A kubectl plugin can be any type of an executable file (a Bash script, a compiled C program, a Python script, etc.).
 
-For example, do you remember the command for listing the container images of all pods in your cluster from a [previous section](#3-using-custom-output-formats)? You can easily transform it to a plugin that you can invoke as `kubectl images`.
+The only requirement is that it is named `kubectl-x`, where `x` is the name of your plugin.
+
+For example, do you remember the command for listing the container images of all pods in your cluster from a [previous section](#3-using-custom-output-formats)?
+
+You can easily transform it to a plugin that you can invoke as `kubectl images`.
 
 All you have to do for this is to create a file named `kubectl-images` with the following content:
 
@@ -1011,13 +1126,21 @@ kubectl get pods -o custom-columns='NAME:metadata.name,IMAGES:spec.containers[*]
 
 That's it! The `kubectl-images` file is a valid kubectl plugin and can be [installed](#installing-plugins) by anyone, and invoked as `kubectl images`.
 
-This example plugin is just a simple shell script, but plugins can be arbitrarily sophisticated. Nothing prevents you from implementing a plugin in Java or Go, possibly using a [Kubernetes client library](https://kubernetes.io/docs/reference/using-api/client-libraries/) (for Go there exists even a utility library called [cli-runtime](https://github.com/kubernetes/cli-runtime) specifically for kubectl plugins). Detailed information about creating plugins can be found [here](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/).
+This example plugin is just a simple shell script, but plugins can be arbitrarily sophisticated.
 
-Feel free to distribute your plugins on GitHub if you think they might be useful for others too (just add the [kubectl-plugins](https://github.com/topics/kubectl-plugins) topic to make them easily discoverable). You can even try to add a plugin to the [krew index](https://github.com/GoogleContainerTools/krew-index) according to the instructions [here](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md) (it requires your plugin to be accepted by the krew maintainers).
+Nothing prevents you from implementing a plugin in Java or Go, possibly using a [Kubernetes client library](https://kubernetes.io/docs/reference/using-api/client-libraries/) (for Go there exists even a utility library called [cli-runtime](https://github.com/kubernetes/cli-runtime) specifically for kubectl plugins).
+
+Detailed information about creating plugins can be found [here](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/).
+
+Feel free to distribute your plugins on GitHub if you think they might be useful for others too (just add the [kubectl-plugins](https://github.com/topics/kubectl-plugins) topic to make them easily discoverable).
+
+You can even try to add a plugin to the [krew index](https://github.com/GoogleContainerTools/krew-index) according to the instructions [here](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md) (it requires your plugin to be accepted by the krew maintainers).
 
 ### Command completion
 
-Currently, the kubectl plugin mechanism does unfortunately not yet support command completion. This means that you have to fully type the plugin names and any arguments.
+Currently, the kubectl plugin mechanism does unfortunately not yet support command completion.
+
+This means that you have to fully type the plugin names and any arguments.
 
 For example, consider you type the following:
 
