@@ -149,7 +149,7 @@ export function Markdown(content: string, assetsPath: string): {html: string, cs
     }
 
     function includeModule(module: string): string {
-      const $ = cheerio.load(module, {decodeEntities: false, xmlMode: true})
+      const $ = cheerio.load(module, {decodeEntities: false})
       const style = $('style').html()
       const script = $('script').html()
       if (!!style) {
