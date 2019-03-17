@@ -56,7 +56,6 @@ Though their inner workings differ a little, they stem from the same rationale.
 
 A typical cloud provider buys loads of powerful servers organised in large data centres. To maximise the utilisation of hardware, they divide those computers into smaller virtual machines.
 
-{% include_relative split.html %}
 ```include
 <template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 780" id="split">
@@ -767,7 +766,6 @@ But if you're interested to know how big is your cluster you can sum the memory 
 
 If you have one 4GB/1vCPU and one 8GB/2vCPUs instances, you only have a cluster with 12GB and 3 vCPUs.
 
-{% include_relative resources.html %}
 ```include
 <template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 658" id="resources">

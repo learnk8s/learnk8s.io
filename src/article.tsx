@@ -156,8 +156,8 @@ export function Markdown(content: string, assetsPath: string): {html: string, cs
           <div className='w1 h1 ml1 bg-yellow br-100'></div>
         </header>
         {!!lang ?
-        <pre className={`code language-${lang} relative pa4 overflow-auto mv0 br2 br--bottom`} data-line={lines}><code className={`language-${lang}`}>${Prism.highlight(code, Prism.languages[lang])}</code></pre> :
-        <pre className='code language-none relative pa4 overflow-auto mv0 br2 br--bottom'><code className='language-none'>{code}</code></pre>
+        <pre className={`code language-${lang} relative pa4 overflow-auto mv0 br2 br--bottom`} data-line={lines}><code className={`language-${lang}`} dangerouslySetInnerHTML={{__html: Prism.highlight(code, Prism.languages[lang])}}></code></pre> :
+        <pre className='code language-none relative pa4 overflow-auto mv0 br2 br--bottom'><code className='language-none' dangerouslySetInnerHTML={{__html: code}}></code></pre>
         }
       </div>)
     }
