@@ -9,12 +9,12 @@ import { BlogPosting } from 'schema-dts'
 import { ListItem } from '../layout'
 
 export const Details = {
-  type: identity<'advancedKubectl'>('advancedKubectl'),
-  url: '/kubectl-advanced-tips-and-tricks',
-  seoTitle: 'Advanced kubectl tips and tricks for power users ♦︎ Learnk8s',
-  title: 'Advanced kubectl tips and tricks for power users',
-  shortDescription: ``,
-  description: ``,
+  type: identity<'kubectlProductivity'>('kubectlProductivity'),
+  url: '/kubectl-productivity',
+  seoTitle: 'How to boost your kubectl productivity ♦︎ Learnk8s',
+  title: 'How to boost your kubectl productivity',
+  shortDescription: `If you work with Kubernetes, you most probably use kubectl. And you probably use it a lot. This article contains a set of tips and tricks to make your usage of kubectl more efficient.`,
+  description: `If you work with Kubernetes, you most probably use kubectl. And you probably use it a lot. Whenever you spend a lot of time working with a specific tool, it is worth truly "mastering" it and using it efficiently. This article contains a set of tips and tricks to make your usage of kubectl more efficient.`,
   openGraphImage: Image({url: 'src/advancedKubectl/magic.jpg', description: 'Advanced kubectl usage'}),
   publishedDate: '2019-01-24',
   previewImage: Image({url: 'src/advancedKubectl/magic.jpg', description: 'Advanced kubectl usage'}),
@@ -87,7 +87,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
     <RelatedConentContainer>
       <RelatedContentItem>
-        <a href={getFullUrl(website.children.blog.children.smallerDockerImage)} className='link navy underline hover-sky'>3 simple tricks for smaller Docker images</a> and learn how to build and deploy Docker images quicker.
+        <a href={getFullUrl(website.children.blog.children.spotInstances)} className='link navy underline hover-sky'>How to practice chaos engineering and reduce costs</a> with Kubernetes and spot instances.
       </RelatedContentItem>
       <RelatedContentItem>
         <a href={getFullUrl(website.children.blog.children.scalingSpringBoot)} className='link navy underline hover-sky'>Scaling Microservices with Message Queues, Spring Boot and Kubernetes.</a> Learn how to use the Horizontal Pod Autoscaler to resize your fleet of applications dynamically.
@@ -97,19 +97,17 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     <div className='pt4'>
       <p className='lh-copy f5 black-70'>↓ Caution: shameless plug ahead! Continue reading below ↓</p>
       <h2 className='f2 pt0 pb2 mt2'>Become an expert at deploying and scaling applications in Kubernetes</h2>
-      <p className='lh-copy measure-wide f4'>But how do you deal with thousands of <span className='i'>small</span> containers?</p>
-      <p className='lh-copy measure-wide f4'>You should learn how to leverage a container orchestrator such as Kubernetes.</p>
-      <p className='lh-copy measure-wide f4'>You can get a head start with our hands-on courses and learn how to master scalability in the cloud.</p>
+      <p className='lh-copy measure-wide f4'>Sign up for the Learnk8s Academy — a self-paced online course designed to dive into the details of Kubernetes.</p>
       <p className='lh-copy measure-wide f4'>Learn how to:</p>
       <ul className='list ph3'>
-        <ListItem>Handle the busiest traffic websites without breaking a sweat</ListItem>
+        <ListItem>Master Kubernetes networking and handle the busiest traffic websites without breaking a sweat</ListItem>
         <ListItem>Scale your jobs to thousands of servers and reduce the waiting time from days to minutes</ListItem>
-        <ListItem>Enjoy peace of mind knowing that your apps are highly available with a multi-cloud setup</ListItem>
-        <ListItem>Save a ton of cash on your cloud bill by using only the resources you need</ListItem>
+        <ListItem>Design clusters that are reliable and enjoy peace of mind knowing that your apps are highly available with a multi-cloud setup</ListItem>
+        <ListItem>Optimise server density with containers and Kubernetes and save a ton of cash on your cloud bill by using only the resources you need</ListItem>
         <ListItem>Supercharge your delivery pipeline and deploy application around the clock</ListItem>
       </ul>
       <div className='pt2 pb4'>
-        <a href={getFullUrl(website.children.training)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3'>Become an expert →</a>
+        <a href={getFullUrl(website.children.academy)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3'>Join the Learnk8s Academy →</a>
       </div>
       <p className='lh-copy f5'>P.S. Don't miss the next experiment, insight, or <span className='b'>discount</span>: <a href={getFullUrl(website.children.newsletter)} className='link navy underline hover-sky'>subscribe to the mailing list!</a></p>
     </div>
