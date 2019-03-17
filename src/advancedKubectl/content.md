@@ -771,7 +771,7 @@ Here's an example for `kubectl get pods -o yaml`. Try to interact with the lette
   <li class="hover-sky relative hide-child pv2">po <span class="child absolute bottom--2 left-0 f2">pods</li>
   <li class="hover-sky relative hide-child pv2">oyaml <span class="child absolute bottom--2 left-0 f2">-o yaml</li>
 </ul>
-<template>
+</template>
 <script>
 </script>
 ```
@@ -786,7 +786,7 @@ Another example is `kubect describe services all`:
   <li class="hover-sky relative hide-child pv2">svc <span class="child absolute bottom--2 left-0 f2">services</li>
   <li class="hover-sky relative hide-child pv2">all <span class="child absolute bottom--2 left-0 f2 no-wrap">--all-namespaces</li>
 </ul>
-<template>
+</template>
 <style>
 .no-wrap {
   white-space: nowrap;
@@ -853,7 +853,7 @@ The table below summarises the aliases and explores further examples:
   </li>
 </ul>
 </div>
-<template>
+</template>
 <style>
 .ksysgdepowide:hover ~ .abbreviations .alias-k,
 .ksysgdepowide:hover ~ .abbreviations .alias-sys,
