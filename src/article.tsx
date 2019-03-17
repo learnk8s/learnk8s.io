@@ -5,6 +5,7 @@ import { Img, Image, CSSBundle } from './assets'
 import { Sitemap } from './sitemap'
 import { Layout, Navbar, Footer} from './layout'
 import cheerio from 'cheerio'
+import { renderToStaticMarkup } from 'react-dom/server'
 
 const loadLanguages = require('prismjs/components/')
 loadLanguages(['powershell', 'bash', 'docker', 'json', 'yaml', 'sql', 'ruby', 'java'])
@@ -114,22 +115,23 @@ export function Markdown(content: string, assetsPath: string): {html: string, cs
     }
 
     function renderSlideshow({slides, description}: {description: string, slides: {image: string, description: string}[]}): string {
-      return `<div class="slideshow-js overflow-hidden">
-  <ul class="pl0 list slider-js">
-      ${slides.map(({image, description}, index) => {
-        const optimisedImage = Image({url: image, description})
-        return `<li class="mv3">
-          <img src="${optimisedImage.url}" alt="${optimisedImage.description}"/>
-          <div class="bt b-solid bw2 b--black-70 relative mt3">
-            <div class="bg-black-10 br1 pa1 dib mt2 absolute bottom-1 left-0"><span class="b black-60">${index + 1}</span><span class="f7 black-50">/${slides.length}</span></div>
-          </div>
-          <div class="navigation-js flex items-start justify-between bg-evian ph2">
-            <div class="f5 lh-copy black-90 w-60 center">${marked(description, {renderer: inlineRenderer})}</div>
-          </div>
-        </li>`
-      }).join('')}
-  </ul>
-</div>`
+      return renderToStaticMarkup(<div className='slideshow-js overflow-hidden'>
+        <ul className='pl0 list slider-js'>
+            {slides.map(({image, description}, index) => {
+              const optimisedImage = Image({url: `${assetsPath}/${image}`, description})
+
+              return <li className='mv3'>
+                <img src={optimisedImage.url} alt={optimisedImage.description}/>
+                <div className='bt b-solid bw2 b--black-70 relative mt3'>
+                  <div className='bg-black-10 br1 pa1 dib mt2 absolute bottom-1 left-0'><span className='b black-60'>{index + 1}</span><span className='f7 black-50'>/{slides.length}</span></div>
+                </div>
+                <div className='navigation-js flex items-start justify-between bg-evian ph2'>
+                  <div className='f5 lh-copy black-90 w-60 center'>{marked(description, {renderer: inlineRenderer})}</div>
+                </div>
+              </li>
+            })}
+        </ul>
+      </div>)
     }
 
     function includeModule(module: string): string {
@@ -147,18 +149,17 @@ export function Markdown(content: string, assetsPath: string): {html: string, cs
     }
 
     function decorateWithEditor(lang: string, code: string, lines?: string): string {
-      return `<div class="mv4 mv5-l">
-  <header class="bg-light-gray flex pv2 pl1 br--top br2">
-    <div class="w1 h1 ml1 bg-dark-red br-100"></div>
-    <div class="w1 h1 ml1 bg-green br-100"></div>
-    <div class="w1 h1 ml1 bg-yellow br-100"></div>
-  </header>
-  ${!!lang ?
-    `<pre class="code language-${lang} relative pa4 overflow-auto mv0 br2 br--bottom" ${lines ? `data-line="${lines}"` : ''}><code class="language-${lang}">${Prism.highlight(code, Prism.languages[lang])}</code>` :
-    `<pre class="code language-none relative pa4 overflow-auto mv0 br2 br--bottom"><code class="language-none">${code}</code></pre>`
-  }
-</pre>
-</div>`
+      return renderToStaticMarkup(<div className='mv4 mv5-l'>
+        <header className='bg-light-gray flex pv2 pl1 br--top br2'>
+          <div className='w1 h1 ml1 bg-dark-red br-100'></div>
+          <div className='w1 h1 ml1 bg-green br-100'></div>
+          <div className='w1 h1 ml1 bg-yellow br-100'></div>
+        </header>
+        {!!lang ?
+        <pre className={`code language-${lang} relative pa4 overflow-auto mv0 br2 br--bottom`} data-line={lines}><code className={`language-${lang}`}>${Prism.highlight(code, Prism.languages[lang])}</code></pre> :
+        <pre className='code language-none relative pa4 overflow-auto mv0 br2 br--bottom'><code className='language-none'>{code}</code></pre>
+        }
+      </div>)
     }
   }
   renderer.blockquote = (quote) => {
