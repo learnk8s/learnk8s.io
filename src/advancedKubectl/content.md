@@ -1,79 +1,63 @@
-If you work with Kubernetes, you most probably use kubectl. And you probably use it *a lot*. Whenever you spend a lot of time working with a specific tool, it is worth truly "mastering" it and using it efficiently.
+If you work with Kubernetes, you use kubectl. And you probably use it *a lot*. Whenever you spend a lot of time working with a specific tool, it is worth to get to know it very well in order to use it efficiently.
 
 This article contains a set of tips and tricks to make your usage of kubectl more efficient. By the way, this article also aims at deepening your understanding of how Kubernetes works.
 
-The goal of all this is not only to make your daily work with Kubernetes more efficient, but also more enjoyable!
+The goal of this article is not only to make your daily work with Kubernetes more efficient, but also more enjoyable!
 
-## kubectl recap
+## Understanding kubectl
 
-Before focussing on how to *use* kubectl more efficienly, let's do a recap.
+Before focussing on how to *use* kubectl more efficienly, let's understand what it actually *is*.
 
-When you ask Kubernetes to create a deployment, you use `kubectl` — a command line tool to interact with the cluster.
+From a user's point of view, kubectl is the primary means to interact with Kubernetes. Kubectl is your cockpit that allows you to execute every possible Kubernetes operation.
 
-`kubectl` sends an API request with the content of the YAML file to the Kubernetes API.
+Technically, kubectl is a client for the **Kubernetes API**.
 
-The API stores the state of the resource in a database.
+The Kubernetes API is the actual **user interface** of Kubernetes. It is an HTTP REST API and Kubernetes is fully controlled through this API. That means, every operation that Kubernetes provides has a corresponding API call.
 
-```slideshow
-{
-  "description": "Here's what happens when you type `kubectl create -f`",
-  "slides": [
-    {
-      "image": "kubectl-create-1.svg",
-      "description": "You use `kubectl create -f replicaset.yaml` to send a request to the master Node to deploy three replicas."
-    },
-    {
-      "image": "kubectl-create-2.svg",
-      "description": "Inside the master node, the API receives the request and the JSON payload — `kubectl` converted the YAML resource into JSON."
-    },
-    {
-      "image": "kubectl-create-3.svg",
-      "description": "The API server persists the object definition to the database."
-    },
-    {
-      "image": "kubectl-create-4.svg",
-      "description": "The database stores the document."
-    }
-  ]
-}
-```
+Consequently, the main job of kubectl is to carry out HTTP requests to the Kubernetes API.
 
-As you can see, `kubectl` is in fact an HTTP-based client to the Kubernetes API.
+![](kubernetes-api.png)
 
-_But what is the Kubernetes API?_
+Let's consider an example. Imagine you want to create a ReplicaSet. To do so, you could define the resource in the `replicaset.yaml` file, and then run the following kubectl command:
 
-To understand this, let's briefly look at the Kubernetes internals.
+~~~bash
+kubectl create -f replicaset.yaml
+~~~
+
+This "magically" creates your ReplicaSet in Kubernetes. But what happens behind the scenes?
+
+Like for every Kubernetes operation, Kubernetes provides an API endpoint for creating ReplicaSet resources:
+
+~~~
+POST /apis/apps/v1/namespaces/{namespace}/replicasets
+~~~
+
+When you execute the above command, kubectl makes an HTTP request to this endpoint, passing the resource definition (the content of your `replicaset.yaml` file) in the body of the HTTP POST request.
+
+This works exactly the same for *all* Kubernetes operations, no matter whether for creating, reading, updating, or deleting resources. These operations are all implemented by HTTP REST endpoints, and kubectl simply carries out HTTP request to these endpoints.
+
+> You can find the documentation about all Kubernetes API endpoints in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13) (including the [above](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) one).
+
+So far we have talked a lot about *Kubernetes* and the *Kubernetes API*, but gleaned over many details. Let's fix this by looking at these terms in some more depth.
 
 ### Kubernetes internals
 
-Kubernetes consists of a set of independent components that run on the nodes (i.e. machines) of the cluster.
+Kubernetes consists of a set of independent components (each running as a separate process) that are distributed over the nodes of a cluster. Each component has a very specific function. 
 
-Each component runs as a separate operating system process.
+The most important components on the master nodes are:
 
-Some components run on the master nodes of the cluster (forming the cluster control plane) and others run on the worker nodes.
+- **API server:** provides Kubernetes API, manages storage backend
+- **Storage backend:** database (usually implemented by [etcd](https://coreos.com/etcd/))
+- **Controller manager:** ensures resource statuses match specifications
+- **Scheduler:** schedules pods to worker nodes
 
-On master nodes you can find:
+And the most important components on the worker nodes are:
 
-- the **API server:** provides the Kubernetes API, manages etcd storage
-- **etcd:** storage backend
-- the **Controller manager:** ensures status matches spec of all resources
-- the **Scheduler:** schedules pods to worker nodes
+- **kubelet:** manages execution of containers on a worker node
 
-The **kubelet:** controls execution of containers and is installed in every on worker node.
+To see how these components work together, let's see consider an example. Imagine you create a [ReplicaSet](https://kubernetes.io/docs/reference/generated/kubernetes-   api/v1.13/#replicaset-v1-apps) resource in your cluster (a ReplicaSet consists of a pod template and "replica count", that is, the number of replicas of this pod that   should be running at all times) by preparing a YAML manifest of the resource and then creating it with `kubectl apply`.
 
-To see how these components work together, let's see consider an example.
-
-Imagine you create a [ReplicaSet resource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#replicaset-v1-apps) in your cluster (a ReplicaSet consists of a pod template and "replica count", that is, the number of replicas of this pod that should be running at all times) by preparing a YAML manifest of the resource and then creating it with `kubectl create`.
-
-When you create the ReplicaSet resource, the **API server** saves its manifest in the **etcd** storage.
-
-This event triggers the ReplicaSet controller, a sub-process of the **controller manager**.
-
-The controller detects that there is now a ReplicaSet, but no corresponding pods, so it creates manifests for these pods and saves them in the etcd storage (through the API server).
-
-This in turn triggers the **scheduler**, as it sees that there now exists a number of pods that are not assigned to a worker node yet.
-
-Thus, it selects a worker node for each of these pods and adds the respective node names to the pod manifests in the etcd storage (through the API server).
+When you create the ReplicaSet resource, the **API server** saves its manifest in the **etcd** storage. This event triggers the ReplicaSet controller, a sub-process of  the **controller manager**. It detects that there is now a ReplicaSet, but no corresponding pods, so it creates manifests for these pods and saves them in the etcd      storage (through the API server). This in turn triggers the **scheduler**, as it sees that there now exists a number of pods that are not assigned to a worker node yet. Thus, it selects a worker node for each of these pods and adds the respective node names to the pod manifests in the etcd storage (through the API server). This in turn triggers the **kubelets** on the corresponding worker nodes, as they detect that a pod has been assigned to them. The kubelets then run the containers of these pods on  their worker nodes.
 
 ```slideshow
 {
@@ -103,16 +87,6 @@ Thus, it selects a worker node for each of these pods and adds the respective no
 }
 ```
 
-Not a single resource is created in the infrastructure at this point.
-
-All objects are safely stored in the database, but no container or Pods was created in any node.
-
-In each worker node in your Kubernetes cluster, there's a binary called the `kubelet`.
-
-The `kubelet` is the Kubernetes agent and is in charge of asking for updates to the master Node and create containers (among many other things).
-
-The kubelet then delegates running the containers of these pods on its worker node.
-
 ```slideshow
 {
   "description": "The kubelet creates the Pods in the Node",
@@ -139,23 +113,18 @@ The kubelet then delegates running the containers of these pods on its worker no
 
 ### The Kubernetes API
 
-The Kubernetes API is an **HTTP REST API** provided by the API server, and *all* interactions between Kubernetes components happen as [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations through this API.
+The Kubernetes API is an **HTTP REST API** provided by the API server, and *all* interactions between Kubernetes components happen as [CRUD](https://en.wikipedia.org/   wiki/Create,_read,_update_and_delete) operations through this API. That means, Kubernetes resources (such as ReplicaSets, pods, etc.) are created, read, updated, and
+deleted through this API (persisted in the etcd storage backend).
 
-That means, Kubernetes resources (such as ReplicaSets, pods, etc.) are created, read, updated, and deleted through this API (persisted in the etcd storage backend).
+The special thing about Kubernetes is that the same management API is used for internal operations as well as for users of the cluster. In other words, kubectl talks to
+exactly the same API as the internal components, such as the scheduler or kubelet.
 
-The special thing about Kubernetes is that the same management API is used for internal operations as well as for users of the cluster.
-
-In other words, kubectl talks to exactly the same API as the internal components, such as the scheduler or kubelet.
-
-The full specification of this API for the currently latest version of Kubernetes (v1.13) can be found on the official documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/).
-
-As you can see, the specification is organised as a list of resource types.
-
-These are the resources that can be created, read, updated, and deleted (CRUD) through the Kubernetes API.
+The full specification of this API for the currently latest version of Kubernetes (v1.13) can be found [here](https://kubernetes.io/docs/reference/generated/kubernetes- api/v1.13/). As you can see, the specification is organised as a list of resource types. These are the resources that can be created, read, updated, and deleted (CRUD)  through the Kubernetes API.
 
 For each resource, the specification lists its **structure**, as well as the **operations** that can be applied to this resource.
 
-For example, [the create operation for a ReplicaSet]((https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps)) is implemented by the following HTTP API endpoint:
+For example, [the *create* operation for a ReplicaSet](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) is implemented by
+the following HTTP API endpoint:
 
 ~~~
 POST /apis/apps/v1/namespaces/{namespace}/replicasets
@@ -163,13 +132,14 @@ POST /apis/apps/v1/namespaces/{namespace}/replicasets
 
 The body for this HTTP POST request must be a manifest of a ReplicaSet in one of the supported formats (YAML, JSON, or [protobuf](https://developers.google.com/protocol-buffers/)).
 
-So, when you execute a command like `kubectl create -f replicaset.yaml`, then kubectl makes the above API request behind the scenes.
+So, when you execute a command like `kubectl create -f rs.yaml`, then kubectl makes the above API request behind the scenes. Similarly, internal Kubernetes components
+themselves use the same API endpoints when they have to create, read, update, or delete Kubernetes resources.
 
-Similarly, internal Kubernetes components themselves use the same API endpoints when they have to create, read, update, or delete Kubernetes resources.
-
-> Please note that Kubernetes is organised in such a way that the whole cluster can be operated and used through CRUD operations on Kubernetes resources through the Kubernetes API.
+Note that Kubernetes is organised in such a way that the whole cluster can be operated and used through CRUD operations on Kubernetes resources through the Kubernetes
+API.
 
 Let's now look at a series of tips and tricks to make your usage of kubectl more efficient.
+
 
 ## 1. Save typing with command completion
 
