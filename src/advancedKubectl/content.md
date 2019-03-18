@@ -38,7 +38,7 @@ This works exactly the same for *all* Kubernetes operations, no matter whether f
 
 > You can find the documentation about all Kubernetes API endpoints in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13) (including the [above](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) one).
 
-So far we have talked a lot about *Kubernetes* and the *Kubernetes API*, but gleaned over many details. Let's fix this by looking at these terms in some more depth.
+So, Kubernetes operations are exposed as HTTP REST API calls. But how are these operations implemented inside Kubernetes? And where does the Kubernetes API come from? The next sections clear this up.
 
 ### Kubernetes internals
 
@@ -61,51 +61,35 @@ When you create the ReplicaSet resource, the **API server** saves its manifest i
 
 ```slideshow
 {
-  "description": "The controller manager creates the pods",
+  "description": "Walkthrough from creating a ReplicaSet to the execution of containers.",
   "slides": [
     {
       "image": "schedule-pods-1.svg",
-      "description": "You submitted a Deployment with `kubectl create -f replicaset.yaml` and the resource is stored in etcd."
+      "description": "When you create a ReplicaSet by running `kubectl create -f replicaset.yaml`, the API server saves your resource definition in the storage backend."
     },
     {
       "image": "schedule-pods-2.svg",
-      "description": "The controller manager listens for updates from etcd (through the API). When a ReplicaSet is created, the controller manager is notified."
+      "description": "This triggers the ReplicaSet controller in the controller manager, who watches for creations, updates, and deletions of ReplicaSet resources."
     },
     {
       "image": "schedule-pods-3.svg",
-      "description": "The controller manager creates enough pods to match the replicas in the ReplicaSet. The pods are stored in etcd in a _Pending_ state."
+      "description": "The ReplicaSet controller creates a Pod definition for each required replica (according to the Pod template in the ReplicaSet definition) and saves them in the storage backend."
     },
     {
       "image": "schedule-pods-4.svg",
-      "description": "The scheduler is notified when a pod is created. It then proceeds to find the best node to assign to the Pod."
+      "description": "This triggers the scheduler who watches for Pods that have not yet been assigned to a worker node."
     },
     {
       "image": "schedule-pods-5.svg",
-      "description": "As soon as the pod is assigned to a node, its status goes from _Pending_ to _Scheduled_."
-    }
-  ]
-}
-```
-
-```slideshow
-{
-  "description": "The kubelet creates the Pods in the Node",
-  "slides": [
-    {
-      "image": "kubelet-1.svg",
-      "description": "In each worker node there's a binary — the kubelet — that is in charge of talking to the master node."
+      "description": "The scheduler chooses a suitable worker node for each Pod and adds this information to the Pod definitions in the storage backend."
     },
     {
-      "image": "kubelet-2.svg",
-      "description": "The `kubelet` continuously polls the master node for updates. It's interested in knowing if there's any pod assigned to its node."
+      "image": "schedule-pods-6.svg",
+      "description": "This update of the Pod definitions triggers the kubelet on the worker node that the Pods have been scheduled to."
     },
     {
-      "image": "kubelet-3.svg",
-      "description": "When a pod is assigned to the current node, the `kubelet` read the resource definition and delegates creating the container to the Docker daemon."
-    },
-    {
-      "image": "kubelet-4.svg",
-      "description": "The pod is finally _Running_."
+      "image": "schedule-pods-7.svg",
+      "description": "The kubelet reads the Pod definitions, downloads the required contaier images, and runs the containers via Docker (or another container runtime) on the worker node."
     }
   ]
 }
