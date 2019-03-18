@@ -1,11 +1,10 @@
-import {Image} from './assets'
+import { Image } from './assets'
 import { Sitemap, LinkedNode } from './sitemap'
-
 
 export const Details = {
   type: identity<'browserConfig'>('browserConfig'),
   url: '/browserconfig.xml',
-  mstyle: Image({url: 'assets/mstile-150x150.png', description: 'MS Style'}),
+  mstyle: Image({ url: 'assets/mstile-150x150.png', description: 'MS Style' }),
 }
 
 function identity<T>(value: T): T {

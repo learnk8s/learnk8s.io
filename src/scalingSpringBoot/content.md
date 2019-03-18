@@ -2096,14 +2096,14 @@ spec:
         app: queue
     spec:
       containers:
-      - name: web
-        image: webcenter/activemq:5.14.3
-        imagePullPolicy: IfNotPresent
-        ports:
-          - containerPort: 61616
-        resources:
-          limits:
-            memory: 512Mi
+        - name: web
+          image: webcenter/activemq:5.14.3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 61616
+          resources:
+            limits:
+              memory: 512Mi
 ```
 
 The template is verbose but straightforward to read:
@@ -2122,8 +2122,8 @@ metadata:
   name: queue
 spec:
   ports:
-  - port: 61616
-    targetPort: 61616
+    - port: 61616
+      targetPort: 61616
   selector:
     app: queue
 ```
@@ -2166,27 +2166,27 @@ spec:
         app: frontend
     spec:
       containers:
-      - name: frontend
-        image: spring-boot-hpa
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: ACTIVEMQ_BROKER_URL
-          value: "tcp://queue:61616"
-        - name: STORE_ENABLED
-          value: "true"
-        - name: WORKER_ENABLED
-          value: "false"
-        ports:
-          - containerPort: 8080
-        livenessProbe:
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          httpGet:
-            path: /health
-            port: 8080
-        resources:
-          limits:
-            memory: 512Mi
+        - name: frontend
+          image: spring-boot-hpa
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ACTIVEMQ_BROKER_URL
+              value: 'tcp://queue:61616'
+            - name: STORE_ENABLED
+              value: 'true'
+            - name: WORKER_ENABLED
+              value: 'false'
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            httpGet:
+              path: /health
+              port: 8080
+          resources:
+            limits:
+              memory: 512Mi
 ```
 
 The _Deployment_ looks a lot like the previous one.
@@ -2205,9 +2205,9 @@ metadata:
   name: frontend
 spec:
   ports:
-  - nodePort: 32000
-    port: 80
-    targetPort: 8080
+    - nodePort: 32000
+      port: 80
+      targetPort: 8080
   selector:
     app: frontend
   type: NodePort
@@ -2245,27 +2245,27 @@ spec:
         prometheus.io/scrape: 'true'
     spec:
       containers:
-      - name: backend
-        image: spring-boot-hpa
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: ACTIVEMQ_BROKER_URL
-          value: "tcp://queue:61616"
-        - name: STORE_ENABLED
-          value: "false"
-        - name: WORKER_ENABLED
-          value: "true"
-        ports:
-          - containerPort: 8080
-        livenessProbe:
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          httpGet:
-            path: /health
-            port: 8080
-        resources:
-          limits:
-            memory: 512Mi
+        - name: backend
+          image: spring-boot-hpa
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ACTIVEMQ_BROKER_URL
+              value: 'tcp://queue:61616'
+            - name: STORE_ENABLED
+              value: 'false'
+            - name: WORKER_ENABLED
+              value: 'true'
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            httpGet:
+              path: /health
+              port: 8080
+          resources:
+            limits:
+              memory: 512Mi
 ```
 
 Create a `backend-service.yaml` file with the following content:
@@ -2277,9 +2277,9 @@ metadata:
   name: backend
 spec:
   ports:
-  - nodePort: 31000
-    port: 80
-    targetPort: 8080
+    - nodePort: 31000
+      port: 80
+      targetPort: 8080
   selector:
     app: backend
   type: NodePort

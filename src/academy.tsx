@@ -1,8 +1,36 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude , SpecialListItem, Testimonal, MailTo, mailto, YourTeam, FAQs, FAQ, PackageList, PackageLeft, PackageRight, Hero} from './layout'
-import {Image, Img, Script, Javascript, ExternalJavascript, ExternalScript, CSSBundle, JSScript, JSBundle} from './assets'
-import {material, assets as materialAssets} from './material'
+import {
+  Navbar,
+  Consultation,
+  Footer,
+  Layout,
+  ListItem,
+  Interlude,
+  SpecialListItem,
+  Testimonal,
+  MailTo,
+  mailto,
+  YourTeam,
+  FAQs,
+  FAQ,
+  PackageList,
+  PackageLeft,
+  PackageRight,
+  Hero,
+} from './layout'
+import {
+  Image,
+  Img,
+  Script,
+  Javascript,
+  ExternalJavascript,
+  ExternalScript,
+  CSSBundle,
+  JSScript,
+  JSBundle,
+} from './assets'
+import { material, assets as materialAssets } from './material'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { PrimaryButton } from './homepage'
@@ -10,11 +38,11 @@ import { renderToStaticMarkup } from 'react-dom/server'
 
 export const Assets = {
   page: {
-    training: Image({url: 'assets/academy/training.svg', description: 'Training'}),
-    down: Image({url: 'assets/academy/down_arrow_white.svg', description: 'Down'}),
-    together: Image({url: 'assets/academy/together.svg', description: 'Team'}),
-    tick: Image({url: 'assets/academy/tick.svg', description: 'Tick'}),
-    paddle: ExternalJavascript({url: 'https://cdn.paddle.com/paddle/paddle.js'}),
+    training: Image({ url: 'assets/academy/training.svg', description: 'Training' }),
+    down: Image({ url: 'assets/academy/down_arrow_white.svg', description: 'Down' }),
+    together: Image({ url: 'assets/academy/together.svg', description: 'Team' }),
+    tick: Image({ url: 'assets/academy/tick.svg', description: 'Tick' }),
+    paddle: ExternalJavascript({ url: 'https://cdn.paddle.com/paddle/paddle.js' }),
   },
   material: materialAssets,
 }
@@ -25,7 +53,7 @@ export const Details = {
   seoTitle: 'Learnk8s Academy ♦︎ Learnk8s',
   title: 'Kubernetes Online Course',
   description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
-  openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
+  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
 }
 
 function identity<T>(value: T): T {
@@ -44,400 +72,576 @@ const privateGroupEnquiry: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-const faqs: FAQ[] = [{
-  title: `I'm starting out. Is this right for me?`,
-  content: 'Of course. The academy and our online courses are meant for developers that have little to no experience in containers nor Kubernetes.',
-}, {
-  title: 'What happens after I buy the access for the course?',
-  content: `You'll be given an account where you can access the course at any time and from any web browser (desktop, tablet, or mobile). You can log in and start learning Kubernetes.`,
-}, {
-  title: 'What version of Kubernetes was this created for?',
-  content: 'The material was authored for Minikube 0.28, Kubernetes 1.10, Helm 2.9',
-}, {
-  title: `What if I'm not thrilled?`,
-  content: `We want to make sure you get real value out of this so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt and I will refund you.`
-}, {
-  title: 'Do you offer a student discount?',
-  content: `Absolutely! [Fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform) with some proof that you are a student and we'll send you a discount code. This applies to anyone in any type of schooling, including evening classes and coding bootcamps!`
-}, {
-  title: 'I have another question!',
-  content: `Sure - send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io).`
-}]
+const faqs: FAQ[] = [
+  {
+    title: `I'm starting out. Is this right for me?`,
+    content:
+      'Of course. The academy and our online courses are meant for developers that have little to no experience in containers nor Kubernetes.',
+  },
+  {
+    title: 'What happens after I buy the access for the course?',
+    content: `You'll be given an account where you can access the course at any time and from any web browser (desktop, tablet, or mobile). You can log in and start learning Kubernetes.`,
+  },
+  {
+    title: 'What version of Kubernetes was this created for?',
+    content: 'The material was authored for Minikube 0.28, Kubernetes 1.10, Helm 2.9',
+  },
+  {
+    title: `What if I'm not thrilled?`,
+    content: `We want to make sure you get real value out of this so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt and I will refund you.`,
+  },
+  {
+    title: 'Do you offer a student discount?',
+    content: `Absolutely! [Fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform) with some proof that you are a student and we'll send you a discount code. This applies to anyone in any type of schooling, including evening classes and coding bootcamps!`,
+  },
+  {
+    title: 'I have another question!',
+    content: `Sure - send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io).`,
+  },
+]
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(<Layout
-    website={website}
-    seoTitle={currentNode.payload.seoTitle}
-    title={currentNode.payload.title}
-    description={currentNode.payload.description}
-    openGraphImage={currentNode.payload.openGraphImage}
-    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-    cssBundle={CSSBundle({
-      paths: [
-        'node_modules/tachyons/css/tachyons.css',
-        'assets/style.css',
-      ],
-    })}>
-    <JsonLd<Course> item={{
-      '@type': 'Course',
-      '@context': 'https://schema.org',
-      name: 'Learnk8s Academy',
-      courseCode: 'K8SACADEMY',
-      description: 'Self-paced Kubernetes online course: become an expert in deploying applications at scale.',
-      educationalCredentialAwarded: 'CKA or CKAD (optional)',
-      provider: {
-        '@type': 'Organization',
-        name: 'Learnk8s',
-      }}}></JsonLd>
-    <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
-      <Navbar root={website} />
+  return renderToStaticMarkup(
+    <Layout
+      website={website}
+      seoTitle={currentNode.payload.seoTitle}
+      title={currentNode.payload.title}
+      description={currentNode.payload.description}
+      openGraphImage={currentNode.payload.openGraphImage}
+      absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+      cssBundle={CSSBundle({
+        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
+      })}
+    >
+      <JsonLd<Course>
+        item={{
+          '@type': 'Course',
+          '@context': 'https://schema.org',
+          name: 'Learnk8s Academy',
+          courseCode: 'K8SACADEMY',
+          description: 'Self-paced Kubernetes online course: become an expert in deploying applications at scale.',
+          educationalCredentialAwarded: 'CKA or CKAD (optional)',
+          provider: {
+            '@type': 'Organization',
+            name: 'Learnk8s',
+          },
+        }}
+      />
+      <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
+        <Navbar root={website} />
 
-      <Hero image={Assets.page.training} imageClass='i-training'>
-        <h1 className='f1 mt1-l pt5-l f-subheadline-l lh-solid'>Self-paced Kubernetes online course</h1>
-        <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>Become an expert in deploying applications at scale.</h2>
-        <div className='dn db-l pt5 mw6 mh3 mh4-ns tc'>
-          <div className='w3 h3 dib'><Img image={Assets.page.down}/></div>
-        </div>
-      </Hero>
-    </div>
+        <Hero image={Assets.page.training} imageClass='i-training'>
+          <h1 className='f1 mt1-l pt5-l f-subheadline-l lh-solid'>Self-paced Kubernetes online course</h1>
+          <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>
+            Become an expert in deploying applications at scale.
+          </h2>
+          <div className='dn db-l pt5 mw6 mh3 mh4-ns tc'>
+            <div className='w3 h3 dib'>
+              <Img image={Assets.page.down} />
+            </div>
+          </div>
+        </Hero>
+      </div>
 
-    <section className='ph3 ph4-ns flex items-center justify-center relative z3'>
-
-      <div className='w-50-l dn db-l tc'>
-        <div className='dib'>
-          <div className='i-together relative'>
-            <Img image={Assets.page.together} className='absolute top-0 right-0'/>
+      <section className='ph3 ph4-ns flex items-center justify-center relative z3'>
+        <div className='w-50-l dn db-l tc'>
+          <div className='dib'>
+            <div className='i-together relative'>
+              <Img image={Assets.page.together} className='absolute top-0 right-0' />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className='w-50-l center pt3'>
-        <h2 className='f3 navy f2-l measure-narrow'>Learn Kubernetes at your pace</h2>
-        <div className='measure-wide'>
-          <p className='lh-copy f4-l black-70'>With a focus on simplicity and readability, this course will have you deploying and scaling applications in no time!</p>
-          <ul className='list black-70 pl0 pt2'>
-            {[
-              'Gain hands-on experience in deploying and scaling applications',
-              'Level up your expertise by solving challenges from real-world use cases',
-              'Learn best practices from the experts and how to do things the Kubernetes way™',
-              'Speak the Kubernetes jargon and talk to the rest of the Cloud Native community',
-              'Gain valuable knowledge by getting your hands dirty and trying things for yourself',
-              'Become an expert faster with laser-focused materials and labs (no fluff!)',
-              'Help to shape your company\'s roadmap to cloud-native technologies',
-              'Empower your team to operate and use Kubernetes like experts',
-              'Quickly onboard new members your team to the same level as everyone else',
-            ].map((it, index) => <ListItem key={index}>{it}</ListItem>)}
-          </ul>
-        </div>
-      </div>
-
-    </section>
-
-     <Interlude />
-
-    <section className='w-100 ph3 ph4-ns flex items-center justify-center pb4'>
-
-      <div className='center pt3'>
-        <h2 className='f3 navy f2-l measure-narrow'>You will learn how to</h2>
-        <div className='measure-wide'>
-          <ul className='list black-70 pl0 pt2'>
-            <ListItem>Standardise your tools, workflows and deployments under a single tool</ListItem>
-            <ListItem>Master architecting services that span multiple clouds and data centres for resilience and failover</ListItem>
-            <ListItem>Secure your Kubernetes cluster by breaking it</ListItem>
-            <ListItem>Package, deploy and scale applications in Kubernetes</ListItem>
-            <ListItem>Design cloud provider agnostic clusters</ListItem>
-            <ListItem>Leverage the strength and avoid the weaknesses of the major Kubernetes managed service offerings (AKS, EKS, GKE)</ListItem>
-            <ListItem>Deploy applications in production with zero downtime</ListItem>
-            <ListItem>Monitor, log and debug production issues in Kubernetes</ListItem>
-            <ListItem>Deploy stateful workloads such as databases</ListItem>
-            <ListItem>Implement a CI/CD delivery pipeline that leverages containers and Kubernetes for speed and reliability</ListItem>
-            <SpecialListItem>Everything you need to pass your certification as a Certified Kubernetes Administrator (CKA) and Kubernetes Application Developer (CKAD)</SpecialListItem>
-          </ul>
-        </div>
-      </div>
-
-      <div className='dn db-l center tc'>
-        <div className='i-together dib relative'>
-          <Img image={Assets.page.together} className='absolute top-0 right-0'/>
-        </div>
-      </div>
-
-    </section>
-
-    <Testimonal author='Marcello Teodori, Architect' quote='This is the course you have to do to put all the pieces in the right place and challenge yourself to really master your knowledge of Kubernetes. Wish I had done it long ago.'/>
-
-    <section className='bg-evian pt4'>
-      <p className='f2 navy b tc'>What's inside</p>
-      <p className='lh-copy f4 black-70 measure center tc'>Inside this course, you'll find all the know-how, scripts, documents, templates, code, and more you need to learn Kubernetes and its ecosystem.</p>
-
-      <div className='ma3 ma5-l pa3 bg-white shadow-1'>
-
-        <Module name={material.docker.name} description={material.docker.description} topics={Object.values(material.docker.topics)}>
-          <Preview>
-            <PreviewTopic title={material.docker.topics.isolation} image={Assets.material.docker.isolation} />
-            <PreviewTopic title={material.docker.topics.docker} image={Assets.material.docker.docker} />
-            <PreviewTopic title={material.docker.topics.architecture} image={Assets.material.docker.architecture} />
-            <PreviewTopic title={material.docker.topics.port} image={Assets.material.docker.port} />
-          </Preview>
-        </Module>
-
-        <Module name={material.zeroToKubernetes.name} description={material.zeroToKubernetes.description} topics={Object.values(material.zeroToKubernetes.topics)}>
-          <Preview>
-            <PreviewTopic title={material.zeroToKubernetes.topics.tetrisPlayer} image={Assets.material.zeroToKubernetes.tetrisPlayer} />
-            <PreviewTopic title={material.zeroToKubernetes.topics.datacentreAsVM} image={Assets.material.zeroToKubernetes.datacentreAsVM} />
-            <PreviewTopic title={material.zeroToKubernetes.topics.basics} image={Assets.material.zeroToKubernetes.basics} />
-            <PreviewTopic title={material.zeroToKubernetes.topics.localCluster} image={Assets.material.zeroToKubernetes.localCluster} />
-          </Preview>
-        </Module>
-
-        <Module name={material.deploymentStrategies.name} description={material.deploymentStrategies.description} topics={Object.values(material.deploymentStrategies.topics)}>
-          <Preview>
-            <PreviewTopic title={material.deploymentStrategies.topics.livenessProbe} image={Assets.material.deploymentStrategies.livenessProbe} />
-            <PreviewTopic title={material.deploymentStrategies.topics.readinessProbe} image={Assets.material.deploymentStrategies.readinessProbe} />
-            <PreviewTopic title={material.deploymentStrategies.topics.rollingUpdates} image={Assets.material.deploymentStrategies.rollingUpdates} />
-            <PreviewTopic title={material.deploymentStrategies.topics.servicesAndSelectors} image={Assets.material.deploymentStrategies.servicesAndSelectors} />
-          </Preview>
-        </Module>
-
-        <Module name={material.architecture.name} description={material.architecture.description} topics={Object.values(material.architecture.topics)}>
-          <Preview>
-            <PreviewTopic title={material.architecture.topics.controlPlane} image={Assets.material.architecture.controlPlane} />
-            <PreviewTopic title={material.architecture.topics.monzo} image={Assets.material.architecture.monzo} />
-            <PreviewTopic title={material.architecture.topics.raft} image={Assets.material.architecture.raft} />
-            <PreviewTopic title={material.architecture.topics.clusters} image={Assets.material.architecture.clusters} />
-          </Preview>
-        </Module>
-
-        <Module name={material.networking.name} description={material.networking.description} topics={Object.values(material.networking.topics)}>
-          <Preview>
-            <PreviewTopic title={material.networking.topics.networkRequirements} image={Assets.material.networking.networkRequirements} />
-            <PreviewTopic title={material.networking.topics.kubeProxy} image={Assets.material.networking.kubeProxy} />
-            <PreviewTopic title={material.networking.topics.latency} image={Assets.material.networking.latency} />
-            <PreviewTopic title={material.networking.topics.e2e} image={Assets.material.networking.e2e} />
-          </Preview>
-        </Module>
-
-        <Module name={material.managingState.name} description={material.managingState.description} topics={Object.values(material.managingState.topics)}>
-          <Preview>
-            <PreviewTopic title={material.managingState.topics.persistentVolumeClaims} image={Assets.material.managingState.persistentVolumeClaims} />
-            <PreviewTopic title={material.managingState.topics.storageClass} image={Assets.material.managingState.storageClass} />
-            <PreviewTopic title={material.managingState.topics.localVolumes} image={Assets.material.managingState.localVolumes} />
-            <PreviewTopic title={material.managingState.topics.statefulSets} image={Assets.material.managingState.statefulSets} />
-          </Preview>
-        </Module>
-
-        <Module name={material.templating.name} description={material.templating.description} topics={Object.values(material.templating.topics)}>
-          <Preview>
-            <PreviewTopic title={material.templating.topics.helm} image={Assets.material.templating.helm} />
-            <PreviewTopic title={material.templating.topics.helmArchitecture} image={Assets.material.templating.helmArchitecture} />
-            <PreviewTopic title={material.templating.topics.rollbacks} image={Assets.material.templating.rollbacks} />
-            <PreviewTopic title={material.templating.topics.repositories} image={Assets.material.templating.repositories} />
-          </Preview>
-        </Module>
-
-        <div className='flex-l justify-center'>
-
-          <div className='w-30-l ph3 pb3'>
-            <h2 className='navy b lh-solid'>Coming soon</h2>
-            <p className='lh-copy black-70 measure'>The following modules are being developed and are coming to the Academy later on.</p>
-          </div>
-
-          <div className='w-60-l'>
-            <ul className='list pa2'>
-              <ComingSoon name={material.advancedNetworking.name} description={material.advancedNetworking.description} image={Assets.material.advancedNetworking.nodeNetwork}/>
-              <ComingSoon name={material.advancedScheduling.name} description={material.advancedScheduling.description} image={Assets.material.advancedScheduling.antiAffinity}/>
-              <ComingSoon name={material.security.name} description={material.security.description} image={Assets.material.security.rbac}/>
-              <ComingSoon name={material.multiCloud.name} description={material.multiCloud.description} image={Assets.material.multiCloud.clusterFederation}/>
-              <ComingSoon name={material.managedServices.name} description={material.managedServices.description} image={Assets.material.managedServices.managedServices}/>
-              <ComingSoon name={material.pipelines.name} description={material.pipelines.description} image={Assets.material.pipelines.flow}/>
+        <div className='w-50-l center pt3'>
+          <h2 className='f3 navy f2-l measure-narrow'>Learn Kubernetes at your pace</h2>
+          <div className='measure-wide'>
+            <p className='lh-copy f4-l black-70'>
+              With a focus on simplicity and readability, this course will have you deploying and scaling applications
+              in no time!
+            </p>
+            <ul className='list black-70 pl0 pt2'>
+              {[
+                'Gain hands-on experience in deploying and scaling applications',
+                'Level up your expertise by solving challenges from real-world use cases',
+                'Learn best practices from the experts and how to do things the Kubernetes way™',
+                'Speak the Kubernetes jargon and talk to the rest of the Cloud Native community',
+                'Gain valuable knowledge by getting your hands dirty and trying things for yourself',
+                'Become an expert faster with laser-focused materials and labs (no fluff!)',
+                "Help to shape your company's roadmap to cloud-native technologies",
+                'Empower your team to operate and use Kubernetes like experts',
+                'Quickly onboard new members your team to the same level as everyone else',
+              ].map((it, index) => (
+                <ListItem key={index}>{it}</ListItem>
+              ))}
             </ul>
           </div>
+        </div>
+      </section>
 
+      <Interlude />
+
+      <section className='w-100 ph3 ph4-ns flex items-center justify-center pb4'>
+        <div className='center pt3'>
+          <h2 className='f3 navy f2-l measure-narrow'>You will learn how to</h2>
+          <div className='measure-wide'>
+            <ul className='list black-70 pl0 pt2'>
+              <ListItem>Standardise your tools, workflows and deployments under a single tool</ListItem>
+              <ListItem>
+                Master architecting services that span multiple clouds and data centres for resilience and failover
+              </ListItem>
+              <ListItem>Secure your Kubernetes cluster by breaking it</ListItem>
+              <ListItem>Package, deploy and scale applications in Kubernetes</ListItem>
+              <ListItem>Design cloud provider agnostic clusters</ListItem>
+              <ListItem>
+                Leverage the strength and avoid the weaknesses of the major Kubernetes managed service offerings (AKS,
+                EKS, GKE)
+              </ListItem>
+              <ListItem>Deploy applications in production with zero downtime</ListItem>
+              <ListItem>Monitor, log and debug production issues in Kubernetes</ListItem>
+              <ListItem>Deploy stateful workloads such as databases</ListItem>
+              <ListItem>
+                Implement a CI/CD delivery pipeline that leverages containers and Kubernetes for speed and reliability
+              </ListItem>
+              <SpecialListItem>
+                Everything you need to pass your certification as a Certified Kubernetes Administrator (CKA) and
+                Kubernetes Application Developer (CKAD)
+              </SpecialListItem>
+            </ul>
+          </div>
         </div>
 
-      </div>
+        <div className='dn db-l center tc'>
+          <div className='i-together dib relative'>
+            <Img image={Assets.page.together} className='absolute top-0 right-0' />
+          </div>
+        </div>
+      </section>
 
-      <div className='pt5-m pt4 pb5 ph3 measure-wide center black-80'>
-        <p className='f3 mb1 mt0 lh-copy'>The course is totally worth the money and time, if you have a team that is getting started with Kubernetes and want to validate the approach that you are taking as well as to level up your knowledge on K8s, this is the way to go.</p>
-        <p className='f4 i mb2'>— Salaboy, Activiti Cloud Team Lead</p>
-      </div>
+      <Testimonal
+        author='Marcello Teodori, Architect'
+        quote='This is the course you have to do to put all the pieces in the right place and challenge yourself to really master your knowledge of Kubernetes. Wish I had done it long ago.'
+      />
 
-    </section>
+      <section className='bg-evian pt4'>
+        <p className='f2 navy b tc'>What's inside</p>
+        <p className='lh-copy f4 black-70 measure center tc'>
+          Inside this course, you'll find all the know-how, scripts, documents, templates, code, and more you need to
+          learn Kubernetes and its ecosystem.
+        </p>
 
-    <section className='pt5 pb4'>
+        <div className='ma3 ma5-l pa3 bg-white shadow-1'>
+          <Module
+            name={material.docker.name}
+            description={material.docker.description}
+            topics={Object.values(material.docker.topics)}
+          >
+            <Preview>
+              <PreviewTopic title={material.docker.topics.isolation} image={Assets.material.docker.isolation} />
+              <PreviewTopic title={material.docker.topics.docker} image={Assets.material.docker.docker} />
+              <PreviewTopic title={material.docker.topics.architecture} image={Assets.material.docker.architecture} />
+              <PreviewTopic title={material.docker.topics.port} image={Assets.material.docker.port} />
+            </Preview>
+          </Module>
 
-      <PackageList>
-        <PackageLeft heading='Individual' subheading='Full membership plan'>
-          <p className='navy tc f2'>
-            <span className='dib relative'><span className='paddle-net' data-product='549763'>$999</span> <span className='f7 v-mid absolute right--2 top-0'>+TAX</span></span>
+          <Module
+            name={material.zeroToKubernetes.name}
+            description={material.zeroToKubernetes.description}
+            topics={Object.values(material.zeroToKubernetes.topics)}
+          >
+            <Preview>
+              <PreviewTopic
+                title={material.zeroToKubernetes.topics.tetrisPlayer}
+                image={Assets.material.zeroToKubernetes.tetrisPlayer}
+              />
+              <PreviewTopic
+                title={material.zeroToKubernetes.topics.datacentreAsVM}
+                image={Assets.material.zeroToKubernetes.datacentreAsVM}
+              />
+              <PreviewTopic
+                title={material.zeroToKubernetes.topics.basics}
+                image={Assets.material.zeroToKubernetes.basics}
+              />
+              <PreviewTopic
+                title={material.zeroToKubernetes.topics.localCluster}
+                image={Assets.material.zeroToKubernetes.localCluster}
+              />
+            </Preview>
+          </Module>
+
+          <Module
+            name={material.deploymentStrategies.name}
+            description={material.deploymentStrategies.description}
+            topics={Object.values(material.deploymentStrategies.topics)}
+          >
+            <Preview>
+              <PreviewTopic
+                title={material.deploymentStrategies.topics.livenessProbe}
+                image={Assets.material.deploymentStrategies.livenessProbe}
+              />
+              <PreviewTopic
+                title={material.deploymentStrategies.topics.readinessProbe}
+                image={Assets.material.deploymentStrategies.readinessProbe}
+              />
+              <PreviewTopic
+                title={material.deploymentStrategies.topics.rollingUpdates}
+                image={Assets.material.deploymentStrategies.rollingUpdates}
+              />
+              <PreviewTopic
+                title={material.deploymentStrategies.topics.servicesAndSelectors}
+                image={Assets.material.deploymentStrategies.servicesAndSelectors}
+              />
+            </Preview>
+          </Module>
+
+          <Module
+            name={material.architecture.name}
+            description={material.architecture.description}
+            topics={Object.values(material.architecture.topics)}
+          >
+            <Preview>
+              <PreviewTopic
+                title={material.architecture.topics.controlPlane}
+                image={Assets.material.architecture.controlPlane}
+              />
+              <PreviewTopic title={material.architecture.topics.monzo} image={Assets.material.architecture.monzo} />
+              <PreviewTopic title={material.architecture.topics.raft} image={Assets.material.architecture.raft} />
+              <PreviewTopic
+                title={material.architecture.topics.clusters}
+                image={Assets.material.architecture.clusters}
+              />
+            </Preview>
+          </Module>
+
+          <Module
+            name={material.networking.name}
+            description={material.networking.description}
+            topics={Object.values(material.networking.topics)}
+          >
+            <Preview>
+              <PreviewTopic
+                title={material.networking.topics.networkRequirements}
+                image={Assets.material.networking.networkRequirements}
+              />
+              <PreviewTopic title={material.networking.topics.kubeProxy} image={Assets.material.networking.kubeProxy} />
+              <PreviewTopic title={material.networking.topics.latency} image={Assets.material.networking.latency} />
+              <PreviewTopic title={material.networking.topics.e2e} image={Assets.material.networking.e2e} />
+            </Preview>
+          </Module>
+
+          <Module
+            name={material.managingState.name}
+            description={material.managingState.description}
+            topics={Object.values(material.managingState.topics)}
+          >
+            <Preview>
+              <PreviewTopic
+                title={material.managingState.topics.persistentVolumeClaims}
+                image={Assets.material.managingState.persistentVolumeClaims}
+              />
+              <PreviewTopic
+                title={material.managingState.topics.storageClass}
+                image={Assets.material.managingState.storageClass}
+              />
+              <PreviewTopic
+                title={material.managingState.topics.localVolumes}
+                image={Assets.material.managingState.localVolumes}
+              />
+              <PreviewTopic
+                title={material.managingState.topics.statefulSets}
+                image={Assets.material.managingState.statefulSets}
+              />
+            </Preview>
+          </Module>
+
+          <Module
+            name={material.templating.name}
+            description={material.templating.description}
+            topics={Object.values(material.templating.topics)}
+          >
+            <Preview>
+              <PreviewTopic title={material.templating.topics.helm} image={Assets.material.templating.helm} />
+              <PreviewTopic
+                title={material.templating.topics.helmArchitecture}
+                image={Assets.material.templating.helmArchitecture}
+              />
+              <PreviewTopic title={material.templating.topics.rollbacks} image={Assets.material.templating.rollbacks} />
+              <PreviewTopic
+                title={material.templating.topics.repositories}
+                image={Assets.material.templating.repositories}
+              />
+            </Preview>
+          </Module>
+
+          <div className='flex-l justify-center'>
+            <div className='w-30-l ph3 pb3'>
+              <h2 className='navy b lh-solid'>Coming soon</h2>
+              <p className='lh-copy black-70 measure'>
+                The following modules are being developed and are coming to the Academy later on.
+              </p>
+            </div>
+
+            <div className='w-60-l'>
+              <ul className='list pa2'>
+                <ComingSoon
+                  name={material.advancedNetworking.name}
+                  description={material.advancedNetworking.description}
+                  image={Assets.material.advancedNetworking.nodeNetwork}
+                />
+                <ComingSoon
+                  name={material.advancedScheduling.name}
+                  description={material.advancedScheduling.description}
+                  image={Assets.material.advancedScheduling.antiAffinity}
+                />
+                <ComingSoon
+                  name={material.security.name}
+                  description={material.security.description}
+                  image={Assets.material.security.rbac}
+                />
+                <ComingSoon
+                  name={material.multiCloud.name}
+                  description={material.multiCloud.description}
+                  image={Assets.material.multiCloud.clusterFederation}
+                />
+                <ComingSoon
+                  name={material.managedServices.name}
+                  description={material.managedServices.description}
+                  image={Assets.material.managedServices.managedServices}
+                />
+                <ComingSoon
+                  name={material.pipelines.name}
+                  description={material.pipelines.description}
+                  image={Assets.material.pipelines.flow}
+                />
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className='pt5-m pt4 pb5 ph3 measure-wide center black-80'>
+          <p className='f3 mb1 mt0 lh-copy'>
+            The course is totally worth the money and time, if you have a team that is getting started with Kubernetes
+            and want to validate the approach that you are taking as well as to level up your knowledge on K8s, this is
+            the way to go.
           </p>
-          <ul className='list pl0 black-70'>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>12 months access</p>
-            </Item>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>Docker fundamentals module</p>
-            </Item>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>Access to the material for all modules</p>
-              <ol className='pl3'>
-                <li className='mv2'>Getting started with Kubernetes</li>
-                <li className='mv2'>Deployment strategies</li>
-                <li className='mv2'>Kubernetes architecture</li>
-                <li className='mv2'>Kubernetes networking</li>
-                <li className='mv2'>Managing state</li>
-                <li className='mv2'>Helm</li>
-                <li className='mv2'>Advanced networking</li>
-              </ol>
-            </Item>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy'><span className='b'>All source code</span> — build files, scripts and files for each module</p>
-            </Item>
-          </ul>
-          <div className='tc'>
-            <a href='https://academy.learnk8s.io/payment' className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Buy now &#8594;</a>
-          </div>
-        </PackageLeft>
-        <PackageRight heading='Enterprise' subheading='From 10+ users'>
-          <ul className='list pl0 black-70'>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>All individual plan features</p>
-            </Item>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>Dedicated customer support</p>
-            </Item>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>Dedicated playground for challenges</p>
-            </Item>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>Analytics and reports</p>
-            </Item>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>Custom topics</p>
-            </Item>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>Live classes and webinars</p>
-            </Item>
-            <Item tick={Assets.page.tick}>
-              <p className='mv0 f4-l lh-copy b'>Host the Academy on your cloud</p>
-            </Item>
-          </ul>
-          <div className='tc'>
-            <a href={mailto(enterprisePackage)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>Get in touch &#8594;</a>
-          </div>
-        </PackageRight>
-      </PackageList>
+          <p className='f4 i mb2'>— Salaboy, Activiti Cloud Team Lead</p>
+        </div>
+      </section>
 
-    </section>
+      <section className='pt5 pb4'>
+        <PackageList>
+          <PackageLeft heading='Individual' subheading='Full membership plan'>
+            <p className='navy tc f2'>
+              <span className='dib relative'>
+                <span className='paddle-net' data-product='549763'>
+                  $999
+                </span>{' '}
+                <span className='f7 v-mid absolute right--2 top-0'>+TAX</span>
+              </span>
+            </p>
+            <ul className='list pl0 black-70'>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy b'>12 months access</p>
+              </Item>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy b'>Docker fundamentals module</p>
+              </Item>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy b'>Access to the material for all modules</p>
+                <ol className='pl3'>
+                  <li className='mv2'>Getting started with Kubernetes</li>
+                  <li className='mv2'>Deployment strategies</li>
+                  <li className='mv2'>Kubernetes architecture</li>
+                  <li className='mv2'>Kubernetes networking</li>
+                  <li className='mv2'>Managing state</li>
+                  <li className='mv2'>Helm</li>
+                  <li className='mv2'>Advanced networking</li>
+                </ol>
+              </Item>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy'>
+                  <span className='b'>All source code</span> — build files, scripts and files for each module
+                </p>
+              </Item>
+            </ul>
+            <div className='tc'>
+              <a
+                href='https://academy.learnk8s.io/payment'
+                className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'
+              >
+                Buy now &#8594;
+              </a>
+            </div>
+          </PackageLeft>
+          <PackageRight heading='Enterprise' subheading='From 10+ users'>
+            <ul className='list pl0 black-70'>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy b'>All individual plan features</p>
+              </Item>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy b'>Dedicated customer support</p>
+              </Item>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy b'>Dedicated playground for challenges</p>
+              </Item>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy b'>Analytics and reports</p>
+              </Item>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy b'>Custom topics</p>
+              </Item>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy b'>Live classes and webinars</p>
+              </Item>
+              <Item tick={Assets.page.tick}>
+                <p className='mv0 f4-l lh-copy b'>Host the Academy on your cloud</p>
+              </Item>
+            </ul>
+            <div className='tc'>
+              <a href={mailto(enterprisePackage)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>
+                Get in touch &#8594;
+              </a>
+            </div>
+          </PackageRight>
+        </PackageList>
+      </section>
 
-    <section className='tc mv4'>
-      <p className='f2 navy b tc'>Try before you buy</p>
-      <p className='lh-copy f4 black-70 measure center tc'>You can sign-up to a demo account and have look at the content and the structure of the course before you commit to it.</p>
-      <PrimaryButton text='Try now →' href='https://academy.learnk8s.io/trial'/>
-    </section>
+      <section className='tc mv4'>
+        <p className='f2 navy b tc'>Try before you buy</p>
+        <p className='lh-copy f4 black-70 measure center tc'>
+          You can sign-up to a demo account and have look at the content and the structure of the course before you
+          commit to it.
+        </p>
+        <PrimaryButton text='Try now →' href='https://academy.learnk8s.io/trial' />
+      </section>
 
-    <YourTeam mailto={mailto(privateGroupEnquiry)}/>
+      <YourTeam mailto={mailto(privateGroupEnquiry)} />
 
-    <FAQs faqs={faqs}/>
+      <FAQs faqs={faqs} />
 
-    <Consultation />
-    <Footer root={website} />
-    <ExternalScript script={Assets.page.paddle}></ExternalScript>
-    <JSScript js={JSBundle({
-      scripts: [
-        `(${Scroll.toString()})()`,
-        `Paddle.Setup({vendor:${'38628'}});`
-      ],
-    })}/>
-  </Layout>)
+      <Consultation />
+      <Footer root={website} />
+      <ExternalScript script={Assets.page.paddle} />
+      <JSScript
+        js={JSBundle({
+          scripts: [`(${Scroll.toString()})()`, `Paddle.Setup({vendor:${'38628'}});`],
+        })}
+      />
+    </Layout>,
+  )
 }
 
-export const Item: React.StatelessComponent<{tick: Image}> = ({children, tick}) => {
-  return <li className='mv3 flex justify-center'>
-    <div className='v-top tc'><Img image={tick} className='w2 h2'/></div>
-    <div className='v-top pl3 w-90'>{children}</div>
-  </li>
+export const Item: React.StatelessComponent<{ tick: Image }> = ({ children, tick }) => {
+  return (
+    <li className='mv3 flex justify-center'>
+      <div className='v-top tc'>
+        <Img image={tick} className='w2 h2' />
+      </div>
+      <div className='v-top pl3 w-90'>{children}</div>
+    </li>
+  )
 }
 
-export const Preview: React.StatelessComponent<{}> = ({children}) => {
-  return <div className='preview-js'>
-    <div className='academy-js flex w-100'>
-      <div className='left-pane-js w-30 bg-evian ph4 pv2 dn db-l'>
-        <div className='mt3 pt3 h1 bg-navy'></div>
-        <div className='pr3'>
-        {RandomBlocks({blocks: [
-          [5, 6, 7, 5, 8],
-          [6, 7, 4, 8, 9],
-        ]})}
+export const Preview: React.StatelessComponent<{}> = ({ children }) => {
+  return (
+    <div className='preview-js'>
+      <div className='academy-js flex w-100'>
+        <div className='left-pane-js w-30 bg-evian ph4 pv2 dn db-l'>
+          <div className='mt3 pt3 h1 bg-navy' />
+          <div className='pr3'>{RandomBlocks({ blocks: [[5, 6, 7, 5, 8], [6, 7, 4, 8, 9]] })}</div>
+        </div>
+        <div className='w-100 w-70-l bg-black-05'>
+          <div className='bg-sky h2 w-100' />
+          <div className='relative'>
+            <div className='bg-black-05 ph1 h-100 absolute top-0 right-0 z-1' />
+            <div className='progress-bar-js bg-black-10 ph1 h4 absolute top-0 right-0 z-3' />
+            <div className='right-pane-js overflow-hidden'>
+              <div className='scrollable-content-js w-80 center mv4'>
+                <div className='w-40 mt3 pt3 h1 bg-black-50 mb3' />
+                <div className='bg-black-20 pa1 mv2 mr5' />
+                <div className='bg-black-20 pa1 mv2 mr3' />
+                <div className='pv2'>
+                  <div className='relative padding-hack-75 first-image-js' />
+                </div>
+                <div className='bg-black-20 pa1 mv2 mr5' />
+                <div className='bg-black-20 pa1 mv2' />
+                <div className='w-20 bg-black-20 pa1 mv2 mr3' />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div className='w-100 w-70-l bg-black-05'>
-        <div className='bg-sky h2 w-100'></div>
-        <div className='relative'>
-          <div className='bg-black-05 ph1 h-100 absolute top-0 right-0 z-1'></div>
-          <div className='progress-bar-js bg-black-10 ph1 h4 absolute top-0 right-0 z-3'></div>
-          <div className='right-pane-js overflow-hidden'>
-          <div className='scrollable-content-js w-80 center mv4'>
+      <p className='ttu f7 black-50'>Modules include:</p>
+      <ul className='topics-js flex flex-wrap list pl0'>{children}</ul>
+    </div>
+  )
+}
 
-            <div className='w-40 mt3 pt3 h1 bg-black-50 mb3'></div>
-            <div className='bg-black-20 pa1 mv2 mr5'></div>
-            <div className='bg-black-20 pa1 mv2 mr3'></div>
-            <div className='pv2'><div className='relative padding-hack-75 first-image-js'></div></div>
-            <div className='bg-black-20 pa1 mv2 mr5'></div>
-            <div className='bg-black-20 pa1 mv2'></div>
-            <div className='w-20 bg-black-20 pa1 mv2 mr3'></div>
-
-          </div>
-        </div>
+export const PreviewTopic: React.StatelessComponent<{ title: string; image: Image }> = ({ title, image }) => {
+  return (
+    <li className='topic-js w-50 w-25-l pa3 pt0'>
+      <div className='grow reverse-dim'>
+        <div className='topic-image-js relative padding-hack-75'>
+          <Img image={image} className='bg-white br1 absolute top-0 left-0' />
         </div>
       </div>
-    </div>
-    <p className='ttu f7 black-50'>Modules include:</p>
-    <ul className='topics-js flex flex-wrap list pl0'>{children}</ul>
-  </div>
+      <h3 className='f6 navy'>{title}</h3>
+    </li>
+  )
 }
 
-export const PreviewTopic: React.StatelessComponent<{title: string, image: Image}> = ({title, image}) => {
-  return <li className='topic-js w-50 w-25-l pa3 pt0'>
-    <div className='grow reverse-dim'>
-      <div className='topic-image-js relative padding-hack-75'><Img image={image} className='bg-white br1 absolute top-0 left-0'/></div>
+export const Module: React.StatelessComponent<{ name: string; description: string; topics: string[] }> = ({
+  children,
+  name,
+  description,
+  topics,
+}) => {
+  return (
+    <div className='flex-ns justify-center mt5-l'>
+      <div className='w-40-ns w-30-l pa3 pt0 black-70 lh-copy mr4-l'>
+        <h2 className='navy b lh-solid'>{name}</h2>
+        <p className='measure'>{description}</p>
+        <p>The topics covered in this module are:</p>
+        <ul className=''>
+          {topics.map((it, index) => (
+            <li className='mv1' key={index}>
+              {it}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className='w-60-ns'>{children}</div>
     </div>
-    <h3 className='f6 navy'>{title}</h3>
-  </li>
+  )
 }
 
-export const Module: React.StatelessComponent<{name: string, description: string, topics: string[]}> = ({children, name, description, topics}) => {
-  return <div className='flex-ns justify-center mt5-l'>
-  <div className='w-40-ns w-30-l pa3 pt0 black-70 lh-copy mr4-l'>
-    <h2 className='navy b lh-solid'>{name}</h2>
-    <p className='measure'>{description}</p>
-    <p>The topics covered in this module are:</p>
-    <ul className=''>{topics.map((it, index) => <li className='mv1' key={index}>{it}</li>)}</ul>
-  </div>
-  <div className='w-60-ns'>{children}</div>
-</div>
+export const ComingSoon: React.StatelessComponent<{ name: string; description: string; image: Image }> = ({
+  name,
+  description,
+  image,
+}) => {
+  return (
+    <li className='w-100 pa3 pt0 flex-l items-start'>
+      <div className='w-20-l'>
+        <div className='relative padding-hack-75'>
+          <Img image={image} className='absolute top-0 left-0' />
+        </div>
+      </div>
+      <div className='w-80-l ml4-l'>
+        <h3 className='f5 navy'>{name}</h3>
+        <p className='measure-wide lh-copy'>{description}</p>
+      </div>
+    </li>
+  )
 }
 
-export const ComingSoon: React.StatelessComponent<{name: string, description: string, image: Image}> = ({name, description, image}) => {
-  return <li className='w-100 pa3 pt0 flex-l items-start'>
-    <div className='w-20-l'>
-      <div className='relative padding-hack-75'><Img image={image} className='absolute top-0 left-0'/></div>
-    </div>
-    <div className='w-80-l ml4-l'>
-      <h3 className='f5 navy'>{name}</h3>
-      <p className='measure-wide lh-copy'>{description}</p>
-    </div>
-  </li>
-}
-
-export const RandomBlocks = ({blocks}: {blocks: number[][]}) => {
+export const RandomBlocks = ({ blocks }: { blocks: number[][] }) => {
   return blocks.map((it, index) => {
     const [firstLength] = it
-    return [
-      <div className={`title-js bg-sky h1 pa1 mt4 mb2 w-${10 * firstLength}`}></div>
-    ].concat(it.slice(1).map(it => {
-      return <div className={`bg-black-10 pa1 pt2 mv2 w-${it * 10}`}></div>
-    }))
+    return [<div className={`title-js bg-sky h1 pa1 mt4 mb2 w-${10 * firstLength}`} />].concat(
+      it.slice(1).map(it => {
+        return <div className={`bg-black-10 pa1 pt2 mv2 w-${it * 10}`} />
+      }),
+    )
   })
 }
 
@@ -476,11 +680,18 @@ function Scroll() {
     var titles = [].slice.call(it.querySelectorAll('.title-js')) as HTMLElement[]
     if (titles.length < 2) return
     var progressBar = it.querySelector('.progress-bar-js') as HTMLElement
-    rightPane.addEventListener('scroll', event => setTimeout(() => {
-      checkScroll(rightPane as HTMLElement, titles[0], titles[1])
-      if (!progressBar) return
-      checkProgress((rightPane as HTMLElement).scrollTop, (rightPane as HTMLElement).offsetHeight, (scrollableContent as HTMLElement).offsetHeight, progressBar)
-    }, 0))
+    rightPane.addEventListener('scroll', event =>
+      setTimeout(() => {
+        checkScroll(rightPane as HTMLElement, titles[0], titles[1])
+        if (!progressBar) return
+        checkProgress(
+          (rightPane as HTMLElement).scrollTop,
+          (rightPane as HTMLElement).offsetHeight,
+          (scrollableContent as HTMLElement).offsetHeight,
+          progressBar,
+        )
+      }, 0),
+    )
     checkScroll(rightPane as HTMLElement, titles[0], titles[1])
     var items = [].slice.call(topics.querySelectorAll('.topic-js')) as HTMLElement[]
     items.forEach(function(it, index) {
@@ -505,11 +716,11 @@ function Scroll() {
     return node
   }
   function random(min: number, max: number): number {
-    return Math.round(((Math.random() * (max - min)) + min))
+    return Math.round(Math.random() * (max - min) + min)
   }
   function checkScroll(target: HTMLElement, sectionA: HTMLElement, sectionB: HTMLElement) {
     var classes = ['bl', 'bw3', 'b--navy']
-    if (target.scrollTop > (target.offsetHeight) * 0.5) {
+    if (target.scrollTop > target.offsetHeight * 0.5) {
       sectionA.classList.remove(...classes)
       sectionB.classList.add(...classes)
     } else {
@@ -519,7 +730,7 @@ function Scroll() {
   }
   function checkProgress(scrollTop: number, windowHeight: number, totalHeight: number, progressBar: HTMLElement) {
     var progressLength = windowHeight - progressBar.offsetHeight
-    var percentageCompleted = Math.min((scrollTop) / totalHeight, 1)
+    var percentageCompleted = Math.min(scrollTop / totalHeight, 1)
     progressBar.style.top = `${progressLength * percentageCompleted}px`
   }
 }

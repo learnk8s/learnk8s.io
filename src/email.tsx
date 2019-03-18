@@ -32,28 +32,36 @@ renderer.list = (body: string, ordered: boolean, start: number) => {
   return `<mj-text font-family="${font}" line-height="1.5" font-size="18px"><${type}>${body}</${type}></mj-text>`
 }
 renderer.link = (href: string, title: string, text: string) => {
-  return !!title ?
-    `<mj-button background-color="#346DB7" href="${href}" font-family="${font}" line-height="1.5" font-size="18px">${text}</mj-button>` :
-    `<a href="${href}">${text}</a>`
+  return !!title
+    ? `<mj-button background-color="#346DB7" href="${href}" font-family="${font}" line-height="1.5" font-size="18px">${text}</mj-button>`
+    : `<a href="${href}">${text}</a>`
 }
 
-export const NewsletterLayout: React.StatelessComponent<{title: string, preview?: string, content: string}> = ({title, preview, content}) => {
-  return <Mjml>
-  <MjmlHead>
-    <MjmlTitle>{title}</MjmlTitle>
-    {!!preview ? <MjmlPreview>{preview}</MjmlPreview> : null}
-  </MjmlHead>
-  <MjmlBody width={600}>
-    <MjmlSection>
-      <Md content={content} />
-    </MjmlSection>
-  </MjmlBody>
-</Mjml>
+export const NewsletterLayout: React.StatelessComponent<{ title: string; preview?: string; content: string }> = ({
+  title,
+  preview,
+  content,
+}) => {
+  return (
+    <Mjml>
+      <MjmlHead>
+        <MjmlTitle>{title}</MjmlTitle>
+        {!!preview ? <MjmlPreview>{preview}</MjmlPreview> : null}
+      </MjmlHead>
+      <MjmlBody width={600}>
+        <MjmlSection>
+          <Md content={content} />
+        </MjmlSection>
+      </MjmlBody>
+    </Mjml>
+  )
 }
 
-export const Md: React.StatelessComponent<{content: string}> = ({content}) => {
-  return React.createElement('mj-column', {dangerouslySetInnerHTML: {__html: `${marked(content, {renderer})}`}});
+export const Md: React.StatelessComponent<{ content: string }> = ({ content }) => {
+  return React.createElement('mj-column', { dangerouslySetInnerHTML: { __html: `${marked(content, { renderer })}` } })
 }
 
-const newsletter = <NewsletterLayout title={commander.title} preview={commander.preview} content={cat(commander.md).toString()}/>
+const newsletter = (
+  <NewsletterLayout title={commander.title} preview={commander.preview} content={cat(commander.md).toString()} />
+)
 console.log(render(newsletter).html)

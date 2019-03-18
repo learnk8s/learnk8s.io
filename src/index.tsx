@@ -38,7 +38,12 @@ export function run(options: Settings) {
   return function mount(root: Sitemap) {
     renderTree(root, root)
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
-      syncEvents(console.log, eventbrite({token: options.eventBriteToken}), options.eventBriteOrg, options.canPublishEvents)
+      syncEvents(
+        console.log,
+        eventbrite({ token: options.eventBriteToken }),
+        options.eventBriteOrg,
+        options.canPublishEvents,
+      )
     } else {
       console.log('Skipping Eventbrite publishing')
     }
@@ -50,7 +55,7 @@ export function run(options: Settings) {
   }
 }
 
-function render(node: LinkedNode<any>, root: Sitemap, {siteUrl}: Settings) {
+function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
   const page = node.payload
   const fullUrl = getFullUrl(node)
   function generatePath() {
@@ -176,8 +181,14 @@ interface Settings {
   canPublishEvents: boolean
 }
 
-ok(process.env.ENVENTBRITE_TOKEN, `Missing Oauth token for Eventbrite https://www.eventbrite.com/platform/api#/introduction/authentication`)
-ok(process.env.ENVENTBRITE_ORG, `Missing the organization ID for Eventbrite https://www.eventbrite.com/platform/api#/reference/organization/list/list-your-organizations`)
+ok(
+  process.env.ENVENTBRITE_TOKEN,
+  `Missing Oauth token for Eventbrite https://www.eventbrite.com/platform/api#/introduction/authentication`,
+)
+ok(
+  process.env.ENVENTBRITE_ORG,
+  `Missing the organization ID for Eventbrite https://www.eventbrite.com/platform/api#/reference/organization/list/list-your-organizations`,
+)
 
 run({
   siteUrl: 'https://learnk8s.io',

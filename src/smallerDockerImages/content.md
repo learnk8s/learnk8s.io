@@ -503,12 +503,12 @@ It's big but provides the same experiences as if you were to have your workstati
 
 Recap of image sizes:
 
-| Image | Size (MB) |
-|-|-|
-| `node:8` | 681 |
-| `node:8` with multi stage build | 678 |
-| `gcr.io/distroless/nodejs` | 76.7 |
-| `node:8-alpine` | 69.7 |
+| Image                           | Size (MB) |
+| ------------------------------- | --------- |
+| `node:8`                        | 681       |
+| `node:8` with multi stage build | 678       |
+| `gcr.io/distroless/nodejs`      | 76.7      |
+| `node:8-alpine`                 | 69.7      |
 
 ## That's all folks!
 

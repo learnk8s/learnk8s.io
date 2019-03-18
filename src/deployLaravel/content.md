@@ -40,7 +40,6 @@ Similar to Vagrant, Minikube is merely a Virtual Machine that contains a Kuberne
 
 You will need both to deploy your application as a Docker container and scale it to three instances using Kubernetes.
 
-
 ## The application
 
 I have prepared a simple Laravel application which you can clone from [the repository on GitHub](https://github.com/learnk8s/laravel-kubernetes-demo). It is nothing more than a fresh Laravel installation.
@@ -57,7 +56,6 @@ git clone git@github.com:learnk8s/laravel-kubernetes-demo.git .
 ## Before you start
 
 To follow with this demonstration, you will need the following installed on your local system:
-
 
 1. [Docker](https://docs.docker.com/install/)
 2. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
@@ -421,11 +419,13 @@ and provided all went well, you will see a confirmation similar to:
 ```bash
 service "laravel-kubernetes-demo" exposed
 ```
+
 Running the following command:
 
 ```bash
 kubectl get services
 ```
+
 will show you a list of running services. You can also view the running service under the "Services" navigation menu within the dashboard.
 
 A more exciting way to verify this deployment and the service exposure is obviously seeing the running application in the browser 😊
@@ -707,7 +707,6 @@ deployment "laravel-kubernetes-demo" scaled
 
 You can see how convenient it is to use Kubernetes to scale your website.
 
-
 ## Using Nginx Ingress to expose the app
 
 You've already achieved great things, you deployed the application and scaled the deployment.
@@ -969,14 +968,15 @@ spec:
     serviceName: default-http-server
     servicePort: 80
   rules:
-  - host: laravel-kubernetes.demo
-  - http:
-      paths:
-      - path: /
-        backend:
-          serviceName: laravel-kubernetes-demo
-          servicePort: 80
+    - host: laravel-kubernetes.demo
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: laravel-kubernetes-demo
+              servicePort: 80
 ```
+
 Among the basic content you would expect from a Kubernetes resource file, this file defines a set of rules to follow when routing inbound traffic.
 
 The `laravel-kubernetes.demo` URL will point to the Service where the application is running, as previously labelled `laravel-kubernetes-demo` on port 8181.
@@ -989,19 +989,20 @@ This tutorial uses the Nginx Ingress controller for routing the traffic. Minikub
 minikube addons enable ingress
 ```
 
->Please note that it may take few minutes for Minikube to download and install Nginx as an Ingress.
-
+> Please note that it may take few minutes for Minikube to download and install Nginx as an Ingress.
 
 Once you have enabled the Ingress addon, you can create the Ingress in this way:
 
 ```bash
 kubectl create -f path-to-your-ingress-file.yaml
 ```
+
 You can verify and obtain the Ingress' information by running the following command:
 
 ```bash
 kubectl describe ing laravel-kubernetes-demo-ingress
 ```
+
 which outputs something similar to:
 
 ```bash

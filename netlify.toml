@@ -1,10 +1,10 @@
 [build]
   base    = "."
   publish = "_site"
-  command = "npm install && npm run build"
+  command = "npm install && npm run fmt && npm run build"
 [context.deploy-preview]
   NODE_ENV = "preview"
-  command = "npm install && mkdir -p _site && echo -e \"\nDisallow: /\" >> _site/robots.txt && npm run build"
+  command = "npm install && mkdir -p _site && echo -e \"\nDisallow: /\" >> _site/robots.txt && npm run fmt && npm run build"
 [context.production.environment]
   NODE_ENV = "production"
 [[headers]]

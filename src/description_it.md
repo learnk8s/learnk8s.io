@@ -10,7 +10,6 @@ Questo corso è pensato per:
 - Insegnare quali delle decine distribuzioni di Kubernetes è quella giusta per te
 - Imparare la terminologia usata dagli esperti nella communità di Kubernetes e Cloud Native
 
-
 **DETTAGLI DEL CORSO**
 
 - Durata: 3 giorni
@@ -28,7 +27,7 @@ Questo corso è pensato per:
 
 - Esperienza con la linea di comando in Linux
 - Conoscenza delle practiche di sviluppo software
-- Familiarità con tecnologie di virtualizzazione 
+- Familiarità con tecnologie di virtualizzazione
 - Familiarità con concetti di reti di calcolatori
 - Conoscenza di come funzionano le applicazioni web
 
@@ -39,7 +38,6 @@ Se cancelli la tua partecipazione 14 giorni prima dell'evento ti rimborsiamo tut
 
 **Come posso contattarvi se ho delle domande sul corso?**
 Puoi mandarci una mail a [ciao@learnk8s.io](mailto:ciao@learnk8s.io).
-
 
 ---
 

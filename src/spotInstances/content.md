@@ -2,12 +2,12 @@ The last decades have seen a global shift from on-premise data centres to the pr
 
 Running and managing your own physical machines is hard and costly; chances are you'll never be as successful and efficient as any of the top cloud providers. And what's not to love when you can leverage a mature platform and features such as:
 
-* **Vertical scalability** - You can get instances of different sizes
-* **Horizontal scalability** - You can get (almost) as many instances as you want
-* **Flexible pricing** - You only pay for what you use
-* **Logistics cost** - You don't have to physically maintain any server (heat control, electricity, backup, storage cost, fire prevention etc…)
-* **Availability** - Provision VM in separate data centres
-* **Reliability** - If you pay for an instance you'll keep it until you are done. Should it go down you'll immediately (+- 5min) get a replacement
+- **Vertical scalability** - You can get instances of different sizes
+- **Horizontal scalability** - You can get (almost) as many instances as you want
+- **Flexible pricing** - You only pay for what you use
+- **Logistics cost** - You don't have to physically maintain any server (heat control, electricity, backup, storage cost, fire prevention etc…)
+- **Availability** - Provision VM in separate data centres
+- **Reliability** - If you pay for an instance you'll keep it until you are done. Should it go down you'll immediately (+- 5min) get a replacement
 
 In this article, we will explore the different pricing models of a typical cloud provider. We will focus on one strategy and see how it could **cut your bill by up to 80%** if you are willing to trade in reliability.
 
@@ -21,20 +21,18 @@ Compute resources come in different sizes (i.e. memory, CPU, disk etc..) and an 
 
 This flexibility of pricing is excellent and fair, but you have to be careful with what you consume. If you leave instances running while you don't need them anymore, you'll be throwing money out of the window.
 
-*However let's say you can foresee utilisation of a VM for a whole year. Shouldn't you be able to get a bulk discount on your bill?*
+_However let's say you can foresee utilisation of a VM for a whole year. Shouldn't you be able to get a bulk discount on your bill?_
 
 ## Get a bulk discount with Reserved Instances
 
 With reserved instances, you need to **commit** to compute resources for at least a whole year, and if you really love commitment, up to five years. You may decide to pay an amount of the bill upfront.
 
-The discount that you get will depend on how long you are willing to commit and how much you can pay upfront. For example on Amazon Web Services, the *m4.large* instance type can be discounted as follow:
+The discount that you get will depend on how long you are willing to commit and how much you can pay upfront. For example on Amazon Web Services, the _m4.large_ instance type can be discounted as follow:
 
-
-| Pricing Model               | $/hour | Instance/year | Total 1 year |
-|-----------------------------|-------:|--------------:|-------------:|
-|Pay-as-you-go                |$0.111  |$960           |$3847         |
-|1 Year reserved 100% upfront |$0.071  |$615           |$2460         |
-
+| Pricing Model                | \$/hour | Instance/year | Total 1 year |
+| ---------------------------- | ------: | ------------: | -----------: |
+| Pay-as-you-go                | \$0.111 |         \$960 |       \$3847 |
+| 1 Year reserved 100% upfront | \$0.071 |         \$615 |       \$2460 |
 
 As you can see, the discount offered from reserved instances **typically range from 30% to 40%**.
 
@@ -44,7 +42,7 @@ Though 30% to 40% might sound like reasonable savings, it might not always be wo
 
 Are you able to forecast your compute resource utilisation for the next 1 to 5 years? If you are building a cutting-edge startup in the cloud can you accurately predict what your traffic will be like in a few years?
 
-*If it sounds like a gamble, it is. Perhaps commitment and upfront payment is not the only way you could save on your cloud bill.*
+_If it sounds like a gamble, it is. Perhaps commitment and upfront payment is not the only way you could save on your cloud bill._
 
 ## Spot Instances: when cheap is better than reliable
 
@@ -318,7 +316,7 @@ Don't forget that redundancy means more compute resources. And more compute reso
 
 Another point to consider is the dynamic aspect of spot instances. Being based on idle resources, the size of instances available to you will **depend on what is currently unpopular**.
 
-In other words, *beggars can't be choosers*.
+In other words, _beggars can't be choosers_.
 
 Perhaps this week you can pick up cheap 2GB memory instances, which is great if it is the amount of memory which your application requires.
 
@@ -487,7 +485,7 @@ Cloud infrastructure - especially with spot instances - have completely changed 
 
 Kubernetes provides a layer of abstraction on all your compute resources - regardless of how many, irrespective of their sizes. You only have to interact with a **single** entity: **the cluster**.
 
-Your cluster could be formed of 10 small virtual machines or 2 big bare metal servers, the end result is the same: *a single point of interaction that manages and scales workload on your nodes*.
+Your cluster could be formed of 10 small virtual machines or 2 big bare metal servers, the end result is the same: _a single point of interaction that manages and scales workload on your nodes_.
 
 ```include
 <template>
@@ -1048,7 +1046,7 @@ If you have one 4GB/1vCPU and one 8GB/2vCPUs instances, you only have a cluster 
 
 The other noteworthy feature in Kubernetes is that nodes are monitored for uptime.
 
-*If a node is lost, Kubernetes will remove its memory and CPU from the cluster and migrate all applications to other worker nodes.*
+_If a node is lost, Kubernetes will remove its memory and CPU from the cluster and migrate all applications to other worker nodes._
 
 ## Self-healing infrastructure with Kubernetes
 
@@ -1343,7 +1341,7 @@ The most significant insight from the likes of Netflix, Google and Amazon, is th
 
 Even on the best and most expensive hardware, the probability of failure is strictly larger than zero.
 
-*So how do you design around it?*
+_So how do you design around it?_
 
 **You test the failover with chaos engineering.**
 
@@ -1353,7 +1351,7 @@ If you need to remember a single thing it is that **availability and reliability
 
 If you want to make sure your application is highly available, you need to kill nodes regularly.
 
-*And what better way to kill node at random times if not spot instances?*
+_And what better way to kill node at random times if not spot instances?_
 
 So not only you're saving 80% of your cloud bill because you're leveraging spare resources, but you're also continuously testing your infrastructure for resilience.
 
@@ -1371,9 +1369,9 @@ If you wish to try spot instances in your Kubernetes clusters, a few things coul
 
 Pick unpopular instance types.
 
-For instance, *m4* instances on Amazon Web Services are cheap because the *m5* instance family has recently been released.
+For instance, _m4_ instances on Amazon Web Services are cheap because the _m5_ instance family has recently been released.
 
-This made the *m4* instances go out of fashion meaning lower demand and better price for you!
+This made the _m4_ instances go out of fashion meaning lower demand and better price for you!
 
 ### Maximum bid price (AWS only)
 

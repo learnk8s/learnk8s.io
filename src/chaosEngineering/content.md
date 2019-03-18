@@ -4184,7 +4184,7 @@ The proxy intercepts all the traffic directed to the node and routes it to the r
 
 It doesn't.
 
-The master node knows *everything* and is in charge of creating the list with all the routing rules.
+The master node knows _everything_ and is in charge of creating the list with all the routing rules.
 
 `kube-proxy` is in charge of checking and enforcing the rules on the list.
 
@@ -5312,7 +5312,7 @@ $ curl <node ip>:30000
 
 > Please note that you can retrieve the node's IP with `kubectl get nodes -o wide`
 
-The application replies with *Hello World!* and the hostname of the container is running on.
+The application replies with _Hello World!_ and the hostname of the container is running on.
 
 In the previous command, you should be greeted by `Hello world! via <hostname>`.
 
@@ -5343,11 +5343,11 @@ Phew! That was long!
 
 Now that you know how things are plugged in together let's get back to the original question.
 
-*What if you tamper with the routing rules?*
+_What if you tamper with the routing rules?_
 
-*Will the cluster still work?*
+_Will the cluster still work?_
 
-*Do the pods still serve requests?*
+_Do the pods still serve requests?_
 
 Let's go ahead and delete the routing rules.
 
@@ -5392,9 +5392,9 @@ If everything went according to plan you should experience something similar to 
 
 As you noticed, it took about 27 seconds from when you dropped the iptables rules and the next response, from 10:14:43 to 10:15:10.
 
-*What happened in this 27 seconds?*
+_What happened in this 27 seconds?_
 
-*Why is everything back to normal after 27 seconds?*
+_Why is everything back to normal after 27 seconds?_
 
 Perhaps it's just a coincidence. Let's flush the rules again:
 
@@ -5408,9 +5408,9 @@ Perhaps it's just a coincidence. Let's flush the rules again:
 
 There was a gap of 29 seconds, from 11:29:56 to 11:30:25, but the cluster is back to normal.
 
-*Why does it take about 30 seconds to reply?*
+_Why does it take about 30 seconds to reply?_
 
-*Is the node receiving traffic despite no routing table?*
+_Is the node receiving traffic despite no routing table?_
 
 Maybe you could investigate what happens to the node in this 30 seconds.
 
@@ -5434,13 +5434,13 @@ Hello world! via k8s-hello-world-55f48f8c94-vrkr9
 
 It shouldn't come as a surprise that connections to the node are timing out after you drop the iptables rules. What's more interesting is that `curl` waits for ten seconds before giving up.
 
-*What if in the previous example the load balancer is waiting for the connection to be made?*
+_What if in the previous example the load balancer is waiting for the connection to be made?_
 
 That would explain the 30 seconds delay. But it doesn't tell why the node is ready to accept a connection when you wait long enough.
 
-*So why is the traffic recovering after 30 seconds?*
+_So why is the traffic recovering after 30 seconds?_
 
-*Who is putting the iptables rules back?*
+_Who is putting the iptables rules back?_
 
 Before you drop the iptables rules, you can inspect them with:
 
@@ -5450,7 +5450,7 @@ $ iptables -L
 
 Soon after you drop the rules, you should keep executing `iptables -F` and notice that the rules are back in a few seconds!
 
-*Is this you, `kube-proxy`?*
+_Is this you, `kube-proxy`?_
 
 Yes, it is.
 
@@ -5480,9 +5480,9 @@ Let's recap how Kubernetes and `kube-proxy` can recover from someone tampering w
 
 Waiting for 30 seconds may be unacceptable for your application. You may be interested in tweaking the default refresh interval for `kube-proxy`.
 
-*So where are the settings and how can you change them?*
+_So where are the settings and how can you change them?_
 
-It turns out that there's an agent on the node — *the kubelet* — that is in charge of starting `kube-proxy` as a static pod on each node.
+It turns out that there's an agent on the node — _the kubelet_ — that is in charge of starting `kube-proxy` as a static pod on each node.
 
 The documentation for static pods suggests that the kubelet scans a specific folder and creates all the resources contained in that folder.
 

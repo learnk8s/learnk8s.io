@@ -33,7 +33,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       id: getAbsoluteUrl(it, siteUrl),
       description: it.payload.description,
       content: it.payload.description,
-      image: `${siteUrl}${it.payload.openGraphImage}`
+      image: `${siteUrl}${it.payload.openGraphImage}`,
     })
   })
   return feed.atom1()

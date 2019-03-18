@@ -1,9 +1,11 @@
 # 1. Who are we?
+
 Welcome to Learnk8s and our Site, [learnk8s.io](https://learnk8s.io), which we own and operate. Learnk8s is a company registered in England and Wales under registration number 08578228. Our registered office is 60 Windsor Avenue, London SW19 2RR. Our VAT number is GB 179048575.
 
 To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 
 # 2. What these general terms and conditions of supply are for
+
 2.1 These general terms and conditions of supply ("Terms") of Learnk8s Ltd (from now on, "Learnk8s", "we", "our" and "us") (together with the documents expressly referred to in this document) tell You information about us and the legal terms and conditions on which we sell any of our goods and services (including meetups, talks, conferences, skillscasts and workshops courses and events, In-The-Brain sessions, Hackathons and other types of events, SkillsCast recordings, articles or online content programmes and other services) ("Services") listed on our website (our "Site") to our customers (from now on, "You").
 
 2.2 These Terms are an important and legally binding document and will apply to any contract between Learnk8s and You for the supply of Services ("Contract"). Please read these Terms carefully and make sure that You understand them before ordering any Services, whether from our Site or directly from us. By ordering any of our Services, You, the individual or entity that has ordered from us, agree to be bound by these Terms and the other documents expressly referred to in this document.
@@ -17,6 +19,7 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 2.6 If You are a purchaser of one of our courses ("Courses") then the specific terms and conditions set out below in "Specific terms related to courses", "Specific terms related to vouchers" will also apply to our provision of those Services.
 
 # 3. Our services and reliance on information
+
 3.1 We update information about the availability of our Services frequently on our Site. Sometimes however Courses and tickets sell out or are cancelled between this time and when You have placed an order. If so, we will notify You as soon as possible.
 
 3.2 Although we make reasonable efforts to update the information on our Site, we make no representations, warranties or guarantees, whether express or implied, that the content on our Site is accurate, complete or up-to-date.
@@ -24,16 +27,19 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 3.3 Any views given by any speakers at any of our Conferences, events and Courses during the supply of our Services are provided for general information only and it is not intended to amount to advice on which You should rely or to be considered an endorsement by us of such views.
 
 # 4. Intellectual property rights
+
 4.1 You acknowledge that Learnk8s Ltd is the owner of the unregistered trade marks for "learnk8s" and its logo and the owner or authorised licensee of all intellectual property rights in the images and descriptions and other content published on our Site and provided to You by us when providing our Services. Those works are protected by copyright laws and treaties around the world.
 
 4.2 No licence is given to You and no intellectual property rights are transferred to you except as expressly stated in these Terms. All rights not expressly dealt with under these Terms are reserved to us exclusively.
 
 # 5. Applicable law
+
 5.1 If You are a consumer, please note that these Terms, their subject matter and Contract formation, are governed by English law. You and we both agree that the courts of England and Wales will have non-exclusive jurisdiction. However, if You are a resident of Northern Ireland, You may also bring proceedings in Northern Ireland, and if You are resident of Scotland, You may also bring proceedings in Scotland.
 
 5.2 If You are a business, these Terms, their subject matter and Contract formation (and any non-contractual disputes or claims) are governed by English law. We both agree to the exclusive jurisdiction of the courts of England and Wales.
 
 # 6. If you are a consumer
+
 6.1 This clause only applies if You are a consumer. You may only purchase Services from our Site if You are at least 18 years old.
 
 6.2 As a consumer, You have legal rights in relation to Services that are faulty or not as described. Advice about Your legal rights is available from Your local Citizens' Advice Bureau or Trading Standards office. Nothing in these Terms will affect these legal rights.
@@ -45,18 +51,21 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 - (a) Have You bought services? If so, You have 14 days after the date of Order Confirmation. However, once we have completed the services You cannot change Your mind, even if the period is still running. If You cancel after we have started the services, You must pay us for the services provided up until the time You tell us that You have changed Your mind.
 - (b) Have You bought digital content for download or streaming? if so, You have 14 days after the date of Order Confirmation, or, if earlier, until You start downloading or streaming. If we delivered the digital content to You immediately, and You agreed to this when ordering, You will not have a right to change Your mind.
 - (c) Have You bought goods? if so You have 14 days after the day You (or someone You nominate) receives the goods, unless:
+
   - I. Your goods are split into several deliveries over different days. In this case You have until 14 days after the day You (or someone You nominate) receives the last delivery to change Your mind about the goods.
   - II. Your goods are for regular delivery over a set period. In this case You have until 14 days after the day You (or someone You nominate) receives the first delivery of the goods.
 
-6.5 When You don't have the right to change Your mind. You do not have a right to change Your mind in respect of:
+    6.5 When You don't have the right to change Your mind. You do not have a right to change Your mind in respect of:
+
 - (a) digital products after You have started to download or stream these;
 - (b) services, once these have been completed, even if the cancellation period is still running;
 - (c) sealed audio or sealed video recordings or sealed computer software, once these products are unsealed after You receive them; and
 - (d) any products which become mixed inseparably with other items after their delivery.
 
-6.6 We will process any refund due to You as soon as possible and refund You on the credit card or debit card (if any) used by You to pay.
+  6.6 We will process any refund due to You as soon as possible and refund You on the credit card or debit card (if any) used by You to pay.
 
 # 7. If you are a business customer
+
 7.1 This clause only applies if you are a business.
 
 7.2 These Terms and any document expressly referred to in them constitute the entire agreement between you and us and supersede and extinguish all previous agreements, promises, assurances, warranties, representations and understandings between us, whether written or oral, relating to its subject matter.
@@ -66,6 +75,7 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 7.4 You and we agree that neither of us shall have any claim for innocent or negligent misrepresentation or negligent misstatement based on any statement in this Contract.
 
 # 8. How the contract is formed between you and us - orders
+
 8.1 To place an order for attendance at one of our Courses on our Site, you can click the 'Book Now' buttons provided on the page on our Site that describes that conference or course or meet up.
 
 8.2 If you are ordering for a business, You confirm that You have authority to bind any business on whose behalf You use our Site to purchase Services.
@@ -81,11 +91,12 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 - (a) we have, without limiting our other rights or remedies, the right to cancel or suspend performance of the Services until You remedy the Customer Default, and to rely on the Customer Default to relieve us from the performance of any of our obligations to the extent the Customer Default prevents or delays our performance of any of our obligations; and
 - (b) we will not be liable for any costs or losses sustained or incurred by You arising directly or indirectly from our failure or delay to perform any of our obligations as set out in this clause 8.6.
 
-8.7 We are not responsible for delays outside our control. If our supply of the Services is delayed by an event outside our control then we will contact you as soon as possible to let you know and we will take steps to minimise the effect of the delay. Provided we do this we will not be liable for delays caused by the event, but if there is a risk of substantial delay you may contact us to end the contract and receive a refund for any products you have paid for but not received.
+  8.7 We are not responsible for delays outside our control. If our supply of the Services is delayed by an event outside our control then we will contact you as soon as possible to let you know and we will take steps to minimise the effect of the delay. Provided we do this we will not be liable for delays caused by the event, but if there is a risk of substantial delay you may contact us to end the contract and receive a refund for any products you have paid for but not received.
 
-8.8 Your cancellation of orders: Subject to our specific terms for Conferences, Courses, Facilities Hire, Vouchers and Community Sponsorship in sections 15, 16, 17, 18 and 19, any order cancellations by You before Order Confirmation must be made by email or phone at [hello@learnk8s.io](mailto:hello@learnk8s.io).
+  8.8 Your cancellation of orders: Subject to our specific terms for Conferences, Courses, Facilities Hire, Vouchers and Community Sponsorship in sections 15, 16, 17, 18 and 19, any order cancellations by You before Order Confirmation must be made by email or phone at [hello@learnk8s.io](mailto:hello@learnk8s.io).
 
 # 9. Price of services
+
 9.1 The prices of the Services will be as quoted on our Site from time to time. We take all reasonable care to ensure that the prices are correct at the time when the relevant information was entered onto the system.
 
 9.2 Prices for our Services may change from time to time, but changes will not affect any order which we have confirmed with an Order Confirmation.
@@ -93,6 +104,7 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 9.3 Except as expressly stated on our Site, the price of any Services excludes VAT (where applicable) at the applicable current rate chargeable in the UK for the time being. However, if the rate of VAT changes between the date of Your order and the date of delivery, we will adjust the VAT You pay, unless You have already paid for the Services in full before the change in VAT takes effect.
 
 # 10. How to pay
+
 10.1 You can pay for Services using secure banking through Barclays or direct credit to our bank account.
 
 10.2 We will accept payment in the currency advertised with the event only.
@@ -102,6 +114,7 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 10.4 Payment is in advance.
 
 # 11. Limitation of our liability if you are a consumer
+
 11.1 This clause only applies if You are a consumer.
 
 11.2 Subject to the rest of the provisions in this clause 11, our total liability to You for any loss You suffer will be limited to the amount of money payable to us for the Services provided to You.
@@ -115,6 +128,7 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 11.6 We are not liable for business losses. We only supply the products for domestic and private use. If You use the products for any commercial, business or re-sale purpose we will have no liability to You for any loss of profit, loss of business, business interruption, or loss of business opportunity.
 
 # 12. Limitation of our liability if you are a business
+
 12.1 This clause only applies if You are a business customer.
 
 12.2 We only supply the Services for internal use by Your business, and You agree not to use the Services for any resale purposes.
@@ -125,7 +139,7 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 - (d) breach of the terms implied by section 12 of the Sale of Goods Act 1979 (title and quiet possession); or
 - (e) defective products under the Consumer Protection Act 1987.
 
-12.3 Subject to clause 12.2, we will under no circumstances whatever be liable to You, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, arising under or in connection with the Contract for:
+  12.3 Subject to clause 12.2, we will under no circumstances whatever be liable to You, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, arising under or in connection with the Contract for:
 
 - (a) any loss of profits, sales, business, or revenue;
 - (b) loss or corruption of data, information or software;
@@ -134,11 +148,12 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 - (e) loss of goodwill; or
 - (f) any indirect or consequential loss.
 
-12.4 Subject to clause 12.2, our total liability to You in respect of all losses arising under or in connection with the Contract, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, shall in no circumstances exceed 100% of the price of the Services.
+  12.4 Subject to clause 12.2, our total liability to You in respect of all losses arising under or in connection with the Contract, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, shall in no circumstances exceed 100% of the price of the Services.
 
-12.5 Except as expressly stated in these Terms, we do not give any representation, warranties or undertakings in relation to the Services. Any representation, condition or warranty which might be implied or incorporated into these Terms by statute, common law or otherwise is excluded to the fullest extent permitted by law. In particular, we will not be responsible for ensuring that the Services are suitable for Your purposes.
+  12.5 Except as expressly stated in these Terms, we do not give any representation, warranties or undertakings in relation to the Services. Any representation, condition or warranty which might be implied or incorporated into these Terms by statute, common law or otherwise is excluded to the fullest extent permitted by law. In particular, we will not be responsible for ensuring that the Services are suitable for Your purposes.
 
 # 13. Other important terms
+
 13.1 We may transfer our rights and obligations under a Contract to another organisation, but this will not affect Your rights or our obligations under these Terms.
 
 13.2 You may only transfer Your rights or Your obligations under these Terms to another person if we agree in writing.
@@ -150,6 +165,7 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 13.5 If we fail to insist that You perform any of Your obligations under these Terms, or if we do not enforce our rights against You, or if we delay in doing so, that will not mean that we have waived our rights against You and will not mean that You do not have to comply with those obligations. If we do waive a default by You, we will only do so in writing, and that will not mean that we will automatically waive any later default by You.
 
 # 14. Specific terms related to courses
+
 These specific terms apply in addition to sections 1 to 13 above of these Terms to any of our Services that are Courses. To the extent of any inconsistency between these "Specific terms related to courses" and sections 1 to 13 of these Terms, these "Specific terms related to courses" will override.
 
 14.1 Course Fee: The Fee payable for the Course includes attendance of the Course, lunch and light refreshments during morning and afternoon breaks. Unless otherwise stated in the Course description on our Site, the Course Fee will not include breakfast, dinner, accommodation, travel or any other expenses that may be incurred by delegates to the Course.
@@ -159,7 +175,7 @@ These specific terms apply in addition to sections 1 to 13 above of these Terms 
 - (a) 14 days after our invoice date; or
 - (b) the day before the Course start date. Prices quoted for Course on our Site are exclusive of VAT or other applicable taxes (such as sales taxes), which will be added at the current rate upon invoicing or payment. Where a delegate is attending a Course in the UK, regardless of the delegate's country of origin, the point of supply for VAT purposes is the location of the Course, which in that case is the UK.
 
-14.3 Substitutions and Cancellations by the Delegate: In addition to any rights we may have in respect of cancellations under clauses 6, 8.5, 8.6 or 8.8, once booked and confirmed, Courses can be cancelled or rescheduled by
+  14.3 Substitutions and Cancellations by the Delegate: In addition to any rights we may have in respect of cancellations under clauses 6, 8.5, 8.6 or 8.8, once booked and confirmed, Courses can be cancelled or rescheduled by
 
 You subject to the following charges:
 
@@ -178,6 +194,7 @@ A qualified substitute may be enrolled in a delegate's place provided we are not
 14.7 Your contact details: In accordance with our Privacy Policy (which is incorporated by reference into these Terms), Learnk8s will use the contact and delegate details You enter during the registration process to provide You with further details on, or any changes to the Course and may also include You in our mailing list which we use to contact You from time to time with information on our other Courses. You will have the option to unsubscribe from this list. Learnk8s may provide Your details to third party co-organisers of the Course as described in the Course description on our Site.
 
 # 15. Specific terms related to vouchers
+
 These specific terms apply in addition to sections 1 to 13 above of these Terms to the purchase and use of vouchers for our Courses ("Vouchers").
 
 15.1 Vouchers may be available from time to time for the Courses which are advertised on our Site as being offered and delivered by us. We do not supply vouchers for Courses which we advertise for third parties.

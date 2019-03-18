@@ -18,7 +18,7 @@ export const Details = {
   seoTitle: 'Terms and Conditions ♦︎ Learnk8s',
   title: 'Terms and Conditions',
   description: 'Terms and Conditions that applies to all services offered by Learnk8s',
-  openGraphImage: Image({url: 'assets/open_graph_preview.png', description: 'Learnk8s preview'}),
+  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
 }
 
 function identity<T>(value: T): T {
@@ -26,37 +26,35 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(<Layout
-    website={website}
-    seoTitle={currentNode.payload.seoTitle}
-    title={currentNode.payload.title}
-    description={currentNode.payload.description}
-    openGraphImage={currentNode.payload.openGraphImage}
-    absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-    cssBundle={CSSBundle({
-      paths: [
-        'node_modules/tachyons/css/tachyons.css',
-        'assets/style.css',
-      ],
-    })}>
-    <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
+  return renderToStaticMarkup(
+    <Layout
+      website={website}
+      seoTitle={currentNode.payload.seoTitle}
+      title={currentNode.payload.title}
+      description={currentNode.payload.description}
+      openGraphImage={currentNode.payload.openGraphImage}
+      absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+      cssBundle={CSSBundle({
+        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
+      })}
+    >
+      <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
+        <Navbar root={website} />
 
-      <Navbar root={website} />
+        <section className='ph5-l'>
+          <div className='w-100'>
+            <h1 className='f1 pl3 pl4-ns f-subheadline-l'>General terms and conditions</h1>
+            <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns f3-l pb4'>Effective from 10 May 2018</h2>
+          </div>
+        </section>
+      </div>
 
-      <section className='ph5-l'>
-        <div className='w-100'>
-          <h1 className='f1 pl3 pl4-ns f-subheadline-l'>General terms and conditions</h1>
-          <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns f3-l pb4'>Effective from 10 May 2018</h2>
-        </div>
+      <section className='bg-black-02 black-70 relative z-999 w-90-m w-70-l center pa3 pa4-ns mb3 mb5-ns lh-copy'>
+        <div dangerouslySetInnerHTML={{ __html: marked(cat(`${__dirname}/t-and-cs.md`).toString(), { renderer }) }} />
       </section>
 
-    </div>
-
-    <section className='bg-black-02 black-70 relative z-999 w-90-m w-70-l center pa3 pa4-ns mb3 mb5-ns lh-copy'>
-      <div dangerouslySetInnerHTML={{__html: marked(cat(`${__dirname}/t-and-cs.md`).toString(), {renderer})}}></div>
-    </section>
-
-    <Consultation />
-    <Footer root={website} />
-  </Layout>)
+      <Consultation />
+      <Footer root={website} />
+    </Layout>,
+  )
 }

@@ -1,4 +1,5 @@
-import * as React from 'react'
+/* eslint @typescript-eslint/no-explicit-any: 0 */
+
 import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
 import * as Academy from './academy'
@@ -29,43 +30,69 @@ import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import { Venues, Timezone } from './courses'
 import moment from 'moment-timezone'
 
+export function createNode<T extends {}, U extends { [name: string]: LinkedNode<any> }>({
+  page,
+  children,
+}: {
+  page: T
+  children: U
+}): LinkedNode<T, U> {
+  const linkedNode = {
+    prev: null,
+    next: null,
+    payload: page,
+    children,
+    parent: null,
+  }
+  Object.keys(children).forEach((key, index, array) => {
+    children[key].parent = linkedNode
+    if (index > 0) {
+      children[key].prev = children[array[index - 1]]
+    }
+    if (index < array.length) {
+      children[key].next = children[array[index + 1]]
+    }
+  })
+  return linkedNode
+}
+
 const blogPosts = {
   installingK8sOnWindows: createNode({
     page: K8sOnWindows.Details,
-    children: {}
+    children: {},
   }),
   chaosEngineering: createNode({
     page: ChaosEngineering.Details,
-    children: {}
+    children: {},
   }),
   deployLaravel: createNode({
     page: DeployLaravel.Details,
-    children: {}
+    children: {},
   }),
   solarPlants: createNode({
     page: SolarPlants.Details,
-    children: {}
+    children: {},
   }),
   spotInstances: createNode({
     page: SpotInstances.Details,
-    children: {}
+    children: {},
   }),
   scalingTensorflow: createNode({
     page: ScalingTensorflow.Details,
-    children: {}
+    children: {},
   }),
   scalingSpringBoot: createNode({
     page: ScalingSpringBoot.Details,
-    children: {}
+    children: {},
   }),
   smallerDockerImage: createNode({
     page: SmallerImages.Details,
-    children: {}
+    children: {},
   }),
   whatIsKubernetes: createNode({
     page: WhatIsKubernetes.Details,
-    children: {}
-  })
+    children: {},
+  }),
 }
 
 export const Sitemap = createNode({
@@ -73,10 +100,12 @@ export const Sitemap = createNode({
   children: {
     training: createNode({
       page: Training.Details,
-      children: {}}),
+      children: {},
+    }),
     academy: createNode({
       page: Academy.Details,
-      children: {}}),
+      children: {},
+    }),
     blog: createNode({
       page: Blog.Details,
       children: {
@@ -86,48 +115,48 @@ export const Sitemap = createNode({
             url: '/deploying-laravel-to-kubernetes',
             redirectTo: blogPosts.deployLaravel,
           }),
-          children: {}
+          children: {},
         }),
-      }
+      },
     }),
     contactUs: createNode({
       page: ContactUs.Details,
-      children: {}
+      children: {},
     }),
     termsAndConditions: createNode({
       page: TermsAndConditions.Details,
-      children: {}
+      children: {},
     }),
     newsletter: createNode({
       page: Newsletter.Details,
-      children: {}
+      children: {},
     }),
     consulting: createNode({
       page: Consulting.Details,
-      children: {}
+      children: {},
     }),
     aboutUs: createNode({
       page: AboutUs.Details,
-      children: {}
+      children: {},
     }),
     careers: createNode({
       page: Careers.Details,
-      children: {}
+      children: {},
     }),
     infiniteConf2018: createNode({
       page: Redirect.Details({
         url: '/infiniteconf2018',
         redirectTo: blogPosts.scalingTensorflow,
       }),
-      children: {}
+      children: {},
     }),
     rss: createNode({
       page: RSS.Details,
-      children: {}
+      children: {},
     }),
     notFound: createNode({
       page: NotFound.Details,
-      children: {}
+      children: {},
     }),
     london: createNode({
       page: Landing.Details({
@@ -136,7 +165,7 @@ export const Sitemap = createNode({
         timezone: Timezone.LONDON,
         city: 'London',
       }),
-      children: {}
+      children: {},
     }),
     toronto: createNode({
       page: Landing.Details({
@@ -145,7 +174,7 @@ export const Sitemap = createNode({
         timezone: Timezone.TORONTO,
         city: 'Toronto',
       }),
-      children: {}
+      children: {},
     }),
     cardiff: createNode({
       page: Landing.Details({
@@ -154,7 +183,7 @@ export const Sitemap = createNode({
         timezone: Timezone.LONDON,
         city: 'Cardiff',
       }),
-      children: {}
+      children: {},
     }),
     singapore: createNode({
       page: Landing.Details({
@@ -163,7 +192,7 @@ export const Sitemap = createNode({
         timezone: Timezone.SINGAPORE,
         city: 'Singapore',
       }),
-      children: {}
+      children: {},
     }),
     sanFrancisco: createNode({
       page: Landing.Details({
@@ -172,7 +201,7 @@ export const Sitemap = createNode({
         timezone: Timezone.SAN_FRANCISCO,
         city: 'San Francisco',
       }),
-      children: {}
+      children: {},
     }),
     milan: createNode({
       page: Landing.Details({
@@ -181,17 +210,17 @@ export const Sitemap = createNode({
         timezone: Timezone.ROME,
         city: 'Milan',
       }),
-      children: {}
+      children: {},
     }),
     webAppManifest: createNode({
       page: WebAppManifest.Details,
-      children: {}
+      children: {},
     }),
     browserConfig: createNode({
       page: BrowserConfig.Details,
-      children: {}
-    })
-  }
+      children: {},
+    }),
+  },
 })
 
 export type Sitemap = typeof Sitemap
@@ -202,26 +231,6 @@ export interface LinkedNode<T, U = {}> {
   payload: T
   children: U
   parent: LinkedNode<any, any> | null
-}
-
-export function createNode<T extends {}, U extends {[name: string]: LinkedNode<any>}>({page, children}: {page: T, children: U}): LinkedNode<T, U> {
-  const linkedNode = {
-    prev: null,
-    next: null,
-    payload: page,
-    children,
-    parent: null
-  }
-  Object.keys(children).forEach((key, index, array) => {
-    children[key].parent = linkedNode
-    if (index > 0) {
-      children[key].prev = children[array[index -1]]
-    }
-    if (index < array.length) {
-      children[key].next = children[array[index + 1]]
-    }
-  })
-  return linkedNode
 }
 
 export function getFullUrl(currentPage: LinkedNode<any>): string {
@@ -239,26 +248,32 @@ export function getAbsoluteUrl(currentPage: LinkedNode<any>, siteUrl: string): s
 }
 
 export function getBlogPosts(website: Sitemap): typeof blogPosts[keyof typeof blogPosts][] {
-  return Object.values(website.children.blog.children).filter(it => it.payload.type !== Redirect.Type).slice(0)
-  .sort((a: any, b: any) => {
-    return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
-  }) as any
+  return Object.values(website.children.blog.children)
+    .filter(it => it.payload.type !== Redirect.Type)
+    .slice(0)
+
+    .sort((a: any, b: any) => {
+      return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
+    }) as any
+}
+
+function render(node: LinkedNode<any, object>, siteUrl: string): string {
+  if (node.payload.type === Redirect.Type) {
+    return ''
+  }
+  return `<url><loc>${getAbsoluteUrl(node, siteUrl)}</loc><lastmod>${new Date().toISOString()}</lastmod></url>`
 }
 
 function renderTree(node: LinkedNode<any, object>, siteUrl: string): string[] {
   return [
     render(node, siteUrl),
-    ...Object.values(node.children).reduce((acc, it) => acc.concat(renderTree(it as any, siteUrl)), [] as string[])
+    ...Object.values(node.children).reduce((acc, it) => acc.concat(renderTree(it as any, siteUrl)), [] as string[]),
   ]
 }
 
-function render(node: LinkedNode<any, object>, siteUrl: string) {
-  if (node.payload.type === Redirect.Type) {
-    return ''
-  }
-  return `<url><loc>${getAbsoluteUrl(node, siteUrl)}</loc><lastmod>${(new Date()).toISOString()}</lastmod></url>`
-}
-
-export function runSiteMap(root: LinkedNode<any, object>, siteUrl: string) {
-  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${renderTree(Sitemap, siteUrl).join('')}</urlset>`
+export function runSiteMap(root: LinkedNode<any, object>, siteUrl: string): string {
+  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${renderTree(
+    Sitemap,
+    siteUrl,
+  ).join('')}</urlset>`
 }

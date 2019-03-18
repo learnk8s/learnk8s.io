@@ -67,7 +67,7 @@ const svgo = new SVGO({
     {
       convertShapeToPath: true,
     },
-  ]
+  ],
 })
 
 const files = ls([
@@ -103,7 +103,7 @@ const files = ls([
     })
     const optimisedContent = $('body').html()
     if (optimisedContent !== svgContent) {
-      (shell as any).ShellString(optimisedContent).to(svgFileName)
+      ;(shell as any).ShellString(optimisedContent).to(svgFileName)
     }
   })
 })

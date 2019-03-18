@@ -5,7 +5,8 @@
   "scripts": {
     "minify": "for i in `find _site -name \"*.html\" -type f`; do inline-source --root ./_site $i $i; done",
     "build": "npx ts-node --files src/index.tsx && cp favicon.ico _site",
-    "svgo": "npx ts-node src/svgo.ts"
+    "svgo": "npx ts-node src/svgo.ts",
+    "fmt": "prettier 'src/**/*.{ts,tsx,md}' --list-different"
   },
   "author": "Learnk8s",
   "license": "MIT",
@@ -35,6 +36,7 @@
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.23",
     "postcss": "^7.0.14",
+    "prettier": "^1.16.4",
     "prismjs": "^1.15.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",

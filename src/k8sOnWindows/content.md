@@ -38,7 +38,7 @@ You have the latest Windows 10 Pro, and you can install Docker for Windows.
 
 Excellent performance and excellent developer experience. You're sorted, aren't you?
 
-*Maybe.*
+_Maybe._
 
 The hypervisor used by Docker for Windows is extremely powerful — _indeed it's called a Type-1 hypervisor_.
 
@@ -145,7 +145,7 @@ Yes, you do!
 You should be aware that Docker requires VT-X/AMD-v virtual hardware extension to be enabled before you can run any container. Depending on your computer, you may need to reboot and enable it in your BIOS.
 
 > You can check if VT-X/AMD-v is enabled by running `systeminfo` from the
-command prompt.
+> command prompt.
 
 If you're unsure VT-X/AMD-v was enabled, don't worry. If you don't have it, Docker will greet you with the following error message:
 
@@ -228,7 +228,7 @@ Don't forget to insert the adapter that you selected earlier.
 
 If you fail to create the network switch, you should see the following error when you start minikube:
 
-> E0427 09:06:16.000298    3252 start.go:159] Error starting host: Error creating host: Error executing step: Running precreate checks.
+> E0427 09:06:16.000298 3252 start.go:159] Error starting host: Error creating host: Error executing step: Running precreate checks.
 > no External vswitch found. A valid vswitch must be available for this command to run. Check https://docs.docker.com/machine/drivers/hyper-v/.
 
 You can test your minikube installation with:
@@ -248,7 +248,7 @@ minikube start --vm-driver=hyperv --hyperv-virtual-switch=minikube --v=7 --alsol
 
 The extra verbose logging should help you get to the issue. In my particular case, minikube used to fail with:
 
-> E0427 09:19:10.114873   10012 start.go:159] Error starting host: Error starting stopped host: exit status 1.
+> E0427 09:19:10.114873 10012 start.go:159] Error starting host: Error starting stopped host: exit status 1.
 
 Not very helpful. After enabling verbose logging the issue was more obvious:
 
