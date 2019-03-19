@@ -3100,7 +3100,13 @@ Even better, if all of the nodes were to become isolated, they could still serve
 </style>
 ```
 
-Since each node can serve the application, how does the third node know that it doesn't run the application and has to route the traffic to one of the other nodes?
+Now imagine that the three pods belong to a service of `type: NodePort`.
+
+A NodePort service exposes a port in the range between 30000-32767 in each node in the cluster.
+
+That means that every node can respond to incoming requests, even if the node itself doesn't host the app.
+
+So how does the third node know that it doesn't run the pod and has to route the traffic to one of the other nodes?
 
 ```include
 <template>
@@ -4174,13 +4180,15 @@ Since each node can serve the application, how does the third node know that it 
 </style>
 ```
 
-Kubernetes has a binary called `kube-proxy` that runs on each node, and that is in charge of routing the traffic to a specific pod.
+Kubernetes has a binary called `kube-proxy` that runs on each node, and that is in charge of routing the traffic from a service to a specific pod.
 
 You can think of `kube-proxy` like a receptionist.
 
-The proxy intercepts all the traffic directed to the node and routes it to the right pod.
+The proxy intercepts all the traffic directed to the service and routes it to the right pod.
 
 **But how does `kube-proxy` know where all the pods are?**
+
+**And how does `kube-proxy` know about the services?**
 
 It doesn't.
 
@@ -4190,6 +4198,7 @@ The master node knows _everything_ and is in charge of creating the list with al
 
 In the simple scenario above, the list looks like this:
 
+- A Service points to Application instance 1 and 2
 - Application instance 1 is available on Node 1
 - Application instance 2 is available on Node 2
 
@@ -5374,6 +5383,8 @@ Let's delete the routing rules from the node.
 
 `kube-proxy` can operate in three modes: **userspace**, **iptables** and **ipvs**. The default since Kubernetes 1.2 is **iptables**.
 
+> Please note that if you're using a cluster with 1.11 or more recent, you might be using **ipvs**.
+
 In **iptables** mode, `kube-proxy` writes the list of routing rules to the node using iptables rules.
 
 So you could log in into one of the node servers and delete the iptables rules with `iptables -F`.
@@ -5459,13 +5470,17 @@ Digging in the [official documentation for `kube-proxy`](https://kubernetes.io/d
 - `--iptables-sync-period` - The maximum interval of how often iptables rules are refreshed (e.g. '5s', '1m', '2h22m'). Must be greater than 0. (default 30s)
 - `--iptables-min-sync-period` - The minimum interval of how often the iptables rules can be refreshed as endpoints and services change (e.g. '5s', '1m', '2h22m'). (default 10s)
 
-`kube-proxy` refreshes the iptables rules every 10 to 30 seconds. If we drop the iptables rules, it will take up to 30 seconds for `kube-proxy` to realise and restore them back.
+`kube-proxy` refreshes the iptables rules every 10 to 30 seconds.
+
+If we drop the iptables rules, it will take up to 30 seconds for `kube-proxy` to realise and restore them back.
 
 That explains why it took 30 seconds to get your node back!
 
 It also explains how routing tables are propagated from the master node to the worker node.
 
-`kube-proxy` is in charge of syncing them on a regular basis. In other words, every time a pod is added or deleted, the master node recomputes the routing list.
+`kube-proxy` is in charge of syncing them on a regular basis.
+
+In other words, every time a pod is added or deleted, the master node recomputes the routing list.
 
 On a regular interval, `kube-proxy` syncs the rules into the current node.
 

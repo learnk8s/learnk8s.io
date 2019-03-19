@@ -6,7 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { cat } from 'shelljs'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { ListItem, PromoAcademy } from '../layout'
+import { PromoAcademy } from '../layout'
 
 export const Details = {
   type: identity<'chaosEngineering'>('chaosEngineering'),
@@ -20,6 +20,7 @@ export const Details = {
     description: 'Chaos engineering',
   }),
   publishedDate: '2018-05-15',
+  lastModifiedDate: '2019-03-19',
   previewImage: Image({
     url: 'src/chaosEngineering/chaos-engineering-kubernetes.png',
     description: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1',
@@ -79,7 +80,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
           url: getAbsoluteUrl(currentNode, siteUrl),
           datePublished: currentNode.payload.publishedDate,
-          dateModified: currentNode.payload.publishedDate,
+          dateModified: currentNode.payload.lastModifiedDate,
           description: currentNode.payload.description,
           mainEntityOfPage: {
             '@type': 'SoftwareSourceCode',
