@@ -8,17 +8,17 @@ The goal of this article is not only to make your daily work with Kubernetes mor
 
 Before learning how to use kubectl more efficiently, you should have a basic understanding of what it actually is.
 
-From a user's point of view, kubectl is the main cockpit to control Kubernetes. It allows you to perform every possible Kubernetes operation.
+From a user's point of view, kubectl your cockpit to control Kubernetes. It allows you to perform every possible Kubernetes operation.
 
 From a technical point of view, kubectl is a client for the **Kubernetes API**.
 
 The Kubernetes API is an **HTTP REST API**. This API is the real Kubernetes **user interface**. Kubernetes is fully controlled through this API. This means that every Kubernetes operation is exposed as an API endpoint and can be executed by an HTTP request to this endpoint.
 
-Consquently, the main job of kubectl is to carry out HTTP requests to the Kubernetes API:
+Consequently, the main job of kubectl is to carry out HTTP requests to the Kubernetes API:
 
 ![kubectl architecture](kubectl-architecture-1.svg)
 
-> The Kubernetes API is fully **resource-centred**. This means, Kubernetes maintains an internal state of resources, and all Kubernetes operations are [**CRUD**](https://en.wikipedia.org/wiki/Create%2C_read%2C_update_and_delete) operations on these resources. You fully control Kubernetes by manipulating resources (and Kubernetes figures out what to do based on the current state of resources). For this reason, the Kubernetes [**API reference**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) is organised as a list of all the Kubernetes resources with their associated operations.
+> Kubernetes is fully **resource-centred**. That means, Kubernetes maintains an internal state of resources, and all Kubernetes operations are [**CRUD**](https://en.wikipedia.org/wiki/Create%2C_read%2C_update_and_delete) operations on these resources. You fully control Kubernetes through manipulation of these resources (and Kubernetes figures out what to do based on the current state of resources). For this reason, the Kubernetes [**API reference**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) is organised as a list of resource types with their associated operations.
 
 Let's consider an example.
 
@@ -30,46 +30,40 @@ kubectl create -f replicaset.yaml
 
 Obviously, this creates your ReplicaSet in Kubernetes. But what happens behind the scenes?
 
-Creating a ReplicaSet is implemented by the [*create ReplicaSet*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) operation of Kubernetes. Like all Kubernetes operations, this operation has a corresponding API endpoint:
+Kubernetes has a *create ReplicaSet* operation, and the API endpoint that exposes this operation is as follows:
 
 ~~~
 POST /apis/apps/v1/namespaces/{namespace}/replicasets
 ~~~
 
-> You can find the documentation for all Kubernetes API endpoints in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13) (including for the [above endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps)).
+> You can find the API endpoints of all Kubernetes operations in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13) (including the [above endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps)).
 
-Behind the scenes, the above kubectl command invokes this endpoint with an HTTP POST request, passing the ReplicaSet definition (the content of your `replicaset.yaml` file) in the body of the request.
+Thus, behind the scenes, the above kubectl command makes an HTTP POST request to the above endpoint, passing the ReplicaSet definition (the content of the `replicaset.yaml` file) in the request body.
 
-That's how *all* Kubernetes operations work, no matter if they are for creating, reading, updating, or deleting resources. Each operation is exposed as an API endpoint, and kubectl carries out HTTP requests to them.
+This is how *all* kubectl command (that access the Kubernetes API) are implemented. They simply make HTTP requests to endopints of the Kubernetes API.
 
-> It's totally  possible to fully control Kubernetes with a tool like `curl` by manually issuing HTTP requests to the Kubernetes API. Kubectl just makes it easier for you to use the Kubernetes API.
+> It's totally possible to fully control Kubernetes with a tool like `curl` by manually issuing HTTP requests to the Kubernetes API. Kubectl just makes it easier for you to use the Kubernetes API.
 
 These are the basics of what kubectl is. But there is much more about the Kubernetes API that every kubectl user should know. To this end, let's briefly dive into the Kubernetes internals.
 
-
-If you're very impatient, you can [jump to the next section →](#1-save-typing-with-command-completion)
+<!--If you're very impatient, you can [jump to the next section →](#1-save-typing-with-command-completion)-->
 
 ### Kubernetes internals
 
-Kubernetes consists of a set of independent components, each one having a very specific function. Each component runs as a separate process, and some components run on the master nodes, whereas others run ont he worker nodes.
+Kubernetes consists of a set of independent components that run as separate processes on the nodes of a cluster. Each component has a very specific function, and some components run on the master nodes and others on the worker nodes.
 
 The most important components on the master nodes are:
 
-- **API server:** provides Kubernetes API and manages storage backend
 - **Storage backend:** stores resource definitions (usually [etcd](https://coreos.com/etcd/))
+- **API server:** provides Kubernetes API and manages storage backend
 - **Controller manager:** ensures resource statuses match specifications
-- **Scheduler:** schedules pods to worker nodes
+- **Scheduler:** schedules Pods to worker nodes
 
-And the most important component on the worker nodes is:
+And the most important component running on each worker node is:
 
 - **kubelet:** manages execution of containers on a worker node
 
-The API server and the storage backend have a very special role:
-
-- The storage backend stores all the Kubernetes resources, that is, the entire state of this Kubernetes instance (as mentioned, Kubernetes is centred around the state of resources).
-- The API server implements the Kubernetes API. Furthermore, the API server is the only component that directly accesses the storage backend. All other components access the resources in the storage backend only through the Kubernetes API (thus, through the API server).
-
-To see how all components work together, let's dig deeper into the ReplicaSet example from above.
+To see how these components work together, let's consider an example. Actually, let's just continue the ReplicaSet example from above.
 
 Assume, you just executed `kubectl create -f replicaset.yaml`, upon which kubectl made an HTTP POST request to the [*create ReplicaSet* API endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps).
 
@@ -82,7 +76,7 @@ What happens now?
   "slides": [
     {
       "image": "schedule-pods-1.svg",
-      "description": "When you create a ReplicaSet by running `kubectl create -f replicaset.yaml`, the API server saves your resource definition in the storage backend."
+      "description": "After running `kubectl create -f replicaset.yaml`, the API server saves you ReplicaSet resource definition in the storage backend."
     },
     {
       "image": "schedule-pods-2.svg",
@@ -90,7 +84,7 @@ What happens now?
     },
     {
       "image": "schedule-pods-3.svg",
-      "description": "The ReplicaSet controller creates a Pod definition for each required replica (according to the Pod template in the ReplicaSet definition) and saves them in the storage backend."
+      "description": "The ReplicaSet controller creates a Pod definition for each replica of the ReplicaSet (according to the Pod template in the ReplicaSet definition) and saves them in the storage backend."
     },
     {
       "image": "schedule-pods-4.svg",
@@ -102,11 +96,11 @@ What happens now?
     },
     {
       "image": "schedule-pods-6.svg",
-      "description": "This update of the Pod definitions triggers the kubelet on the worker node that the Pods have been scheduled to."
+      "description": "This triggers the kubelet on the worker node that the Pods have been scheduled to, who watches for Pods that have been scheduled to its worker node."
     },
     {
       "image": "schedule-pods-7.svg",
-      "description": "The kubelet reads the Pod definitions, downloads the required contaier images, and runs the containers via Docker (or another container runtime) on the worker node."
+      "description": "The kubelet reads the Pod definitions, downloads the required container images, and runs the containers via Docker (or another container runtime) on the worker node."
     }
   ]
 }
@@ -114,199 +108,201 @@ What happens now?
 
 The API request to the *create ReplicaSet* endpoint is handled by the **API server**. The API server authenticates the request and saves your ReplicaSet resource definition in the storage backend.
 
-This event triggers the **ReplicaSet controller**, which is a sub-process of the **controller manager**. The ReplicaSet controller watches for creations, updates, and deletions of ReplicaSet resources in the storage backend, and makes sure that the *status* of each ReplicaSet matches its *specification*.
+This event triggers the **ReplicaSet controller**, which is a sub-process of the **controller manager**. The ReplicaSet controller watches for creations, updates, and deletions of ReplicaSet resources in the storage backend, and gets notified by an event when this happens.
 
-The ReplicaSet controller detects that there is a ReplicaSet but the corresponding replica Pod definitions are missing. Thus, the ReplicaSet controller creates these Pod definitions (according to the Pod template in the ReplicaSet definition) and saves them in the storage backend.
+The job of the ReplicaSet controller is to make sure that the required number of replica Pods of a ReplicaSet exists. In our example, no Pods exist yet, so the ReplicaSet controller creates these Pod definitions (according to the Pod template in the ReplicaSet definition) and saves them in the storage backend.
 
-The creation of the new Pod definitions triggers the **scheduler**, which watches for Pod definitions that are not yet associated to a worker node. The scheduler chooses a suitable worker node for each Pod and writes this information back to the Pod definitions in the storage backend.
+The creation of the new Pods triggers the **scheduler**, which watches for Pod definitions that are not yet associated to a worker node. The scheduler chooses a suitable worker node for each Pod and updates the Pod definitions in the storage backend with this information.
 
 > Note that up to this point, no workload code is being run anywhere on the infrastructure. All that has been done so far is creating and updating resources in the storage backend on the master node.
 
-This update of the Pod definitions triggers the **kubelets** which watch for Pods that are scheduled to their worker nodes. The kubelet of the target worker node of your ReplicaSet Pods downloads the container images of these Pods (if not already present on the machine), and runs them with the configured container runtime (which is often Docker).
+This event triggers the **kubelets** who watch for Pods that are scheduled to their worker nodes. The kubelet worker node your ReplicaSet Pods have been scheduled to, downloads the container images of these Pods (if not already present on the machine), and runs them with the configured container runtime (which may be Docker).
 
 At this point, finally, your ReplicaSet application is running!
 
-The *create ReplicaSet* operation shown here is just an example Kubernetes operation. But the principles of how Kubernetes components work together is the same for *all* Kubernetes operations.
-
 ### The role of the Kubernetes API
 
-As you have seen, Kubernetes components are highly decoupled, and they don't communicate directly with each other. With exception of the API server and the storage backend, the only entity the components talk to, and know about, is the Kubernetes API.
+As you can see from the above example, Kubernetes components (except the API server and the storage backend) work by watching for resource changes in the storage backend, and manipulating resources in the storage backend.
 
-It's important to note that **this is the [same API](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) that is also used by kubectl.**
+However, these components **do not** access the storage backend directly, but only **through the Kubernetes API**.
 
 Consider the following examples:
 
-- The ReplicaSet controller watches for changes to the ReplicaSet resources by performing a [*list ReplicaSets*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#list-replicaset-v1-apps) operation with a `watch` parameter.
-- The ReplicaSet controller creates Pod resources by performing [*create Pod*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-pod-v1-core) operations.
-- The scheduler updates Pod resources with the worker node information by a [*patch Pod*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#patch-pod-v1-core) operation.
+- The ReplicaSet controller uses the [*list ReplicaSets*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#list-replicaset-v1-apps) API operation with a `watch` parameter for watching for changes to ReplicaSet resources.
+- The ReplicaSet controller uses the [*create Pod*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-pod-v1-core) API operation for creating Pods.
+- The scheduler uses the [*patch Pod*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#patch-pod-v1-core) API operation for updating Pods with the information of the worker nodes the Pods were scheduled to.
 
-In other words, the Kubernetes components do their work by simple HTTP requests to the Kubernetes API, exactly like kubectl.
+As you can see, this is the **same API that is also used by kubectl**.
 
-It is a fundamental design principle of Kubernetes that internal components use the same API like external users like kubectl.
+This double usage of the Kubernetes API for internal components as well as for external users is a fundamental design concept of Kubernetes.
 
-In fact, internal components are just client programs of the Kubernetes API like kubectl. They have the same capabilities and restrictions. For example, every request from a component to the Kubernetes API must be authenticated in the same way as requests from kubectl.
+With this knowledge, you can create a model of how Kubernetes works:
 
-Being familiar with the Kubernetes API **will help you a lot** understanding kubectl better and making the most use of it!
+- The storage backend stores the state (i.e. resources) of Kubernetes.
+- The API server provides an interface to the storage backend in the form of the Kubernetes API.
+- All other components, as well as external users, read, watch, and manipulate the state (i.e. resources) of Kubernetes through the Kubernetes API.
+
+Being familiar with these concepts and the Kubernetes API **will help you a lot** to understand kubectl better and make the most use of it!
 
 Let's now look at a series of concrete tips and tricks to help you boosting your kubectl productivity.
 
 ## 1. Save typing with command completion
 
-One of the most useful, but often overlooked, tricks to make your kubectl usage more efficient is shell completion.
+One of the most useful, but often overlooked, tricks to boost your kubectl productivity is command completion.
 
-This feature is provided by kubectl for the [**Bash**](https://www.gnu.org/software/bash/) and [**Zsh**](https://www.zsh.org/) shells (also [on the official documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)).
+This allows you to auto-complete command-line tokens for kubectl commands with the *Tab* key. These command-line tokens may be sub-commands, options, or arguments, including hard-to-type things like resource names.
 
-Command completion allows you to auto-complete kubectl sub-commands, options, and arguments.
-
-This includes hard-to-type things like resource names, such as pod names or node names.
-
-_It can save you a tremendous amount of typing and copy-pasting!_
-
-Here is a small demonstration of kubectl command completion in action:
+Here you can see kubectl command completion in action:
 
 ![](autocompletion.cast)
 
-<!--To use command completion, hit *Tab* to auto-complete the current word (if there is only a single match), and hit *Tab* two times to display a list of all the possible completions (if there are multiple matches).-->
+Command completion is available for the [**Bash**](https://www.gnu.org/software/bash/) and [**Zsh**](https://www.zsh.org/) shells.
 
-Command completion works by the means of a **completion script** that defines the completion behaviour for a specific command.
+There are detailed instructions for setting up command completion in the [official documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion), but below is a short recap.
 
-Kubectl can auto-generate its completion script for Bash and Zsh with the following command:
+### General notes
 
-~~~bash
-kubectl completion <shell>
+In general, command completion works by the means of **completion scripts**. A completion script is shell script that defines the completion behaviour for a specific command. Sourcing a completion script in your shell, enables command completion for the corresponding command.
+
+Kubectl can conveniently print out its completion scripts for Bash and Zsh with the following commands:
+
+~~~
+kubectl completion bash
+kubectl completion zsh
 ~~~
 
-Where `<shell>` is either `bash` or `zsh`.
+In principle, sourcing the output of these commands in the respective shells, enables kubectl command completion.
 
-In the end, this script must be sourced by your shell to enable command completion.
+However, the details differ for Bash (including a difference between Linux and macOS) and Zsh. All these cases are explained in the following.
 
-However, the procedure to set everything up properly is different for Bash and Zsh, and furthermore, there is a small complication if you use Bash on macOS.
-
-The following sections cover all these cases and you can click on one of the links below to directly jump to the instructions for your scenario:
-
-- [Setting up command completion for Bash](#bash)
+- [Setting up command completion for Bash on Linux](#bash-on-linux)
 - [Setting up command completion for Bash on macOS](#bash-on-macos)
 - [Setting up command completion for Zsh](#zsh)
 
-### Bash
+### Bash on Linux
 
-For Bash, the kubectl completion script depends on a third-party project called [bash-completion](https://github.com/scop/bash-completion).
+The completion script for Bash depends on the [**bash-completion**](https://github.com/scop/bash-completion) package, so you have to install that first.
 
-You have to install this software on your system to make kubectl command completion work for Bash.
+You can install bash-completion with [various package managers](https://github.com/scop/bash-completion#installation). For example:
 
-There are [bash-completion packages for many common package managers](https://github.com/scop/bash-completion#installation).
-
-For example, if you use APT, you can install the package as follows:
-
-~~~bash
+~~~
 sudo apt-get install bash-completion
+yum install bash-completion
 ~~~
 
-This creates the file `/etc/bash_completion`, which you have to source in your `~/.bashrc` file. So add the following to your `~/.bashrc` file:
+You can test if bash-completion is correctly installed with the following command:
 
 ~~~bash
-source /etc/bash_completion
+type _init_completion
 ~~~
 
-Now, everything is set up for the kubectl completion script to work, and you just have to source this script itself in your `~/.bashrc` file. You can do this by adding the following command to your `~/.bashrc` file:
+If this outputs the code of a function, then the installation is complete. If it outputs a `not found` error, you have to add the following line to your `~/.bashrc` file:
+
+~~~bash
+source /usr/share/bash-completion/bash_completion
+~~~
+
+> Whether you have to add this line to your `~/.bashrc` file or not, depends on the package manager you used to install bash-completion. For APT it's necessary, for yum not.
+
+Once bash-completion is installed, you have to ensure that the kubectl **completion script** gets sourced in all your shell sessions.
+
+One way to do this is to add the following line to your `~/.bashrc` file:
 
 ~~~bash
 source <(kubectl completion bash)
 ~~~
 
-And that's it! After restarting your shell (or sourcing `~/.bashrc`), kubectl command completion should work.
+Another possibility is to add the completion script to the `/etc/bash_completion.d` directory (you might have to create this directory if it doesn't exist):
+
+~~~bash
+kubectl completion bash >/etc/bash_completion.d/kubectl
+~~~
+
+> Completion scripts in `/etc/bash_completion.d` are sourced by bash-completion.
+
+Both approaches are equivalent.
+
+After reloading your shell, kubectl completion should be working!
 
 [Jump to the next section →](#quickly-access-resource-documentation-with-kubectl-explain)
 
 ### Bash on macOS
 
-Apple includes an old version of Bash in macOS, and unfortunately the kubectl completion script does not work with this version.
+With macOS there is a slight complication. The reason is that the default version of Bash on macOS is 3.2, which is hopelessly outdated. The kubectl completion script unfortunately doesn't work with this version of Bash, it requires at least Bash 4.1.
 
-In particular, macOS includes Bash 3.2, and the kubectl completion script requires at least Bash 4.1 (the current version of Bash is 5.0).
+> The reason that Apple includes an outdated version of Bash in macOS is that newer versions use the [GPLv3](https://en.wikipedia.org/wiki/GNU_General_Public_License) license, which Apple doesn't support.
 
-> In case you're interested why Apply includes such an old version of Bash in macOS (Bash 3.2 is from 2007): it is for licensing reasons. Bash 3.2 is the last version that uses the [GNU General Public License](https://en.wikipedia.org/wiki/GNU_General_Public_License) v2 (GPLv2), whereas later versions use GPLv3. Apple is generally unwilling to accept GPLv3.
+That means, to use kubectl command completion on macOS, you have to **install a newer version of Bash**. You can even make this new Bash your default shell, which will save you a lot of trouble of this kind in the future. It's actually a quick and easy process, and I wrote an [**Upgrading Bash on macOS**](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba) article about it.
 
-The only way around this is to install a newer version of Bash on macOS.
+*Before continuing, make sure that you are now indeed using Bash 4.1 or newer (find out with `bash --version`).*
 
-This is something that is generally recommended if you use Bash on macOS, as it can save you from a lot of trouble when using shell scripts and software that is designed for newer versions of Bash.
+The kubectl completion script for Bash depends on [**bash-completion**](https://github.com/scop/bash-completion), so you have to install this first.
 
-Installing a newer version of Bash on macOS and making it the default shell is actually not difficult, and I wrote [an entire article about it](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba).
-
-If you want to use kubectl command completion on macOS, then you should follow the steps in this article before proceeding.
-
-Once you have upgraded Bash to a newer version, you can set up kubectl command completion.
-
-For Bash, the kubectl command completion script depends on a third-party project called [bash-completion](https://github.com/scop/bash-completion). You have to install this software on your system in order to make kubectl command completion work.
-
-You can install bash-completion conveniently with the [Homebrew](https://brew.sh/) package manager:
+You can install bash-completion with [Homebrew](https://brew.sh):
 
 ~~~bash
 brew install bash-completion@2
 ~~~
 
-> The `@2` at the end of the Homebrew formula stands for version 2 of bash-completion. This version targets Bash 4.1 and later, whereas version 1 (without the `@2`) targets versions up to Bash 3.2. The kubectl completion script only works with version 2, that's why you had to install a newer version of Bash.
+> The `@2` at stands for version 2 of bash-completion, and the kubectl completion script works only with this version. However, bash-completion 2 works only with Bash 4.1+, and that's the reason that you can use the kubectl completion script only with Bash 4.1+.
 
-The `brew install` command asks you in the "Caveats" section to add the following snippet to your `~/.bash_profile`:
+The output of the `brew install` command includes instructions to add the following lines to your `~/.bash_profile` file:
 
 ~~~bash
+export BASH_COMPLETION_COMPAT_DIR=/usr/local/etc/bash_completion.d
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 ~~~
 
-I recommend adding it to your `~/.bashrc` file instead, so that bash-completion is also available in sub-shells.
+You have to do this to complete the installation of bash-completion, but I recommend adding it to the `~/.bashrc` file instead. This ensures that bash-completion is also available in sub-shells.
 
-Now all that is left to do is to ensure that the kubectl completion script is sourced in your shell.
+After reloading your shell, you can test if bash-completion is correctly installed with the following command:
 
-The simplest way to do this is by simply adding the following command to your `~/.bashrc` file:
+~~~bash
+type _init_completion
+~~~
+
+If this outputs the code of a function, then the installation was successful.
+
+Now, all you have to do is ensuring that the kubectl **completion script** gets sourced in all your shell sessions.
+
+One way to do this is to add the following line to your `~/.bashrc` file:
 
 ~~~bash
 source <(kubectl completion bash)
 ~~~
 
-Optionally, **if you installed kubectl with Homebrew** (`brew install kubernetes-cli`), you can achieve the same in another way (which will be useful for other commands that you installed with Homebrew too).
-
-Homebrew formulas install completion scripts (if any) to the `/usr/local/etc/bash_completion.d` directory.
-
-If you installed kubectl with Homebrew, then the kubectl completion script has been placed in this directory by the Homebrew formula.
-
-You can instruct bash-completion to source all the completion script in this directory by adding the following line to your `~/.bashrc` file (this is also indicated in the "Caveats" section of the `brew install` command for bash-completion):
+Another option is to add the completion script to the `/usr/local/etc/bash_completion.d` directory:
 
 ~~~bash
-export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+kubectl completion bash >/usr/local/etc/bash_completion.d/kubectl
 ~~~
 
-You just have to make sure this line comes *before* the above line of the "Caveats" section in your `~/.bashrc` file.
+> This only works if you installed bash-completion with Homebrew. In that case, bash-completion sources all completion scripts in this directory.
 
-Once this is done, you don't need to source the kubectl completion script in your `~/.bashrc` file anymore.
+In case you [installed kubectl with Homebrew](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-homebrew-on-macos), you don't even have to do the above, because the completion script has already been put in the `/usr/local/etc/bash_completion.d` directory by the kubectl Homebrew formula.
 
-In addition, all completion scripts of other Homebrew formula will be automatically sourced too.
+All these approaches are equivalent.
 
-No matter which approach you use, after restarting your shell, kubectl command completion should be working!
+After reloading your shell, kubectl completion should be working!
 
 [Jump to the next section →](#quickly-access-resource-documentation-with-kubectl-explain)
 
 ### Zsh
 
-Setting up kubectl completion for Zsh is straightforward.
+The completion script for Zsh doesn't have any dependencies. So, all you have to do is to ensure that it gets sourced in all your shell sessions.
 
-All you have to do is to source the kubectl completion script for Zsh.
-
-You can do this by adding the following command to your `~/.zshrc` file:
+You can do this by adding the following line to your `~/.zshrc` file:
 
 ~~~bash
 source <(kubectl completion zsh)
 ~~~
 
-That's it! After restarting your shell, kubectl command completion should be working.
-
-If after restarting your shell, you get an error like `complete:13: command not found: compdef`, then you have to enable the `compdef` builtin in your shell.
-
-You can do this by adding the following to the beginning of your `~/.zshrc` file:
+In case you get a `command not found: compdef` error after reloading your shell, you have to enable the `compdef` builtin, which you can do by adding the following to the beginning of your `~/.zshrc` file:
 
 ~~~bash
 autoload -Uz compinit
 compinit
 ~~~
-
 
 ## 2. Quickly look up resource definitions
 
