@@ -62,6 +62,7 @@ export const Layout: React.StatelessComponent<{
         <meta property='og:title' content={title} />
         <meta property='og:image' content={openGraphImage.url} />
         <meta property='og:description' content={description} />
+        <meta name='pocket-site-verification' content='1476398dfb5a771a94da9466e0bb43' />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function (w, d, s, l, i) {
