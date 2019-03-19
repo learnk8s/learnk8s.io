@@ -463,7 +463,7 @@ export const PackageRight: React.StatelessComponent<{ heading: string; subheadin
 }
 
 export const PackageList: React.StatelessComponent<{}> = ({ children }) => {
-  return <ul className='cf pl0 list'>{children}</ul>
+  return <ul className='cf list'>{children}</ul>
 }
 
 export const Hero: React.StatelessComponent<{ image: Image; imageClass: string }> = ({
@@ -480,5 +480,44 @@ export const Hero: React.StatelessComponent<{ image: Image; imageClass: string }
         </div>
       </div>
     </section>
+  )
+}
+
+export const PromoAcademy: React.StatelessComponent<{ sitemap: Sitemap }> = ({ sitemap }) => {
+  return (
+    <div className='pt4'>
+      <p className='lh-copy f5 black-70'>↓ Caution: shameless plug ahead! Continue reading below ↓</p>
+      <h2 className='f2 pt0 pb2 mt2'>Become an expert at deploying and scaling applications in Kubernetes</h2>
+      <p className='lh-copy measure-wide f4'>
+        Sign up for the Learnk8s Academy — a self-paced online course designed to dive into the details of Kubernetes.
+      </p>
+      <p className='lh-copy measure-wide f4'>Learn how to:</p>
+      <ul className='list ph3'>
+        <ListItem>
+          Master Kubernetes networking and handle the busiest traffic websites without breaking a sweat
+        </ListItem>
+        <ListItem>Scale your jobs to thousands of servers and reduce the waiting time from days to minutes</ListItem>
+        <ListItem>
+          Design reliable clusters and enjoy peace of mind knowing that your apps are highly available in a multi-cloud
+          setup
+        </ListItem>
+        <ListItem>
+          Optimise server density with containers and Kubernetes and save a ton of cash on your cloud bill by using only
+          the resources you need
+        </ListItem>
+        <ListItem>Supercharge your delivery pipeline and deploy application around the clock</ListItem>
+      </ul>
+      <div className='pt2 pb4'>
+        <a href={getFullUrl(sitemap.children.academy)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3'>
+          Learn more about the Learnk8s Academy →
+        </a>
+      </div>
+      <p className='lh-copy f5'>
+        P.S. Don't miss the next experiment, insight, or <span className='b'>discount</span>:{' '}
+        <a href={getFullUrl(sitemap.children.newsletter)} className='link navy underline hover-sky'>
+          subscribe to the mailing list!
+        </a>
+      </p>
+    </div>
   )
 }

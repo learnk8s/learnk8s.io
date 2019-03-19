@@ -11,6 +11,7 @@ export const Assets = {
   catAndDog: Image({ url: 'assets/cat_and_dog.svg', description: 'Learn at your own pace' }),
   whiteboard: Image({ url: 'assets/whiteboard.svg', description: 'Instructor-led training' }),
   team: Image({ url: 'assets/team.svg', description: 'Consulting' }),
+  downArrow: Image({ url: 'assets/down_arrow_sky.svg', description: 'Down' }),
 }
 
 export const Details = {
@@ -75,20 +76,39 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             </h2>
             <div className='measure-wide'>
               <p className='lh-copy f4-l black-70'>
-                Kubernetes is particularly well known for having a steep learning curve. It's also very early days, and
-                the technology is changing at a fast pace. So how do you quickly get up to speed when everything around
-                it is moving quickly? At learnk8s we have the best resources to master Kubernetes so that you can:
+                Kubernetes is particularly well known for having a steep learning curve.
+              </p>
+              <p className='lh-copy f4-l black-70'>
+                It's also very early days, and the technology is changing at a fast pace.
+              </p>
+              <p className='lh-copy f4-l black-70 b'>
+                How do you quickly get up to speed when everything around it is moving quickly?
+              </p>
+              <p className='lh-copy f4-l black-70'>
+                At Learnk8s we have the best resources to master Kubernetes so that you can:
               </p>
               <ul className='list black-70 pl0 pt2'>
-                <ListItem>Decide which one of the dozen ways to install Kubernetes is right for your team</ListItem>
-                <ListItem>Speak the Kubernetes lingo and communicate with the rest of the industry</ListItem>
                 <ListItem>
-                  Architect micro-services that scale and leverage the strength and weaknesses of the platform
+                  Decide which one of the dozen <span className='b'>ways to install Kubernetes</span> is right for your
+                  team
                 </ListItem>
                 <ListItem>
-                  Get up to speed quickly without drowning in the amount of incomplete/outdated documentation
+                  <span className='b'>Speak the Kubernetes</span> lingo and communicate with the rest of the industry
+                </ListItem>
+                <ListItem>
+                  <span className='b'>Architect micro-services that scale</span> and leverage the strength and
+                  weaknesses of the platform
+                </ListItem>
+                <ListItem>
+                  <span className='b'>Get up to speed quickly</span> without drowning in the amount of
+                  incomplete/outdated documentation
                 </ListItem>
               </ul>
+              <div className='w-100 tc mt4'>
+                <div className='w3 h3 dib'>
+                  <Img image={Assets.downArrow} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -100,12 +120,25 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <div className='ph3'>
           <div className='content measure-wide'>
             <h2 className='f3 navy f2-l'>Learnk8s Academy</h2>
+            <p className='f4-l lh-copy black-70 measure-wide'>Learn Kubernetes online with hands-on material.</p>
             <p className='f4-l lh-copy black-70 measure-wide'>
-              Learn Kubernetes online with hands-on material and instructor-led webinars. From playing to developing,
-              testing to deploying, we'll cover it all in a way that is easy to understand. Master application
-              deployment and scaling from the comfort of your home. There's no deadline: enjoy learning Kubernetes and
-              solving challenges at your pace.
+              You will learn how to create, package and deploy your applications to Kubernetes from the comfort of your
+              home.
             </p>
+            <p className='f4-l lh-copy black-70 measure-wide'>
+              There's no deadline: enjoy learning Kubernetes and solving challenges at your pace.
+            </p>
+            <ul className='list mv4'>
+              <ListItem>
+                <span className='b'>Interactive lectures</span>
+              </ListItem>
+              <ListItem>
+                <span className='b'>Hands-on material</span>
+              </ListItem>
+              <ListItem>
+                <span className='b'>Designed for visual learners</span>
+              </ListItem>
+            </ul>
             <PrimaryButton href={getFullUrl(website.children.academy)} text='Learn more &#8594;' />
           </div>
         </div>
@@ -128,12 +161,26 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
         <div className='ph3'>
           <div className='measure-wide'>
-            <h2 className='f3 navy f2-l'>Quickstart Kubernetes training</h2>
+            <h2 className='f3 navy f2-l'>Advanced Kubernetes training</h2>
             <p className='f4-l lh-copy black-70'>
-              Hands-on modular courses that will train you how to deploy Kubernetes, how to get it into production, and
-              how to operate and manage it efficiently and effectively. The training course draws from the real world
-              examples making it perfect to quickly get up to speed with containers and Kubernetes.
+              Instructor-led, hands-on modular courses that will train you and your team on how to deploy apps into
+              Kubernetes.
             </p>
+            <p className='f4-l lh-copy black-70'>
+              The training course draws from the real world examples making it perfect to quickly get up to speed with
+              containers and Kubernetes.
+            </p>
+            <ul className='list mv4'>
+              <ListItem>
+                <span className='b'>Public courses</span>
+              </ListItem>
+              <ListItem>
+                <span className='b'>Private courses</span>
+              </ListItem>
+              <ListItem>
+                <span className='b'>Hands-on material</span>
+              </ListItem>
+            </ul>
             <PrimaryButton href={getFullUrl(website.children.training)} text='Get started &#8594;' />
           </div>
         </div>
@@ -144,11 +191,29 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           <div className='measure-wide'>
             <h2 className='f3 navy f2-l'>Enterprise-ready Kubernetes consulting</h2>
             <p className='f4-l lh-copy black-70'>
-              Have you already built a Kubernetes cluster, but want the confidence it won't die when you move into prod?
-              Our engineers have deployed production-ready Kubernetes for the hottest start-ups and the largest
-              Enterprises. Their wide variety of experience will enable you to get the most out of Kubernetes and make
-              sure you avoid unnecessary issues and pitfalls.
+              Have you already built a Kubernetes cluster, but want the confidence it won't die when you move into
+              production?
             </p>
+            <p className='f4-l lh-copy black-70'>
+              Our engineers have deployed production-ready Kubernetes for the hottest start-ups and the largest
+              Enterprises.
+            </p>
+            <p className='f4-l lh-copy black-70'>
+              {' '}
+              Their wide variety of experience will enable you to get the most out of Kubernetes and make sure you avoid
+              unnecessary issues and pitfalls.
+            </p>
+            <ul className='list mv4'>
+              <ListItem>
+                <span className='b'>Evaluate Kubernetes in your organisation</span>
+              </ListItem>
+              <ListItem>
+                <span className='b'>Assess your Kubernetes practices</span>
+              </ListItem>
+              <ListItem>
+                <span className='b'>Standardise your processes</span>
+              </ListItem>
+            </ul>
             <PrimaryButton href={getFullUrl(website.children.consulting)} text='Get started &#8594;' />
           </div>
         </div>
