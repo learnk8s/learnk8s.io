@@ -6,7 +6,7 @@ import { cat } from 'shelljs'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { ListItem } from '../layout'
+import { ListItem, PromoAcademy } from '../layout'
 
 export const Details = {
   type: identity<'scalingSpringBoot'>('scalingSpringBoot'),
@@ -105,38 +105,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         </RelatedContentItem>
       </RelatedConentContainer>
 
-      <div className='pt4'>
-        <p className='lh-copy f5 black-70'>↓ Caution: shameless plug ahead! Continue reading below ↓</p>
-        <h2 className='f2 pt0 pb2 mt2'>Become an expert at deploying and scaling applications in Kubernetes</h2>
-        <p className='lh-copy measure-wide f4'>
-          But how do you deal with thousands of <span className='i'>small</span> containers?
-        </p>
-        <p className='lh-copy measure-wide f4'>
-          You should learn how to leverage a container orchestrator such as Kubernetes.
-        </p>
-        <p className='lh-copy measure-wide f4'>
-          You can get a head start with our hands-on courses and learn how to master scalability in the cloud.
-        </p>
-        <p className='lh-copy measure-wide f4'>Learn how to:</p>
-        <ul className='list ph3'>
-          <ListItem>Handle the busiest traffic websites without breaking a sweat</ListItem>
-          <ListItem>Scale your jobs to thousands of servers and reduce the waiting time from days to minutes</ListItem>
-          <ListItem>Enjoy peace of mind knowing that your apps are highly available with a multi-cloud setup</ListItem>
-          <ListItem>Save a ton of cash on your cloud bill by using only the resources you need</ListItem>
-          <ListItem>Supercharge your delivery pipeline and deploy application around the clock</ListItem>
-        </ul>
-        <div className='pt2 pb4'>
-          <a href={getFullUrl(website.children.training)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3'>
-            Become an expert →
-          </a>
-        </div>
-        <p className='lh-copy f5'>
-          P.S. Don't miss the next experiment, insight, or <span className='b'>discount</span>:{' '}
-          <a href={getFullUrl(website.children.newsletter)} className='link navy underline hover-sky'>
-            subscribe to the mailing list!
-          </a>
-        </p>
-      </div>
+      <PromoAcademy sitemap={website} />
 
       <JSScript
         js={JSBundle({
