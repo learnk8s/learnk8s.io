@@ -16,7 +16,7 @@ The Kubernetes API is an **HTTP REST API**. This API is the real Kubernetes **us
 
 Consquently, the main job of kubectl is to carry out HTTP requests to the Kubernetes API:
 
-![](kubernetes-api.png)
+![kubectl architecture](kubectl-architecture-1.svg)
 
 > The Kubernetes API is fully **resource-centred**. This means, Kubernetes maintains an internal state of resources, and all Kubernetes operations are [**CRUD**](https://en.wikipedia.org/wiki/Create%2C_read%2C_update_and_delete) operations on these resources. You fully control Kubernetes by manipulating resources (and Kubernetes figures out what to do based on the current state of resources). For this reason, the Kubernetes [**API reference**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) is organised as a list of all the Kubernetes resources with their associated operations.
 
@@ -114,7 +114,7 @@ What happens now?
 
 The API request to the *create ReplicaSet* endpoint is handled by the **API server**. The API server authenticates the request and saves your ReplicaSet resource definition in the storage backend.
 
-This event triggers the **ReplicaSet controller**, which is a sub-process of the **controller manager**. The ReplicaSet controller watches for creations, updates, and deletions of ReplicaSet resources in the storage backend, and makes sure that the *status* of each ReplicaSet matches its *specification*. 
+This event triggers the **ReplicaSet controller**, which is a sub-process of the **controller manager**. The ReplicaSet controller watches for creations, updates, and deletions of ReplicaSet resources in the storage backend, and makes sure that the *status* of each ReplicaSet matches its *specification*.
 
 The ReplicaSet controller detects that there is a ReplicaSet but the corresponding replica Pod definitions are missing. Thus, the ReplicaSet controller creates these Pod definitions (according to the Pod template in the ReplicaSet definition) and saves them in the storage backend.
 
@@ -138,7 +138,7 @@ Consider the following examples:
 
 - The ReplicaSet controller watches for changes to the ReplicaSet resources by performing a [*list ReplicaSets*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#list-replicaset-v1-apps) operation with a `watch` parameter.
 - The ReplicaSet controller creates Pod resources by performing [*create Pod*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-pod-v1-core) operations.
-- The scheduler updates Pod resources with the worker node information by a [*patch Pod*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#patch-pod-v1-core) operation. 
+- The scheduler updates Pod resources with the worker node information by a [*patch Pod*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#patch-pod-v1-core) operation.
 
 In other words, the Kubernetes components do their work by simple HTTP requests to the Kubernetes API, exactly like kubectl.
 
