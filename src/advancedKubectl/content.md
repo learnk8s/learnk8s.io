@@ -136,13 +136,13 @@ As you can see, this is the **same API that is also used by kubectl**.
 
 This double usage of the Kubernetes API for internal components as well as for external users is a fundamental design concept of Kubernetes.
 
-With this knowledge, you can create a model of how Kubernetes works:
+With this knowledge, you can create a mental summary of how Kubernetes works:
 
 - The storage backend stores the state (i.e. resources) of Kubernetes.
 - The API server provides an interface to the storage backend in the form of the Kubernetes API.
 - All other components, as well as external users, read, watch, and manipulate the state (i.e. resources) of Kubernetes through the Kubernetes API.
 
-Being familiar with these concepts and the Kubernetes API **will help you a lot** to understand kubectl better and make the most use of it!
+Being familiar with these concepts **will help you a lot** to understand kubectl better and make the most use of it!
 
 Let's now look at a series of concrete tips and tricks to help you boosting your kubectl productivity.
 
@@ -150,7 +150,7 @@ Let's now look at a series of concrete tips and tricks to help you boosting your
 
 One of the most useful, but often overlooked, tricks to boost your kubectl productivity is command completion.
 
-This allows you to auto-complete command-line tokens for kubectl commands with the *Tab* key. These command-line tokens may be sub-commands, options, or arguments, including hard-to-type things like resource names.
+This allows you to auto-complete command-line words for kubectl commands with the *Tab* key. These command-line words may be sub-commands, options, or arguments, including hard-to-type things like resource names.
 
 Here you can see kubectl command completion in action:
 
@@ -304,59 +304,41 @@ autoload -Uz compinit
 compinit
 ~~~
 
-## 2. Quickly look up resource definitions
+## 2. Quickly look up resource specifications
 
-This tip will prove useful for many of the subsequent tips, and for your Kubernetes usage in general.
+This tip will prove useful for many of the subsequent tips.
 
-When you define a YAML or JSON manifest for a resource (e.g. a Deployment or a Service), you need to know the structure of this resource.
+When you create YAML resource definitions, you need to know the fields and their meanings of these resources. One location to look up this information is in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/), which contains the full specifications of all resources.
 
-In general, resources have a hierarchical structure consisting of fields and sub-fields, each field must be of a specific data type, and some fields are mandatory whereas other are optional.
+However, switching to a web browser each time you need to look up something is tedious. Therefore, kubectl provides the `kubectl explain` command, which can print out the full resource specifications of all resources right in your terminal.
 
-One way to look up all this information is in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) on the web.
-
-However, there is a better and quicker way, namely the `kubectl explain` command.
-
-This command displays you the fields and sub-fields of each resource type, including a description and the data type of each field.
-
-The information displayed by `kubectl explain` is the same as in the API reference, but you get it right in your terminal.
-
-The usage of this command is as follows:
+The usage of `kubectl explain` is as follows:
 
 ~~~bash
-kubectl explain resource[.field][.field]...
+kubectl explain resource[.field]...
 ~~~
 
-For example, if you want to look up the fields of a Deployment (one level deep), you can do that as follows:
+And the output is the specification of the resource or resource field. The displayed information is identical to the information in the API reference.
 
-~~~bash
-kubectl explain deployment
-~~~
-
-If you then want to drill down into the `spec` field of a Deployment, you can do it like that:
-
-~~~bash
-kubectl explain deployment.spec
-~~~
-
-And so on, for any fields and sub-fields.
+Here you can see `kubectl explain` in action:
 
 ![](explain.cast)
 
-By default, `kubectl explain` displays only a single level of fields.
-
-You can recursively display all the fields and sub-fields (without their descriptions) with the `--recursive` flag. For example:
+By default, `kubectl explain` displays only a single level of fields. You can recursively display all fields and sub-fields (without their descriptions) with the `--recursive` flag:
 
 ~~~bash
 kubectl explain deployment.spec --recursive
 ~~~
 
-In case you're not sure about which resources you can use with `kubectl explain`, you can display all of them with the following command:
+In case you're not sure about which resource names you can use with `kubectl explain`, you can display all of them with the following command:
 
 ~~~bash
 kubectl api-resources
 ~~~
 
-The above command displays the resource names in their plural forms (e.g. `deployments` instead of `deployment`). For applicable resources, it also displays their "shortname" (e.g. `deploy`). All of these name variants are in general equivalent for kubectl. That is, you can use any of these variants for `kubectl explain`.
+This command displays the resource names in their plural form (e.g. `deployments` instead of `deployment`). It also displays the shortname (e.g. `deploy`) for those resources that have one.
+
+Don't worry about these differences. In general, all of these name variants are equivalent for kubectl. That is, you can use any of them for `kubectl explain`.
 
 For example, all the following commands are equivalent:
 
