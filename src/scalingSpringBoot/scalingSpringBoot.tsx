@@ -36,7 +36,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
   return renderToStaticMarkup(
     <Article
       website={website}
-      siteUrl={siteUrl}
       seoTitle={currentNode.payload.seoTitle}
       title={currentNode.payload.title}
       description={currentNode.payload.description}
@@ -54,6 +53,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         ],
         styles: css,
       })}
+      publishedDate={currentNode.payload.publishedDate}
     >
       <JsonLd<BlogPosting>
         item={{

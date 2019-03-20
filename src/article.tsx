@@ -6,13 +6,17 @@ import { Sitemap } from './sitemap'
 import { Layout, Navbar, Footer } from './layout'
 import cheerio from 'cheerio'
 import { renderToStaticMarkup } from 'react-dom/server'
+import moment from 'moment'
 
 const loadLanguages = require('prismjs/components/')
 loadLanguages(['powershell', 'bash', 'docker', 'json', 'yaml', 'sql', 'ruby', 'java'])
 
+export const Assets = {
+  tick: Image({ url: 'assets/tick.svg', description: 'Tick' }),
+}
+
 export const Article: React.StatelessComponent<{
   website: Sitemap
-  siteUrl: string
   seoTitle: string
   title: string
   description: string
@@ -22,9 +26,10 @@ export const Article: React.StatelessComponent<{
   authorAvatar: Image
   authorLink: string
   cssBundle: CSSBundle
+  publishedDate: string
+  lastUpdated?: string
 }> = ({
   website,
-  siteUrl,
   seoTitle,
   title,
   description,
@@ -34,6 +39,8 @@ export const Article: React.StatelessComponent<{
   authorAvatar,
   authorLink,
   cssBundle,
+  publishedDate,
+  lastUpdated,
   children,
 }) => {
   return (
@@ -54,7 +61,13 @@ export const Article: React.StatelessComponent<{
       </div>
       <article className='ph3 pt0 pb4 mw7 center'>
         <h1 className='navy tc f2 f1-ns'>{title}</h1>
-        <Img image={openGraphImage} />
+        <p className='f7 black-60 tc ttu'>Published in {moment(publishedDate).format('MMMM YYYY')}</p>
+        {lastUpdated ? (
+          <p className='f7 black-60 tc ttu b'>
+            <Img image={Assets.tick} className='w1 h1 v-mid' /> Updated in {moment(lastUpdated).format('MMMM YYYY')}
+          </p>
+        ) : null}
+        <Img image={openGraphImage} className='pt2' />
         <hr className='w3 center b--navy mv4 mb5-ns' />
         {children}
       </article>
