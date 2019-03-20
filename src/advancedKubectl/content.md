@@ -348,9 +348,9 @@ kubectl explain deployment.spec
 kubectl explain deploy.spec
 ~~~
 
-## 3. Use custom output formats
+## 3. Use custom columns output
 
-When you use `kubectl get` to read Kubernetes resources, you get by default an output format like in the following example:
+The default output format of the `kubectl get` command (for *reading* resources) is as follows:
 
 ~~~bash
 $ kubectl get pods
@@ -361,79 +361,60 @@ engine-544b6b6467-tvgmg   1/1     Running   0          78d
 web-ui-6db964458-8pdw4    1/1     Running   0          78d
 ~~~
 
-This format is practical for human consumption, but it displays only a limited amount of information for each resource instance.
+That's a nice human-readable format, but it contains just a limited amount of information. Just some few fields of the resource definitions are shown.
 
-If you want more information, you could use the `-o json` or `-o yaml` option, but then kubectl displays the *full* definition of each resource, and that's probably more information than you want.
+That's where the [**custom columns**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#resource-operations) output format comes in. This options lets you freely define the columns and the data to display in them. You can choose *any* field of a resource definition (as stored in the storage backend) as an output column.
 
-Furthermore, JSON and YAML are intended for machine processing, and not as human-readable as the above table format.
+The usage of the custom columns output format is as follows:
 
-The ["custom columns"](https://kubernetes.io/docs/reference/kubectl/overview/#custom-columns) output format displays resources in a human-readable table format (as above), but allows you to define the information displayed in the table yourself.
+~~~
+-o custom-columns=&lt;header&gt;:&lt;jsonpath&gt;[,&lt;header&gt;:&lt;jsonpath&gt;]...
+~~~
 
-You use the custom columns output format with the `-o custom-columns=<spec>` option. Here is an example:
+You have to define each output column as a `<header>:<jsonpath>` pair:
+
+- `<header>` is the name of the column, and you can choose anything you want.
+- `<jsonpath>` is an expression that selects a field of the resource (explained in more detail below).
+
+Let's look at a simple example:
 
 ~~~bash
-kubectl get pods -o custom-columns='NAME:metadata.name,IMAGES:spec.containers[*].image'
+$ kubectl get pods -o custom-columns='NAME:metadata.name'
+NAME
+engine-544b6b6467-22qr6
+engine-544b6b6467-lw5t8
+engine-544b6b6467-tvgmg
+web-ui-6db964458-8pdw4
 ~~~
 
-As you can see, the `<spec>` part of the `-o custom-columns` option is as follows:
+This displays a single column with the names of all Pods.
 
-~~~
-NAME:metadata.name,IMAGES:spec.containers[*].image
-~~~
+The expression that selects the Pod names is `metadata.name`. The reason for this is that the name of a Pod is defined in the `name` field of the `metadata` field of a Pod resource (you can look this up in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#pod-v1-core) or with `kubectl explain pod.metadata.name`).
 
-It specifies two columns, one entitled `NAME` and the other entitled `IMAGES`, and defines which resource field value(s) to display in these columns. If you run this command, the output will be something like this:
+Now, imagine you want to add an additonal column to the output, for example, one that shows the node that each Pod is running on. To do so, just add an additional column specification:
 
-~~~
-NAME                       IMAGES
-rabbitmq-d4b77b989-t4wzm   rabbitmq:3.7.8-management,nginx
-test-pod                   nginx
-test-rc-hnhqm              nginx
-test-rc-zqz4n              nginx
-~~~
-
-As you can see, the output shows the name of each pod as well as the image names of all the containers that run as part of this pod.
-
-In general, the custom columns output format is used as follows:
-
-~~~
--o custom-columns=<header>:<jsonpath>[,<header>:<jsonpath>]...
+~~~bash
+$ kubectl get pods -o custom-columns='NAME:metadata.name,NODE:spec.nodeName'
+NAME                      NODE
+engine-544b6b6467-22qr6   ip-10-0-80-67.ec2.internal
+engine-544b6b6467-lw5t8   ip-10-0-36-80.ec2.internal
+engine-544b6b6467-tvgmg   ip-10-0-118-34.ec2.internal
+web-ui-6db964458-8pdw4    ip-10-0-118-34.ec2.internal
 ~~~
 
-That is, you specify a comma-separated list of `<header>:<jsonpath>` pairs, one for each column that you want in the output table.
+Here, the expression that selects the node name is `spec.nodeName`, because this is the field in the Pod resource specification that contains the name of the node the Pod has been scheduled to (see `kubectl explain pod.spec.nodeName`).
 
-The `<header>` part is the header of the column and you can freely choose it (it may also be empty). The `<jsonpath>` part is a specifier based on [JSONPath](https://goessner.net/articles/JsonPath/index.html) that selects a field value (or collection of field values) to display in the column.
+You can set *any* field of a resource as an output column in this way. Just browse the resource specifications and look for fields that interest you!
+
+But first, let's look more closely at these field selection expressions.
 
 ### JSONPath expressions
 
-JSONPath is a language to extract data from JSON documents. In kubectl, JSONPath is used to specify fields of resources for display.
+The expressions for selecting resource fields are based on [JSONPath](https://goessner.net/articles/JsonPath/index.html). 
 
-For example, in the above command the JSONPath expression for the `NAME` column is:
+JSONPath is a language to extract data from JSON documents (it is similar to XPath for XML). Selecting single field is only the most basic usage of JSONPath. It has [a lot of features](https://goessner.net/articles/JsonPath/index.html#e3), like list selectors, filters, and more.
 
-~~~
-metadata.name
-~~~
-
-If you look at the resource definition of a pod (which you can do either in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) or with `kubectl explain`), you see that the name of a pod is defined in the `metadata.name` field (see `kubectl explain pod.metadata.name`).
-
-Thus, if you want to display the name of a pod in the output table, you have to use this JSONPath expression.
-
-The JSONPath expression for the `IMAGES` column is:
-
-~~~
-spec.containers[*].image
-~~~
-
-This is also a valid JSONPath expression, but this time it contains an array operator. If you look at the definition of a pod, you see that the `spec.containers` field is a **list**, each element containing the definition of a container of this pod (see `kubectl explain pod.spec.containers`).
-
-When you encounter resource fields that are lists, then you can use the array operator `[]` in a JSONPath expression. The `*` is a wildcard array subscript operator that selects *all* elements of the array.
-
-Thus, in effect, this JSONPath expression the image names of *all* the containers in the pod, which will be displayed by kubectl as a comma-separated list.
-
-[JSONPath can do more than only that]((https://goessner.net/articles/JsonPath/index.html#e3)).
-
-However, for the kubectl custom columns output format, only a subset of these capabilites is supported.
-
-The supported capabilities are listed in the following with examples:
+However, for the field selector expressions, only a subset of the JSONPath capabilities are supported. The following summarises these supported advanced features with example usages:
 
 ~~~bash
 # Select all elements of a list
@@ -452,18 +433,34 @@ kubectl get pods -o custom-columns='DATA:metadata.*'
 kubectl get pods -o custom-columns='DATA:..image'
 ~~~
 
-### What else you can do with custom columns output
+Of particualar importance is the `[]` operator. Many fields of Kubernetes resources are lists, and this operator allows you to select items of these lists. It is often used with a wildcard as `[*]` to select all items of the list.
 
-The uses cases of the custom column output format are endless. You can display any combination of data you want and thus creating your custom "reports" of what's going on in your cluster. Just follow these steps:
+Below you will find some examples that use this notation.
 
-1. Explore the definition of a resource
-  - In the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/)
-  - With `kubectl explain`
-  - In the YAML or JSON representation of a resource that you get with `kubectl get -o <yaml|json>`
-2. Create JSONPath expressions to extract the data you want to display
-3. Assemble the `-o custom-columns` option
+### Applications
 
-Here is another example:
+Here are some ideas of what you can do with the custom columns output format.
+
+In general, the possibilites are endless, as you can display any field of a resource as an output column. Feel free to experiment and find usages that are useful for you!
+
+> **Tip:** if you use a command frequently, create a [shell alias](https://en.wikipedia.org/wiki/Alias_(command)#Creating_aliases) for it.
+
+#### Display container images of Pods
+
+~~~bash
+$ kubectl get pods -o custom-columns='NAME:metadata.name,IMAGES:spec.containers[*].image'
+NAME                       IMAGES
+engine-544b6b6467-22qr6    rabbitmq:3.7.8-management,nginx
+engine-544b6b6467-lw5t8    rabbitmq:3.7.8-management,nginx
+engine-544b6b6467-tvgmg    rabbitmq:3.7.8-management,nginx
+web-ui-6db964458-8pdw4     wordpress
+~~~
+
+This command displays the names of the container images of each Pod.
+
+> Remember that a Pod may contain more than one container. In that case, the container images are displayed as a comma-separated list in the same column.
+
+#### Display availability zones of nodes
 
 ~~~bash
 $ kubectl get nodes -o custom-columns='NAME:metadata.name,ZONE:metadata.labels.failure-domain\.beta\.kubernetes\.io/zone'
@@ -473,17 +470,20 @@ ip-10-0-36-80.ec2.internal    us-east-1a
 ip-10-0-80-67.ec2.internal    us-east-1b
 ~~~
 
-As you can see, this command displays which "zone" each node in the cluster is in. This applies if your cluster runs on a cloud infrastructure, such as AWS or GCP. In these environments, a "zone" is a replication area within a "region".
+This command can be useful if your Kubernetes cluster is deployed on a public cloud infrastructure (such as AWS or GCP). It displays the *availability zone* that each node is in.
 
-The JSONPath expression for the `ZONE` column selects the value of a special label called [`failure-domain.beta.kubernetes.io/zone`](https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#failure-domainbetakubernetesiozone).
+The availability zone is a cloud concept that denotes a point of replication within a geographical *region*.
 
-This label is populated with the "zone" of the node, if the cluster runs on a cloud infrastructure.
+The way the availability zone is obtained for each node is through the special label [`failure-domain.beta.kubernetes.io/zone`](https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#failure-domainbetakubernetesiozone). If the cluster runs on a public cloud infrastructure, then this label is automatically created, and its value is set to the name of the availability zone the node is in.
 
-Labels are custom data and are not specified in the API reference or in `kubectl explain`.
+Labels are not part of the Kubernetes resource specifications, so you can't find this label in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/). However, you can see it (as well as all other labels), if you output the nodes as YAML or JSON:
 
-So to see the full range of data you can display, you can explore the YAML or JSON definitions of your resources that you get with `kubectl get -o yaml` or `kubectl get -o json`.
+~~~bash
+kubectl get nodes -o yaml
+kubectl get nodes -o json
+~~~
 
-This is just one of many examples of what you can do with the custom columns output format. Feel free to explore your resources and find new use cases!
+This is generally a good way to disover even more information about your resources, in addition to exploring the [resource specifications](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/).
 
 <!--
 ### What `kubectl get` gets from the API server
