@@ -133,7 +133,7 @@ Looking nice!
 You can download Docker for Windows with:
 
 ```bash
-choco install docker-for-windows -y
+choco install docker-desktop -y
 ```
 
 Restart your laptop. Docker will ask you if you wish to enable Hyper-V.

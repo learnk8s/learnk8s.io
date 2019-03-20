@@ -20,6 +20,7 @@ export const Details = {
     description: 'Getting started with Docker and Kubernetes on Windows 10',
   }),
   publishedDate: '2018-06-05',
+  lastModifiedDate: '2019-03-20',
   previewImage: Image({
     url: 'src/k8sOnWindows/k8s_on_win.jpg',
     description: 'Getting started with Docker and Kubernetes on Windows 10',
@@ -79,7 +80,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
           url: getAbsoluteUrl(currentNode, siteUrl),
           datePublished: currentNode.payload.publishedDate,
-          dateModified: currentNode.payload.publishedDate,
+          dateModified: currentNode.payload.lastModifiedDate,
           description: currentNode.payload.description,
           mainEntityOfPage: {
             '@type': 'SoftwareSourceCode',
