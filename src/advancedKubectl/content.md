@@ -16,7 +16,7 @@ The Kubernetes API is an **HTTP REST API**. This API is the real Kubernetes **us
 
 Consequently, the main job of kubectl is to carry out HTTP requests to the Kubernetes API:
 
-![kubectl architecture](kubectl-architecture-1.svg)
+![Kubernetes API](kubernetes-api.svg)
 
 > Kubernetes is fully **resource-centred**. That means, Kubernetes maintains an internal state of resources, and all Kubernetes operations are [**CRUD**](https://en.wikipedia.org/wiki/Create%2C_read%2C_update_and_delete) operations on these resources. You fully control Kubernetes through manipulation of these resources (and Kubernetes figures out what to do based on the current state of resources). For this reason, the Kubernetes [**API reference**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) is organised as a list of resource types with their associated operations.
 
@@ -75,31 +75,31 @@ What happens now?
   "description": "Walkthrough from the creation of a ReplicaSet to the execution of the containers on the worker nodes.",
   "slides": [
     {
-      "image": "schedule-pods-1.svg",
+      "image": "kubernetes-internals-1.svg",
       "description": "After running `kubectl create -f replicaset.yaml`, the API server saves you ReplicaSet resource definition in the storage backend."
     },
     {
-      "image": "schedule-pods-2.svg",
+      "image": "kubernetes-internals-2.svg",
       "description": "This triggers the ReplicaSet controller in the controller manager, who watches for creations, updates, and deletions of ReplicaSet resources."
     },
     {
-      "image": "schedule-pods-3.svg",
+      "image": "kubernetes-internals-3.svg",
       "description": "The ReplicaSet controller creates a Pod definition for each replica of the ReplicaSet (according to the Pod template in the ReplicaSet definition) and saves them in the storage backend."
     },
     {
-      "image": "schedule-pods-4.svg",
+      "image": "kubernetes-internals-4.svg",
       "description": "This triggers the scheduler who watches for Pods that have not yet been assigned to a worker node."
     },
     {
-      "image": "schedule-pods-5.svg",
+      "image": "kubernetes-internals-5.svg",
       "description": "The scheduler chooses a suitable worker node for each Pod and adds this information to the Pod definitions in the storage backend."
     },
     {
-      "image": "schedule-pods-6.svg",
+      "image": "kubernetes-internals-6.svg",
       "description": "This triggers the kubelet on the worker node that the Pods have been scheduled to, who watches for Pods that have been scheduled to its worker node."
     },
     {
-      "image": "schedule-pods-7.svg",
+      "image": "kubernetes-internals-7.svg",
       "description": "The kubelet reads the Pod definitions, downloads the required container images, and runs the containers via Docker (or another container runtime) on the worker node."
     }
   ]
