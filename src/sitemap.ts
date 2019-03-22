@@ -27,6 +27,8 @@ import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 
+import * as AskKubernetesExpert1903 from './qa01/qa01'
+
 import { Venues, Timezone } from './courses'
 import moment from 'moment-timezone'
 
@@ -92,6 +94,10 @@ const blogPosts = {
   whatIsKubernetes: createNode({
     page: WhatIsKubernetes.Details,
     children: {},
+  }),
+  askExpert1903: createNode({
+    page: AskKubernetesExpert1903.Details,
+    children: {}
   }),
 }
 

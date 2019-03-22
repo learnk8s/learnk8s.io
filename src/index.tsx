@@ -34,6 +34,8 @@ import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 
+import * as AskKubernetesExpert1903 from './qa01/qa01'
+
 export function run(options: Settings) {
   return function mount(root: Sitemap) {
     renderTree(root, root)
@@ -155,6 +157,10 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     }
     case Landing.Type: {
       writeFileSync(generatePath(), `<!DOCTYPE html>${Landing.render(root, node, siteUrl)}`)
+      return
+    }
+    case AskKubernetesExpert1903.Details.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${AskKubernetesExpert1903.render(root, node, siteUrl)}`)
       return
     }
     case WebAppManifest.Details.type: {
