@@ -1,12 +1,12 @@
-If you work with Kubernetes, you use kubectl. And you probably use it *a lot*. Whenever you spend a lot of time working with a tool, it is worth to get to know it very well and learn to use it as efficiently as possible.
+If you work with Kubernetes, you must use kubectl. And you probably use it *a lot*. Whenever you spend a lot of time working with a tool, it is worth to get to know it very well and learn how to use it efficiently.
 
-This article contains a set of tips and tricks to make boost your kubectl productivity. At the same time, this article also aims at deepening your understanding of how various aspects of Kubernetes work.
+This article contains a set of tips and tricks to help you boosting your kubectl productivity. At the same time, this article also aims at deepening your understanding of how various aspects of Kubernetes work.
 
 The goal of this article is not only to make your daily work with Kubernetes more efficient, but also more enjoyable!
 
 ## Understanding kubectl
 
-Before learning how to use kubectl more efficiently, you should have a basic understanding of what it actually is.
+Before learning how to use kubectl more efficiently, you should have a basic understanding of what it is and how it works.
 
 From a user's point of view, kubectl your cockpit to control Kubernetes. It allows you to perform every possible Kubernetes operation.
 
@@ -22,7 +22,7 @@ Consequently, the main job of kubectl is to carry out HTTP requests to the Kuber
 
 Let's consider an example.
 
-Imagine you want to create a [ReplicaSet](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#replicaset-v1-apps) resource. To do so, you would define the ReplicaSet in the `replicaset.yaml` file, and then run the following command:
+Imagine you want to create a [ReplicaSet](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#replicaset-v1-apps) resource. To do so, you would define the ReplicaSet in a file named `replicaset.yaml` file, and then run the following command:
 
 ~~~bash
 kubectl create -f replicaset.yaml
@@ -30,23 +30,22 @@ kubectl create -f replicaset.yaml
 
 Obviously, this creates your ReplicaSet in Kubernetes. But what happens behind the scenes?
 
-Kubernetes has a *create ReplicaSet* operation, and the API endpoint that exposes this operation is as follows:
+Kubernetes has a *create ReplicaSet* operation, and like all Kubernetes operations, it is exposed as an API endpoint. The specific API endpoint for this operation is as follows:
 
 ~~~
 POST /apis/apps/v1/namespaces/{namespace}/replicasets
 ~~~
 
-> You can find the API endpoints of all Kubernetes operations in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13) (including the [above endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps)).
+> You can find the API endpoints of all Kubernetes operations in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13) (including the [above endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps)). Note that to make a request, you need to prepend IP address or DNS name of the API server to the endpoint paths that are listed in the API reference.
 
-Thus, behind the scenes, the above kubectl command makes an HTTP POST request to the above endpoint, passing the ReplicaSet definition (the content of the `replicaset.yaml` file) in the request body.
+Consequently, what the above kubectl command actually does, is an HTTP POST request to the above API endpoint. The ReplicaSet definition (that you provided in the `replicaset.yaml` file) is passed in the body of the request.
 
-This is how *all* kubectl command (that access the Kubernetes API) are implemented. They simply make HTTP requests to endopints of the Kubernetes API.
+This is how *all* kubectl command (that interact with Kubernetes) are implemented. They simply make appropriate HTTP requests to the endopints of the Kubernetes API.
 
-> It's totally possible to fully control Kubernetes with a tool like `curl` by manually issuing HTTP requests to the Kubernetes API. Kubectl just makes it easier for you to use the Kubernetes API.
+> Note that it's totally possible to control Kubernetes with a tool like `curl` by manually issuing HTTP requests to the Kubernetes API. Kubectl just makes it easier for you to use the Kubernetes API.
 
 These are the basics of what kubectl is. But there is much more about the Kubernetes API that every kubectl user should know. To this end, let's briefly dive into the Kubernetes internals.
 
-<!--If you're very impatient, you can [jump to the next section →](#1-save-typing-with-command-completion)-->
 
 ### Kubernetes internals
 
@@ -63,11 +62,11 @@ And the most important component running on each worker node is:
 
 - **kubelet:** manages execution of containers on a worker node
 
-To see how these components work together, let's consider an example. Actually, let's just continue the ReplicaSet example from above.
+To see how these components work together, let's consider an example.
 
 Assume, you just executed `kubectl create -f replicaset.yaml`, upon which kubectl made an HTTP POST request to the [*create ReplicaSet* API endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps).
 
-What happens now?
+What happens now inside Kubernetes?
 
 
 ```slideshow
@@ -76,7 +75,7 @@ What happens now?
   "slides": [
     {
       "image": "kubernetes-internals-1.svg",
-      "description": "After running `kubectl create -f replicaset.yaml`, the API server saves you ReplicaSet resource definition in the storage backend."
+      "description": "Following `kubectl create -f replicaset.yaml`, the API server saves your ReplicaSet resource definition in the storage backend."
     },
     {
       "image": "kubernetes-internals-2.svg",
