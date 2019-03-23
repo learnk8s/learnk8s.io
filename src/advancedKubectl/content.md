@@ -1,10 +1,20 @@
-If you work with Kubernetes, you must use kubectl. And you probably use it *a lot*. Whenever you spend a lot of time working with a tool, it is worth to get to know it very well and learn how to use it efficiently.
+If you work with Kubernetes, then kubectl is probably one of your most-used tools. Whenever you spend a lot of time working with a specific tool, it is worth to get to know it very well and learn how to use it efficiently.
 
-This article contains a set of tips and tricks to help you boosting your kubectl productivity. At the same time, this article also aims at deepening your understanding of how various aspects of Kubernetes work.
+This article contains a series of tips and tricks to help you boosting your kubectl productivity. At the same time, this article aims at deepening your understanding of how various aspects of Kubernetes work.
 
 The goal of this article is not only to make your daily work with Kubernetes more efficient, but also more enjoyable!
 
-## Understanding kubectl
+## Contents
+
+- [**Introduction: what is kubectl?**](#introduction-what-is-kubectl-)
+- [**1. Save typing with command completion**](#1-save-typing-with-command-completion)
+- [**2. Quickly look up resource specifications**](#2-quickly-look-up-resource-specifications)
+- [**3. Use the custom columns output format**](#3-use-the-custom-columns-output-format)
+- [**4. Switch between clusters and namespaces with ease**](#4-switch-between-clusters-and-namespaces-with-ease)
+- [**5. Save typing with auto-generated aliases**](#5-save-typing-with-auto-generated-aliases)
+- [**6. Extend kubectl with plugins**](#6-extend-kubectl-with-plugins)
+
+## Introduction: what is kubectl?
 
 Before learning how to use kubectl more efficiently, you should have a basic understanding of what it is and how it works.
 
@@ -64,7 +74,7 @@ And the most important component running on each worker node is:
 
 To see how these components work together, let's consider an example.
 
-Assume, you just executed `kubectl create -f replicaset.yaml`, upon which kubectl made an HTTP POST request to the [*create ReplicaSet* API endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps).
+Assume, you just executed `kubectl create -f replicaset.yaml`, upon which kubectl made an HTTP POST request to the [*create ReplicaSet* API endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) (passing along your ReplicaSet resource definition).
 
 What happens now inside Kubernetes?
 
@@ -99,7 +109,7 @@ What happens now inside Kubernetes?
     },
     {
       "image": "kubernetes-internals-7.svg",
-      "description": "The kubelet reads the Pod definitions, downloads the required container images, and runs the containers via Docker (or another container runtime) on the worker node."
+      "description": "The kubelet reads the Pod definitions from the storage backend, downloads the required container images, and runs the containers via Docker (or another container runtime) on the worker node."
     }
   ]
 }
@@ -223,7 +233,7 @@ Both approaches are equivalent.
 
 After reloading your shell, kubectl completion should be working!
 
-[Jump to the next section →](#quickly-access-resource-documentation-with-kubectl-explain)
+[Jump to the next section →](#2-quickly-look-up-resource-specifications)
 
 ### Bash on macOS
 
@@ -284,7 +294,7 @@ All these approaches are equivalent.
 
 After reloading your shell, kubectl completion should be working!
 
-[Jump to the next section →](#quickly-access-resource-documentation-with-kubectl-explain)
+[Jump to the next section →](#2-quickly-look-up-resource-specifications)
 
 ### Zsh
 
@@ -347,7 +357,7 @@ kubectl explain deployment.spec
 kubectl explain deploy.spec
 ~~~
 
-## 3. Use custom columns output
+## 3. Use the custom columns output format
 
 The default output format of the `kubectl get` command (for *reading* resources) is as follows:
 
@@ -1059,7 +1069,7 @@ You just have to create an executable file that does what you want, give it a na
 
 The executable can be of *any* type, a Bash script, a compiled Go program, a Python script, it really doesn't matter. The only requirement is that it can be directly executed by the operating system.
 
-Let's create an example plugin right now. In a [previous section](#3-use-custom-columns-output), you used a kubectl command to list the container images of each pod. You can easily turn this command into a plugin that you can invoke with, say, `kubectl img`.
+Let's create an example plugin right now. In a [previous section](#3-use-the-custom-columns-output-format), you used a kubectl command to list the container images of each pod. You can easily turn this command into a plugin that you can invoke with, say, `kubectl img`.
 
 To do so, just create a file named `kubectl-img` with the following content:
 
