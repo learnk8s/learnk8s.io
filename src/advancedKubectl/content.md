@@ -46,7 +46,7 @@ Kubernetes has a *create ReplicaSet* operation, and like all Kubernetes operatio
 POST /apis/apps/v1/namespaces/{namespace}/replicasets
 ~~~
 
-> You can find the API endpoints of all Kubernetes operations in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13) (including the [above endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps)). Note that to make a request, you need to prepend IP address or DNS name of the API server to the endpoint paths that are listed in the API reference.
+> You can find the API endpoints of all Kubernetes operations in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13) (including the [above endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps)). Note that to make a request, you need to prepend the base URL of the API server to the endpoint paths that are listed in the API reference.
 
 Consequently, what the above kubectl command actually does, is an HTTP POST request to the above API endpoint. The ReplicaSet definition (that you provided in the `replicaset.yaml` file) is passed in the body of the request.
 
@@ -159,38 +159,38 @@ Let's now look at a series of concrete tips and tricks to help you boosting your
 
 One of the most useful, but often overlooked, tricks to boost your kubectl productivity is command completion.
 
-This allows you to auto-complete command-line words for kubectl commands with the *Tab* key. These command-line words may be sub-commands, options, or arguments, including hard-to-type things like resource names.
+Command completion allows you to auto-complete the individual parts of kubectl command with the *Tab* key. This works for sub-commands, options, and arguments, including hard-to-type things like resource names.
 
-Here you can see kubectl command completion in action:
+Here you can see kubectl command completion in action (using the Zsh shell):
 
 ![](autocompletion.cast)
 
 Command completion is available for the [**Bash**](https://www.gnu.org/software/bash/) and [**Zsh**](https://www.zsh.org/) shells.
 
-There are detailed instructions for setting up command completion in the [official documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion), but below is a short recap.
+The [official documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion) contains detailed instructions for setting up command completion, but the following sections provide a recap for you.
 
-### General notes
+### How command completion works
 
-In general, command completion works by the means of **completion scripts**. A completion script is shell script that defines the completion behaviour for a specific command. Sourcing a completion script in your shell, enables command completion for the corresponding command.
+In general, command completion is a shell feature that works by the means of a **completion script**. A completion script is shell script that defines the completion behaviour for a specific command. To enable completion for a command, you have to source its completion script.
 
-Kubectl can conveniently print out its completion scripts for Bash and Zsh with the following commands:
+Kubectl can automatically generate and print out the completion scripts for Bash and Zsh with the following commands:
 
 ~~~
 kubectl completion bash
 kubectl completion zsh
 ~~~
 
-In principle, sourcing the output of these commands in the respective shells, enables kubectl command completion.
+In theory, sourcing the output of this command in the approprate shell enables kubectl command completion.
 
-However, the details differ for Bash (including a difference between Linux and macOS) and Zsh. All these cases are explained in the following.
+However, in practice, the details differ for Bash (including a difference between Linux and macOS) and Zsh. The following sections explain all these cases:
 
-- [Setting up command completion for Bash on Linux](#bash-on-linux)
-- [Setting up command completion for Bash on macOS](#bash-on-macos)
-- [Setting up command completion for Zsh](#zsh)
+- [**Set up command completion for Bash on Linux**](#bash-on-linux)
+- [**Set up command completion for Bash on macOS**](#bash-on-macos)
+- [**Set up command completion for Zsh**](#zsh)
 
 ### Bash on Linux
 
-The completion script for Bash depends on the [**bash-completion**](https://github.com/scop/bash-completion) package, so you have to install that first.
+The completion script for Bash depends on the [**bash-completion**](https://github.com/scop/bash-completion) project, so you have to install that first.
 
 You can install bash-completion with [various package managers](https://github.com/scop/bash-completion#installation). For example:
 
@@ -205,7 +205,7 @@ You can test if bash-completion is correctly installed with the following comman
 type _init_completion
 ~~~
 
-If this outputs the code of a function, then the installation is complete. If it outputs a `not found` error, you have to add the following line to your `~/.bashrc` file:
+If this outputs the code of shell function, then bash-completion has been correctly installed. If the command outputs a `not found` error, you have to add the following line to your `~/.bashrc` file:
 
 ~~~bash
 source /usr/share/bash-completion/bash_completion
@@ -213,7 +213,7 @@ source /usr/share/bash-completion/bash_completion
 
 > Whether you have to add this line to your `~/.bashrc` file or not, depends on the package manager you used to install bash-completion. For APT it's necessary, for yum not.
 
-Once bash-completion is installed, you have to ensure that the kubectl **completion script** gets sourced in all your shell sessions.
+Once bash-completion is installed, you have to set things up so that the kubectl **completion script** gets sourced in all your shell sessions.
 
 One way to do this is to add the following line to your `~/.bashrc` file:
 
@@ -221,31 +221,31 @@ One way to do this is to add the following line to your `~/.bashrc` file:
 source <(kubectl completion bash)
 ~~~
 
-Another possibility is to add the completion script to the `/etc/bash_completion.d` directory (you might have to create this directory if it doesn't exist):
+Another possibility is to add the kubectl completion script to the `/etc/bash_completion.d` directory (you can create this directory if it doesn't exist):
 
 ~~~bash
 kubectl completion bash >/etc/bash_completion.d/kubectl
 ~~~
 
-> Completion scripts in `/etc/bash_completion.d` are sourced by bash-completion.
+> All completion scripts in the `/etc/bash_completion.d` directory are automatically sourced by bash-completion.
 
 Both approaches are equivalent.
 
-After reloading your shell, kubectl completion should be working!
+After reloading your shell, kubectl command completion should be working!
 
 [Jump to the next section →](#2-quickly-look-up-resource-specifications)
 
 ### Bash on macOS
 
-With macOS there is a slight complication. The reason is that the default version of Bash on macOS is 3.2, which is hopelessly outdated. The kubectl completion script unfortunately doesn't work with this version of Bash, it requires at least Bash 4.1.
+With macOS there is a slight complication. The reason is that the default version of Bash on macOS is 3.2, which is quite outdated. The kubectl completion script unfortunately requires at least Bash 4.1 and thus doesn't work with Bash 3.2.
 
 > The reason that Apple includes an outdated version of Bash in macOS is that newer versions use the [GPLv3](https://en.wikipedia.org/wiki/GNU_General_Public_License) license, which Apple doesn't support.
 
-That means, to use kubectl command completion on macOS, you have to **install a newer version of Bash**. You can even make this new Bash your default shell, which will save you a lot of trouble of this kind in the future. It's actually a quick and easy process, and I wrote an [**Upgrading Bash on macOS**](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba) article about it.
+That means, to use kubectl command completion on macOS, you have to **install a newer version of Bash**. You can even make it your new default shell, which will save you a lot of trouble of this kind in the future. It's actually not difficult, and you can find instructions in an [**Upgrading Bash on macOS**](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba) article that I wrote previously.
 
 *Before continuing, make sure that you are now indeed using Bash 4.1 or newer (find out with `bash --version`).*
 
-The kubectl completion script for Bash depends on [**bash-completion**](https://github.com/scop/bash-completion), so you have to install this first.
+The completion script for Bash depends on the [**bash-completion**](https://github.com/scop/bash-completion) project, so you have to install that first.
 
 You can install bash-completion with [Homebrew](https://brew.sh):
 
@@ -253,16 +253,16 @@ You can install bash-completion with [Homebrew](https://brew.sh):
 brew install bash-completion@2
 ~~~
 
-> The `@2` at stands for version 2 of bash-completion, and the kubectl completion script works only with this version. However, bash-completion 2 works only with Bash 4.1+, and that's the reason that you can use the kubectl completion script only with Bash 4.1+.
+> The `@2` at stands for of **bash-completion v2**. The kubectl completion script requires bash-completion v2, and bash-completion v2 requires at least Bash 4.1. This is the reason that you can't use the kubectl completion script on Bash versions lower than 4.1.
 
-The output of the `brew install` command includes instructions to add the following lines to your `~/.bash_profile` file:
+The output of the `brew install` command includes a "Caveats" section with instructions to add the following lines to your `~/.bash_profile` file:
 
 ~~~bash
 export BASH_COMPLETION_COMPAT_DIR=/usr/local/etc/bash_completion.d
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 ~~~
 
-You have to do this to complete the installation of bash-completion, but I recommend adding it to the `~/.bashrc` file instead. This ensures that bash-completion is also available in sub-shells.
+You have to do this in order to complete the installation of bash-completion. However, I recommend adding these lines to your `~/.bashrc` instead of `~/.bash_profile` file. This ensures that bash-completion is also available in sub-shells.
 
 After reloading your shell, you can test if bash-completion is correctly installed with the following command:
 
@@ -270,9 +270,9 @@ After reloading your shell, you can test if bash-completion is correctly install
 type _init_completion
 ~~~
 
-If this outputs the code of a function, then the installation was successful.
+If this outputs the code of a shell function, then you're all set.
 
-Now, all you have to do is ensuring that the kubectl **completion script** gets sourced in all your shell sessions.
+Now, you have to set things up so that the kubectl **completion script** gets sourced in all your shell sessions.
 
 One way to do this is to add the following line to your `~/.bashrc` file:
 
@@ -280,7 +280,7 @@ One way to do this is to add the following line to your `~/.bashrc` file:
 source <(kubectl completion bash)
 ~~~
 
-Another option is to add the completion script to the `/usr/local/etc/bash_completion.d` directory:
+Another possibility is to add the kubectl completion script to the `/usr/local/etc/bash_completion.d` directory:
 
 ~~~bash
 kubectl completion bash >/usr/local/etc/bash_completion.d/kubectl
@@ -288,9 +288,9 @@ kubectl completion bash >/usr/local/etc/bash_completion.d/kubectl
 
 > This only works if you installed bash-completion with Homebrew. In that case, bash-completion sources all completion scripts in this directory.
 
-In case you [installed kubectl with Homebrew](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-homebrew-on-macos), you don't even have to do the above, because the completion script has already been put in the `/usr/local/etc/bash_completion.d` directory by the kubectl Homebrew formula.
+In case you also [installed kubectl with Homebrew](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-homebrew-on-macos), you don't even have to do the above step, because the completion script should already have been put in the `/usr/local/etc/bash_completion.d` directory by the kubectl Homebrew formula. In that case, kubectl completion should just start working automatically after installing bash-completion.
 
-All these approaches are equivalent.
+In the end, all of these approaches are equivalent.
 
 After reloading your shell, kubectl completion should be working!
 
@@ -298,7 +298,7 @@ After reloading your shell, kubectl completion should be working!
 
 ### Zsh
 
-The completion script for Zsh doesn't have any dependencies. So, all you have to do is to ensure that it gets sourced in all your shell sessions.
+The completion script for Zsh doesn't have any dependencies. So, all you have to do is to set things up so it gets sourced in all your shell sessions.
 
 You can do this by adding the following line to your `~/.zshrc` file:
 
@@ -315,11 +315,9 @@ compinit
 
 ## 2. Quickly look up resource specifications
 
-This tip will prove useful for many of the subsequent tips.
-
 When you create YAML resource definitions, you need to know the fields and their meanings of these resources. One location to look up this information is in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/), which contains the full specifications of all resources.
 
-However, switching to a web browser each time you need to look up something is tedious. Therefore, kubectl provides the `kubectl explain` command, which can print out the full resource specifications of all resources right in your terminal.
+However, switching to a web browser each time you need to look up something is tedious. Therefore, kubectl provides the `kubectl explain` command, which can print out the resource specifications of all resources right in your terminal.
 
 The usage of `kubectl explain` is as follows:
 
@@ -327,29 +325,27 @@ The usage of `kubectl explain` is as follows:
 kubectl explain resource[.field]...
 ~~~
 
-And the output is the specification of the resource or resource field. The displayed information is identical to the information in the API reference.
+The command outputs the specification of the requested resource or field. The information shown by `kubectl explain` is identical to the information in the API reference.
 
 Here you can see `kubectl explain` in action:
 
 ![](explain.cast)
 
-By default, `kubectl explain` displays only a single level of fields. You can recursively display all fields and sub-fields (without their descriptions) with the `--recursive` flag:
+By default, `kubectl explain` displays only a single level of fields. You can display the **entire tree** of fields with the `--recursive` flag:
 
 ~~~bash
 kubectl explain deployment.spec --recursive
 ~~~
 
-In case you're not sure about which resource names you can use with `kubectl explain`, you can display all of them with the following command:
+In case you're not sure about which **resource names** you can use with `kubectl explain`, you can display all of them with the following command:
 
 ~~~bash
 kubectl api-resources
 ~~~
 
-This command displays the resource names in their plural form (e.g. `deployments` instead of `deployment`). It also displays the shortname (e.g. `deploy`) for those resources that have one.
+This command displays the resource names in their plural form (e.g. `deployments` instead of `deployment`). It also displays the shortname (e.g. `deploy`) for those resources that have one. Don't worry about these differences. All of these name variants are equivalent for kubectl. That is, you can use any of them for `kubectl explain`.
 
-Don't worry about these differences. In general, all of these name variants are equivalent for kubectl. That is, you can use any of them for `kubectl explain`.
-
-For example, all the following commands are equivalent:
+For example, all of the following commands are equivalent:
 
 ~~~bash
 kubectl explain deployments.spec
@@ -370,11 +366,11 @@ engine-544b6b6467-tvgmg   1/1     Running   0          78d
 web-ui-6db964458-8pdw4    1/1     Running   0          78d
 ~~~
 
-That's a nice human-readable format, but it contains just a limited amount of information. Just some few fields of the resource definitions are shown.
+That's a nice human-readable format, but it contains only a limited amount of information. As you can see, just some few fields (compared to the full resource definitions) are shown for each resource.
 
-That's where the [**custom columns**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#resource-operations) output format comes in. This options lets you freely define the output columns and the data to display in them. You can choose *any* field of a resource definition (as stored in the storage backend) as an output column.
+That's where the [**custom columns**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#resource-operations) output format comes in. This output format lets you freely define the columns and the data to display in them. You can choose *any* field of a resource to be displayed as a separate column in the output
 
-The usage of the custom columns output format is as follows:
+The usage of the custom columns output option is as follows:
 
 ~~~
 -o custom-columns=&lt;header&gt;:&lt;jsonpath&gt;[,&lt;header&gt;:&lt;jsonpath&gt;]...
@@ -382,8 +378,8 @@ The usage of the custom columns output format is as follows:
 
 You have to define each output column as a `<header>:<jsonpath>` pair:
 
-- `<header>` is the name of the column, and you can choose anything you want.
-- `<jsonpath>` is an expression that selects a field of the resource (explained in more detail below).
+- `<header>` is the name of the column, you can choose anything you want.
+- `<jsonpath>` is an expression that selects a resource field (explained in more detail below).
 
 Let's look at a simple example:
 
@@ -396,11 +392,11 @@ engine-544b6b6467-tvgmg
 web-ui-6db964458-8pdw4
 ~~~
 
-This displays a single column with the names of all Pods.
+Here, the output consists of a single column displaying the names of all Pods.
 
-The expression that selects the Pod names is `metadata.name`. The reason for this is that the name of a Pod is defined in the `name` field of the `metadata` field of a Pod resource (you can look this up in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#pod-v1-core) or with `kubectl explain pod.metadata.name`).
+The expression selecting the Pod names is `metadata.name`. The reason for this is that the name of a Pod is defined in the `name` field of the `metadata` field of a Pod resource (you can look this up in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#pod-v1-core) or with `kubectl explain pod.metadata.name`).
 
-Now, imagine you want to add an additonal column to the output, for example, one that shows the node that each Pod is running on. To do so, just add an additional column specification:
+Now, imagine you want to add an additonal column to the output, for example, showing the node that each Pod is running on. To do so, you can just add an appropriate column specification to the custom columns option:
 
 ~~~bash
 $ kubectl get pods -o custom-columns='NAME:metadata.name,NODE:spec.nodeName'
@@ -411,11 +407,13 @@ engine-544b6b6467-tvgmg   ip-10-0-118-34.ec2.internal
 web-ui-6db964458-8pdw4    ip-10-0-118-34.ec2.internal
 ~~~
 
-Here, the expression that selects the node name is `spec.nodeName`, because this is the field in the Pod resource specification that contains the name of the node the Pod has been scheduled to (see `kubectl explain pod.spec.nodeName`).
+The expression selecting the node name is `spec.nodeName`. This is because the node a Pod has been scheduled to is saved in the `spec.nodeName` field of a Pod (see `kubectl explain pod.spec.nodeName`).
 
-You can set *any* field of a resource as an output column in this way. Just browse the resource specifications and look for fields that interest you!
+> Note that Kubernetes resource fields are **case-sensitive**.
 
-But first, let's look more closely at these field selection expressions.
+You can set *any* field of a resource as an output column in that way. Just browse the resource specifications and try it out with any fields you like!
+
+But first, let's have a closer look at these field selection expressions.
 
 ### JSONPath expressions
 
@@ -423,7 +421,7 @@ The expressions for selecting resource fields are based on [JSONPath](https://go
 
 JSONPath is a language to extract data from JSON documents (it is similar to XPath for XML). Selecting single field is only the most basic usage of JSONPath. It has [a lot of features](https://goessner.net/articles/JsonPath/index.html#e3), like list selectors, filters, and more.
 
-However, for the field selector expressions, only a subset of the JSONPath capabilities are supported. The following summarises these supported advanced features with example usages:
+However, with `kubectl explain`, only a subset of the JSONPath capabilities are supported. The following summarises these supported features with example usages:
 
 ~~~bash
 # Select all elements of a list
@@ -446,13 +444,11 @@ Of particualar importance is the `[]` operator. Many fields of Kubernetes resour
 
 Below you will find some examples that use this notation.
 
-### Applications
+### Example applications
 
-Here are some ideas of what you can do with the custom columns output format.
+The possibilites for using the custom columns output format are endless, as you can display any field, or combination of fields, of a resource in the output. Here are some example applications, but feel free to explore on your own and find applications that are useful to you!
 
-In general, the possibilites are endless, as you can display any field of a resource as an output column. Feel free to experiment and find usages that are useful for you!
-
-> **Tip:** if you use a command frequently, create a [shell alias](https://en.wikipedia.org/wiki/Alias_(command)#Creating_aliases) for it.
+> **Tip:** if you end up using one of these a commands frequently, you can create a [shell alias](https://en.wikipedia.org/wiki/Alias_(command)#Creating_aliases) for it.
 
 #### Display container images of Pods
 
@@ -465,9 +461,9 @@ engine-544b6b6467-tvgmg    rabbitmq:3.7.8-management,nginx
 web-ui-6db964458-8pdw4     wordpress
 ~~~
 
-This command displays the names of the container images of each Pod.
+This command displays the names of all the container images of each Pod.
 
-> Remember that a Pod may contain more than one container. In that case, the container images are displayed as a comma-separated list in the same column.
+> Remember that a Pod may contain more than one container. In that case, the container images of a single Pod are displayed as a comma-separated list in the same column.
 
 #### Display availability zones of nodes
 
@@ -481,11 +477,11 @@ ip-10-0-80-67.ec2.internal    us-east-1b
 
 This command can be useful if your Kubernetes cluster is deployed on a public cloud infrastructure (such as AWS, Azure, or GCP). It displays the *availability zone* that each node is in.
 
-The availability zone is a cloud concept that denotes a point of replication within a geographical *region*.
+> The *availability zone* is a cloud concept that denotes a point of replication within a geographical *region*.
 
-The way the availability zone is obtained for each node is through the special label [`failure-domain.beta.kubernetes.io/zone`](https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#failure-domainbetakubernetesiozone). If the cluster runs on a public cloud infrastructure, then this label is automatically created, and its value is set to the name of the availability zone the node is in.
+The availability zones for each node are obtained through the special [`failure-domain.beta.kubernetes.io/zone`](https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#failure-domainbetakubernetesiozone) label. If the cluster runs on a public cloud infrastructure, then this label is automatically created and its value is set to the name of the availability zone of the node.
 
-Labels are not part of the Kubernetes resource specifications, so you can't find this label in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/). However, you can see it (as well as all other labels), if you output the nodes as YAML or JSON:
+Labels are not part of the Kubernetes resource specifications, so you can't find the above label in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/). However, you can see it (as well as all other labels), if you output the nodes as YAML or JSON:
 
 ~~~bash
 kubectl get nodes -o yaml
@@ -555,51 +551,53 @@ This is generally a good way to disover even more information about your resourc
 
 ## 4. Switch between clusters and namespaces with ease
 
-All the information that kubectl needs to connect to a cluster is saved in a so-called **kubeconfig** file in YAML format. Whenever you invoke kubectl, it reads the kubeconfig file to determine the connection parameters of the cluster it is supposed to connect to.
+When kubectl has to make a request to the Kubernetes API, it reads the so-called **kubeconfig** file on your system to get all the connection parameters it needs to access and make a request to the API server.
 
-Often you work with **multiple clusters** at the same time. In that case, the kubeconfig file contains the connection parameters of *all of these* clusters. But now you need a way to indicate to *which* of those clusters you want kubectl to connect to.
+> The default kubeconfig file is `~/.kube/config`. This file is usually automatically created or updated by some command (for example, `aws eks update-kubeconfig` or `gcloud container clusters get-credentials`, if you use managed Kubernetes services).
 
-Similarly, you might have configured **multiple [namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)** within a given cluster (these are kind of "virtual" clusters within physical cluster). Kubectl also determines which namespace to use from the kubeconfig file. So, you need a way to indicate *which* namespace you intend to use.
+When you work with **multiple clusters**, then you have connection parameters for *multiple* clusters configured in your kubeconfig file. This means, you need a way to tell kubectl to *which* of these cluster you want it to connect.
 
-This section shows you how you can do this with ease.
+Within a cluster, you can set up **multiple [namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)** (a namespace is kind of "virtual" clusters within physical cluster). Kubectl determines which namespace to use for a request from the kubeconfig file as well. So, you need a way to tell kubectl *which* of these namespaces you want it to use.
 
-> Note that the default kubeconfig file is `~/.kube/config`. You can also explicitly specify a kubeconfig file with the `--kubeconfig` option or by setting the `KUBECONFIG` environment variable. In these cases, the kubeconfig files can have any name. If you use the `KUBECONFIG` variable, you can even have multiple kubeconfig files (for example, one for each cluster), but these files will be merged to a single effective configuration when kubectl is run. See the [official](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) [documentation](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
+This section explains how this works and how you can do it effortlessly.
+
+> Note that you can also have multiple kubeconfig files by listing them in the [`KUBECONFIG`](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#the-kubeconfig-environment-variable) environment variable. In that case, all these files will be merged to a single effective configuration at execution time. You can also overwrite the default kubeconfig file with the `--kubeconfig` option for every kubectl command. See the [official](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) [documentation](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
 
 ### Kubeconfig files
 
-Let's have a look what a kubeconfig file actually contains:
+Let's see what a kubeconfig file actually contains:
 
 ![A kubeconfig file contains a set of contexts](kubeconfig-1.svg)
 
-In essence, a kubeconfig file consists of a set of **contexts**. A context contains the following three pieces of information:
+As you can see, a kubeconfig file consists of a set of **contexts**. A context contains the following three elements:
 
-- **Cluster:** address (IP or DNS) of the API server in a cluster
-- **User:** authentication information for a specific user of the cluster
+- **Cluster:** URL of the API server of a cluster
+- **User:** authentication credentials for a specific user of the cluster
 - **Namespace:** the namespace to use when connecting to the cluster
 
-> In practice, people often have a single context per cluster in their kubeconfig file. However, you could also have multiple contexts per cluster, differing in their *user* or *namespace*. But this seems to be less common, so that a *context* can often be equated to a *cluster*.
+> In practice, people often use a single context per cluster in their kubeconfig file. However, you could also have multiple contexts per cluster, differing in their *user* or *namespace*. But this seems to be less common, so that often there is a one-to-one mapping between clusters and contexts.
 
-At any time, one of these contexts is set as the **current context** (through a dedicated field in the kubeconfig file):
+At any given time, one of these contexts is set as the **current context** (through a dedicated field in the kubeconfig file):
 
 ![One of the contexts in a kubeconfig file is set as the current context](kubeconfig-2.svg)
 
-Kubectl always connects to the cluster of the current context. Thus, in the above example, kubectl would connect to the *Hare* cluster.
+When kubectl reads a kubeconfig file, it always uses the information from the *current context*. Thus, in the above example, kubectl would connect to the *Hare* cluster.
 
-Consequently, to switch to another cluster, you can just change the value of the *current context* in the kubeconfig file:
+Consequently, to switch to another cluster, you can just change the *current context* in the kubeconfig file:
 
 ![Changing the current context of a kubeconfig file](kubeconfig-3.svg)
 
 In the above example, kubectl would now connect to the *Fox* cluster.
 
-And to switch to another namespace in the same cluster, you can change the value of the *namespace* field of the current context:
+And to switch to another namespace in the same cluster, you can change the value of the *namespace* element of the current context:
 
 ![Changing the namespace of the current context in a kubeconfig file](kubeconfig-4.svg)
 
 In the above example, kubectl would now use the *Prod* namespace in the *Fox* cluster (instead of the *Test* namespace that was set before).
 
-> Kubectl also provides the `--cluster`, `--user`, `--namespace`, and `--context` options that allow you to overwrite individual elements and the current context as a whole, no matter what is set in the kubeconfig file. See `kubectl options`.
+> Note that kubectl also provides the `--cluster`, `--user`, `--namespace`, and `--context` options that allow you to overwrite individual elements and the current context itself, regardless of what is set in the kubeconfig file. See `kubectl options`.
 
-In principle, you could do these changes by manually editing the kubeconfig file. But of course this is very tedious. In the following I'm going to present some tools and approaches that do these modifications automatically for you, so that you can switch between clusters and namespaces with ease.
+In theory, you could do these changes by manually editing the kubeconfig file. But of course this is tedious. The following sections present various tools that allow you to do these changes automatically.
 
 ### Use kubectx
 
@@ -611,80 +609,77 @@ This tool provides the `kubectx` and `kubens` commands that allow you change the
 
 Here you can see these two commands in action:
 
-![](kubectx.cast)
+![](asciicast-kubeconfig-kubectx.gif)
 
-> Note that under the hood, these commands perform the same manipulations in the kubeconfig file that were explained in the previous section.
+> Under the hood, these commands just edit the kubeconfig file as explained in the previous section.
 
 To install kubectx, just follow the [instructions on the GitHub page](https://github.com/ahmetb/kubectx/#installation).
 
-A particularly useful feature of kubectx is the [**interactive mode**](https://github.com/ahmetb/kubectx/#interactive-mode). This works in conjunction with the [**fzf**](https://github.com/junegunn/fzf) tool, which you have to install separately. In fact, installing fzf, automatically enables kubectx interactive mode.
+Both `kubectx` and `kubens` provide **command completion** through a completion script. This allows you to auto-complete the context names and namespaces, so that you don't have to fully type them. You can find the instructions to set up completion on the [GitHub page](https://github.com/ahmetb/kubectx/#installation) as well.
 
-With the interactive mode, you don't need to type the context or namespace that you want to change to, but you can select it through an interactive fuzzy search interface (provided by fzf). This can be extremely useful if you have long and cryptic context names, as they are, for example, produced by managed Kubernetes services like [EKS from AWS](https://aws.amazon.com/eks/) or [GKE from GCP](https://cloud.google.com/kubernetes-engine/).
+Another useful feature of kubectx is the [**interactive mode**](https://github.com/ahmetb/kubectx/#interactive-mode). This works in conjunction with the [**fzf**](https://github.com/junegunn/fzf) tool, which you have to install separately (in fact, installing fzf, automatically enables kubectx interactive mode).The interactive mode allows you to select the target context or namespace through an interactive fuzzy search interface (provided by fzf).
 
-### Use smart shell aliases
+### Use shell aliases
 
-Actually, you don't need to use separate tools to change the current context or namespace in your kubeconfig file, because kubectl provides command for doing exactly this:
+Actually, you don't really need separate tools to change the current context and namespace, because kubectl provides commands for doing this too. In particular, the `kubectl config` command provides sub-commands for editing kubeconfig files. Here are some of them:
 
 - `kubectl config get-contexts`: list all contexts
 - `kubectl config current-context`: get the current context
 - `kubectl config use-context`: change the current context
-- `kubectl config set-context`: change entries of a context
+- `kubectl config set-context`: change an element of a context
 
-However, using these commands directly is not very convenient, because they are long to type. But what you can do is wrapping them into shell aliases that can be easily executed.
+However, using these commands directly is not very convenient, because they are long to type. But what you can do is wrapping them into shell aliases that can be more easily executed.
 
-I crafted a set of such aliases that provide a similar functionality as kubectx. The aliases also use [fzf](https://github.com/junegunn/fzf) to provide an interactive fuzzy search interface for selecting the target context or namespace. That means, to use these aliases, you also need to have fzf installed.
+I created a set of aliases based on these commands that provide a similar functionality as kubectx. Here you can see them in action:
 
-Here you can see the aliases in action:
+![](asciicast-kubeconfig-aliases.gif)
 
-![](aliases.cast)
+> Note that the aliases use [**fzf**](https://github.com/junegunn/fzf) to provide an interactive fuzzy search interface (like the interactive mode of kubectx). That means, you need to [install fzf](https://github.com/junegunn/fzf#installation) in order to use these aliases.
 
-And here are their definitions:
+Here are the definitions of the aliases:
 
 ~~~bash
-# Get the current context
-alias kcc='kubectl config current-context'
+# Get current context
+alias krc='kubectl config current-context'
 # List all contexts
-alias klc='kubectl config get-contexts -o name | sed "s/^/  /;\|^  $(kcc)$|s/ /*/"'
-# Change the current context
-alias ksc='kubectl config use-context "$(klc | fzf -e | sed "s/^..//")"'
+alias klc='kubectl config get-contexts -o name | sed "s/^/  /;\|^  $(krc)$|s/ /*/"'
+# Change current context
+alias kcc='kubectl config use-context "$(klc | fzf -e | sed "s/^..//")"'
 
-# Get the current namespace
-alias kcn='kubectl config get-contexts --no-headers "$(kcc)" | awk "{print \$5}" | sed "s/^$/default/"'
+# Get current namespace
+alias krn='kubectl config get-contexts --no-headers "$(krc)" | awk "{print \$5}" | sed "s/^$/default/"'
 # List all namespaces
-alias kln='kubectl get -o name ns | sed "s|^.*/|  |;\|$(kcn)|s/ /*/"'
-# Change the current namespace
-alias ksn='kubectl config set-context --current --namespace "$(kln | fzf -e | sed "s/^..//")"'
+alias kln='kubectl get -o name ns | sed "s|^.*/|  |;\|$(krn)|s/ /*/"'
+# Change current namespace
+alias kcn='kubectl config set-context --current --namespace "$(kln | fzf -e | sed "s/^..//")"'
 ~~~
 
-To install these aliases, all you have to do is to add the above definitions to your `~/.bashrc` or `~/.zshrc` file (they work for both Bash and Zsh).
-
-As you can see, the aliases provide roughly the same functionality as kubectx, but you have literally implemented it in **6 lines of code**.
+To **install these aliases**, you just have to add the above definitions to your `~/.bashrc` or `~/.zshrc` file and reload your shell!
 
 ### Use plugins
 
-This approach builds on the aliases from the last section, but goes one step further. It actually anticipates something that will be treated in a [later section](#6-extend-kubectl-with-plugins).
+Kubectl allows to intall plugins that can be invoked like native command. You can, for example, install a *kubectl-foo* plugin and then invoke it as `kubectl foo`.
 
-Kubectl allows to intall plugins that can be invoked like native command. You can, for example, very easily install a plugin called *kubectl-foo* and then invoke it as `kubectl foo`.
+> Kubectl plugins will be described in detail in a [later section](#6-extend-kubectl-with-plugins).
 
-Wouldn't it be nice to be able to change the current context and namespace like this? For example, `kubectl ctx` to change the context and `kubectl ns` to change the namespace?
+Wouldn't it be nice to be able to change the current context and namespace like that? For example, running `kubectl ctx` to change the context and `kubectl ns` to change the namespace?
 
-I created two plugins that allow to do exactly this:
+I created two plugins that allow to do that:
 
 - [**kubectl-ctx**](https://github.com/weibeld/kubectl-ctx)
 - [**kubectl-ns**](https://github.com/weibeld/kubectl-ns)
 
+Internally, the plugins build on the aliases from the previous section.
+
 Here you can see the plugins in action:
 
-![](kubeconfig-plugins.gif)
+![](asciicast-kubeconfig-plugins.gif)
 
-As you can see, the plugins also make use of [fzf](https://github.com/junegunn/fzf), which means you need to have fzf installed in order to use them.
+> Note that the plugins use [**fzf**](https://github.com/junegunn/fzf) to provide an interactive fuzzy search interface. That means, you need to [install fzf](https://github.com/junegunn/fzf#installation) in order to use these plugins.
 
-To install the plugins themselves, you simply have to download the shell scripts named [`kubectl-ctx`](https://raw.githubusercontent.com/weibeld/kubectl-ctx/master/kubectl-ctx) and [`kubectl-ns`](https://raw.githubusercontent.com/weibeld/kubectl-ns/master/kubectl-ns) to *any directory* in your `PATH` and make them executable (for example, with `chmod +x`).
-
-That's it! You should now be able to use `kubectl ctx` and `kubectl ns`.
+To **install the plugins**, you just have to download the shell scripts named [`kubectl-ctx`](https://raw.githubusercontent.com/weibeld/kubectl-ctx/master/kubectl-ctx) and [`kubectl-ns`](https://raw.githubusercontent.com/weibeld/kubectl-ns/master/kubectl-ns) to *any* directory in your `PATH` and make them executable (for example, with `chmod +x`). That's it! Immediately after that, you should be able to use `kubectl ctx` and `kubectl ns`!
 
 <!-- [Markdown syntax highlighting fix] -->
-
 
 ## 5. Save typing with auto-generated aliases
 
@@ -1024,11 +1019,11 @@ This command also displays warnings if you have multiple plugins with the same n
 
 ### Finding and installing plugins with krew
 
-Kubectl plugins lend themselves to be distributed and reused like software packages. But where can you find plugins that were published by others?
+Kubectl plugins lend themselves to be shared and reused like software packages. But where can you find plugins that are shared by others?
 
-The [**krew**](https://github.com/GoogleContainerTools/krew) project aims at providing a unified solution for distributing, discovering, and installing kubectl plugins. The project refers to itself as a "package manager for kubectl plugins" (the name *krew* is a hint at [*brew*](https://brew.sh)).
+The [**krew**](https://github.com/GoogleContainerTools/krew) project aims at providing a unified solution for sharing and installing kubectl plugins. The project refers to itself as a "package manager for kubectl plugins" (the name *krew* is a hint at [*brew*](https://brew.sh)).
 
-With krew you can browse, install, and manage kubectl plugins from the [krew index](https://github.com/GoogleContainerTools/krew-index) with easy-to-use commands:
+With krew you can browse, install, and manage kubectl plugins from the [krew index](https://github.com/GoogleContainerTools/krew-index) with simple commands:
 
 ![](krew.cast)
 
