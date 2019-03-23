@@ -9,10 +9,10 @@ import { BlogPosting } from 'schema-dts'
 import { ListItem, PromoAcademy } from '../layout'
 
 export const Details = {
-  type: identity<'qa01'>('qa01'),
-  url: '/top-questions-march-2019',
-  seoTitle: 'Kubernetes Top Questions in March 2019 ♦︎ Learnk8s',
-  title: 'Kubernetes Top Questions in March 2019',
+  type: identity<'askExpert201903'>('askExpert201903'),
+  url: '/ask-kubernetes-expert-march-2019',
+  seoTitle: 'Ask the expert: Kubernetes top questions March 2019 ♦︎ Learnk8s',
+  title: 'Ask the expert: Kubernetes top questions in March 2019',
   shortDescription: ``,
   description: ``,
   openGraphImage: Image({
@@ -36,7 +36,7 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Markdown(cat('src/qa01/content.md').toString(), __dirname)
+  const { css, js, html } = Markdown(cat('src/askExpert201903/content.md').toString(), __dirname)
   return renderToStaticMarkup(
     <Article
       website={website}
@@ -55,7 +55,14 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           'src/prism-line-highlight.css',
           'assets/style.css',
         ],
-        styles: css,
+        styles: css.concat(`.pagination-icon {
+          stroke: currentColor;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          stroke-width: .125rem;
+          display: inline-block;
+          width: 0.4rem;
+        }`),
       })}
       publishedDate={currentNode.payload.publishedDate}
     >
@@ -89,6 +96,59 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       <div dangerouslySetInnerHTML={{ __html: html }} />
 
       <PromoAcademy sitemap={website} />
+
+      <JSScript
+        js={JSBundle({
+          scripts: `(${Slideshow.toString()})()`,
+        })}
+      />
     </Article>,
   )
+}
+
+function Slideshow() {
+  function setupSlideshow(root: HTMLElement) {
+    const width = root.offsetWidth
+    const slides = [].slice.call(root.querySelectorAll('li')) as HTMLElement[]
+    const slider = root.querySelector<HTMLElement>('.slider-js')
+    if (!slider) {
+      return console.log(`I couldn't find the slider`)
+    }
+    slider.style.width = `${width * slides.length}px`
+    slider.classList.add('flex')
+    slides.forEach(slide => slide.style.width = `${width}px`)
+
+    function createEmptyNav() {
+      const emptyNav = document.createElement('div')
+      emptyNav.classList.add('w-20')
+      emptyNav.innerHTML = '&nbsp;'
+      return emptyNav
+    }
+
+    slides.forEach((slide, index, items) => {
+      const leftNav = document.createElement('div')
+      leftNav.classList.add('f6', 'b', 'black-50', 'pv3', 'pointer', 'w-20')
+      leftNav.innerHTML = `<svg viewBox='0 0 10 16' xmlns='http://www.w3.org/2000/svg' class='pagination-icon mr2'>
+  <polyline fill='none' vectorEffect='non-scaling-stroke' points='8,2 2,8 8,14'></polyline>
+</svg>
+<span class='ttu'>Previous</span>`
+      leftNav.onclick = () => root.scrollLeft -= width
+      const rightNav = document.createElement('div')
+      rightNav.classList.add('f6', 'b', 'black-50', 'pv3', 'pointer', 'w-20', 'tr')
+      rightNav.innerHTML = `<span class='ttu'>Next</span>
+<svg viewBox='0 0 10 16' xmlns='http://www.w3.org/2000/svg' class='pagination-icon ml2'>
+  <polyline fill='none' vectorEffect='non-scaling-stroke' points='2,2 8,8 2,14'></polyline>
+</svg>`
+      rightNav.onclick = () => root.scrollLeft += width
+      const navigation = slide.querySelector('.navigation-js')
+      if (!navigation) {
+        return console.log(`I couldn't find the navigation`)
+      }
+      navigation.prepend(index === 0 ? createEmptyNav() : leftNav)
+      navigation.append(index === items.length - 1 ? createEmptyNav() : rightNav)
+    })
+
+  }
+
+  document.querySelectorAll<HTMLElement>('.slideshow-js').forEach(setupSlideshow)
 }
