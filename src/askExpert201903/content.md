@@ -380,7 +380,7 @@ If neither Ambassador or Kong are suitable for what you do, you should check out
 
 ## 3. Is there any tool to visualise the dependency between YAML files?
 
-> **TL;DR:** Not for YAML. But you can visualise your dependencies in the cluster with [Weaveworks Scope]((https://github.com/weaveworks/scope), [Kubebricks](https://github.com/kubricksllc/Kubricks) or Istio
+> **TL;DR:** Not for YAML. But you can visualise your dependencies in the cluster with [Weave Scope]((https://github.com/weaveworks/scope) or [Istio](https://istio.io).
 
 When you have a large number of resources in your cluster, you might lose track of all relationships between them.
 
@@ -396,34 +396,68 @@ You could write a tool to analyse YAML files and link them together statically, 
 
 However, if your goal is to visualise dependencies, you could focus on the cluster and ignore the YAML.
 
-### Option #1 — Weaveworks Scope, the Kubernetes dashboard
+### Option #1 — Weave Scope, the Kubernetes dashboard
 
-[Weaveworks Scope](https://github.com/weaveworks/scope) is one of those tools that — once installed into your cluster — can help you visualise your Kubernetes resources in a dependency graph.
+[Weave Scope](https://github.com/weaveworks/scope) is one of those tools that — once installed into your cluster — can help you visualise your Kubernetes resources in a dependency graph.
 
 Weave scope connects to the Kubernetes API and queries your resources to draw a dependency graphs.
 
-![Example]()
+As an example, have a look at the dependencies for the [microservices-demo project from Google Cloud Platform](https://github.com/GoogleCloudPlatform/microservices-demo) — a collection of ten microservices that are meant to be demoing an e-commerce website.
+
+![Weave scope on GoogleCloudPlatform/microservices-demo](weavescope.gif)
+
+As you can see the tool automatically maps dependencies between Pods.
 
 The tool isn't limited to dependencies, though.
 
-As part of the installation process, WeaveScope installs agents on every node that probe the nodes for metrics.
+As part of the installation process, you can have agents on every node that probe the nodes for metrics.
 
-You can use Weavescope to monitor for CPU and memory in your nodes as well as generate reports. And even better, Weavescope has a mechanism to create custom plugins.
+You can use Weave Scope to monitor for CPU and memory in your nodes [as well as other useful metrics](https://github.com/weaveworks-plugins/).
+
+And even better, Weave Scope has a mechanism to create custom plugins.
 
 Weavescope isn't the only tool that can identify and visualise dependencies in your cluster.
 
-### Option #2 — Kubricks, the desktop app
+### Option #2 — Tracing the traffic
 
-If you're looking for something simple and less involved, you might want to check out [Kubricks — an Electron App](https://github.com/kubricksllc/Kubricks) designed to provide intuitive graphs of the current cluster deployments.
+If you could trace all the traffic between your components, you should be able to visualise the dependency and observe the state of your system in real time.
 
-The tool doesn't require any component to be installed in the cluster, and it leverages your kubectl credentials to communicate with the API server.
-This makes Kubebricks more suitable in scenarios when you don't want to install extra controllers in the cluster, or you want to answer a quick question about your cluster.
+**Even if you don't use Kubernetes.**
 
-Kubricks has more modest ambitions when compared to Weavescope, and it doesn't come with anything but dependencies. So you won't be able to query for custom metrics.
+Tool such as [Istio](https://istio.io) or [Linkerd2](https://linkerd.io/2/overview/) are designed to do just that: augment your network so you can debug, observe, and secure your traffic without requiring any changes to your code.
 
-### Option #3 — Leveraging Istio
+In this example you will have a look at Istio, but the same applies to any other similar technology.
 
-[TODO]
+After you install Istio in your cluster, every new Pod has a companion container that is in charge of routing all the inbound and outbound traffic to that Pod.
+
+You can think about it as a proxy container.
+
+The proxy does a lot more than just routing the traffic, though.
+
+It can collect metrics and receive instructions from the control plane.
+
+When every app in your cluster has a sidee car proxy, you can visualise the flow of the traffic.
+
+Here's the same collection of microservices deployed in a cluster with Istio enabled:
+
+![Istio with GoogleCloudPlatform/microservices-demo](istio.gif)
+
+As you can see the graph is identical to the one drew by Weave Scope.
+
+But Istio didn't have to interrogate the Kubernetes API to draw any of it.
+
+Using a service mesh such as Istio, isn't a free lunch, though.
+
+Adding it to an existing cluster is not trivial, because you have to recreate all the Pods with the proxy container.
+
+Also adding an extra container to every Pod affects latency and resource consumption.
+
+### More options
+
+There're two noteworthy tools that can help visualise dependencies in your cluster
+
+- [Linkerd2](https://linkerd.io/2/overview/), another service mesh similar to Istio
+- [Kubebricks](https://github.com/kubricksllc/Kubricks), an electron app that connects to your cluster using kubectl and helps you visualise your dependencies
 
 ## 4. Is Helm used just for templating?
 
@@ -431,21 +465,39 @@ Kubricks has more modest ambitions when compared to Weavescope, and it doesn't c
 
 When you start using Kubernetes in different environments, you might see yourself copy-pasting the same YAML resources over and over.
 
-A better strategy is to create and use dynamic templates as you've done for HTML in web pages.
+A better strategy is to create and use dynamic templates as you've done for HTML in web pages — for example.
 
 All the variables that can change are replaced with placeholders.
 
 Before submitting them to the cluster, you could use the template engine of choice to customise them with the correct value.
 
-While there're a lot of competition tools to template Kubernetes YAML files, Helm caught a lot of attention very early on and established itself as the market leader.
+```yaml{11}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+    - name: test-container
+      image: k8s.gcr.io/busybox
+      env:
+        - name: ENV
+          value: {{ .Values.env_name }}
+```
 
-Helm is a convenient templating engine: it uses to go and the Sprig library.
+While there're a lot of tools to template Kubernetes YAML files, Helm caught a lot of attention very early on and established itself as the market leader.
+
+Helm is a convenient templating engine: it uses the [Go templating engine](https://golang.org/pkg/text/template/) and the [helpers from the Sprig library](https://github.com/Masterminds/sprig).
 
 But the reason for such a quick uptake isn't for the templating alone.
 
-A collection of templated resources in Helm is called a chart. Charts are similar to archives, and you can share them with your colleagues or uploaded them to a registry.
+**A collection of templated resources in Helm is called a chart.**
 
-Charts became such a ubiquitous tool to share collections of YAML files that made Helm even more popular. Have a look at all the available charts on the public registry github.com/helm/charts/
+Charts are similar to archives, and you can share them with your colleagues or uploaded them to a registry.
+
+Charts became such a ubiquitous tool to share collections of YAML files that made Helm even more popular.
+
+[Have a look at all the available charts on the public registry](github.com/helm/charts/).
 
 > Please note that you can use `helm search <keyword>` to search for a specific chart on the official registry.
 
@@ -453,9 +505,9 @@ Companies started sharing packages internally for their teams and that led to pr
 
 You have a public registry with packages contributed by the community and private registry for internal use.
 
-Tools such as Artifactory or Azure Container Registry are popular options when it comes to using a registry to store your private charts.
+Tools such as [Artifactory](https://www.jfrog.com/confluence/display/RTF/Helm+Chart+Repositories) or [Azure Container Registry](https://azure.microsoft.com/en-us/updates/azure-container-registry-helm-repositories-public-preview/) are popular options when it comes to using a registry to store your private charts.
 
-If you wish to host your private registry, is a proven solution https://github.com/helm/chartmuseum
+If you wish to host your private registry [Chartmuseum is a solid choice](https://github.com/helm/chartmuseum).
 
 But templating and sharing charts are not the only task that Helm can handle.
 
@@ -465,10 +517,60 @@ Every time you install a chart or upgrade your definitions, the client side tool
 
 The controller templates the YAML and stores a copy of the resources in a history table.
 
+```slideshow
+{
+  "description": "Description",
+  "slides": [
+    {
+      "image": "28-templating.svg",
+      "description": "When you create resources with Helm, the request is sent to your cluster."
+    },
+    {
+      "image": "29-templating.svg",
+      "description": "But before the resources are submitted to the API, they are collected and templated by an operator: the tiller."
+    },
+    {
+      "image": "30-templating.svg",
+      "description": "The tiller is in charge of storing previous resources used for deployments as well as templating the YAML."
+    },
+    {
+      "image": "74-templating.svg",
+      "description": "Helm records every resource that you submit in the Tiller."
+    },
+    {
+      "image": "75-templating.svg",
+      "description": "It also records all the updates and upgrade you did to your releases."
+    }
+  ]
+}
+```
+
 Keeping track of all releases is handy.
 
 You can roll back when you notice that the current deployment doesn't behave the way you expect.
 
+```slideshow
+{
+  "description": "Helm history",
+  "slides": [
+    {
+      "image": "78-templating.svg",
+      "description": "If you realise that a release contained a bug, you can rollback."
+    },
+    {
+      "image": "79-templating.svg",
+      "description": "Helm creates a new entry in the history table and reverts the resource definition to the previous deployment."
+    }
+  ]
+}
+```
+
 Helm helps you manage the lifecycle of your releases.
 
 From creating to updating and deleting charts, Helm makes sure there's always an audit trail, and you can inspect the current and past states.
+
+To summarise, Helm is:
+
+- a **templating engine** for your YAML files
+- a convenient way for **packaging collections of YAML files and distributing them** in public and private registry
+- a **release manager** capable of rolling back deployments

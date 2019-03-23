@@ -161,9 +161,7 @@ export function Markdown(content: string, assetsPath: string): { html: string; c
                     </div>
                   </div>
                   <div className='navigation-js flex items-start justify-between bg-evian ph2'>
-                    <div className='f5 lh-copy black-90 w-60 center'>
-                      {marked(description, { renderer: inlineRenderer })}
-                    </div>
+                    <div className='f5 lh-copy black-90 w-60 center' dangerouslySetInnerHTML={{__html: marked(description, { renderer: inlineRenderer })}}></div>
                   </div>
                 </li>
               )
