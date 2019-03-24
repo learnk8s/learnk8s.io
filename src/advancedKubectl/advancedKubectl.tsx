@@ -13,10 +13,14 @@ export const Details = {
   url: '/kubectl-productivity',
   seoTitle: 'Boosting your kubectl productivity ♦︎ Learnk8s',
   title: 'Boosting your kubectl productivity',
-  shortDescription: `If you work with Kubernetes, you use kubectl. This article contains a set of tips and tricks to make your usage of kubectl more efficient.`,
-  description: `If you work with Kubernetes, you use kubectl. And you probably use it a lot. Whenever you spend a lot of time working with a specific tool, it is worth to get to know it very well in order to use it efficiently. This article contains a set of tips and tricks to make your usage of kubectl more efficient.`,
+  shortDescription: `If you work with Kubernetes, then kubectl is probably one of your most-used tools. This article contains a series of tips and tricks to make your usage of kubectl more efficient.`,
+  description: `If you work with Kubernetes, then kubectl is probably one of your most-used tools. Whenever you spend a lot of time working with a specific tool, it is worth to get to know it very well and learn how to use it efficiently.
+
+This article contains a series of tips and tricks to help you boost your kubectl productivity. At the same time, it aims at deepening your understanding of how various aspects of Kubernetes work.
+
+The goal of this article is not only to make your daily work with Kubernetes more efficient but also more enjoyable!`,
   openGraphImage: Image({url: 'src/advancedKubectl/magic.jpg', description: 'Advanced kubectl usage'}),
-  publishedDate: '2019-01-24',
+  publishedDate: '2019-03-25',
   previewImage: Image({url: 'src/advancedKubectl/magic.jpg', description: 'Advanced kubectl usage'}),
   author: {
     fullName: 'Daniel Weibel',
