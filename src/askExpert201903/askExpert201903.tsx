@@ -14,8 +14,7 @@ export const Details = {
   url: '/ask-kubernetes-expert-march-2019',
   seoTitle: 'Ask the expert: Kubernetes top questions March 2019 ♦︎ Learnk8s',
   title: 'Ask the expert: Kubernetes top questions in March 2019',
-  shortDescription: ``,
-  description: ``,
+  description: `The top Kubernetes questions in March 2019 answered by Daniele Polencic`,
   openGraphImage: Image({
     url: 'src/k8sOnWindows/k8s_on_win.jpg',
     description: 'placeholder',
@@ -43,7 +42,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       website={website}
       seoTitle={currentNode.payload.seoTitle}
       title={currentNode.payload.title}
-      description={currentNode.payload.shortDescription}
+      description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
       authorFullName={currentNode.payload.author.fullName}
