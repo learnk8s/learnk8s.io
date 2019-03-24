@@ -28,7 +28,7 @@ Consequently, the main job of kubectl is to carry out HTTP requests to the Kuber
 
 ![Kubernetes API](kubernetes-api.svg)
 
-> Kubernetes is fully **resource-centred**. That means, Kubernetes maintains an internal state of resources, and all Kubernetes operations are [**CRUD**](https://en.wikipedia.org/wiki/Create%2C_read%2C_update_and_delete) operations on these resources. You fully control Kubernetes through manipulation of these resources (and Kubernetes figures out what to do based on the current state of resources). For this reason, the Kubernetes [**API reference**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) is organised as a list of resource types with their associated operations.
+> Kubernetes is a fully **resource-centred** system. That means, Kubernetes maintains an internal state of resources, and all Kubernetes operations are [**CRUD**](https://en.wikipedia.org/wiki/Create%2C_read%2C_update_and_delete) operations on these resources. You fully control Kubernetes through manipulation of these resources (and Kubernetes figures out what to do based on the current state of resources). For this reason, the Kubernetes [**API reference**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) is organised as a list of resource types with their associated operations.
 
 Let's consider an example.
 
@@ -46,24 +46,24 @@ Kubernetes has a *create ReplicaSet* operation, and like all Kubernetes operatio
 POST /apis/apps/v1/namespaces/{namespace}/replicasets
 ~~~
 
-> You can find the API endpoints of all Kubernetes operations in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13) (including the [above endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps)). Note that to make a request, you need to prepend the base URL of the API server to the endpoint paths that are listed in the API reference.
+> You can find the API endpoints of all Kubernetes operations in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13) (including the [above endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps)). To make an actual request to an endpoint, you need to prepend the URL of the API server to the endpoint paths that are listed in the API reference.
 
-Consequently, what the above kubectl command actually does, is an HTTP POST request to the above API endpoint. The ReplicaSet definition (that you provided in the `replicaset.yaml` file) is passed in the body of the request.
+Consequently, when you execute the above command, kubectl makes an HTTP POST request to the above API endpoint. The ReplicaSet definition (that you provided in the `replicaset.yaml` file) is passed in the body of the request.
 
-This is how *all* kubectl command (that interact with Kubernetes) are implemented. They simply make appropriate HTTP requests to the endopints of the Kubernetes API.
+This is how kubectl works for *all* commands that interact with the Kubernetes cluter. In all these cases, kubectl simply makes HTTP requests to the appropriate Kubernetes API endpoints.
 
 > Note that it's totally possible to control Kubernetes with a tool like `curl` by manually issuing HTTP requests to the Kubernetes API. Kubectl just makes it easier for you to use the Kubernetes API.
 
-These are the basics of what kubectl is. But there is much more about the Kubernetes API that every kubectl user should know. To this end, let's briefly dive into the Kubernetes internals.
+These are the basics of what kubectl is and how it works. But there is much more about the Kubernetes API that every kubectl user should know. To this end, let's briefly dive into the Kubernetes internals.
 
 
 ### Kubernetes internals
 
-Kubernetes consists of a set of independent components that run as separate processes on the nodes of a cluster. Each component has a very specific function, and some components run on the master nodes and others on the worker nodes.
+Kubernetes consists of a set of independent components that run as separate processes on the nodes of a cluster. Some components run on the master nodes and others run on the worker nodes, and each component has a very specific function.
 
 The most important components on the master nodes are:
 
-- **Storage backend:** stores resource definitions (usually [etcd](https://coreos.com/etcd/))
+- **Storage backend:** stores resource definitions (usually [etcd](https://coreos.com/etcd/) is used)
 - **API server:** provides Kubernetes API and manages storage backend
 - **Controller manager:** ensures resource statuses match specifications
 - **Scheduler:** schedules Pods to worker nodes
@@ -121,11 +121,11 @@ This event triggers the **ReplicaSet controller**, which is a sub-process of the
 
 The job of the ReplicaSet controller is to make sure that the required number of replica Pods of a ReplicaSet exists. In our example, no Pods exist yet, so the ReplicaSet controller creates these Pod definitions (according to the Pod template in the ReplicaSet definition) and saves them in the storage backend.
 
-The creation of the new Pods triggers the **scheduler**, which watches for Pod definitions that are not yet associated to a worker node. The scheduler chooses a suitable worker node for each Pod and updates the Pod definitions in the storage backend with this information.
+The creation of the new Pods triggers the **scheduler**, who watches for Pod definitions that are not yet associated to a worker node. The scheduler chooses a suitable worker node for each Pod and updates the Pod definitions in the storage backend with this information.
 
-> Note that up to this point, no workload code is being run anywhere on the infrastructure. All that has been done so far is creating and updating resources in the storage backend on the master node.
+> Note that up to this point, no workload code is being run anywhere in the cluster. All that has been done so far is creating and updating resources in the storage backend on the master node.
 
-This event triggers the **kubelets** who watch for Pods that are scheduled to their worker nodes. The kubelet worker node your ReplicaSet Pods have been scheduled to, downloads the container images of these Pods (if not already present on the machine), and runs them with the configured container runtime (which may be Docker).
+This event triggers the **kubelets** who watch for Pods that are scheduled to their worker nodes. The kubelet of the worker node your ReplicaSet Pods have been scheduled to, downloads the container images for these Pods (if not already present on the machine), and runs them with the configured container runtime (which may be Docker or another container runtime).
 
 At this point, finally, your ReplicaSet application is running!
 
@@ -137,19 +137,19 @@ However, these components **do not** access the storage backend directly, but on
 
 Consider the following examples:
 
-- The ReplicaSet controller uses the [*list ReplicaSets*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#list-replicaset-v1-apps) API operation with a `watch` parameter for watching for changes to ReplicaSet resources.
-- The ReplicaSet controller uses the [*create Pod*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-pod-v1-core) API operation for creating Pods.
-- The scheduler uses the [*patch Pod*](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#patch-pod-v1-core) API operation for updating Pods with the information of the worker nodes the Pods were scheduled to.
+- The ReplicaSet controller uses the [*list ReplicaSets* API endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#list-replicaset-v1-apps) API operation with a `watch` parameter for watching for changes to ReplicaSet resources.
+- The ReplicaSet controller uses the [*create Pod* API endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-pod-v1-core) for creating Pods.
+- The scheduler uses the [*patch Pod* API endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#patch-pod-v1-core) for updating Pods with the information about the selected worker node.
 
 As you can see, this is the **same API that is also used by kubectl**.
 
-This double usage of the Kubernetes API for internal components as well as for external users is a fundamental design concept of Kubernetes.
+This double usage of the Kubernetes API for internal components as well as for external users is a **fundamental design concept** of Kubernetes.
 
-With this knowledge, you can create a mental summary of how Kubernetes works:
+With this knowledge, you can summarise how Kubernetes works as follows:
 
 - The storage backend stores the state (i.e. resources) of Kubernetes.
 - The API server provides an interface to the storage backend in the form of the Kubernetes API.
-- All other components, as well as external users, read, watch, and manipulate the state (i.e. resources) of Kubernetes through the Kubernetes API.
+- All other Kubernetes components and users read, watch, and manipulate the state (i.e. resources) of Kubernetes through the Kubernetes API.
 
 Being familiar with these concepts **will help you a lot** to understand kubectl better and make the most use of it!
 
@@ -159,9 +159,9 @@ Let's now look at a series of concrete tips and tricks to help you boosting your
 
 One of the most useful, but often overlooked, tricks to boost your kubectl productivity is command completion.
 
-Command completion allows you to auto-complete the individual parts of kubectl command with the *Tab* key. This works for sub-commands, options, and arguments, including hard-to-type things like resource names.
+Command completion allows you to auto-complete individual parts of kubectl commands with the *Tab* key. This works for sub-commands, options, and arguments, including hard-to-type things like resource names.
 
-Here you can see kubectl command completion in action (using the Zsh shell):
+Here you can see kubectl command completion in action:
 
 ![](asciicast-completion.gif)
 
@@ -171,7 +171,7 @@ The [official documentation](https://kubernetes.io/docs/tasks/tools/install-kube
 
 ### How command completion works
 
-In general, command completion is a shell feature that works by the means of a **completion script**. A completion script is shell script that defines the completion behaviour for a specific command. To enable completion for a command, you have to source its completion script.
+In general, command completion is a shell feature that works by the means of a **completion script**. A completion script is shell script that defines the completion behaviour for a specific command. Sourcing a completion script enables completion for the corresponding command.
 
 Kubectl can automatically generate and print out the completion scripts for Bash and Zsh with the following commands:
 
@@ -221,7 +221,7 @@ One way to do this is to add the following line to your `~/.bashrc` file:
 source <(kubectl completion bash)
 ~~~
 
-Another possibility is to add the kubectl completion script to the `/etc/bash_completion.d` directory (you can create this directory if it doesn't exist):
+Another possibility is to add the kubectl completion script to the `/etc/bash_completion.d` directory (create it, if it doesn't exist):
 
 ~~~bash
 kubectl completion bash >/etc/bash_completion.d/kubectl
@@ -994,17 +994,17 @@ Here is an example of a kubectl plugin that can be invoked as `kubectl hello`:
 
 ![](asciicast-plugins-hello.gif)
 
-> The kubectl plugin mechanisms closely follows the design of the [Git plugin mechanism](https://adamcod.es/2013/07/12/how-to-create-git-plugin.html).
+> In case you're familiar with it, the kubectl plugin mechanisms closely follows the design of the [Git plugin mechanism](https://adamcod.es/2013/07/12/how-to-create-git-plugin.html).
 
 This section will show you how to install plugins, where you can find existing plugins, and how to create your own plugins.
 
 ### Installing plugins
 
-Kubectl plugins are distributed as simple executable files that have a name of the form `kubectl-x`. The prefix `kubectl-` is mandatory, and what follows is kubectl sub-command that allows to invoke the plugin.
+Kubectl plugins are distributed as simple executable files with a name of the form `kubectl-x`. The prefix `kubectl-` is mandatory, and what follows is the new kubectl sub-command that allows to invoke the plugin.
 
 For example, the *hello* plugin shown above would be distributed as a file named `kubectl-hello`.
 
-[Installing a plugin](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/#installing-kubectl-plugins) is straightforward: you just have to copy the `kubectl-x` file to *any* directory in your `PATH` and make sure that it's exectuable (for example, with `chmod +x`). Immediately after that, you can invoke the plugin with `kubectl x`.
+To [install a plugin](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/#installing-kubectl-plugins), you just have to copy the `kubectl-x` file to *any* directory in your `PATH` and make it exectuable (for example, with `chmod +x`). Immediately after that, you can invoke the plugin with `kubectl x`.
 
 You can use the following command to list all the plugins that are currently installed on your system:
 
@@ -1024,7 +1024,7 @@ Krew is centred around an [index](https://github.com/GoogleContainerTools/krew-i
 
 ![](asciicast-plugins-krew.gif)
 
-As you can see, krew itself is a kubectl plugin. That means, you **install krew** in essence like any other kubectl plugin. You can find the detailed installation instructions on the [GitHub page](https://github.com/GoogleContainerTools/krew/#installation).
+As you can see, krew itself is a kubectl plugin. That means, **installing krew**  works in essence like installing any other kubectl plugin. You can find the detailed installation instructions for krew on the [GitHub page](https://github.com/GoogleContainerTools/krew/#installation).
 
 The most important krew commands are as follows:
 
@@ -1043,13 +1043,13 @@ kubectl krew list
 kubectl krew remove <plugin>
 ~~~
 
-Note that installing plugins with krew does **not** prevent installing plugins the traditional way. Even if you use krew, you can still install plugins that you find elsewhere (or create yourself) as described [above](#installing-plugins). 
+Note that installing plugins with krew does **not** prevent installing plugins the [traditional way](#installing-plugins). Even if you use krew, you can still install plugins that you find elsewhere (or create yourself) by other means.
 
 > Note that the `kubectl krew list` command does only list the plugins that have been installed with krew, whereas the `kubectl plugin list` command lists *all* plugins, that is, those installed with krew and those installed in other ways.
 
 ### Finding plugins elsewhere
 
-Krew is still a young project and at the moment there are only about 30 plugins in the krew index. In case you don't find what you need there, you can look for plugins elsewhere, for example, on GitHub. 
+Krew is still a young project and at the moment there are only about 30 plugins in the [krew index](https://github.com/GoogleContainerTools/krew-index/). In case you don't find what you need there, you can look for plugins elsewhere, for example, on GitHub. 
 
 I recommend to check out the [**kubectl-plugins**](https://github.com/topics/kubectl-plugins) GitHub topic. You will find several dozens of available plugins there that are worth to have a look at.
 
@@ -1070,15 +1070,21 @@ To do so, just create a file named `kubectl-img` with the following content:
 kubectl get pods -o custom-columns='NAME:metadata.name,IMAGES:spec.containers[*].image'
 ~~~
 
-Now you just have to make the file exectuable with `chmod +x kubectl-img` and move it to any directory in your `PATH`, and after that you can immediately start using the plugin with `kubectl img`.
+Now make the file exectuable with `chmod +x kubectl-img` and move it to any directory in your `PATH`. Immediately after that you can start using the plugin with `kubectl img`!
 
-> As mentioned, kubectl plugins can be written in any programming language. If you use shell scripts, you have the advantage that you can easily invoke kubectl from the plugin (it's certain that kubectl is installed if your plugin is used as a kubectl plugin). However, you can write more sophisticated plugins in real programming languages, for example, using a [Kubernetes client library](https://kubernetes.io/docs/reference/using-api/client-libraries/). If you use Go, there is even a library called [cli-runtime](https://github.com/kubernetes/cli-runtime) that exists specifically for writing kubectl plugins.
+> As mentioned, kubectl plugins can be written in *any* programming or scripting language. If you use shell scripts, you have the advantage that you can easily invoke kubectl from the plugin. However, you can write more sophisticated plugins with real programming languages, for example, using a [Kubernetes client library](https://kubernetes.io/docs/reference/using-api/client-libraries/). If you use Go, you can also use the [cli-runtime](https://github.com/kubernetes/cli-runtime) library, which exists specifically for writing kubectl plugins.
+
+### Sharing your plugins
+
+If you think that one of your plugins might be useful for others, feel free to share it on **GitHub**. Make sure to add it to the [**kubectl-plugins**](https://github.com/topics/kubectl-plugins) topic, so that others can find it.
+
+You can also request to add your plugin to the [**krew index**](https://github.com/GoogleContainerTools/krew-index/). You can find the instructions for how to do this in the [krew GitHub repository](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md).
 
 ### Command completion
 
 At the moment, the plugin mechanism unfortunately doesn't yet support command completion. This means that you need to fully type the plugin names, as well as any arguments for the plugins.
 
-However, there is an open [**feature request**](https://github.com/kubernetes/kubectl/issues/585) to provide command completion for plugins. So, it is possible that this feature will be implemented some time in the future.
+However, there is an open [**feature request**](https://github.com/kubernetes/kubectl/issues/585) for this in the kubectl GitHub repository. So, it is possible that this feature will be implemented some time in the future.
 
 <!-- #### Distribute your own plugins via krew
 
