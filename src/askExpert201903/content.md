@@ -1,3 +1,18 @@
+**Welcome to the weekly Ask the Kubernetes Expert** — a monthly column on the most interesting questions that we see online and during our workshops.
+
+This month the answers are curated by Learnk8s' instructor [Daniele Polencic](https://twitter.com/danielepolencic).
+
+Daniele has a background in software development and has deployed to Kubernetes since version 1.2.
+
+**The top questions of this month are:**
+
+1. [How do I connect clusters living in different data centres?](#1-how-do-i-connect-clusters-living-in-different-data-centres-)
+1. [Can I have an API Gateway as an ingress?](2-can-i-have-an-api-gateway-as-an-ingress-)
+1. [Is there any tool to visualise the dependency between YAML files?](3-is-there-any-tool-to-visualise-the-dependency-between-yaml-files-)
+1. [Is Helm used just for templating?](4-is-helm-used-just-for-templating-)
+
+If you wish to have your question featured on the next episode, [please get in touch](mailto:hello@learnk8s.io).
+
 ## 1. How do I connect clusters living in different data centres?
 
 > **TL;DR:** [Kubefed v2 is coming soon](https://github.com/kubernetes-sigs/federation-v2), you probably want to check out [Shipper](https://github.com/bookingcom/shipper) and the [multi-cluster-scheduler project](https://github.com/admiraltyio/multicluster-scheduler).
@@ -27,7 +42,7 @@ The official response from SIG-cluster is [kubefed2 — a revised version of the
 
 The first attempt at managing a collection of clusters as a single entity came from a tool called kube federation.
 
-It was a good start, but kube federation ended up being not so popular because not all resource were supported.
+It was a good start, but kube federation ended up being not so popular because not all resources were supported.
 
 The tool had support for federated Deployments and Services but didn't cover StatefulSets, for example.
 
@@ -88,7 +103,7 @@ spec:
 
 As you can imagine, the Deployment is distributed in two clusters: `cluster1` and `cluster2`.
 
-The first cluster deploys 3 replicas whereas the second overrides the value to 5.
+The first cluster deploys three replicas whereas the second overrides the value to 5.
 
 If you wish to have more control on the number of replicas, kubefed2 exposes a new object called ReplicaSchedulingPreference where you can distribute replicas in weighted proportions:
 
@@ -108,7 +123,7 @@ spec:
       weight: 2
 ```
 
-The final design for the CRD and the API is not finalised and there's a lot of activity on the official project repository.
+The final design for the CRD and the API is not finalised, and there's a lot of activity on the official project repository.
 
 **You should keep a close eye on kubefed2, but you should also be aware of that this is not production ready yet.**
 
@@ -124,11 +139,11 @@ Both tools let you customise the rollout strategy to multiple clusters, which is
 
 _However, Shipper is more opinionated._
 
-As an example, Shipper is designed to take Helm charts as inputs and you can't use vanilla resources.
+As an example, Shipper is designed to take Helm charts as inputs, and you can't use vanilla resources.
 
 Shipper is also used for production infrastructure, so it's technically a more mature and reliable product than kubefed2.
 
-Here's a high level overview of how Shipper works.
+Here's a high-level overview of how Shipper works.
 
 Instead of creating a standard Deployment, you should create an Application resource that wraps an Helm chart like this:
 
@@ -169,9 +184,9 @@ spec:
 
 When you submit the resource to the cluster, the Shipper controller takes care of rolling out the change in all federated clusters.
 
-**Shipper is an interesting contender in the multi-cluster deployment space, but it's tight integration with Helm is also a major concern.**
+**Shipper is an interesting contender in the multi-cluster deployment space, but its tight integration with Helm is also a significant concern.**
 
-You can learn more about Shipper and its phylosophy by [reading the official press release](https://medium.com/booking-com-infrastructure/introducing-shipper-daf9244e3882).
+You can learn more about Shipper and its philosophy by [reading the official press release](https://medium.com/booking-com-infrastructure/introducing-shipper-daf9244e3882).
 
 If you prefer to dive into the code, you should [head over to the official project repository](https://github.com/bookingcom/shipper).
 
@@ -189,9 +204,9 @@ But instead of creating a new way to interact with the cluster and wrapping reso
 
 When a Pod is created is immediately replaced by a proxy Pod.
 
-The original Pod goes through a second round of scheduling where the placement decision is taken after interrogating the entire federation.
+The original Pod goes through another round of scheduling where the placement decision is taken after interrogating the entire federation.
 
-Finally the Pod is deployed in the target cluster.
+Finally, the Pod is deployed in the target cluster.
 
 In other news, you end up having one extra Pod that doesn't do much — it's just a placeholder.
 
@@ -199,15 +214,15 @@ But the benefit is that you didn't have to write any new resource to make your D
 
 Every resource that creates Pod is automatically federation-ready.
 
-It's a neat idea because you can suddenly have multi-region clusters without event noticing it, but it also feels quite risky as there's a lot of magic going on.
+It's a neat idea because you can suddenly have multi-region clusters without even noticing it, but it also feels quite risky as there's a lot of magic going on.
 
-If you wish to dive more into the multi-cluster-scheduler you should check out [the official repository page](multi-cluster-scheduler).
+If you wish to dive more into the multi-cluster-scheduler, you should check out [the official repository page](multi-cluster-scheduler).
 
-If you prefer to read about the multi-cluster-scheduler in action, Admirality has an [interesting use case applied to Argo](https://admiralty.io/blog/running-argo-workflows-across-multiple-kubernetes-clusters/) — the open source Kubernetes native workflows, events, CI and CD.
+If you prefer to read about the multi-cluster-scheduler in action, Admiralty has an [interesting use case applied to Argo](https://admiralty.io/blog/running-argo-workflows-across-multiple-kubernetes-clusters/) — the open source Kubernetes native workflows, events, CI and CD.
 
 ### More tools and solutions
 
-Connecting and managing multiple clusters together is a complex topic and there's a solution fits all.
+Connecting and managing multiple clusters together is a complex topic, and there's a solution fits all.
 
 If you're interested in diving more into the topic, you should have a look at the following resources:
 
@@ -372,10 +387,10 @@ Ambassador has an excellent tutorial about rate limiting, so if you are interest
 
 ### More options
 
-If neither Ambassador or Kong are suitable for what you do, you should check out the following alternatives:
+If neither Ambassador or Kong is suitable for what you do, you should check out the following alternatives:
 
 - [Tyk](https://tyk.io/) is an open source API gateway that can be deployed as an Ingress.
-- You could [build your own API gateway Ingress using Ballerina](https://ballerina.io/learn/by-guide/api-gateway/) — a Cloud Native programming language
+- You could [build your API gateway Ingress using Ballerina](https://ballerina.io/learn/by-guide/api-gateway/) — a Cloud Native programming language
 
 ## 3. Is there any tool to visualise the dependency between YAML files?
 
@@ -385,11 +400,11 @@ When you have a large number of resources in your cluster, you might lose track 
 
 Keeping track of dependencies is even more challenging when you're managing distributed teams or have several clusters.
 
-_Wouldn't be nice if you could have a tool that reads a repository and show the dependencies between your Deployments, Services, Persistent Volume Claims etc.?_
+_Wouldnot be nice if you could have a tool that reads a repository and show the dependencies between your Deployments, Services, Persistent Volume Claims etc.?_
 
 Unfortunately, such a tool doesn't exist for YAML.
 
-YAML is a human-readable configuration language and it doesn't have a way to express relationships with other YAML files.
+YAML is a human-readable configuration language, and it doesn't have a way to express relationships with other YAML files.
 
 You could write a tool to analyse YAML files and link them together statically, but you will have to duplicate all the rules that power Kubernetes such as namespaces, selectors, etc. to make sure that you can draw a correct dependency graph.
 
@@ -399,7 +414,7 @@ However, if your goal is to visualise dependencies, you could focus on the clust
 
 [Weave Scope](https://github.com/weaveworks/scope) is one of those tools that — once installed into your cluster — can help you visualise your Kubernetes resources in a dependency graph.
 
-Weave scope connects to the Kubernetes API and queries your resources to draw a dependency graphs.
+Weave scope connects to the Kubernetes API and queries your resources to draw a dependency graph.
 
 As an example, have a look at the dependencies for the [microservices-demo project from Google Cloud Platform](https://github.com/GoogleCloudPlatform/microservices-demo) — a collection of ten microservices that are meant to be demoing an e-commerce website.
 
@@ -423,9 +438,9 @@ If you could trace all the traffic between your components, you should be able t
 
 **Even if you don't use Kubernetes.**
 
-Tool such as [Istio](https://istio.io) or [Linkerd2](https://linkerd.io/2/overview/) are designed to do just that: augment your network so you can debug, observe, and secure your traffic without requiring any changes to your code.
+A tool such as [Istio](https://istio.io) or [Linkerd2](https://linkerd.io/2/overview/) are designed to do just that: augment your network so you can debug, observe, and secure your traffic without requiring any changes to your code.
 
-In this example you will have a look at Istio, but the same applies to any other similar technology.
+In this example, you will have a look at Istio, but the same applies to any other similar technology.
 
 After you install Istio in your cluster, every new Pod has a companion container that is in charge of routing all the inbound and outbound traffic to that Pod.
 
@@ -435,13 +450,13 @@ The proxy does a lot more than just routing the traffic, though.
 
 It can collect metrics and receive instructions from the control plane.
 
-When every app in your cluster has a sidee car proxy, you can visualise the flow of the traffic.
+When every app in your cluster has a sidecar proxy, you can visualise the flow of the traffic.
 
 Here's the same collection of microservices deployed in a cluster with Istio enabled:
 
 ![Istio with GoogleCloudPlatform/microservices-demo](istio.gif)
 
-As you can see the graph is identical to the one drew by Weave Scope.
+As you can see the graph is identical to the one drawn by Weave Scope.
 
 But Istio didn't have to interrogate the Kubernetes API to draw any of it.
 
@@ -453,7 +468,7 @@ Also adding an extra container to every Pod affects latency and resource consump
 
 ### More options
 
-There're two noteworthy tools that can help visualise dependencies in your cluster
+Two noteworthy tools can help visualise dependencies in your cluster:
 
 - [Linkerd2](https://linkerd.io/2/overview/), another service mesh similar to Istio
 - [Kubebricks](https://github.com/kubricksllc/Kubricks), an electron app that connects to your cluster using kubectl and helps you visualise your dependencies
@@ -500,7 +515,7 @@ Charts became such a ubiquitous tool to share collections of YAML files that mad
 
 > Please note that you can use `helm search <keyword>` to search for a specific chart on the official registry.
 
-Companies started sharing packages internally for their teams and that led to private registries.
+Companies started sharing packages internally for their teams, and that led to private registries.
 
 You have a public registry with packages contributed by the community and private registry for internal use.
 
@@ -573,3 +588,11 @@ To summarise, Helm is:
 - a **templating engine** for your YAML files
 - a convenient way for **packaging collections of YAML files and distributing them** in public and private registry
 - a **release manager** capable of rolling back deployments
+
+## That's all folks
+
+Thanks for reading until the end!
+
+A special thank you goes to [XXXX](xxx) and [XXX](xxx) that reviewed the content of this article.
+
+Don't forget that if you wish to have your question featured on the next episode, [you should get in touch](mailto:hello@learnk8s.io).
