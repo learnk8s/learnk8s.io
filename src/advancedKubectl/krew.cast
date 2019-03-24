@@ -190,3 +190,4 @@
 [39.101962, "o", "\r\n"]
 [40.395144, "o", "Resource   Requests  %Requests     Limits  %Limits  Allocatable  Schedulable        Free\r\nCPU             590         19          0        0         3003         2413        2413\r\nMemory    115343360          4  178257920        6   2786279424   2670936064  2608021504\r\n"]
 [40.399299, "o", "\u001b[1;32m5.0|~$ \u001b[0m"]
+[41.399299, "o", ""]
