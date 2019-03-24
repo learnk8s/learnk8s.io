@@ -1,8 +1,8 @@
 If you work with Kubernetes, then kubectl is probably one of your most-used tools. Whenever you spend a lot of time working with a specific tool, it is worth to get to know it very well and learn how to use it efficiently.
 
-This article contains a series of tips and tricks to help you boosting your kubectl productivity. At the same time, this article aims at deepening your understanding of how various aspects of Kubernetes work.
+This article contains a series of tips and tricks to help you boost your kubectl productivity. At the same time, it aims at deepening your understanding of how various aspects of Kubernetes work.
 
-The goal of this article is not only to make your daily work with Kubernetes more efficient, but also more enjoyable!
+The goal of this article is not only to make your daily work with Kubernetes more efficient but also more enjoyable!
 
 ## Contents
 
@@ -50,7 +50,7 @@ POST /apis/apps/v1/namespaces/{namespace}/replicasets
 
 Consequently, when you execute the above command, kubectl makes an HTTP POST request to the above API endpoint. The ReplicaSet definition (that you provided in the `replicaset.yaml` file) is passed in the body of the request.
 
-This is how kubectl works for *all* commands that interact with the Kubernetes cluter. In all these cases, kubectl simply makes HTTP requests to the appropriate Kubernetes API endpoints.
+This is how kubectl works for *all* commands that interact with the Kubernetes cluster. In all these cases, kubectl simply makes HTTP requests to the appropriate Kubernetes API endpoints.
 
 > Note that it's totally possible to control Kubernetes with a tool like `curl` by manually issuing HTTP requests to the Kubernetes API. Kubectl just makes it easier for you to use the Kubernetes API.
 
@@ -121,17 +121,17 @@ This event triggers the **ReplicaSet controller**, which is a sub-process of the
 
 The job of the ReplicaSet controller is to make sure that the required number of replica Pods of a ReplicaSet exists. In our example, no Pods exist yet, so the ReplicaSet controller creates these Pod definitions (according to the Pod template in the ReplicaSet definition) and saves them in the storage backend.
 
-The creation of the new Pods triggers the **scheduler**, who watches for Pod definitions that are not yet associated to a worker node. The scheduler chooses a suitable worker node for each Pod and updates the Pod definitions in the storage backend with this information.
+The creation of the new Pods triggers the **scheduler**, who watches for Pod definitions that are not yet scheduled to a worker node. The scheduler chooses a suitable worker node for each Pod and updates the Pod definitions in the storage backend with this information.
 
 > Note that up to this point, no workload code is being run anywhere in the cluster. All that has been done so far is creating and updating resources in the storage backend on the master node.
 
-This event triggers the **kubelets** who watch for Pods that are scheduled to their worker nodes. The kubelet of the worker node your ReplicaSet Pods have been scheduled to, downloads the container images for these Pods (if not already present on the machine), and runs them with the configured container runtime (which may be Docker or another container runtime).
+This event triggers the **kubelets** who watch for Pods that are scheduled to their worker nodes. The kubelet of the worker node your ReplicaSet Pods have been scheduled to downloads the container images for these Pods (if not already present on the machine) and runs them with the configured container runtime (which may be Docker or another container runtime).
 
 At this point, finally, your ReplicaSet application is running!
 
 ### The role of the Kubernetes API
 
-As you can see from the above example, Kubernetes components (except the API server and the storage backend) work by watching for resource changes in the storage backend, and manipulating resources in the storage backend.
+As you can see from the above example, Kubernetes components (except the API server and the storage backend) work by watching for resource changes in the storage backend and manipulating resources in the storage backend.
 
 However, these components **do not** access the storage backend directly, but only **through the Kubernetes API**.
 
@@ -153,7 +153,7 @@ With this knowledge, you can summarise how Kubernetes works as follows:
 
 Being familiar with these concepts **will help you a lot** to understand kubectl better and make the most use of it!
 
-Let's now look at a series of concrete tips and tricks to help you boosting your kubectl productivity.
+Let's now look at a series of concrete tips and tricks to help you boost your kubectl productivity.
 
 ## 1. Save typing with command completion
 
@@ -171,7 +171,7 @@ The [official documentation](https://kubernetes.io/docs/tasks/tools/install-kube
 
 ### How command completion works
 
-In general, command completion is a shell feature that works by the means of a **completion script**. A completion script is shell script that defines the completion behaviour for a specific command. Sourcing a completion script enables completion for the corresponding command.
+In general, command completion is a shell feature that works by the means of a **completion script**. A completion script is a shell script that defines the completion behaviour for a specific command. Sourcing a completion script enables completion for the corresponding command.
 
 Kubectl can automatically generate and print out the completion scripts for Bash and Zsh with the following commands:
 
@@ -180,7 +180,7 @@ kubectl completion bash
 kubectl completion zsh
 ~~~
 
-In theory, sourcing the output of this command in the approprate shell enables kubectl command completion.
+In theory, sourcing the output of this command in the appropriate shell enables kubectl command completion.
 
 However, in practice, the details differ for Bash (including a difference between Linux and macOS) and Zsh. The following sections explain all these cases:
 
@@ -237,7 +237,7 @@ After reloading your shell, kubectl command completion should be working!
 
 ### Bash on macOS
 
-With macOS there is a slight complication. The reason is that the default version of Bash on macOS is 3.2, which is quite outdated. The kubectl completion script unfortunately requires at least Bash 4.1 and thus doesn't work with Bash 3.2.
+With macOS, there is a slight complication. The reason is that the default version of Bash on macOS is 3.2, which is quite outdated. The kubectl completion script unfortunately requires at least Bash 4.1 and thus doesn't work with Bash 3.2.
 
 > The reason that Apple includes an outdated version of Bash in macOS is that newer versions use the [GPLv3](https://en.wikipedia.org/wiki/GNU_General_Public_License) license, which Apple doesn't support.
 
@@ -253,7 +253,7 @@ You can install bash-completion with [Homebrew](https://brew.sh):
 brew install bash-completion@2
 ~~~
 
-> The `@2` at stands for of **bash-completion v2**. The kubectl completion script requires bash-completion v2, and bash-completion v2 requires at least Bash 4.1. This is the reason that you can't use the kubectl completion script on Bash versions lower than 4.1.
+> The `@2` stands for of **bash-completion v2**. The kubectl completion script requires bash-completion v2, and bash-completion v2 requires at least Bash 4.1. This is the reason that you can't use the kubectl completion script on Bash versions lower than 4.1.
 
 The output of the `brew install` command includes a "Caveats" section with instructions to add the following lines to your `~/.bash_profile` file:
 
@@ -419,9 +419,9 @@ But first, let's have a closer look at these field selection expressions.
 
 The expressions for selecting resource fields are based on [JSONPath](https://goessner.net/articles/JsonPath/index.html). 
 
-JSONPath is a language to extract data from JSON documents (it is similar to XPath for XML). Selecting single field is only the most basic usage of JSONPath. It has [a lot of features](https://goessner.net/articles/JsonPath/index.html#e3), like list selectors, filters, and more.
+JSONPath is a language to extract data from JSON documents (it is similar to XPath for XML). Selecting a single field is only the most basic usage of JSONPath. It has [a lot of features](https://goessner.net/articles/JsonPath/index.html#e3), like list selectors, filters, and more.
 
-However, with `kubectl explain`, only a subset of the JSONPath capabilities are supported. The following summarises these supported features with example usages:
+However, with `kubectl explain`, only a subset of the JSONPath capabilities is supported. The following summarises these supported features with example usages:
 
 ~~~bash
 # Select all elements of a list
@@ -433,20 +433,20 @@ kubectl get pods -o custom-columns='DATA:spec.containers[0].image'
 # Select those elements of a list that match a filter expression
 kubectl get pods -o custom-columns='DATA:spec.containers[?(@.image!="nginx")].image'
 
-# Select all fields under a specific location, regardless their name
+# Select all fields under a specific location, regardless of their name
 kubectl get pods -o custom-columns='DATA:metadata.*'
 
-# Select all fields with a specific name, regardless their location
+# Select all fields with a specific name, regardless of their location
 kubectl get pods -o custom-columns='DATA:..image'
 ~~~
 
-Of particualar importance is the `[]` operator. Many fields of Kubernetes resources are lists, and this operator allows you to select items of these lists. It is often used with a wildcard as `[*]` to select all items of the list.
+Of particular importance is the `[]` operator. Many fields of Kubernetes resources are lists, and this operator allows you to select items of these lists. It is often used with a wildcard as `[*]` to select all items of the list.
 
 Below you will find some examples that use this notation.
 
 ### Example applications
 
-The possibilites for using the custom columns output format are endless, as you can display any field, or combination of fields, of a resource in the output. Here are some example applications, but feel free to explore on your own and find applications that are useful to you!
+The possibilities for using the custom columns output format are endless, as you can display any field, or combination of fields, of a resource in the output. Here are some example applications, but feel free to explore on your own and find applications that are useful to you!
 
 > **Tip:** if you end up using one of these a commands frequently, you can create a [shell alias](https://en.wikipedia.org/wiki/Alias_(command)#Creating_aliases) for it.
 
@@ -488,7 +488,7 @@ kubectl get nodes -o yaml
 kubectl get nodes -o json
 ~~~
 
-This is generally a good way to disover even more information about your resources, in addition to exploring the [resource specifications](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/).
+This is generally a good way to discover even more information about your resources, in addition to exploring the [resource specifications](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/).
 
 <!--
 ### What `kubectl get` gets from the API server
@@ -555,13 +555,13 @@ When kubectl has to make a request to the Kubernetes API, it reads the so-called
 
 > The default kubeconfig file is `~/.kube/config`. This file is usually automatically created or updated by some command (for example, `aws eks update-kubeconfig` or `gcloud container clusters get-credentials`, if you use managed Kubernetes services).
 
-When you work with **multiple clusters**, then you have connection parameters for *multiple* clusters configured in your kubeconfig file. This means, you need a way to tell kubectl to *which* of these cluster you want it to connect.
+When you work with **multiple clusters**, then you have connection parameters for *multiple* clusters configured in your kubeconfig file. This means, you need a way to tell kubectl to *which* of these clusters you want it to connect.
 
-Within a cluster, you can set up **multiple [namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)** (a namespace is kind of "virtual" clusters within physical cluster). Kubectl determines which namespace to use for a request from the kubeconfig file as well. So, you need a way to tell kubectl *which* of these namespaces you want it to use.
+Within a cluster, you can set up **multiple [namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)** (a namespace is kind of "virtual" clusters within a physical cluster). Kubectl determines which namespace to use for a request from the kubeconfig file as well. So, you need a way to tell kubectl *which* of these namespaces you want it to use.
 
 This section explains how this works and how you can do it effortlessly.
 
-> Note that you can also have multiple kubeconfig files by listing them in the [`KUBECONFIG`](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#the-kubeconfig-environment-variable) environment variable. In that case, all these files will be merged to a single effective configuration at execution time. You can also overwrite the default kubeconfig file with the `--kubeconfig` option for every kubectl command. See the [official](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) [documentation](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
+> Note that you can also have multiple kubeconfig files by listing them in the [`KUBECONFIG`](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/#the-kubeconfig-environment-variable) environment variable. In that case, all these files will be merged into a single effective configuration at execution time. You can also overwrite the default kubeconfig file with the `--kubeconfig` option for every kubectl command. See the [official](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) [documentation](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
 
 ### Kubeconfig files
 
@@ -575,7 +575,7 @@ As you can see, a kubeconfig file consists of a set of **contexts**. A context c
 - **User:** authentication credentials for a specific user of the cluster
 - **Namespace:** the namespace to use when connecting to the cluster
 
-> In practice, people often use a single context per cluster in their kubeconfig file. However, you could also have multiple contexts per cluster, differing in their *user* or *namespace*. But this seems to be less common, so that often there is a one-to-one mapping between clusters and contexts.
+> In practice, people often use a single context per cluster in their kubeconfig file. However, you could also have multiple contexts per cluster, differing in their *user* or *namespace*. But this seems to be less common so that often there is a one-to-one mapping between clusters and contexts.
 
 At any given time, one of these contexts is set as the **current context** (through a dedicated field in the kubeconfig file):
 
@@ -603,7 +603,7 @@ In theory, you could do these changes by manually editing the kubeconfig file. B
 
 A very popular tool for switching between clusters and namespaces is [**kubectx**](https://github.com/ahmetb/kubectx/).
 
-This tool provides the `kubectx` and `kubens` commands that allow you change the current context and namespace, respectively.
+This tool provides the `kubectx` and `kubens` commands that allow you to change the current context and namespace, respectively.
 
 > As mentioned, changing the current context means changing the cluster, if you have only a single context per cluster.
 
@@ -615,9 +615,9 @@ Here you can see these two commands in action:
 
 To install kubectx, just follow the [instructions on the GitHub page](https://github.com/ahmetb/kubectx/#installation).
 
-Both `kubectx` and `kubens` provide **command completion** through a completion script. This allows you to auto-complete the context names and namespaces, so that you don't have to fully type them. You can find the instructions to set up completion on the [GitHub page](https://github.com/ahmetb/kubectx/#installation) as well.
+Both `kubectx` and `kubens` provide **command completion** through a completion script. This allows you to auto-complete the context names and namespaces so that you don't have to fully type them. You can find the instructions to set up completion on the [GitHub page](https://github.com/ahmetb/kubectx/#installation) as well.
 
-Another useful feature of kubectx is the [**interactive mode**](https://github.com/ahmetb/kubectx/#interactive-mode). This works in conjunction with the [**fzf**](https://github.com/junegunn/fzf) tool, which you have to install separately (in fact, installing fzf, automatically enables kubectx interactive mode).The interactive mode allows you to select the target context or namespace through an interactive fuzzy search interface (provided by fzf).
+Another useful feature of kubectx is the [**interactive mode**](https://github.com/ahmetb/kubectx/#interactive-mode). This works in conjunction with the [**fzf**](https://github.com/junegunn/fzf) tool, which you have to install separately (in fact, installing fzf, automatically enables kubectx interactive mode). The interactive mode allows you to select the target context or namespace through an interactive fuzzy search interface (provided by fzf).
 
 ### Use shell aliases
 
@@ -658,7 +658,7 @@ To **install these aliases**, you just have to add the above definitions to your
 
 ### Use plugins
 
-Kubectl allows to intall plugins that can be invoked like native commands. You can, for example, install a plugin named *kubectl-foo* and then invoke it as `kubectl foo`.
+Kubectl allows installing plugins that can be invoked like native commands. You can, for example, install a plugin named *kubectl-foo* and then invoke it as `kubectl foo`.
 
 > Kubectl plugins will be described in detail in a [later section of this article](#6-extend-kubectl-with-plugins).
 
@@ -780,7 +780,7 @@ You might wonder how you could possibly remember 800 aliases? Actually, you don'
 </style>
 ```
 
-As you can see, the aliases consist of **components**, each standing for a specific elements of a kubectl command. Each alias can have one component for the **base command**, **operation**, and **resource**, and multiple components for the **options**, and you just "fill in" these components from left to right according to the above scheme.
+As you can see, the aliases consist of **components**, each standing for a specific element of a kubectl command. Each alias can have one component for the **base command**, **operation**, and **resource**, and multiple components for the **options**, and you just "fill in" these components from left to right according to the above scheme.
 
 > Please note that the current and fully detailed scheme is on the [GitHub page](https://github.com/ahmetb/kubectl-aliases#syntax-explanation). There you can also find the [full list of aliases](https://github.com/ahmetb/kubectl-aliases/blob/master/.kubectl_aliases).
 
@@ -864,7 +864,7 @@ Note that some aliases even *require* a further argument on the command-line. Fo
 
 > For that reason, you can use the `a`, `f`, and `l` components only at the end of an alias.
 
-In general, once you get the hang of this scheme, you an intuitively deduce the alias names from the commands you want to execute and save a lot of typing!
+In general, once you get the hang of this scheme, you can intuitively deduce the alias names from the commands you want to execute and save a lot of typing!
 
 ### Installation
 
@@ -888,7 +888,7 @@ kgpooyaml test-pod-d4b77b989
 
 If you use kubectl command completion, then you're probably used to auto-complete things like resource names. But can you still do that when you use the aliases?
 
-*That's an important question, because if it wouldn't work, that would undo some of the benefits of these aliases!*
+*That's an important question because if it wouldn't work, that would undo some of the benefits of these aliases!*
 
 The answer depends on which shell you use.
 
@@ -1000,11 +1000,11 @@ This section will show you how to install plugins, where you can find existing p
 
 ### Installing plugins
 
-Kubectl plugins are distributed as simple executable files with a name of the form `kubectl-x`. The prefix `kubectl-` is mandatory, and what follows is the new kubectl sub-command that allows to invoke the plugin.
+Kubectl plugins are distributed as simple executable files with a name of the form `kubectl-x`. The prefix `kubectl-` is mandatory, and what follows is the new kubectl sub-command that allows invoking the plugin.
 
 For example, the *hello* plugin shown above would be distributed as a file named `kubectl-hello`.
 
-To [install a plugin](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/#installing-kubectl-plugins), you just have to copy the `kubectl-x` file to *any* directory in your `PATH` and make it exectuable (for example, with `chmod +x`). Immediately after that, you can invoke the plugin with `kubectl x`.
+To [install a plugin](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/#installing-kubectl-plugins), you just have to copy the `kubectl-x` file to *any* directory in your `PATH` and make it executable (for example, with `chmod +x`). Immediately after that, you can invoke the plugin with `kubectl x`.
 
 You can use the following command to list all the plugins that are currently installed on your system:
 
@@ -1055,7 +1055,7 @@ I recommend to check out the [**kubectl-plugins**](https://github.com/topics/kub
 
 ### Creating your own plugins
 
-Of course you can [create your own kubectl plugins](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/#writing-kubectl-plugins), and it is very easy to do so.
+Of course, you can [create your own kubectl plugins](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/#writing-kubectl-plugins), and it is very easy to do so.
 
 You just have to create an executable file that does what you want, give it a name of the form `kubectl-x`, and then install it as described [above](#installing-plugins).
 
@@ -1070,7 +1070,7 @@ To do so, just create a file named `kubectl-img` with the following content:
 kubectl get pods -o custom-columns='NAME:metadata.name,IMAGES:spec.containers[*].image'
 ~~~
 
-Now make the file exectuable with `chmod +x kubectl-img` and move it to any directory in your `PATH`. Immediately after that you can start using the plugin with `kubectl img`!
+Now make the file executable with `chmod +x kubectl-img` and move it to any directory in your `PATH`. Immediately after that, you can start using the plugin with `kubectl img`!
 
 > As mentioned, kubectl plugins can be written in *any* programming or scripting language. If you use shell scripts, you have the advantage that you can easily invoke kubectl from the plugin. However, you can write more sophisticated plugins with real programming languages, for example, using a [Kubernetes client library](https://kubernetes.io/docs/reference/using-api/client-libraries/). If you use Go, you can also use the [cli-runtime](https://github.com/kubernetes/cli-runtime) library, which exists specifically for writing kubectl plugins.
 
@@ -1084,7 +1084,7 @@ You can also request to add your plugin to the [**krew index**](https://github.c
 
 At the moment, the plugin mechanism unfortunately doesn't yet support command completion. This means that you need to fully type the plugin names, as well as any arguments for the plugins.
 
-However, there is an open [**feature request**](https://github.com/kubernetes/kubectl/issues/585) for this in the kubectl GitHub repository. So, it is possible that this feature will be implemented some time in the future.
+However, there is an open [**feature request**](https://github.com/kubernetes/kubectl/issues/585) for this in the kubectl GitHub repository. So, it is possible that this feature will be implemented sometime in the future.
 
 <!-- #### Distribute your own plugins via krew
 
@@ -1101,7 +1101,8 @@ The **plugin manifest** must contain all the required information for *krew* to 
 
 To publish your plugin to the *krew* index, you have to create a pull request to the [krew-index](https://github.com/GoogleContainerTools/krew-index) repository adding your plugin manifest to the [`plugins`](https://github.com/GoogleContainerTools/krew-index/tree/master/plugins) directory of this repository. This is were the manifests of all the plugins in the *krew* index are maintained.
 
-Once the pull request is accepted, you plugin will be publicly listed by `kubectl krew search` and users can install it with `kubectl install <plugin>`. If you create a new version of your plugin, you have to update your plugin manifest in the krew-index repository with a new pull request.
+Once the pull request is accepted, your plugin will be publicly listed by `kubectl krew search` and users can install it with `kubectl install <plugin>`. If you create a new version of your plugin, you have to update your plugin manifest in the krew-index repository with a new pull request.
 
 Again, the detailed instructions for publishing plugins to *krew* can be found in the *krew* [developer guide](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md).
  -->
+
