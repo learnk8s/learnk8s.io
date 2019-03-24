@@ -163,7 +163,7 @@ Command completion allows you to auto-complete the individual parts of kubectl c
 
 Here you can see kubectl command completion in action (using the Zsh shell):
 
-![](autocompletion.cast)
+![](asciicast-completion.gif)
 
 Command completion is available for the [**Bash**](https://www.gnu.org/software/bash/) and [**Zsh**](https://www.zsh.org/) shells.
 
@@ -329,7 +329,7 @@ The command outputs the specification of the requested resource or field. The in
 
 Here you can see `kubectl explain` in action:
 
-![](explain.cast)
+![](asciicast-kubectl-explain.gif)
 
 By default, `kubectl explain` displays only a single level of fields. You can display the **entire tree** of fields with the `--recursive` flag:
 
@@ -992,7 +992,7 @@ Since [version 1.12](https://github.com/kubernetes/kubernetes/blob/master/CHANGE
 
 Here is an example of a kubectl plugin that can be invoked as `kubectl hello`:
 
-![](kubectl-hello.cast)
+![](asciicast-plugins-hello.gif)
 
 > The kubectl plugin mechanisms closely follows the design of the [Git plugin mechanism](https://adamcod.es/2013/07/12/how-to-create-git-plugin.html).
 
@@ -1022,7 +1022,7 @@ The [**krew**](https://github.com/GoogleContainerTools/krew) project aims at pro
 
 Krew is centred around an [index](https://github.com/GoogleContainerTools/krew-index) of kubectl plugins from which you can choose and install. Here you can see krew in action:
 
-![](krew.cast)
+![](asciicast-plugins-krew.gif)
 
 As you can see, krew itself is a kubectl plugin. That means, you **install krew** in essence like any other kubectl plugin. You can find the detailed installation instructions on the [GitHub page](https://github.com/GoogleContainerTools/krew/#installation).
 
