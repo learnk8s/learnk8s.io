@@ -44,12 +44,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       authorAvatar={currentNode.payload.author.avatar}
       authorLink={currentNode.payload.author.link}
       cssBundle={CSSBundle({
-        paths: [
-          'node_modules/tachyons/css/tachyons.css',
-          'src/prism-solarizedlight.css',
-          'src/prism-line-highlight.css',
-          'assets/style.css',
-        ],
+        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
         styles: css,
       })}
       publishedDate={currentNode.payload.publishedDate}

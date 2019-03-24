@@ -51,7 +51,7 @@ The federated CRD has three sections:
 
 Here's an example of a federated Deployment with placements and overrides.
 
-```yaml
+```yaml|title=federated-deployment.yaml
 apiVersion: types.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
@@ -73,17 +73,17 @@ spec:
             app: nginx
         spec:
           containers:
-          - image: nginx
-            name: nginx
+            - image: nginx
+              name: nginx
   placement:
     clusterNames:
-    - cluster2
-    - cluster1
+      - cluster2
+      - cluster1
   overrides:
-  - clusterName: cluster2
-    clusterOverrides:
-    - path: spec.replicas
-      value: 5
+    - clusterName: cluster2
+      clusterOverrides:
+        - path: spec.replicas
+          value: 5
 ```
 
 As you can imagine, the Deployment is distributed in two clusters: `cluster1` and `cluster2`.
@@ -92,7 +92,7 @@ The first cluster deploys 3 replicas whereas the second overrides the value to 5
 
 If you wish to have more control on the number of replicas, kubefed2 exposes a new object called ReplicaSchedulingPreference where you can distribute replicas in weighted proportions:
 
-```yaml
+```yaml|title=preference.yaml
 apiVersion: scheduling.federation.k8s.io/v1alpha1
 kind: ReplicaSchedulingPreference
 metadata:
@@ -132,7 +132,7 @@ Here's a high level overview of how Shipper works.
 
 Instead of creating a standard Deployment, you should create an Application resource that wraps an Helm chart like this:
 
-```yaml
+```yaml|title=application.yaml
 apiVersion: shipper.booking.com/v1alpha1
 kind: Application
 metadata:
@@ -146,23 +146,23 @@ spec:
       version: 0.0.1
     clusterRequirements:
       regions:
-      - name: local
+        - name: local
     strategy:
       steps:
-      - capacity:
-          contender: 1
-          incumbent: 100
-        name: staging
-        traffic:
-          contender: 0
-          incumbent: 100
-      - capacity:
-          contender: 100
-          incumbent: 0
-        name: full on
-        traffic:
-          contender: 100
-          incumbent: 0
+        - capacity:
+            contender: 1
+            incumbent: 100
+          name: staging
+          traffic:
+            contender: 0
+            incumbent: 100
+        - capacity:
+            contender: 100
+            incumbent: 0
+          name: full on
+          traffic:
+            contender: 100
+            incumbent: 0
     values:
       replicaCount: 3
 ```
@@ -248,20 +248,20 @@ So you could use in your cluster as a gateway between your users and your backen
 
 You can expose your API to external traffic with the standard Ingress object:
 
-```yaml
+```yaml|title=ingress.yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: my-ingress
 spec:
   rules:
-  - host: example.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: api-service
-          servicePort: 80
+    - host: example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: api-service
+              servicePort: 80
 ```
 
 But there's more.
@@ -270,7 +270,7 @@ As part of the installation process Kong's controller registers Custom Resource 
 
 If you wish to limit the requests to your Ingress by IP address, you can create a definition for the limit with:
 
-```yaml
+```yaml|title=limit-by-ip.yaml
 apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
@@ -284,7 +284,7 @@ plugin: rate-limiting
 
 And you can reference the limit with an annotation in your ingress with:
 
-```yaml{5-6}
+```yaml|highlight=5-6|title=ingress.yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -293,13 +293,13 @@ metadata:
     plugins.konghq.com: rl-by-ip
 spec:
   rules:
-  - host: example.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: api-service
-          servicePort: 80
+    - host: example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: api-service
+              servicePort: 80
 ```
 
 You can [explore the Custom Resource Definitions (CRDs) for Kong](https://github.com/Kong/kubernetes-ingress-controller/blob/master/docs/custom-resources.md) on the official documentation.
@@ -316,7 +316,7 @@ The main difference between Ambassador and Kong/Nginx is that Ambassador doesn't
 
 Instead, services are exposed to the outside world using annotations within the Service:
 
-```yaml{7-15}
+```yaml|highlight=7-15|title=service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -335,12 +335,11 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: 80
+    - port: 80
+      targetPort: 80
   selector:
     service: api-backend
 ```
-
 
 The novel approach is interesting because in a single place you can define all the routing for your Deployments and Pods.
 
@@ -348,7 +347,7 @@ However, having YAML as free text within an annotation could lead to errors and 
 
 If you wish to apply rate limiting to your API, this is what it looks like in Ambassador:
 
-```yaml
+```yaml|highlight=5-11|title=service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -365,8 +364,8 @@ spec:
   selector:
     app: api-service
   ports:
-  - port: 5000
-    targetPort: http-api
+    - port: 5000
+      targetPort: http-api
 ```
 
 Ambassador has an excellent tutorial about rate limiting, so if you are interested in using that features, you can head over to [Ambassador's official documentation](https://www.getambassador.io/user-guide/rate-limiting-tutorial/).
@@ -471,7 +470,7 @@ All the variables that can change are replaced with placeholders.
 
 Before submitting them to the cluster, you could use the template engine of choice to customise them with the correct value.
 
-```yaml{11}
+```yaml|highlight=11|title=pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -482,7 +481,7 @@ spec:
       image: k8s.gcr.io/busybox
       env:
         - name: ENV
-          value: {{ .Values.env_name }}
+          value: { { .Values.env_name } }
 ```
 
 While there're a lot of tools to template Kubernetes YAML files, Helm caught a lot of attention very early on and established itself as the market leader.

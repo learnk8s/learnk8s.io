@@ -97,7 +97,7 @@ const blogPosts = {
   }),
   askExpert1903: createNode({
     page: AskKubernetesExpert201903.Details,
-    children: {}
+    children: {},
   }),
 }
 

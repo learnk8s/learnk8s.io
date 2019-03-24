@@ -7,13 +7,15 @@ import { Layout, Navbar, Footer } from './layout'
 import cheerio from 'cheerio'
 import { renderToStaticMarkup } from 'react-dom/server'
 import moment from 'moment'
+import { cat } from 'shelljs'
 
-const loadLanguages = require('prismjs/components/')
-loadLanguages(['powershell', 'bash', 'docker', 'json', 'yaml', 'sql', 'ruby', 'java'])
+require('prismjs/components/')()
 
 export const Assets = {
   tick: Image({ url: 'assets/tick.svg', description: 'Tick' }),
 }
+
+const prismSolarizedCss = cat('src/prism-solarizedlight.css').toString()
 
 export const Article: React.StatelessComponent<{
   website: Sitemap
@@ -123,10 +125,8 @@ export function Markdown(content: string, assetsPath: string): { html: string; c
     const { url, description } = Image({ url: `${assetsPath}/${src}`, description: title })
     return `<img src="${url}" alt="${description}" class="db pv3"/>`
   }
-  renderer.code = (code, langAndLines, escaped) => {
-    const matches = (langAndLines || '').match(/\{(.*?)\}/)
-    const lang = (langAndLines || '').replace(/(\{.*?\})/, '')
-    const lines = !!matches ? matches[1] : undefined
+  renderer.code = (code, args, escaped) => {
+    const { lang, title, highlight } = extractArgs(args)
     switch (lang) {
       case 'slideshow':
         return renderSlideshow(JSON.parse(code))
@@ -135,7 +135,7 @@ export function Markdown(content: string, assetsPath: string): { html: string; c
       case 'eval':
         return code
       default:
-        return decorateWithEditor(lang, code, lines)
+        return decorateWithEditor(lang, code, highlight, title)
     }
 
     function renderSlideshow({
@@ -145,6 +145,15 @@ export function Markdown(content: string, assetsPath: string): { html: string; c
       description: string
       slides: { image: string; description: string }[]
     }): string {
+      js.push(`(${Slideshow.toString()})()`)
+      css.push(`.pagination-icon {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: .125rem;
+  display: inline-block;
+  width: 0.4rem;
+}`)
       return renderToStaticMarkup(
         <div className='slideshow-js overflow-hidden'>
           <ul className='pl0 list slider-js'>
@@ -161,7 +170,10 @@ export function Markdown(content: string, assetsPath: string): { html: string; c
                     </div>
                   </div>
                   <div className='navigation-js flex items-start justify-between bg-evian ph2'>
-                    <div className='f5 lh-copy black-90 w-60 center' dangerouslySetInnerHTML={{__html: marked(description, { renderer: inlineRenderer })}}></div>
+                    <div
+                      className='f5 lh-copy black-90 w-60 center'
+                      dangerouslySetInnerHTML={{ __html: marked(description, { renderer: inlineRenderer }) }}
+                    />
                   </div>
                 </li>
               )
@@ -185,26 +197,36 @@ export function Markdown(content: string, assetsPath: string): { html: string; c
       return html ? `<div class="mv4 mv5-l">${html}</div>` : ''
     }
 
-    function decorateWithEditor(lang: string, code: string, lines?: string): string {
+    function decorateWithEditor(lang: string | null, code: string, lines: string | null, title: string | null): string {
+      const codeAsLines = code.split('\n')
+      const groupedCode = groupHighlightedCode(lines, codeAsLines.length)
+      const codeBlocks = groupedCode.map(([groupType, lines]) => {
+        const start = lines[0]
+        const end = lines[lines.length - 1]
+        const currentBlock = codeAsLines.slice(start - 1, end).join('\n')
+        switch (groupType) {
+          case Group.HIGHLIGHT:
+            css.push(prismSolarizedCss)
+            return `<span class="highlight">${
+              !!lang ? Prism.highlight(currentBlock, Prism.languages[lang]) : currentBlock
+            }</span>`
+          case Group.STANDARD:
+            return `<span class="standard">${
+              !!lang ? Prism.highlight(currentBlock, Prism.languages[lang]) : currentBlock
+            }</span>`
+        }
+      })
       return renderToStaticMarkup(
         <div className='mv4 mv5-l'>
-          <header className='bg-light-gray flex pv2 pl1 br--top br2'>
+          <header className='bg-light-gray flex pv2 pl1 br--top br2 relative'>
             <div className='w1 h1 ml1 bg-dark-red br-100' />
             <div className='w1 h1 ml1 bg-green br-100' />
             <div className='w1 h1 ml1 bg-yellow br-100' />
+            {!!title ? <p className='code f6 mv0 black-60 w-100 tc absolute top-0 left-0 h1 pv2'>{title}</p> : null}
           </header>
-          {!!lang ? (
-            <pre className={`code language-${lang} relative pa4 overflow-auto mv0 br2 br--bottom`} data-line={lines}>
-              <code
-                className={`language-${lang}`}
-                dangerouslySetInnerHTML={{ __html: Prism.highlight(code, Prism.languages[lang]) }}
-              />
-            </pre>
-          ) : (
-            <pre className='code language-none relative pa4 overflow-auto mv0 br2 br--bottom'>
-              <code className='language-none' dangerouslySetInnerHTML={{ __html: code }} />
-            </pre>
-          )}
+          <pre className={`code-light-theme relative pv4 overflow-auto mv0 br2 br--bottom`}>
+            <code className={`code lh-copy`} dangerouslySetInnerHTML={{ __html: `${codeBlocks.join('\n')}` }} />
+          </pre>
         </div>,
       )
     }
@@ -260,8 +282,8 @@ export function Markdown(content: string, assetsPath: string): { html: string; c
   }
   return {
     html: marked(content, { renderer }),
-    css,
-    js,
+    css: css.filter(onlyUnique),
+    js: js.filter(onlyUnique),
   }
 }
 
@@ -279,4 +301,151 @@ export const RelatedConentContainer: React.StatelessComponent<{}> = ({ children 
 
 export const RelatedContentItem: React.StatelessComponent<{}> = ({ children }) => {
   return <li className='mv3 f4-l lh-copy'>{children}</li>
+}
+
+function range(start: number, end: number) {
+  return [...Array.from(Array(1 + end - start).keys())].map(v => start + v)
+}
+
+export const enum Group {
+  STANDARD = 'standard',
+  HIGHLIGHT = 'highlight',
+}
+
+export function groupHighlightedCode(
+  linesToHighlight: string | null | undefined,
+  linesLength: number,
+): [Group, number[]][] {
+  if (!linesToHighlight) {
+    return [[Group.STANDARD, range(1, linesLength)]]
+  }
+  const taggedCode = linesToHighlight.split(',').reduce(
+    (acc, it) => {
+      if (/-/.test(it)) {
+        const [start, end] = it.split('-')
+        return range(parseInt(start, 10), parseInt(end, 10)).reduce(
+          (acc, n) => {
+            acc[n] = it
+            return acc
+          },
+          { ...acc },
+        )
+      } else {
+        return { ...acc, [it]: it }
+      }
+    },
+    {} as { [index: string]: string },
+  )
+  const { obj: fullyTaggedCode } = range(1, linesLength).reduce(
+    (acc, n) => {
+      if (!acc.obj[n]) {
+        acc.obj[n] = `group${acc.counter}`
+      } else {
+        acc.counter += 1
+      }
+      return acc
+    },
+    { counter: 0, obj: taggedCode },
+  )
+  const groupedCodeBlocks = range(1, linesLength).reduce(
+    (acc, n) => {
+      const label = fullyTaggedCode[n]
+      if (!acc[label]) {
+        acc[label] = []
+      }
+      acc[label].push(n)
+      return acc
+    },
+    {} as { [name: string]: number[] },
+  )
+  const sorted = Object.keys(groupedCodeBlocks)
+    .map(key => {
+      return [/^group/.test(key) ? Group.STANDARD : Group.HIGHLIGHT, groupedCodeBlocks[key]] as [Group, number[]]
+    })
+    .sort((a, b) => {
+      return a[1][0] - b[1][0]
+    })
+  return sorted
+}
+
+export function extractArgs(args: string | null | undefined) {
+  if (!args) {
+    return {
+      lang: null,
+      highlight: null,
+      title: null,
+    }
+  }
+  let [head, ...rest] = args.split('|')
+  let highlight = null
+  let title = null
+  let lang = null
+  if (/=/.test(head)) {
+    rest.push(head)
+  } else {
+    lang = head
+  }
+  const maybeHighlight = rest.find(it => /^highlight=/gi.test(it))
+  if (!!maybeHighlight) {
+    highlight = maybeHighlight.replace(/^highlight=/gi, '')
+  }
+  const maybeTitle = rest.find(it => /^title=/gi.test(it))
+  if (!!maybeTitle) {
+    title = maybeTitle.replace(/^title=/gi, '')
+  }
+  return {
+    lang: lang || null,
+    highlight,
+    title,
+  }
+}
+
+function onlyUnique(value: string, index: number, self: string[]) {
+  return self.indexOf(value) === index
+}
+
+function Slideshow() {
+  function setupSlideshow(root: HTMLElement) {
+    const width = root.offsetWidth
+    const slides = [].slice.call(root.querySelectorAll('li')) as HTMLElement[]
+    const slider = root.querySelector<HTMLElement>('.slider-js')
+    if (!slider) {
+      return console.log(`I couldn't find the slider`)
+    }
+    slider.style.width = `${width * slides.length}px`
+    slider.classList.add('flex')
+    slides.forEach(slide => (slide.style.width = `${width}px`))
+
+    function createEmptyNav() {
+      const emptyNav = document.createElement('div')
+      emptyNav.classList.add('w-20')
+      emptyNav.innerHTML = '&nbsp;'
+      return emptyNav
+    }
+
+    slides.forEach((slide, index, items) => {
+      const leftNav = document.createElement('div')
+      leftNav.classList.add('f6', 'b', 'black-50', 'pv3', 'pointer', 'w-20')
+      leftNav.innerHTML = `<svg viewBox='0 0 10 16' xmlns='http://www.w3.org/2000/svg' class='pagination-icon mr2'>
+  <polyline fill='none' vectorEffect='non-scaling-stroke' points='8,2 2,8 8,14'></polyline>
+</svg>
+<span class='ttu'>Previous</span>`
+      leftNav.onclick = () => (root.scrollLeft -= width)
+      const rightNav = document.createElement('div')
+      rightNav.classList.add('f6', 'b', 'black-50', 'pv3', 'pointer', 'w-20', 'tr')
+      rightNav.innerHTML = `<span class='ttu'>Next</span>
+<svg viewBox='0 0 10 16' xmlns='http://www.w3.org/2000/svg' class='pagination-icon ml2'>
+  <polyline fill='none' vectorEffect='non-scaling-stroke' points='2,2 8,8 2,14'></polyline>
+</svg>`
+      rightNav.onclick = () => (root.scrollLeft += width)
+      const navigation = slide.querySelector('.navigation-js')
+      if (!navigation) {
+        return console.log(`I couldn't find the navigation`)
+      }
+      navigation.prepend(index === 0 ? createEmptyNav() : leftNav)
+      navigation.append(index === items.length - 1 ? createEmptyNav() : rightNav)
+    })
+  }
+
+  document.querySelectorAll<HTMLElement>('.slideshow-js').forEach(setupSlideshow)
 }
