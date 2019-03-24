@@ -1,8 +1,6 @@
-**Welcome to the weekly Ask the Kubernetes Expert** — a monthly column on the most interesting questions that we see online and during our workshops.
+**Welcome to Ask the Kubernetes Expert** — a monthly blog post on the most interesting questions that we saw online and during our workshops in March.
 
-This month the answers are curated by Learnk8s' instructor [Daniele Polencic](https://twitter.com/danielepolencic).
-
-Daniele has a background in software development and has deployed to Kubernetes since version 1.2.
+> This month's answers are curated by [Daniele Polencic](https://twitter.com/danielepolencic). Daniele is an instructor and software engineer at [Learnk8s](https://learnk8s.io).
 
 **The top questions of this month are:**
 
