@@ -658,9 +658,9 @@ To **install these aliases**, you just have to add the above definitions to your
 
 ### Use plugins
 
-Kubectl allows to intall plugins that can be invoked like native command. You can, for example, install a *kubectl-foo* plugin and then invoke it as `kubectl foo`.
+Kubectl allows to intall plugins that can be invoked like native commands. You can, for example, install a plugin named *kubectl-foo* and then invoke it as `kubectl foo`.
 
-> Kubectl plugins will be described in detail in a [later section](#6-extend-kubectl-with-plugins).
+> Kubectl plugins will be described in detail in a [later section of this article](#6-extend-kubectl-with-plugins).
 
 Wouldn't it be nice to be able to change the current context and namespace like that? For example, running `kubectl ctx` to change the context and `kubectl ns` to change the namespace?
 
@@ -683,128 +683,132 @@ To **install the plugins**, you just have to download the shell scripts named [`
 
 ## 5. Save typing with auto-generated aliases
 
-Shell aliases, in general, can save you a lot of typing. The [**kubectl-aliases**](https://github.com/ahmetb/kubectl-aliases) project takes this idea to heart and provides about **800 aliases** for common kubectl commands.
+Shell aliases are generally a good way to save typing. The [**kubectl-aliases**](https://github.com/ahmetb/kubectl-aliases) project takes this idea to heart and provides about **800 aliases** for common kubectl commands.
 
-You might wonder how you could possibly remember 800 aliases? You actually don't need to remember them, because they are all auto-generated according to a simple scheme.
+You might wonder how you could possibly remember 800 aliases? Actually, you don't need to remember them, because they are all generated according to a simple scheme, which is shown below together with some example aliases:
 
-Below you can see this scheme together with some example aliases:
-
-> You can find the fully specified scheme on the kubectl-aliases [GitHub page](https://github.com/ahmetb/kubectl-aliases#syntax-explanation). You can also see the full list of aliases in the [`.kubectl-aliases`](https://github.com/ahmetb/kubectl-aliases/blob/master/.kubectl_aliases) file in the GitHub repository.
+> Try to hover over the example aliases for a visual effect.
 
 ```include
 <template>
 <div class="list pl0 flex flex-wrap f1">
-<div class="mv3 b tc order-last pointer ksysgdepojson w-50">ksysgdepojson</div>
-<div class="mv3 b tc order-last pointer krmcm w-50">krmcm</div>
-<div class="mv3 b tc order-last pointer kgsvcwall w-50">kgsvcwall</div>
-<div class="mv3 b tc order-last pointer kgpoallsl w-50">kgpoallsl</div>
-<ul class="abbreviations list pl0 flex justify-center items-center f4 b mv4 w-100">
-  <li class="mh2 relative">
-    <p class="absolute top--2 left-0 ttu black-50 f6 mv0">base</p>
-    <ul class="list pl0 flex flex-column">
-      <li><span class="alias-k sky">k</span>ubectl</li>
-    </ul>
-  </li>
-  <li class="mh2 relative">
-    <p class="absolute top--2 left-0 ttu black-50 f6 mv0">System</p>
-    <ul class="list pl0 flex flex-column">
-      <li>-n kube-<span class="alias-sys sky no-wrap">sys</span>tem</li>
-    </ul>
-  <li class="mh2 relative">
-    <p class="absolute top--2 left-0 ttu black-50 f6 mv0">Operation</p>
-    <ul class="list pl0 flex flex-column">
-      <li><span class="alias-g sky">g</span>et</li>
-      <li><span class="alias-d sky">d</span>escribe</li>
-      <li><span class="alias-rm sky">rm</span>&nbsp;(delete)</li>
-      <li><span class="sky">lo</span>gs</li>
-      <li><span class="sky">ex</span>ec</li>
-      <li><span class="sky">a</span>pply</li>
-    </ul>
-  </li>
-  <li class="mh2 relative">
-    <p class="absolute top--2 left-0 ttu black-50 f6 mv0">Resource</p>
-    <ul class="list pl0 flex flex-column">
-      <li><span class="alias-po sky">po</span>ds</li>
-      <li><span class="alias-dep sky">dep</span>loyment</li>
-      <li><span class="sky">sec</span>ret</li>
-      <li><span class="sky">ing</span>ress</li>
-      <li><span class="sky">no</span>de</li>
-      <li><span class="alias-svc sky">svc</span>&nbsp;(service)</li>
-      <li><span class="sky">ns</span>&nbsp;(namespace)</li>
-      <li><span class="alias-cm sky">cm</span>&nbsp;(configmap)</li>
-    </ul>
-  </li>
-  <li class="mh2 relative">
-    <p class="absolute top--2 left-0 ttu black-50 f6 mv0">Options</p>
-    <ul class="list pl0 flex flex-column">
-      <li><span class="alias-oyaml sky">oyaml</span>:&nbsp;-o yaml</li>
-      <li><span class="alias-ojson sky">ojson</span>:&nbsp;-o json</li>
-      <li><span class="alias-owide sky">owide</span>:&nbsp;-o wide</li>
-      <li><span class="alias-all sky no-wrap">all</span>:&nbsp;--all-namespaces</li>
-      <li><span class="alias-w sky">w</span>:&nbsp;--watch</li>
-      <li><span class="alias-sl sky">sl</span>:&nbsp;--show-labels</li>
-      <li><span class="sky">f</span>:&nbsp;-f</li>
-      <li><span class="sky">l</span>:&nbsp;-l</li>
-    </ul>
-  </li>
-</ul>
+
+  <div class="f3 w-100 gray order-last mb3">EXAMPLE ALIASES</div>
+  <div class="mv3 b pl4 order-last pointer example-1 w-50 hover-sky">kgpooyaml</div>
+  <div class="mv3 b pl4 order-last pointer example-2 w-50 hover-sky">ksysrmcm</div>
+  <div class="mv3 b pl4 order-last pointer example-3 w-50 hover-sky">ksysgsvcw</div>
+  <div class="mv3 b pl4 order-last pointer example-4 w-50 hover-sky">kgpdepallsl</div>
+
+  <div class="f3 w-100 black-50 mb3">SCHEME</div>
+  <ul class="abbreviations list pl0 flex justify-center items-center f4 b mv4 w-100">
+    <li class="mh2 relative">
+      <p class="absolute top--2 left-0 ttu black-50 f6 mv0">base</p>
+      <ul class="list pl0 flex flex-column">
+        <li><span class="alias-k sky">k</span>ubectl</li>
+      </ul>
+    </li>
+    <li class="mh2 relative">
+      <p class="absolute top--2 left-0 ttu black-50 f6 mv0">System</p>
+      <ul class="list pl0 flex flex-column">
+        <li>-n kube-<span class="alias-sys sky no-wrap">sys</span>tem</li>
+      </ul>
+    <li class="mh2 relative">
+      <p class="absolute top--2 left-0 ttu black-50 f6 mv0">Operation</p>
+      <ul class="list pl0 flex flex-column">
+        <li><span class="alias-g sky">g</span>et</li>
+        <li><span class="alias-d sky">d</span>escribe</li>
+        <li><span class="alias-rm sky">rm</span>&nbsp;(delete)</li>
+        <li><span class="sky">lo</span>gs -f</li>
+        <li><span class="sky">ex</span>ec -it</li>
+        <li><span class="sky">a</span>pply -f</li>
+      </ul>
+    </li>
+    <li class="mh2 relative">
+      <p class="absolute top--2 left-0 ttu black-50 f6 mv0">Resource</p>
+      <ul class="list pl0 flex flex-column">
+        <li><span class="alias-po sky">po</span>ds</li>
+        <li><span class="alias-dep sky">dep</span>loyment</li>
+        <li><span class="sky">sec</span>ret</li>
+        <li><span class="sky">ing</span>ress</li>
+        <li><span class="sky">no</span>de</li>
+        <li><span class="alias-svc sky">svc</span>&nbsp;(service)</li>
+        <li><span class="sky">ns</span>&nbsp;(namespace)</li>
+        <li><span class="alias-cm sky">cm</span>&nbsp;(configmap)</li>
+      </ul>
+    </li>
+    <li class="mh2 relative">
+      <p class="absolute top--2 left-0 ttu black-50 f6 mv0">Options</p>
+      <ul class="list pl0 flex flex-column">
+        <li><span class="alias-oyaml sky">oyaml</span>:&nbsp;-o yaml</li>
+        <li><span class="alias-ojson sky">ojson</span>:&nbsp;-o json</li>
+        <li><span class="alias-owide sky">owide</span>:&nbsp;-o wide</li>
+        <li><span class="alias-all sky no-wrap">all</span>:&nbsp;--all-namespaces</li>
+        <li><span class="alias-w sky">w</span>:&nbsp;--watch</li>
+        <li><span class="alias-sl sky">sl</span>:&nbsp;--show-labels</li>
+        <li><span class="sky">f</span>:&nbsp;-f</li>
+        <li><span class="sky">l</span>:&nbsp;-l</li>
+      </ul>
+    </li>
+  </ul>
 </div>
 </template>
 <style>
-.ksysgdepojson:hover ~ .abbreviations .alias-k,
-.ksysgdepojson:hover ~ .abbreviations .alias-sys,
-.ksysgdepojson:hover ~ .abbreviations .alias-g,
-.ksysgdepojson:hover ~ .abbreviations .alias-dep,
-.ksysgdepojson:hover ~ .abbreviations .alias-ojson,
+.example-1:hover ~ .abbreviations .alias-k,
+.example-1:hover ~ .abbreviations .alias-g,
+.example-1:hover ~ .abbreviations .alias-po,
+.example-1:hover ~ .abbreviations .alias-oyaml,
 
-.krmcm:hover ~ .abbreviations .alias-k,
-.krmcm:hover ~ .abbreviations .alias-rm,
-.krmcm:hover ~ .abbreviations .alias-cm,
+.example-2:hover ~ .abbreviations .alias-k,
+.example-2:hover ~ .abbreviations .alias-sys,
+.example-2:hover ~ .abbreviations .alias-rm,
+.example-2:hover ~ .abbreviations .alias-cm,
 
-.kgsvcwall:hover ~ .abbreviations .alias-k,
-.kgsvcwall:hover ~ .abbreviations .alias-g,
-.kgsvcwall:hover ~ .abbreviations .alias-svc,
-.kgsvcwall:hover ~ .abbreviations .alias-w,
-.kgsvcwall:hover ~ .abbreviations .alias-all,
+.example-3:hover ~ .abbreviations .alias-k,
+.example-3:hover ~ .abbreviations .alias-sys,
+.example-3:hover ~ .abbreviations .alias-g,
+.example-3:hover ~ .abbreviations .alias-svc,
+.example-3:hover ~ .abbreviations .alias-w,
 
-.kgpoallsl:hover ~ .abbreviations .alias-k,
-.kgpoallsl:hover ~ .abbreviations .alias-g,
-.kgpoallsl:hover ~ .abbreviations .alias-po,
-.kgpoallsl:hover ~ .abbreviations .alias-sl,
-.kgpoallsl:hover ~ .abbreviations .alias-all {
+.example-4:hover ~ .abbreviations .alias-k,
+.example-4:hover ~ .abbreviations .alias-g,
+.example-4:hover ~ .abbreviations .alias-dep,
+.example-4:hover ~ .abbreviations .alias-sl,
+.example-4:hover ~ .abbreviations .alias-all
+{
   color: #E7040F;
 }
 </style>
 ```
-> Try to hover over all the example aliases in this section to visualise their components.
 
-As you can see, the aliases consist of combinations of a relatively small set of components, representing the **base command**, an **action**, a **resource**, and a variable number of **options**.
+As you can see, the aliases consist of **components**, each standing for a specific elements of a kubectl command. Each alias can have one component for the **base command**, **operation**, and **resource**, and multiple components for the **options**, and you just "fill in" these components from left to right according to the above scheme.
 
-You can have multiple option components. For example, the `kgpooyamlall` alias stands for `kubectl get pods -o yaml --all-namespaces`:
+> Please note that the current and fully detailed scheme is on the [GitHub page](https://github.com/ahmetb/kubectl-aliases#syntax-explanation). There you can also find the [full list of aliases](https://github.com/ahmetb/kubectl-aliases/blob/master/.kubectl_aliases).
+
+For example, the alias `kgpooyamlall` stands for the command `kubectl get pods -o yaml --all-namespaces`:
 
 ```include
 <template>
-<ul class="list pl0 flex justify-center f-headline b pointer mv4">
-<li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
-<li class="hover-sky relative hide-child pv2">g <span class="child absolute bottom--2 left-0 f2">get</span></li>
-<li class="hover-sky relative hide-child pv2">po <span class="child absolute bottom--2 left-0 f2">pods</span></li>
-<li class="hover-sky relative hide-child pv2">oyaml <span class="child absolute bottom--2 left-0 f2" no-wrap>-o yaml</span></li>
-<li class="hover-sky relative hide-child pv2">all <span class="child absolute bottom--2 left-0 f2 no-wrap">--all-namespaces</span></li>
+<ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
+<li class="hover-sky relative hide-child pv2">k<span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
+<li class="hover-sky relative hide-child pv2">g<span class="child absolute bottom--2 left-0 f2">get</span></li>
+<li class="hover-sky relative hide-child pv2">po<span class="child absolute bottom--2 left-0 f2">pods</span></li>
+<li class="hover-sky relative hide-child pv2">oyaml<span class="child absolute bottom--2 left-0 f2" no-wrap>-o yaml</span></li>
+<li class="hover-sky relative hide-child pv2">all<span class="child absolute bottom--2 left-0 f2 no-wrap">--all-namespaces</span></li>
 </ul>
 </template>
 <script>
 </script>
 ```
 
-The order of most options doesn't matter in the alias. So, `kgpooyamlall` is equivalent to `kgpoalloyaml`.
+Note that the relative order of most option components doesn't matter. So, `kgpooyamlall` is equivalent to `kgpoalloyaml`.
 
-All components except the base command are optional. So, strings like `k`, `kg`, `klo`, `ksys`, or `ksysg` are valid aliases too. You can't use these aliases by themselves, but you can combine them with other words on the command-line.
+You don't need to use all the components for an alias. For example, `k`, `kg`, `klo`, `ksys`, or `kgpo` are valid aliases too. Furthermore, you can combine aliases with other words on the command-line.
 
 For example, you could use `k proxy` for running `kubectl proxy`:
 
 ```include
 <template>
-<ul class="list pl0 flex justify-center f-headline b pointer mv4">
+<ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
 <li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="relative hide-child pv2 gray">&nbsp;proxy</li>
 </ul>
@@ -813,11 +817,11 @@ For example, you could use `k proxy` for running `kubectl proxy`:
 </script>
 ```
 
-Or you could use `kg roles` for running `kubectl get roles`:
+Or you could use `kg roles` for running `kubectl get roles` (there exists currently no alias component for the Roles resource):
 
 ```include
 <template>
-<ul class="list pl0 flex justify-center f-headline b pointer mv4">
+<ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
 <li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="hover-sky relative hide-child pv2">g <span class="child absolute bottom--2 left-0 f2">get</span></li>
 <li class="relative hide-child pv2 gray">&nbsp;roles</li>
@@ -827,34 +831,30 @@ Or you could use `kg roles` for running `kubectl get roles`:
 </script>
 ```
 
-This allows you to take advantage of the aliases for sub-commands and resources for which no explicit aliases are defined.
-
-You can also combine aliases with resource names and other arguments. The following gets a specific pod by name:
+To get a specific Pod, you could use `kgpo my-pod` for running `kubectl get pod my-pod`:
 
 ```include
 <template>
-<ul class="list pl0 flex justify-center f-headline b pointer mv4">
+<ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
 <li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="hover-sky relative hide-child pv2">g <span class="child absolute bottom--2 left-0 f2">get</span></li>
 <li class="hover-sky relative hide-child pv2">po <span class="child absolute bottom--2 left-0 f2">pods</span></li>
-<li class="relative hide-child pv2 gray">&nbsp;pod-123</li>
+<li class="relative hide-child pv2 gray">&nbsp;my-pod</li>
 </ul>
 </template>
 <script>
 </script>
 ```
 
-Some alias components even *require* you to append an argument to the alias, for example, the `f` and `l` components (standing for the `-f` and `-l` options).
-
-For example, `kgpol` stands for `kubectl get pods -l`, which can't be executed by itself, but needs a label specification as the argument for the `-l` option. So, you have to use this alias, for example, as follows:
+Note that some aliases even *require* a further argument on the command-line. For example, the `kgpol` alias stands for `kubectl get pods -l`. The `-l` option requires an argument (a label specification). So, you have to use this alias, for example, like this:
 
 ```include
 <template>
-<ul class="list pl0 flex justify-center f-headline b pointer mv4">
-<li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
-<li class="hover-sky relative hide-child pv2">g <span class="child absolute bottom--2 left-0 f2">get</span></li>
-<li class="hover-sky relative hide-child pv2">po <span class="child absolute bottom--2 left-0 f2">pods</span></li>
-<li class="hover-sky relative hide-child pv2">l <span class="child absolute bottom--2 left-0 f2 no-wrap">-l</span></li>
+<ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
+<li class="hover-sky relative hide-child pv2">k<span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
+<li class="hover-sky relative hide-child pv2">g<span class="child absolute bottom--2 left-0 f2">get</span></li>
+<li class="hover-sky relative hide-child pv2">po<span class="child absolute bottom--2 left-0 f2">pods</span></li>
+<li class="hover-sky relative hide-child pv2">l<span class="child absolute bottom--2 left-0 f2 no-wrap">-l</span></li>
 <li class="relative hide-child pv2 gray">&nbsp;app=ui</li>
 </ul>
 </template>
@@ -862,13 +862,13 @@ For example, `kgpol` stands for `kubectl get pods -l`, which can't be executed b
 </script>
 ```
 
-> For that reason, you can use `f` and `l` only at the end of an alias.
+> For that reason, you can use the `a`, `f`, and `l` components only at the end of an alias.
 
-In general, for using the aliases correctly, just mentally replace the alias with the command it stands for and make sure that the resulting command-line (including any words after the alias) forms a valid command.
+In general, once you get the hang of this scheme, you an intuitively deduce the alias names from the commands you want to execute and save a lot of typing!
 
 ### Installation
 
-To install kubectl-aliases, all you have to do is to download the [`.kubectl-aliases`](https://raw.githubusercontent.com/ahmetb/kubectl-aliases/master/.kubectl_aliases) file from the GitHub repository and source it in your `~/.bashrc` or `~/.zshrc` file:
+To install kubectl-aliases, you just have to download the [`.kubectl-aliases`](https://raw.githubusercontent.com/ahmetb/kubectl-aliases/master/.kubectl_aliases) file from GitHub and source it in your `~/.bashrc` or `~/.zshrc` file:
 
 <!-- [Markdown syntax highlighting fix] -->
 
@@ -876,44 +876,43 @@ To install kubectl-aliases, all you have to do is to download the [`.kubectl-ali
 source ~/.kubectl_aliases
 ~~~
 
-That's it! After reloading your shell, you should be able to use all the 800 aliases!
+That's it! After reloading your shell, you should be able to use all the 800 kubectl aliases!
 
 ### Completion
 
-As you have seen, you often combine the aliases with other words on the command-line. For example:
+As you have seen, you often append further words to an alias on the command-line. For example:
 
 ~~~bash
 kgpooyaml test-pod-d4b77b989
 ~~~
 
-If you typed the full command (instead of using an alias), you probably wouldn't type the Pod name yourself, but auto-complete it with kubectl command completion. But does that still work whith aliases?
+If you use kubectl command completion, then you're probably used to auto-complete things like resource names. But can you still do that when you use the aliases?
 
-That's an important question, because if it wouldn't work, that would undo some of the benefits of the aliases!
+*That's an important question, because if it wouldn't work, that would undo some of the benefits of these aliases!*
 
 The answer depends on which shell you use.
 
-For **Zsh**, it works out-of-the-box the way you would expect it. So you don't need to take any action.
+For **Zsh**, completion works out-of-the-box for aliases.
 
-For **Bash**, unfortunately, it doesn't work by default, but it can be made working with some extra steps . The next section explains how you can do that.
+For **Bash**, unfortunately, completion doesn't work by default for aliases. The good news is that it can be made working with some extra steps. The next section explains how to do this.
 
 ### Enable completion for aliases in Bash
 
-The problem with Bash is that it attempts completion (when you press *Tab*) on the alias name, and not on the aliased command (unlike Zsh). Since you don't have a separate completion script for all the 800 aliases, this doesn't work.
+The problem with Bash is that it attempts completion (whenever you press *Tab*) on the alias name, instead of on the aliased command (like Zsh). Since you don't have a completion script for all the 800 aliases, this doesn't work.
 
-The [**complete-alias**](https://github.com/cykerway/complete-alias) project provides a general solution for this problem. It taps into the completion mechanism, looks at the command the alias stands for, and returns the completion suggestions of this command.
+The [**complete-alias**](https://github.com/cykerway/complete-alias) project provides a general solution to this problem. It taps into the completion mechanism for an alias, internally expands the alias to the aliased command, and returns the completion suggestion for the expanded command. This means, it makes completion for an alias behave exactly the same as for the aliased command.
 
-In the following, I will first explain how to install complete-alias, and then how to configure it to enable completion for the kubectl aliases.
+In the following, I will first explain how to install complete-alias, and then how to configure it to enable completion for all of the kubectl aliases.
 
 #### Install complete-alias
 
 First of all, complete-alias depends on [bash-completion](https://github.com/scop/bash-completion). So you need to ensure that bash-completion is installed before installing complete-alias. Instructions for this have been given earlier for [Linux](#bash-on-linux) and [macOS](#bash-on-macos).
 
-> **Important note for macOS users:** like the [kubectl completion script](#bash-on-macos), complete-alias does not work with the default version of Bash on macOS, which is Bash 3.2. It requires at least Bash 4.1. In particular, complete-alias depends on bash-completion 2 (`brew install bash-completion@2`), which requires Bash 4.1+. That means, to enable alias completion on macOS, you need to [install a newer version of Bash](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba) first.
+> **Important note for macOS users:** like the [kubectl completion script](#bash-on-macos), complete-alias does not work with Bash 3.2, which is the default version of Bash on macOS. In particular, complete-alias depends on bash-completion v2 (`brew install bash-completion@2`), which requires at least Bash 4.1. That means, to use complete-alias on macOS, you need to [install a newer version of Bash](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba).
 
 <!-- If you try to use complete-alias with bash-completion 1 and Bash 3.2, you will get an error of the form `_completion_loader: command not found`. -->
 
-
-To install complete-alias, all you have to do is to download the [`bash_completion.sh`](https://raw.githubusercontent.com/cykerway/complete-alias/master/bash_completion.sh) script from the complete-alias [GitHub repository](https://github.com/cykerway/complete-alias), and source it in your `~/.bashrc` file:
+To install complete-alias, you just have to download the [`bash_completion.sh`](https://raw.githubusercontent.com/cykerway/complete-alias/master/bash_completion.sh) script from the [GitHub repository](https://github.com/cykerway/complete-alias), and source it in your `~/.bashrc` file:
 
 <!-- [] -->
 
@@ -925,33 +924,31 @@ After reloading your shell, complete-alias should be correctly installed.
 
 #### Enable completion for kubectl aliases
 
-Technically, complete-alias provides the `_complete_alias` shell function. This function inspects an alias and returns the completion suggestions that would normally be returned for the command the alias stands for.
+Technically, complete-alias provides the `_complete_alias` shell function. This function inspects an alias and returns the completion suggestions for the aliased command.
 
-In other words, this function provides the same completion behaviour for an alias as for the aliased command.
+To hook this up with a specific alias, you have to use the [`complete`](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html#Programmable-Completion-Builtins) Bash builtin to set `_complete_alias` as the *completion function* of the alias.
 
-To enable this, you have to set the `_complete_alias` function as the *completion function* of an alias. This works by the means of the Bash [`complete`](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html#Programmable-Completion-Builtins) builtin, as explained in the following.
+<!-- [] -->
 
-Let's take the alias defined as `alias k=kubectl` as an example. The following sets `_complete_alias` as the completion function of `k`:
+As an example, let's take the `k` alias that stands for the `kubectl` command. To set `_complete_alias` as the completion function for this alias, you have to execute the following command:
 
 ~~~bash
 complete -F _complete_alias k
 ~~~
 
-Now, when you apply completion to the `k` alias (by hitting *Tab*), the `_complete_alias` function gets invoked. As mentioned, this function inspects the alias and returns the completion suggestions for the aliased command (that is `kubectl`). In other words, now completion works for `k` in the same way it works for `kubectl`.
+The effect of this is that whenever you auto-complete on the `k` alias, the `_complete_alias` function is invoked, which inspects the alias and returns the completion suggestions for the `kubectl` command.
 
-As another example, consider the alias defined as `alias kg='kubectl get'`. To enable completion for it, you would execute the following:
+As another example, let's take the `kg` alias that stands for `kubectl get`:
 
 ~~~bash
 complete -F _complete_alias kg
 ~~~
 
-The effect of this is that completion for `kg` works the same way as for `kubectl get`.
+Similarly, the effect of this is that when you auto-complete on `kg`, you get the same completion suggestions that you would get for `kubectl get`.
 
-> You can use complete-alias in this way for *any* alias on your system.
+> Note that can use complete-alias in this way for *any* alias on your system.
 
-So, to enable completion for **all the kubectl aliases**, you simply have to run the above command for each of them.
-
-You can do this by adding the following snippet to your `~/.bashrc` file:
+Consequently, to enable completion for *all* the kubectl aliases, you just have to run the above command for each of them. The following snippet does exactly that (assuming you installed kubectl-aliases to `~/.kubectl-aliases`):
 
 ~~~bash
 for _a in $(sed '/^alias /!d;s/^alias //;s/=.*$//' ~/.kubectl_aliases); do
@@ -959,7 +956,7 @@ for _a in $(sed '/^alias /!d;s/^alias //;s/=.*$//' ~/.kubectl_aliases); do
 done
 ~~~
 
-After reloading your shell, all the 800 kubectl aliases should now provide completion support!
+Just add this snippet to your `~/.bashrc` file, reload your shell, and now you should be able to use completion for all the 800 kubectl aliases!
 
 <!--
 - https://github.com/ahmetb/kubectl-aliases
@@ -1019,15 +1016,15 @@ This command also displays warnings if you have multiple plugins with the same n
 
 ### Finding and installing plugins with krew
 
-Kubectl plugins lend themselves to be shared and reused like software packages. But where can you find plugins that are shared by others?
+Kubectl plugins lend themselves to be shared and reused like software packages. But where can you find plugins that were shared by others?
 
-The [**krew**](https://github.com/GoogleContainerTools/krew) project aims at providing a unified solution for sharing and installing kubectl plugins. The project refers to itself as a "package manager for kubectl plugins" (the name *krew* is a hint at [*brew*](https://brew.sh)).
+The [**krew**](https://github.com/GoogleContainerTools/krew) project aims at providing a unified solution for sharing, finding, installing, and managing kubectl plugins. The project refers to itself as a "package manager for kubectl plugins" (the name *krew* is a hint at [*brew*](https://brew.sh)).
 
-With krew you can browse, install, and manage kubectl plugins from the [krew index](https://github.com/GoogleContainerTools/krew-index) with simple commands:
+Krew is centred around an [index](https://github.com/GoogleContainerTools/krew-index) of kubectl plugins from which you can choose and install. Here you can see krew in action:
 
 ![](krew.cast)
 
-As you can see, krew itself is implemented as a kubectl plugin. That means, **installing krew** is as easy as installing any kubectl plugin, and you can find the instructions on its [GitHub page](https://github.com/GoogleContainerTools/krew/#installation).
+As you can see, krew itself is a kubectl plugin. That means, you **install krew** in essence like any other kubectl plugin. You can find the detailed installation instructions on the [GitHub page](https://github.com/GoogleContainerTools/krew/#installation).
 
 The most important krew commands are as follows:
 
