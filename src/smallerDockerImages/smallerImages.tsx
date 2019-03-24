@@ -1,12 +1,13 @@
 import { Image, CSSBundle, JSBundle, JSScript } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, Markdown, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { cat } from 'shelljs'
-import { ListItem, PromoAcademy } from '../layout'
+import { PromoAcademy } from '../layout'
 import { BlogPosting } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
+import { Markdown } from '../markdown'
 
 export const Details = {
   type: identity<'smaller_images'>('smaller_images'),

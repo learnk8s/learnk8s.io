@@ -1,12 +1,13 @@
 import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
-import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
+import { Sitemap, LinkedNode, getAbsoluteUrl } from '../sitemap'
 import * as React from 'react'
-import { Markdown, Article, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Article } from '../article'
 import { cat } from 'shelljs'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { ListItem, PromoAcademy } from '../layout'
+import { PromoAcademy } from '../layout'
+import { Markdown } from '../markdown'
 
 export const Details = {
   type: identity<'askExpert201903'>('askExpert201903'),

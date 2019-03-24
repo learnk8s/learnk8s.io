@@ -2,11 +2,12 @@ import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { Article, RelatedConentContainer, RelatedContentItem, Markdown } from '../article'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
 import { BlogPosting } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import { ListItem, PromoAcademy } from '../layout'
+import { PromoAcademy } from '../layout'
 import { cat } from 'shelljs'
+import { Markdown } from '../markdown'
 
 export const Details = {
   type: identity<'deployLaravel'>('deployLaravel'),

@@ -1,12 +1,13 @@
 import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Markdown, Article, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { cat } from 'shelljs'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
 import { PromoAcademy } from '../layout'
+import { Markdown } from '../markdown'
 
 export const Details = {
   type: identity<'chaosEngineering'>('chaosEngineering'),
