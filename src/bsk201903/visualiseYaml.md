@@ -1,6 +1,6 @@
 ## Is there any tool to visualise the dependency between YAML files?
 
-> **TL;DR:** Not for YAML. But you can visualise your dependencies in the cluster with [Weave Scope]((https://github.com/weaveworks/scope) or [Istio](https://istio.io).
+> **TL;DR:** Not for YAML. But you can visualise your dependencies in the cluster with [Weave Scope](https://github.com/weaveworks/scope) or [Istio](https://istio.io).
 
 When you have a large number of resources in your cluster, you might lose track of all relationships between them.
 
@@ -78,3 +78,13 @@ Two noteworthy tools can help visualise dependencies in your cluster:
 
 - [Linkerd2](https://linkerd.io/2/overview/), another service mesh similar to Istio
 - [Kubebricks](https://github.com/kubricksllc/Kubricks), an electron app that connects to your cluster using kubectl and helps you visualise your dependencies
+
+## That's all folks
+
+_Have you built a tool to visualise your cluster?_
+
+_Or have a recommendation to visualise dependencies?_
+
+[Let us know in an email](mailto:hello@learnk8s) or [tweet us @learnk8s](https://twitter.com/learnk8s).
+
+A special thank you goes to [XXXX](xxx) and [XXX](xxx) that reviewed the content of this article.

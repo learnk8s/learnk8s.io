@@ -168,6 +168,18 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       writeFileSync(generatePath(), `<!DOCTYPE html>${BiteSized201903.MultipleClustersRender(root, node, siteUrl)}`)
       return
     }
+    case BiteSized201903.IngressApiGatewayDetails.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${BiteSized201903.IngressApiGatewayRender(root, node, siteUrl)}`)
+      return
+    }
+    case BiteSized201903.VisualiseYamlDetails.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${BiteSized201903.VisualiseYamlRender(root, node, siteUrl)}`)
+      return
+    }
+    case BiteSized201903.HelmDetails.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${BiteSized201903.HelmRender(root, node, siteUrl)}`)
+      return
+    }
     case WebAppManifest.Details.type: {
       writeFileSync(generatePath(), WebAppManifest.render(root, node, siteUrl))
       return

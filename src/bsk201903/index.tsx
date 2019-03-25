@@ -49,10 +49,10 @@ export const IngressApiGatewayDetails = identity<Details>({
 
 export const VisualiseYamlDetails = identity<Details>({
   type: identity<'bsk-march-03'>('bsk-march-03'),
-  url: '/ingress-api-gateway',
-  seoTitle: 'Can you have an API Gateway as an ingress? ♦︎ Learnk8s',
-  title: 'Can you have an API Gateway as an ingress?',
-  description: `In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster. You can select an Ingress that is also an API gateway.`,
+  url: '/visualise-dependencies-kubernetes',
+  seoTitle: 'Is there any tool to visualise the dependency between YAML files?',
+  title: 'Is there any tool to visualise the dependency between YAML files?',
+  description: `When you have a large number of resources in your cluster, you might lose track of all relationships between them. Learn how you can build a dependency graph with all your resources.`,
   openGraphImage: Image({
     url: 'src/k8sOnWindows/k8s_on_win.jpg',
     description: 'placeholder',
@@ -93,10 +93,10 @@ export const HelmDetails = identity<Details>({
   },
 })
 
-export const MultipleClustersRender = BiteSizedRender(`${__dirname}/connectMultipleClusters.md`)
-export const IngressApiGatewayRender = BiteSizedRender(`${__dirname}/ingressApiGateway.md`)
-export const VisualiseYamlRender = BiteSizedRender(`${__dirname}/visualiseYaml.md`)
-export const helmRender = BiteSizedRender(`${__dirname}/helm.md`)
+export const MultipleClustersRender = BiteSizedRender(`${__dirname}/connectMultipleClusters.md`, __dirname)
+export const IngressApiGatewayRender = BiteSizedRender(`${__dirname}/ingressApiGateway.md`, __dirname)
+export const VisualiseYamlRender = BiteSizedRender(`${__dirname}/visualiseYaml.md`, __dirname)
+export const HelmRender = BiteSizedRender(`${__dirname}/helm.md`, __dirname)
 
 function identity<T>(value: T): T {
   return value
