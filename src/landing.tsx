@@ -159,7 +159,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
         <p className='f2 navy b tc ph3'>Join the next class in {currentNode.payload.location.city} or online</p>
         <p className='lh-copy f4 black-70 measure center tc ph3 pb3'>
           Public classes are great to get started mastering Kubernetes or prepare for your CKA or CKAD exam. The
-          starting time is 9.30 am GMT.
+          starting time is 9.30 am local time.
         </p>
         <ul className='list'>
           {Courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[])
