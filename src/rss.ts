@@ -1,7 +1,6 @@
-import { getAbsoluteUrl, Sitemap, LinkedNode, getBlogPosts } from './sitemap'
+import { getAbsoluteUrl, Sitemap, LinkedNode, getBlogPosts, getBiteSizedSeries } from './sitemap'
 import { Feed } from 'feed'
 import moment = require('moment')
-import * as Redirect from './redirect'
 
 export const Details = {
   type: identity<'rss'>('rss'),
@@ -13,7 +12,7 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const articles = getBlogPosts(website)
+  const articles = [...getBlogPosts(website), ...getBiteSizedSeries(website)]
   const feed = new Feed({
     title: 'Learnk8s',
     description: 'Learn Kubernetes',
