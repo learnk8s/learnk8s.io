@@ -25,6 +25,7 @@ import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 
+import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
 
 import { Venues, Timezone } from './courses'
@@ -127,10 +128,7 @@ export const Sitemap = createNode({
       },
     }),
     biteSizedKubernetes: createNode({
-      page: Redirect.Details({
-        url: '/bite-sized',
-        redirectTo: bsk.bskMultiCluster,
-      }),
+      page: BiteSized.Details,
       children: bsk,
     }),
     contactUs: createNode({

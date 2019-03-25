@@ -3,7 +3,6 @@ import { LinkedNode, getFullUrl, Sitemap, getAbsoluteUrl, getBlogPosts } from '.
 import { Navbar, Consultation, Footer, Layout } from './layout'
 import { Image, Img, CSSBundle } from './assets'
 import moment = require('moment')
-import * as Redirect from './redirect'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 function identity<T>(value: T): T {
