@@ -94,7 +94,7 @@ export function BiteSizedRender(markdownPath: string) {
         </p>
         <blockquote className='pl3 mh2 bl bw2 b--blue bg-evian pv1 ph4'>
           <p className='lh-copy measure-wide f4'>
-            This month's answers are curated by{' '}
+            Today's answers are curated by{' '}
             <a
               href={currentNode.payload.author.link}
               className='link navy underline hover-sky'
