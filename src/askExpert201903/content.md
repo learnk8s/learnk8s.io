@@ -227,7 +227,8 @@ If you're interested in diving more into the topic, you should have a look at th
 - [Submariner from Rancher](https://submariner.io), a tool built to connect overlay networks of different Kubernetes clusters
 - The retailer Target is using [Spinnaker to orchestrate deployment across several clusters](https://tech.target.com/infrastructure/2018/06/20/enter-unimatrix.html)
 - You could use IPV6 and have a [unified network across several regions](https://itnext.io/kubernetes-multi-cluster-networking-made-simple-c8f26827813)
-- You could use a service mesh such as [Istio to connect multiple clusters](https://istio.io/docs/setup/kubernetes/install/multicluster/).
+- You could use a service mesh such as [Istio to connect multiple clusters](https://istio.io/docs/setup/kubernetes/install/multicluster/)
+- Cilium, the Container Network Interface plugin, has a [cluster mesh feature](https://cilium.io/blog/2019/03/12/clustermesh/) that lets you connect multiple clusters toegether
 
 ## 2. Can I have an API Gateway as an ingress?
 
@@ -387,6 +388,7 @@ Ambassador has an excellent tutorial about rate limiting, so if you are interest
 
 If neither Ambassador or Kong is suitable for what you do, you should check out the following alternatives:
 
+- [Gloo](https://github.com/solo-io/gloo) is another Envoy-powered API gateway
 - [Tyk](https://tyk.io/) is an open source API gateway that can be deployed as an Ingress.
 - You could [build your API gateway Ingress using Ballerina](https://ballerina.io/learn/by-guide/api-gateway/) — a Cloud Native programming language
 
