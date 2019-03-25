@@ -41,9 +41,9 @@ export interface Details {
   }
 }
 
-export function BiteSizedRender(markdownPath: string) {
+export function BiteSizedRender(markdownPath: string, assetsPath: string) {
   return function render(website: Sitemap, currentNode: LinkedNode<Details>, siteUrl: string): string {
-    const { css, js, html } = Markdown(cat(markdownPath).toString(), __dirname)
+    const { css, js, html } = Markdown(cat(markdownPath).toString(), assetsPath)
     return renderToStaticMarkup(
       <Article
         website={website}

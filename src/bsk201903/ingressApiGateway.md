@@ -1,6 +1,6 @@
 ## Can you have an API Gateway as an ingress?
 
-> **TL;DR:** yes, you can. Have a look at the [Kong](https://konghq.com/blog/kong-kubernetes-ingress-controller/) and [Ambassador Ingress](https://www.getambassador.io/).
+> **TL;DR:** yes, you can. Have a look at the [Kong](https://konghq.com/blog/kong-kubernetes-ingress-controller/), [Ambassador](https://www.getambassador.io/) and [Gloo Ingress](https://gloo.solo.io/).
 
 In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster.
 
@@ -152,18 +152,100 @@ spec:
 
 Ambassador has an excellent tutorial about rate limiting, so if you are interested in using that features, you can head over to [Ambassador's official documentation](https://www.getambassador.io/user-guide/rate-limiting-tutorial/).
 
+### Option 3 — Gloo things together
+
+Ambassador is not the only Envoy-powered ingress that can be used as API Gateway.
+
+[Gloo is a Kubernetes Ingress](https://gloo.solo.io/) that is also an API gateway capable of providing rate limiting, circuit breaking, retries, caching, external authentication and authorisation, transformation, service-mesh integration, and security.
+
+The selling point for Glue is that it's capable of auto discover API endpoints for your application and automatically understand arguments and parameters.
+
+I understand it's hard to believe (and their documentation doesn't help in that sense), so here's an example.
+
+Imagine you have a REST API for an address book.
+
+The app exposes the following endpoints:
+
+- `GET /users/{id}`, get the profile for a user
+- `GET /users`, get all users
+- `POST /users/find`, find a particular user
+
+If your API is developed using standard tools such as the OpenAPI, then Gloo automatically uses the OpenAPI definition to introspect your API and store the three endpoints.
+
+If you list all the endpoint served by Gloo after the discovery phase, this is what you see:
+
+```yaml|highlight=14-22,24-33,35-44|title=gloo upstream service-8080
+upstreamSpec:
+  kube:
+    selector:
+      app: addressbook
+    serviceName: addressbook
+    serviceNamespace: default
+    servicePort: 8080
+    serviceSpec:
+      rest:
+        swaggerInfo:
+          url: http://addressbook.default.svc.cluster.local:8080/swagger.json
+        transformations:
+          findUserById:
+            body:
+              text: '{"id": {{ default(id, "") }}}'
+            headers:
+              :method:
+                text: POST
+              :path:
+                text: /users/find
+              content-type:
+                text: application/json
+          getUser:
+            body: {}
+            headers:
+              :method:
+                text: GET
+              :path:
+                text: /user/{{ default(id, "") }}
+              content-length:
+                text: "0"
+              content-type: {}
+              transfer-encoding: {}
+          getUsers:
+            body: {}
+            headers:
+              :method:
+                text: GET
+              :path:
+                text: /users
+              content-length:
+                text: "0"
+              content-type: {}
+              transfer-encoding: {}
+```
+
+Once Gloo has a list of endpoints, you can use that list to apply transformations to the incoming requests before they reach the backend.
+
+As an example, you may want to collect all the headers from the incoming requests and add them to the JSON payload before the request reaches the app.
+
+Or you could do the opposite.
+
+Expose a JSON API and let Gloo apply a transformation to render the message as SOAP.
+
+Being able to discover APIs and apply transformations makes Gloo particularly suitable for an environment with diverse technologies — or when you're in the middle of a migration from an old legacy system to a newer stack.
+
+Gloo can discover other kinds of endpoints such as AWS Lambdas.
+
+Which makes it the perfect companion when you wish to mix and match Kubernetes and serverless.
+
 ### More options
 
-If neither Ambassador or Kong is suitable for what you do, you should check out the following alternatives:
+If neither Ambassador, Kong or Gloo is suitable for what you do, you should check out the following alternatives:
 
-- [Gloo](https://github.com/solo-io/gloo) is another Envoy-powered API gateway
 - [Tyk](https://tyk.io/) is an open source API gateway that can be deployed as an Ingress.
 - You could [build your API gateway Ingress using Ballerina](https://ballerina.io/learn/by-guide/api-gateway/) — a Cloud Native programming language
 
 ## That's all folks
 
-Thanks for reading until the end!
+_Do you have any recommendation when it comes to API Gateways on Kubernetes?_
 
-If you know of a better way to connect multiple clusters together, please [get in touch and let us know](mailto:hello@learnk8s.io). We will add it to the links above.
+[Let us know in an email](mailto:hello@learnk8s) or [tweet us @learnk8s](https://twitter.com/learnk8s).
 
 A special thank you goes to [XXXX](xxx) and [XXX](xxx) that reviewed the content of this article.

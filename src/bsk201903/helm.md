@@ -113,3 +113,11 @@ To summarise, Helm is:
 - a **templating engine** for your YAML files
 - a convenient way for **packaging collections of YAML files and distributing them** in public and private registry
 - a **release manager** capable of rolling back deployments
+
+## That's all folks
+
+Still have questions about Helm and what it can do?
+
+[Let us know in an email](mailto:hello@learnk8s) or [ask us with a tweet](https://twitter.com/learnk8s).
+
+A special thank you goes to [XXXX](xxx) and [XXX](xxx) that reviewed the content of this article.

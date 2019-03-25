@@ -221,6 +221,8 @@ If you're interested in diving more into the topic, you should have a look at th
 
 Thanks for reading until the end!
 
-If you know of a better way to connect multiple clusters together, please [get in touch and let us know](mailto:hello@learnk8s.io). We will add it to the links above.
+If you know of a better way to connect multiple clusters, please [get in touch and let us know](mailto:hello@learnk8s.io).
+
+We will add it to the links above.
 
 A special thank you goes to [XXXX](xxx) and [XXX](xxx) that reviewed the content of this article.
