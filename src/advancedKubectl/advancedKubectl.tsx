@@ -20,7 +20,7 @@ This article contains a series of tips and tricks to help you boost your kubectl
 
 The goal of this article is not only to make your daily work with Kubernetes more efficient but also more enjoyable!`,
   openGraphImage: Image({url: 'src/advancedKubectl/magic.jpg', description: 'Advanced kubectl usage'}),
-  publishedDate: '2019-03-24',
+  publishedDate: '2019-03-25',
   previewImage: Image({url: 'src/advancedKubectl/magic.jpg', description: 'Advanced kubectl usage'}),
   author: {
     fullName: 'Daniel Weibel',
