@@ -18,7 +18,7 @@ The goal of this article is not only to make your daily work with Kubernetes mor
 
 Before learning how to use kubectl more efficiently, you should have a basic understanding of what it is and how it works.
 
-From a user's point of view, kubectl your cockpit to control Kubernetes. It allows you to perform every possible Kubernetes operation.
+From a user's point of view, kubectl is your cockpit to control Kubernetes. It allows you to perform every possible Kubernetes operation.
 
 From a technical point of view, kubectl is a client for the **Kubernetes API**.
 
@@ -61,16 +61,16 @@ These are the basics of what kubectl is and how it works. But there is much more
 
 Kubernetes consists of a set of independent components that run as separate processes on the nodes of a cluster. Some components run on the master nodes and others run on the worker nodes, and each component has a very specific function.
 
-The most important components on the master nodes are:
+These are the most important components on the master nodes:
 
 - **Storage backend:** stores resource definitions (usually [etcd](https://coreos.com/etcd/) is used)
 - **API server:** provides Kubernetes API and manages storage backend
 - **Controller manager:** ensures resource statuses match specifications
 - **Scheduler:** schedules Pods to worker nodes
 
-And the most important component running on each worker node is:
+And this is the most important component on the worker nodes:
 
-- **kubelet:** manages execution of containers on a worker node
+- **Kubelet:** manages execution of containers on a worker node
 
 To see how these components work together, let's consider an example.
 
@@ -109,7 +109,7 @@ What happens now inside Kubernetes?
     },
     {
       "image": "kubernetes-internals-7.svg",
-      "description": "The kubelet reads the Pod definitions from the storage backend, downloads the required container images, and runs the containers via Docker (or another container runtime) on the worker node."
+      "description": "The kubelet reads the Pod definitions from the storage backend and instructs the container runtime (Docker, for example) to run the containers on the worker node."
     }
   ]
 }
@@ -125,7 +125,7 @@ The creation of the new Pods triggers the **scheduler**, who watches for Pod def
 
 > Note that up to this point, no workload code is being run anywhere in the cluster. All that has been done so far is creating and updating resources in the storage backend on the master node.
 
-This event triggers the **kubelets** who watch for Pods that are scheduled to their worker nodes. The kubelet of the worker node your ReplicaSet Pods have been scheduled to downloads the container images for these Pods (if not already present on the machine) and runs them with the configured container runtime (which may be Docker or another container runtime).
+This event triggers the **kubelets** who watch for Pods that are scheduled to their worker nodes. The kubelet of the worker node your ReplicaSet Pods have been scheduled to instructs the configured container runtime (which may be Docker) to download the required container images and run the containers.
 
 At this point, finally, your ReplicaSet application is running!
 
@@ -147,9 +147,9 @@ This double usage of the Kubernetes API for internal components as well as for e
 
 With this knowledge, you can summarise how Kubernetes works as follows:
 
-- The storage backend stores the state (i.e. resources) of Kubernetes.
-- The API server provides an interface to the storage backend in the form of the Kubernetes API.
-- All other Kubernetes components and users read, watch, and manipulate the state (i.e. resources) of Kubernetes through the Kubernetes API.
+1. The storage backend stores the state (i.e. resources) of Kubernetes.
+2. The API server provides an interface to the storage backend in the form of the Kubernetes API.
+3. All other Kubernetes components and users read, watch, and manipulate the state (i.e. resources) of Kubernetes through the Kubernetes API.
 
 Being familiar with these concepts **will help you a lot** to understand kubectl better and make the most use of it!
 
@@ -490,65 +490,6 @@ kubectl get nodes -o json
 
 This is generally a good way to discover even more information about your resources, in addition to exploring the [resource specifications](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/).
 
-<!--
-### What `kubectl get` gets from the API server
-
-- You can set the log level for kubectl with the `-v` option
-    - Default is 0 (`-v 0`), highest is 10 (`-v 10`)
-- If you set the log level to 9+, the output includes each request kubectl makes to the API server, including the full request and response bodies
-    - Thus, you can see what exactly the response to a `kubectl get` API request is
-- The response bodies to GET requests issued by `kubectl get` are:
-    - Always JSON
-    - For the default output format and `-o wide` with `--server-print=true` (this is the default)
-        - JSON object of kind *Table* that defines the columns and rows of the output table
-        - https://kubernetes.io/docs/reference/using-api/api-concepts/#receiving-resources-as-tables
-        - Since v1.10
-    - The above with `--server-print=false` and all other output formats:
-        - List* operation:
-            - JSON object representing resource of kind *XList* (e.g. *PodList*) according to [API reference](https://kubernetes.io/docs/reference/kubernetes-api/)
-            - Similar, but not identical, to the output with the `-o json` option (this output object is of kind *List*)
-            - In Kubernetes v1.13, for all resources except the following ones there exists a *XList* object (where *X* is the resource type):
-                - Container
-                - Volume
-                - Binding
-                - LocalSubjectAccessReview
-                - SelfSubjectAccessReview
-                - SelfSubjectRulesReview
-                - SubjectAccessReview
-                - TokenReview
-        - Read operation:
-            - JSON object representing a resource of kind *X* (e.g. *Pod*) according to [API reference](https://kubernetes.io/docs/reference/kubernetes-api/)
-            - Exactly the same as the output with the `-o json` option
-
-### When creating resources with kubectl: what is sent to the API server
-
-- The request bodies for POST request issued, for example, by `kubectl create` are:
-    - Always JSON
-    - A JSON representation fo the resource specification that is passed to `kubectl create` (no matter if the specification is in YAML or JSON)
-
-### Creating resources by talking to the API server directly
-
-- Start a proxy to the API server with kubectl: kubectl proxy
-    - API server can now be accessed as http://127.0.0.1:8001
-- Now, you can create resources as follows (example for a pod):
-    - `curl -H "Content-Type: <in>" -H "Accept: <out>" -d "$(cat file)" -X POST http://127.0.0.1:8001/api/v1/namespaces/default/pods`
-        - Where:
-            - `<in>` is the data type of the resource specification in `file`. It can be one of:
-            - `<out>` is the desired data type of the response
-            - Both `<in>` and `<out>` can be one of:
-                - `application/json` (default for `<out>`)
-                - `application/yaml`
-                - `application/vnd.kubernetes.protobuf`
-    - That means, the API server accepts resource specifications in three formats: JSON, YAML, and Protocol Buffers
-        - This is as explained in [Managing Kubernetes, Chapter 4](https://www.oreilly.com/library/view/managing-kubernetes/9781492033905/ch04.html) (Alternate Encodings)
-        - Protobuf support is a newer feature, see here: https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/protobuf.md
-    - On a POST request, the API server returns the completed specification of the created resource
-        - This returned specifications contains all the default and initialised values that were not present in the specification initially passed to the API server
-    - You can choose any combinations of input and output formats (i.e. `<in>` and `<out>`)
-        - For example, post a specification in YAML (set `<in>` to `application/yaml`) and get the response in Protocol Buffers (set `<out>` to `application/vnd.kubernetes.protobuf`
-    - https://kubernetes.io/docs/reference/using-api/api-concepts/#alternate-representations-of-resources
--->
-
 ## 4. Switch between clusters and namespaces with ease
 
 When kubectl has to make a request to the Kubernetes API, it reads the so-called **kubeconfig** file on your system to get all the connection parameters it needs to access and make a request to the API server.
@@ -679,7 +620,7 @@ Here you can see the plugins in action:
 
 To **install the plugins**, you just have to download the shell scripts named [`kubectl-ctx`](https://raw.githubusercontent.com/weibeld/kubectl-ctx/master/kubectl-ctx) and [`kubectl-ns`](https://raw.githubusercontent.com/weibeld/kubectl-ns/master/kubectl-ns) to *any* directory in your `PATH` and make them executable (for example, with `chmod +x`). That's it! Immediately after that, you should be able to use `kubectl ctx` and `kubectl ns`!
 
-<!-- [Markdown syntax highlighting fix] -->
+<!-- ] -->
 
 ## 5. Save typing with auto-generated aliases
 
@@ -817,7 +758,7 @@ For example, you could use `k proxy` for running `kubectl proxy`:
 </script>
 ```
 
-Or you could use `kg roles` for running `kubectl get roles` (there exists currently no alias component for the Roles resource):
+Or you could use `kg roles` for running `kubectl get roles` (there doesn't currently exist an alias component for the Roles resource):
 
 ```include
 <template>
@@ -870,7 +811,7 @@ In general, once you get the hang of this scheme, you can intuitively deduce the
 
 To install kubectl-aliases, you just have to download the [`.kubectl-aliases`](https://raw.githubusercontent.com/ahmetb/kubectl-aliases/master/.kubectl_aliases) file from GitHub and source it in your `~/.bashrc` or `~/.zshrc` file:
 
-<!-- [Markdown syntax highlighting fix] -->
+<!-- ] -->
 
 ~~~bash
 source ~/.kubectl_aliases
@@ -910,11 +851,9 @@ First of all, complete-alias depends on [bash-completion](https://github.com/sco
 
 > **Important note for macOS users:** like the [kubectl completion script](#bash-on-macos), complete-alias does not work with Bash 3.2, which is the default version of Bash on macOS. In particular, complete-alias depends on bash-completion v2 (`brew install bash-completion@2`), which requires at least Bash 4.1. That means, to use complete-alias on macOS, you need to [install a newer version of Bash](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba).
 
-<!-- If you try to use complete-alias with bash-completion 1 and Bash 3.2, you will get an error of the form `_completion_loader: command not found`. -->
-
 To install complete-alias, you just have to download the [`bash_completion.sh`](https://raw.githubusercontent.com/cykerway/complete-alias/master/bash_completion.sh) script from the [GitHub repository](https://github.com/cykerway/complete-alias), and source it in your `~/.bashrc` file:
 
-<!-- [] -->
+<!-- ] -->
 
 ~~~bash
 source ~/bash_completion.sh
@@ -928,7 +867,7 @@ Technically, complete-alias provides the `_complete_alias` shell function. This 
 
 To hook this up with a specific alias, you have to use the [`complete`](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html#Programmable-Completion-Builtins) Bash builtin to set `_complete_alias` as the *completion function* of the alias.
 
-<!-- [] -->
+<!-- ] -->
 
 As an example, let's take the `k` alias that stands for the `kubectl` command. To set `_complete_alias` as the completion function for this alias, you have to execute the following command:
 
@@ -957,34 +896,6 @@ done
 ~~~
 
 Just add this snippet to your `~/.bashrc` file, reload your shell, and now you should be able to use completion for all the 800 kubectl aliases!
-
-<!--
-- https://github.com/ahmetb/kubectl-aliases
-- Described here: https://ahmet.im/blog/kubectl-aliases/
-- 800 auto-generated aliases
-- Just download the `.kubectl_aliases` file and source it from your `~/.bashrc` of `~/.zshrc`
-
-### Programmable Completion
-
-- With Zsh, command completion keeps working with aliases
-- With Bash, command completion doesn't work with aliases by default
-
-#### Solution for Bash Problem
-
-- https://github.com/cykerway/complete-alias
-- Simply download the https://github.com/cykerway/complete-alias/blob/master/bash_completion.sh file and source it in your `~/.bashrc`
-- This provides the function `_complete_alias`
-- Then, for every alias for which you want to enable command completion:
-    - `complete -F _complete_alias <alias>`
-- This works by internally expanding the alias and getting the completion options in the same way as the aliased command
-- The implementation depends on bash-completion https://github.com/scop/bash-completion
-- Problem with macOS
-    - complete-alias depends on bash-completion 2.0 or newer
-    - macOS indludes Bash 3.2 which uses bash-completion 1.3 (when installed with Homebrew)
-    - This results in an error: `_completion_loader: command not found`
-        - The `_completion_loader` function has been added in bash-completion 2.0 (i.e. does not exist in bash-completion 1.3)
-    - Solution: install a newer version of Bash on macOS and use bash-completion 2.8
--->
 
 ## 6. Extend kubectl with plugins
 
@@ -1085,24 +996,3 @@ You can also request to add your plugin to the [**krew index**](https://github.c
 At the moment, the plugin mechanism unfortunately doesn't yet support command completion. This means that you need to fully type the plugin names, as well as any arguments for the plugins.
 
 However, there is an open [**feature request**](https://github.com/kubernetes/kubectl/issues/585) for this in the kubectl GitHub repository. So, it is possible that this feature will be implemented sometime in the future.
-
-<!-- #### Distribute your own plugins via krew
-
-If you created a plugin and want to add it to the *krew* index, so that other users can discover and install it via *krew*, you can do that. The instructions for this can be found in the [developer guide](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md) of the *krew* documentation.
-
-In short, you have create two artefacts for publishing your plugin to *krew*:
-
-- A `.zip` or `.tar.gz` archive containing the executables of your plugin (possibly for different platforms)
-- A *krew* [plugin manifest](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md#writing-a-plugin-manifest) YAML file
-
-The **archive** with the executables must be publicly downloadable via a URL. You can achieve this, for example, by adding it as a binary to a GitHub [release](https://help.github.com/articles/creating-releases/).
-
-The **plugin manifest** must contain all the required information for *krew* to install the plugin. This includes the URL of the archive with the executables, and the names of the executables to install for each platform. The plugin manifest is what will be uploaded to the *krew* index.
-
-To publish your plugin to the *krew* index, you have to create a pull request to the [krew-index](https://github.com/GoogleContainerTools/krew-index) repository adding your plugin manifest to the [`plugins`](https://github.com/GoogleContainerTools/krew-index/tree/master/plugins) directory of this repository. This is were the manifests of all the plugins in the *krew* index are maintained.
-
-Once the pull request is accepted, your plugin will be publicly listed by `kubectl krew search` and users can install it with `kubectl install <plugin>`. If you create a new version of your plugin, you have to update your plugin manifest in the krew-index repository with a new pull request.
-
-Again, the detailed instructions for publishing plugins to *krew* can be found in the *krew* [developer guide](https://github.com/GoogleContainerTools/krew/blob/master/docs/DEVELOPER_GUIDE.md).
- -->
-
