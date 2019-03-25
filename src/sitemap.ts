@@ -1,5 +1,3 @@
-/* eslint @typescript-eslint/no-explicit-any: 0 */
-
 import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
 import * as Academy from './academy'
@@ -27,7 +25,7 @@ import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 
-import * as AskKubernetesExpert201903 from './askExpert201903/askExpert201903'
+import * as BiteSized201903 from './bsk201903'
 
 import { Venues, Timezone } from './courses'
 import moment from 'moment-timezone'
@@ -95,8 +93,11 @@ const blogPosts = {
     page: WhatIsKubernetes.Details,
     children: {},
   }),
-  askExpert1903: createNode({
-    page: AskKubernetesExpert201903.Details,
+}
+
+const bsk = {
+  bskMultiCluster: createNode({
+    page: BiteSized201903.MultipleClustersDetails,
     children: {},
   }),
 }
@@ -124,6 +125,13 @@ export const Sitemap = createNode({
           children: {},
         }),
       },
+    }),
+    biteSizedKubernetes: createNode({
+      page: Redirect.Details({
+        url: '/bite-sized',
+        redirectTo: bsk.bskMultiCluster,
+      }),
+      children: bsk,
     }),
     contactUs: createNode({
       page: ContactUs.Details,
@@ -255,6 +263,16 @@ export function getAbsoluteUrl(currentPage: LinkedNode<any>, siteUrl: string): s
 
 export function getBlogPosts(website: Sitemap): typeof blogPosts[keyof typeof blogPosts][] {
   return Object.values(website.children.blog.children)
+    .filter(it => it.payload.type !== Redirect.Type)
+    .slice(0)
+
+    .sort((a: any, b: any) => {
+      return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
+    }) as any
+}
+
+export function getBiteSizedSeries(website: Sitemap): typeof blogPosts[keyof typeof blogPosts][] {
+  return Object.values(website.children.biteSizedKubernetes.children)
     .filter(it => it.payload.type !== Redirect.Type)
     .slice(0)
 

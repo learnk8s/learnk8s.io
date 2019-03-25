@@ -115,6 +115,7 @@ export function Markdown(content: string, assetsPath: string): { html: string; c
     }
 
     function decorateWithEditor(lang: string | null, code: string, lines: string | null, title: string | null): string {
+      css.push(prismSolarizedCss)
       const codeAsLines = code.split('\n')
       const groupedCode = groupHighlightedCode(lines, codeAsLines.length)
       const codeBlocks = groupedCode.map(([groupType, lines]) => {
@@ -123,7 +124,6 @@ export function Markdown(content: string, assetsPath: string): { html: string; c
         const currentBlock = codeAsLines.slice(start - 1, end).join('\n')
         switch (groupType) {
           case Group.HIGHLIGHT:
-            css.push(prismSolarizedCss)
             return `<span class="highlight">${
               !!lang ? Prism.highlight(currentBlock, Prism.languages[lang]) : currentBlock
             }</span>`

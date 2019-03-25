@@ -38,7 +38,7 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Markdown(cat('src/k8sOnWindows/content.md').toString(), __dirname)
+  const { css, js, html } = Markdown(cat(`${__dirname}/content.md`).toString(), __dirname)
   return renderToStaticMarkup(
     <Article
       website={website}
