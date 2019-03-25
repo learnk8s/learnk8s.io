@@ -166,7 +166,7 @@ export const Courses: KubernetesCourse[] = [
         details: AdvancedDetails,
         location: Venues.SanFrancisco,
         offer: {
-          price: 2250,
+          price: 2650,
           currency: CurrencyCode.USD,
           locale: 'it-IT',
         },
@@ -268,7 +268,7 @@ export const Courses: KubernetesCourse[] = [
         details: AdvancedDetails,
         location: Venues.SanFrancisco,
         offer: {
-          price: 2250,
+          price: 2650,
           currency: CurrencyCode.USD,
           locale: 'it-IT',
         },
@@ -438,7 +438,7 @@ export const Courses: KubernetesCourse[] = [
         details: AdvancedDetails,
         location: Venues.SanFrancisco,
         offer: {
-          price: 2250,
+          price: 2650,
           currency: CurrencyCode.USD,
           locale: 'it-IT',
         },
