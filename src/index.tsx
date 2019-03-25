@@ -34,6 +34,7 @@ import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 
+import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
 
 export function run(options: Settings) {
@@ -109,6 +110,10 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     }
     case Blog.Details.type: {
       writeFileSync(generatePath(), `<!DOCTYPE html>${Blog.render(root, node, siteUrl)}`)
+      return
+    }
+    case BiteSized.Details.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${BiteSized.render(root, node, siteUrl)}`)
       return
     }
     case RSS.Details.type: {
