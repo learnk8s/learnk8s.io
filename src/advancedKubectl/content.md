@@ -28,7 +28,7 @@ Consequently, the main job of kubectl is to carry out HTTP requests to the Kuber
 
 ![Kubernetes API](kubernetes-api.svg)
 
-> Kubernetes is a fully **resource-centred** system. That means, Kubernetes maintains an internal state of resources, and all Kubernetes operations are [**CRUD**](https://en.wikipedia.org/wiki/Create%2C_read%2C_update_and_delete) operations on these resources. You fully control Kubernetes through manipulation of these resources (and Kubernetes figures out what to do based on the current state of resources). For this reason, the Kubernetes [**API reference**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) is organised as a list of resource types with their associated operations.
+> Kubernetes is a fully **resource-centred** system. That means, Kubernetes maintains an internal state of resources, and all Kubernetes operations are [**CRUD operations**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#resource-operations) on these resources. You fully control Kubernetes by manipulating these resources (and Kubernetes figures out what to do based on the current state of resources). For this reason, the Kubernetes [**API reference**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/) is organised as a list of resource types with their associated operations.
 
 Let's consider an example.
 
@@ -239,7 +239,7 @@ After reloading your shell, kubectl command completion should be working!
 
 With macOS, there is a slight complication. The reason is that the default version of Bash on macOS is 3.2, which is quite outdated. The kubectl completion script unfortunately requires at least Bash 4.1 and thus doesn't work with Bash 3.2.
 
-> The reason that Apple includes an outdated version of Bash in macOS is that newer versions use the [GPLv3](https://en.wikipedia.org/wiki/GNU_General_Public_License) license, which Apple doesn't support.
+> The reason that Apple includes an outdated version of Bash in macOS is that newer versions use the [GPLv3 license](https://en.wikipedia.org/wiki/GNU_General_Public_License), which Apple doesn't support.
 
 That means, to use kubectl command completion on macOS, you have to **install a newer version of Bash**. You can even make it your new default shell, which will save you a lot of trouble of this kind in the future. It's actually not difficult, and you can find instructions in an [**Upgrading Bash on macOS**](https://itnext.io/upgrading-bash-on-macos-7138bd1066ba) article that I wrote previously.
 
@@ -368,7 +368,7 @@ web-ui-6db964458-8pdw4    1/1     Running   0          78d
 
 That's a nice human-readable format, but it contains only a limited amount of information. As you can see, just some few fields (compared to the full resource definitions) are shown for each resource.
 
-That's where the [**custom columns**](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#resource-operations) output format comes in. This output format lets you freely define the columns and the data to display in them. You can choose *any* field of a resource to be displayed as a separate column in the output
+That's where the [**custom columns output format**](https://kubernetes.io/docs/reference/kubectl/overview/#custom-columns) comes in. It lets you freely define the columns and the data to display in them. You can choose *any* field of a resource to be displayed as a separate column in the output
 
 The usage of the custom columns output option is as follows:
 
