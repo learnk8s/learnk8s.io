@@ -6,8 +6,8 @@ import { ok } from 'assert'
 import postcss from 'postcss'
 import cssnano from 'cssnano'
 import shell, { cat, mkdir, cp } from 'shelljs'
-import {minify} from 'terser'
-const {render} = require('svg-term')
+import { minify } from 'terser'
+const { render } = require('svg-term')
 
 export interface Image {
   url: string
@@ -19,7 +19,7 @@ export function Image(image: { url: string; description: string }): Image {
   mkdir('-p', '_site/a')
   ok(existsSync(image.url), `Image ${image.url} doesn't exist.`)
   cp(image.url, `_site/a/${digest}${extname(image.url)}`)
-  return {...image, url: `/a/${digest}${extname(image.url)}`}
+  return { ...image, url: `/a/${digest}${extname(image.url)}` }
 }
 
 export const Img: React.StatelessComponent<{ image: Image; className?: string }> = ({ image, className }) => {
@@ -30,21 +30,21 @@ export interface AsciiCast {
   url: string
 }
 
-export function AsciiCast({castPath}: {castPath: string}): AsciiCast {
+export function AsciiCast({ castPath }: { castPath: string }): AsciiCast {
   ok(existsSync(castPath), `ASCIICast ${castPath} doesn't exist.`)
   const digest = md5(castPath)
   mkdir('-p', '_site/a')
-  const svg = render(cat(castPath).toString(), {window: true})
+  const svg = render(cat(castPath).toString(), { window: true })
   writeFileSync(`_site/a/${digest}.svg`, svg)
-  return {url: `/a/${digest}.svg`}
+  return { url: `/a/${digest}.svg` }
 }
 
 export interface Javascript {
   script: string
 }
 
-export function Javascript(js: {script: string}): Javascript {
-  return {...js}
+export function Javascript(js: { script: string }): Javascript {
+  return { ...js }
 }
 
 export const Script: React.StatelessComponent<{ script: Javascript }> = ({ script }) => {
@@ -55,8 +55,8 @@ export interface ExternalJavascript {
   url: string
 }
 
-export function ExternalJavascript(js: {url: string}): ExternalJavascript {
-  return {...js}
+export function ExternalJavascript(js: { url: string }): ExternalJavascript {
+  return { ...js }
 }
 
 export const ExternalScript: React.StatelessComponent<{ script: ExternalJavascript }> = ({ script }) => {
