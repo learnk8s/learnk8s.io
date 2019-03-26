@@ -97,7 +97,7 @@ const blogPosts = {
   }),
   advancedKubectl: createNode({
     page: AdvancedKubectl.Details,
-    children: {}
+    children: {},
   }),
 }
 

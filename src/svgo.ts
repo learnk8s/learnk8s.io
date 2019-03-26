@@ -76,7 +76,7 @@ const files = ls([
   'assets/material/*.svg',
   'assets/training/*.svg',
   'assets/contact-us/*.svg',
-  'src/advancedKubectl/*.svg'
+  'src/advancedKubectl/*.svg',
 ]).map(svgFileName => {
   const svgContent = cat(svgFileName).toString()
   return svgo.optimize(svgContent).then(svgo => {
