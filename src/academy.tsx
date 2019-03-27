@@ -435,7 +435,7 @@ setTimeout(ldinsp, 0);
             and want to validate the approach that you are taking as well as to level up your knowledge on K8s, this is
             the way to go.
           </p>
-          <p className='f4 i mb2'>— Salaboy, Activiti Cloud Team Lead</p>
+          <p className='f4 i mb2'>— Mauricio Salatino, Activiti Cloud Team Lead</p>
         </div>
       </section>
 
