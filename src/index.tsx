@@ -116,10 +116,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       writeFileSync(generatePath(), `<!DOCTYPE html>${BiteSized.render(root, node, siteUrl)}`)
       return
     }
-    case RSS.Details.type: {
-      writeFileSync(generatePath(), RSS.render(root, node, siteUrl))
-      return
-    }
     case SmallerImages.Details.type: {
       writeFileSync(generatePath(), `<!DOCTYPE html>${SmallerImages.render(root, node, siteUrl)}`)
       return
@@ -156,10 +152,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       writeFileSync(generatePath(), `<!DOCTYPE html>${ScalingSpringBoot.render(root, node, siteUrl)}`)
       return
     }
-    case NotFound.Details.type: {
-      writeFileSync(`_site/404.html`, `<!DOCTYPE html>${NotFound.render(root, node, siteUrl)}`)
-      return
-    }
     case Landing.Type: {
       writeFileSync(generatePath(), `<!DOCTYPE html>${Landing.render(root, node, siteUrl)}`)
       return
@@ -180,12 +172,20 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       writeFileSync(generatePath(), `<!DOCTYPE html>${BiteSized201903.HelmRender(root, node, siteUrl)}`)
       return
     }
+    case NotFound.Details.type: {
+      writeFileSync(`_site/404.html`, `<!DOCTYPE html>${NotFound.render(root, node, siteUrl)}`)
+      return
+    }
     case WebAppManifest.Details.type: {
-      writeFileSync(generatePath(), WebAppManifest.render(root, node, siteUrl))
+      writeFileSync(`_site${WebAppManifest.Details.url}`, WebAppManifest.render(root, node, siteUrl))
       return
     }
     case BrowserConfig.Details.type: {
-      writeFileSync(generatePath(), BrowserConfig.render(root, node, siteUrl))
+      writeFileSync(`_site${BrowserConfig.Details.url}`, BrowserConfig.render(root, node, siteUrl))
+      return
+    }
+    case RSS.Details.type: {
+      writeFileSync(`_site${RSS.Details.url}`, RSS.render(root, node, siteUrl))
       return
     }
     default:

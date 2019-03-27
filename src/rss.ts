@@ -21,7 +21,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
     favicon: 'https://learnk8s.io/favicon.ico',
     feedLinks: {},
     copyright: 'Learnk8s Ltd',
-    feed: 'https://example.com/atom',
+    feed: 'https://learnk8s.io/rss',
     updated: new Date(),
   })
   articles.forEach(it => {
