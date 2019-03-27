@@ -139,10 +139,11 @@ export const Sitemap = createNode({
         }),
       },
     }),
-    biteSizedKubernetes: createNode({
-      page: BiteSized.Details,
-      children: bsk,
-    }),
+    // [BSK ENABLE]
+    // biteSizedKubernetes: createNode({
+    //   page: BiteSized.Details,
+    //   children: bsk,
+    // }),
     contactUs: createNode({
       page: ContactUs.Details,
       children: {},
@@ -281,14 +282,16 @@ export function getBlogPosts(website: Sitemap): typeof blogPosts[keyof typeof bl
     }) as any
 }
 
-export function getBiteSizedSeries(website: Sitemap): typeof blogPosts[keyof typeof blogPosts][] {
-  return Object.values(website.children.biteSizedKubernetes.children)
-    .filter(it => it.payload.type !== Redirect.Type)
-    .slice(0)
+export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bsk][] {
+  // [BSK ENABLE]
+  // return Object.values(website.children.biteSizedKubernetes.children)
+  //   .filter(it => it.payload.type !== Redirect.Type)
+  //   .slice(0)
 
-    .sort((a: any, b: any) => {
-      return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
-    }) as any
+  //   .sort((a: any, b: any) => {
+  //     return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
+  //   }) as any
+  return {} as any
 }
 
 function render(node: LinkedNode<any, object>, siteUrl: string): string {
