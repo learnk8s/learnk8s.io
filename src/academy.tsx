@@ -84,11 +84,15 @@ const faqs: FAQ[] = [
   },
   {
     title: 'What version of Kubernetes was this created for?',
-    content: 'The material was authored for Minikube 0.28, Kubernetes 1.10, Helm 2.9',
+    content: 'The material was authored for Minikube 0.28+, Kubernetes 1.10+, Helm 2.9',
   },
   {
     title: `What if I'm not thrilled?`,
     content: `We want to make sure you get real value out of this so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt and I will refund you.`,
+  },
+  {
+    title: `How do I cancel my subscription?`,
+    content: `Drop us an email at [hello@learnk8s.io](mailto:hello@learnk8s.io) and we will cancel your subscription (please note that you won't be billed **from the next instalment**).`,
   },
   {
     title: 'Do you offer a student discount?',
@@ -449,13 +453,16 @@ setTimeout(ldinsp, 0);
               </div>
               <div className='flex item-start justify-center dib relative navy tc f2 pt4'>
                 <p className='f1 mv0 lh-solid relative'>
-                  $109 <span className='f7 v-mid absolute right--2 top-0 pt2 right--2'>+TAX</span>
+                  <span className='paddle-net' data-product='555459'>
+                    $109
+                  </span>{' '}
+                  <span className='f7 v-mid absolute right--2 top-0 pt2 right--2'>+TAX</span>
                 </p>
               </div>
               <p className='ttu f6 black-60 tc'>per month</p>
               <div className='tc pb3'>
                 <a
-                  href='https://academy.learnk8s.io/payment'
+                  href='https://academy.learnk8s.io/checkout-1'
                   className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'
                 >
                   Buy now &#8594;
@@ -470,16 +477,18 @@ setTimeout(ldinsp, 0);
                 <h3 className='normal black-70 tc mt0'>Paid yearly</h3>
               </div>
               <div className='flex item-start justify-center dib relative navy tc f2 pt4'>
-                <p className='f1 mv0 lh-solid'>$83</p>
-                <p className='f4 mv0 relative pt1'>
-                  .25 <span className='f7 v-mid absolute left-0 top-0 pl4 pt2'>+TAX</span>
+                <p className='f1 mv0 lh-solid relative'>
+                  <span className='paddle-net' data-product='555462'>
+                    $83
+                  </span>{' '}
+                  <span className='f7 v-mid absolute right--2 top-0 pt2 right--2'>+TAX</span>
                 </p>
               </div>
               <p className='ttu f6 black-60 tc'>per month</p>
               <p className='bg-navy white b pa2 ttu tc'>24% Off montly price</p>
               <div className='tc pb3'>
                 <a
-                  href='https://academy.learnk8s.io/payment'
+                  href='https://academy.learnk8s.io/checkout-12'
                   className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'
                 >
                   Buy now &#8594;
