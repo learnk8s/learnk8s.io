@@ -1,5 +1,5 @@
 import test from 'tape'
-import { groupHighlightedCode, Group, extractArgs } from './article'
+import { groupHighlightedCode, Group, extractArgs } from './markdown'
 
 test('it should group code when highlighted', assert => {
   const grouped = groupHighlightedCode('12-13,23-30', 34)
