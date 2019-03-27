@@ -6,6 +6,7 @@ import { Sitemap } from './sitemap'
 import { Layout, Navbar, Footer } from './layout'
 import moment from 'moment'
 import { renderToStaticMarkup } from 'react-dom/server'
+import * as cheerio from 'cheerio'
 
 export const Assets = {
   tick: Image({ url: 'assets/tick.svg', description: 'Tick' }),
