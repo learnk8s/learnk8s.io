@@ -440,87 +440,87 @@ setTimeout(ldinsp, 0);
       </section>
 
       <section className='pt5 pb4'>
-        <PackageList>
-          <PackageLeft heading='Individual' subheading='Full membership plan'>
-            <p className='navy tc f2'>
-              <span className='dib relative'>
-                <span className='paddle-net' data-product='549763'>
-                  $999
-                </span>{' '}
-                <span className='f7 v-mid absolute right--2 top-0'>+TAX</span>
-              </span>
-            </p>
-            <ul className='list pl0 black-70'>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>12 months access</p>
-              </Item>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Docker fundamentals module</p>
-              </Item>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Access to the material for all modules</p>
-                <ol className='pl3'>
-                  <li className='mv2'>Getting started with Kubernetes</li>
-                  <li className='mv2'>Deployment strategies</li>
-                  <li className='mv2'>Kubernetes architecture</li>
-                  <li className='mv2'>Kubernetes networking</li>
-                  <li className='mv2'>Managing state</li>
-                  <li className='mv2'>Helm</li>
-                  <li className='mv2'>Advanced networking</li>
-                </ol>
-              </Item>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy'>
-                  <span className='b'>All source code</span> — build files, scripts and files for each module
+        <ul className='list pl0 flex-ns items-center justify-center'>
+          <li className='w-100 w-third-ns w-30-l'>
+            <div className={`mv3 mh3 mr2-ns bg-black-02`}>
+              <div className='header ph3 pt1 bb b--light-gray'>
+                <h2 className='navy tc mb1'>Monthly plan</h2>
+                <h3 className='normal black-70 tc mt0'>Paid monthly</h3>
+              </div>
+              <div className='flex item-start justify-center dib relative navy tc f2 pt4'>
+                <p className='f1 mv0 lh-solid relative'>
+                  $109 <span className='f7 v-mid absolute right--2 top-0 pt2 right--2'>+TAX</span>
                 </p>
-              </Item>
-            </ul>
-            <div className='tc'>
-              <a
-                href='https://academy.learnk8s.io/payment'
-                className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'
-              >
-                Buy now &#8594;
-              </a>
+              </div>
+              <p className='ttu f6 black-60 tc'>per month</p>
+              <div className='tc pb3'>
+                <a
+                  href='https://academy.learnk8s.io/payment'
+                  className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'
+                >
+                  Buy now &#8594;
+                </a>
+              </div>
             </div>
-          </PackageLeft>
-          <PackageRight heading='Enterprise' subheading='From 10+ users'>
-            <ul className='list pl0 black-70'>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>All individual plan features</p>
-              </Item>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Dedicated customer support</p>
-              </Item>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Dedicated playground for challenges</p>
-              </Item>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Analytics and reports</p>
-              </Item>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Custom topics</p>
-              </Item>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Live classes and webinars</p>
-              </Item>
-              <Item tick={Assets.page.tick}>
-                <p className='mv0 f4-l lh-copy b'>Host the Academy on your cloud</p>
-              </Item>
-            </ul>
-            <div className='tc'>
-              <a href={mailto(enterprisePackage)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>
-                Get in touch &#8594;
-              </a>
+          </li>
+          <li className='w-100 w-third-ns w-30-l'>
+            <div className={`mv3 mh3 mr2-ns bg-evian`}>
+              <div className='header ph3 pt1 bb b--light-gray'>
+                <h2 className='navy tc mb1'>Yearly plan</h2>
+                <h3 className='normal black-70 tc mt0'>Paid yearly</h3>
+              </div>
+              <div className='flex item-start justify-center dib relative navy tc f2 pt4'>
+                <p className='f1 mv0 lh-solid'>$83</p>
+                <p className='f4 mv0 relative pt1'>
+                  .25 <span className='f7 v-mid absolute left-0 top-0 pl4 pt2'>+TAX</span>
+                </p>
+              </div>
+              <p className='ttu f6 black-60 tc'>per month</p>
+              <p className='bg-navy white b pa2 ttu tc'>24% Off montly price</p>
+              <div className='tc pb3'>
+                <a
+                  href='https://academy.learnk8s.io/payment'
+                  className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'
+                >
+                  Buy now &#8594;
+                </a>
+              </div>
             </div>
-          </PackageRight>
-        </PackageList>
+          </li>
+          <li className='w-100 w-third-ns w-30-l'>
+            <div className={`mv3 mh3 mr2-ns bg-black-02`}>
+              <div className='header ph3 pt1 bb b--light-gray'>
+                <h2 className='navy tc mb1'>Business plan</h2>
+                <h3 className='normal black-70 tc mt0'>From 10+ users</h3>
+              </div>
+              <ul className='list pl0 black-70 ph3'>
+                <Item tick={Assets.page.tick}>
+                  <p className='mv0 f4-l lh-copy b'>Dedicated support</p>
+                </Item>
+                <Item tick={Assets.page.tick}>
+                  <p className='mv0 f4-l lh-copy b'>Analytics and reports</p>
+                </Item>
+                <Item tick={Assets.page.tick}>
+                  <p className='mv0 f4-l lh-copy b'>Live classes and webinars</p>
+                </Item>
+                <Item tick={Assets.page.tick}>
+                  <p className='mv0 f4-l lh-copy b'>Host the Academy on your cloud</p>
+                </Item>
+              </ul>
+              <div className='tc'>
+                <a href={mailto(enterprisePackage)} className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 ph4'>
+                  Get in touch &#8594;
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
       </section>
 
       <section className='tc mv4'>
-        <p className='f2 navy b tc'>Try before you buy</p>
+        <p className='f2 navy b tc'>Preview account</p>
         <p className='lh-copy f4 black-70 measure center tc'>
-          You can sign-up to a demo account and have look at the content and the structure of the course before you
+          You can sign-up for a preview account and have look at the content and the structure of the course before you
           commit to it.
         </p>
         <PrimaryButton text='Try now →' href='https://academy.learnk8s.io/trial' />
