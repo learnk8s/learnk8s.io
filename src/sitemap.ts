@@ -120,6 +120,11 @@ const bsk = {
   }),
 }
 
+const rss = createNode({
+  page: RSS.Details,
+  children: {},
+})
+
 export const Sitemap = createNode({
   page: Homepage.Details,
   children: {
@@ -180,10 +185,14 @@ export const Sitemap = createNode({
       }),
       children: {},
     }),
-    rss: createNode({
-      page: RSS.Details,
+    oldRss: createNode({
+      page: Redirect.Details({
+        url: '/rss',
+        redirectTo: rss
+      }),
       children: {},
     }),
+    rss,
     notFound: createNode({
       page: NotFound.Details,
       children: {},
