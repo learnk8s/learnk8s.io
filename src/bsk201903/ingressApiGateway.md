@@ -205,7 +205,7 @@ upstreamSpec:
               :path:
                 text: /user/{{ default(id, "") }}
               content-length:
-                text: "0"
+                text: '0'
               content-type: {}
               transfer-encoding: {}
           getUsers:
@@ -216,7 +216,7 @@ upstreamSpec:
               :path:
                 text: /users
               content-length:
-                text: "0"
+                text: '0'
               content-type: {}
               transfer-encoding: {}
 ```
