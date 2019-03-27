@@ -12,7 +12,7 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const articles = [...getBlogPosts(website), ...getBiteSizedSeries(website)]
+  const articles = [...getBlogPosts(website),] // [BSK ENABLE] ...getBiteSizedSeries(website)]
   const feed = new Feed({
     title: 'Learnk8s',
     description: 'Learn Kubernetes',
