@@ -7,7 +7,8 @@
     "build": "npx ts-node --files src/index.tsx && cp favicon.ico _site",
     "svgo": "npx ts-node src/svgo.ts",
     "fmt": "prettier 'src/**/*.{ts,tsx,md}' --list-different",
-    "test": "ts-node --files node_modules/tape/bin/tape 'src/**/test.ts' 'src/**/*.test.ts' 'src/**/*.integration.ts' 'src/**/integration.ts'"
+    "test": "ts-node --files node_modules/tape/bin/tape 'src/**/test.ts' 'src/**/*.test.ts' 'src/**/*.integration.ts' 'src/**/integration.ts'",
+    "start": "http-serve _site -p 4000"
   },
   "author": "Learnk8s",
   "license": "MIT",
@@ -29,6 +30,7 @@
     "cssnano": "^4.1.10",
     "eventbrite": "^1.2.1",
     "feed": "^2.0.2",
+    "http-serve": "^1.0.1",
     "http-server": "^0.11.1",
     "inline-source-cli": "^1.2.0",
     "marked": "^0.6.0",
