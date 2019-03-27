@@ -1,4 +1,4 @@
-import { Image } from './assets'
+import { Image, AsciiCast } from './assets'
 import marked from 'marked'
 import { cat } from 'shelljs'
 import Prism from 'prismjs'
@@ -39,6 +39,10 @@ export function Markdown(content: string, assetsPath: string): { html: string; c
     return `<p class="lh-copy measure-wide f5">${text}</p>`
   }
   renderer.image = (src, title, text) => {
+    if (/\.cast$/gi.test(src)) {
+      const asciiCast = AsciiCast({ castPath: `${assetsPath}/${src}` })
+      return `<img src="${asciiCast.url}" alt="${title}" class="db pv4"/>`
+    }
     const { url, description } = Image({ url: `${assetsPath}/${src}`, description: title })
     return `<img src="${url}" alt="${description}" class="db pv3"/>`
   }
