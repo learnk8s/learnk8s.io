@@ -517,12 +517,11 @@ export const PromoAcademy: React.StatelessComponent<{ sitemap: Sitemap }> = ({ s
           </ListItem>
         </ul>
         <div className='pt2 pb4'>
-          <a href='https://academy.learnk8s.io/trial' className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 mr3'>
-            Start your trial →
-          </a>{' '}
-          or{' '}
-          <a href={getFullUrl(sitemap.children.academy)} className='link navy underline'>
-            explore the modules
+          <a
+            href={getFullUrl(sitemap.children.academy)}
+            className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 mr3'
+          >
+            Learn more →
           </a>
         </div>
       </div>
