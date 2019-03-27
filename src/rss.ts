@@ -4,7 +4,7 @@ import moment = require('moment')
 
 export const Details = {
   type: identity<'rss'>('rss'),
-  url: '/rss',
+  url: '/rss.xml',
 }
 
 function identity<T>(value: T): T {
@@ -16,12 +16,12 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
   const feed = new Feed({
     title: 'Learnk8s',
     description: 'Learn Kubernetes',
-    id: 'https://learnk8s.io',
-    link: 'https://learnk8s.io',
-    favicon: 'https://learnk8s.io/favicon.ico',
+    id: siteUrl,
+    link: siteUrl,
+    favicon: `${siteUrl}/favicon.ico`,
     feedLinks: {},
     copyright: 'Learnk8s Ltd',
-    feed: 'https://learnk8s.io/rss',
+    feed: getAbsoluteUrl(website.children.rss, siteUrl),
     updated: new Date(),
   })
   articles.forEach(it => {
