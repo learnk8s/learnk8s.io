@@ -37,6 +37,7 @@ import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
+import * as BiteSized201904 from './bsk201904'
 
 export function run(options: Settings) {
   return function mount(root: Sitemap) {
@@ -171,6 +172,10 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     }
     case BiteSized201903.HelmDetails.type: {
       writeFileSync(generatePath(), `<!DOCTYPE html>${BiteSized201903.HelmRender(root, node, siteUrl)}`)
+      return
+    }
+    case BiteSized201904.CreateVsApplyDetails.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${BiteSized201904.CreateVsApplyRender(root, node, siteUrl)}`)
       return
     }
     case NotFound.Details.type: {
