@@ -106,18 +106,18 @@ const bsk = {
     page: BiteSized201903.MultipleClustersDetails,
     children: {},
   }),
-  bskIngressApi: createNode({
-    page: BiteSized201903.IngressApiGatewayDetails,
-    children: {},
-  }),
-  bskVisualiseYaml: createNode({
-    page: BiteSized201903.VisualiseYamlDetails,
-    children: {},
-  }),
-  bskHelm: createNode({
-    page: BiteSized201903.HelmDetails,
-    children: {},
-  }),
+  // bskIngressApi: createNode({
+  //   page: BiteSized201903.IngressApiGatewayDetails,
+  //   children: {},
+  // }),
+  // bskVisualiseYaml: createNode({
+  //   page: BiteSized201903.VisualiseYamlDetails,
+  //   children: {},
+  // }),
+  // bskHelm: createNode({
+  //   page: BiteSized201903.HelmDetails,
+  //   children: {},
+  // }),
 }
 
 const rss = createNode({
@@ -149,11 +149,10 @@ export const Sitemap = createNode({
         }),
       },
     }),
-    // [BSK ENABLE]
-    // biteSizedKubernetes: createNode({
-    //   page: BiteSized.Details,
-    //   children: bsk,
-    // }),
+    biteSizedKubernetes: createNode({
+      page: BiteSized.Details,
+      children: bsk,
+    }),
     contactUs: createNode({
       page: ContactUs.Details,
       children: {},
@@ -297,15 +296,13 @@ export function getBlogPosts(website: Sitemap): typeof blogPosts[keyof typeof bl
 }
 
 export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bsk][] {
-  // [BSK ENABLE]
-  // return Object.values(website.children.biteSizedKubernetes.children)
-  //   .filter(it => it.payload.type !== Redirect.Type)
-  //   .slice(0)
+  return Object.values(website.children.biteSizedKubernetes.children)
+    .filter(it => it.payload.type !== Redirect.Type)
+    .slice(0)
 
-  //   .sort((a: any, b: any) => {
-  //     return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
-  //   }) as any
-  return {} as any
+    .sort((a: any, b: any) => {
+      return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
+    }) as any
 }
 
 function render(node: LinkedNode<any, object>, siteUrl: string): string {
