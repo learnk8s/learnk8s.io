@@ -106,10 +106,10 @@ const bsk = {
     page: BiteSized201903.MultipleClustersDetails,
     children: {},
   }),
-  // bskIngressApi: createNode({
-  //   page: BiteSized201903.IngressApiGatewayDetails,
-  //   children: {},
-  // }),
+  bskIngressApi: createNode({
+    page: BiteSized201903.IngressApiGatewayDetails,
+    children: {},
+  }),
   // bskVisualiseYaml: createNode({
   //   page: BiteSized201903.VisualiseYamlDetails,
   //   children: {},
