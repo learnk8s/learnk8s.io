@@ -114,10 +114,10 @@ const bsk = {
   //   page: BiteSized201903.VisualiseYamlDetails,
   //   children: {},
   // }),
-  // bskHelm: createNode({
-  //   page: BiteSized201903.HelmDetails,
-  //   children: {},
-  // }),
+  bskHelm: createNode({
+    page: BiteSized201903.HelmDetails,
+    children: {},
+  }),
 }
 
 const rss = createNode({
