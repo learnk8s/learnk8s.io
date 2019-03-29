@@ -8,13 +8,13 @@ export const MultipleClustersDetails = identity<Details>({
   title: 'How do you connect clusters located in different data centres?',
   description: `In Kubernetes, Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and availability. Learn what options you have.`,
   openGraphImage: Image({
-    url: 'src/k8sOnWindows/k8s_on_win.jpg',
-    description: 'placeholder',
+    url: 'assets/bsk.png',
+    description: 'Bite-sized Kubernetes learning',
   }),
   publishedDate: '2019-01-09',
   previewImage: Image({
-    url: 'src/k8sOnWindows/k8s_on_win.jpg',
-    description: 'placeholder',
+    url: 'assets/bsk.png',
+    description: 'Bite-sized Kubernetes learning',
   }),
   author: {
     fullName: 'Daniele Polencic',
@@ -31,13 +31,13 @@ export const IngressApiGatewayDetails = identity<Details>({
   title: 'Can you have an API Gateway as an ingress?',
   description: `In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster. You can select an Ingress that is also an API gateway.`,
   openGraphImage: Image({
-    url: 'src/k8sOnWindows/k8s_on_win.jpg',
-    description: 'placeholder',
+    url: 'assets/bsk.png',
+    description: 'Bite-sized Kubernetes learning',
   }),
   publishedDate: '2019-01-09',
   previewImage: Image({
-    url: 'src/k8sOnWindows/k8s_on_win.jpg',
-    description: 'placeholder',
+    url: 'assets/bsk.png',
+    description: 'Bite-sized Kubernetes learning',
   }),
   author: {
     fullName: 'Daniele Polencic',
@@ -54,13 +54,13 @@ export const VisualiseYamlDetails = identity<Details>({
   title: 'Is there any tool to visualise the dependency between YAML files?',
   description: `When you have a large number of resources in your cluster, you might lose track of all relationships between them. Learn how you can build a dependency graph with all your resources.`,
   openGraphImage: Image({
-    url: 'src/k8sOnWindows/k8s_on_win.jpg',
-    description: 'placeholder',
+    url: 'assets/bsk.png',
+    description: 'Bite-sized Kubernetes learning',
   }),
   publishedDate: '2019-01-09',
   previewImage: Image({
-    url: 'src/k8sOnWindows/k8s_on_win.jpg',
-    description: 'placeholder',
+    url: 'assets/bsk.png',
+    description: 'Bite-sized Kubernetes learning',
   }),
   author: {
     fullName: 'Daniele Polencic',
@@ -77,13 +77,13 @@ export const HelmDetails = identity<Details>({
   title: 'Is Helm used just for templating?',
   description: `Learn how Helm is used for templating, sharing charts and managing releases.`,
   openGraphImage: Image({
-    url: 'src/k8sOnWindows/k8s_on_win.jpg',
-    description: 'placeholder',
+    url: 'assets/bsk.png',
+    description: 'Bite-sized Kubernetes learning',
   }),
   publishedDate: '2019-01-09',
   previewImage: Image({
-    url: 'src/k8sOnWindows/k8s_on_win.jpg',
-    description: 'placeholder',
+    url: 'assets/bsk.png',
+    description: 'Bite-sized Kubernetes learning',
   }),
   author: {
     fullName: 'Daniele Polencic',
