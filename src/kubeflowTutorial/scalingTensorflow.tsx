@@ -16,9 +16,9 @@ export const Details = {
   title: 'Recognising handwritten digits with Kubernetes and Tensorflow',
   shortDescription: ``,
   description: ``,
-  openGraphImage: Image({url: 'src/scalingKubeflow/kubeflow.png', description: 'Big data'}),
+  openGraphImage: Image({url: 'src/scalingKubeflow/digits.png', description: 'Machine learning with Kubeflow, Tensorflow, Kubernetes'}),
   publishedDate: '2019-03-15',
-  previewImage: Image({url: 'src/scalingKubeflow/kubeflow.png', description: 'Scaling Jupyter notebooks with Kubernetes and Tensorflow'}),
+  previewImage: Image({url: 'src/scalingKubeflow/digits.png', description: 'Machine learning with Kubeflow, Tensorflow, Kubernetes'}),
   author: {
     fullName: 'Salman Iqbal',
     avatar: Image({url: 'assets/authors/salman_iqbal.jpg', description: 'Salman Iqbal'}),
