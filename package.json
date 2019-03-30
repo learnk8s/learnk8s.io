@@ -55,7 +55,7 @@
     "moment-timezone": "^0.5.23",
     "postcss": "^7.0.14",
     "prettier": "^1.16.4",
-    "prismjs": "^1.15.0",
+    "prismjs": "^1.16.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "react-schemaorg": "^0.1.0",
