@@ -393,6 +393,7 @@ However, it is still more convenient than running it on your computer.
 You can run a distributed TensorFlow job on your NFS filesystem with:
 
 ```bash
+
 ```
 
 The results are stored in the NFS volume.
@@ -402,6 +403,7 @@ You can visualise the detail of your distributed TensorFlow job with [Tensorboar
 You can deploy Tensorboard with:
 
 ```bash
+
 ```
 
 Retrieve the name of the Tensorboard's Pod with:
@@ -426,13 +428,13 @@ You can serve your model with [TensorFlow Serving](https://www.TensorFlow.org/se
 
 You can create a TensorFlow Serving server with:
 
-```bash
+````bash
 
 Retrieve the name of the TensorFlow Serving's Pod with:
 
 ```bash
 kubectl get pods -l app=tf-serving
-```
+````
 
 You can forward the traffic from the Tensorboard's Pod on your cluster to your computer with:
 
