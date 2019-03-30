@@ -42,6 +42,7 @@ import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
+import * as TerraformAks from './terraformAks/terraformAks'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
@@ -318,6 +319,10 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       const $ = Cheerio.of(AdvancedKubectl.render(root, node, siteUrl))
       optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
+      return
+    }
+    case TerraformAks.Details.type: {
+      writeFileSync(generatePath(), `<!DOCTYPE html>${TerraformAks.render(root, node, siteUrl)}`)
       return
     }
     case WebAppManifest.Details.type: {

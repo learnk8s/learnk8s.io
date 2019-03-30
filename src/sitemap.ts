@@ -25,6 +25,7 @@ import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
+import * as TerraformAks from './terraformAks/terraformAks'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
@@ -97,6 +98,10 @@ const blogPosts = {
   }),
   advancedKubectl: createNode({
     page: AdvancedKubectl.Details,
+    children: {},
+  }),
+  terraformAks: createNode({
+    page: TerraformAks.Details,
     children: {},
   }),
 }
