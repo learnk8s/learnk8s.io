@@ -188,7 +188,7 @@ export const Sitemap = createNode({
     oldRss: createNode({
       page: Redirect.Details({
         url: '/rss',
-        redirectTo: rss
+        redirectTo: rss,
       }),
       children: {},
     }),
