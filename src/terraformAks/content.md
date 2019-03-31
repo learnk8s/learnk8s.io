@@ -1,9 +1,18 @@
-# learnk8s - the state of Terraform on Azure Kubernetes Service (AKS)
-
 Azure offers a managed Kubernetes service where you can request for a cluster, connect to it and use it to deploy applications.
-Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. Why worrying about scaling APIs, managing databases, provisioning compute resources, and offering a five nines reliability when you can outsource all of it to Azure. For free — yes, Azure doesn't charge you a penny for the master nodes in AKS.
-But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control. If you accidentally delete your cluster, or decide to provision a copy in another region, you can replicate the exact same configuration.
-And if you're working as part of a team, source control gives you peace of mind. You know exactly why changes occurred and who made them.
+
+Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes.
+
+_Why worrying about scaling APIs, managing databases, provisioning compute resources, and offering a five nines reliability when you can outsource all of it to Azure._
+
+For free — yes, **Azure doesn't charge you a penny for the master nodes in Azure Kubernetes Service (AKS).**
+
+But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.
+
+If you accidentally delete your cluster, or decide to provision a copy in another region, you can replicate the exact same configuration.
+
+And if you're working as part of a team, source control gives you peace of mind.
+
+You know exactly why changes occurred and who made them.
 
 ## Managing infrastructure as code
 
@@ -11,15 +20,29 @@ You have a few options when it comes to keeping your cluster configuration under
 
 ### Pulumi
 
-[Pulumi](https://github.com/pulumi/pulumi) was recently released and offers a novel approach to configuration management through code. It resemble a universal SDK that works for any cloud provider. The infrastructure on Azure (or Google Cloud or Amazon Web Services) is exposed as a collection of objects that you can leverage from your favourite programming language. Imagine instantiating a LoadBalancer class in Typescript and having an Azure load balancer provisioned as a side effect. But it doesn't end there.
-Pulumi stores the current state of your infrastructure. So if you run your code twice, it will create a single load balancer and not two.
-While technically promising, it's also the new kid on the block. Pulumi was released at the beginning of 2018 and some of the features are not as polished as in Terraform or Azure Resource Manager templates.
+[Pulumi](https://github.com/pulumi/pulumi) was recently released and offers a novel approach to configuration management through code.
+
+It resemble **a universal SDK that works across cloud providers**.
+
+The infrastructure on Azure (or Google Cloud or Amazon Web Services) is exposed as a collection of objects that you can leverage from your favourite programming language.
+
+Imagine instantiating a LoadBalancer class in Typescript and having an Azure load balancer provisioned as a side effect.
+
+_But it doesn't end there._
+
+Pulumi stores the current state of your infrastructure.
+
+So if you run your code twice, it will create a single load balancer and not two.
+
+While technically promising, it's also the new kid on the block.
+
+Pulumi was released at the beginning of 2018 and some of the features are not as polished as in Terraform or Azure Resource Manager templates.
 
 > As an example, you are force to connect to the Pulumi servers to store the state of your infrastructure. But there're efforts to [make it work with Azure blob storage and Amazon S3](https://github.com/pulumi/pulumi/pull/2455).
 
 Creating an Azure load balancer in Pulumi looks like this using Typescript:
 
-```
+```typescript
 import * as azure from '@pulumi/azure'
 
 const testResourceGroup = new azure.core.ResourceGroup('test', {
@@ -65,12 +88,20 @@ pulumi up
 
 ### Azure Resource Manager Templates
 
-Often abbreviated ARM. ARM is the toolset developed by Microsoft designed to provision and control resources in Azure. ARM templates describe a resource and its related dependencies. The templates are akin to JSON files and not particularly human friendly. Also, ARM lack advanced features such as keeping track of what's being deployed, dry runs, and the ability to modularise and reuse your code.
+[Azure Resource Manager templates](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authoring-templates), _often abbreviated ARM templates_, are a toolset developed by Microsoft designed to provision and control resources in Azure.
+
+ARM templates describe a resource and its related dependencies.
+
+The templates are akin to JSON files and not particularly human friendly.
+
+Also, ARM lack advanced features such as keeping track of what's being deployed, dry runs, and the ability to modularise and reuse your code.
+
 If Pulumi gave you the extreme flexibility of writing your own code, ARM takes that away by giving you a semi static JSON file where you can dynamically inject variables.
+
 Azure Templates are made of two parts:
 
 1. a generic template and
-2. A parameter file that is used to inject the value in the template
+1. A parameter file that is used to inject the value in the template
 
 Here you can [find the generic template for the Azure Load Balancer](https://github.com/Azure/azure-quickstart-templates/blob/master/201-1-vm-loadbalancer-2-nics/azuredeploy.json).
 
@@ -86,9 +117,22 @@ Notice how you had to specify the parameter file to customise some of the values
 
 ### Terraform
 
-Terraform gained most of its popularity from being a friendly tool to provision infrastructure on Amazon Web Services. Terraform is not a library that you use in your favourite programming language, and it's not even a collection of JSON templates. It's something in between. It's a sort of DSL — a domain specific language that's designed to be easy to read and write.
+[Terraform](https://www.terraform.io/intro/index.html#what-is-terraform-) gained most of its popularity from being a friendly tool to provision infrastructure on Amazon Web Services.
 
-Terraform doesn't know to connect to a cloud provider and orchestrate their API. It delegates all the work to plugins called providers. Providers are in charge of translating the terraform DSL into HTTP requests to Azure, Amazon Web Service or any other cloud provider.
+Terraform is not a library that you use in your favourite programming language, and it's not even a collection of JSON templates.
+
+It's something in between.
+
+It's a sort of DSL — a domain specific language that's designed to be easy to read and write.
+
+_It looks like real code, but it lacks some of the flexibility._
+
+Terraform doesn't know to connect to a cloud provider and orchestrate their API.
+
+It delegates all the work to plugins called providers.
+
+Providers are in charge of translating the terraform DSL into HTTP requests to Azure, Amazon Web Service or any other cloud provider.
+
 Of course, there is a Terraform provider for Azure, [as well as many others](https://www.terraform.io/docs/providers/).
 
 > Did you know that [you could use Terraform to provision Github's actions](https://www.terraform.io/docs/github-actions/index.html)?
@@ -122,7 +166,9 @@ resource "azurerm_lb" "test" {
 
 > Please note how the code is remarkably similar to Pulumi's.
 
-Terraform has a powerful mechanism where it can trace dependencies across resources and store them in a graph. The graph is used to optimise creating infrastructure: resources that are independent are created in parallel instead of sequentially.
+Terraform has a powerful mechanism where it can trace dependencies across resources and store them in a graph.
+
+The graph is used to optimise creating infrastructure: resources that are independent are created in parallel instead of sequentially.
 
 The dependency graph for the load balancer above is simple.
 
@@ -136,7 +182,7 @@ The following complex dependency graph was drawn with [Blast Radius](https://git
 
 Terraform also keeps track of the current state of your infrastructure, so running your the script twice hold the same result.
 
-In the rest of this article you will explore why Terraform is loved by small and large enterprises that uses it everyday in production.
+In the rest of this article you will explore why Terraform is loved by small and large enterprises that use it everyday in production.
 
 ## Getting started with Terraform
 
@@ -158,11 +204,17 @@ And you can list your accounts with:
 az account list
 ```
 
-**Make a note of your subscription id.**
+**Make a note now of your subscription id.**
 
-> If you have more than one subscription, you can set your active subscription with `az account set --subscription="SUBSCRIPTION_ID"`
+> If you have more than one subscription, you can set your active subscription with `az account set --subscription="SUBSCRIPTION_ID"`. You still need to make a note of your subscription id.
 
-Terraform needs a Service Principal to create resources on your behalf. You can think of it as a user identity (login and password) with a specific role, and tightly controlled permissions to access your resources. It could have fine grained permissions such as only to create virtual machines or read from a particular blob storage. In your case, you need a Contributor Service Principal — enough permissions to create, and delete resources.
+Terraform needs a Service Principal to create resources on your behalf.
+
+You can think of it as a user identity (login and password) with a specific role, and tightly controlled permissions to access your resources.
+
+It could have fine grained permissions such as only to create virtual machines or read from a particular blob storage.
+
+In your case, you need a _Contributor_ Service Principal — enough permissions to create, and delete resources.
 
 You can create the Service Principal with:
 
@@ -184,20 +236,22 @@ The previous command should print a JSON payload like this:
 
 Make a note of the `appId`, `password` and `tenant`. You need those to set up Terraform.
 
-Export the following environment variables
+Export the following environment variables:
 
-```shell
+```bash
 export ARM_CLIENT_ID=<insert the appId from above>
 export ARM_SUBSCRIPTION_ID=<insert your subscription id>
 export ARM_TENANT_ID=<insert the tenant from above>
 export ARM_CLIENT_SECRET=<insert the password from above>
 ```
 
+## Creating a resource group with Terraform
+
 You should install the Terraform CLI. You can [follow the instructions from the official website](https://learn.hashicorp.com/terraform/getting-started/install.html).
 
 If the installation is successful, you should be able to test it by printing the current version of the binary:
 
-```shell
+```bash
 terraform version
 ```
 
@@ -225,25 +279,28 @@ terraform init
 The command execute two crucial tasks:
 
 1. It downloads the Azure provider which is necessary to translate the Terraform instructions into API calls
-2. It initialises the state where it keeps track of all the resources that are created.
+1. It initialises the state where it keeps track of all the resources that are created.
 
 You're ready to create your resource group using Terraform.
 
-There're two commands that are frequently used in succession:
+There're two commands that are frequently used in succession. The first is:
 
-```shell
+```bash
 terraform plan
 ```
 
-Terraform asks for two variables:
+At this point, Terraform asks for two variables:
 
-1. The service principal id — this is the appId that you retrieved previously and
-2. The service principal secret — this is the password
+1. **The service principal id** — this is the appId that you retrieved previously and
+1. **The service principal secret** — this is the password
 
-Executes a dry run. It's always a good idea to double check what happens to your infrastructure, before you commit the changes.
-You don't want to accidentally destroy a database because you forgot to add or remove a resource.
+As soon as you provide the credentials, Terraform executes a dry run.
 
-Once, you are happy with the changes, you can create the resources with:
+It's always a good idea to double check what happens to your infrastructure, before you commit the changes.
+
+**You don't want to accidentally destroy a database** because you forgot to add or remove a resource.
+
+Once, you are happy with the changes, you can create the resources for real with:
 
 ```bash
 terraform apply
@@ -253,14 +310,17 @@ Please note that you may enter the service principal id (`tenant`) and service p
 
 > If you are bored at typing the same credentials every time you type `terraform plan` or `terraform apply`, you can export the following variables `export TF_VAR_service_principal_client_secret=<password>` and `TF_VAR_service_principal_client_id=<tenant>`
 
-As soon as you type those, Terraform creates the resource group.
+Terraform created the resource group.
 
-Congratulations, you just used Terraform to provision your infrastructure.
+Congratulations, you just used Terraform to provision your infrastructure!
 
 You can imagine that, by adding more block resources, you can create more components in your infrastructure.
-You can have a look at all the resources that you could create [in the left column of the official provider page for Azure](https://www.terraform.io/docs/providers/azurerm/index.html#).
 
-> Please note that you should have a sufficient knowledge of Azure and its resources to understand how components can be plugged in together.
+You can have a look at all the resources that you could create [in the left column of the official provider page for Azure](https://www.terraform.io/docs/providers/azurerm/index.html).
+
+> Please note that you should have a sufficient knowledge of Azure and its resources to understand how components can be plugged in together. The documentation provides great examples, though.
+
+## Provisioning a Kubernetes cluster on Azure with Terraform
 
 The bill of material to provision a Kubernetes cluster on Azure is as follow. You need:
 
@@ -275,7 +335,15 @@ The list translates to the following Terraform code:
 
 ```
 
-Please notice how we are referencing to some of the variables defined in the vnet and resource groups. Terraform computes the dependencies between resources and substitutes the references with the real values once those are computed.
+Please notice how we are referencing to some of the variables defined in the vnet and resource groups.
+
+Also, pay attention to the `azurerm_kubernetes_cluster` resource block:
+
+- `linux_profile` is used to set the username and public key to SSH into the node
+- `agent_pool_profile` defines how many virtual machines should be part of the cluster and what their configuration should look like
+- `service_principal` is used by the API to provision the AKS cluster and connect the master to the worker nodes
+
+Terraform computes the dependencies between resources and substitutes the references with the real values once those are computed.
 
 Before you apply the changes, execute a dry-run with:
 
@@ -291,19 +359,25 @@ If the proposed changes resonate with what you asked for, you can apply them wit
 terraform apply
 ```
 
-It's time for a cup of coffee. Provisioning a cluster on AKS takes in average about ten minutes.
+_It's time for a cup of coffee._
 
-Done?
+Provisioning a cluster on AKS takes in average about ten minutes.
 
-You might wonder where is your cluster.
+What happens in the background is that Azure receives your request, generates a few ARM templates, deploys them internally and create the extra resources needed (such as NICs and virtual machines) to create the cluster.
 
-How do you connect to it?
+_Done?_
+
+**You might wonder where is your cluster.**
+
+_How do you connect to it?_
 
 You can head back to the Azure console and search for your cluster and download the kubeconfig file.
 
 But there's a quicker way.
 
-Terraform can print information about the state. You could use that to print the kubeconfig file associated with the cluster.
+**Terraform can print information about the state.**
+
+You could use that to print the kubeconfig file associated with the cluster.
 
 You should add the following snippet to the end of your `main.tf` file:
 
@@ -317,7 +391,9 @@ You should go through another cycle of `terraform plan` and `terraform apply` an
 
 You should also notice that, after the last `terraform apply`, the kubeconfig file is printed to the terminal before the script completes.
 
-You could copy the content and save it locally. Or if you prefer, you can use the following command to access the value and save it to disk:
+You could copy the content and save it locally.
+
+Or, if you prefer, you can use the following command to access the value and save it to disk:
 
 ```bash
 echo "$(terraform output kube_config)" > azurek8s
@@ -335,128 +411,242 @@ Assuming you have kubectl installed locally, you can test the connection to the 
 kubectl get pods --all-namespaces
 ```
 
-Hurrah!
+**Hurrah!**
 
 You have provision a cluster using Terraform.
 
-## Requirements for production
+_The cluster is empty, though._
 
-A production ready Kubernetes cluster is made of few parts:
-
-- A master, node usually provisioned by Azure
-- At least one agent pool — a collection of identical compute resources such a the Ev4
-- An Ingress controller — used to expose your Pods to the internet
-- A load balancer which distributes incoming traffic to the compute resources in the agent pool
-
-[PIC]
-
-The above setup is the bare minimum to deploy, scale and serve applications in Kubernetes.
-
-However, if you're deploying enterprise grade software that scales to million of users you probably need few extra components:
-
-- An application gateway to provide the DNS component and the Web Application Firewall
-- A Traffic manager to distribute traffic across several clusters geographically distributed across the globe.
-
-[PIC]
-
-Ideally you should keep all your infrastructure setup in Terraform and version control. You don't want details to be missed, particularly if you wish to have a robust disaster recovery plan or you want to build a copy of your setup in a different region.
-[why single command deploy]
-
-Time to write some Terraform.
-
-## Terraforming AKS
-
-AKS is defined as a single resource in Terraform. Go ahead and add the following snippet of code in your `main.tf`:
-
-[code]
-
-A few notes on the resource definition:
-
-- `linux_profile` is used to set the username and public key to SSH into the node
-- `agent_pool_profile` defines how many virtual machines should be part of the cluster and what their configuration should look like.
-- `service_principal` is used by the API to provision the AKS cluster and connect the master to the worker nodes. [check]
-
-You can create the cluster with:
-
-```bash
-Terraform plan
-Terraform apply
-```
-
-The process take in average about 10 minutes. What happens in the background is that Azure receives your request, generates a few ARM templates, deploys them internally and create the extra resources needed (such as NICs and virtual machines) to create the cluster.
-
-Terraform created the cluster, but where is it?
-
-You could log in into the portal and check if the cluster is ready, but that doesn’t help. You want to connect to the cluster with kubectl.
-
-Terraform can expose the details for your cluster using outputs. You can configure the following outputs:
-
-[code]
-
-You will have to run `terraform apply` again to see the output.
-
-Assuming you have kubectl installed locally, you can connect kubectl to your AKS cluster by following the steps:
-
-```bash
-echo "$(terraform output kube_config)" > ./azurek8s
-export KUBECONFIG=${PWD}/azurek8s
-```
-
-You can test that the kubectl is working with:
-
-```bash
-Kubectl cluster-info
-```
-
-Congratulations! You just configured your first cluster using Terraform.
-
-The cluster is empty, though. And you don’t have an Ingress controller to route the traffic to the cluster.
+And you don't have an Ingress controller to route the traffic to the cluster.
 
 ## Installing an Ingress
 
-In this tutorial, you will deploy the nginx-ingress controller. While the nginx-ingress controller is the most popular, it is not necessarily the best option all the time.
+In Kubernetes, the Ingress is that component in charge of routing the traffic from outside the cluster to your Pods.
+
+You could think about the Ingress as a reverse proxy.
+
+All the traffic is proxied to the Ingress and it's then distributed to one of the Pods.
+
+If you wish to do intelligent path based routing, TLS termination or simply route the traffic to different backends based on the domain, you can do so in the Ingress.
+
+While there're several kind of Ingresses such as Kong, HAProxy and Ambassador, the ingress-nginx is the most popular.
+
+You'll use the ingress-nginx in this guide.
+
 When you install the ingress controller you have two options.
 
 You can install the nginx-ingress controller using a service of type NodePort.
+
 Each node in your agent pool will expose a fixed port and you can route the traffic to that port to reach the Pods in your cluster.
-To reach the port on a node, you need the node’s IP address.
-Unfortunately, you can’t reach the node’s IP address directly because the IP is private. You still need to find a way to route the traffic from the outside to your node.
-You could provision a load balancer. And since you’re acquainted with Terraform, you could use that to create the load balancer and link it to the agent pool.
-Not so fast. To provision a load balancer, you need a list of IP addresses to route the traffic to, and Azure doesn’t expose the NIC created as part of the AKS cluster.
-Manually provisioning a load balancer on top of your agent pool is not doable in AKS.
 
-You’re left with another option. Using a Service of `type: LoadBalancer`.
-Services of this type are cloud provider aware and can create a load balancer on your current cloud provider such as Azure.
-So instead of exposing your Services as NodePort and you manually linking the load balancer, you have Azure doing the work.
+To reach the port on a node, you need the node's IP address.
 
-Sounds like a plan.
+Unfortunately, you can't reach the node's IP address directly because the it's private.
 
-But how do you submit the YAML resources for your ingress?
+You're left with another option: using a Service of `type: LoadBalancer`.
 
-You could download the resources from the official website. Or you could use Helm and the official nginx-ingress controller chart.
+Services of this type are cloud provider aware and can create a load balancer in your current cloud provider such as Azure.
 
-The easiest option is to use the Helm chart.
-Helm comes with a server side component that is installed inside the cluster called the tiller. The tiller act as a middleman and creates resources on your behalf. The tiller is hard to secure
+So instead of exposing your Services as NodePort and struggling to send the traffic to the nodes, you have Azure doing the work.
+
+[Azure creates a real load balancer](https://azure.microsoft.com/en-us/services/load-balancer/) and connect all the nodes in the cluster to it.
+
+_But how do you submit the YAML resources for your ingress?_
+
+You could [follow the manual instructions and install the ingress-nginx](https://github.com/nginxinc/kubernetes-ingress/blob/master/docs/installation.md).
+
+Or you could install it as a package with a single command and Helm.
+
+Helm is the Kubernetes package manager.
+
+It's convenient when you want to share and parametrise a collection of YAML resources.
+
+You can see what packages are already [available in the public registry](https://github.com/helm/charts).
+
+You can find the instruction on how to install the Helm CLI [in the official documentation](https://helm.sh/docs/using_helm/).
+
+Helm comes with a server side component that is installed inside the cluster called the tiller.
+
+The tiller act as a middleman and creates resources on your behalf.
+
+The CLI is used primarely to send commands to the tiller.
+
+You can install the Tiller with:
+
+```bash
+helm init
+```
+
+Helm automatically uses your kubectl credentials to connect to the cluster.
+
 You can install the ingress with:
 
 ```bash
+helm install stable/nginx-ingress \
+  --set rbac.create=true
+  --name ingress
+```
+
+Helm installed the resources such as ConfigMaps, Deployment and Service for the Nginx Ingress controller.
+
+It also provision a Service of `type: Loadbalancer`.
+
+The IP address of the load balancer is dynamically assigned.
+
+> Please note that you might need to wait up to 10 minutes for Azure to provision a Load balancer and link it to the Ingress.
+
+You can retrieve the IP with:
+
+```bash
+kubectl get service -n ingress??
+```
+
+You can test that the Ingress is working as expected by curling the IP address with:
+
+```bash
+curl <ip address>
+```
+
+You should see a `404 - default backend` message.
+
+That message is coming from Nginx and suggests that you haven't deployed any application yet.
+
+Congratulations, you have a fully working cluster that is capable of routing the traffic using Nginx.
+
+## A fully configured cluster in one click
+
+Wouldn't be great if you could create the cluster and configure the Ingress with a single command?
+
+You could type `terraform apply` and create a production cluster in a blink of an eye.
+
+The good news is that Terraform has a Helm provider.
+
+You can install the Tiller and any other Helm chart using Terraform.
+
+However, before you continue, you should remove the existin Ingress.
+
+Terraform doesn't recognise resources that it hasn't created.
+
+You can delete the existing Ingress with:
+
+```bash
+helm delete ingress
+```
+
+You can also remove the Tiller with:
+
+```bash
+helm reset
+```
+
+The Helm provider can use the credentials generated by Terraform after the cluster is created.
+
+The following snippet illustrates how you can integrate Helm in your existing Terraform file:
+
+```hcl
 
 ```
 
-The IP address of the load balancer is dynamically generated. You can retrieve the IP with:
+> Please note that you can reference the full file on the GitHub repository.
+
+You can test the changes with `terraform plan`.
+
+When you're ready, you can apply the changes with `terraform apply`.
+
+If the installation was successful, you can retrieve the IP address of the new load balancer with:
 
 ```bash
 
 ```
 
-Congrats you have a fully working cluster that is capable of routing the traffic using Nginx.
+> Please note that it takes time for Azure to provision a load balancer and attach it to the cluster.
 
-## Creating more copies
+And you can repeat the test that you did earlier:
+
+```bash
+curl <ip of the load balancer>
+```
+
+The command should return the same `404 - default backend`.
+
+_Everything is exactly the same, so what's the advantage of using a single Terraform file?_
+
+## Cloning the clusters
 
 The beauty of Terraform is that you can use the same code to generate several cluster with a different name.
-You might have a cluster for each environment such as a cluster for dev, one for preproduction and one for production.
-You can change your terraform code to allow for any number of clusters to be created.
 
-[TODO]
+You can parametrise the name of your resources and create clusters that are exact copies.
+
+And since the Terraform script creates fully working clusters with nginx Ingresses, it's easy to provision copies for several environments such as Development, Preproduction and Production.
+
+You can reuse the existing Terraform code and provision two clusters simultaneously using [modules](https://www.terraform.io/docs/modules/index.html) and [interpolation](https://www.terraform.io/docs/configuration-0-11/interpolation.html).
+
+> Before you execute thee script, it's a good idea to destroy any cluster that you created previously with `kubectl destroy`.
+
+The interpolation is straightforward, have a look at an example of a parametrised resource group:
+
+```hcl
+
+```
+
+As you notice, you a `variable` block that defines the variables that can change.
+
+You can set the resource group name with `terraform apply -var="name=production"`.
+
+Terraform modules use variables and interpolation to create copy of resources.
+
+Modules are simply Terraform scripts that are not in the root folder where you type `terraform apply`.
+
+You can move the existing script to a new folder called `aks` and create a new `main.tf` file with the following content:
+
+```hcl
+
+```
+
+> Please note that the script and module are available in the GitHub repository in full.
+
+The `module` keyword is used to define a new module.
+
+The `source` field in the module points to the module.
+
+Any `variable` in the source module is an argument in the `module` block.
+
+You should notice that both clusters have different names.
+
+Before you can plan and apply the changes, you should run `terraform init` one more time.
+
+The command downloads and links the local module.
+
+Running `terraform plan` and `terraform apply` should create two clusters now.
+
+_How do you connect to the Development and Production cluster, though?_
+
+You can read the modules' output and create `output` blocks like this:
+
+```bash
+
+```
+
+You should `terraform apply` the changes again to see the output with the kubeconfig file.
+
+You should connect to the cluster, retrieve the IP address of the load balancer and make a `curl` request to it.
+
+Everything works as expected!
+
+Hurrah!
+
+You have two identical clusters, but you can create a lot more!
 
 ## What's next
+
+Having the infrastructure defined as code in your repository makes your job easier.
+
+If you wish to change the version of the cluster, you can do it in a centralised manner and have it applied to all clusters.
+
+The setup described is only the beginning, if you're provisioning production-grade infrastructure you should look into:
+
+- how to structure your Terraform files
+- how to use AzureDNS to point to the load balancer and use domain names instead of IP addresses
+- how to set up TLS with cert manager
+
+Nad the beauty is that Extenal DNS and Cert Manager are available as charts, so you could integrate tham with your AKS module and have all the cluster updated at the same time.
