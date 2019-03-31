@@ -648,5 +648,6 @@ The setup described is only the beginning, if you're provisioning production-gra
 - how to structure your Terraform files
 - how to use AzureDNS to point to the load balancer and use domain names instead of IP addresses
 - how to set up TLS with cert manager
+- managing state
 
 Nad the beauty is that Extenal DNS and Cert Manager are available as charts, so you could integrate tham with your AKS module and have all the cluster updated at the same time.
