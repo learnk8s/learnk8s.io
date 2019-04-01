@@ -11,7 +11,7 @@ export const MultipleClustersDetails = identity<Details>({
     url: 'assets/bsk.png',
     description: 'Bite-sized Kubernetes learning',
   }),
-  publishedDate: '2019-01-09',
+  publishedDate: '2019-04-04',
   previewImage: Image({
     url: 'assets/bsk.png',
     description: 'Bite-sized Kubernetes learning',
