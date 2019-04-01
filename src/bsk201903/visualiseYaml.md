@@ -6,13 +6,17 @@ When you have a large number of resources in your cluster, you might lose track 
 
 Keeping track of dependencies is even more challenging when you're managing distributed teams or have several clusters.
 
-_Wouldnot be nice if you could have a tool that reads a repository and show the dependencies between your Deployments, Services, Persistent Volume Claims etc.?_
+_Wouldn't be nice if you could have a tool that reads a repository and show the dependencies between your Deployments, Services, Persistent Volume Claims, etc.?_
 
 Unfortunately, such a tool doesn't exist for YAML.
 
 YAML is a human-readable configuration language, and it doesn't have a way to express relationships with other YAML files.
 
-You could write a tool to analyse YAML files and link them together statically, but you will have to duplicate all the rules that power Kubernetes such as namespaces, selectors, etc. to make sure that you can draw a correct dependency graph.
+You could write a tool to analyse YAML files and link them together statically, but you will have to code all the rules that power Kubernetes such as namespaces, selectors, etc. to make sure that you can draw a correct dependency graph.
+
+Even with such tool, you won't be able to describe that a front-end component is consuming a backend API.
+
+The relationship isn't expressed in the YAML, but in the application.
 
 However, if your goal is to visualise dependencies, you could focus on the cluster and ignore the YAML.
 
