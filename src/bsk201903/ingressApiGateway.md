@@ -1,6 +1,6 @@
 ## Can you have an API Gateway as an ingress?
 
-> **TL;DR:** yes, you can. Have a look at the [Kong](https://konghq.com/blog/kong-kubernetes-ingress-controller/), [Ambassador](https://www.getambassador.io/) and [Gloo Ingress](https://gloo.solo.io/).
+> **TL;DR:** yes, you can. Have a look at the [Kong](https://konghq.com/blog/kong-kubernetes-ingress-controller/), [Ambassador](https://www.getambassador.io/) and [Gloo](https://gloo.solo.io/) Ingress controllers.
 
 In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster.
 
@@ -8,19 +8,19 @@ In simple terms, **the Ingress works as a reverse proxy** or a load balancer: al
 
 While the most popular ingress is the [ingress-nginx project](https://github.com/kubernetes/ingress-nginx), there're several other options when it comes to selecting and using an Ingress.
 
-You can choose from Ingresses that:
+You can choose from Ingress controllers that:
 
 - handle HTTP traffic such as [Contour](https://github.com/heptio/contour) and [Treafik Ingress](https://docs.traefik.io/user-guide/kubernetes/)
 - support UDP and TCP traffic such as [Citrix Ingress](https://github.com/citrix/citrix-k8s-ingress-controller)
 - support Websockets such as [HAProxy Ingress](https://github.com/jcmoraisjr/haproxy-ingress)
 
-There are also other hybrid ingresses can integrate with existing cloud providers such as [Zalando's Skipper Ingress](https://opensource.zalando.com/skipper/).
+There are also other hybrid Ingress controllers can integrate with existing cloud providers such as [Zalando's Skipper Ingress](https://opensource.zalando.com/skipper/).
 
-### Option #1 — The king of API Gateways: Kong
+## Option #1 — The king of API Gateways: Kong
 
 But if the product that you're building is primarily an API, you might be interested in what the [Kong Ingress](https://konghq.com/blog/kong-kubernetes-ingress-controller/) has to offer.
 
-Kong is an API gateway built on top of Nginx.
+**Kong is an API gateway built on top of Nginx.**
 
 It offers features such as authentication, rate limiting, retries, circuit breakers and more.
 
@@ -46,9 +46,11 @@ spec:
               servicePort: 80
 ```
 
-But there's more.
+_But there's more._
 
-As part of the installation process Kong's controller registers Custom Resource Definitions (CRDs). One of these custom extensions is related to Kong's plugins.
+As part of the installation process Kong's controller registers Custom Resource Definitions (CRDs).
+
+One of these custom extensions is related to Kong's plugins.
 
 If you wish to limit the requests to your Ingress by IP address, you can create a definition for the limit with:
 
@@ -86,17 +88,17 @@ spec:
 
 You can [explore the Custom Resource Definitions (CRDs) for Kong](https://github.com/Kong/kubernetes-ingress-controller/blob/master/docs/custom-resources.md) on the official documentation.
 
-But Kong isn't the only option.
+_But Kong isn't the only choice._
 
-### Option #2 — Ambassador, the modern API gateway
+## Option #2 — Ambassador, the modern API gateway
 
 [Ambassador is another Kubernetes Ingress](https://www.getambassador.io/) built on top of Envoy that offers a robust API Gateway.
 
-The Ambassador Ingress is a modern take on Kubernetes Ingresses as demonstrated by its rapid development and the traction received by the community.
+The Ambassador Ingress is a modern take on Kubernetes Ingress controllers as demonstrated by its rapid development and the traction received by the community.
 
 The main difference between Ambassador and Kong/Nginx is that Ambassador doesn't use the familiar Kubernetes Ingress.
 
-Instead, services are exposed to the outside world using annotations within the Service:
+Instead, services are exposed to the outside world using annotations:
 
 ```yaml|highlight=7-15|title=service.yaml
 apiVersion: v1
@@ -123,9 +125,9 @@ spec:
     service: api-backend
 ```
 
-The novel approach is interesting because in a single place you can define all the routing for your Deployments and Pods.
+The novel approach is convenient because in a single place you can define all the routing for your Deployments and Pods.
 
-However, having YAML as free text within an annotation could lead to errors and confusion.
+**However, having YAML as free text within an annotation could lead to errors and confusion.**
 
 If you wish to apply rate limiting to your API, this is what it looks like in Ambassador:
 
@@ -150,15 +152,15 @@ spec:
       targetPort: http-api
 ```
 
-Ambassador has an excellent tutorial about rate limiting, so if you are interested in using that features, you can head over to [Ambassador's official documentation](https://www.getambassador.io/user-guide/rate-limiting-tutorial/).
+Ambassador has an excellent tutorial about rate limiting, so if you are interested in using that feature, you can head over to [Ambassador's official documentation](https://www.getambassador.io/user-guide/rate-limiting-tutorial/).
 
-### Option 3 — Gloo things together
+## Option 3 — Gloo things together
 
 Ambassador is not the only Envoy-powered ingress that can be used as API Gateway.
 
 [Gloo is a Kubernetes Ingress](https://gloo.solo.io/) that is also an API gateway capable of providing rate limiting, circuit breaking, retries, caching, external authentication and authorisation, transformation, service-mesh integration, and security.
 
-The selling point for Glue is that it's capable of auto discover API endpoints for your application and automatically understand arguments and parameters.
+**The selling point for Glue is that it's capable of auto discover API endpoints for your application and automatically understand arguments and parameters.**
 
 I understand it's hard to believe (and their documentation doesn't help in that sense), so here's an example.
 
@@ -225,19 +227,17 @@ Once Gloo has a list of endpoints, you can use that list to apply transformation
 
 As an example, you may want to collect all the headers from the incoming requests and add them to the JSON payload before the request reaches the app.
 
-Or you could do the opposite.
-
-Expose a JSON API and let Gloo apply a transformation to render the message as SOAP.
+Or you could expose a JSON API and let Gloo apply a transformation to render the message as SOAP before it reaches a legacy component.
 
 Being able to discover APIs and apply transformations makes Gloo particularly suitable for an environment with diverse technologies — or when you're in the middle of a migration from an old legacy system to a newer stack.
 
-Gloo can discover other kinds of endpoints such as AWS Lambdas.
+**Gloo can discover other kinds of endpoints such as AWS Lambdas.**
 
 Which makes it the perfect companion when you wish to mix and match Kubernetes and serverless.
 
-### More options
+## More options
 
-If neither Ambassador, Kong or Gloo is suitable for what you do, you should check out the following alternatives:
+If neither Ambassador, Kong or Gloo is suitable for what you have in mind, you should check out the following alternatives:
 
 - [Tyk](https://tyk.io/) is an open source API gateway that can be deployed as an Ingress.
 - You could [build your API gateway Ingress using Ballerina](https://ballerina.io/learn/by-guide/api-gateway/) — a Cloud Native programming language

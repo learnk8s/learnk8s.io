@@ -34,7 +34,7 @@ export const IngressApiGatewayDetails = identity<Details>({
     url: 'assets/bsk.png',
     description: 'Bite-sized Kubernetes learning',
   }),
-  publishedDate: '2019-01-09',
+  publishedDate: '2019-04-11',
   previewImage: Image({
     url: 'assets/bsk.png',
     description: 'Bite-sized Kubernetes learning',
