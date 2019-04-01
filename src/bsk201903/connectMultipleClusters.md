@@ -14,14 +14,41 @@ _Should you create a single large cluster that spans multiple regions over a uni
 
 _Or should you have a lot of smaller clusters and find a way to manage and synchronise them?_
 
-Creating a single cluster that uses a unified network isn't recommended due to challenges such as:
+## A cluster to rule them all
 
-- **Distributing traffic using Kube-proxy.** Your requests could land in one region and being redirected to another
-- **Etcd being very picky when it comes to network latency.** etcd is so sensitive to network latency that even not running SSD disk could cause delays in reconciliations and slowdowns in your cluster.
+_Creating a single cluster that uses a unified network is a challenge._
 
-Most of the effort from the community and the SIG-cluster group is focussed on the latter question — finding a way to orchestrate clusters in the same way that Kubernetes orchestrates containers.
+Consider what happens during a network partition.
 
-### Option #1 — Federated clusters with kubefed
+If you host a single master node, half of your fleet won't be able to receive new commands because it's unable to reach the master.
+
+And that includes old routing tables (`kube-proxy` is unable to download new ones) and no more Pods (the kubelet fails to ask for updates).
+
+What's worse is that Kubernetes marks the nodes that it can't see as _Lost_ and reschedules the missing Pods on the existing Nodes.
+
+**So you end up having twice as many Pods.**
+
+If you decide to have one master node for each region, you have to fight etcd.
+
+etcd uses the [raft protocol](http://thesecretlivesofdata.com/raft/) to agree on a value before it's written to disk.
+
+In other words, the majority of the nodes have to reach consensus before any value is written in the database.
+
+If the latency between the etcd instances spikes, it takes longer to agree and write the value to disk.
+
+The delay is propagated to the Kubernetes controllers.
+
+The controller manager takes longer to be notified of a change and to write the response to the database.
+
+And since you have a series of controllers, **like a chain reaction, the entire cluster becomes incredibly slow.**
+
+You should know that etcd is so sensitive to latency that [the official documentation recommend using SSD disks](https://coreos.com/etcd/docs/latest/faq.html#deployment) instead of regular hard drives.
+
+**At the moment, there are no good examples of a stretched network for a single cluster.**
+
+Most of the effort from the community and the SIG-cluster group is focussed on answering another question: cluster federation — finding a way to orchestrate clusters in the same way that Kubernetes orchestrates containers.
+
+## Option #1 — Federated clusters with kubefed
 
 The official response from SIG-cluster is [kubefed2 — a revised version of the original kube federation client and operator](https://github.com/kubernetes-sigs/federation-v2).
 
@@ -51,7 +78,7 @@ The federated CRD has three sections:
 
 Here's an example of a federated Deployment with placements and overrides.
 
-```yaml|title=federated-deployment.yaml
+```yaml|title=federated-deployment.yaml|highlight=2,24-32
 apiVersion: types.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
@@ -92,7 +119,7 @@ The first cluster deploys three replicas whereas the second overrides the value 
 
 If you wish to have more control on the number of replicas, kubefed2 exposes a new object called ReplicaSchedulingPreference where you can distribute replicas in weighted proportions:
 
-```yaml|title=preference.yaml
+```yaml|title=preference.yaml|highlight=9-13
 apiVersion: scheduling.federation.k8s.io/v1alpha1
 kind: ReplicaSchedulingPreference
 metadata:
@@ -114,7 +141,7 @@ The final design for the CRD and the API is not finalised, and there's a lot of 
 
 You can learn more about kubefed2 from [the official kubefed2 article](https://kubernetes.io/blog/2018/12/12/kubernetes-federation-evolution/) published on the Kubernetes Blog and [from the official repository of the kubefed project](https://github.com/kubernetes-sigs/federation-v2).
 
-### Option #2 — Cluster federation the Booking.com way
+## Option #2 — Cluster federation the Booking.com way
 
 Booking.com's engineering team wasn't involved with the design of kubefed v2, so they developed shipper — an operator for multi-cluster, multi-region, multi-cloud deployment.
 
@@ -124,7 +151,7 @@ Both tools let you customise the rollout strategy to multiple clusters, which is
 
 _However, Shipper is more opinionated._
 
-As an example, Shipper is designed to take Helm charts as inputs, and you can't use vanilla resources.
+As an example, **Shipper is designed to take Helm charts as input,** and you can't use vanilla resources.
 
 Shipper is also used for production infrastructure, so it's technically a more mature and reliable product than kubefed2.
 
@@ -132,7 +159,7 @@ Here's a high-level overview of how Shipper works.
 
 Instead of creating a standard Deployment, you should create an Application resource that wraps an Helm chart like this:
 
-```yaml|title=application.yaml
+```yaml|title=application.yaml|highlight=2
 apiVersion: shipper.booking.com/v1alpha1
 kind: Application
 metadata:
@@ -175,7 +202,7 @@ You can learn more about Shipper and its philosophy by [reading the official pre
 
 If you prefer to dive into the code, you should [head over to the official project repository](https://github.com/bookingcom/shipper).
 
-### Option #3 — Magic ✨ cluster federation
+## Option #3 — Magic ✨ cluster federation
 
 Kubefed v2 and Shipper solve cluster federation by exposing new resources to the cluster using Custom Resource Definitions.
 
@@ -187,7 +214,7 @@ _Can you still federate your existing cluster without changing the YAML?_
 
 But instead of creating a new way to interact with the cluster and wrapping resources in Custom Resource Definitions, the multi-cluster-scheduler inject itself in the standard Kubernetes lifecycle and intercept all the calls that create Pods.
 
-When a Pod is created is immediately replaced by a proxy Pod.
+**When a Pod is created is immediately replaced by a proxy Pod.**
 
 The original Pod goes through another round of scheduling where the placement decision is taken after interrogating the entire federation.
 
@@ -197,7 +224,7 @@ In other news, you end up having one extra Pod that doesn't do much — it's jus
 
 But the benefit is that you didn't have to write any new resource to make your Deployments federated.
 
-Every resource that creates Pod is automatically federation-ready.
+**Every resource that creates Pod is automatically federation-ready.**
 
 It's a neat idea because you can suddenly have multi-region clusters without even noticing it, but it also feels quite risky as there's a lot of magic going on.
 
@@ -205,7 +232,7 @@ If you wish to dive more into the multi-cluster-scheduler, you should check out 
 
 If you prefer to read about the multi-cluster-scheduler in action, Admiralty has an [interesting use case applied to Argo](https://admiralty.io/blog/running-argo-workflows-across-multiple-kubernetes-clusters/) — the open source Kubernetes native workflows, events, CI and CD.
 
-### More tools and solutions
+## More tools and solutions
 
 Connecting and managing multiple clusters together is a complex topic, and there's a solution fits all.
 
@@ -215,14 +242,14 @@ If you're interested in diving more into the topic, you should have a look at th
 - The retailer Target is using [Spinnaker to orchestrate deployment across several clusters](https://tech.target.com/infrastructure/2018/06/20/enter-unimatrix.html)
 - You could use IPV6 and have a [unified network across several regions](https://itnext.io/kubernetes-multi-cluster-networking-made-simple-c8f26827813)
 - You could use a service mesh such as [Istio to connect multiple clusters](https://istio.io/docs/setup/kubernetes/install/multicluster/)
-- Cilium, the Container Network Interface plugin, has a [cluster mesh feature](https://cilium.io/blog/2019/03/12/clustermesh/) that lets you connect multiple clusters toegether
+- Cilium, the Container Network Interface plugin, has a [cluster mesh feature](https://cilium.io/blog/2019/03/12/clustermesh/) that lets you combine multiple clusters
 
 ## That's all folks
 
-Thanks for reading until the end!
+_Thanks for reading until the end!_
 
 If you know of a better way to connect multiple clusters, please [get in touch and let us know](mailto:hello@learnk8s.io).
 
 We will add it to the links above.
 
-A special thank you goes to [XXXX](xxx) and [XXX](xxx) that reviewed the content of this article.
+A special thank you goes to [Chris Nesbitt-Smith](https://github.com/chrisns) and [XXX](xxx) that reviewed the content of this article.
