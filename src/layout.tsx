@@ -355,7 +355,7 @@ inlineRenderer.paragraph = text => {
   return text
 }
 inlineRenderer.link = (href: string, title: string, text: string) => {
-  return `<a href="${href}" class="link underline navy">${text}</a>`
+  return `<a href="${href}" className="link underline navy">${text}</a>`
 }
 
 export const InlineMarkdown: React.StatelessComponent<{ content: string }> = ({ content }) => {
@@ -531,6 +531,88 @@ export const PromoAcademy: React.StatelessComponent<{ sitemap: Sitemap }> = ({ s
           subscribe to the mailing list!
         </a>
       </p>
+    </div>
+  )
+}
+
+export const Subscribe: React.StatelessComponent<{ identifier: string }> = ({ identifier }) => {
+  return (
+    <div className='bg-evian pa4 br2 mv4 mv5-l'>
+      <p className='f2 navy b mt0 measure-narrow'>Don't miss the next experiment, insight, or discount</p>
+      <p className='f4 measure black-80 mv4'>
+        Sign up for curated Kubernetes news, article and resources, delivered straight to your inbox.
+      </p>
+      <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST'>
+        <input type='hidden' name='u' value='2f82ec7d5caaa9ced71141211' />
+        <input type='hidden' name='id' value='8ecff1a8cf' />
+        {/* <Honeypot> */}
+        <div className='dn' aria-label='Please leave the following three fields empty'>
+          <label htmlFor='b_name'>Name: </label>
+          <input type='text' name='b_name' tabIndex={-1} defaultValue='' placeholder='Freddie' id='b_comment' />
+
+          <label htmlFor='b_email'>Email: </label>
+          <input
+            type='email'
+            name='b_email'
+            tabIndex={-1}
+            defaultValue=''
+            placeholder='youremail@gmail.com'
+            id='b_comment'
+          />
+
+          <label htmlFor='b_comment'>Comment: </label>
+          <textarea name='b_comment' tabIndex={-1} placeholder='Please comment' id='b_comment' />
+        </div>
+        {/* </Honeypot> */}
+
+        <div className='mv4'>
+          <div className='mv3'>
+            <label htmlFor='MERGE1' className='navy db tl ttu pb2 fw6'>
+              Your first name
+            </label>
+            <div className='field-group'>
+              <input
+                className='pa3 w-100 br3 input-reset b--none'
+                type='text'
+                name='MERGE1'
+                id='MERGE1'
+                size={25}
+                defaultValue=''
+                placeholder='Your first name'
+              />
+            </div>
+          </div>
+
+          <div className='mv3'>
+            <label htmlFor='MERGE0' className='navy db tl ttu pb2 fw6'>
+              Your email address
+            </label>
+            <div className='field-group'>
+              <input
+                className='pa3 w-100 br3 input-reset b--none'
+                type='email'
+                autoCapitalize='off'
+                autoCorrect='off'
+                name='MERGE0'
+                id='MERGE0'
+                size={25}
+                defaultValue=''
+                placeholder='Your email address'
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className=''>
+          <button className='dib white bg-blue br1 pv3 ph4 b f4 bn pointer' type='submit'>
+            Subscribe ⇢
+          </button>
+        </div>
+        <input type='hidden' name='SOURCE' id='SOURCE' value={identifier} />
+        <input type='hidden' name='ht' value='aca6953f09c7fcc43d98b4366d71b6e0c79fbb81:MTU1NDE3Njc3OC40MzAz' />
+        <input type='hidden' name='mc_signupsource' value='hosted' />
+      </form>
+      <p className='f6 black-60 mt4 mb0'>We'll never share your email address and you can opt out at any time.</p>
     </div>
   )
 }

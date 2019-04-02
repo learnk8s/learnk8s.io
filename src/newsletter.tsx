@@ -80,7 +80,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
                   <p className='f7 tl'>We'll never share your email address and you can opt out at any time.</p>
                 </li>
               </ol>
-              <button className='link dib blue bg-white br2 pa3 b f3-ns mt2 ml3-l ph5 mb3 b--none submit' type='submit'>
+              <button className='dib blue bg-white br2 pa3 b f3-ns mt2 ml3-l ph5 mb3 b--none submit' type='submit'>
                 Subscribe ⇢
               </button>
               <p className='success absolute bottom mt1 w-100 bg-light-green pa2 dark-green b--dark-green bw1 b--solid dn'>
