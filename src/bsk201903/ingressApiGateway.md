@@ -235,6 +235,21 @@ Being able to discover APIs and apply transformations makes Gloo particularly su
 
 Which makes it the perfect companion when you wish to mix and match Kubernetes and serverless.
 
+## Recap
+
+Here's a handy recap of the three Ingress controllers:
+
+|                 |                                                     Kong                                                    |                   Ambassador                  |         Gloo         |
+|:----------------|:-----------------------------------------------------------------------------------------------------------:|:---------------------------------------------:|:--------------------:|
+| protocol        | http,https,grpc,tcp                                                                                         | http,https,grpc,tcp,udp,tcp+ssl               |                      |
+| based on        | Nginx                                                                                                       | Envoy                                         | Envoy                |
+| resiliency      | active and passive health check, circuit break, rate limit, retries                                         | rate limit                                    |                      |
+| state           | configured in PostgreSQL or Cassandra, state stored in Kubernetes                                           | Kubernetes                                    | Kubernetes           |
+| Routing defined | as Ingress manifest                                                                                         | in the Service                                | as Ingress manifest  |
+| auth            |  Basic Auth, HMAC, JWT, Key, LDAP, OAuth 2.0, PASETO, plus paid Kong Enterprise options like OpenID Connect | Basic Auth, OIDC                              |                      |
+| extensible      | yes, plugins                                                                                                | no                                            | yes, transformations |
+| dashboard       | Kong Enterprise dashboard or open-source community projects                                                 | Metrics can be seen in Grafana and Prometheus |                      |
+
 ## More options
 
 If neither Ambassador, Kong or Gloo is suitable for what you have in mind, you should check out the following alternatives:

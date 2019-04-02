@@ -323,3 +323,7 @@
     left: 0;
   }
 }
+
+.table th:empty {
+  background: none;
+}
