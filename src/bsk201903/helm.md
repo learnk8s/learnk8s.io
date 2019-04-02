@@ -1,10 +1,10 @@
 ## Is Helm used just for templating?
 
-> **TL;DR:** Helm is used for templating, sharing charts and managing releases.
+> **TL;DR:** Helm is used for templating, sharing charts and managing releases. If you're looking just for templating, you should check out [kustomize](https://github.com/kubernetes-sigs/kustomize).
 
 When you start using Kubernetes in different environments, you might see yourself copy-pasting the same YAML resources over and over.
 
-A better strategy is to create and use dynamic templates as you've done for HTML in web pages — for example.
+_A better strategy is to create and use dynamic templates as you've done for HTML in web pages — for example._
 
 All the variables that can change are replaced with placeholders.
 
@@ -21,7 +21,7 @@ spec:
       image: k8s.gcr.io/busybox
       env:
         - name: ENV
-          value: { { .Values.env_name } }
+          value: {{ .Values.env_name }}
 ```
 
 While there're a lot of tools to template Kubernetes YAML files, Helm caught a lot of attention very early on and established itself as the market leader.
@@ -46,11 +46,11 @@ You have a public registry with packages contributed by the community and privat
 
 Tools such as [Artifactory](https://www.jfrog.com/confluence/display/RTF/Helm+Chart+Repositories) or [Azure Container Registry](https://azure.microsoft.com/en-us/updates/azure-container-registry-helm-repositories-public-preview/) are popular options when it comes to using a registry to store your private charts.
 
-If you wish to host your private registry [Chartmuseum is a solid choice](https://github.com/helm/chartmuseum).
+> If you wish to host your private registry [Chartmuseum is a solid choice](https://github.com/helm/chartmuseum).
 
 But templating and sharing charts are not the only task that Helm can handle.
 
-Helm is deployed into parts: a client-side tool that is connected to a controller that lives inside your cluster.
+**Helm is deployed into parts: a client-side tool that is connected to a controller that lives inside your cluster.**
 
 Every time you install a chart or upgrade your definitions, the client side tool sends the YAML resources to the controller.
 
@@ -114,9 +114,92 @@ To summarise, Helm is:
 - a convenient way for **packaging collections of YAML files and distributing them** in public and private registry
 - a **release manager** capable of rolling back deployments
 
+_Is Helm the only option?_
+
+## Other tools to kustomize your YAML
+
+Two recent events threaten Helm's popularity.
+
+First, Helm 3 was announced in June 2018 as a radical departure from the previous version.
+
+It doesn't feature a Tiller anymore: having a component that has admin-like access to create resources in the cluster was also a security concern.
+
+_What if a malicious user can get hold of the Tiller?_
+
+They could end up with unlimited access to creating and deleting resources inside the cluster.
+
+However, removing the tiller is posing new challenges on how to manage releases and rollbacks.
+
+Also, Helm 3 offers a novel approach to templating resources.
+
+You can use Go templates like in Helm 2, but you can also leverage Lua to write resources as code.
+
+Here's an example of a Pod written in Lua:
+
+```lua|title=pod.lua
+local pods = require("mylib.pods");
+function create_alpine_pod(_)
+  myPod = pods.new("alpine:3.7", _)
+  myPod.spec.restartPolicy = "Always"
+  -- set any other properties
+  _.Manifests.add(myPod)
+end
+```
+
+Lua is meant to solve nasty hacks such as [the need to indent lines](https://github.com/technosophos/k8s-helm/blob/master/docs/charts_tips_and_tricks.md#using-the-include-function) in the Go templates.
+
+The other noteworthy event is a competing templating engine was merged in the official `kubectl` client: [kustomize](https://github.com/kubernetes-sigs/kustomize).
+
+Kustomize lets you customise your YAML files by applying patches and overlays to your existing resources.
+
+You can think of Kustomize as a way to define exceptions on your YAML files without touching the original file.
+
+Let's have a look at an example for a Pod:
+
+```yaml|title=pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+  - name: my-pod
+    image: nginx
+```
+
+And a `kustomization.yaml` like:
+
+```yaml|title=kustomization.yaml
+commonLabels:
+  env: production
+resources:
+- pod.yaml
+```
+
+When you run `kubectl apply -k .` the following resource is submitted to the cluster:
+
+```yaml|title=kustomized-pod.yaml|highlight=4-5
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    env: production
+  name: my-pod
+spec:
+  containers:
+  - image: nginx
+    name: my-pod
+```
+
+You can use kustomize as an independent binary, but having it bundled in `kubectl` is convenient.
+
+It also demonstrates the commitment of the SIG-machinery to provide a reliable alternative to Helm.
+
+With Helm 3 still in the making and kustomize being merged in kubectl, it looks like the war for a Kubernetes templating engine has just started.
+
 ## That's all folks
 
-Still have questions about Helm and what it can do?
+Still, have questions about Helm and what it can do?
 
 [Let us know in an email](mailto:hello@learnk8s) or [ask us with a tweet](https://twitter.com/learnk8s).
 
