@@ -1,6 +1,7 @@
-import shell, { ls, cat, exit } from 'shelljs'
+import { ls, cat, exit } from 'shelljs'
 import SVGO from 'svgo'
 import cheerio from 'cheerio'
+import { writeFileSync } from 'fs'
 
 const svgo = new SVGO({
   plugins: [
@@ -67,22 +68,19 @@ const svgo = new SVGO({
     {
       convertShapeToPath: true,
     },
+    {
+      removeStyleElement: false,
+    },
+    {
+      removeScriptElement: false,
+    },
   ],
 })
 
-const files = ls([
-  'assets/academy/*.svg',
-  // 'assets/consulting/*.svg',
-  // 'assets/material/*.svg',
-  // 'assets/training/*.svg',
-  // 'assets/contact-us/*.svg',
-  // 'src/advancedKubectl/*.svg',
-]).map(svgFileName => {
-  const svgContent = cat(svgFileName).toString()
+export function optimise(svgContent: string, skipIds = [] as string[]): Promise<string> {
   return svgo.optimize(svgContent).then(svgo => {
     const $ = cheerio.load(svgo.data, { decodeEntities: false })
 
-    const skipIds = [] as string[]
     $('[fill]').each((index, element) => {
       const fill = $(element).attr('fill')
       if (fill.startsWith('url(#')) {
@@ -101,11 +99,20 @@ const files = ls([
     $('[font-family]').each((index, element) => {
       $(element).attr('font-family', 'sans-serif')
     })
-    const optimisedContent = $('body').html()
-    if (optimisedContent !== svgContent) {
-      ;(shell as any).ShellString(optimisedContent).to(svgFileName)
-    }
+    return $('body').html() || ''
   })
+}
+
+const files = ls([
+  'assets/academy/*.svg',
+  'assets/consulting/*.svg',
+  'assets/material/*.svg',
+  'assets/training/*.svg',
+  'assets/contact-us/*.svg',
+  'src/advancedKubectl/*.svg',
+]).map(svgFileName => {
+  const svgContent = cat(svgFileName).toString()
+  return optimise(svgContent).then(it => writeFileSync(svgFileName, it))
 })
 
 Promise.all(files).then(() => exit(0))

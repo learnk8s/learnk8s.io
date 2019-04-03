@@ -6,6 +6,8 @@ In Kubernetes, an Ingress is a component that routes the traffic from outside th
 
 In simple terms, **the Ingress works as a reverse proxy** or a load balancer: all external traffic is routed to the Ingress and then is routed to the other components.
 
+![Ingress as a load balancer](ingress-generated.svg)
+
 While the most popular ingress is the [ingress-nginx project](https://github.com/kubernetes/ingress-nginx), there're several other options when it comes to selecting and using an Ingress.
 
 You can choose from Ingress controllers that:
@@ -15,6 +17,8 @@ You can choose from Ingress controllers that:
 - support Websockets such as [HAProxy Ingress](https://github.com/jcmoraisjr/haproxy-ingress)
 
 There are also other hybrid Ingress controllers can integrate with existing cloud providers such as [Zalando's Skipper Ingress](https://opensource.zalando.com/skipper/).
+
+When it comes to API gateway in Ingress, you have three popular choices to select from.
 
 ## Option #1 — The king of API Gateways: Kong
 
@@ -129,6 +133,8 @@ The novel approach is convenient because in a single place you can define all th
 
 **However, having YAML as free text within an annotation could lead to errors and confusion.**
 
+It's hard to get the formatting right in normal YAML, let alone as a string inside more YAML.
+
 If you wish to apply rate limiting to your API, this is what it looks like in Ambassador:
 
 ```yaml|highlight=5-11|title=service.yaml
@@ -239,16 +245,16 @@ Which makes it the perfect companion when you wish to mix and match Kubernetes a
 
 Here's a handy recap of the three Ingress controllers:
 
-|                 |                                                     Kong                                                    |                   Ambassador                  |         Gloo         |
-|:----------------|:-----------------------------------------------------------------------------------------------------------:|:---------------------------------------------:|:--------------------:|
-| protocol        | http,https,grpc,tcp                                                                                         | http,https,grpc,tcp,udp,tcp+ssl               |                      |
-| based on        | Nginx                                                                                                       | Envoy                                         | Envoy                |
-| resiliency      | active and passive health check, circuit break, rate limit, retries                                         | rate limit                                    |                      |
-| state           | configured in PostgreSQL or Cassandra, state stored in Kubernetes                                           | Kubernetes                                    | Kubernetes           |
-| Routing defined | as Ingress manifest                                                                                         | in the Service                                | as Ingress manifest  |
-| auth            |  Basic Auth, HMAC, JWT, Key, LDAP, OAuth 2.0, PASETO, plus paid Kong Enterprise options like OpenID Connect | Basic Auth, OIDC                              |                      |
-| extensible      | yes, plugins                                                                                                | no                                            | yes, transformations |
-| dashboard       | Kong Enterprise dashboard or open-source community projects                                                 | Metrics can be seen in Grafana and Prometheus |                      |
+|                 |                                                     Kong                                                    |                   Ambassador                  |                     Gloo                    |
+|-----------------|:-----------------------------------------------------------------------------------------------------------:|:---------------------------------------------:|:-------------------------------------------:|
+| protocol        | http,https,grpc,tcp                                                                                         | http,https,grpc,tcp,udp,tcp+ssl               | http,https,grpc                             |
+| based on        | Nginx                                                                                                       | Envoy                                         | Envoy                                       |
+| resiliency      | active and passive health check, circuit break, rate limit, retries                                         | rate limit                                    | rate limit, circuit break, retries, caching |
+| state           | configured in PostgreSQL or Cassandra, state stored in Kubernetes                                           | Kubernetes                                    | CRDs                                        |
+| Routing defined | as Ingress manifest                                                                                         | in the Service                                | as Ingress manifest                         |
+| auth            |  Basic Auth, HMAC, JWT, Key, LDAP, OAuth 2.0, PASETO, plus paid Kong Enterprise options like OpenID Connect | Basic Auth, OIDC                              | Basic Auth, OIDC                            |
+| extensible      | plugins                                                                                                     | no, external integrations                     | plugins                                     |
+| dashboard       | Kong Enterprise dashboard or open-source community projects                                                 | Metrics can be seen in Grafana and Prometheus | Dashboard for enterprise version            |
 
 ## More options
 
@@ -263,4 +269,4 @@ _Do you have any recommendation when it comes to API Gateways on Kubernetes?_
 
 [Let us know in an email](mailto:hello@learnk8s) or [tweet us @learnk8s](https://twitter.com/learnk8s).
 
-A special thank you goes to [XXXX](xxx) and [XXX](xxx) that reviewed the content of this article.
+A special thank you goes to [Irakli Natsvlishvili](https://www.linkedin.com/in/irakli/) who offered some invaluable feedback and helped me put together the above table. Also, thanks to Idit Levine and Scott Weiss from [the Solo.io team](https://www.solo.io/) for answering my questions about the Gloo Ingress controller.
