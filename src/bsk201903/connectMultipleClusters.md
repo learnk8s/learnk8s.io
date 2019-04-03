@@ -266,4 +266,4 @@ If you know of a better way to connect multiple clusters, please [get in touch a
 
 We will add it to the links above.
 
-A special thank you goes to [Chris Nesbitt-Smith](https://github.com/chrisns) and [Vincent De Smet](https://github.com/so0k) that reviewed the content of this article and offered some insightful feedback on how federation works.
+A special thank you goes to [Chris Nesbitt-Smith](https://github.com/chrisns) and [Vincent De Smet](https://github.com/so0k) (SRE at [swatmobile.io](https://swatmobile.io)) that reviewed the content of this article and offered some insightful feedback on how federation works.
