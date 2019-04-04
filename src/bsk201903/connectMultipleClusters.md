@@ -72,9 +72,7 @@ SIG-cluster has gone a long way since kubefed v1 and decided to tackle the chall
 
 **Instead of using annotations, they decided to release a controller which can be installed in your clusters and can be configured using Custom Resource Definitions (CRDs).**
 
-You have a Custom Resource Definitions (CRD) for each resource that you wish to federate.
-
-The federated Custom Resource Definitions (CRD) has three sections:
+You have a Custom Resource Definition (CRD) for each resource that you wish to federate with three sections:
 
 - the standard resource definition such as a Deployment
 - a `placement` section where you can define how that resource should be distributed in the federation
@@ -139,7 +137,7 @@ spec:
       weight: 2
 ```
 
-The final design for the CRD and the API is not finalised, and there's a lot of activity on the official project repository.
+The CRD structure and the API is not finalised, and there's a lot of activity on the official project repository.
 
 **You should keep a close eye on kubefed2, but you should also be aware that this is not production ready yet.**
 
@@ -165,7 +163,7 @@ As an example, **Shipper is designed to take Helm charts as input,** and you can
 
 Here's a high-level overview of how Shipper works.
 
-Instead of creating a standard Deployment, you should create an Application resource that wraps an Helm chart like this:
+Instead of creating a standard Deployment, you should create an Application resource that wraps a Helm chart like this:
 
 ```yaml|title=application.yaml|highlight=2
 apiVersion: shipper.booking.com/v1alpha1
@@ -222,7 +220,7 @@ _Can you still federate your existing cluster without changing the YAML?_
 
 But instead of creating a new way to interact with the cluster and wrapping resources in Custom Resource Definitions, the multi-cluster-scheduler injects itself in the standard Kubernetes lifecycle and intercept all the calls that create pods.
 
-**When a Pod is created is immediately replaced by a dummy Pod.**
+**When a Pod is created, it is immediately replaced by a dummy Pod.**
 
 > The multi-cluster-scheduler uses [mutating pod admission webhooks](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/) to intercept the call and create a dummy pod that _sleeps_.
 
