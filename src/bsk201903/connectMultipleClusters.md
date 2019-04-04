@@ -1,4 +1,4 @@
-## How do you connect clusters located in different data centres?
+## How do you connect Kubernetes clusters located in different data centres?
 
 > **TL;DR:** [Kubefed v2 is coming soon](https://github.com/kubernetes-sigs/federation-v2), you probably want to check out [Shipper](https://github.com/bookingcom/shipper) and the [multi-cluster-scheduler project](https://github.com/admiraltyio/multicluster-scheduler).
 

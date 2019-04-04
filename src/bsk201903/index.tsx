@@ -3,10 +3,10 @@ import { Details, BiteSizedRender } from '../biteSized'
 
 export const MultipleClustersDetails = identity<Details>({
   type: identity<'bsk-march-01'>('bsk-march-01'),
-  url: '/connecting-multiple-clusters',
+  url: '/connecting-multiple-kubernetes-clusters',
   seoTitle: 'How do you connect clusters located in different data centres?',
-  title: 'How do you connect clusters located in different data centres?',
-  description: `In Kubernetes, Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and availability. Learn what options you have.`,
+  title: 'How do you connect Kubernetes clusters located in different data centres?',
+  description: `In Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and availability. Should you use a single cluster over a unified network or multiple clusters? Learn what options you have.`,
   openGraphImage: Image({
     url: 'assets/bsk.png',
     description: 'Bite-sized Kubernetes learning',
