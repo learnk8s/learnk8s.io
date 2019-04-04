@@ -539,7 +539,7 @@ export const Subscribe: React.StatelessComponent<{ identifier: string }> = ({ id
   return (
     <div className='bg-evian pa4 br2 mv4 mv5-l'>
       <p className='f2 navy b mt0 measure-narrow'>Don't miss the next experiment, insight, or discount</p>
-      <p className='f4 measure black-80 mv4'>
+      <p className='f4 measure black-80 mv4 lh-copy'>
         Sign up for curated Kubernetes news, article and resources, delivered straight to your inbox.
       </p>
       <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST'>
