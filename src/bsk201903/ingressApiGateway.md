@@ -18,15 +18,15 @@ You can choose from Ingress controllers that:
 
 There are also other hybrid Ingress controllers can integrate with existing cloud providers such as [Zalando's Skipper Ingress](https://opensource.zalando.com/skipper/).
 
-When it comes to API gateway in Ingress, you have three popular choices to select from.
+When it comes to API gateway in Kubernetes, you have three popular choices to select from.
 
 ## Option #1 — The king of API Gateways: Kong
 
-But if the product that you're building is primarily an API, you might be interested in what the [Kong Ingress](https://konghq.com/blog/kong-kubernetes-ingress-controller/) has to offer.
+But if the product which you're building is primarily an API, you might be interested in what the [Kong Ingress](https://konghq.com/blog/kong-kubernetes-ingress-controller/) has to offer.
 
 **Kong is an API gateway built on top of Nginx.**
 
-It offers features such as authentication, rate limiting, retries, circuit breakers and more.
+Kong is focused on API management and offers features such as authentication, rate limiting, retries, circuit breakers and more.
 
 What's interesting about Kong is that comes packaged as a Kubernetes Ingress.
 
@@ -98,9 +98,13 @@ _But Kong isn't the only choice._
 
 [Ambassador is another Kubernetes Ingress](https://www.getambassador.io/) built on top of Envoy that offers a robust API Gateway.
 
-The Ambassador Ingress is a modern take on Kubernetes Ingress controllers as demonstrated by its rapid development and the traction received by the community.
+The Ambassador Ingress is a modern take on Kubernetes Ingress controllers, which offers robust protocol support as well as rate limiting, an authentication API, and observability integrations.
 
-The main difference between Ambassador and Kong/Nginx is that Ambassador doesn't use the familiar Kubernetes Ingress.
+The main difference between Ambassador and Kong is that Ambassador is built for Kubernetes and integrates nicely with it.
+
+> Kong was open-sourced in 2015 when the Kubernetes ingress controllers weren't so advanced.
+
+But even if Ambassador is designed with Kubernetes in mind, it doesn't leverage the familiar Kubernetes Ingress.
 
 Instead, services are exposed to the outside world using annotations:
 
@@ -135,7 +139,27 @@ The novel approach is convenient because in a single place you can define all th
 
 It's hard to get the formatting right in normal YAML, let alone as a string inside more YAML.
 
-If you wish to apply rate limiting to your API, this is what it looks like in Ambassador:
+If you wish to apply rate limiting to your API, this is what it looks like in Ambassador.
+
+You have a RateLimiting object that defines the requirements:
+
+```yaml|title=rate-limit.yaml|highlight=2
+apiVersion: getambassador.io/v1beta1
+kind: RateLimit
+metadata:
+ name: basic-rate-limit
+spec:
+ domain: ambassador
+ limits:
+  - pattern: [{x_limited_user: "false"}, {generic_key: "qotm"}]
+    rate: 5
+    unit: minute
+  - pattern: [{x_limited_user: "true"}, {generic_key: "qotm"}]
+    rate: 5
+    unit: minute
+```
+
+You can reference the rate limit in your Service with:
 
 ```yaml|highlight=5-11|title=service.yaml
 apiVersion: v1
@@ -147,7 +171,7 @@ metadata:
       ---
       apiVersion: ambassador/v1
       kind: RateLimitService
-      name: ratelimit
+      name: basic-rate-limit
       service: "api-service:5000"
 spec:
   type: ClusterIP
@@ -162,7 +186,7 @@ Ambassador has an excellent tutorial about rate limiting, so if you are interest
 
 ## Option 3 — Gloo things together
 
-Ambassador is not the only Envoy-powered ingress that can be used as API Gateway.
+Ambassador is not the only Envoy-powered ingress which can be used as API Gateway.
 
 [Gloo is a Kubernetes Ingress](https://gloo.solo.io/) that is also an API gateway capable of providing rate limiting, circuit breaking, retries, caching, external authentication and authorisation, transformation, service-mesh integration, and security.
 
@@ -245,22 +269,28 @@ Which makes it the perfect companion when you wish to mix and match Kubernetes a
 
 Here's a handy recap of the three Ingress controllers:
 
-|                 |                                                     Kong                                                    |                   Ambassador                  |                     Gloo                    |
-|-----------------|:-----------------------------------------------------------------------------------------------------------:|:---------------------------------------------:|:-------------------------------------------:|
-| protocol        | http,https,grpc,tcp                                                                                         | http,https,grpc,tcp,udp,tcp+ssl               | http,https,grpc                             |
-| based on        | Nginx                                                                                                       | Envoy                                         | Envoy                                       |
-| resiliency      | active and passive health check, circuit break, rate limit, retries                                         | rate limit                                    | rate limit, circuit break, retries, caching |
-| state           | configured in PostgreSQL or Cassandra, state stored in Kubernetes                                           | Kubernetes                                    | CRDs                                        |
-| Routing defined | as Ingress manifest                                                                                         | in the Service                                | as Ingress manifest                         |
-| auth            |  Basic Auth, HMAC, JWT, Key, LDAP, OAuth 2.0, PASETO, plus paid Kong Enterprise options like OpenID Connect | Basic Auth, OIDC                              | Basic Auth, OIDC                            |
-| extensible      | plugins                                                                                                     | no, external integrations                     | plugins                                     |
-| dashboard       | Kong Enterprise dashboard or open-source community projects                                                 | Metrics can be seen in Grafana and Prometheus | Dashboard for enterprise version            |
+|                 |                                     Kong                                    |            Ambassador           |                     Gloo                    |
+|:----------------|:---------------------------------------------------------------------------:|:-------------------------------:|:-------------------------------------------:|
+| protocol        |                             http,https,grpc,tcp                             | http,https,grpc,tcp,udp,tcp+ssl |               http,https,grpc               |
+| based on        |                                    Nginx                                    |              Envoy              |                    Envoy                    |
+| resiliency      |     active and passive health check, circuit break, rate limit, retries     |            rate limit           | rate limit, circuit break, retries, caching |
+| state           |     configured in PostgreSQL or Cassandra, state stored in CRDs, Ingress    |             Service             |                     CRDs                    |
+| Routing defined |                             as Ingress manifest                             |          in the Service         |             as Ingress manifest             |
+| auth            | Basic Auth, HMAC, JWT, Key, LDAP, OAuth 2.0, PASETO, OIDC (Enterprise only) |         Basic Auth, OIDC        |               Basic Auth, OIDC              |
+| extensible      |                                   plugins                                   |    no, external integrations    |                   plugins                   |
+| dashboard       |         Kong Enterprise dashboard or open-source community projects         |            Dashboard            |       Dashboard for enterprise version      |
+
+_Which one should you use?_
+
+- **If you want a battle-tested API gateway, Kong is still your best option.** It might not be shiniest, but the documentation is, and there’re plenty of resources online.
+- **If you need a flexible API gateway** that can play nicely with new and old infrastructure, you should have a look at **Gloo**. The ability to auto-discover APIs and transform requests is compelling
+- **If you want the simplicity of setting all the networking in your Services, you should consider Ambassador**. It has excellent tutorials and documentation to get started. Be aware of the YAML indentation as a free string.
 
 ## More options
 
 If neither Ambassador, Kong or Gloo is suitable for what you have in mind, you should check out the following alternatives:
 
-- [Tyk](https://tyk.io/) is an open source API gateway that can be deployed as an Ingress.
+- [Tyk](https://tyk.io/) is an open source API gateway which can be deployed as an Ingress.
 - You could [build your API gateway Ingress using Ballerina](https://ballerina.io/learn/by-guide/api-gateway/) — a Cloud Native programming language
 
 ## That's all folks
@@ -269,4 +299,7 @@ _Do you have any recommendation when it comes to API Gateways on Kubernetes?_
 
 [Let us know in an email](mailto:hello@learnk8s) or [tweet us @learnk8s](https://twitter.com/learnk8s).
 
-A special thank you goes to [Irakli Natsvlishvili](https://www.linkedin.com/in/irakli/) who offered some invaluable feedback and helped me put together the above table. Also, thanks to Idit Levine and Scott Weiss from [the Solo.io team](https://www.solo.io/) for answering my questions about the Gloo Ingress controller.
+A special thank you goes to [Irakli Natsvlishvili](https://www.linkedin.com/in/irakli/) who offered some invaluable feedback and helped me put together the above table. Also, thanks to:
+
+- Idit Levine and Scott Weiss from [the Solo.io team](https://www.solo.io/) for answering my questions about the Gloo Ingress controller
+- [Daniel Bryant](https://twitter.com/danielbryantuk) from the Datawire who kindly helped me understand Ambassador better
