@@ -34,7 +34,7 @@ Pulumi stores the current state of your infrastructure.
 
 So if you run your code twice, it will create a single load balancer and not two.
 
-While technically promising, it's also the new kid on the block.
+While technically promising, it's also the a new technology.
 
 Pulumi was released at the beginning of 2018 and some of the features are not as polished as in Terraform or Azure Resource Manager templates.
 
@@ -42,7 +42,7 @@ Pulumi was released at the beginning of 2018 and some of the features are not as
 
 Creating an Azure load balancer in Pulumi looks like this using Typescript:
 
-```typescript
+```typescript|title=lb.ts
 import * as azure from '@pulumi/azure'
 
 const testResourceGroup = new azure.core.ResourceGroup('test', {
@@ -80,6 +80,34 @@ In the example above, you created three resources:
 
 Note how IP address and load balancer are referencing the resource group.
 
+```typescript|title=lb.ts|highlight=12,24
+import * as azure from '@pulumi/azure'
+
+const testResourceGroup = new azure.core.ResourceGroup('test', {
+  location: 'West US',
+  name: 'LoadBalancerRG',
+})
+
+const testPublicIp = new azure.network.PublicIp('test', {
+  allocationMethod: 'Static',
+  location: 'West US',
+  name: 'PublicIPForLB',
+  resourceGroupName: testResourceGroup.name,
+})
+
+const testLoadBalancer = new azure.lb.LoadBalancer('test', {
+  frontendIpConfigurations: [
+    {
+      name: 'PublicIPAddress',
+      publicIpAddressId: testPublicIp.id,
+    },
+  ],
+  location: 'West US',
+  name: 'TestLoadBalancer',
+  resourceGroupName: testResourceGroup.name,
+})
+```
+
 Assuming that you have the `pulumi` binary installed, you can execute the script and create the load balancer with:
 
 ```bash
@@ -96,12 +124,12 @@ The templates are akin to JSON files and not particularly human friendly.
 
 Also, ARM lack advanced features such as keeping track of what's being deployed, dry runs, and the ability to modularise and reuse your code.
 
-If Pulumi gave you the extreme flexibility of writing your own code, ARM takes that away by giving you a semi static JSON file where you can dynamically inject variables.
+If Pulumi gave you the extreme flexibility of writing your own code, ARM takes it away by giving you a semi static JSON file where you can dynamically inject variables.
 
 Azure Templates are made of two parts:
 
 1. a generic template and
-1. A parameter file that is used to inject the value in the template
+1. a parameter file that is used to inject values in the template
 
 Here you can [find the generic template for the Azure Load Balancer](https://github.com/Azure/azure-quickstart-templates/blob/master/201-1-vm-loadbalancer-2-nics/azuredeploy.json).
 
@@ -139,7 +167,7 @@ Of course, there is a Terraform provider for Azure, [as well as many others](htt
 
 Creating an Azure load balancer in Terraform looks like this:
 
-```hcl
+```hcl|title=lb.tf
 resource "azurerm_resource_group" "test" {
   name     = "LoadBalancerRG"
   location = "West US"
@@ -172,13 +200,13 @@ The graph is used to optimise creating infrastructure: resources that are indepe
 
 The dependency graph for the load balancer above is simple.
 
-[TODO]
+![Dependency graph for provisioning a load balancer](simple-graph.svg)
 
 But you can imagine that once you have a dozen services to maintain, things could become more complicated.
 
 The following complex dependency graph was drawn with [Blast Radius](https://github.com/28mm/blast-radius) — a tool for reasoning about Terraform dependency graphs with interactive visualisations.
 
-[TODO]
+![Complex dependency graph in Terraform](complex-graph.svg)
 
 Terraform also keeps track of the current state of your infrastructure, so running your the script twice hold the same result.
 
@@ -255,9 +283,11 @@ If the installation is successful, you should be able to test it by printing the
 terraform version
 ```
 
-Let's create the simplest Terraform file. Create a file named `main.tf` with the following content:
+Let's create the simplest Terraform file.
 
-```bash
+Create a file named `main.tf` with the following content:
+
+```hcl|title=main.tf
 provider "azurerm" {
   version = "~> 1.23"
 }
@@ -276,10 +306,10 @@ In the same directory initialise Terraform with:
 terraform init
 ```
 
-The command execute two crucial tasks:
+The command executes two crucial tasks:
 
-1. It downloads the Azure provider which is necessary to translate the Terraform instructions into API calls
-1. It initialises the state where it keeps track of all the resources that are created.
+1. it downloads the Azure provider which is necessary to translate the Terraform instructions into API calls
+1. it initialises the state where it keeps track of all the resources that are created.
 
 You're ready to create your resource group using Terraform.
 
@@ -289,12 +319,7 @@ There're two commands that are frequently used in succession. The first is:
 terraform plan
 ```
 
-At this point, Terraform asks for two variables:
-
-1. **The service principal id** — this is the appId that you retrieved previously and
-1. **The service principal secret** — this is the password
-
-As soon as you provide the credentials, Terraform executes a dry run.
+Terraform executes a dry run.
 
 It's always a good idea to double check what happens to your infrastructure, before you commit the changes.
 
@@ -306,10 +331,6 @@ Once, you are happy with the changes, you can create the resources for real with
 terraform apply
 ```
 
-Please note that you may enter the service principal id (`tenant`) and service principal secret (`password`) again.
-
-> If you are bored at typing the same credentials every time you type `terraform plan` or `terraform apply`, you can export the following variables `export TF_VAR_service_principal_client_secret=<password>` and `TF_VAR_service_principal_client_id=<tenant>`
-
 Terraform created the resource group.
 
 Congratulations, you just used Terraform to provision your infrastructure!
@@ -320,30 +341,85 @@ You can have a look at all the resources that you could create [in the left colu
 
 > Please note that you should have a sufficient knowledge of Azure and its resources to understand how components can be plugged in together. The documentation provides great examples, though.
 
+Before you provision a cluster, let's clean up the existing resources.
+
+You can delete the resource group with:
+
+```bash
+terraform destroy
+```
+
+Terraform destroys the resources in the inverse order of the apply.
+
 ## Provisioning a Kubernetes cluster on Azure with Terraform
 
 The bill of material to provision a Kubernetes cluster on Azure is as follow. You need:
 
 - a resource group to contain all of the resources
 - a virtual network and a subnet where to place the virtual machines (nodes) for the cluster
-- security groups to expose the cluster to the public internet
-- a Kubernetes master node (that is managed by Azure)
+- a Kubernetes master node (which is managed by Azure)
 
 The list translates to the following Terraform code:
 
-```hcl
+```hcl|title=main.tf|highlight=41-42
+provider "azurerm" {
+  version = "1.23"
+}
 
+resource "azurerm_resource_group" "rg" {
+  name     = "aks-cluster"
+  location = "uksouth"
+}
+
+resource "azurerm_virtual_network" "network" {
+  name                = "aks-vnet"
+  location            = "${azurerm_resource_group.rg.location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  address_space       = ["10.1.0.0/16"]
+}
+
+resource "azurerm_subnet" "subnet" {
+  name                      = "aks-subnet"
+  resource_group_name       = "${azurerm_resource_group.rg.name}"
+  address_prefix            = "10.1.0.0/24"
+  virtual_network_name      = "${azurerm_virtual_network.network.name}"
+}
+
+resource "azurerm_kubernetes_cluster" "cluster" {
+  name       = "aks"
+  location   = "${azurerm_resource_group.rg.location}"
+  dns_prefix = "aks"
+
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  kubernetes_version  = "1.12.6"
+
+  agent_pool_profile {
+    name           = "aks"
+    count          = "1"
+    vm_size        = "Standard_D2s_v3"
+    os_type        = "Linux"
+    vnet_subnet_id = "${azurerm_subnet.subnet.id}"
+  }
+
+  service_principal {
+    client_id     = "<replace with appId>"
+    client_secret = "<replace with password>"
+  }
+
+  network_profile {
+    network_plugin = "azure"
+  }
+}
 ```
+
+> The code is also available as [a repository on Github](https://github.com/learnk8s/terraform-aks).
 
 Please notice how we are referencing to some of the variables defined in the vnet and resource groups.
 
 Also, pay attention to the `azurerm_kubernetes_cluster` resource block:
 
-- `linux_profile` is used to set the username and public key to SSH into the node
 - `agent_pool_profile` defines how many virtual machines should be part of the cluster and what their configuration should look like
 - `service_principal` is used by the API to provision the AKS cluster and connect the master to the worker nodes
-
-Terraform computes the dependencies between resources and substitutes the references with the real values once those are computed.
 
 Before you apply the changes, execute a dry-run with:
 
@@ -351,7 +427,7 @@ Before you apply the changes, execute a dry-run with:
 terraform plan
 ```
 
-You should notice that the old resource group is marked as ready to be deleted, and there are a lot of resources that are ready to be created.
+You should notice that there are a lot of resources that are ready to be created.
 
 If the proposed changes resonate with what you asked for, you can apply them with:
 
@@ -417,7 +493,55 @@ You have provision a cluster using Terraform.
 
 _The cluster is empty, though._
 
-And you don't have an Ingress controller to route the traffic to the cluster.
+_And it doesn't expose any port to the public._
+
+Let's fix that by adding a security group:
+
+```hcl|title=main.tf|highlight=36
+resource azurerm_network_security_group "sg" {
+  name                = "aks-nsg"
+  location            = "${azurerm_resource_group.rg.location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+
+  security_rule {
+    name                       = "HTTPS"
+    priority                   = 1001
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "HTTP"
+    priority                   = 1002
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
+
+# ...
+
+resource "azurerm_subnet" "subnet" {
+  name                      = "aks-subnet"
+  resource_group_name       = "${azurerm_resource_group.rg.name}"
+  network_security_group_id = "${azurerm_network_security_group.sg.id}"
+  address_prefix            = "10.1.0.0/24"
+  virtual_network_name      = "${azurerm_virtual_network.network.name}"
+}
+```
+
+> Please note that the snippet above is not the full code. You can find the full [code on the Github respository](https://github.com/learnk8s/terraform-aks).
+
+Even if you can reach the cluster now, you don't have an Ingress controller to route the traffic to the pods.
 
 ## Installing an Ingress
 
@@ -483,11 +607,17 @@ You can install the ingress with:
 
 ```bash
 helm install stable/nginx-ingress \
-  --set rbac.create=true
+  --set rbac.create=true \
   --name ingress
 ```
 
 Helm installed the resources such as ConfigMaps, Deployment and Service for the Nginx Ingress controller.
+
+You can verify that by typing:
+
+```bash
+helm status ingress
+```
 
 It also provision a Service of `type: Loadbalancer`.
 
@@ -498,8 +628,10 @@ The IP address of the load balancer is dynamically assigned.
 You can retrieve the IP with:
 
 ```bash
-kubectl get service -n ingress??
+kubectl describe service ingress-nginx-ingress-controller
 ```
+
+> The `LoadBalancer Ingress` should contain an IP address.
 
 You can test that the Ingress is working as expected by curling the IP address with:
 
@@ -507,15 +639,15 @@ You can test that the Ingress is working as expected by curling the IP address w
 curl <ip address>
 ```
 
-You should see a `404 - default backend` message.
+You should see a `default backend - 404` message.
 
-That message is coming from Nginx and suggests that you haven't deployed any application yet.
+That message is coming from Nginx and suggests that you haven't deployed any application yet, but the ingress controller is working.
 
 Congratulations, you have a fully working cluster that is capable of routing the traffic using Nginx.
 
 ## A fully configured cluster in one click
 
-Wouldn't be great if you could create the cluster and configure the Ingress with a single command?
+_Wouldn't be great if you could create the cluster and configure the Ingress with a single command?_
 
 You could type `terraform apply` and create a production cluster in a blink of an eye.
 
@@ -523,7 +655,7 @@ The good news is that Terraform has a Helm provider.
 
 You can install the Tiller and any other Helm chart using Terraform.
 
-However, before you continue, you should remove the existin Ingress.
+However, before you continue, you should remove the existing Ingress.
 
 Terraform doesn't recognise resources that it hasn't created.
 
@@ -541,13 +673,33 @@ helm reset
 
 The Helm provider can use the credentials generated by Terraform after the cluster is created.
 
-The following snippet illustrates how you can integrate Helm in your existing Terraform file:
+The following snippet illustrates how you can integrate Helm in your existing Terraform file.
 
-```hcl
+> Please pay extra attention to how you can reuse the credentials from the cluster to initialise Helm.
 
+```hcl|title=main.tf|highlight=4-7
+provider "helm" {
+  version = "0.9.0"
+  kubernetes {
+    host     = "${azurerm_kubernetes_cluster.cluster.kube_config.0.host}"
+    client_key             = "${base64decode(azurerm_kubernetes_cluster.cluster.kube_config.0.client_key)}"
+    client_certificate     = "${base64decode(azurerm_kubernetes_cluster.cluster.kube_config.0.client_certificate)}"
+    cluster_ca_certificate = "${base64decode(azurerm_kubernetes_cluster.cluster.kube_config.0.cluster_ca_certificate)}"
+  }
+}
+
+resource "helm_release" "ingress" {
+    name      = "ingress"
+    chart     = "stable/nginx-ingress"
+
+    set {
+        name  = "rbac.create"
+        value = "true"
+    }
+}
 ```
 
-> Please note that you can reference the full file on the GitHub repository.
+> The snippet above doesn't include the terraform for the cluster, vnet or security groups. You can find [the full script on the GitHub repository](https://github.com/learnk8s/terraform-aks).
 
 You can test the changes with `terraform plan`.
 
@@ -556,7 +708,7 @@ When you're ready, you can apply the changes with `terraform apply`.
 If the installation was successful, you can retrieve the IP address of the new load balancer with:
 
 ```bash
-
+kubectl describe service ingress-nginx-ingress-controller
 ```
 
 > Please note that it takes time for Azure to provision a load balancer and attach it to the cluster.
@@ -567,11 +719,11 @@ And you can repeat the test that you did earlier:
 curl <ip of the load balancer>
 ```
 
-The command should return the same `404 - default backend`.
+The command should return the same `default backend - 404`.
 
 _Everything is exactly the same, so what's the advantage of using a single Terraform file?_
 
-## Cloning the clusters
+## Cloning the cluster
 
 The beauty of Terraform is that you can use the same code to generate several cluster with a different name.
 
@@ -581,26 +733,83 @@ And since the Terraform script creates fully working clusters with nginx Ingress
 
 You can reuse the existing Terraform code and provision two clusters simultaneously using [modules](https://www.terraform.io/docs/modules/index.html) and [interpolation](https://www.terraform.io/docs/configuration-0-11/interpolation.html).
 
-> Before you execute thee script, it's a good idea to destroy any cluster that you created previously with `kubectl destroy`.
+> Before you execute thee script, it's a good idea to destroy any cluster that you created previously with `terraform destroy`.
 
 The interpolation is straightforward, have a look at an example of a parametrised resource group:
 
-```hcl
+```hcl|title=main.tf|highlight=5-7,10
+provider "azurerm" {
+  version = "~> 1.23"
+}
 
+variable "name" {
+  default = "test"
+}
+
+resource "azurerm_resource_group" "rg" {
+  name     = "${var.name}"
+  location = "uksouth"
+}
 ```
 
-As you notice, you a `variable` block that defines the variables that can change.
+As you notice, there's a `variable` block that defines the a value that could change.
 
 You can set the resource group name with `terraform apply -var="name=production"`.
+
+> If you leave that empty, it defaults to _test_.
 
 Terraform modules use variables and interpolation to create copy of resources.
 
 Modules are simply Terraform scripts that are not in the root folder where you type `terraform apply`.
 
-You can move the existing script to a new folder called `aks` and create a new `main.tf` file with the following content:
+The first step consist in parametrising the Terraform file.
 
-```hcl
+Instead of having a fixed named for the resources, you can interpolate a variable called name:
 
+```hcl|title=main.tf|highlight=1,4,9
+variable "name" {}
+
+resource "azurerm_resource_group" "rg" {
+  name     = "aks-cluster-${var.name}"
+  location = "uksouth"
+}
+
+resource "azurerm_virtual_network" "network" {
+  name                = "aks-vnet-${var.name}"
+  location            = "${azurerm_resource_group.rg.location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  address_space       = ["10.1.0.0/16"]
+}
+
+# ...
+```
+
+Then, you can move the existing script to a new folder called `aks-module` and create a new `main.tf` file with the following content:
+
+```hcl|title=main.tf
+variable "service_principal_client_id" {
+  description = "The Client ID for the Service Principal"
+}
+
+variable "service_principal_client_secret" {
+  description = "The Client Secret for the Service Principal"
+}
+
+module "dev" {
+  source = "./aks-module"
+
+  name                            = "dev"
+  service_principal_client_id     = "${var.service_principal_client_id}"
+  service_principal_client_secret = "${var.service_principal_client_secret}"
+}
+
+module "preprod" {
+  source = "./aks-module"
+
+  name                            = "preprod"
+  service_principal_client_id     = "${var.service_principal_client_id}"
+  service_principal_client_secret = "${var.service_principal_client_secret}"
+}
 ```
 
 > Please note that the script and module are available in the GitHub repository in full.
@@ -623,8 +832,14 @@ _How do you connect to the Development and Production cluster, though?_
 
 You can read the modules' output and create `output` blocks like this:
 
-```bash
+```hcl|title=main.tf
+output "kubeconfig_dev" {
+  value = "${module.dev.kube_config}"
+}
 
+output "kubeconfig_preprod" {
+  value = "${module.preprod.kube_config}"
+}
 ```
 
 You should `terraform apply` the changes again to see the output with the kubeconfig file.
@@ -635,7 +850,7 @@ Everything works as expected!
 
 Hurrah!
 
-You have two identical clusters, but you can create a lot more!
+You have two identical clusters, but you can create a lot more now!
 
 ## What's next
 
@@ -645,9 +860,9 @@ If you wish to change the version of the cluster, you can do it in a centralised
 
 The setup described is only the beginning, if you're provisioning production-grade infrastructure you should look into:
 
-- how to structure your Terraform files
+- how to structure your Terraform in global and environment specific layers
+- managing Terraform state and how to work with the rest of your team
 - how to use AzureDNS to point to the load balancer and use domain names instead of IP addresses
 - how to set up TLS with cert manager
-- managing state
 
-Nad the beauty is that Extenal DNS and Cert Manager are available as charts, so you could integrate tham with your AKS module and have all the cluster updated at the same time.
+And the beauty is that Extenal DNS and Cert Manager are available as charts, so you could integrate tham with your AKS module and have all the cluster updated at the same time.
