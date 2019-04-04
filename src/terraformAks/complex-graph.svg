@@ -1,0 +1,317 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" xmlns:ev="http://www.w3.org/2001/xml-events" style="overflow: hidden; "><g id="viewport-20190404033500047" class="svg-pan-zoom_viewport" transform="matrix(1.4119496855345912,0,0,1.4119496855345912,495.30974842767296,0)" style="transform: matrix(1.41195, 0, 0, 1.41195, 495.31, 0);">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 632)">
+
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-632 463,-632 463,4 -4,4"/>
+<g id="clust2" class="cluster">
+
+</g>
+<g id="clust3" class="cluster">
+
+</g>
+<g id="clust4" class="cluster">
+
+</g>
+<g id="clust5" class="cluster">
+
+</g>
+<!-- [root] aws_elb.web -->
+<g id="node_0" class="node" fill="#1f77b4" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="128,-394 128,-409 167,-409 167,-394 128,-394" style="fill: rgb(31, 119, 180);"/>
+<text text-anchor="start" x="130.6973" y="-399.6" font-family="courier new" font-size="8.00" fill="#000000">aws_elb</text>
+<polygon fill="none" stroke="#000000" points="128,-379 128,-394 167,-394 167,-379 128,-379"/>
+<text text-anchor="start" x="140.2988" y="-384.6" font-family="courier new" font-size="8.00" fill="#000000">web</text>
+</g>
+<!-- [root] aws_instance.web -->
+<g id="node_1" class="node" fill="#1f77b4" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="190,-322 190,-337 253,-337 253,-322 190,-322" style="fill: rgb(31, 119, 180);"/>
+<text text-anchor="start" x="192.6953" y="-327.6" font-family="courier new" font-size="8.00" fill="#000000">aws_instance</text>
+<polygon fill="none" stroke="#000000" points="190,-307 190,-322 253,-322 253,-307 190,-307"/>
+<text text-anchor="start" x="214.2988" y="-312.6" font-family="courier new" font-size="8.00" fill="#000000">web</text>
+</g>
+<!-- [root] aws_elb.web&#45;&gt;[root] aws_instance.web -->
+<g id="edge_0" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M165.6733,-375.8314C174.5249,-367.219 185.2486,-356.7851 194.8895,-347.4048"/>
+<polygon fill="#000000" stroke="#000000" points="197.6061,-349.645 202.3326,-340.1628 192.7246,-344.6279 197.6061,-349.645"/>
+</g>
+<!-- [root] aws_security_group.elb -->
+<g id="node_6" class="node" fill="#aec7e8" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="79,-322 79,-337 171,-337 171,-322 79,-322" style="fill: rgb(174, 199, 232);"/>
+<text text-anchor="start" x="81.793" y="-327.6" font-family="courier new" font-size="8.00" fill="#000000">aws_security_group</text>
+<polygon fill="none" stroke="#000000" points="79,-307 79,-322 171,-322 171,-307 79,-307"/>
+<text text-anchor="start" x="117.7988" y="-312.6" font-family="courier new" font-size="8.00" fill="#000000">elb</text>
+</g>
+<!-- [root] aws_elb.web&#45;&gt;[root] aws_security_group.elb -->
+<g id="edge_1" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M141.4485,-375.8314C139.0697,-368.0463 136.2362,-358.7729 133.5967,-350.1347"/>
+<polygon fill="#000000" stroke="#000000" points="136.8958,-348.954 130.6263,-340.4133 130.2013,-350.9996 136.8958,-348.954"/>
+</g>
+<!-- [root] aws_key_pair.auth -->
+<g id="node_3" class="node" fill="#1f77b4" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="373,-250 373,-265 436,-265 436,-250 373,-250" style="fill: rgb(31, 119, 180);"/>
+<text text-anchor="start" x="375.6953" y="-255.6" font-family="courier new" font-size="8.00" fill="#000000">aws_key_pair</text>
+<polygon fill="none" stroke="#000000" points="373,-235 373,-250 436,-250 436,-235 373,-235"/>
+<text text-anchor="start" x="394.8984" y="-240.6" font-family="courier new" font-size="8.00" fill="#000000">auth</text>
+</g>
+<!-- [root] aws_instance.web&#45;&gt;[root] aws_key_pair.auth -->
+<g id="edge_2" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M252.6084,-314.2205C281.9715,-306.4259 326.5283,-293.1351 363,-276 364.8309,-275.1398 366.6788,-274.2124 368.5245,-273.2379"/>
+<polygon fill="#000000" stroke="#000000" points="370.6724,-276.0436 377.6452,-268.0667 367.2198,-269.9543 370.6724,-276.0436"/>
+</g>
+<!-- [root] aws_security_group.default -->
+<g id="node_5" class="node" fill="#aec7e8" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="262,-250 262,-265 354,-265 354,-250 262,-250" style="fill: rgb(174, 199, 232);"/>
+<text text-anchor="start" x="264.793" y="-255.6" font-family="courier new" font-size="8.00" fill="#000000">aws_security_group</text>
+<polygon fill="none" stroke="#000000" points="262,-235 262,-250 354,-250 354,-235 262,-235"/>
+<text text-anchor="start" x="291.1973" y="-240.6" font-family="courier new" font-size="8.00" fill="#000000">default</text>
+</g>
+<!-- [root] aws_instance.web&#45;&gt;[root] aws_security_group.default -->
+<g id="edge_3" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M242.9538,-303.8314C253.6695,-294.9632 266.7189,-284.1637 278.309,-274.5718"/>
+<polygon fill="#000000" stroke="#000000" points="280.5808,-277.2349 286.0533,-268.1628 276.1178,-271.8422 280.5808,-277.2349"/>
+</g>
+<!-- [root] aws_subnet.default -->
+<g id="node_7" class="node" fill="#aec7e8" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="190,-250 190,-265 244,-265 244,-250 190,-250" style="fill: rgb(174, 199, 232);"/>
+<text text-anchor="start" x="192.9961" y="-255.6" font-family="courier new" font-size="8.00" fill="#000000">aws_subnet</text>
+<polygon fill="none" stroke="#000000" points="190,-235 190,-250 244,-250 244,-235 190,-235"/>
+<text text-anchor="start" x="200.1973" y="-240.6" font-family="courier new" font-size="8.00" fill="#000000">default</text>
+</g>
+<!-- [root] aws_instance.web&#45;&gt;[root] aws_subnet.default -->
+<g id="edge_4" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M219.9906,-303.8314C219.5628,-296.131 219.0541,-286.9743 218.5787,-278.4166"/>
+<polygon fill="#000000" stroke="#000000" points="222.0724,-278.2037 218.023,-268.4133 215.0831,-278.592 222.0724,-278.2037"/>
+</g>
+<!-- [root] var.aws_amis -->
+<g id="node_10" class="node" fill="#ffbb78" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="123,-250 123,-265 167,-265 167,-250 123,-250" style="fill: rgb(255, 187, 120);"/>
+<text text-anchor="start" x="137.7988" y="-255.6" font-family="courier new" font-size="8.00" fill="#000000">var</text>
+<polygon fill="none" stroke="#000000" points="123,-235 123,-250 167,-250 167,-235 123,-235"/>
+<text text-anchor="start" x="125.7969" y="-240.6" font-family="courier new" font-size="8.00" fill="#000000">aws_amis</text>
+</g>
+<!-- [root] aws_instance.web&#45;&gt;[root] var.aws_amis -->
+<g id="edge_5" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M201.822,-303.8314C192.6412,-295.1337 181.4994,-284.5783 171.5224,-275.1265"/>
+<polygon fill="#000000" stroke="#000000" points="173.8385,-272.4995 164.1719,-268.1628 169.0243,-277.5811 173.8385,-272.4995"/>
+</g>
+<!-- [root] aws_internet_gateway.default -->
+<g id="node_2" class="node" fill="#aec7e8" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="0,-394 0,-409 102,-409 102,-394 0,-394" style="fill: rgb(174, 199, 232);"/>
+<text text-anchor="start" x="2.9922" y="-399.6" font-family="courier new" font-size="8.00" fill="#000000">aws_internet_gateway</text>
+<polygon fill="none" stroke="#000000" points="0,-379 0,-394 102,-394 102,-379 0,-379"/>
+<text text-anchor="start" x="34.1973" y="-384.6" font-family="courier new" font-size="8.00" fill="#000000">default</text>
+</g>
+<!-- [root] aws_vpc.default -->
+<g id="node_8" class="node" fill="#aec7e8" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="198,-178 198,-193 237,-193 237,-178 198,-178" style="fill: rgb(174, 199, 232);"/>
+<text text-anchor="start" x="200.6973" y="-183.6" font-family="courier new" font-size="8.00" fill="#000000">aws_vpc</text>
+<polygon fill="none" stroke="#000000" points="198,-163 198,-178 237,-178 237,-163 198,-163"/>
+<text text-anchor="start" x="200.6973" y="-168.6" font-family="courier new" font-size="8.00" fill="#000000">default</text>
+</g>
+<!-- [root] aws_internet_gateway.default&#45;&gt;[root] aws_vpc.default -->
+<g id="edge_6" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M50.3447,-375.9546C50.1129,-341.6833 54.6117,-266.7878 95,-224 117.32,-200.3539 153.0046,-188.761 180.0276,-183.1399"/>
+<polygon fill="#000000" stroke="#000000" points="180.7415,-186.567 189.9144,-181.2652 179.4374,-179.6895 180.7415,-186.567"/>
+</g>
+<!-- [root] provider.aws -->
+<g id="node_9" class="node" fill="#ff7f0e" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="239,-106 239,-121 283,-121 283,-106 239,-106" style="fill: rgb(255, 127, 14);"/>
+<text text-anchor="start" x="241.7969" y="-111.6" font-family="courier new" font-size="8.00" fill="#000000">provider</text>
+<polygon fill="none" stroke="#000000" points="239,-91 239,-106 283,-106 283,-91 239,-91"/>
+<text text-anchor="start" x="253.7988" y="-96.6" font-family="courier new" font-size="8.00" fill="#000000">aws</text>
+</g>
+<!-- [root] aws_key_pair.auth&#45;&gt;[root] provider.aws -->
+<g id="edge_7" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M382.7961,-231.5837C373.4905,-223.3217 362.5367,-213.3485 353,-204 328.7252,-180.2043 302.2891,-151.7595 284.0105,-131.6604"/>
+<polygon fill="#000000" stroke="#000000" points="286.4945,-129.1893 277.1868,-124.1279 281.3067,-133.8889 286.4945,-129.1893"/>
+</g>
+<!-- [root] var.key_name -->
+<g id="node_11" class="node" fill="#ffbb78" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="382,-178 382,-193 426,-193 426,-178 382,-178" style="fill: rgb(255, 187, 120);"/>
+<text text-anchor="start" x="396.7988" y="-183.6" font-family="courier new" font-size="8.00" fill="#000000">var</text>
+<polygon fill="none" stroke="#000000" points="382,-163 382,-178 426,-178 426,-163 382,-163"/>
+<text text-anchor="start" x="384.7969" y="-168.6" font-family="courier new" font-size="8.00" fill="#000000">key_name</text>
+</g>
+<!-- [root] aws_key_pair.auth&#45;&gt;[root] var.key_name -->
+<g id="edge_8" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M404,-231.8314C404,-224.131 404,-214.9743 404,-206.4166"/>
+<polygon fill="#000000" stroke="#000000" points="407.5001,-206.4132 404,-196.4133 400.5001,-206.4133 407.5001,-206.4132"/>
+</g>
+<!-- [root] aws_route.internet_access -->
+<g id="node_4" class="node" fill="#aec7e8" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="24,-466 24,-481 102,-481 102,-466 24,-466" style="fill: rgb(174, 199, 232);"/>
+<text text-anchor="start" x="41.3965" y="-471.6" font-family="courier new" font-size="8.00" fill="#000000">aws_route</text>
+<polygon fill="none" stroke="#000000" points="24,-451 24,-466 102,-466 102,-451 24,-451"/>
+<text text-anchor="start" x="26.9941" y="-456.6" font-family="courier new" font-size="8.00" fill="#000000">internet_access</text>
+</g>
+<!-- [root] aws_route.internet_access&#45;&gt;[root] aws_internet_gateway.default -->
+<g id="edge_10" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M59.9719,-447.8314C58.6885,-440.131 57.1624,-430.9743 55.7361,-422.4166"/>
+<polygon fill="#000000" stroke="#000000" points="59.1653,-421.7018 54.0689,-412.4133 52.2606,-422.8526 59.1653,-421.7018"/>
+</g>
+<!-- [root] aws_security_group.default&#45;&gt;[root] aws_vpc.default -->
+<g id="edge_11" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M285.0369,-231.8314C273.8285,-222.9632 260.1791,-212.1637 248.0561,-202.5718"/>
+<polygon fill="#000000" stroke="#000000" points="249.9697,-199.6229 239.9558,-196.1628 245.6263,-205.1125 249.9697,-199.6229"/>
+</g>
+<!-- [root] aws_security_group.elb&#45;&gt;[root] aws_vpc.default -->
+<g id="edge_12" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M114.0747,-303.8034C103.0632,-282.8495 89.8263,-248.2101 106,-224 122.2953,-199.6079 154.1821,-188.1333 179.614,-182.7449"/>
+<polygon fill="#000000" stroke="#000000" points="180.5206,-186.1358 189.7006,-180.8465 179.2258,-179.2566 180.5206,-186.1358"/>
+</g>
+<!-- [root] aws_subnet.default&#45;&gt;[root] aws_vpc.default -->
+<g id="edge_13" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M217,-231.8314C217,-224.131 217,-214.9743 217,-206.4166"/>
+<polygon fill="#000000" stroke="#000000" points="220.5001,-206.4132 217,-196.4133 213.5001,-206.4133 220.5001,-206.4132"/>
+</g>
+<!-- [root] aws_vpc.default&#45;&gt;[root] provider.aws -->
+<g id="edge_14" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M228.1031,-159.8314C233.0674,-151.7079 239.0222,-141.9637 244.4928,-133.0118"/>
+<polygon fill="#000000" stroke="#000000" points="247.5194,-134.7712 249.7474,-124.4133 241.5464,-131.121 247.5194,-134.7712"/>
+</g>
+<!-- [root] var.aws_region -->
+<g id="node_16" class="node" fill="#ffbb78" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="234,-34 234,-49 288,-49 288,-34 234,-34" style="fill: rgb(255, 187, 120);"/>
+<text text-anchor="start" x="253.7988" y="-39.6" font-family="courier new" font-size="8.00" fill="#000000">var</text>
+<polygon fill="none" stroke="#000000" points="234,-19 234,-34 288,-34 288,-19 234,-19"/>
+<text text-anchor="start" x="236.9961" y="-24.6" font-family="courier new" font-size="8.00" fill="#000000">aws_region</text>
+</g>
+<!-- [root] provider.aws&#45;&gt;[root] var.aws_region -->
+<g id="edge_20" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M261,-87.8314C261,-80.131 261,-70.9743 261,-62.4166"/>
+<polygon fill="#000000" stroke="#000000" points="264.5001,-62.4132 261,-52.4133 257.5001,-62.4133 264.5001,-62.4132"/>
+</g>
+<!-- [root] meta.count&#45;boundary (count boundary fixup) -->
+<g id="node_13" class="node" fill="#ff7f0e" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="101,-538 101,-553 174,-553 174,-538 101,-538" style="fill: rgb(255, 127, 14);"/>
+<text text-anchor="start" x="127.8984" y="-543.6" font-family="courier new" font-size="8.00" fill="#000000">meta</text>
+<polygon fill="none" stroke="#000000" points="101,-523 101,-538 174,-538 174,-523 101,-523"/>
+<text text-anchor="start" x="103.8945" y="-528.6" font-family="courier new" font-size="8.00" fill="#000000">count-boundary</text>
+</g>
+<!-- [root] meta.count&#45;boundary (count boundary fixup)&#45;&gt;[root] aws_route.internet_access -->
+<g id="edge_15" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M118.3267,-519.8314C109.4751,-511.219 98.7514,-500.7851 89.1105,-491.4048"/>
+<polygon fill="#000000" stroke="#000000" points="91.2754,-488.6279 81.6674,-484.1628 86.3939,-493.645 91.2754,-488.6279"/>
+</g>
+<!-- [root] output.address -->
+<g id="node_14" class="node" fill="#2ca02c" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="128,-466 128,-481 167,-481 167,-466 128,-466" style="fill: rgb(44, 160, 44);"/>
+<text text-anchor="start" x="133.0977" y="-471.6" font-family="courier new" font-size="8.00" fill="#000000">output</text>
+<polygon fill="none" stroke="#000000" points="128,-451 128,-466 167,-466 167,-451 128,-451"/>
+<text text-anchor="start" x="130.6973" y="-456.6" font-family="courier new" font-size="8.00" fill="#000000">address</text>
+</g>
+<!-- [root] meta.count&#45;boundary (count boundary fixup)&#45;&gt;[root] output.address -->
+<g id="edge_16" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M139.5234,-519.8314C140.5929,-512.131 141.8647,-502.9743 143.0532,-494.4166"/>
+<polygon fill="#000000" stroke="#000000" points="146.5336,-494.7997 144.4426,-484.4133 139.6001,-493.8367 146.5336,-494.7997"/>
+</g>
+<!-- [root] provider.aws (close) -->
+<g id="node_15" class="node" fill="#ff7f0e" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="33,-538 33,-553 77,-553 77,-538 33,-538" style="fill: rgb(255, 127, 14);"/>
+<text text-anchor="start" x="35.7969" y="-543.6" font-family="courier new" font-size="8.00" fill="#000000">provider</text>
+<polygon fill="none" stroke="#000000" points="33,-523 33,-538 77,-538 77,-523 33,-523"/>
+<text text-anchor="start" x="47.7988" y="-528.6" font-family="courier new" font-size="8.00" fill="#000000">aws</text>
+</g>
+<!-- [root] provider.aws (close)&#45;&gt;[root] aws_elb.web -->
+<g id="edge_18" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M33.9418,-519.951C26.4628,-512.2 18.9295,-502.5074 15,-492 6.9046,-470.3531 1.1333,-458.4889 15,-440 39.8958,-406.8056 65.916,-425.3291 110.0216,-411.7038"/>
+<polygon fill="#000000" stroke="#000000" points="111.4517,-414.9106 119.7138,-408.2782 109.119,-408.3107 111.4517,-414.9106"/>
+</g>
+<!-- [root] provider.aws (close)&#45;&gt;[root] aws_route.internet_access -->
+<g id="edge_19" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M57.0187,-519.8314C57.8743,-512.131 58.8917,-502.9743 59.8426,-494.4166"/>
+<polygon fill="#000000" stroke="#000000" points="63.3283,-494.7386 60.9541,-484.4133 56.3711,-493.9656 63.3283,-494.7386"/>
+</g>
+<!-- [root] provisioner.remote&#45;exec (close) -->
+<g id="node_17" class="node" fill="#98df8a" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="192,-538 192,-553 250,-553 250,-538 192,-538" style="fill: rgb(152, 223, 138);"/>
+<text text-anchor="start" x="194.5957" y="-543.6" font-family="courier new" font-size="8.00" fill="#000000">provisioner</text>
+<polygon fill="none" stroke="#000000" points="192,-523 192,-538 250,-538 250,-523 192,-523"/>
+<text text-anchor="start" x="194.5957" y="-528.6" font-family="courier new" font-size="8.00" fill="#000000">remote-exec</text>
+</g>
+<!-- [root] provisioner.remote&#45;exec (close)&#45;&gt;[root] aws_instance.web -->
+<g id="edge_21" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M221,-519.9555C221,-482.3938 221,-395.5541 221,-350.4103"/>
+<polygon fill="#000000" stroke="#000000" points="224.5001,-350.145 221,-340.1451 217.5001,-350.1451 224.5001,-350.145"/>
+</g>
+<!-- [root] root -->
+<g id="node_18" class="node" fill="#ff7f0e" opacity="1">
+
+<polygon fill="#ff7f0e" stroke="#000000" points="171.3089,-628 102.6911,-628 102.6911,-592 171.3089,-592 171.3089,-628" style="fill: rgb(255, 127, 14);"/>
+<text text-anchor="middle" x="137" y="-608.1313" font-family="courier new" font-size="8.00" fill="#000000">[root] root</text>
+</g>
+<!-- [root] root&#45;&gt;[root] meta.count&#45;boundary (count boundary fixup) -->
+<g id="edge_22" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M137,-591.8314C137,-584.131 137,-574.9743 137,-566.4166"/>
+<polygon fill="#000000" stroke="#000000" points="140.5001,-566.4132 137,-556.4133 133.5001,-566.4133 140.5001,-566.4132"/>
+</g>
+<!-- [root] root&#45;&gt;[root] provider.aws (close) -->
+<g id="edge_23" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M116.3079,-591.8314C106.3052,-583.0485 94.145,-572.3712 83.3001,-562.8489"/>
+<polygon fill="#000000" stroke="#000000" points="85.5092,-560.1308 75.6854,-556.1628 80.8906,-565.3909 85.5092,-560.1308"/>
+</g>
+<!-- [root] root&#45;&gt;[root] provisioner.remote&#45;exec (close) -->
+<g id="edge_24" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M158.1967,-591.8314C168.4434,-583.0485 180.9003,-572.3712 192.0097,-562.8489"/>
+<polygon fill="#000000" stroke="#000000" points="194.4952,-565.3282 199.81,-556.1628 189.9397,-560.0134 194.4952,-565.3282"/>
+</g>
+<!-- [root] var.public_key_path -->
+<g id="node_12" class="node" fill="#ffbb78" opacity="1">
+
+<polygon fill="none" stroke="#000000" points="365,-106 365,-121 443,-121 443,-106 365,-106" style="fill: rgb(255, 187, 120);"/>
+<text text-anchor="start" x="396.7988" y="-111.6" font-family="courier new" font-size="8.00" fill="#000000">var</text>
+<polygon fill="none" stroke="#000000" points="365,-91 365,-106 443,-106 443,-91 365,-91"/>
+<text text-anchor="start" x="367.9941" y="-96.6" font-family="courier new" font-size="8.00" fill="#000000">public_key_path</text>
+</g>
+<!-- [root] var.key_name&#45;&gt;[root] var.public_key_path -->
+<g id="edge_25" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M404,-159.8314C404,-149 404,-135.2876 404,-124.4133"/>
+</g>
+<!-- [root] output.address&#45;&gt;[root] aws_elb.web -->
+<g id="edge_17" class="edge" opacity="1">
+
+<path fill="none" stroke="#000000" d="M147,-447.8314C147,-440.131 147,-430.9743 147,-422.4166"/>
+<polygon fill="#000000" stroke="#000000" points="150.5001,-422.4132 147,-412.4133 143.5001,-422.4133 150.5001,-422.4132"/>
+</g>
+</g>
+</g></svg>
