@@ -5,7 +5,7 @@ import { cat } from 'shelljs'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { PromoAcademy, Layout, Navbar, Consultation, Footer } from './layout'
+import { PromoAcademy, Layout, Navbar, Consultation, Footer, Subscribe } from './layout'
 import { Markdown } from './markdown'
 import { Image, CSSBundle, JSScript, JSBundle, Img } from './assets'
 import marked from 'marked'
@@ -131,7 +131,7 @@ export function BiteSizedRender(markdownPath: string, assetsPath: string) {
         </p>
         <div dangerouslySetInnerHTML={{ __html: html }} />
 
-        <PromoAcademy sitemap={website} />
+        <Subscribe identifier={currentNode.payload.title.replace(/[^\w]+/g, '-')} />
 
         <JSScript
           js={JSBundle({
