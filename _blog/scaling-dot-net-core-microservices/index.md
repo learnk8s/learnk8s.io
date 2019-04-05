@@ -3,16 +3,16 @@ layout: post
 title: Scaling Microservices with Message Queues, DotNet Core and Kubernetes
 date: 2019-02-24 08:00:00
 author: "Lewis Denham-Parry"
-author_link: https://twitter.com/soulmaniqbal
+author_link: https://twitter.com/denhamparry
 categories: kubernetes microservices "message queues" "dotnet core"
-image: /to/add
+image: /blog/scaling-dot-net-core-microservices/tickets.png
 excerpt: To do...
 description: To do...
 open_graph:
   title: Scaling Microservices with Message Queues, DotNet Core and Kubernetes
   description: To do...
   type: article
-  image: /to/add
+  image: /blog/scaling-dot-net-core-microservices/tickets.png
 ---
 
 There are many challenges when working as a developer within an organisation. Usually its linked to the following cycle:
