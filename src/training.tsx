@@ -319,7 +319,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
                 'Pick the modules relevant to your team',
                 'Deep dive into the content with a three, four or five days course',
                 'Delivered on site, remotely or in a cozy meeting room',
-                'Classes from 10+ delegates',
+                'Classes from 5+ delegates',
               ]}
             >
               <SpecialListItem>
