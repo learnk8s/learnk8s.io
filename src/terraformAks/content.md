@@ -153,9 +153,15 @@ It's something in between.
 
 It's a sort of DSL — a domain specific language that's designed to be easy to read and write.
 
+Terraform configurations can be written in HashiCorp Configuration Language (HCL) or in JSON.
+
+**HCL is also fully JSON compatible.**
+
+That is, JSON can be used as completely valid input to a system expecting HCL.
+
 _It looks like real code, but it lacks some of the flexibility._
 
-Terraform doesn't know to connect to a cloud provider and orchestrate their API.
+Terraform doesn't know how to connect to a cloud provider and orchestrate their API.
 
 It delegates all the work to plugins called providers.
 
@@ -349,7 +355,9 @@ You can delete the resource group with:
 terraform destroy
 ```
 
-Terraform destroys the resources in the inverse order of the apply.
+Terraform prints a list of resources that are ready to be deleted.
+
+As soon as you confirm, it destroys all the resources.
 
 ## Provisioning a Kubernetes cluster on Azure with Terraform
 
@@ -439,7 +447,7 @@ _It's time for a cup of coffee._
 
 Provisioning a cluster on AKS takes in average about ten minutes.
 
-What happens in the background is that Azure receives your request, generates a few ARM templates, deploys them internally and create the extra resources needed (such as NICs and virtual machines) to create the cluster.
+What happens in the background is that Azure receives your request, calls the Azure APIs and creates the extra resources needed (such as NICs and virtual machines) to provision the cluster.
 
 _Done?_
 
@@ -498,7 +506,7 @@ _And it doesn't expose any port to the public._
 Let's fix that by adding a security group:
 
 ```hcl|title=main.tf|highlight=36
-resource azurerm_network_security_group "sg" {
+resource "azurerm_network_security_group" "sg" {
   name                = "aks-nsg"
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
@@ -725,7 +733,7 @@ _Everything is exactly the same, so what's the advantage of using a single Terra
 
 ## Cloning the cluster
 
-The beauty of Terraform is that you can use the same code to generate several cluster with a different name.
+The beauty of Terraform is that you can use the same code to generate several clusters with a different name.
 
 You can parametrise the name of your resources and create clusters that are exact copies.
 
