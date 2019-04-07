@@ -228,7 +228,7 @@ const content = {
     },
   },
   networking: {
-    name: 'Netwoking in Kubernetes',
+    name: 'Networking in Kubernetes',
     description: `How do you route traffic from the internet to your applications? How can you secure your communication with TLS? How about path routing to different services? In this module, you will explore how the traffic is routed in the cluster.`,
     topics: {
       basicNetworking: {
