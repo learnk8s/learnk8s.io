@@ -608,7 +608,7 @@ export const Subscribe: React.StatelessComponent<{ identifier: string }> = ({ id
             Subscribe ⇢
           </button>
         </div>
-        <input type='hidden' name='SOURCE' id='SOURCE' value={identifier} />
+        <input type='hidden' name='MERGE2' id='MERGE2' value={identifier} />
         <input type='hidden' name='ht' value='aca6953f09c7fcc43d98b4366d71b6e0c79fbb81:MTU1NDE3Njc3OC40MzAz' />
         <input type='hidden' name='mc_signupsource' value='hosted' />
       </form>

@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
 import { BlogPosting } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import { PromoAcademy } from '../layout'
+import { Subscribe } from '../layout'
 import { cat } from 'shelljs'
 import { Markdown } from '../markdown'
 
@@ -97,7 +97,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         </RelatedContentItem>
       </RelatedConentContainer>
 
-      <PromoAcademy sitemap={website} />
+      <Subscribe identifier='deploy-laravel' />
 
       <JSScript
         js={JSBundle({

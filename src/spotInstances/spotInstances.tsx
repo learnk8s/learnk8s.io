@@ -6,7 +6,7 @@ import { cat } from 'shelljs'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { PromoAcademy } from '../layout'
+import { Subscribe } from '../layout'
 import { Markdown } from '../markdown'
 
 export const Details = {
@@ -102,7 +102,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         </RelatedContentItem>
       </RelatedConentContainer>
 
-      <PromoAcademy sitemap={website} />
+      <Subscribe identifier='spot-instances' />
 
       <JSScript
         js={JSBundle({

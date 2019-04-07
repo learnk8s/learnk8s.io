@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { cat } from 'shelljs'
-import { PromoAcademy } from '../layout'
+import { Subscribe } from '../layout'
 import { BlogPosting } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { Markdown } from '../markdown'
@@ -100,7 +100,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         </RelatedContentItem>
       </RelatedConentContainer>
 
-      <PromoAcademy sitemap={website} />
+      <Subscribe identifier='smaller-images-docker' />
 
       <JSScript
         js={JSBundle({
