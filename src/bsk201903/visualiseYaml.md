@@ -14,9 +14,9 @@ YAML is a human-readable configuration language, and it doesn't have a way to ex
 
 You could write a tool to analyse YAML files and link them together statically, but you will have to code all the rules that power Kubernetes such as namespaces, selectors, etc. to make sure that you can draw a correct dependency graph.
 
-Even with such tool, you won't be able to describe that a front-end component is consuming a backend API.
+Even with such a tool, you wouldn't be able to describe that a front-end component is consuming a backend API.
 
-The relationship isn't expressed in the YAML, but in the application.
+The relationship isn't expressed in the YAML but in the application.
 
 However, if your goal is to visualise dependencies, you could focus on the cluster and ignore the YAML.
 
@@ -68,13 +68,13 @@ Here's the same collection of microservices deployed in a cluster with Istio ena
 
 As you can see the graph is identical to the one drawn by Weave Scope.
 
-But Istio didn't have to interrogate the Kubernetes API to draw any of it.
+Note that Istio didn't have to interrogate the Kubernetes API to draw any of it.
 
 Using a service mesh such as Istio, isn't a free lunch, though.
 
 Adding it to an existing cluster is not trivial, because you have to recreate all the Pods with the proxy container.
 
-Also adding an extra container to every Pod affects latency and resource consumption.
+And having an extra container attached to every Pod affects latency and resource consumption.
 
 ### More options
 
@@ -91,4 +91,4 @@ _Or have a recommendation to visualise dependencies?_
 
 [Let us know in an email](mailto:hello@learnk8s) or [tweet us @learnk8s](https://twitter.com/learnk8s).
 
-A special thank you goes to [XXXX](xxx) and [XXX](xxx) that reviewed the content of this article.
+A special thank you goes to [Cesar Tron-Lozai](https://twitter.com/cesartronlozai) that reviewed the content of this article.
