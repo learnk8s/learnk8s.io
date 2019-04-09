@@ -12,17 +12,17 @@ import { Markdown } from '../markdown'
 export const Details = {
   type: identity<'terraformAks'>('terraformAks'),
   url: '/get-start-terraform-aks',
-  seoTitle: 'Get started with Terraform ans AKS ♦︎ Learnk8s',
-  title: 'Get started with Terraform ans AKS',
+  seoTitle: 'Get started with Terraform and AKS ♦︎ Learnk8s',
+  title: 'Get started with Terraform and AKS',
   description: ``,
   openGraphImage: Image({
-    url: 'src/whatIsKubernetes/why-kube.png',
-    description: 'Get started with Terraform ans AKS',
+    url: 'src/terraformAks/terraforming.png',
+    description: 'Get started with Terraform and AKS',
   }),
   publishedDate: '2019-03-30',
   previewImage: Image({
-    url: 'src/whatIsKubernetes/why-kube.png',
-    description: 'Get started with Terraform ans AKS',
+    url: 'src/terraformAks/terraforming.png',
+    description: 'Get started with Terraform and AKS',
   }),
   author: {
     fullName: 'Daniele Polencic',
