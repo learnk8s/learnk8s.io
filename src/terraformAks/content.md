@@ -214,7 +214,7 @@ The following complex dependency graph was drawn with [Blast Radius](https://git
 
 ![Complex dependency graph in Terraform](complex-graph.svg)
 
-Terraform also keeps track of the current state of your infrastructure, so running your the script twice hold the same result.
+Terraform also keeps track of the current state of your infrastructure, so running your the script twice holds the same result.
 
 In the rest of this article you will explore why Terraform is loved by small and large enterprises that use it everyday in production.
 
