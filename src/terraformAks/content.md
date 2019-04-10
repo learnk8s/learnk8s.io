@@ -143,6 +143,8 @@ New-AzResourceGroupDeployment -Name TestRG -Location uswest `
 
 Notice how you had to specify the parameter file to customise some of the values.
 
+If you wish to explore more examples of ARM templates [the official website has a handy collection of quickstart templates](https://azure.microsoft.com/en-us/resources/templates/).
+
 ### Terraform
 
 [Terraform](https://www.terraform.io/intro/index.html#what-is-terraform-) gained most of its popularity from being a friendly tool to provision infrastructure on Amazon Web Services.
@@ -224,7 +226,7 @@ Terraform uses a different set of credentials to provision the infrastructure, s
 
 The first step is to install the Azure CLI. You can find detailed [instructions on how to install it on the official website](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
 
-> [Sign up for an Azure account](https://azure.microsoft.com/en-gb/free/), if you don't own one already. You will receive \$300 in free credits.
+> [Sign up for an Azure account](https://azure.microsoft.com/en-us/free/), if you don't own one already. You will receive USD200 in free credits.
 
 You can link your Azure CLI to your account with:
 
