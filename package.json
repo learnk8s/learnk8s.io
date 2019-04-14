@@ -33,6 +33,7 @@
     "diff": "^4.0.1",
     "eventbrite": "^1.2.1",
     "feed": "^2.0.2",
+    "hastscript": "^5.0.0",
     "http-serve": "^1.0.1",
     "http-server": "^0.11.1",
     "inline-source-cli": "^1.2.0",

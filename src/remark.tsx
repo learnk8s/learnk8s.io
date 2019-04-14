@@ -16,6 +16,14 @@ import { AsciiCast, Image } from './assets'
 import { dirname } from 'path'
 const remove = require('unist-util-remove')
 const toString = require('mdast-util-to-string')
+const H: Hastscript = require('hastscript')
+
+interface Hastscript {
+  (selector: string): Node
+  (selector: string, properties: {}): Node
+  (selector: string, children: Node[]): Node
+  (selector: string, properties: {}, children: Node[]): Node
+}
 
 const prismSolarizedCss = readFileSync('src/prism-solarizedlight.css', 'utf8')
 require('prismjs/components/')()
@@ -103,127 +111,82 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
         heading: (h: h, node: Mdast.Heading): Node => {
           switch (node.depth) {
             case 1:
-              return h(
-                node,
-                'h' + node.depth,
-                { className: `f${node.depth} pt5`, id: toId(toString(node)) },
-                all(h, node),
-              )
+              return H(`h${node.depth}.f${node.depth}.pt5#${toId(toString(node))}`, all(h, node))
             case 2:
-              return h(
-                node,
-                'h' + node.depth,
-                { className: `f${node.depth} pt4 pb2`, id: toId(toString(node)) },
-                all(h, node),
-              )
+              return H(`h${node.depth}.f${node.depth}.pt4.pb2#${toId(toString(node))}`, all(h, node))
             case 3:
-              return h(
-                node,
-                'h' + node.depth,
-                { className: `f${node.depth} pt3`, id: toId(toString(node)) },
-                all(h, node),
-              )
+              return H(`h${node.depth}.f${node.depth}.pt3#${toId(toString(node))}`, all(h, node))
             default:
-              return h(node, 'h' + node.depth, { className: `f${node.depth}`, id: toId(toString(node)) }, all(h, node))
+              return H(`h${node.depth}.f${node.depth}#${toId(toString(node))}`, all(h, node))
           }
           function toId(raw: string): string {
             return raw.toLowerCase().replace(/[^\w]+/g, '-')
           }
         },
         slideshow: (h: h, node: Mdast.Slideshow): Node => {
-          return h(
-            null,
-            'div',
-            {
-              className: ['slideshow-js', 'overflow-hidden'],
-            },
-            [
-              h(
-                null,
-                'ul',
-                { className: ['pl0', 'list', 'slider-js'] },
-                selectAll('slide', node)
-                  .map((it: Mdast.Slide, index: number, slides: Mdast.Slide[]) => {
-                    const img: Node = select('slide image', it)
-                    const rest: Node[] = selectAll('slide > :not(image)', it)
-                    const imageNode = one(h, { ...img, alt: toString(it) })
-                    delete (imageNode as any).properties.className
-                    return h(null, 'li', { className: ['mv3'] }, [
-                      imageNode,
-                      h(null, 'div', { className: ['bt', 'b-solid', 'bw2', 'b--black-70', 'relative', 'mt3'] }, [
-                        h(
-                          null,
-                          'div',
-                          {
-                            className: ['bg-black-10', 'br1', 'pa1', 'dib', 'mt2', 'absolute', 'bottom-1', 'left-0'],
-                          },
-                          [
-                            h(null, 'span', { className: ['b', 'black-60'] }, [{ type: 'text', value: index + 1 }]),
-                            h(null, 'span', { className: ['f7', 'black-50'] }, [
-                              { type: 'text', value: `/${slides.length}` },
-                            ]),
-                          ],
-                        ),
+          return H('div.slideshow-js.overflow-hidden', [
+            H(
+              'ul.pl0.list.slider-js',
+              selectAll('slide', node)
+                .map((it: Mdast.Slide, index: number, slides: Mdast.Slide[]) => {
+                  const img: Node = select('slide image', it)
+                  const rest: Node[] = selectAll('slide > :not(image)', it)
+                  const imageNode = one(h, { ...img, alt: toString(it) })
+                  delete (imageNode as any).properties.className
+                  return H('li.mv3', [
+                    imageNode,
+                    H('div.bt.b-solid.bw2.b--black-70.relative.mt3', [
+                      H('div.bg-black-10.br1.pa1.dib.mt2.absolute.bottom-1.left-0', [
+                        H('span.b.black-60', [{ type: 'text', value: index + 1 }]),
+                        H('span.f7.black-50', [{ type: 'text', value: `/${slides.length}` }]),
                       ]),
-                      h(
-                        null,
-                        'div',
-                        { className: ['navigation-js', 'flex', 'items-start', 'justify-between', 'bg-evian ph2'] },
-                        [
-                          h(
-                            null,
-                            'div',
-                            { className: 'f5 lh-copy black-90 w-60 center' },
-                            rest.map(it => {
-                              if (it.type === 'paragraph') {
-                                return h(null, 'p', { className: 'lh-copy measure-wide f5' }, all(h, it))
-                              }
-                              return one(h, it)
-                            }),
-                          ),
-                        ],
-                      ),
-                    ])
-                  })
-                  .concat([
-                    h(null, 'style', {}, [
-                      {
-                        type: 'text',
-                        value: `.pagination-icon {
-                  stroke: currentColor;
-                  stroke-linecap: round;
-                  stroke-linejoin: round;
-                  stroke-width: .125rem;
-                  display: inline-block;
-                  width: 0.4rem;
-                }`,
-                      },
                     ]),
-                    h(null, 'script', {}, [{ type: 'text', value: `(${Slideshow.toString()})()` }]),
+                    H('div.navigation-js.flex.items-start.justify-between.bg-evian ph2', [
+                      H(
+                        'div.f5.lh-copy.black-90.w-60.center',
+                        rest.map(it => {
+                          if (it.type === 'paragraph') {
+                            return H('p.lh-copy.measure-wide.f5', all(h, it))
+                          }
+                          return one(h, it)
+                        }),
+                      ),
+                    ]),
+                  ])
+                })
+                .concat([
+                  H('style', [
+                    {
+                      type: 'text',
+                      value: `.pagination-icon {
+                        stroke: currentColor;
+                        stroke-linecap: round;
+                        stroke-linejoin: round;
+                        stroke-width: .125rem;
+                        display: inline-block;
+                        width: 0.4rem;
+                      }`,
+                    },
                   ]),
-              ),
-            ],
-          )
+                  H('script', [{ type: 'text', value: `(${Slideshow.toString()})()` }]),
+                ]),
+            ),
+          ])
         },
         paragraph: (h: h, node: Mdast.Paragraph): Node => {
           if (node.children[0].type === 'image') {
             return one(h, node.children[0])
           }
-          return h(node, 'p', { className: ['lh-copy', 'measure-wide', 'f4'] }, all(h, node))
+          return H('p.lh-copy.measure-wide.f4', all(h, node))
         },
         blockquote: (h: h, node: Node): Node => {
-          return h(
-            node,
-            'blockquote',
-            { className: ['pl3', 'mh2', 'bl', 'bw2', 'b--blue', 'bg-evian', 'pv1', 'ph4'] },
-            all(h, node),
-          )
+          return H('blockquote.pl3.mh2.bl.bw2.b--blue.bg-evian.pv1.ph4', all(h, node))
         },
         strong: (h: h, node: Node): Node => {
-          return h(node, 'strong', { className: ['b'] }, all(h, node))
+          return H('strong.b', all(h, node))
         },
         emphasis: (h: h, node: Node): Node => {
-          return h(node, 'em', { className: ['i'] }, all(h, node))
+          return H('em.i', all(h, node))
         },
         link: (h: h, node: Mdast.Link): Node => {
           const isLocal = !/^http/.test(node.url)
@@ -254,17 +217,13 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
           return h(node, 'a', attrs, all(h, node))
         },
         list: (h: h, node: Mdast.List): Node => {
-          return h(node, node.ordered ? 'ol' : 'ul', {}, all(h, node))
+          return H(node.ordered ? 'ol' : 'ul', all(h, node))
         },
         listItem: (h: h, node: Mdast.ListItem): Node => {
-          // console.log(node.children)
-          return h(
-            null,
-            'li',
-            { className: ['lh-copy', 'f4', 'mv1', 'measure-wide'] },
+          return H(
+            'li.lh-copy.f4.mv1.measure-wide',
             node.children.reduce(
               (acc, it) => {
-                // console.log(it)
                 if (it.type === 'paragraph') {
                   return acc.concat((it.children as Node[]).map(it => one(h, it)))
                 }
@@ -276,12 +235,10 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
         },
         table: (h: h, node: Mdast.Table): Node => {
           const [firstRow, ...restRows] = node.children
-          return h(null, 'table', { className: 'table w-100 f4 mv3 mv5-l', cellspacing: 0 }, [
-            h(null, 'thead', {}, [
-              h(
-                null,
+          return H('table.table.w-100.f4.mv3.mv5-l', [
+            H('thead', [
+              H(
                 'tr',
-                {},
                 firstRow.children.map((it, index) => {
                   return h(
                     null,
@@ -292,15 +249,11 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
                 }),
               ),
             ]),
-            h(
-              null,
-              'tbody',
-              { className: 'lh-copy' },
+            H(
+              'tbody.lh-copy',
               restRows.map(row => {
-                return h(
-                  null,
+                return H(
                   'tr',
-                  {},
                   row.children.map((it, index) => {
                     return h(
                       null,
@@ -339,14 +292,14 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
             const currentBlock = codeAsLines.slice(start - 1, end).join('\n')
             switch (groupType) {
               case Group.HIGHLIGHT:
-                return h(null, 'span', { className: 'highlight' }, [
+                return H('span.highlight', [
                   {
                     type: 'raw',
                     value: !!node.lang ? Prism.highlight(currentBlock, Prism.languages[node.lang]) : currentBlock,
                   },
                 ])
               case Group.STANDARD:
-                return h(null, 'span', { className: 'standard' }, [
+                return H('span.standard', [
                   {
                     type: 'raw',
                     value: !!node.lang ? Prism.highlight(currentBlock, Prism.languages[node.lang]) : currentBlock,
@@ -354,42 +307,38 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
                 ])
             }
           })
-          return h(null, 'div', { className: ['mv4', 'mv5-l'] }, [
-            h(
-              null,
-              'header',
-              { className: ['bg-light-gray', 'flex', 'pv2', 'pl1 br--top', 'br2', 'relative'] },
+          return H('div.mv4.mv5-l', [
+            H(
+              'header.bg-light-gray.flex.pv2.pl1 br--top.br2.relative',
               [
-                h(null, 'div', { className: ['w1 h1 ml1 bg-dark-red br-100'] }),
-                h(null, 'div', { className: ['w1 h1 ml1 bg-green br-100'] }),
-                h(null, 'div', { className: ['w1 h1 ml1 bg-yellow br-100'] }),
+                H('div.w1.h1.ml1.br-100.bg-dark-red'),
+                H('div.w1.h1.ml1.br-100.bg-green'),
+                H('div.w1.h1.ml1.br-100.bg-yellow'),
               ].concat(
                 node.data && node.data.title
-                  ? h(null, 'p', { className: ['code f6 mv0 black-60 w-100 tc absolute top-0 left-0 h1 pv2'] }, [
+                  ? H('p.code.f6.mv0.black-60.w-100.tc.absolute.top-0.left-0.h1.pv2', [
                       { type: 'text', value: node.data.title },
                     ])
                   : [],
               ),
             ),
-            h(null, 'pre', { className: 'code-light-theme relative pv4 overflow-auto mv0 br2 br--bottom' }, [
-              h(null, 'code', { className: 'code lh-copy' }, codeBlocks),
+            H('pre.code-light-theme.relative.pv4.overflow-auto.mv0.br2.br--bottom', [
+              H('code.code.lh-copy', codeBlocks),
             ]),
-            h(null, 'style', {}, [{ type: 'text', value: prismSolarizedCss }]),
+            H('style', [{ type: 'text', value: prismSolarizedCss }]),
           ])
         },
         inlineCode: (h: h, node: Mdast.Code): Node => {
-          return h(null, 'code', { className: ['code f5 lh-copy bg-near-white br2 pv1 ph2 fs-normal'] }, [
-            { type: 'text', value: node.value },
-          ])
+          return H('code.code.f5.lh-copy.bg-near-white.br2.pv1.ph2.fs-normal', [{ type: 'text', value: node.value }])
         },
         include: (h: h, node: Mdast.Include): Node => {
           const html = select('html', node)
           const css = select('style', node)
           const js = select('script', node)
-          return h(null, 'div', { className: 'mv4 mv5-l' }, [
+          return H('div.mv4.mv5-l', [
             { type: 'raw', value: html.value },
-            h(null, 'style', {}, [{ type: 'text', value: css.value }]),
-            h(null, 'script', {}, [{ type: 'text', value: js.value }]),
+            H('style', {}, [{ type: 'text', value: css.value }]),
+            H('script', {}, [{ type: 'text', value: js.value }]),
           ])
         },
         image: (h: h, node: Mdast.Image): Node => {
@@ -399,10 +348,10 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
           }
           if (/\.cast$/gi.test(node.url)) {
             const asciiCast = AsciiCast({ castPath: `${assetsPath}/${node.url}` })
-            return h(null, 'img', { ...props, className: 'db pv4', src: asciiCast.url, alt: node.alt || '' })
+            return H('img.db.pv4', { ...props, src: asciiCast.url, alt: node.alt || '' })
           }
           const { url, description } = Image({ url: `${assetsPath}/${node.url}`, description: node.alt || '' })
-          return h(null, 'img', { ...props, className: 'db pv3', src: url, alt: description })
+          return H('img.db.pv3', { ...props, src: url, alt: description })
         },
       },
     })
