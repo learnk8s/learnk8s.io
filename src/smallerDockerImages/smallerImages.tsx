@@ -3,11 +3,10 @@ import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
 import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { cat } from 'shelljs'
 import { Subscribe } from '../layout'
 import { BlogPosting } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import { Markdown } from '../markdown'
+import * as Remark from '../remark'
 
 export const Details = {
   type: identity<'smaller_images'>('smaller_images'),
@@ -34,7 +33,7 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Markdown(cat('src/smallerDockerImages/content.md').toString(), __dirname)
+  const { css, js, html } = Remark.render(`${__dirname}/content.md`)
   return renderToStaticMarkup(
     <Article
       website={website}
@@ -79,7 +78,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
         }}
       />
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+      {html}
 
       <RelatedConentContainer>
         <RelatedContentItem>

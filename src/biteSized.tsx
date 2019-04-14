@@ -6,7 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
 import { PromoAcademy, Layout, Navbar, Consultation, Footer, Subscribe } from './layout'
-import { Markdown } from './markdown'
+import * as Remark from './remark'
 import { Image, CSSBundle, JSScript, JSBundle, Img } from './assets'
 import marked from 'marked'
 import moment = require('moment')
@@ -41,9 +41,9 @@ export interface Details {
   }
 }
 
-export function BiteSizedRender(markdownPath: string, assetsPath: string) {
+export function BiteSizedRender(markdownPath: string) {
   return function render(website: Sitemap, currentNode: LinkedNode<Details>, siteUrl: string): string {
-    const { css, js, html } = Markdown(cat(markdownPath).toString(), assetsPath)
+    const { css, js, html } = Remark.render(markdownPath)
     return renderToStaticMarkup(
       <Article
         website={website}
@@ -129,7 +129,7 @@ export function BiteSizedRender(markdownPath: string, assetsPath: string) {
             .
           </em>
         </p>
-        <div dangerouslySetInnerHTML={{ __html: html }} />
+        {html}
 
         <Subscribe identifier={currentNode.payload.title.replace(/[^\w]+/g, '-')} />
 

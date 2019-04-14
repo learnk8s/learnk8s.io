@@ -93,10 +93,10 @@ export const HelmDetails = identity<Details>({
   },
 })
 
-export const MultipleClustersRender = BiteSizedRender(`${__dirname}/connectMultipleClusters.md`, __dirname)
-export const IngressApiGatewayRender = BiteSizedRender(`${__dirname}/ingressApiGateway.md`, __dirname)
-export const VisualiseYamlRender = BiteSizedRender(`${__dirname}/visualiseYaml.md`, __dirname)
-export const HelmRender = BiteSizedRender(`${__dirname}/helm.md`, __dirname)
+export const MultipleClustersRender = BiteSizedRender(`${__dirname}/connectMultipleClusters.md`)
+export const IngressApiGatewayRender = BiteSizedRender(`${__dirname}/ingressApiGateway.md`)
+export const VisualiseYamlRender = BiteSizedRender(`${__dirname}/visualiseYaml.md`)
+export const HelmRender = BiteSizedRender(`${__dirname}/helm.md`)
 
 function identity<T>(value: T): T {
   return value

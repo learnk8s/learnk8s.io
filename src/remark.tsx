@@ -17,9 +17,10 @@ import { dirname } from 'path'
 const remove = require('unist-util-remove')
 const toString = require('mdast-util-to-string')
 
+const prismSolarizedCss = readFileSync('src/prism-solarizedlight.css', 'utf8')
 require('prismjs/components/')()
 
-function parse(content: string): Promise<Node> {
+export function parse(content: string): Node {
   const tree = unified()
     .use(markdown, { commonmark: true })
     .parse(content)
@@ -88,10 +89,10 @@ function parse(content: string): Promise<Node> {
         })
       }
     })
-    .run(tree)
+    .runSync(tree)
 }
 
-function render(path: string): Promise<{ html: JSX.Element; css: string[]; js: string[] }> {
+export function render(path: string): { html: JSX.Element; css: string[]; js: string[] } {
   const assetsPath = dirname(path)
   const content = readFileSync(path, 'utf8')
 
@@ -373,6 +374,7 @@ function render(path: string): Promise<{ html: JSX.Element; css: string[]; js: s
             h(null, 'pre', { className: 'code-light-theme relative pv4 overflow-auto mv0 br2 br--bottom' }, [
               h(null, 'code', { className: 'code lh-copy' }, codeBlocks),
             ]),
+            h(null, 'style', {}, [{ type: 'text', value: prismSolarizedCss }]),
           ])
         },
         inlineCode: (h: h, node: Mdast.Code): Node => {
@@ -415,20 +417,18 @@ function render(path: string): Promise<{ html: JSX.Element; css: string[]; js: s
     createElement: React.createElement,
   })
 
-  return parse(content)
-    .then(it => hastParser.run(it))
-    .then(it => {
-      const css: Node[] = selectAll('[tagName="style"]', it)
-      const js: Node[] = selectAll('[tagName="script"]', it)
-      const tree = remove(it, { cascade: true }, (node: Node) => {
-        return /script|style/gi.test(node.tagName as any)
-      })
-      return {
-        html: (jsxStringifier.stringify(tree) as any) as JSX.Element,
-        css: css.map(it => toString(it)).filter(onlyUnique),
-        js: js.map(it => toString(it)).filter(onlyUnique),
-      }
-    })
+  const mdastTree = parse(content)
+  const hastTree = hastParser.runSync(mdastTree)
+  const css: Node[] = selectAll('[tagName="style"]', hastTree)
+  const js: Node[] = selectAll('[tagName="script"]', hastTree)
+  const tree = remove(hastTree, { cascade: true }, (node: Node) => {
+    return /script|style/gi.test(node.tagName as any)
+  })
+  return {
+    html: (jsxStringifier.stringify(tree) as any) as JSX.Element,
+    css: css.map(it => toString(it)).filter(onlyUnique),
+    js: js.map(it => toString(it)).filter(onlyUnique),
+  }
 }
 
 function extractArgs(args: string | null | undefined) {
