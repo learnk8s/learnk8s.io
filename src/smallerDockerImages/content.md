@@ -4,7 +4,7 @@ But how do you keep the size under control when every `RUN` statement creates a 
 
 You may have noticed that most of the `Dockerfile`s in the wild have some weird tricks like this:
 
-```dockerfile
+```dockerfile|title=Dockerfile
 FROM ubuntu
 
 RUN apt-get update && apt-get install vim
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install vim
 
 Why the `&&`? Why not running two `RUN` statements like this?
 
-```dockerfile
+```dockerfile|title=Dockerfile
 FROM ubuntu
 
 RUN apt-get update
@@ -84,7 +84,7 @@ In this example, you will build a Node.js container.
 
 Let's start with an `index.js`:
 
-```js
+```js|title=index.js
 const express = require('express')
 const app = express()
 
@@ -97,7 +97,7 @@ app.listen(3000, () => {
 
 and `package.json`:
 
-```json
+```json|title=package.json
 {
   "name": "hello-world",
   "version": "1.0.0",
@@ -113,7 +113,7 @@ and `package.json`:
 
 You can package this application with the following `Dockerfile`:
 
-```dockerfile
+```dockerfile|title=Dockerfile
 FROM node:8
 
 EXPOSE 3000
@@ -126,14 +126,14 @@ CMD ["npm", "start"]
 
 You can build the image with:
 
-```bash
-$ docker build -t node-vanilla .
+```terminal|title=bash
+docker build -t node-vanilla .
 ```
 
 And you can test that it works correctly with:
 
-```bash
-$ docker run -p 3000:3000 -ti --rm --init node-vanilla
+```terminal|command=1|title=bash
+docker run -p 3000:3000 -ti --rm --init node-vanilla
 
 > hello-world@1.0.0 start /app
 > node index.js
@@ -145,8 +145,8 @@ You should be able to visit [http://localhost:3000](http://localhost:3000) and b
 
 There is a `COPY` and a `RUN` statements in the `Dockerfile`. So you should expect to see at least two layers more than the base image:
 
-```bash
-$ docker history node-vanilla
+```terminal|command=1|title=bash
+docker history node-vanilla
 IMAGE          CREATED BY                                      SIZE
 075d229d3f48   /bin/sh -c #(nop)  CMD ["npm" "start"]          0B
 bc8c3cc813ae   /bin/sh -c npm install                          2.91MB
@@ -174,7 +174,7 @@ Let's try the multi-stage Docker build.
 
 You will use the same `Dockerfile` above, but twice:
 
-```dockerfile
+```dockerfile|title=Dockerfile|highlight=7-11
 FROM node:8 as build
 
 WORKDIR /app
@@ -258,14 +258,14 @@ The first part of the `Dockerfile` creates three layers. The layers are then mer
 
 Go ahead and verify yourself. First, build the container:
 
-```bash
-$ docker build -t node-multi-stage .
+```terminal|title=bash
+docker build -t node-multi-stage .
 ```
 
 And now inspect the history:
 
-```bash
-$ docker history node-multi-stage
+```terminal|command=1|title=bash
+docker history node-multi-stage
 IMAGE          CREATED BY                                      SIZE
 331b81a245b1   /bin/sh -c #(nop)  CMD ["index.js"]             0B
 bdfc932314af   /bin/sh -c #(nop)  EXPOSE 3000                  0B
@@ -287,8 +287,8 @@ b87c2ad8344d   /bin/sh -c #(nop)  CMD ["node"]                 0B
 
 Hurrah! Has the file size changed at all?
 
-```bash
-$ docker images | grep node-
+```terminal|command=1|title=bash
+docker images | grep node-
 node-multi-stage   331b81a245b1   678MB
 node-vanilla       075d229d3f48   679MB
 ```
@@ -323,7 +323,7 @@ This is precisely what you need!
 
 You can tweak the `Dockerfile` to leverage the new base image like this:
 
-```dockerfile
+```dockerfile|title=Dockerfile|highlight=7
 FROM node:8 as build
 
 WORKDIR /app
@@ -339,22 +339,22 @@ CMD ["index.js"]
 
 And you can compile the image as usual with:
 
-```bash
-$ docker build -t node-distroless .
+```terminal|title=bash
+docker build -t node-distroless .
 ```
 
 The application should run as normal. To verify that is still the case, you could run the container like this:
 
-```bash
-$ docker run -p 3000:3000 -ti --rm --init node-distroless
+```terminal|title=bash
+docker run -p 3000:3000 -ti --rm --init node-distroless
 ```
 
 And visit the page at [http://localhost:3000](http://localhost:3000).
 
 Is the image without all the extra binaries smaller?
 
-```bash
-$ docker images | grep node-distroless
+```terminal|command=1|title=bash
+docker images | grep node-distroless
 node-distroless   7b4db3b7f1e5   76.7MB
 ```
 
@@ -366,8 +366,8 @@ Excellent news! But there's something you should pay attention to when it comes 
 
 When your container is running, and you wish to inspect it, you can attach to a running container with:
 
-```bash
-$ docker exec -ti <insert_docker_id> bash
+```terminal|title=bash
+docker exec -ti <insert_docker_id> bash
 ```
 
 Attaching to a running container and running `bash` feels like establishing an SSH session.
@@ -380,8 +380,8 @@ The good and the bad news is that you can't.
 
 It's bad news because you can only execute the binaries in the container. The only binary you could run is Node.js:
 
-```bash
-$ docker exec -ti <insert_docker_id> node
+```terminal|title=bash
+docker exec -ti <insert_docker_id> node
 ```
 
 It's good news because an attacker exploiting your application and gaining access to the container won't be able to do as much damage as if were to access a shell. In other words, fewer binaries mean smaller sizes and increased security. But at the cost of more painful debugging.
@@ -404,7 +404,7 @@ You shouldn't take their words for granted. Let's check if the image is smaller.
 
 You should tweak the `Dockerfile` and use `node:8-alpine`:
 
-```dockerfile
+```dockerfile|title=Dockerfile|highlight=7
 FROM node:8 as build
 
 WORKDIR /app
@@ -420,14 +420,14 @@ CMD ["npm", "start"]
 
 You can build the image with:
 
-```bash
-$ docker build -t node-alpine .
+```terminal|title=bash
+docker build -t node-alpine .
 ```
 
 And you can check the size with:
 
-```bash
-$ docker images | grep node-alpine
+```terminal|command=1|title=bash
+docker images | grep node-alpine
 node-alpine   aa1f85f8e724   69.7MB
 ```
 
@@ -439,23 +439,24 @@ Can you attach to a running container, unlike distroless? It's time to find out.
 
 Let's start the container first:
 
-```bash
-$ docker run -p 3000:3000 -ti --rm --init node-alpine
+```terminal|command=1|title=bash
+docker run -p 3000:3000 -ti --rm --init node-alpine
 Example app listening on port 3000!
 ```
 
 You can attach to the running container with:
 
-```bash
-$ docker exec -ti 9d8e97e307d7 bash
+```terminal|command=1|title=bash
+docker exec -ti 9d8e97e307d7 bash
 OCI runtime exec failed: exec failed: container_linux.go:296: starting container process caused "exec: \"bash\": executable file not found in $PATH": unknown
 ```
 
 With no luck. But perhaps the container has a `sh`ell?
 
-```bash
-$ docker exec -ti 9d8e97e307d7 sh
+```terminal|command=1|title=bash
+docker exec -ti 9d8e97e307d7 sh
 / #
+/ # exit
 ```
 
 Yes! You can still attach to a running container and you have an overall smaller image.

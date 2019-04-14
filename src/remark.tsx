@@ -17,6 +17,7 @@ import { dirname } from 'path'
 const remove = require('unist-util-remove')
 const toString = require('mdast-util-to-string')
 const H: Hastscript = require('hastscript')
+const inspect = require('unist-util-inspect')
 
 interface Hastscript {
   (selector: string): Node
@@ -26,6 +27,7 @@ interface Hastscript {
 }
 
 const prismSolarizedCss = readFileSync('src/prism-solarizedlight.css', 'utf8')
+const prismOkaidiadCss = readFileSync('src/prism-okaidia.css', 'utf8')
 require('prismjs/components/')()
 
 export function parse(content: string): Node {
@@ -88,8 +90,22 @@ export function parse(content: string): Node {
                 }
               }
               default: {
-                const { lang, title, highlight } = extractArgs(node.lang)
-                return { ...node, data: { ...node.data, title, highlight }, lang }
+                const { lang } = extractCodeFences(node.lang, [])
+                switch (lang) {
+                  case 'terminal': {
+                    const { command, title } = extractCodeFences(node.lang, ['command', 'title'])
+                    return {
+                      type: 'terminal',
+                      value: node.value,
+                      command,
+                      title,
+                    }
+                  }
+                  default: {
+                    const { title, highlight } = extractCodeFences(node.lang, ['highlight', 'title'])
+                    return { ...node, data: { ...node.data, title, highlight }, lang }
+                  }
+                }
               }
             }
           }
@@ -286,10 +302,11 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
             node.data && (node.data.highlight as string | undefined),
             codeAsLines.length,
           )
-          const codeBlocks = groupedCode.map(([groupType, lines]) => {
+          const codeBlocks = groupedCode.map(([groupType, lines], index, array) => {
             const start = lines[0]
             const end = lines[lines.length - 1]
-            const currentBlock = codeAsLines.slice(start - 1, end).join('\n')
+            const isLastLine = index + 1 === array.length
+            const currentBlock = `${codeAsLines.slice(start - 1, end).join('\n')}${isLastLine ? '' : '\n'}`
             switch (groupType) {
               case Group.HIGHLIGHT:
                 return H('span.highlight', [
@@ -353,6 +370,61 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
           const { url, description } = Image({ url: `${assetsPath}/${node.url}`, description: node.alt || '' })
           return H('img.db.pv3', { ...props, src: url, alt: description })
         },
+        terminal: (h: h, node: Mdast.Terminal): Node => {
+          const codeAsLines = node.value.split('\n')
+          const groupedCode = groupHighlightedCode(
+            node.command ? node.command : `1-${codeAsLines.length}`,
+            codeAsLines.length,
+          )
+          const codeBlocks = groupedCode.map(([groupType, lines], index, array) => {
+            const start = lines[0]
+            const end = lines[lines.length - 1]
+            const isLastLine = index + 1 === array.length
+            const currentBlock = `${codeAsLines.slice(start - 1, end).join('\n')}${isLastLine ? '' : '\n'}`
+            switch (groupType) {
+              case Group.HIGHLIGHT:
+                return H('span.command.prompt', [
+                  {
+                    type: 'raw',
+                    value: Prism.highlight(currentBlock, Prism.languages['bash']),
+                  },
+                ])
+              case Group.STANDARD:
+                return H('span.output', [
+                  {
+                    type: 'raw',
+                    value: Prism.highlight(currentBlock, Prism.languages['bash']),
+                  },
+                ])
+            }
+          })
+          if (((codeBlocks[codeBlocks.length - 1] as any).properties.className || []).includes('output')) {
+            codeBlocks.push(H('span.output.prompt.mt3.empty'))
+          } else {
+            const classNames = (codeBlocks[codeBlocks.length - 1] as any).properties.className || []
+            ;(codeBlocks[codeBlocks.length - 1] as any).properties.className = [...classNames, 'active']
+          }
+          return H('div.mv4.mv5-l', [
+            H(
+              'header.bg-light-gray.flex.pv2.pl1 br--top.br2.relative',
+              [
+                H('div.w1.h1.ml1.br-100.bg-dark-red'),
+                H('div.w1.h1.ml1.br-100.bg-green'),
+                H('div.w1.h1.ml1.br-100.bg-yellow'),
+              ].concat(
+                node.title
+                  ? H('p.code.f6.mv0.black-60.w-100.tc.absolute.top-0.left-0.h1.pv2', [
+                      { type: 'text', value: node.title },
+                    ])
+                  : [],
+              ),
+            ),
+            H('pre.code-dark-theme.relative.pv4.overflow-auto.mv0.br2.br--bottom', [
+              H('code.code.lh-copy', codeBlocks),
+            ]),
+            H('style', [{ type: 'text', value: prismOkaidiadCss }]),
+          ])
+        },
       },
     })
     .use(raw)
@@ -380,36 +452,41 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
   }
 }
 
-function extractArgs(args: string | null | undefined) {
+export function extractCodeFences<T extends string>(
+  args: string | null | undefined,
+  features: T[],
+): { [a in T]: string | null } & { lang: string | null } {
+  const init = features.reduce(
+    (acc, it) => {
+      acc[it] = null
+      return acc
+    },
+    {} as { [a in T]: string | null },
+  )
   if (!args) {
-    return {
-      lang: null,
-      highlight: null,
-      title: null,
-    }
+    return { ...init, lang: null }
   }
   let [head, ...rest] = args.split('|')
-  let highlight = null
-  let title = null
   let lang = null
   if (/=/.test(head)) {
     rest.push(head)
   } else {
     lang = head
   }
-  const maybeHighlight = rest.find(it => /^highlight=/gi.test(it))
-  if (!!maybeHighlight) {
-    highlight = maybeHighlight.replace(/^highlight=/gi, '')
-  }
-  const maybeTitle = rest.find(it => /^title=/gi.test(it))
-  if (!!maybeTitle) {
-    title = maybeTitle.replace(/^title=/gi, '')
-  }
-  return {
-    lang: lang || null,
-    highlight,
-    title,
-  }
+  const collected = features.reduce(
+    (acc, it) => {
+      const regex = new RegExp(`^${it}=`, 'gi')
+      const arg = rest.find(it => regex.test(it))
+      if (!arg) {
+        acc[it] = null
+        return acc
+      }
+      acc[it] = arg.replace(regex, '')
+      return acc
+    },
+    {} as { [a in T]: string | null },
+  )
+  return { ...collected, lang }
 }
 
 function isCode(node: Node): node is Mdast.Code {
@@ -421,6 +498,13 @@ namespace Mdast {
     type: 'code'
     lang?: string
     meta?: string
+    value: string
+  }
+
+  export interface Terminal extends Node {
+    type: 'terminal'
+    title: string | null
+    command: string | null
     value: string
   }
 

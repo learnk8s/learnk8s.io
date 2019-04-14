@@ -17,6 +17,7 @@ export const Details = {
   description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
   openGraphImage: Image({ url: 'src/smallerDockerImages/smaller_images.png', description: 'Docker whale' }),
   publishedDate: '2018-02-12',
+  lastModifiedDate: '2019-04-14',
   previewImage: Image({
     url: 'src/smallerDockerImages/smaller_images.png',
     description: '3 simple tricks for smaller Docker images',
@@ -50,6 +51,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         styles: css,
       })}
       publishedDate={currentNode.payload.publishedDate}
+      lastUpdated={currentNode.payload.lastModifiedDate}
     >
       <JsonLd<BlogPosting>
         item={{

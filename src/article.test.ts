@@ -1,5 +1,5 @@
 import test from 'tape'
-import { groupHighlightedCode, Group, extractArgs } from './markdown'
+import { groupHighlightedCode, Group, extractCodeFences } from './remark'
 
 test('it should group code when highlighted', assert => {
   const grouped = groupHighlightedCode('12-13,23-30', 34)
@@ -55,25 +55,21 @@ test('it should group code when highlighted, e2e', assert => {
 })
 
 test('it should extract args', assert => {
-  assert.deepEqual(extractArgs(null), {
+  assert.deepEqual(extractCodeFences(null, []), {
     lang: null,
-    highlight: null,
-    title: null,
   })
   assert.end()
 })
 
 test('it should extract args', assert => {
-  assert.deepEqual(extractArgs('yaml'), {
+  assert.deepEqual(extractCodeFences('yaml', []), {
     lang: 'yaml',
-    highlight: null,
-    title: null,
   })
   assert.end()
 })
 
 test('it should extract args', assert => {
-  assert.deepEqual(extractArgs('yaml|highlight=12-24,5|title=test.yaml'), {
+  assert.deepEqual(extractCodeFences('yaml|highlight=12-24,5|title=test.yaml', ['highlight', 'title']), {
     lang: 'yaml',
     highlight: '12-24,5',
     title: 'test.yaml',
@@ -82,10 +78,20 @@ test('it should extract args', assert => {
 })
 
 test('it should extract args', assert => {
-  assert.deepEqual(extractArgs('highlight=12-24,5|title=test.yaml'), {
+  assert.deepEqual(extractCodeFences('highlight=12-24,5|title=test.yaml', ['highlight', 'title']), {
     lang: null,
     highlight: '12-24,5',
     title: 'test.yaml',
+  })
+  assert.end()
+})
+
+test('it should extract args', assert => {
+  assert.deepEqual(extractCodeFences('terminal|command=12-24,5|title=test.yaml', ['command', 'title', 'nope']), {
+    lang: 'terminal',
+    command: '12-24,5',
+    title: 'test.yaml',
+    nope: null,
   })
   assert.end()
 })

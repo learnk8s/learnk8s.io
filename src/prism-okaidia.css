@@ -1,0 +1,182 @@
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+.code-dark-theme {
+  color: #f8f8f2;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+.code-dark-theme {
+  background-color: #272822;
+}
+
+.code-dark-theme .token.comment,
+.code-dark-theme .token.prolog,
+.code-dark-theme .token.doctype,
+.code-dark-theme .token.cdata {
+  color: slategray;
+}
+
+.code-dark-theme .token.punctuation {
+  color: #f8f8f2;
+}
+
+.code-dark-theme .namespace {
+  opacity: 0.7;
+}
+
+.code-dark-theme .token.property,
+.code-dark-theme .token.tag,
+.code-dark-theme .token.constant,
+.code-dark-theme .token.symbol,
+.code-dark-theme .token.deleted {
+  color: #f92672;
+}
+
+.code-dark-theme .token.boolean,
+.code-dark-theme .token.number {
+  color: #ae81ff;
+}
+
+.code-dark-theme .token.selector,
+.code-dark-theme .token.attr-name,
+.code-dark-theme .token.string,
+.code-dark-theme .token.char,
+.code-dark-theme .token.builtin,
+.code-dark-theme .token.inserted {
+  color: #a6e22e;
+}
+
+.code-dark-theme .token.operator,
+.code-dark-theme .token.entity,
+.code-dark-theme .token.url,
+.code-dark-theme .language-css .token.string,
+.code-dark-theme .style .token.string,
+.code-dark-theme .token.variable {
+  color: #f8f8f2;
+}
+
+.code-dark-theme .token.atrule,
+.code-dark-theme .token.attr-value,
+.code-dark-theme .token.function,
+.code-dark-theme .token.class-name {
+  color: #e6db74;
+}
+
+.code-dark-theme .token.keyword {
+  color: #66d9ef;
+}
+
+.code-dark-theme .token.regex,
+.code-dark-theme .token.important {
+  color: #fd971f;
+}
+
+.code-dark-theme .token.important,
+.code-dark-theme .token.bold {
+  font-weight: bold;
+}
+.code-dark-theme .token.italic {
+  font-style: italic;
+}
+
+.code-dark-theme .token.entity {
+  cursor: help;
+}
+
+.code-dark-theme .command,
+.code-dark-theme .output {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: block;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.code .prompt {
+  text-indent: 1em;
+  position: relative;
+}
+
+.code .prompt:before {
+  position: absolute;
+  top: 0;
+  left: 1em;
+  content: '$';
+}
+
+.code .prompt.active:after {
+  content: ' _';
+}
+.code .prompt.empty:after {
+  content: '_';
+}
+
+.code .prompt.active:after,
+.code .prompt.empty:after,
+.blinking-cursor {
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite;
+}
+
+@keyframes "blink" {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
+
+@-moz-keyframes blink {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
+
+@-webkit-keyframes "blink" {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
+
+@-ms-keyframes "blink" {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
+
+@-o-keyframes "blink" {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
