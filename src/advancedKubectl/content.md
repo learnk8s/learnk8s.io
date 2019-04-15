@@ -6,13 +6,13 @@ The goal of this article is not only to make your daily work with Kubernetes mor
 
 ## Contents
 
-- [**Introduction: what is kubectl?**](#introduction-what-is-kubectl-)
-- [**1. Save typing with command completion**](#1-save-typing-with-command-completion)
-- [**2. Quickly look up resource specifications**](#2-quickly-look-up-resource-specifications)
-- [**3. Use the custom columns output format**](#3-use-the-custom-columns-output-format)
-- [**4. Switch between clusters and namespaces with ease**](#4-switch-between-clusters-and-namespaces-with-ease)
-- [**5. Save typing with auto-generated aliases**](#5-save-typing-with-auto-generated-aliases)
-- [**6. Extend kubectl with plugins**](#6-extend-kubectl-with-plugins)
+- [Introduction: what is kubectl?](#introduction-what-is-kubectl-)
+- [1. Save typing with command completion](#1-save-typing-with-command-completion)
+- [2. Quickly look up resource specifications](#2-quickly-look-up-resource-specifications)
+- [3. Use the custom columns output format](#3-use-the-custom-columns-output-format)
+- [4. Switch between clusters and namespaces with ease](#4-switch-between-clusters-and-namespaces-with-ease)
+- [5. Save typing with auto-generated aliases](#5-save-typing-with-auto-generated-aliases)
+- [6. Extend kubectl with plugins](#6-extend-kubectl-with-plugins)
 
 ## Introduction: what is kubectl?
 
@@ -34,7 +34,7 @@ Let's consider an example.
 
 Imagine you want to create a [ReplicaSet](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#replicaset-v1-apps) resource. To do so, you would define the ReplicaSet in a file named `replicaset.yaml` file, and then run the following command:
 
-```bash
+```terminal|title=bash
 kubectl create -f replicaset.yaml
 ```
 
@@ -161,7 +161,7 @@ Command completion allows you to auto-complete individual parts of kubectl comma
 
 Here you can see kubectl command completion in action:
 
-![](asciicast-completion.gif)
+![Terminal autocompletion](asciicast-completion.gif)
 
 Command completion is available for the [**Bash**](https://www.gnu.org/software/bash/) and [**Zsh**](https://www.zsh.org/) shells.
 
@@ -173,8 +173,9 @@ In general, command completion is a shell feature that works by the means of a *
 
 Kubectl can automatically generate and print out the completion scripts for Bash and Zsh with the following commands:
 
-```
+```terminal|title=bash|command=1,3
 kubectl completion bash
+# or
 kubectl completion zsh
 ```
 
@@ -182,9 +183,9 @@ In theory, sourcing the output of this command in the appropriate shell enables 
 
 However, in practice, the details differ for Bash (including a difference between Linux and macOS) and Zsh. The following sections explain all these cases:
 
-- [**Set up command completion for Bash on Linux**](#bash-on-linux)
-- [**Set up command completion for Bash on macOS**](#bash-on-macos)
-- [**Set up command completion for Zsh**](#zsh)
+- [Set up command completion for Bash on Linux](#bash-on-linux)
+- [Set up command completion for Bash on macOS](#bash-on-macos)
+- [Set up command completion for Zsh](#zsh)
 
 ### Bash on Linux
 
@@ -192,20 +193,21 @@ The completion script for Bash depends on the [**bash-completion**](https://gith
 
 You can install bash-completion with [various package managers](https://github.com/scop/bash-completion#installation). For example:
 
-```
+```terminal|command=1,3|title=bash
 sudo apt-get install bash-completion
+# or
 yum install bash-completion
 ```
 
 You can test if bash-completion is correctly installed with the following command:
 
-```bash
+```terminal|title=bash
 type _init_completion
 ```
 
 If this outputs the code of shell function, then bash-completion has been correctly installed. If the command outputs a `not found` error, you have to add the following line to your `~/.bashrc` file:
 
-```bash
+```terminal|title=bash
 source /usr/share/bash-completion/bash_completion
 ```
 
@@ -215,13 +217,13 @@ Once bash-completion is installed, you have to set things up so that the kubectl
 
 One way to do this is to add the following line to your `~/.bashrc` file:
 
-```bash
+```bash|title=.bashrc
 source <(kubectl completion bash)
 ```
 
 Another possibility is to add the kubectl completion script to the `/etc/bash_completion.d` directory (create it, if it doesn't exist):
 
-```bash
+```terminal|title=bash
 kubectl completion bash >/etc/bash_completion.d/kubectl
 ```
 
@@ -247,7 +249,7 @@ The completion script for Bash depends on the [**bash-completion**](https://gith
 
 You can install bash-completion with [Homebrew](https://brew.sh):
 
-```bash
+```terminal|title=bash
 brew install bash-completion@2
 ```
 
@@ -255,7 +257,7 @@ brew install bash-completion@2
 
 The output of the `brew install` command includes a "Caveats" section with instructions to add the following lines to your `~/.bash_profile` file:
 
-```bash
+```bash|title=.bash_profile
 export BASH_COMPLETION_COMPAT_DIR=/usr/local/etc/bash_completion.d
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 ```
@@ -264,7 +266,7 @@ You have to do this in order to complete the installation of bash-completion. Ho
 
 After reloading your shell, you can test if bash-completion is correctly installed with the following command:
 
-```bash
+```terminal|title=bash
 type _init_completion
 ```
 
@@ -274,13 +276,13 @@ Now, you have to set things up so that the kubectl **completion script** gets so
 
 One way to do this is to add the following line to your `~/.bashrc` file:
 
-```bash
+```bash|title=.bashrc
 source <(kubectl completion bash)
 ```
 
 Another possibility is to add the kubectl completion script to the `/usr/local/etc/bash_completion.d` directory:
 
-```bash
+```terminal|title=bash
 kubectl completion bash >/usr/local/etc/bash_completion.d/kubectl
 ```
 
@@ -300,13 +302,13 @@ The completion script for Zsh doesn't have any dependencies. So, all you have to
 
 You can do this by adding the following line to your `~/.zshrc` file:
 
-```bash
+```bash|title=.zshrc
 source <(kubectl completion zsh)
 ```
 
 In case you get a `command not found: compdef` error after reloading your shell, you have to enable the `compdef` builtin, which you can do by adding the following to the beginning of your `~/.zshrc` file:
 
-```bash
+```bash|title=.zshrc
 autoload -Uz compinit
 compinit
 ```
@@ -319,7 +321,7 @@ However, switching to a web browser each time you need to look up something is t
 
 The usage of `kubectl explain` is as follows:
 
-```bash
+```terminal|title=bash
 kubectl explain resource[.field]...
 ```
 
@@ -327,17 +329,17 @@ The command outputs the specification of the requested resource or field. The in
 
 Here you can see `kubectl explain` in action:
 
-![](asciicast-kubectl-explain.cast)
+![Kubectl explain](asciicast-kubectl-explain.cast)
 
 By default, `kubectl explain` displays only a single level of fields. You can display the **entire tree** of fields with the `--recursive` flag:
 
-```bash
+```terminal|title=bash
 kubectl explain deployment.spec --recursive
 ```
 
 In case you're not sure about which **resource names** you can use with `kubectl explain`, you can display all of them with the following command:
 
-```bash
+```terminal|title=bash
 kubectl api-resources
 ```
 
@@ -345,9 +347,11 @@ This command displays the resource names in their plural form (e.g. `deployments
 
 For example, all of the following commands are equivalent:
 
-```bash
+```terminal|title=bash|command=1,3,5
 kubectl explain deployments.spec
+# or
 kubectl explain deployment.spec
+# or
 kubectl explain deploy.spec
 ```
 
@@ -355,8 +359,8 @@ kubectl explain deploy.spec
 
 The default output format of the `kubectl get` command (for _reading_ resources) is as follows:
 
-```bash
-$ kubectl get pods
+```terminal|command=1|title=bash
+kubectl get pods
 NAME                      READY   STATUS    RESTARTS   AGE
 engine-544b6b6467-22qr6   1/1     Running   0          78d
 engine-544b6b6467-lw5t8   1/1     Running   0          78d
@@ -381,8 +385,8 @@ You have to define each output column as a `<header>:<jsonpath>` pair:
 
 Let's look at a simple example:
 
-```bash
-$ kubectl get pods -o custom-columns='NAME:metadata.name'
+```terminal|command=1|title=bash
+kubectl get pods -o custom-columns='NAME:metadata.name'
 NAME
 engine-544b6b6467-22qr6
 engine-544b6b6467-lw5t8
@@ -396,8 +400,9 @@ The expression selecting the Pod names is `metadata.name`. The reason for this i
 
 Now, imagine you want to add an additonal column to the output, for example, showing the node that each Pod is running on. To do so, you can just add an appropriate column specification to the custom columns option:
 
-```bash
-$ kubectl get pods -o custom-columns='NAME:metadata.name,NODE:spec.nodeName'
+```terminal|command=1-2|title=bash
+kubectl get pods \
+  -o custom-columns='NAME:metadata.name,NODE:spec.nodeName'
 NAME                      NODE
 engine-544b6b6467-22qr6   ip-10-0-80-67.ec2.internal
 engine-544b6b6467-lw5t8   ip-10-0-36-80.ec2.internal
@@ -421,7 +426,7 @@ JSONPath is a language to extract data from JSON documents (it is similar to XPa
 
 However, with `kubectl explain`, only a subset of the JSONPath capabilities is supported. The following summarises these supported features with example usages:
 
-```bash
+```terminal|title=bash|command=2,5,8,11,14
 # Select all elements of a list
 kubectl get pods -o custom-columns='DATA:spec.containers[*].image'
 
@@ -450,8 +455,9 @@ The possibilities for using the custom columns output format are endless, as you
 
 #### Display container images of Pods
 
-```bash
-$ kubectl get pods -o custom-columns='NAME:metadata.name,IMAGES:spec.containers[*].image'
+```terminal|command=1-2|title=bash
+kubectl get pods \
+  -o custom-columns='NAME:metadata.name,IMAGES:spec.containers[*].image'
 NAME                       IMAGES
 engine-544b6b6467-22qr6    rabbitmq:3.7.8-management,nginx
 engine-544b6b6467-lw5t8    rabbitmq:3.7.8-management,nginx
@@ -465,8 +471,9 @@ This command displays the names of all the container images of each Pod.
 
 #### Display availability zones of nodes
 
-```bash
-$ kubectl get nodes -o custom-columns='NAME:metadata.name,ZONE:metadata.labels.failure-domain\.beta\.kubernetes\.io/zone'
+```terminal|command=1-2|title=bash
+kubectl get nodes \
+  -o custom-columns='NAME:metadata.name,ZONE:metadata.labels.failure-domain\.beta\.kubernetes\.io/zone'
 NAME                          ZONE
 ip-10-0-118-34.ec2.internal   us-east-1b
 ip-10-0-36-80.ec2.internal    us-east-1a
@@ -481,8 +488,10 @@ The availability zones for each node are obtained through the special [`failure-
 
 Labels are not part of the Kubernetes resource specifications, so you can't find the above label in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/). However, you can see it (as well as all other labels), if you output the nodes as YAML or JSON:
 
-```bash
+```terminal|title=bash|command=2,4
+# output as yaml
 kubectl get nodes -o yaml
+#output as json
 kubectl get nodes -o json
 ```
 
@@ -548,7 +557,7 @@ This tool provides the `kubectx` and `kubens` commands that allow you to change 
 
 Here you can see these two commands in action:
 
-![](asciicast-kubeconfig-kubectx.gif)
+![Kubectx](asciicast-kubeconfig-kubectx.gif)
 
 > Under the hood, these commands just edit the kubeconfig file as explained in the previous section.
 
@@ -571,13 +580,13 @@ However, using these commands directly is not very convenient, because they are 
 
 I created a set of aliases based on these commands that provide a similar functionality as kubectx. Here you can see them in action:
 
-![](asciicast-kubeconfig-aliases.gif)
+![Kubeconfig aliases](asciicast-kubeconfig-aliases.gif)
 
 > Note that the aliases use [**fzf**](https://github.com/junegunn/fzf) to provide an interactive fuzzy search interface (like the interactive mode of kubectx). That means, you need to [install fzf](https://github.com/junegunn/fzf#installation) in order to use these aliases.
 
 Here are the definitions of the aliases:
 
-```bash
+```bash|title=.bashrc
 # Get current context
 alias krc='kubectl config current-context'
 # List all contexts
@@ -612,13 +621,11 @@ Internally, the plugins build on the aliases from the previous section.
 
 Here you can see the plugins in action:
 
-![](asciicast-kubeconfig-plugins.gif)
+![kubectl plugins](asciicast-kubeconfig-plugins.gif)
 
 > Note that the plugins use [**fzf**](https://github.com/junegunn/fzf) to provide an interactive fuzzy search interface. That means, you need to [install fzf](https://github.com/junegunn/fzf#installation) in order to use these plugins.
 
 To **install the plugins**, you just have to download the shell scripts named [`kubectl-ctx`](https://raw.githubusercontent.com/weibeld/kubectl-ctx/master/kubectl-ctx) and [`kubectl-ns`](https://raw.githubusercontent.com/weibeld/kubectl-ns/master/kubectl-ns) to _any_ directory in your `PATH` and make them executable (for example, with `chmod +x`). That's it! Immediately after that, you should be able to use `kubectl ctx` and `kubectl ns`!
-
-<!-- ] -->
 
 ## 5. Save typing with auto-generated aliases
 
@@ -809,9 +816,7 @@ In general, once you get the hang of this scheme, you can intuitively deduce the
 
 To install kubectl-aliases, you just have to download the [`.kubectl-aliases`](https://raw.githubusercontent.com/ahmetb/kubectl-aliases/master/.kubectl_aliases) file from GitHub and source it in your `~/.bashrc` or `~/.zshrc` file:
 
-<!-- ] -->
-
-```bash
+```bash|title=.bashrc
 source ~/.kubectl_aliases
 ```
 
@@ -821,7 +826,7 @@ That's it! After reloading your shell, you should be able to use all the 800 kub
 
 As you have seen, you often append further words to an alias on the command-line. For example:
 
-```bash
+```terminal|title=bash
 kgpooyaml test-pod-d4b77b989
 ```
 
@@ -851,9 +856,7 @@ First of all, complete-alias depends on [bash-completion](https://github.com/sco
 
 To install complete-alias, you just have to download the [`bash_completion.sh`](https://raw.githubusercontent.com/cykerway/complete-alias/master/bash_completion.sh) script from the [GitHub repository](https://github.com/cykerway/complete-alias), and source it in your `~/.bashrc` file:
 
-<!-- ] -->
-
-```bash
+```bash|title=.bashrc
 source ~/bash_completion.sh
 ```
 
@@ -865,11 +868,9 @@ Technically, complete-alias provides the `_complete_alias` shell function. This 
 
 To hook this up with a specific alias, you have to use the [`complete`](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html#Programmable-Completion-Builtins) Bash builtin to set `_complete_alias` as the _completion function_ of the alias.
 
-<!-- ] -->
-
 As an example, let's take the `k` alias that stands for the `kubectl` command. To set `_complete_alias` as the completion function for this alias, you have to execute the following command:
 
-```bash
+```terminal|title=bash
 complete -F _complete_alias k
 ```
 
@@ -877,7 +878,7 @@ The effect of this is that whenever you auto-complete on the `k` alias, the `_co
 
 As another example, let's take the `kg` alias that stands for `kubectl get`:
 
-```bash
+```terminal|title=bash
 complete -F _complete_alias kg
 ```
 
@@ -887,7 +888,7 @@ Similarly, the effect of this is that when you auto-complete on `kg`, you get th
 
 Consequently, to enable completion for _all_ the kubectl aliases, you just have to run the above command for each of them. The following snippet does exactly that (assuming you installed kubectl-aliases to `~/.kubectl-aliases`):
 
-```bash
+```bash|title=.bashrc
 for _a in $(sed '/^alias /!d;s/^alias //;s/=.*$//' ~/.kubectl_aliases); do
   complete -F _complete_alias "$_a"
 done
@@ -901,7 +902,7 @@ Since [version 1.12](https://github.com/kubernetes/kubernetes/blob/master/CHANGE
 
 Here is an example of a kubectl plugin that can be invoked as `kubectl hello`:
 
-![](asciicast-plugins-hello.cast)
+![Hello World kubectl plugin](asciicast-plugins-hello.cast)
 
 > In case you're familiar with it, the kubectl plugin mechanisms closely follows the design of the [Git plugin mechanism](https://adamcod.es/2013/07/12/how-to-create-git-plugin.html).
 
@@ -917,7 +918,7 @@ To [install a plugin](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-pl
 
 You can use the following command to list all the plugins that are currently installed on your system:
 
-```bash
+```terminal|title=bash
 kubectl plugin list
 ```
 
@@ -931,13 +932,13 @@ The [**krew**](https://github.com/GoogleContainerTools/krew) project aims at pro
 
 Krew is centred around an [index](https://github.com/GoogleContainerTools/krew-index) of kubectl plugins from which you can choose and install. Here you can see krew in action:
 
-![](asciicast-plugins-krew.cast)
+![Krew plugin](asciicast-plugins-krew.cast)
 
 As you can see, krew itself is a kubectl plugin. That means, **installing krew** works in essence like installing any other kubectl plugin. You can find the detailed installation instructions for krew on the [GitHub page](https://github.com/GoogleContainerTools/krew/#installation).
 
 The most important krew commands are as follows:
 
-```bash
+```terminal|title=bash|command=2,4,6,8,10,12
 # Search the krew index (with an optional search query)
 kubectl krew search [<query>]
 # Display information about a plugin
@@ -974,7 +975,7 @@ Let's create an example plugin right now. In a [previous section](#3-use-the-cus
 
 To do so, just create a file named `kubectl-img` with the following content:
 
-```bash
+```bash|title=kubectl-img
 #!/bin/bash
 kubectl get pods -o custom-columns='NAME:metadata.name,IMAGES:spec.containers[*].image'
 ```

@@ -21,6 +21,7 @@ This article contains a series of tips and tricks to help you boost your kubectl
 The goal of this article is not only to make your daily work with Kubernetes more efficient but also more enjoyable!`,
   openGraphImage: Image({ url: 'src/advancedKubectl/magic.jpg', description: 'Advanced kubectl usage' }),
   publishedDate: '2019-03-27',
+  lastModifiedDate: '2019-04-15',
   previewImage: Image({ url: 'src/advancedKubectl/magic.jpg', description: 'Advanced kubectl usage' }),
   author: {
     fullName: 'Daniel Weibel',
@@ -47,6 +48,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       authorAvatar={currentNode.payload.author.avatar}
       authorLink={currentNode.payload.author.link}
       publishedDate={currentNode.payload.publishedDate}
+      lastUpdated={currentNode.payload.lastModifiedDate}
       cssBundle={CSSBundle({
         paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
         styles: css,
