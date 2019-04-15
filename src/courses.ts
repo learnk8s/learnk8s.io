@@ -166,7 +166,7 @@ export const Courses: KubernetesCourse[] = [
         details: AdvancedDetails,
         location: Venues.Singapore,
         offer: {
-          price: 3400,
+          price: 2550,
           currency: CurrencyCode.SGD,
           locale: 'en-SG',
         },
@@ -285,7 +285,7 @@ export const Courses: KubernetesCourse[] = [
         details: AdvancedDetails,
         location: Venues.Singapore,
         offer: {
-          price: 3400,
+          price: 2550,
           currency: CurrencyCode.SGD,
           locale: 'en-SG',
         },
@@ -387,7 +387,7 @@ export const Courses: KubernetesCourse[] = [
         details: AdvancedDetails,
         location: Venues.Singapore,
         offer: {
-          price: 3400,
+          price: 2550,
           currency: CurrencyCode.SGD,
           locale: 'en-SG',
         },
