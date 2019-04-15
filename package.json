@@ -6,7 +6,7 @@
     "minify": "for i in `find _site -name \"*.html\" -type f`; do inline-source --root ./_site $i $i; done",
     "build": "npx ts-node --files src/index.tsx && cp favicon.ico _site",
     "svgo": "npx ts-node src/svgo.ts",
-    "fmt": "prettier 'src/**/*.{ts,tsx,md}' --list-different",
+    "fmt": "prettier 'src/**/*.{ts,tsx}' --list-different",
     "test": "ts-node --files node_modules/tape/bin/tape 'src/**/test.ts' 'src/**/*.test.ts' 'src/**/*.integration.ts' 'src/**/integration.ts'",
     "start": "http-serve _site -p 4000"
   },
