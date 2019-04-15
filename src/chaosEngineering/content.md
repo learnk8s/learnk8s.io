@@ -5253,8 +5253,8 @@ It doesn't matter which node the traffic is coming from; `kube-proxy` knows wher
 
 Let's assume you have a 2 node cluster on GCP:
 
-```bash
-$ kubectl get nodes
+```terminal|command=1|title=bash
+kubectl get nodes
 NAME        STATUS  ROLES   AGE VERSION
 node1       Ready   <none>  17h v1.8.8-gke.0
 node2       Ready   <none>  18h v1.8.8-gke.0
@@ -5262,9 +5262,9 @@ node2       Ready   <none>  18h v1.8.8-gke.0
 
 And you deployed Manabu's application with:
 
-```bash
-$ kubectl create -f https://raw.githubusercontent.com/manabusakai/k8s-hello-world/master/kubernetes/deployment.yml
-$ kubectl create -f https://raw.githubusercontent.com/manabusakai/k8s-hello-world/master/kubernetes/service.yml
+```terminal|command=1,2|title=bash
+kubectl create -f https://raw.githubusercontent.com/manabusakai/k8s-hello-world/master/kubernetes/deployment.yml
+kubectl create -f https://raw.githubusercontent.com/manabusakai/k8s-hello-world/master/kubernetes/service.yml
 ```
 
 The application is simple. It displays the hostname of the current pod in a web page:
@@ -5273,14 +5273,14 @@ The application is simple. It displays the hostname of the current pod in a web 
 
 You should scale the deployments to ten replicas with:
 
-```bash
-$ kubectl scale --replicas 10 deployment/k8s-hello-world
+```terminal|title=bash
+kubectl scale --replicas 10 deployment/k8s-hello-world
 ```
 
 The ten replicas are distributed evenly across the two nodes:
 
-```bash
-$ kubectl get pods
+```terminal|command=1|title=bash
+kubectl get pods
 NAME                              READY STATUS  NODE
 k8s-hello-world-55f48f8c94-7shq5  1/1   Running node1
 k8s-hello-world-55f48f8c94-9w5tj  1/1   Running node1
@@ -5298,8 +5298,8 @@ k8s-hello-world-55f48f8c94-xzvlc  1/1   Running node2
 
 A Service was created to load balance the requests across the ten replicas:
 
-```bash
-$ kubectl get services
+```terminal|command=1|title=bash
+kubectl get services
 NAME              TYPE      CLUSTER-IP      EXTERNAL-IP PORT(S)         AGE
 k8s-hello-world   NodePort  100.69.211.31   <none>      8080:30000/TCP  3h
 kubernetes        ClusterIP 100.64.0.1      <none>      443/TCP         18h
@@ -5315,8 +5315,8 @@ The service is exposed to the outside world using `NodePort` on port 30000. In o
 
 You should try to request the node on port 30000:
 
-```bash
-$ curl <node ip>:30000
+```terminal|title=bash
+curl <node ip>:30000
 ```
 
 > Please note that you can retrieve the node's IP with `kubectl get nodes -o wide`
@@ -5364,16 +5364,15 @@ In a separate shell, you should monitor the application for time and dropped req
 
 You could write a loop that every second prints the time and request the application:
 
-```bash
-$ while sleep 1; do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello; done
-```
-
-In this case, you have the time in the first column and the response from the pod in the other:
-
-```bash
+```terminal|title=bash|command=1-3
+while sleep 1;
+  do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello;
+done
 10:14:41 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
 10:14:43 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
 ```
+
+In this case, you have the time in the first column and the response from the pod in the other.
 
 > The first call was made to the _k8s-hello-world-55f48f8c94-vrkr9_ pod at 10:14 and 41 seconds.
 
@@ -5393,7 +5392,10 @@ So you could log in into one of the node servers and delete the iptables rules w
 
 If everything went according to plan you should experience something similar to this:
 
-```bash
+```terminal|title=bash|command=1-3
+while sleep 1;
+  do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello;
+done
 10:14:41 Hello world! via k8s-hello-world-55f48f8c94-xzvlc
 10:14:43 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
 # this is when `iptables -F` was issued
@@ -5409,7 +5411,10 @@ _Why is everything back to normal after 27 seconds?_
 
 Perhaps it's just a coincidence. Let's flush the rules again:
 
-```bash
+```terminal|title=bash|command=1-3
+while sleep 1;
+  do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello;
+done
 11:29:55 Hello world! via k8s-hello-world-55f48f8c94-xzvlc
 11:29:56 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
 # this is when `iptables -F` was issued
@@ -5427,13 +5432,16 @@ Maybe you could investigate what happens to the node in this 30 seconds.
 
 In another terminal, you should write a loop to make requests to the application every second. But this time, you should request the node and not the load balancer:
 
-```bash
-$ while sleep 1; printf %"s\n" $(curl -sS http://<ip of the node>:30000); done
+```terminal|title=bash
+while sleep 1; printf %"s\n" $(curl -sS http://<ip of the node>:30000); done
 ```
 
 And let's drop the iptables rules. The log from the previous command is:
 
-```bash
+```terminal|title=bash|command=1-3
+while sleep 1;
+  do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello;
+done
 Hello world! via k8s-hello-world-55f48f8c94-xzvlc
 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
 # this is when `iptables -F` was issued
@@ -5455,8 +5463,8 @@ _Who is putting the iptables rules back?_
 
 Before you drop the iptables rules, you can inspect them with:
 
-```bash
-$ iptables -L
+```terminal|title=bash
+iptables -L
 ```
 
 Soon after you drop the rules, you should keep executing `iptables -F` and notice that the rules are back in a few seconds!
@@ -5505,14 +5513,14 @@ If you inspect the kubelet process in the node, you should be able to see the ku
 
 Running a simple `ls` reveals the truth:
 
-```bash
-$ ls -l /etc/kubernetes/manifests
+```terminal|title=bash|command=1
+ls -l /etc/kubernetes/manifests
 total 4 -rw-r--r-- 1 root root 1398 Feb 24 08:08 kube-proxy.manifest
 ```
 
 And a quick `cat` of `kube-proxy.manifest` reveals the content:
 
-```yaml
+```yaml|title=kube-proxy.manifest|highlight=22
 apiVersion: v1
 kind: Pod
 metadata:

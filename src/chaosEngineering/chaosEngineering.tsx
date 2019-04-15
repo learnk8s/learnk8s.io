@@ -20,7 +20,7 @@ export const Details = {
     description: 'Chaos engineering',
   }),
   publishedDate: '2018-05-15',
-  lastModifiedDate: '2019-03-19',
+  lastModifiedDate: '2019-04-15',
   previewImage: Image({
     url: 'src/chaosEngineering/chaos-engineering-kubernetes.png',
     description: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1',
