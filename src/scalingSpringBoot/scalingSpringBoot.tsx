@@ -16,6 +16,7 @@ export const Details = {
   description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
   openGraphImage: Image({ url: 'src/scalingSpringBoot/autoscaling.png', description: 'Containers' }),
   publishedDate: '2018-07-11',
+  lastModifiedDate: '2019-04-15',
   previewImage: Image({
     url: 'src/scalingSpringBoot/autoscaling.png',
     description: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
@@ -49,6 +50,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         styles: css,
       })}
       publishedDate={currentNode.payload.publishedDate}
+      lastUpdated={currentNode.payload.lastModifiedDate}
     >
       <JsonLd<BlogPosting>
         item={{

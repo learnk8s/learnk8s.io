@@ -1630,7 +1630,7 @@ And even better, Spring Boot has excellent integration with JMS so you can get u
 
 In fact, the following short class encapsulate the logic used to interact with the queue:
 
-```java
+```java|title=QueueService.java
 @Component
 public class QueueService implements MessageListener {
   private static final Logger LOGGER = LoggerFactory.getLogger(QueueService.class);
@@ -1671,7 +1671,7 @@ The last piece of the puzzle is instructing Spring Boot to use the class.
 
 You can process messages in the background by [registering the listener in the Spring Boot application](https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#jms-annotated-programmatic-registration) like so:
 
-```java
+```java|title=SpringBootApplication.java
 @SpringBootApplication
 @EnableJms
 public class SpringBootApplication implements JmsListenerConfigurer {
@@ -1731,7 +1731,7 @@ You can find the instructions on how to install `minikube` and `kubectl` from th
 
 You should start a cluster with 8GB of RAM and some extra configuration:
 
-```bash
+```terminal|command=1-5|title=bash
 minikube start \
   --memory 8096 \
   --extra-config=controller-manager.horizontal-pod-autoscaler-upscale-delay=1m \
@@ -1743,7 +1743,7 @@ minikube start \
 
 You should verify that the installation was successful with:
 
-```bash
+```terminal|title=bash
 kubectl get all
 ```
 
@@ -1783,7 +1783,7 @@ In fact, you will create the container image directly in `minikube`.
 
 First, connect your Docker client to `minikube` by following the instruction printed by this command:
 
-```bash
+```terminal|title=bash
 minikube docker-env
 ```
 
@@ -1791,13 +1791,13 @@ minikube docker-env
 
 and from the root of the project build the container image with:
 
-```bash
+```terminal|title=bash
 docker build -t spring-k8s-hpa .
 ```
 
 You can verify that the image was built and is ready to run with:
 
-```bash
+```terminal|title=bash
 docker images | grep spring
 ```
 
@@ -2083,7 +2083,7 @@ Let's start with ActiveMQ.
 
 You should create a `activemq-deployment.yaml` file with the following content:
 
-```yaml
+```yaml|title=activemq-deployment.yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -2115,7 +2115,7 @@ The template is verbose but straightforward to read:
 
 Create a `activemq-service.yaml` file with the following content:
 
-```yaml
+```yaml|title=activemq-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -2138,14 +2138,14 @@ The yaml reads:
 
 You can create the resources with:
 
-```bash
+```terminal|command=1,2|title=bash
 kubectl create -f activemq-deployment.yaml
 kubectl create -f activemq-service.yaml
 ```
 
 You can verify that one instance of the database is running with:
 
-```bash
+```terminal|title=bash
 kubectl get pods -l=app=queue
 ```
 
@@ -2153,7 +2153,7 @@ kubectl get pods -l=app=queue
 
 Create a `fe-deployment.yaml` file with the following content:
 
-```yaml
+```yaml|title=fe-deployment.yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -2198,7 +2198,7 @@ There're some new fields, though:
 
 Create a `fe-service.yaml` file with the following content:
 
-```yaml
+```yaml|title=fe-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -2215,14 +2215,14 @@ spec:
 
 You can create the resources with:
 
-```bash
+```terminal|command=1,2|title=bash
 kubectl create -f fe-deployment.yaml
 kubectl create -f fe-service.yaml
 ```
 
 You can verify that one instance of the front-end application is running with:
 
-```bash
+```terminal|title=bash
 kubectl get pods -l=app=fe
 ```
 
@@ -2230,7 +2230,7 @@ kubectl get pods -l=app=fe
 
 Create a `backend-deployment.yaml` file with the following content:
 
-```yaml
+```yaml|title=backend-deployment.yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -2270,7 +2270,7 @@ spec:
 
 Create a `backend-service.yaml` file with the following content:
 
-```yaml
+```yaml|title=backend-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -2287,14 +2287,14 @@ spec:
 
 You can create the resources with:
 
-```bash
+```terminal|command=1,2|title=bash
 kubectl create -f backend-deployment.yaml
 kubectl create -f backend-service.yaml
 ```
 
 You can verify that one instance of the backend is running with:
 
-```bash
+```terminal|title=bash
 kubectl get pods -l=app=backend
 ```
 
@@ -2304,13 +2304,13 @@ _Does it really work, though?_
 
 You can visit the application in your browser with the following command:
 
-```bash
+```terminal|title=bash
 minikube service backend
 ```
 
 and
 
-```bash
+```terminal|title=bash
 minikube service frontend
 ```
 
@@ -2341,13 +2341,13 @@ Let's start with the basics first.
 
 You can scale the backend to three instances with:
 
-```bash
+```terminal|title=bash
 kubectl scale --replicas=5 deployment/backend
 ```
 
 You can verify that Kubernetes created five more instances with:
 
-```bash
+```terminal|title=bash
 kubectl get pods
 ```
 
@@ -2355,7 +2355,7 @@ And the application can process five times more messages.
 
 Once the workers drained the queue, you can scale down with:
 
-```bash
+```terminal|title=bash
 kubectl scale --replicas=1 deployment/backend
 ```
 
@@ -2385,7 +2385,7 @@ The application has a `/metrics` endpoint to expose the number of messages in th
 
 If you try to visit that page you'll notice the following content:
 
-```
+```title=/metrics
 # HELP messages Number of messages in the queue
 # TYPE messages gauge
 messages 0
@@ -2413,13 +2413,13 @@ All the files needed to install the Custom Metrics API are conveniently packaged
 
 You should download the content of that repository and change the current directory to be in the `monitoring` folder of that project.
 
-```bash
+```terminal|title=bash
 cd spring-boot-k8s-hpa/monitoring
 ```
 
 From there you can create the Custom Metrics API with:
 
-```bash
+```terminal|title=bash|command=1,2,3,4
 kubectl create -f ./metrics-server
 kubectl create -f ./namespaces.yaml
 kubectl create -f ./prometheus
@@ -2428,7 +2428,7 @@ kubectl create -f ./custom-metrics-api
 
 You should wait until the following command returns a list of custom metrics:
 
-```bash
+```terminal|title=bash
 kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1" | jq .
 ```
 
@@ -2438,7 +2438,7 @@ _You're ready to consume metrics._
 
 In fact, you should already find a custom metric for the number of messages in the queue:
 
-```bash
+```terminal|title=bash
 kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespaces/default/pods/*/messages" | jq .
 ```
 
@@ -2454,7 +2454,7 @@ You will need one of those to scale your instances automatically.
 
 You should create a `hpa.yaml` file with the following content:
 
-```bash
+```yaml|title=hpa.yaml
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -2481,13 +2481,13 @@ The file is cryptic, let me translate it for you:
 
 You can create the resource with:
 
-```bash
+```terminal|title=bash
 kubectl create -f hpa.yaml
 ```
 
 After you submitted the autoscaler, you should notice that the number of replicas for the backend is two:
 
-```bash
+```terminal|title=bash
 kubectl get pods
 ```
 
@@ -2495,7 +2495,7 @@ It makes sense since you asked the autoscaler always to have at least two replic
 
 You can inspect the conditions that triggered the autoscaler and the events generated as a consequence with:
 
-```bash
+```terminal|title=bash
 kubectl describe hpa
 ```
 
@@ -2511,7 +2511,7 @@ Head over to the front-end application and start adding a lot of messages.
 
 As you add messages, monitor the status of the Horizontal Pod Autoscaler with:
 
-```bash
+```terminal|title=bash
 kubectl describe hpa
 ```
 
