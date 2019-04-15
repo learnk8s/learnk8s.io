@@ -22,7 +22,7 @@ When it comes to API gateway in Kubernetes, you have three popular choices to se
 
 ## Option #1 — The king of API Gateways: Kong
 
-But if the product which you're building is primarily an API, you might be interested in what the [Kong Ingress](https://konghq.com/blog/kong-kubernetes-ingress-controller/) has to offer.
+If you're building an API, you might be interested in what the [Kong Ingress](https://konghq.com/blog/kong-kubernetes-ingress-controller/) has to offer.
 
 **Kong is an API gateway built on top of Nginx.**
 
@@ -184,6 +184,8 @@ spec:
 
 Ambassador has an excellent tutorial about rate limiting, so if you are interested in using that feature, you can head over to [Ambassador's official documentation](https://www.getambassador.io/user-guide/rate-limiting-tutorial/).
 
+You can extend Ambassador with [custom filters for routing](https://www.getambassador.io/docs/guides/filter-dev-guide), but it doesn't offer a rich plugin mechanism as Kong.
+
 ## Option 3 — Gloo things together
 
 Ambassador is not the only Envoy-powered ingress which can be used as API Gateway.
@@ -271,7 +273,7 @@ Here's a handy recap of the three Ingress controllers:
 
 |                 |                                     Kong                                    |            Ambassador           |                     Gloo                    |
 |:----------------|:---------------------------------------------------------------------------:|:-------------------------------:|:-------------------------------------------:|
-| protocol        |                             http,https,grpc,tcp                             | http,https,grpc,tcp,udp,tcp+ssl |               http,https,grpc               |
+| protocol        |                           http,https,grpc,tcp,udp                           | http,https,grpc,tcp,udp,tcp+ssl |               http,https,grpc               |
 | based on        |                                    Nginx                                    |              Envoy              |                    Envoy                    |
 | resiliency      |     active and passive health check, circuit break, rate limit, retries     |            rate limit           | rate limit, circuit break, retries, caching |
 | state           |     configured in PostgreSQL or Cassandra, state stored in CRDs, Ingress    |             Service             |                     CRDs                    |
@@ -282,8 +284,8 @@ Here's a handy recap of the three Ingress controllers:
 
 _Which one should you use?_
 
-- **If you want a battle-tested API gateway, Kong is still your best option.** It might not be shiniest, but the documentation is, and there’re plenty of resources online.
-- **If you need a flexible API gateway** that can play nicely with new and old infrastructure, you should have a look at **Gloo**. The ability to auto-discover APIs and transform requests is compelling
+- **If you want a battle-tested API gateway, Kong is still your best option.** It might not be shiniest, but the documentation is, and there’re plenty of resources online. It also has the most production mileage than any other gateway.
+- **If you need a flexible API gateway** that can play nicely with new and old infrastructure, you should have a look at **Gloo**. The ability to auto-discover APIs and transform requests is compelling.
 - **If you want the simplicity of setting all the networking in your Services, you should consider Ambassador**. It has excellent tutorials and documentation to get started. Be aware of the YAML indentation as a free string.
 
 ## More options
@@ -302,4 +304,5 @@ _Do you have any recommendation when it comes to API Gateways on Kubernetes?_
 A special thank you goes to [Irakli Natsvlishvili](https://www.linkedin.com/in/irakli/) who offered some invaluable feedback and helped me put together the above table. Also, thanks to:
 
 - Idit Levine and Scott Weiss from [the Solo.io team](https://www.solo.io/) for answering my questions about the Gloo Ingress controller
-- [Daniel Bryant](https://twitter.com/danielbryantuk) from the Datawire who kindly helped me understand Ambassador better
+- [Daniel Bryant](https://twitter.com/danielbryantuk) from Datawire who kindly helped me understand Ambassador better
+- [Marco Palladino](https://www.linkedin.com/in/marcopalladino) from Kong Inc. for offering some detailed feedback about the article
