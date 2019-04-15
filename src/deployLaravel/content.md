@@ -48,7 +48,7 @@ Therefore you can follow this example using either the demo application or just 
 
 To use the demo application clone it in your project's directory.
 
-```bash
+```terminal|command=1,2|title=bash
 cd /to/your/working/directory
 git clone git@github.com:learnk8s/laravel-kubernetes-demo.git .
 ```
@@ -69,7 +69,7 @@ Kubernetes deploys containerised applications, and therefore as a first step, yo
 
 Since this tutorial will be run locally on Minikube, you can just build a local Docker Image from the `Dockerfile` included in the example code.
 
-```bash
+```dockerfile|title=Dockerfile
 FROM composer:1.6.5 as build
 WORKDIR /app
 COPY . /app
@@ -90,14 +90,14 @@ This `Dockerfile` is made of two parts:
 
 Before you can test the Docker image, you will need to build it:
 
-```bash
+```terminal|command=1,2|title=bash
 cd /to/your/project/directory
 docker build -t yourname/laravel-kubernetes-demo .
 ```
 
 Then run the application with:
 
-```bash
+```terminal|command=1-4|title=bash
 docker run -ti \
   -p 8080:80 \
   -e APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY= \
@@ -110,7 +110,7 @@ With this setup, the container is generic and the `APP_KEY` is not hardcoded or 
 
 ## Building a Docker image in minikube
 
-```bash
+```terminal|command=1,2,3|title=bash
 cd /to/your/project/directory
 eval $(minikube docker-env)
 docker build -t yourname/laravel-kubernetes-demo .
@@ -124,13 +124,13 @@ Now that the application's image is built and available in Minikube you can go a
 
 I always start with making sure that `kubectl` is in the correct context. In this case, the context is Minikube. You can quickly switch context as follows:
 
-```bash
+```terminal|title=bash
 kubectl config use-context minikube
 ```
 
 then you can deploy the container image:
 
-```bash
+```terminal|title=bash|command=1-5
 kubectl run laravel-kubernetes-demo \
   --image=yourname/laravel-kubernetes-demo \
   --port=80 \
@@ -146,30 +146,25 @@ Do note that you still need to be logged on to Docker's so that `kubectl` can ch
 
 You can check that a Pod is created for the application by running:
 
-```bash
+```terminal|title=bash|command=1
 kubectl get pods
-```
-
-which should return a similar output to:
-
-```bash
 NAME                                       READY     STATUS    RESTARTS   AGE
 laravel-kubernetes-demo-7dbb9d6b48-q54wp   1/1       Running   0          18m
 ```
 
-You can also use the Minikube GUI dashboard to monitor the cluster.
+You can also use the Minikube GUI dashboard to monitor the pods and cluster.
 
 The GUI also helps with visualising most of the discussed concepts.
 
 To view the dashboard, just run the following:
 
-```bash
+```terminal|title=bash
 minikube dashboard
 ```
 
 or to acquire the dashboard's URL address:
 
-```bash
+```terminal|title=bash
 minikube dashboard --url=true
 ```
 
@@ -410,19 +405,14 @@ And since the Service always has the same IP, you won't need to update anything 
 
 You can create a service with:
 
-```bash
+```terminal|title=bash|command=1
 kubectl expose deployment laravel-kubernetes-demo --type=NodePort --port=80
-```
-
-and provided all went well, you will see a confirmation similar to:
-
-```bash
 service "laravel-kubernetes-demo" exposed
 ```
 
 Running the following command:
 
-```bash
+```terminal|title=bash
 kubectl get services
 ```
 
@@ -432,19 +422,14 @@ A more exciting way to verify this deployment and the service exposure is obviou
 
 To obtain the URL of the application (service), you can use the following command:
 
-```bash
+```terminal|title=bash|command=1
 minikube service --url=true laravel-kubernetes-demo
-```
-
-which will output the IP address and port number similar to:
-
-```bash
 http://192.168.99.101:31399
 ```
 
 or, launch the application directly in the browser:
 
-```bash
+```terminal|title=bash
 minikube service laravel-kubernetes-demo
 ```
 
@@ -665,25 +650,23 @@ Let's scale this deployment to two more instances of the application.
 
 So that you understand where you are at this moment, run the following command to get a list of desired and available Pods:
 
-```bash
+```terminal|title=bash|command=1
 kubectl get deployment
-
 NAME                      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 laravel-kubernetes-demo   1         1         1            1           57m
 ```
 
 The output will be "1" for each. You want to have three available Pods so let's scale this up:
 
-```bash
+```terminal|title=bash|command=1
 kubectl scale --replicas=3 deployment/laravel-kubernetes-demo
 deployment "laravel-kubernetes-demo" scaled
 ```
 
 Done. You have replicated the first Pod to another two, giving you three Pods running this service. Running the `get deployment` command will verify this.
 
-```bash
+```terminal|title=bash|command=1
 kubectl get deployment
-
 NAME                      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 laravel-kubernetes-demo   3         3         3            3           59m
 ```
@@ -700,7 +683,7 @@ In the past, you may have been busy writing more scripts to create more instance
 
 In Kubernetes you can scale to multiple instances in a snap:
 
-```bash
+```terminal|title=bash|command=1
 kubectl scale --replicas=10 deployment/laravel-kubernetes-demo
 deployment "laravel-kubernetes-demo" scaled
 ```
@@ -956,7 +939,7 @@ Meaning that they are not accessible or reachable to and from the world outside.
 
 I have included an `ingress.yaml` file with the source code of this demo application with the following contents:
 
-```yaml
+```yaml|title=ingress.yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -985,7 +968,7 @@ The Ingress resource is useless without an Ingress controller so you will need t
 
 This tutorial uses the Nginx Ingress controller for routing the traffic. Minikube (v0.14 and above) comes with the Nginx setup as an addon which you will need to enable manually:
 
-```bash
+```terminal|title=bash
 minikube addons enable ingress
 ```
 
@@ -993,19 +976,14 @@ minikube addons enable ingress
 
 Once you have enabled the Ingress addon, you can create the Ingress in this way:
 
-```bash
+```terminal|title=bash
 kubectl create -f path-to-your-ingress-file.yaml
 ```
 
 You can verify and obtain the Ingress' information by running the following command:
 
-```bash
+```terminal|title=bash|command=1
 kubectl describe ing laravel-kubernetes-demo-ingress
-```
-
-which outputs something similar to:
-
-```bash
 Name:             laravel-kubernetes-demo-ingress
 Namespace:        default
 Address:          192.168.99.101

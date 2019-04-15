@@ -17,7 +17,7 @@ export const Details = {
   description: `Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I'll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
   openGraphImage: Image({ url: 'src/deployLaravel/laravel_k8s.jpg', description: 'Deploy Laravel on Kubernetes' }),
   publishedDate: '2018-04-25',
-  lastModifiedDate: '2018-09-10',
+  lastModifiedDate: '2019-04-15',
   previewImage: Image({ url: 'src/deployLaravel/laravel_k8s.jpg', description: 'Deploy Laravel the easy way' }),
   author: {
     fullName: 'Keith Mifsud',
