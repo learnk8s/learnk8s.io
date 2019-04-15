@@ -4,7 +4,7 @@
 
 When you start using Kubernetes in different environments, you might see yourself copy-pasting the same YAML resources over and over.
 
-_A better strategy is to create and use dynamic templates as you've done for HTML in web pages — for example._
+_A better strategy is to create and use dynamic templates as you've done for HTML pages — for example._
 
 All the variables that can change are replaced with placeholders.
 
@@ -28,19 +28,53 @@ While there're a lot of tools to template Kubernetes YAML files, Helm caught a l
 
 Helm is a convenient templating engine: it uses the [Go templating engine](https://golang.org/pkg/text/template/) and the [helpers from the Sprig library](https://github.com/Masterminds/sprig).
 
+You can compile and deploy the `pod.yaml` resource above with:
+
+```terminal|title=bash|command=1-3
+helm template . \
+  -x templates/pod.yaml \
+  --set env_name=production
+---
+# Source: helm-chart/templates/pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+    - name: test-container
+      image: k8s.gcr.io/busybox
+      env:
+        - name: ENV
+          value: production
+```
+
 But the reason for such a quick uptake isn't for the templating alone.
 
 **A collection of templated resources in Helm is called a chart.**
 
-Charts are similar to archives, and you can share them with your colleagues or uploaded them to a registry.
+Charts are similar to archives, and you can share them with your colleagues or upload them to a registry.
 
-Charts became such a ubiquitous tool to share collections of YAML files that made Helm even more popular.
+Charts became such a ubiquitous tool to share collections of YAML files and, as a consequence, Helm raised in popularity.
 
 [Have a look at all the available charts on the public registry](github.com/helm/charts/).
 
 > Please note that you can use `helm search <keyword>` to search for a specific chart on the official registry.
 
-Companies started sharing packages internally for their teams, and that led to private registries.
+```terminal|title=bash|command=1
+helm search mysql
+NAME                              DESCRIPTION
+stable/mysql                      Fast, reliable, scalable, and easy to use open-source rel...
+stable/mysqldump                  A Helm chart to help backup MySQL databases using mysqldump
+stable/prometheus-mysql-exporter  A Helm chart for prometheus mysql exporter with cloudsqlp...
+stable/percona                    free, fully compatible, enhanced, open source drop-in rep...
+stable/percona-xtradb-cluster     free, fully compatible, enhanced, open source drop-in rep...
+stable/phpmyadmin                 phpMyAdmin is an mysql administration frontend
+stable/gcloud-sqlproxy            DEPRECATED Google Cloud SQL Proxy
+stable/mariadb                    Fast, reliable, scalable, and easy to use open-source rel...
+```
+
+Companies started sharing packages internally in their teams, and that led to private registries.
 
 You have a public registry with packages contributed by the community and private registry for internal use.
 
@@ -48,17 +82,19 @@ Tools such as [Artifactory](https://www.jfrog.com/confluence/display/RTF/Helm+Ch
 
 > If you wish to host your private registry [Chartmuseum is a solid choice](https://github.com/helm/chartmuseum).
 
-But templating and sharing charts are not the only task that Helm can handle.
+But templating and sharing charts are not the only tasks that Helm can handle.
 
-**Helm is deployed into parts: a client-side tool that is connected to a controller that lives inside your cluster.**
+**Helm is deployed into parts: a client-side binary and a server, which is deployed inside your cluster as a controller.**
 
-Every time you install a chart or upgrade your definitions, the client side tool sends the YAML resources to the controller.
+The server component is usually referred to as the Tiller.
 
-The controller templates the YAML and stores a copy of the resources in a history table.
+Every time you install a chart or upgrade your definitions, the client sends the YAML resources to the Tiller.
+
+The Tiller templates the YAML files and stores a copy of them for future reference.
 
 ```slideshow
 {
-  "description": "Description",
+  "description": "Helm client-server architecture",
   "slides": [
     {
       "image": "28-templating.svg",
@@ -106,7 +142,7 @@ You can roll back when you notice that the current deployment doesn't behave the
 
 Helm helps you manage the lifecycle of your releases.
 
-From creating to updating and deleting charts, Helm makes sure there's always an audit trail, and you can inspect the current and past states.
+From creating to updating and deleting charts, Helm makes sure there's always an audit trail, and you can inspect the current and past state.
 
 To summarise, Helm is:
 
@@ -203,4 +239,4 @@ Still, have questions about Helm and what it can do?
 
 [Let us know in an email](mailto:hello@learnk8s) or [ask us with a tweet](https://twitter.com/learnk8s).
 
-A special thank you goes to [XXXX](xxx) and [XXX](xxx) that reviewed the content of this article.
+A special thank you goes to [Mike Bright](https://mjbright.github.io/) that reviewed the content of this article.
