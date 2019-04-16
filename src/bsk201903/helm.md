@@ -1,4 +1,4 @@
-## Is Helm used just for templating?
+## Is Helm used just for templating Kubernetes YAML files?
 
 > **TL;DR:** Helm is used for templating, sharing charts and managing releases. If you're looking just for templating, you should check out [kustomize](https://github.com/kubernetes-sigs/kustomize).
 
