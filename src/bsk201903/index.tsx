@@ -72,15 +72,15 @@ export const VisualiseYamlDetails = identity<Details>({
 
 export const HelmDetails = identity<Details>({
   type: identity<'bsk-march-04'>('bsk-march-04'),
-  url: '/helm-package-manager',
+  url: '/helm-templating-kubernetes-yaml',
   seoTitle: 'Is Helm used just for templating? ♦︎ Learnk8s',
-  title: 'Is Helm used just for templating?',
+  title: 'Is Helm used just for templating Kubernetes YAML files?',
   description: `Learn how Helm is used for templating, sharing charts and managing releases.`,
   openGraphImage: Image({
     url: 'assets/bsk.png',
     description: 'Bite-sized Kubernetes learning',
   }),
-  publishedDate: '2019-04-25',
+  publishedDate: '2019-04-16',
   previewImage: Image({
     url: 'assets/bsk.png',
     description: 'Bite-sized Kubernetes learning',
