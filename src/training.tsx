@@ -100,7 +100,6 @@ export const Assets = {
   previewState: Image({ url: 'assets/training/state.png', description: 'Managing state with Kubernetes' }),
   previewTemplating: Image({ url: 'assets/training/templating.png', description: 'Templating Kubernetes resources' }),
   previewOptionals: Image({ url: 'assets/training/optionals.png', description: 'Optional modules' }),
-  toggle: Javascript({ script: `(${CreateToggle.toString()})()` }),
 }
 
 export const Details = {

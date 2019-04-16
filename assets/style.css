@@ -157,6 +157,26 @@
   height: 0;
   padding-bottom: 75%;
 }
+.i-rocks {
+  width: 19em;
+  height: 0;
+  padding-bottom: 100%;
+}
+.i-academy {
+  width: 35em;
+  height: 0;
+  padding-bottom: 100%;
+}
+.i-nope {
+  width: 20em;
+  height: 0;
+  padding-bottom: 100%;
+}
+.i-onfire {
+  width: 30em;
+  height: 0;
+  padding-bottom: 100%;
+}
 /* END RATIO */
 
 .reverse-dim {
