@@ -72,11 +72,11 @@ const svgo = new SVGO({
 
 const files = ls([
   'assets/academy/*.svg',
-  'assets/consulting/*.svg',
-  'assets/material/*.svg',
-  'assets/training/*.svg',
-  'assets/contact-us/*.svg',
-  'src/advancedKubectl/*.svg',
+  // 'assets/consulting/*.svg',
+  // 'assets/material/*.svg',
+  // 'assets/training/*.svg',
+  // 'assets/contact-us/*.svg',
+  // 'src/advancedKubectl/*.svg',
 ]).map(svgFileName => {
   const svgContent = cat(svgFileName).toString()
   return svgo.optimize(svgContent).then(svgo => {

@@ -311,9 +311,9 @@ export const Consultation: React.StatelessComponent<{}> = ({ children }) => {
   )
 }
 
-export const ListItem: React.StatelessComponent<{}> = ({ children }) => {
+export const ListItem: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
   return (
-    <li className='mv3 flex justify-center'>
+    <li className={`mv3 flex justify-center ${className || ''}`}>
       <div className='v-top tc'>
         <Img image={Assets.tick} className='w2 h2' />
       </div>
@@ -356,6 +356,13 @@ inlineRenderer.paragraph = text => {
 }
 inlineRenderer.link = (href: string, title: string, text: string) => {
   return `<a href="${href}" className="link underline navy">${text}</a>`
+}
+inlineRenderer.list = (body: string, ordered: boolean) => {
+  const element = ordered ? 'ol' : 'ul'
+  return `<${element}>${body}</${element}>`
+}
+inlineRenderer.listitem = (text: string) => {
+  return `<li class="lh-copy black-70">${text}</li>`
 }
 
 export const InlineMarkdown: React.StatelessComponent<{ content: string }> = ({ content }) => {
