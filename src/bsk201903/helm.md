@@ -55,7 +55,7 @@ But the reason for such a quick uptake isn't for the templating alone.
 
 Charts are similar to archives, and you can share them with your colleagues or upload them to a registry.
 
-Charts became such a ubiquitous tool to share collections of YAML files and, as a consequence, Helm raised in popularity.
+Charts became such a ubiquitous tool to share collections of YAML files and that helped Helm raise in popularity.
 
 [Have a look at all the available charts on the public registry](github.com/helm/charts/).
 
