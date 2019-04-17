@@ -57,7 +57,7 @@ Charts are similar to archives, and you can share them with your colleagues or u
 
 Charts became such a ubiquitous tool to share collections of YAML files and that helped Helm raise in popularity.
 
-[Have a look at all the available charts on the public registry](github.com/helm/charts/).
+[Have a look at all the available charts on the public registry](https://github.com/helm/charts/).
 
 > Please note that you can use `helm search <keyword>` to search for a specific chart on the official registry.
 
