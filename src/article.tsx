@@ -59,7 +59,9 @@ export const Article: React.StatelessComponent<{
           <p className='f7 black-60 tc ttu b'>
             <Img image={Assets.tick} className='w1 h1 v-mid' /> Updated in {moment(lastUpdated).format('MMMM YYYY')}
           </p>
-        ) : null}
+        ) : (
+          ''
+        )}
         <Img image={openGraphImage} className='pt2' />
         <hr className='w3 center b--navy mv4 mb5-ns' />
         {children}
