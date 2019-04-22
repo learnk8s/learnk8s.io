@@ -6,6 +6,7 @@ import { cat } from 'shelljs'
 import { Image, CSSBundle } from './assets'
 import unified from 'unified'
 const stringify = require('rehype-stringify')
+const raw = require('rehype-raw')
 
 const renderer = new marked.Renderer()
 
@@ -27,9 +28,9 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return unified()
-    .use(stringify)
-    .stringify(
+  const tree = unified()
+    .use(raw)
+    .runSync(
       <Layout
         website={website}
         seoTitle={currentNode.payload.seoTitle}
@@ -60,4 +61,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <Footer root={website} />
       </Layout>,
     )
+  return unified()
+    .use(stringify)
+    .stringify(tree)
 }

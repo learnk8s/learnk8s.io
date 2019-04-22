@@ -5,6 +5,7 @@ import { material, assets as materialAssets } from './material'
 import { Course, WithContext } from 'schema-dts'
 import unified from 'unified'
 const stringify = require('rehype-stringify')
+const raw = require('rehype-raw')
 import { h } from './h'
 
 export const Assets = {
@@ -96,9 +97,9 @@ const faqs: FAQ[] = [
 ]
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return unified()
-    .use(stringify)
-    .stringify(
+  const tree = unified()
+    .use(raw)
+    .runSync(
       <Layout
         website={website}
         seoTitle={currentNode.payload.seoTitle}
@@ -701,6 +702,9 @@ setTimeout(ldinsp, 0);
         />
       </Layout>,
     )
+  return unified()
+    .use(stringify)
+    .stringify(tree)
 }
 
 export const Item: React.StatelessComponent<{ tick: Image }> = ({ children, tick }) => {

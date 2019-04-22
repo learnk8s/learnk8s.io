@@ -9,7 +9,7 @@
     "fmt": "prettier 'src/**/*.{ts,tsx}' --list-different",
     "test": "ts-node --files node_modules/tape/bin/tape 'src/**/test.ts' 'src/**/*.test.ts' 'src/**/*.integration.ts' 'src/**/integration.ts'",
     "start": "http-serve _site -p 4000",
-    "backstop:baseline": "rm -rf backstop_data && npm run backstop:test && ts-node --files test/visual.ts --approve",
+    "backstop:baseline": "rm -rf backstop_data && npm run backstop:test && ts-node --files test/visual.ts --approve --hostname https://learnk8s.io",
     "backstop:test": "ts-node --files test/visual.ts --test --hostname http://localhost:4000"
   },
   "author": "Learnk8s",

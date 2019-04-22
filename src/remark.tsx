@@ -488,7 +488,7 @@ function isCode(node: Node): node is Mdast.Code {
   return node.type === 'code'
 }
 
-namespace Mdast {
+export namespace Mdast {
   export interface Code extends Node {
     type: 'code'
     lang?: string
