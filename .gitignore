@@ -12,3 +12,5 @@ vendor/
 _site/
 .jekyll-metadata
 .vscode/
+
+backstop_data/

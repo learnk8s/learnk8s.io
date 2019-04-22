@@ -8,7 +8,9 @@
     "svgo": "npx ts-node src/svgo.ts",
     "fmt": "prettier 'src/**/*.{ts,tsx}' --list-different",
     "test": "ts-node --files node_modules/tape/bin/tape 'src/**/test.ts' 'src/**/*.test.ts' 'src/**/*.integration.ts' 'src/**/integration.ts'",
-    "start": "http-serve _site -p 4000"
+    "start": "http-serve _site -p 4000",
+    "backstop:baseline": "rm -rf backstop_data && npm run backstop:test && ts-node --files test/visual.ts --approve",
+    "backstop:test": "ts-node --files test/visual.ts --test --hostname http://localhost:4000"
   },
   "author": "Learnk8s",
   "license": "MIT",
@@ -27,6 +29,7 @@
     "@types/svgo": "^1.0.1",
     "@types/tape": "^4.2.33",
     "@types/terser": "^3.12.0",
+    "backstopjs": "^3.8.8",
     "cheerio": "^1.0.0-rc.2",
     "colors": "^1.3.3",
     "cssnano": "^4.1.10",
