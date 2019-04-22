@@ -7,6 +7,15 @@ export function h<T extends keyof HTMLElementTagNameMap>(
   attrs?: Object,
   ...children: any[]
 ): HTMLElementTagNameMap[T] {
+  if (attrs && 'defaultChecked' in attrs) {
+    delete (attrs as any).defaultChecked
+    Object.assign(attrs, { checked: true })
+  }
+  if (attrs && 'defaultValue' in attrs) {
+    const value = (attrs as any).defaultValue
+    delete (attrs as any).defaultValue
+    Object.assign(attrs, { value })
+  }
   if (isFunction(tagName)) {
     return tagName({ ...attrs, children })
   }

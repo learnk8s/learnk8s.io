@@ -119,445 +119,449 @@ function identity<T>(value: T): T {
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   const tree = unified()
     .use(raw)
-    .runSync(<Layout
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.description}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
-    >
-      {Courses.map((course, index) => {
-        return (
-          <script
-            type='application/ld+json'
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(
-                identity<WithContext<Course>>({
-                  '@type': 'Course',
-                  '@context': 'https://schema.org',
-                  name: course.name,
-                  courseCode: course.code,
-                  description: course.description,
-                  educationalCredentialAwarded: 'CKA or CKAD (optional)',
-                  provider: {
-                    '@type': 'Organization',
-                    name: 'Learnk8s',
-                  },
-                  hasCourseInstance: course.events.map(
-                    it =>
-                      ({
-                        '@type': 'CourseInstance',
-                        name: it.details.title,
-                        description: 'Learn how to deploy and scale applications with Kubernetes.',
-                        courseMode: 'full-time',
-                        duration: it.duration.toISOString() as any,
-                        inLanguage: it.language,
-                        startDate: it.startAt.toISOString(),
-                        endDate: it.startAt
-                          .clone()
-                          .add(it.duration)
-                          .toISOString(),
-                        location: {
-                          '@type': 'Place',
-                          name: it.location.name,
-                          address: isVenueOnline(it.location)
-                            ? 'Online'
-                            : `${it.location.city}, ${it.location.country}`,
-                        },
-                        isAccessibleForFree: Boolean.False,
-                        offers: {
-                          '@type': 'Offer',
-                          availability: ItemAvailabilityEnum.InStock,
-                          price: it.offer.price,
-                          priceCurrency: it.offer.currency,
-                          validFrom: it.startAt
+    .runSync(
+      <Layout
+        website={website}
+        seoTitle={currentNode.payload.seoTitle}
+        title={currentNode.payload.title}
+        description={currentNode.payload.description}
+        openGraphImage={currentNode.payload.openGraphImage}
+        absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+        cssBundle={CSSBundle({
+          paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
+        })}
+      >
+        {Courses.map((course, index) => {
+          return (
+            <script
+              type='application/ld+json'
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(
+                  identity<WithContext<Course>>({
+                    '@type': 'Course',
+                    '@context': 'https://schema.org',
+                    name: course.name,
+                    courseCode: course.code,
+                    description: course.description,
+                    educationalCredentialAwarded: 'CKA or CKAD (optional)',
+                    provider: {
+                      '@type': 'Organization',
+                      name: 'Learnk8s',
+                    },
+                    hasCourseInstance: course.events.map(
+                      it =>
+                        ({
+                          '@type': 'CourseInstance',
+                          name: it.details.title,
+                          description: 'Learn how to deploy and scale applications with Kubernetes.',
+                          courseMode: 'full-time',
+                          duration: it.duration.toISOString() as any,
+                          inLanguage: it.language,
+                          startDate: it.startAt.toISOString(),
+                          endDate: it.startAt
                             .clone()
-                            .subtract(it.canBookInAdvanceFrom)
+                            .add(it.duration)
                             .toISOString(),
-                          url: getAbsoluteUrl(currentNode, siteUrl),
-                        },
-                        image: `${siteUrl}${currentNode.payload.openGraphImage}`,
-                        performer: {
-                          '@type': 'Organization',
-                          name: 'Learnk8s',
-                        },
-                      } as CourseInstance),
-                  ),
-                }),
-              ),
-            }}
-          />
-        )
-      })}
-      <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
-        <Navbar root={website} />
+                          location: {
+                            '@type': 'Place',
+                            name: it.location.name,
+                            address: isVenueOnline(it.location)
+                              ? 'Online'
+                              : `${it.location.city}, ${it.location.country}`,
+                          },
+                          isAccessibleForFree: Boolean.False,
+                          offers: {
+                            '@type': 'Offer',
+                            availability: ItemAvailabilityEnum.InStock,
+                            price: it.offer.price,
+                            priceCurrency: it.offer.currency,
+                            validFrom: it.startAt
+                              .clone()
+                              .subtract(it.canBookInAdvanceFrom)
+                              .toISOString(),
+                            url: getAbsoluteUrl(currentNode, siteUrl),
+                          },
+                          image: `${siteUrl}${currentNode.payload.openGraphImage}`,
+                          performer: {
+                            '@type': 'Organization',
+                            name: 'Learnk8s',
+                          },
+                        } as CourseInstance),
+                    ),
+                  }),
+                ),
+              }}
+            />
+          )
+        })}
+        <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
+          <Navbar root={website} />
 
-        <Hero image={Assets.training} imageClass='i-training'>
-          <h1 className='f1 f-subheadline-l'>
-            Kubernetes <span className='no-wrap'>instructor-led</span> training
-          </h1>
-          <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>
-            Learn how to deploy and scale applications with Kubernetes.
-          </h2>
-          <ul className='list w-60-m center-m mw6 bg-white black-70 ph3 pv1 shadow-1 mh3 mh4-ns mt4'>
-            <li className='flex items-center justify-between ph2 bb b--light-gray'>
-              <p className='ttu'>Private courses</p>
-              <div className='w2 h2'>
-                <Img image={Assets.tick} />
+          <Hero image={Assets.training} imageClass='i-training'>
+            <h1 className='f1 f-subheadline-l'>
+              Kubernetes <span className='no-wrap'>instructor-led</span> training
+            </h1>
+            <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>
+              Learn how to deploy and scale applications with Kubernetes.
+            </h2>
+            <ul className='list w-60-m center-m mw6 bg-white black-70 ph3 pv1 shadow-1 mh3 mh4-ns mt4'>
+              <li className='flex items-center justify-between ph2 bb b--light-gray'>
+                <p className='ttu'>Private courses</p>
+                <div className='w2 h2'>
+                  <Img image={Assets.tick} />
+                </div>
+              </li>
+              <li className='flex items-center justify-between ph2 bb b--light-gray'>
+                <p className='ttu'>Public courses</p>
+                <div className='w2 h2'>
+                  <Img image={Assets.tick} />
+                </div>
+              </li>
+              <li className='flex items-center justify-between ph2'>
+                <p className='ttu v-mid mt2 mb1'>
+                  Online courses{' '}
+                  <span className='dib w2 v-mid'>
+                    <Img image={Assets.slack} />
+                  </span>
+                </p>
+                <div className='w2 h2'>
+                  <Img image={Assets.tick} />
+                </div>
+              </li>
+            </ul>
+            <div className='dn db-l mw6 mh3 mh4-ns tc'>
+              <div className='w3 h3 dib'>
+                <Img image={Assets.downArrow} />
               </div>
-            </li>
-            <li className='flex items-center justify-between ph2 bb b--light-gray'>
-              <p className='ttu'>Public courses</p>
-              <div className='w2 h2'>
-                <Img image={Assets.tick} />
+            </div>
+          </Hero>
+        </div>
+
+        <section className='content ph3 ph4-ns flex items-center justify-center pt5-ns relative z3'>
+          <div className='w-50-l dn db-l tc'>
+            <div className='dib'>
+              <div className='i-more-cargo-loading relative'>
+                <Img image={Assets.cargoLoading} className='absolute top-0 right-0' />
               </div>
-            </li>
-            <li className='flex items-center justify-between ph2'>
-              <p className='ttu v-mid mt2 mb1'>
-                Online courses{' '}
-                <span className='dib w2 v-mid'>
-                  <Img image={Assets.slack} />
-                </span>
+            </div>
+          </div>
+
+          <div className='w-50-l center pt3'>
+            <h2 className='f3 navy f2-l measure-narrow'>Instructor-led, hands-on courses</h2>
+            <div className='measure-wide'>
+              <p className='lh-copy f4-l black-70'>These courses are great if you wish to:</p>
+              <ul className='list black-70 pl0 pt2'>
+                <ListItem>
+                  <span className='b'>Get started with Kubernetes in your next project</span> and you need to quickly
+                  get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices
+                </ListItem>
+                <ListItem>
+                  <span className='b'>Design and architect micro services on Kubernetes</span> that leverage the
+                  strength of distributed systems
+                </ListItem>
+                <ListItem>
+                  <span className='b'>Design applications that can be deployed on AWS, GCP, Azure, etc.</span>, without
+                  requiring changing any of the application or infrastrucure code
+                </ListItem>
+                <ListItem>
+                  <span className='b'>
+                    Autoscale your clusters and applications as your service becomes more popular
+                  </span>
+                </ListItem>
+                <ListItem>
+                  <span className='b'>Standarise your development environments and workflow</span> and design processes
+                  for continuous delivery and intregration with Kubernetes
+                </ListItem>
+                <ListItem>
+                  Become a <span className='b'>Certified Kubernetes Administrator</span> (CKA) or{' '}
+                  <span className='b'>Certified Kubernetes Application Developer</span> (CKAD)
+                </ListItem>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <Interlude />
+
+        <section className='pt5'>
+          <PackageList>
+            <PackageLeft heading='Advanced Kubernetes Course' subheading='Most popular option — 3 days course'>
+              <PackageFeatures
+                description='The course lasts three days and you can choose from Kubernetes core modules and a selection of popular optional module. You will learn how to:'
+                benefits={[
+                  'Package applications in Linux containers',
+                  'Deploy containers in Kubernetes',
+                  'Zero downtime deployment strategies in Kubernetes',
+                  'How to expose services to the public internet',
+                  'The Kubernetes architecture and core components',
+                  'The Kubernetes networking model',
+                  'Autoscaling the cluster and the applicaions',
+                  'Secure your cluster and your network',
+                  'Design automated processes to leverage Kubernetes and continuon integration',
+                ]}
+              />
+              <p className='tc pb4'>
+                <PrimaryButton text='Learn more ⇢' anchor='#start' />
               </p>
-              <div className='w2 h2'>
-                <Img image={Assets.tick} />
-              </div>
+            </PackageLeft>
+            <PackageRight heading='Kubernetes Private Training' subheading='Make your own course'>
+              <PackageFeatures
+                description='The private training course is excellent if you wish to customise your learning path to adopt Kubernetes.'
+                benefits={[
+                  'Pick the modules relevant to your team',
+                  'Deep dive into the content with a three, four or five days course',
+                  'Delivered on site, remotely or in a cozy meeting room',
+                  'Classes from 5+ delegates',
+                ]}
+              >
+                <SpecialListItem>
+                  <span className='b'>Perfect for the Certified Kubernetes Administrator (CKA) exam</span> (exam not
+                  included and optional)
+                </SpecialListItem>
+              </PackageFeatures>
+              <p className='tc pb4'>
+                <PrimaryButton text='Get in touch ⇢' mailto={mailto(privateGroupEnquiry)} />
+              </p>
+            </PackageRight>
+          </PackageList>
+        </section>
+
+        <Testimonal
+          quote='It is an excellent course covering a wide range of Kubernetes concepts, that will give you more than enough knowledge to go back to experiment and be productive with Kubernetes.'
+          author='Luke Anderson, Senior IT Engineer'
+        />
+
+        <section className='bg-evian pt4' id='start'>
+          <p className='f2 navy b tc ph3'>Advanced Kubernetes course modules</p>
+          <p className='lh-copy f4 black-70 measure center tc ph3'>
+            The advanced course is made 6 core modules that are designed to last 2 full days. You're recommended to
+            select 4 optional modules for the third day, but you choose more if you wish.
+          </p>
+
+          <div className='ma3 ma5-l flex-l flex-wrap justify-center'>
+            <DashboardModule
+              className='w-40-l'
+              preview={Assets.previewDocker}
+              title={`1. ${material.docker.name}`}
+              description={material.docker.description}
+            >
+              <p className='lh-copy measure-wide'>
+                You will learn how to package and run applications in Docker containers. The module covers the following
+                topics:
+              </p>
+              <ul>
+                {Object.values(material.docker.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </DashboardModule>
+
+            <DashboardModule
+              className='w-40-l'
+              preview={Assets.previewZero}
+              title={`2. ${material.zeroToKubernetes.name}`}
+              description={material.zeroToKubernetes.description}
+            >
+              <p className='lh-copy measure-wide'>
+                You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the
+                following topics:
+              </p>
+              <ul>
+                {Object.values(material.zeroToKubernetes.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </DashboardModule>
+
+            <DashboardModule
+              className='w-40-l'
+              preview={Assets.previewDeployments}
+              title={`3. ${material.deploymentStrategies.name}`}
+              description={material.deploymentStrategies.description}
+            >
+              <p className='lh-copy measure-wide'>
+                You will learn different techniques to deploy your applications with zero downtime. The module covers
+                the following topics:
+              </p>
+              <ul>
+                {Object.values(material.deploymentStrategies.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </DashboardModule>
+
+            <DashboardModule
+              className='w-40-l'
+              preview={Assets.previewArchitecture}
+              title={`4. ${material.architecture.name}`}
+              description={material.architecture.description}
+            >
+              <p className='lh-copy measure-wide'>
+                You will learn the core components in Kubernetes and how they work. The module covers the following
+                topics:
+              </p>
+              <ul>
+                {Object.values(material.architecture.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </DashboardModule>
+
+            <DashboardModule
+              className='w-40-l'
+              preview={Assets.previewNetworking}
+              title={`5. ${material.networking.name}`}
+              description={material.networking.description}
+            >
+              <p className='lh-copy measure-wide'>
+                You will learn how the traffic flows inside the cluster. You will also learn how to expose your apps to
+                the public internet. The module covers the following topics:
+              </p>
+              <ul>
+                {Object.values(material.networking.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </DashboardModule>
+
+            <DashboardModule
+              className='w-40-l'
+              preview={Assets.previewState}
+              title={`6. ${material.managingState.name}`}
+              description={material.managingState.description}
+            >
+              <p className='lh-copy measure-wide'>
+                You will learn how to persist data in Kubernetes. The module covers the following topics:
+              </p>
+              <ul>
+                {Object.values(material.managingState.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </DashboardModule>
+
+            <DashboardModule
+              className='w-40-l'
+              preview={Assets.previewTemplating}
+              title={`7. ${material.templating.name}`}
+              description={material.templating.description}
+            >
+              <p className='lh-copy measure-wide'>
+                You will learn how to template resources for different environments. The module covers the following
+                topics:
+              </p>
+              <ul>
+                {Object.values(material.templating.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </DashboardModule>
+
+            <DashboardModule
+              className='w-40-l'
+              preview={Assets.previewOptionals}
+              title='Optionals'
+              description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}
+            >
+              <p className='lh-copy measure-wide'>
+                You can pick and choose from the modules below. Looking for something in particular?{' '}
+                <a className='link underline' href={mailto(customRequest)}>
+                  Get in touch!
+                </a>
+              </p>
+              <ul>
+                <li className='lh-copy mv1'>{material.advancedNetworking.name}</li>
+                <li className='lh-copy mv1'>{material.security.name}</li>
+                <li className='lh-copy mv1'>{material.autoscaling.name}</li>
+                <li className='lh-copy mv1'>{material.advancedScheduling.name}</li>
+                <li className='lh-copy mv1'>{material.multiCloud.name}</li>
+                <li className='lh-copy mv1'>{material.serviceMeshes.name}</li>
+                <li className='lh-copy mv1'>{material.extensions.name}</li>
+              </ul>
+            </DashboardModule>
+          </div>
+
+          <div className='pt5-m pb4 pb5-ns ph3 measure-wide center'>
+            <p className='f3 mb1 mt0 lh-copy'>
+              &ldquo;A really enjoyable 3-day workshop on Kubernetes. I cemented my understanding of Kubernetes and can
+              now start implementing and furthering my knowledge with real examples and workflows. Next stop, production
+              experience.&rdquo;
+            </p>
+            <p className='f4 i mb2'>— David Heward, Senior Devops Engineer</p>
+          </div>
+        </section>
+
+        <section id='start' className='w-60-ns ph3 center pt3 pb3 pb5-l'>
+          <h2 className='navy f4 f3-l'>Upcoming events</h2>
+
+          <input className='dn' defaultChecked id='all' type='radio' name='country' />
+          <input className='dn' id='america' type='radio' name='country' />
+          <input className='dn' id='europe' type='radio' name='country' />
+          <input className='dn' id='asia' type='radio' name='country' />
+          <ul className='legend list pl0 flex'>
+            <li className='all dib pa2 navy bb bw1 b--near-white bg-evian br1 br--left'>
+              <label htmlFor='all'>All</label>
+            </li>
+            <li className='america dib pa2 navy bb bw1 b--near-white bg-evian'>
+              <label htmlFor='america'>North America</label>
+            </li>
+            <li className='europe dib pa2 navy bb bw1 b--near-white bg-evian'>
+              <label htmlFor='europe'>Europe</label>
+            </li>
+            <li className='asia dib pa2 navy bb bw1 b--near-white bg-evian br1 br--right'>
+              <label htmlFor='asia'>Asia</label>
             </li>
           </ul>
-          <div className='dn db-l mw6 mh3 mh4-ns tc'>
-            <div className='w3 h3 dib'>
-              <Img image={Assets.downArrow} />
-            </div>
-          </div>
-        </Hero>
-      </div>
 
-      <section className='content ph3 ph4-ns flex items-center justify-center pt5-ns relative z3'>
-        <div className='w-50-l dn db-l tc'>
-          <div className='dib'>
-            <div className='i-more-cargo-loading relative'>
-              <Img image={Assets.cargoLoading} className='absolute top-0 right-0' />
-            </div>
-          </div>
-        </div>
-
-        <div className='w-50-l center pt3'>
-          <h2 className='f3 navy f2-l measure-narrow'>Instructor-led, hands-on courses</h2>
-          <div className='measure-wide'>
-            <p className='lh-copy f4-l black-70'>These courses are great if you wish to:</p>
-            <ul className='list black-70 pl0 pt2'>
-              <ListItem>
-                <span className='b'>Get started with Kubernetes in your next project</span> and you need to quickly
-                get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices
-              </ListItem>
-              <ListItem>
-                <span className='b'>Design and architect micro services on Kubernetes</span> that leverage the
-                strength of distributed systems
-              </ListItem>
-              <ListItem>
-                <span className='b'>Design applications that can be deployed on AWS, GCP, Azure, etc.</span>, without
-                requiring changing any of the application or infrastrucure code
-              </ListItem>
-              <ListItem>
-                <span className='b'>
-                  Autoscale your clusters and applications as your service becomes more popular
-                </span>
-              </ListItem>
-              <ListItem>
-                <span className='b'>Standarise your development environments and workflow</span> and design processes
-                for continuous delivery and intregration with Kubernetes
-              </ListItem>
-              <ListItem>
-                Become a <span className='b'>Certified Kubernetes Administrator</span> (CKA) or{' '}
-                <span className='b'>Certified Kubernetes Application Developer</span> (CKAD)
-              </ListItem>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <Interlude />
-
-      <section className='pt5'>
-        <PackageList>
-          <PackageLeft heading='Advanced Kubernetes Course' subheading='Most popular option — 3 days course'>
-            <PackageFeatures
-              description='The course lasts three days and you can choose from Kubernetes core modules and a selection of popular optional module. You will learn how to:'
-              benefits={[
-                'Package applications in Linux containers',
-                'Deploy containers in Kubernetes',
-                'Zero downtime deployment strategies in Kubernetes',
-                'How to expose services to the public internet',
-                'The Kubernetes architecture and core components',
-                'The Kubernetes networking model',
-                'Autoscaling the cluster and the applicaions',
-                'Secure your cluster and your network',
-                'Design automated processes to leverage Kubernetes and continuon integration',
-              ]}
-            />
-            <p className='tc pb4'>
-              <PrimaryButton text='Learn more ⇢' anchor='#start' />
-            </p>
-          </PackageLeft>
-          <PackageRight heading='Kubernetes Private Training' subheading='Make your own course'>
-            <PackageFeatures
-              description='The private training course is excellent if you wish to customise your learning path to adopt Kubernetes.'
-              benefits={[
-                'Pick the modules relevant to your team',
-                'Deep dive into the content with a three, four or five days course',
-                'Delivered on site, remotely or in a cozy meeting room',
-                'Classes from 5+ delegates',
-              ]}
-            >
-              <SpecialListItem>
-                <span className='b'>Perfect for the Certified Kubernetes Administrator (CKA) exam</span> (exam not
-                included and optional)
-              </SpecialListItem>
-            </PackageFeatures>
-            <p className='tc pb4'>
-              <PrimaryButton text='Get in touch ⇢' mailto={mailto(privateGroupEnquiry)} />
-            </p>
-          </PackageRight>
-        </PackageList>
-      </section>
-
-      <Testimonal
-        quote='It is an excellent course covering a wide range of Kubernetes concepts, that will give you more than enough knowledge to go back to experiment and be productive with Kubernetes.'
-        author='Luke Anderson, Senior IT Engineer'
-      />
-
-      <section className='bg-evian pt4' id='start'>
-        <p className='f2 navy b tc ph3'>Advanced Kubernetes course modules</p>
-        <p className='lh-copy f4 black-70 measure center tc ph3'>
-          The advanced course is made 6 core modules that are designed to last 2 full days. You're recommended to
-          select 4 optional modules for the third day, but you choose more if you wish.
-        </p>
-
-        <div className='ma3 ma5-l flex-l flex-wrap justify-center'>
-          <DashboardModule
-            className='w-40-l'
-            preview={Assets.previewDocker}
-            title={`1. ${material.docker.name}`}
-            description={material.docker.description}
-          >
-            <p className='lh-copy measure-wide'>
-              You will learn how to package and run applications in Docker containers. The module covers the following
-              topics:
-            </p>
-            <ul>
-              {Object.values(material.docker.topics).map((it, index) => (
-                <li key={index} className='lh-copy mv1'>
-                  {it}
-                </li>
+          <ul className='events list pl0 pt3'>
+            {Courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[])
+              .sort((a, b) => a.startAt.valueOf() - b.startAt.valueOf())
+              .map(it => (
+                <CourseRow event={it} slackIcon={Assets.slack} />
               ))}
-            </ul>
-          </DashboardModule>
+          </ul>
 
-          <DashboardModule
-            className='w-40-l'
-            preview={Assets.previewZero}
-            title={`2. ${material.zeroToKubernetes.name}`}
-            description={material.zeroToKubernetes.description}
-          >
-            <p className='lh-copy measure-wide'>
-              You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the
-              following topics:
-            </p>
-            <ul>
-              {Object.values(material.zeroToKubernetes.topics).map((it, index) => (
-                <li key={index} className='lh-copy mv1'>
-                  {it}
-                </li>
-              ))}
-            </ul>
-          </DashboardModule>
-
-          <DashboardModule
-            className='w-40-l'
-            preview={Assets.previewDeployments}
-            title={`3. ${material.deploymentStrategies.name}`}
-            description={material.deploymentStrategies.description}
-          >
-            <p className='lh-copy measure-wide'>
-              You will learn different techniques to deploy your applications with zero downtime. The module covers
-              the following topics:
-            </p>
-            <ul>
-              {Object.values(material.deploymentStrategies.topics).map((it, index) => (
-                <li key={index} className='lh-copy mv1'>
-                  {it}
-                </li>
-              ))}
-            </ul>
-          </DashboardModule>
-
-          <DashboardModule
-            className='w-40-l'
-            preview={Assets.previewArchitecture}
-            title={`4. ${material.architecture.name}`}
-            description={material.architecture.description}
-          >
-            <p className='lh-copy measure-wide'>
-              You will learn the core components in Kubernetes and how they work. The module covers the following
-              topics:
-            </p>
-            <ul>
-              {Object.values(material.architecture.topics).map((it, index) => (
-                <li key={index} className='lh-copy mv1'>
-                  {it}
-                </li>
-              ))}
-            </ul>
-          </DashboardModule>
-
-          <DashboardModule
-            className='w-40-l'
-            preview={Assets.previewNetworking}
-            title={`5. ${material.networking.name}`}
-            description={material.networking.description}
-          >
-            <p className='lh-copy measure-wide'>
-              You will learn how the traffic flows inside the cluster. You will also learn how to expose your apps to
-              the public internet. The module covers the following topics:
-            </p>
-            <ul>
-              {Object.values(material.networking.topics).map((it, index) => (
-                <li key={index} className='lh-copy mv1'>
-                  {it}
-                </li>
-              ))}
-            </ul>
-          </DashboardModule>
-
-          <DashboardModule
-            className='w-40-l'
-            preview={Assets.previewState}
-            title={`6. ${material.managingState.name}`}
-            description={material.managingState.description}
-          >
-            <p className='lh-copy measure-wide'>
-              You will learn how to persist data in Kubernetes. The module covers the following topics:
-            </p>
-            <ul>
-              {Object.values(material.managingState.topics).map((it, index) => (
-                <li key={index} className='lh-copy mv1'>
-                  {it}
-                </li>
-              ))}
-            </ul>
-          </DashboardModule>
-
-          <DashboardModule
-            className='w-40-l'
-            preview={Assets.previewTemplating}
-            title={`7. ${material.templating.name}`}
-            description={material.templating.description}
-          >
-            <p className='lh-copy measure-wide'>
-              You will learn how to template resources for different environments. The module covers the following
-              topics:
-            </p>
-            <ul>
-              {Object.values(material.templating.topics).map((it, index) => (
-                <li key={index} className='lh-copy mv1'>
-                  {it}
-                </li>
-              ))}
-            </ul>
-          </DashboardModule>
-
-          <DashboardModule
-            className='w-40-l'
-            preview={Assets.previewOptionals}
-            title='Optionals'
-            description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}
-          >
-            <p className='lh-copy measure-wide'>
-              You can pick and choose from the modules below. Looking for something in particular?{' '}
-              <a className='link underline' href={mailto(customRequest)}>
-                Get in touch!
-              </a>
-            </p>
-            <ul>
-              <li className='lh-copy mv1'>{material.advancedNetworking.name}</li>
-              <li className='lh-copy mv1'>{material.security.name}</li>
-              <li className='lh-copy mv1'>{material.autoscaling.name}</li>
-              <li className='lh-copy mv1'>{material.advancedScheduling.name}</li>
-              <li className='lh-copy mv1'>{material.multiCloud.name}</li>
-              <li className='lh-copy mv1'>{material.serviceMeshes.name}</li>
-              <li className='lh-copy mv1'>{material.extensions.name}</li>
-            </ul>
-          </DashboardModule>
-        </div>
-
-        <div className='pt5-m pb4 pb5-ns ph3 measure-wide center'>
-          <p className='f3 mb1 mt0 lh-copy'>
-            &ldquo;A really enjoyable 3-day workshop on Kubernetes. I cemented my understanding of Kubernetes and can
-            now start implementing and furthering my knowledge with real examples and workflows. Next stop, production
-            experience.&rdquo;
+          <p className='f2 navy b tc mb2 pt4-ns pt2'>Your city is not on the list?</p>
+          <p className='lh-copy f4 black-70 measure center tc'>
+            Don't worry. We run in-person classrooms in Europe, North America and Asia. If your city is not on the list,
+            drop us a line at{' '}
+            <a className='link underline' href={mailto(newLocationEnquiry)}>
+              hello@learnk8s.io
+            </a>{' '}
+            and will try to make it happen.
           </p>
-          <p className='f4 i mb2'>— David Heward, Senior Devops Engineer</p>
-        </div>
-      </section>
+        </section>
 
-      <section id='start' className='w-60-ns ph3 center pt3 pb3 pb5-l'>
-        <h2 className='navy f4 f3-l'>Upcoming events</h2>
+        <YourTeam mailto={mailto(privateGroupEnquiry)} />
 
-        <input className='dn' defaultChecked id='all' type='radio' name='country' />
-        <input className='dn' id='america' type='radio' name='country' />
-        <input className='dn' id='europe' type='radio' name='country' />
-        <input className='dn' id='asia' type='radio' name='country' />
-        <ul className='legend list pl0 flex'>
-          <li className='all dib pa2 navy bb bw1 b--near-white bg-evian br1 br--left'>
-            <label htmlFor='all'>All</label>
-          </li>
-          <li className='america dib pa2 navy bb bw1 b--near-white bg-evian'>
-            <label htmlFor='america'>North America</label>
-          </li>
-          <li className='europe dib pa2 navy bb bw1 b--near-white bg-evian'>
-            <label htmlFor='europe'>Europe</label>
-          </li>
-          <li className='asia dib pa2 navy bb bw1 b--near-white bg-evian br1 br--right'>
-            <label htmlFor='asia'>Asia</label>
-          </li>
-        </ul>
+        <FAQs faqs={faqs} />
 
-        <ul className='events list pl0 pt3'>
-          {Courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[])
-            .sort((a, b) => a.startAt.valueOf() - b.startAt.valueOf())
-            .map(it => (
-              <CourseRow event={it} slackIcon={Assets.slack} />
-            ))}
-        </ul>
-
-        <p className='f2 navy b tc mb2 pt4-ns pt2'>Your city is not on the list?</p>
-        <p className='lh-copy f4 black-70 measure center tc'>
-          Don't worry. We run in-person classrooms in Europe, North America and Asia. If your city is not on the list,
-          drop us a line at{' '}
-          <a className='link underline' href={mailto(newLocationEnquiry)}>
-            hello@learnk8s.io
-          </a>{' '}
-          and will try to make it happen.
-        </p>
-      </section>
-
-      <YourTeam mailto={mailto(privateGroupEnquiry)} />
-
-      <FAQs faqs={faqs} />
-
-      <Consultation />
-      <Footer root={website} />
-      <JSScript
-        js={JSBundle({
-          scripts: `(${CreateToggle.toString()})()`,
-        })}
-      />
-    </Layout>)
-  return unified().use(stringify).stringify(tree)
+        <Consultation />
+        <Footer root={website} />
+        <JSScript
+          js={JSBundle({
+            scripts: `(${CreateToggle.toString()})()`,
+          })}
+        />
+      </Layout>,
+    )
+  return unified()
+    .use(stringify)
+    .stringify(tree)
 }
 
 export const CourseRow: React.StatelessComponent<{ event: CourseEvent; slackIcon: Image }> = ({ event, slackIcon }) => {
