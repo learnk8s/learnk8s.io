@@ -1,4 +1,4 @@
-import React from 'react'
+import { h } from './h'
 import { writeFileSync } from 'fs'
 import { resolve } from 'path'
 import { mkdir } from 'shelljs'

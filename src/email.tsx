@@ -1,4 +1,5 @@
-import React from 'react'
+import * as React from 'react'
+import { h } from './h'
 import { Mjml, MjmlHead, MjmlTitle, MjmlPreview, MjmlBody, MjmlSection, render } from 'mjml-react'
 import marked from 'marked'
 import { cat } from 'shelljs'

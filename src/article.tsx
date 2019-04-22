@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { h } from './h'
 import { Img, Image, CSSBundle } from './assets'
 import { Sitemap } from './sitemap'
 import { Layout, Navbar, Footer } from './layout'

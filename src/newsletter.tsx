@@ -1,8 +1,9 @@
-import React from 'react'
+import { h } from './h'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
 import { Navbar, Footer, Layout } from './layout'
 import { Javascript, Script, Image, CSSBundle } from './assets'
-import { renderToStaticMarkup } from 'react-dom/server'
+import unified from 'unified'
+const stringify = require('rehype-stringify')
 
 export const Assets = {
   submit: Javascript({ script: `(${SubmitWithAjax.toString()})()` }),
@@ -22,84 +23,87 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(
-    <Layout
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.description}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
-    >
-      <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
-        <Navbar root={website} />
+  return unified()
+    .use(stringify)
+    .stringify(
+      <Layout
+        website={website}
+        seoTitle={currentNode.payload.seoTitle}
+        title={currentNode.payload.title}
+        description={currentNode.payload.description}
+        openGraphImage={currentNode.payload.openGraphImage}
+        absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+        cssBundle={CSSBundle({
+          paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
+        })}
+      >
+        <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
+          <Navbar root={website} />
 
-        <section className='ph5-l'>
-          <div className='w-100 tc mt4'>
-            <h1 className='f1 f-subheadline-l'>The Learnk8s Newsletter</h1>
-            <p className='tc w-50-l w-70 center f2-l f4 lh-title'>
-              Sign up for curated Kubernetes news, article and resources, delivered straight to your inbox occasionaly.
-            </p>
-          </div>
-          <div id='subscription-form' className='w-40-l w-60 tc center mb5 mt5 mt0-l'>
-            <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST' className='relative'>
-              <ol className='list pl0'>
-                <li>
-                  <input type='hidden' name='u' defaultValue='2f82ec7d5caaa9ced71141211' />
-                </li>
-                <li>
-                  <input type='hidden' name='id' defaultValue='8ecff1a8cf' />
-                </li>
-                <li>
-                  <label htmlFor='MERGE1' className='db tl ttu pb2 fw6'>
-                    Your first name
-                  </label>
-                  <input
-                    className='pa3 w-100 br3 input-reset b--none'
-                    type='text'
-                    name='MERGE1'
-                    id='MERGE1'
-                    placeholder='Your first name'
-                  />
-                </li>
-                <li className='mt4'>
-                  <label htmlFor='MERGE0' className='db tl ttu pb2 fw6'>
-                    Your email address
-                  </label>
-                  <input
-                    className='pa3 w-100 br3 input-reset b--none'
-                    type='email'
-                    required={true}
-                    name='MERGE0'
-                    id='MERGE0'
-                    placeholder='Your email address'
-                  />
-                  <p className='f7 tl'>We'll never share your email address and you can opt out at any time.</p>
-                </li>
-              </ol>
-              <button className='dib blue bg-white br2 pa3 b f3-ns mt2 ml3-l ph5 mb3 b--none submit' type='submit'>
-                Subscribe ⇢
-              </button>
-              <p className='success absolute bottom mt1 w-100 bg-light-green pa2 dark-green b--dark-green bw1 b--solid dn'>
-                Thank you for subscribing!
+          <section className='ph5-l'>
+            <div className='w-100 tc mt4'>
+              <h1 className='f1 f-subheadline-l'>The Learnk8s Newsletter</h1>
+              <p className='tc w-50-l w-70 center f2-l f4 lh-title'>
+                Sign up for curated Kubernetes news, article and resources, delivered straight to your inbox
+                occasionaly.
               </p>
-              <p className='failure absolute bottom mt1 w-100 bg-light-red pa2 black b--dark-red bw1 b--solid dn'>
-                Invalid email.
-              </p>
-            </form>
-          </div>
-        </section>
-      </div>
+            </div>
+            <div id='subscription-form' className='w-40-l w-60 tc center mb5 mt5 mt0-l'>
+              <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST' className='relative'>
+                <ol className='list pl0'>
+                  <li>
+                    <input type='hidden' name='u' defaultValue='2f82ec7d5caaa9ced71141211' />
+                  </li>
+                  <li>
+                    <input type='hidden' name='id' defaultValue='8ecff1a8cf' />
+                  </li>
+                  <li>
+                    <label htmlFor='MERGE1' className='db tl ttu pb2 fw6'>
+                      Your first name
+                    </label>
+                    <input
+                      className='pa3 w-100 br3 input-reset b--none'
+                      type='text'
+                      name='MERGE1'
+                      id='MERGE1'
+                      placeholder='Your first name'
+                    />
+                  </li>
+                  <li className='mt4'>
+                    <label htmlFor='MERGE0' className='db tl ttu pb2 fw6'>
+                      Your email address
+                    </label>
+                    <input
+                      className='pa3 w-100 br3 input-reset b--none'
+                      type='email'
+                      required={true}
+                      name='MERGE0'
+                      id='MERGE0'
+                      placeholder='Your email address'
+                    />
+                    <p className='f7 tl'>We'll never share your email address and you can opt out at any time.</p>
+                  </li>
+                </ol>
+                <button className='dib blue bg-white br2 pa3 b f3-ns mt2 ml3-l ph5 mb3 b--none submit' type='submit'>
+                  Subscribe ⇢
+                </button>
+                <p className='success absolute bottom mt1 w-100 bg-light-green pa2 dark-green b--dark-green bw1 b--solid dn'>
+                  Thank you for subscribing!
+                </p>
+                <p className='failure absolute bottom mt1 w-100 bg-light-red pa2 black b--dark-red bw1 b--solid dn'>
+                  Invalid email.
+                </p>
+              </form>
+            </div>
+          </section>
+        </div>
 
-      <hr className='pa3 bn' />
+        <hr className='pa3 bn' />
 
-      <Footer root={website} />
-      <Script script={Assets.submit} />
-    </Layout>,
-  )
+        <Footer root={website} />
+        <Script script={Assets.submit} />
+      </Layout>,
+    )
 }
 
 function SubmitWithAjax() {

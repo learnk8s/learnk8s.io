@@ -1,10 +1,10 @@
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl, getBiteSizedSeries } from './sitemap'
-import * as React from 'react'
+import { h } from './h'
 import { Article } from './article'
 import { cat } from 'shelljs'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { JsonLd } from 'react-schemaorg'
-import { BlogPosting } from 'schema-dts'
+import unified from 'unified'
+const stringify = require('rehype-stringify')
+import { BlogPosting, WithContext } from 'schema-dts'
 import { PromoAcademy, Layout, Navbar, Consultation, Footer, Subscribe } from './layout'
 import * as Remark from './remark'
 import { Image, CSSBundle, JSScript, JSBundle, Img } from './assets'
@@ -44,102 +44,111 @@ export interface Details {
 export function BiteSizedRender(markdownPath: string) {
   return function render(website: Sitemap, currentNode: LinkedNode<Details>, siteUrl: string): string {
     const { css, js, html } = Remark.render(markdownPath)
-    return renderToStaticMarkup(
-      <Article
-        website={website}
-        seoTitle={currentNode.payload.seoTitle}
-        title={currentNode.payload.title}
-        description={currentNode.payload.description}
-        openGraphImage={currentNode.payload.openGraphImage}
-        absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
-        authorFullName={currentNode.payload.author.fullName}
-        authorAvatar={currentNode.payload.author.avatar}
-        authorLink={currentNode.payload.author.link}
-        cssBundle={CSSBundle({
-          paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-          styles: css,
-        })}
-        publishedDate={currentNode.payload.publishedDate}
-      >
-        <JsonLd<BlogPosting>
-          item={{
-            '@context': 'https://schema.org',
-            '@type': 'BlogPosting',
-            headline: currentNode.payload.title,
-            image: `${siteUrl}${currentNode.payload.previewImage.url}`,
-            author: {
-              '@type': 'Person',
-              name: currentNode.payload.author.fullName,
-            },
-            publisher: {
-              '@type': 'Organization',
-              name: 'Learnk8s',
-              logo: {
-                '@type': 'ImageObject',
-                url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
-              },
-            },
-            url: getAbsoluteUrl(currentNode, siteUrl),
-            datePublished: currentNode.payload.publishedDate,
-            dateModified: currentNode.payload.publishedDate,
-            description: currentNode.payload.description,
-            mainEntityOfPage: {
-              '@type': 'SoftwareSourceCode',
-            },
-          }}
-        />
-        <p className='lh-copy measure-wide f4'>
-          <strong className='b'>Welcome to Bite-sized Kubernetes learning</strong> — a regular column on the most
-          interesting questions that we see online and during our workshops answered by a Kubernetes expert.
-        </p>
-        <blockquote className='pl3 mh2 bl bw2 b--blue bg-evian pv1 ph4'>
-          <p className='lh-copy measure-wide f4'>
-            Today's answers are curated by{' '}
-            <a
-              href={currentNode.payload.author.link}
-              className='link navy underline hover-sky'
-              target='_blank'
-              rel='noreferrer'
-            >
-              {currentNode.payload.author.fullName}
-            </a>
-            .{' '}
-            <span
-              dangerouslySetInnerHTML={{
-                __html: marked(currentNode.payload.author.shortDescription, { renderer: inlineRenderer }),
-              }}
-            />
-          </p>
-        </blockquote>
-        <p className='lh-copy measure-wide f4'>
-          <em className='i'>
-            If you wish to have your question featured on the next episode,{' '}
-            <a href='mailto:hello@learnk8s.io' className='link navy underline hover-sky' target='_self'>
-              please get in touch via email
-            </a>{' '}
-            or{' '}
-            <a
-              href='https://twitter.com/learnk8s'
-              className='link navy underline hover-sky'
-              target='_blank'
-              rel='noreferrer'
-            >
-              you can tweet us at @learnk8s
-            </a>
-            .
-          </em>
-        </p>
-        {html}
-
-        <Subscribe identifier={currentNode.payload.title.replace(/[^\w]+/g, '-')} />
-
-        <JSScript
-          js={JSBundle({
-            scripts: js,
+    return unified()
+      .use(stringify)
+      .stringify(
+        <Article
+          website={website}
+          seoTitle={currentNode.payload.seoTitle}
+          title={currentNode.payload.title}
+          description={currentNode.payload.description}
+          openGraphImage={currentNode.payload.openGraphImage}
+          absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
+          authorFullName={currentNode.payload.author.fullName}
+          authorAvatar={currentNode.payload.author.avatar}
+          authorLink={currentNode.payload.author.link}
+          cssBundle={CSSBundle({
+            paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
+            styles: css,
           })}
-        />
-      </Article>,
-    )
+          publishedDate={currentNode.payload.publishedDate}
+        >
+          <script
+            type='application/ld+json'
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(
+                identity<WithContext<BlogPosting>>({
+                  '@context': 'https://schema.org',
+                  '@type': 'BlogPosting',
+                  headline: currentNode.payload.title,
+                  image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+                  author: {
+                    '@type': 'Person',
+                    name: currentNode.payload.author.fullName,
+                  },
+                  publisher: {
+                    '@type': 'Organization',
+                    name: 'Learnk8s',
+                    logo: {
+                      '@type': 'ImageObject',
+                      url: `${siteUrl}${
+                        Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url
+                      }`,
+                    },
+                  },
+                  url: getAbsoluteUrl(currentNode, siteUrl),
+                  datePublished: currentNode.payload.publishedDate,
+                  dateModified: currentNode.payload.publishedDate,
+                  description: currentNode.payload.description,
+                  mainEntityOfPage: {
+                    '@type': 'SoftwareSourceCode',
+                  },
+                }),
+              ),
+            }}
+          />
+          <p className='lh-copy measure-wide f4'>
+            <strong className='b'>Welcome to Bite-sized Kubernetes learning</strong> — a regular column on the most
+            interesting questions that we see online and during our workshops answered by a Kubernetes expert.
+          </p>
+          <blockquote className='pl3 mh2 bl bw2 b--blue bg-evian pv1 ph4'>
+            <p className='lh-copy measure-wide f4'>
+              Today's answers are curated by{' '}
+              <a
+                href={currentNode.payload.author.link}
+                className='link navy underline hover-sky'
+                target='_blank'
+                rel='noreferrer'
+              >
+                {currentNode.payload.author.fullName}
+              </a>
+              .{' '}
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: marked(currentNode.payload.author.shortDescription, { renderer: inlineRenderer }),
+                }}
+              />
+            </p>
+          </blockquote>
+          <p className='lh-copy measure-wide f4'>
+            <em className='i'>
+              If you wish to have your question featured on the next episode,{' '}
+              <a href='mailto:hello@learnk8s.io' className='link navy underline hover-sky' target='_self'>
+                please get in touch via email
+              </a>{' '}
+              or{' '}
+              <a
+                href='https://twitter.com/learnk8s'
+                className='link navy underline hover-sky'
+                target='_blank'
+                rel='noreferrer'
+              >
+                you can tweet us at @learnk8s
+              </a>
+              .
+            </em>
+          </p>
+          {html}
+
+          <Subscribe identifier={currentNode.payload.title.replace(/[^\w]+/g, '-')} />
+
+          <JSScript
+            js={JSBundle({
+              scripts: js,
+            })}
+          />
+        </Article>,
+      )
   }
 }
 
@@ -158,50 +167,52 @@ export const Details = {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(
-    <Layout
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.description}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
-    >
-      <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
-        <Navbar root={website} />
+  return unified()
+    .use(stringify)
+    .stringify(
+      <Layout
+        website={website}
+        seoTitle={currentNode.payload.seoTitle}
+        title={currentNode.payload.title}
+        description={currentNode.payload.description}
+        openGraphImage={currentNode.payload.openGraphImage}
+        absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+        cssBundle={CSSBundle({
+          paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
+        })}
+      >
+        <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
+          <Navbar root={website} />
 
-        <section className='ph5-l'>
-          <div className='w-100'>
-            <h1 className='f1 pl3 pl4-ns f-subheadline-l'>Latest posts</h1>
-          </div>
+          <section className='ph5-l'>
+            <div className='w-100'>
+              <h1 className='f1 pl3 pl4-ns f-subheadline-l'>Latest posts</h1>
+            </div>
+          </section>
+        </div>
+
+        <section className='ph3 measure-wide pv4 center'>
+          <ul className='list pl0'>
+            {getBiteSizedSeries(website).map(it => {
+              return (
+                <li className='pv3'>
+                  <h2 className='mb0'>
+                    <a href={getFullUrl(it)} className='link navy'>
+                      {it.payload.title}
+                    </a>
+                  </h2>
+                  <p className='black-40 mt1'>{moment(it.payload.publishedDate).format('MMMM Do YYYY')}</p>
+                  <p className='lh-copy black-70'>{it.payload.description}</p>
+                </li>
+              )
+            })}
+          </ul>
         </section>
-      </div>
 
-      <section className='ph3 measure-wide pv4 center'>
-        <ul className='list pl0'>
-          {getBiteSizedSeries(website).map(it => {
-            return (
-              <li className='pv3'>
-                <h2 className='mb0'>
-                  <a href={getFullUrl(it)} className='link navy'>
-                    {it.payload.title}
-                  </a>
-                </h2>
-                <p className='black-40 mt1'>{moment(it.payload.publishedDate).format('MMMM Do YYYY')}</p>
-                <p className='lh-copy black-70'>{it.payload.description}</p>
-              </li>
-            )
-          })}
-        </ul>
-      </section>
-
-      <Consultation />
-      <Footer root={website} />
-    </Layout>,
-  )
+        <Consultation />
+        <Footer root={website} />
+      </Layout>,
+    )
 }
 
 export const Block: React.StatelessComponent<{ image: Image; title: string; description: string }> = ({

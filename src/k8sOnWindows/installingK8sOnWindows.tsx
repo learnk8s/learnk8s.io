@@ -1,10 +1,10 @@
 import { Image, CSSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl } from '../sitemap'
-import * as React from 'react'
+import { h } from '../h'
 import { Article } from '../article'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { JsonLd } from 'react-schemaorg'
-import { BlogPosting } from 'schema-dts'
+import unified from 'unified'
+const stringify = require('rehype-stringify')
+import { BlogPosting, WithContext } from 'schema-dts'
 import { Subscribe } from '../layout'
 import * as Remark from '../remark'
 
@@ -38,54 +38,63 @@ function identity<T>(value: T): T {
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   const { css, js, html } = Remark.render(`${__dirname}/content.md`)
-  return renderToStaticMarkup(
-    <Article
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.shortDescription}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      authorFullName={currentNode.payload.author.fullName}
-      authorAvatar={currentNode.payload.author.avatar}
-      authorLink={currentNode.payload.author.link}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: css,
-      })}
-      publishedDate={currentNode.payload.publishedDate}
-      lastUpdated={currentNode.payload.lastModifiedDate}
-    >
-      <JsonLd<BlogPosting>
-        item={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: currentNode.payload.title,
-          image: `${siteUrl}${currentNode.payload.previewImage.url}`,
-          author: {
-            '@type': 'Person',
-            name: currentNode.payload.author.fullName,
-          },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Learnk8s',
-            logo: {
-              '@type': 'ImageObject',
-              url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
-            },
-          },
-          url: getAbsoluteUrl(currentNode, siteUrl),
-          datePublished: currentNode.payload.publishedDate,
-          dateModified: currentNode.payload.lastModifiedDate,
-          description: currentNode.payload.description,
-          mainEntityOfPage: {
-            '@type': 'SoftwareSourceCode',
-          },
-        }}
-      />
-      {html}
+  return unified()
+    .use(stringify)
+    .stringify(
+      <Article
+        website={website}
+        seoTitle={currentNode.payload.seoTitle}
+        title={currentNode.payload.title}
+        description={currentNode.payload.shortDescription}
+        openGraphImage={currentNode.payload.openGraphImage}
+        absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
+        authorFullName={currentNode.payload.author.fullName}
+        authorAvatar={currentNode.payload.author.avatar}
+        authorLink={currentNode.payload.author.link}
+        cssBundle={CSSBundle({
+          paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
+          styles: css,
+        })}
+        publishedDate={currentNode.payload.publishedDate}
+        lastUpdated={currentNode.payload.lastModifiedDate}
+      >
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              identity<WithContext<BlogPosting>>({
+                '@context': 'https://schema.org',
+                '@type': 'BlogPosting',
+                headline: currentNode.payload.title,
+                image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+                author: {
+                  '@type': 'Person',
+                  name: currentNode.payload.author.fullName,
+                },
+                publisher: {
+                  '@type': 'Organization',
+                  name: 'Learnk8s',
+                  logo: {
+                    '@type': 'ImageObject',
+                    url: `${siteUrl}${
+                      Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url
+                    }`,
+                  },
+                },
+                url: getAbsoluteUrl(currentNode, siteUrl),
+                datePublished: currentNode.payload.publishedDate,
+                dateModified: currentNode.payload.lastModifiedDate,
+                description: currentNode.payload.description,
+                mainEntityOfPage: {
+                  '@type': 'SoftwareSourceCode',
+                },
+              }),
+            ),
+          }}
+        />
+        {html}
 
-      <Subscribe identifier='install-win-docker-k8s' />
-    </Article>,
-  )
+        <Subscribe identifier='install-win-docker-k8s' />
+      </Article>,
+    )
 }

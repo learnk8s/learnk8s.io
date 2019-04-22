@@ -1,4 +1,4 @@
-import React from 'react'
+import { h } from './h'
 import { extname } from 'path'
 import md5 from 'md5'
 import { existsSync, writeFileSync } from 'fs'

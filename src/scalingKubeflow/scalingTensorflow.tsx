@@ -1,10 +1,10 @@
 import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
-import * as React from 'react'
+import { h } from '../h'
 import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { JsonLd } from 'react-schemaorg'
-import { BlogPosting } from 'schema-dts'
+import unified from 'unified'
+const stringify = require('rehype-stringify')
+import { BlogPosting, WithContext } from 'schema-dts'
 import { Subscribe } from '../layout'
 import * as Remark from '../remark'
 
@@ -34,81 +34,90 @@ function identity<T>(value: T): T {
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   const { css, js, html } = Remark.render(`${__dirname}/content.md`)
-  return renderToStaticMarkup(
-    <Article
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.shortDescription}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      authorFullName={currentNode.payload.author.fullName}
-      authorAvatar={currentNode.payload.author.avatar}
-      authorLink={currentNode.payload.author.link}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: css,
-      })}
-      publishedDate={currentNode.payload.publishedDate}
-    >
-      <JsonLd<BlogPosting>
-        item={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: currentNode.payload.title,
-          image: `${siteUrl}${currentNode.payload.previewImage.url}`,
-          author: {
-            '@type': 'Person',
-            name: currentNode.payload.author.fullName,
-          },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Learnk8s',
-            logo: {
-              '@type': 'ImageObject',
-              url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
-            },
-          },
-          url: getAbsoluteUrl(currentNode, siteUrl),
-          datePublished: currentNode.payload.publishedDate,
-          dateModified: currentNode.payload.publishedDate,
-          description: currentNode.payload.description,
-          mainEntityOfPage: {
-            '@type': 'SoftwareSourceCode',
-          },
-        }}
-      />
-      {html}
-
-      <RelatedConentContainer>
-        <RelatedContentItem>
-          <a
-            href={getFullUrl(website.children.blog.children.whatIsKubernetes)}
-            className='link navy underline hover-sky'
-          >
-            What is Kubernetes? Optimise your hosting costs and efficiency
-          </a>{' '}
-          and learn how Kubernetes works and why it was invented in the first place.
-        </RelatedContentItem>
-        <RelatedContentItem>
-          <a
-            href={getFullUrl(website.children.blog.children.scalingSpringBoot)}
-            className='link navy underline hover-sky'
-          >
-            Scaling Microservices with Message Queues, Spring Boot and Kubernetes.
-          </a>{' '}
-          Learn how to use the Horizontal Pod Autoscaler to resize your fleet of applications dynamically.
-        </RelatedContentItem>
-      </RelatedConentContainer>
-
-      <Subscribe identifier='scaling-tensorflow' />
-
-      <JSScript
-        js={JSBundle({
-          scripts: js,
-          paths: ['src/scalingKubeflow/anime.min.js', 'src/scalingKubeflow/isScrolledIntoView.js'],
+  return unified()
+    .use(stringify)
+    .stringify(
+      <Article
+        website={website}
+        seoTitle={currentNode.payload.seoTitle}
+        title={currentNode.payload.title}
+        description={currentNode.payload.shortDescription}
+        openGraphImage={currentNode.payload.openGraphImage}
+        absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
+        authorFullName={currentNode.payload.author.fullName}
+        authorAvatar={currentNode.payload.author.avatar}
+        authorLink={currentNode.payload.author.link}
+        cssBundle={CSSBundle({
+          paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
+          styles: css,
         })}
-      />
-    </Article>,
-  )
+        publishedDate={currentNode.payload.publishedDate}
+      >
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              identity<WithContext<BlogPosting>>({
+                '@context': 'https://schema.org',
+                '@type': 'BlogPosting',
+                headline: currentNode.payload.title,
+                image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+                author: {
+                  '@type': 'Person',
+                  name: currentNode.payload.author.fullName,
+                },
+                publisher: {
+                  '@type': 'Organization',
+                  name: 'Learnk8s',
+                  logo: {
+                    '@type': 'ImageObject',
+                    url: `${siteUrl}${
+                      Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url
+                    }`,
+                  },
+                },
+                url: getAbsoluteUrl(currentNode, siteUrl),
+                datePublished: currentNode.payload.publishedDate,
+                dateModified: currentNode.payload.publishedDate,
+                description: currentNode.payload.description,
+                mainEntityOfPage: {
+                  '@type': 'SoftwareSourceCode',
+                },
+              }),
+            ),
+          }}
+        />
+        {html}
+
+        <RelatedConentContainer>
+          <RelatedContentItem>
+            <a
+              href={getFullUrl(website.children.blog.children.whatIsKubernetes)}
+              className='link navy underline hover-sky'
+            >
+              What is Kubernetes? Optimise your hosting costs and efficiency
+            </a>{' '}
+            and learn how Kubernetes works and why it was invented in the first place.
+          </RelatedContentItem>
+          <RelatedContentItem>
+            <a
+              href={getFullUrl(website.children.blog.children.scalingSpringBoot)}
+              className='link navy underline hover-sky'
+            >
+              Scaling Microservices with Message Queues, Spring Boot and Kubernetes.
+            </a>{' '}
+            Learn how to use the Horizontal Pod Autoscaler to resize your fleet of applications dynamically.
+          </RelatedContentItem>
+        </RelatedConentContainer>
+
+        <Subscribe identifier='scaling-tensorflow' />
+
+        <JSScript
+          js={JSBundle({
+            scripts: js,
+            paths: ['src/scalingKubeflow/anime.min.js', 'src/scalingKubeflow/isScrolledIntoView.js'],
+          })}
+        />
+      </Article>,
+    )
 }

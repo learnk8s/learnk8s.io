@@ -6,10 +6,9 @@ const raw = require('rehype-raw')
 import Prism from 'prismjs'
 const map = require('unist-util-map')
 import cheerio from 'cheerio'
-import React from 'react'
+import { h } from './h'
 const all: all = require('mdast-util-to-hast/lib/all')
 const one: one = require('mdast-util-to-hast/lib/one')
-const rehype2react = require('rehype-react')
 const { selectAll, select } = require('unist-util-select')
 import { readFileSync } from 'fs'
 import { AsciiCast, Image } from './assets'
@@ -153,7 +152,7 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
                     imageNode,
                     H('div.bt.b-solid.bw2.b--black-70.relative.mt3', [
                       H('div.bg-black-10.br1.pa1.dib.mt2.absolute.bottom-1.left-0', [
-                        H('span.b.black-60', [{ type: 'text', value: index + 1 }]),
+                        H('span.b.black-60', [{ type: 'text', value: `${index + 1}` }]),
                         H('span.f7.black-50', [{ type: 'text', value: `/${slides.length}` }]),
                       ]),
                     ]),
@@ -434,10 +433,6 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
       })
     })
 
-  const jsxStringifier = unified().use(rehype2react, {
-    createElement: React.createElement,
-  })
-
   const mdastTree = parse(content)
   const hastTree = hastParser.runSync(mdastTree)
   const css: Node[] = selectAll('[tagName="style"]', hastTree)
@@ -446,7 +441,7 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
     return /script|style/gi.test(node.tagName as any)
   })
   return {
-    html: (jsxStringifier.stringify(tree) as any) as JSX.Element,
+    html: (tree as any) as JSX.Element,
     css: css.map(it => toString(it)).filter(onlyUnique),
     js: js.map(it => toString(it)).filter(onlyUnique),
   }

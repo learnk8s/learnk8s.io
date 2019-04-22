@@ -1,7 +1,7 @@
-import React from 'react'
 import { getFullUrl, Sitemap } from './sitemap'
 import { Image, Img, CSSLink, CSSBundle } from './assets'
 import marked from 'marked'
+import { h } from './h'
 
 export interface PageDetails {
   title: string

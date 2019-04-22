@@ -1,10 +1,11 @@
-import React from 'react'
+import { h } from './h'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
 import { Navbar, Consultation, Footer, Layout } from './layout'
 import marked from 'marked'
 import { cat } from 'shelljs'
 import { Image, CSSBundle } from './assets'
-import { renderToStaticMarkup } from 'react-dom/server'
+import unified from 'unified'
+const stringify = require('rehype-stringify')
 
 const renderer = new marked.Renderer()
 
@@ -26,35 +27,37 @@ function identity<T>(value: T): T {
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(
-    <Layout
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.description}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
-    >
-      <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
-        <Navbar root={website} />
+  return unified()
+    .use(stringify)
+    .stringify(
+      <Layout
+        website={website}
+        seoTitle={currentNode.payload.seoTitle}
+        title={currentNode.payload.title}
+        description={currentNode.payload.description}
+        openGraphImage={currentNode.payload.openGraphImage}
+        absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
+        cssBundle={CSSBundle({
+          paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
+        })}
+      >
+        <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
+          <Navbar root={website} />
 
-        <section className='ph5-l'>
-          <div className='w-100'>
-            <h1 className='f1 pl3 pl4-ns f-subheadline-l'>General terms and conditions</h1>
-            <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns f3-l pb4'>Effective from 10 May 2018</h2>
-          </div>
+          <section className='ph5-l'>
+            <div className='w-100'>
+              <h1 className='f1 pl3 pl4-ns f-subheadline-l'>General terms and conditions</h1>
+              <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns f3-l pb4'>Effective from 10 May 2018</h2>
+            </div>
+          </section>
+        </div>
+
+        <section className='bg-black-02 black-70 relative z-999 w-90-m w-70-l center pa3 pa4-ns mb3 mb5-ns lh-copy'>
+          <div dangerouslySetInnerHTML={{ __html: marked(cat(`${__dirname}/t-and-cs.md`).toString(), { renderer }) }} />
         </section>
-      </div>
 
-      <section className='bg-black-02 black-70 relative z-999 w-90-m w-70-l center pa3 pa4-ns mb3 mb5-ns lh-copy'>
-        <div dangerouslySetInnerHTML={{ __html: marked(cat(`${__dirname}/t-and-cs.md`).toString(), { renderer }) }} />
-      </section>
-
-      <Consultation />
-      <Footer root={website} />
-    </Layout>,
-  )
+        <Consultation />
+        <Footer root={website} />
+      </Layout>,
+    )
 }
