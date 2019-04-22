@@ -8,7 +8,7 @@
     "svgo": "npx ts-node src/svgo.ts",
     "fmt": "prettier 'src/**/*.{ts,tsx}' --list-different",
     "test": "ts-node --files node_modules/tape/bin/tape 'src/**/test.ts' 'src/**/*.test.ts' 'src/**/*.integration.ts' 'src/**/integration.ts'",
-    "start": "http-serve _site -p 4000",
+    "start": "ln -fs $PWD $PWD/_site/b && http-server -p 4000 _site",
     "backstop:baseline": "rm -rf backstop_data && npm run backstop:test && ts-node --files test/visual.ts --approve --hostname https://learnk8s.io",
     "backstop:test": "ts-node --files test/visual.ts --test --hostname http://localhost:4000"
   },
@@ -36,8 +36,8 @@
     "diff": "^4.0.1",
     "eventbrite": "^1.2.1",
     "feed": "^2.0.2",
+    "hast-util-select": "^3.0.0",
     "hastscript": "^5.0.0",
-    "http-serve": "^1.0.1",
     "http-server": "^0.11.1",
     "inline-source-cli": "^1.2.0",
     "marked": "^0.6.0",

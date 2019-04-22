@@ -201,23 +201,6 @@
   transform: translateX(-50%);
 }
 
-.ribbon {
-  position: relative;
-}
-
-.ribbon::after {
-  position: absolute;
-  top: -1em;
-  left: -2em;
-  content: 'NEW!';
-  background-color: #FF4136;
-  color: white;
-  padding: 0.125em;
-  transform: rotate(-25deg);
-  font-weight: bold;
-  border-radius: 0.125em;
-}
-
 @media screen and (min-width: 30em) {
   .illustration {
     width: 25rem;
