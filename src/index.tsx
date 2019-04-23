@@ -148,7 +148,14 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
 
   switch (page.type) {
     case Homepage.Details.type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${Homepage.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(Homepage.render(root, node, siteUrl))
+      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+      optimiseCss({ $ })
+      optimiseJs({ $ })
+      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case Training.Details.type: {
