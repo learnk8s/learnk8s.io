@@ -8,7 +8,7 @@
     "svgo": "npx ts-node src/svgo.ts",
     "fmt": "prettier 'src/**/*.{ts,tsx}' --list-different",
     "test": "ts-node --files node_modules/tape/bin/tape 'src/**/test.ts' 'src/**/*.test.ts' 'src/**/*.integration.ts' 'src/**/integration.ts'",
-    "start": "http-serve _site -p 4000"
+    "start": "ln -fs $PWD $PWD/_site/b && http-server -p 4000 _site"
   },
   "author": "Learnk8s",
   "license": "MIT",
@@ -33,6 +33,7 @@
     "diff": "^4.0.1",
     "eventbrite": "^1.2.1",
     "feed": "^2.0.2",
+    "hast-util-select": "^3.0.0",
     "hastscript": "^5.0.0",
     "http-serve": "^1.0.1",
     "http-server": "^0.11.1",
@@ -52,6 +53,7 @@
     "react-schemaorg": "^0.1.0",
     "rehype-raw": "^4.0.0",
     "rehype-react": "^3.1.0",
+    "rehype-stringify": "^5.0.0",
     "remark-parse": "^6.0.3",
     "remark-rehype": "^4.0.0",
     "schema-dts": "^0.3.1",

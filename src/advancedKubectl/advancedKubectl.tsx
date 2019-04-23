@@ -1,15 +1,14 @@
-import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
 import { Subscribe } from '../layout'
-import * as Remark from '../remark'
+import * as Remark from '../remark.v2'
 
 export const Details = {
-  type: identity<'kubectlProductivity'>('kubectlProductivity'),
+  type: 'kubectlProductivity',
   url: '/kubectl-productivity',
   seoTitle: 'Boosting your kubectl productivity ♦︎ Learnk8s',
   title: 'Boosting your kubectl productivity',
@@ -19,23 +18,18 @@ export const Details = {
 This article contains a series of tips and tricks to help you boost your kubectl productivity. At the same time, it aims at deepening your understanding of how various aspects of Kubernetes work.
 
 The goal of this article is not only to make your daily work with Kubernetes more efficient but also more enjoyable!`,
-  openGraphImage: Image({ url: 'src/advancedKubectl/magic.jpg', description: 'Advanced kubectl usage' }),
+  openGraphImage: <img src='src/advancedKubectl/magic.jpg' alt='Advanced kubectl usage' />,
   publishedDate: '2019-03-27',
   lastModifiedDate: '2019-04-15',
-  previewImage: Image({ url: 'src/advancedKubectl/magic.jpg', description: 'Advanced kubectl usage' }),
+  previewImage: <img src='src/advancedKubectl/magic.jpg' alt='Advanced kubectl usage' />,
   author: {
     fullName: 'Daniel Weibel',
-    avatar: Image({ url: 'assets/authors/daniel_weibel.jpg', description: 'Daniel Weibel' }),
+    avatar: <img src='assets/authors/daniel_weibel.jpg' alt='Daniel Weibel' />,
     link: 'https://medium.com/@weibeld',
   },
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Remark.render(`${__dirname}/content.md`)
   return renderToStaticMarkup(
     <Article
       website={website}
@@ -49,17 +43,13 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       authorLink={currentNode.payload.author.link}
       publishedDate={currentNode.payload.publishedDate}
       lastUpdated={currentNode.payload.lastModifiedDate}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: css,
-      })}
     >
       <JsonLd<BlogPosting>
         item={{
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
           headline: currentNode.payload.title,
-          image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+          image: `${currentNode.payload.previewImage.props.src}`,
           author: {
             '@type': 'Person',
             name: currentNode.payload.author.fullName,
@@ -69,7 +59,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             name: 'Learnk8s',
             logo: {
               '@type': 'ImageObject',
-              url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
+              url: `assets/learnk8s_logo_square.png`,
             },
           },
           url: getAbsoluteUrl(currentNode, siteUrl),
@@ -81,7 +71,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
         }}
       />
-      {html}
+      {Remark.render(`${__dirname}/content.md`)}
 
       <RelatedConentContainer>
         <RelatedContentItem>
@@ -102,12 +92,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       </RelatedConentContainer>
 
       <Subscribe identifier='advanced-kubectl' />
-
-      <JSScript
-        js={JSBundle({
-          scripts: js,
-        })}
-      />
     </Article>,
   )
 }
