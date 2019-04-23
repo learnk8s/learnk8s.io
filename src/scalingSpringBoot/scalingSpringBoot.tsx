@@ -16,7 +16,12 @@ export const Details = {
   openGraphImage: <img src='src/scalingSpringBoot/autoscaling.png' alt='Containers' />,
   publishedDate: '2018-07-11',
   lastModifiedDate: '2019-04-15',
-  previewImage: <img src='src/scalingSpringBoot/autoscaling.png' alt='Scaling Microservices with Message Queues, Spring Boot and Kubernetes' />,
+  previewImage: (
+    <img
+      src='src/scalingSpringBoot/autoscaling.png'
+      alt='Scaling Microservices with Message Queues, Spring Boot and Kubernetes'
+    />
+  ),
   author: {
     fullName: 'Daniele Polencic',
     avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,

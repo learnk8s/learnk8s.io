@@ -16,7 +16,12 @@ export const Details = {
   description: `Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
   openGraphImage: <img src='src/spotInstances/cheap-cluster.jpg' alt='Serving cheaper servers' />,
   publishedDate: '2018-11-06',
-  previewImage: <img src='src/spotInstances/cheap-cluster.jpg' alt='Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes' />,
+  previewImage: (
+    <img
+      src='src/spotInstances/cheap-cluster.jpg'
+      alt='Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes'
+    />
+  ),
   author: {
     fullName: 'César Tron-Lozai',
     avatar: <img src='assets/authors/césar_tron-lozai.jpg' alt='César Tron-Lozai' />,

@@ -14,10 +14,14 @@ export const Details = {
   title: 'Getting started with Docker and Kubernetes on Windows 10',
   shortDescription: `In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
   description: `Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
-  openGraphImage: <img src='src/k8sOnWindows/k8s_on_win.jpg' alt='Getting started with Docker and Kubernetes on Windows 10' />,
+  openGraphImage: (
+    <img src='src/k8sOnWindows/k8s_on_win.jpg' alt='Getting started with Docker and Kubernetes on Windows 10' />
+  ),
   publishedDate: '2018-06-05',
   lastModifiedDate: '2019-03-20',
-  previewImage: <img src='src/k8sOnWindows/k8s_on_win.jpg' alt='Getting started with Docker and Kubernetes on Windows 10' />,
+  previewImage: (
+    <img src='src/k8sOnWindows/k8s_on_win.jpg' alt='Getting started with Docker and Kubernetes on Windows 10' />
+  ),
   author: {
     fullName: 'Keith Mifsud',
     avatar: <img src='assets/authors/keith_mifsud.jpg' alt='Keith Mifsud' />,

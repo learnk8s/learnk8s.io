@@ -17,7 +17,9 @@ export const Details = {
   openGraphImage: <img src='src/smallerDockerImages/smaller_images.png' alt='Docker whale' />,
   publishedDate: '2018-02-12',
   lastModifiedDate: '2019-04-14',
-  previewImage: <img src='src/smallerDockerImages/smaller_images.png' alt='3 simple tricks for smaller Docker images' />,
+  previewImage: (
+    <img src='src/smallerDockerImages/smaller_images.png' alt='3 simple tricks for smaller Docker images' />
+  ),
   author: {
     fullName: 'Daniele Polencic',
     avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,

@@ -50,7 +50,7 @@ import postcss = require('postcss')
 import cssnano = require('cssnano')
 import { minify } from 'terser'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { array } from 'prop-types';
+import { array } from 'prop-types'
 
 const isOptimisedBuild = !!process.env.IS_BUILD_OPTIMISED
 
@@ -171,7 +171,14 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Academy.Details.type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${Academy.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(Academy.render(root, node, siteUrl))
+      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+      optimiseCss({ $ })
+      optimiseJs({ $ })
+      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case Consulting.Details.type: {
@@ -431,7 +438,9 @@ function optimiseCss({ $ }: { $: Cheerio }): Cheerio {
   const css: string = [
     ...linkTags.get().map(it => readFileSync((it as any).properties.href, 'utf8')),
     ...styleTags.get().map(it => toString(it)),
-  ].filter(onlyUnique).join('\n')
+  ]
+    .filter(onlyUnique)
+    .join('\n')
   styleTags.remove()
   linkTags.remove()
   const digestCss = md5(css)
@@ -452,8 +461,10 @@ function optimiseJs({ $ }: { $: Cheerio }): Cheerio {
   const externalScripts = scriptTags.get().filter(it => !!(it.properties as any).src)
   const inlineScripts = scriptTags.get().filter(it => !(it.properties as any).src)
   const thirdPartyScripts = externalScripts.filter(it => /^http/.test((it.properties as any).src))
-  const includeScripts = externalScripts.filter(it => !/^http/.test((it.properties as any).src)).map(it => readFileSync((it.properties as any).src, 'utf8'))
-  const js: string = [...includeScripts, ...inlineScripts.map(it => toString(it)),].filter(onlyUnique).join('\n;')
+  const includeScripts = externalScripts
+    .filter(it => !/^http/.test((it.properties as any).src))
+    .map(it => readFileSync((it.properties as any).src, 'utf8'))
+  const js: string = [...includeScripts, ...inlineScripts.map(it => toString(it))].filter(onlyUnique).join('\n;')
   scriptTags.remove()
   const digestJs = md5(js)
   const minifiedJs = minify(js)
