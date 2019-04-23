@@ -55,7 +55,6 @@ Though their inner workings differ a little, they stem from the same rationale.
 A typical cloud provider buys loads of powerful servers organised in large data centres. To maximise the utilisation of hardware, they divide those computers into smaller virtual machines.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 780" id="split">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(194 69)">
@@ -194,7 +193,8 @@ A typical cloud provider buys loads of powerful servers organised in large data 
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#split')
@@ -286,8 +286,6 @@ A typical cloud provider buys loads of powerful servers organised in large data 
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 **Because they promise horizontal scalability to everyone, they need to keep a lot of unutilised hardware in case someone suddenly needs additional compute units. That, however, leaves a lot of resources unused.**
@@ -325,7 +323,6 @@ What should you do next week if those instances become unavailable, and you can 
 Of course, you could use those instances, but you'd be paying twice the price, and the extra memory would be wasted.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 516" id="waste">
   <g fill="none" fill-rule="evenodd">
     <g id="waste-animejs-vm-large" transform="translate(242 65)">
@@ -395,7 +392,8 @@ Of course, you could use those instances, but you'd be paying twice the price, a
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const basicTimeline = anime.timeline({
@@ -457,8 +455,6 @@ Of course, you could use those instances, but you'd be paying twice the price, a
   })
 })();
 </script>
-<style>
-</style>
 ```
 
 Spot instances are an excellent deal, but the downsides might not be acceptable.
@@ -488,7 +484,6 @@ Kubernetes provides a layer of abstraction on all your compute resources - regar
 Your cluster could be formed of 10 small virtual machines or 2 big bare metal servers, the end result is the same: _a single point of interaction that manages and scales workload on your nodes_.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 679" id="united">
   <g fill="none" fill-rule="evenodd">
     <g id="united-animejs-united" transform="translate(57 80)">
@@ -666,7 +661,8 @@ Your cluster could be formed of 10 small virtual machines or 2 big bare metal se
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#united')
@@ -734,8 +730,6 @@ Your cluster could be formed of 10 small virtual machines or 2 big bare metal se
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 When you install Kubernetes on your infrastructure you select one computer as the **master** node, the rest of your fleet join the cluster as **worker** nodes.
@@ -765,7 +759,6 @@ But if you're interested to know how big is your cluster you can sum the memory 
 If you have one 4GB/1vCPU and one 8GB/2vCPUs instances, you only have a cluster with 12GB and 3 vCPUs.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 658" id="resources">
   <g fill="none" fill-rule="evenodd">
     <g id="resources-animejs-server1" transform="translate(243 211)">
@@ -973,7 +966,8 @@ If you have one 4GB/1vCPU and one 8GB/2vCPUs instances, you only have a cluster 
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#resources')
@@ -1040,8 +1034,6 @@ If you have one 4GB/1vCPU and one 8GB/2vCPUs instances, you only have a cluster 
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 The other noteworthy feature in Kubernetes is that nodes are monitored for uptime.
@@ -1063,7 +1055,6 @@ Imagine you have 3 nodes and 3 replicas of an application, one running on each n
 Kubernetes realises that you only have 2 replicas running instead of 3 and immediately starts another copy in one of the two remaining nodes (if space is available of course).
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 644" id="reschedule">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(512 113)">
@@ -1262,7 +1253,8 @@ Kubernetes realises that you only have 2 replicas running instead of 3 and immed
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#reschedule')
@@ -1325,8 +1317,6 @@ Kubernetes realises that you only have 2 replicas running instead of 3 and immed
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 ## Spot instances and Kubernetes: a match made in heaven
