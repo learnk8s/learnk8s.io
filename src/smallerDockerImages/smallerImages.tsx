@@ -1,40 +1,31 @@
-import { Image, CSSBundle, JSBundle, JSScript } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { Subscribe } from '../layout'
+import { Subscribe } from '../layout.v2'
 import { BlogPosting } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import * as Remark from '../remark'
+import * as Remark from '../remark.v2'
 
 export const Details = {
-  type: identity<'smaller_images'>('smaller_images'),
+  type: 'smaller_images',
   url: '/smaller-docker-images',
   seoTitle: '3 simple tricks for smaller Docker images ♦︎ Learnk8s',
   title: '3 simple tricks for smaller Docker images',
   shortDescription: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control?`,
   description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
-  openGraphImage: Image({ url: 'src/smallerDockerImages/smaller_images.png', description: 'Docker whale' }),
+  openGraphImage: <img src='src/smallerDockerImages/smaller_images.png' alt='Docker whale' />,
   publishedDate: '2018-02-12',
   lastModifiedDate: '2019-04-14',
-  previewImage: Image({
-    url: 'src/smallerDockerImages/smaller_images.png',
-    description: '3 simple tricks for smaller Docker images',
-  }),
+  previewImage: <img src='src/smallerDockerImages/smaller_images.png' alt='3 simple tricks for smaller Docker images' />,
   author: {
     fullName: 'Daniele Polencic',
-    avatar: Image({ url: 'assets/authors/daniele_polencic.jpg', description: 'Daniele Polencic' }),
+    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
     link: 'https://linkedin.com/in/danielepolencic',
   },
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Remark.render(`${__dirname}/content.md`)
   return renderToStaticMarkup(
     <Article
       website={website}
@@ -46,10 +37,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       authorFullName={currentNode.payload.author.fullName}
       authorAvatar={currentNode.payload.author.avatar}
       authorLink={currentNode.payload.author.link}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: css,
-      })}
       publishedDate={currentNode.payload.publishedDate}
       lastUpdated={currentNode.payload.lastModifiedDate}
     >
@@ -58,7 +45,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
           headline: currentNode.payload.title,
-          image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+          image: `${currentNode.payload.previewImage.props.src}`,
           author: {
             '@type': 'Person',
             name: currentNode.payload.author.fullName,
@@ -68,7 +55,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             name: 'Learnk8s',
             logo: {
               '@type': 'ImageObject',
-              url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
+              url: `assets/learnk8s_logo_square.png`,
             },
           },
           url: getAbsoluteUrl(currentNode, siteUrl),
@@ -80,7 +67,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
         }}
       />
-      {html}
+      {Remark.render(`${__dirname}/content.md`)}
 
       <RelatedConentContainer>
         <RelatedContentItem>
@@ -102,13 +89,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       </RelatedConentContainer>
 
       <Subscribe identifier='smaller-images-docker' />
-
-      <JSScript
-        js={JSBundle({
-          scripts: js,
-          paths: ['src/smallerDockerImages/anime.min.js', 'src/smallerDockerImages/isScrolledIntoView.js'],
-        })}
-      />
     </Article>,
   )
 }
