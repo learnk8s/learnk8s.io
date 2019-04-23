@@ -26,15 +26,15 @@ export const MultipleClustersDetails = identity<Details>({
 
 export const IngressApiGatewayDetails = identity<Details>({
   type: identity<'bsk-march-02'>('bsk-march-02'),
-  url: '/ingress-api-gateway',
-  seoTitle: 'Can you have an API Gateway as an ingress? ♦︎ Learnk8s',
-  title: 'Can you have an API Gateway as an ingress?',
+  url: '/kubernetes-ingress-api-gateway',
+  seoTitle: 'Can you expose your services with an API gateway in Kubernetes?',
+  title: 'Can you expose your microservices with an API gateway in Kubernetes?',
   description: `In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster. You can select an Ingress that is also an API gateway.`,
   openGraphImage: Image({
     url: 'assets/bsk.png',
     description: 'Bite-sized Kubernetes learning',
   }),
-  publishedDate: '2019-04-11',
+  publishedDate: '2019-04-23',
   previewImage: Image({
     url: 'assets/bsk.png',
     description: 'Bite-sized Kubernetes learning',
