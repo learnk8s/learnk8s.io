@@ -61,7 +61,7 @@ export const Navbar: React.StatelessComponent<{ root: Sitemap }> = ({ root }) =>
   return (
     <nav className='nav cf bb-ns b--lightest-blue-ns pl3 ph0-m ph3l flex-ns items-center-ns bg-sky'>
       <a href={getFullUrl(root)} className='logo fl-ns w-100 mw4 mw-none-ns dib w-20-m w-10-l pa2-ns'>
-      <img src='assets/logo.svg' alt='Learnk8s'/>
+        <img src='assets/logo.svg' alt='Learnk8s' />
       </a>
       <ul className='list fl w-80-m w-90-l pa2 tr dn db-ns'>
         <li className='dib ttu'>
@@ -95,7 +95,7 @@ export const Footer: React.StatelessComponent<{ root: Sitemap }> = ({ root }) =>
       <section className='flex-ns items-start-ns justify-around-ns pr3-m pr7-l'>
         <div className='dn db-l'>
           <a href={getFullUrl(root)} className='logo w4 db'>
-          <img src='assets/logo.svg' alt='Learnk8s'/>
+            <img src='assets/logo.svg' alt='Learnk8s' />
           </a>
           <p>Learn Kubernetes the smart way</p>
         </div>
@@ -280,7 +280,7 @@ export const ListItem: React.StatelessComponent<{ className?: string }> = ({ chi
   return (
     <li className={`mv3 flex justify-center ${className || ''}`}>
       <div className='v-top tc'>
-      <img src='assets/tick.svg' alt='Tick' className='w2 h2'/>
+        <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
       </div>
       <div className='v-top pl3 w-90'>
         <p className='mv0 f4-l lh-copy'>{children}</p>
@@ -293,7 +293,7 @@ export const SpecialListItem: React.StatelessComponent<{}> = ({ children }) => {
   return (
     <li className='mv3 flex justify-center'>
       <div className='v-top tc'>
-      <img src='assets/plus.svg' alt='Plus' className='w2 h2'/>
+        <img src='assets/plus.svg' alt='Plus' className='w2 h2' />
       </div>
       <div className='v-top pl3 w-90'>
         <p className='mv0 f4-l lh-copy'>{children}</p>
@@ -307,7 +307,7 @@ export const Interlude: React.StatelessComponent<{}> = ({}) => {
     <section className='triangle-1 tr'>
       <div className='dib mr4'>
         <div className='i-small-cargo relative'>
-        <img src='assets/small_cargo.svg' alt='Small cargo' className='absolute top-0 right-0'/>
+          <img src='assets/small_cargo.svg' alt='Small cargo' className='absolute top-0 right-0' />
         </div>
       </div>
     </section>

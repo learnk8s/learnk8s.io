@@ -12,7 +12,7 @@ const one: one = require('mdast-util-to-hast/lib/one')
 const rehype2react = require('rehype-react')
 const { selectAll, select } = require('unist-util-select')
 import { readFileSync } from 'fs'
-import { AsciiCast, Image } from './assets'
+import { Image } from './assets'
 import { dirname } from 'path'
 const remove = require('unist-util-remove')
 const toString = require('mdast-util-to-string')
@@ -362,10 +362,6 @@ export function render(path: string): { html: JSX.Element; css: string[]; js: st
           const props = {} as any
           if (node.title !== null && node.title !== undefined) {
             props.title = node.title
-          }
-          if (/\.cast$/gi.test(node.url)) {
-            const asciiCast = AsciiCast({ castPath: `${assetsPath}/${node.url}` })
-            return H('img.db.pv4', { ...props, src: asciiCast.url, alt: node.alt || '' })
           }
           const { url, description } = Image({ url: `${assetsPath}/${node.url}`, description: node.alt || '' })
           return H('img.db.pv3', { ...props, src: url, alt: description })
