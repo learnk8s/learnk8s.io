@@ -1,13 +1,11 @@
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl, getBiteSizedSeries } from './sitemap'
 import * as React from 'react'
-import { Article } from './article'
-import { cat } from 'shelljs'
+import { Article } from './article.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { PromoAcademy, Layout, Navbar, Consultation, Footer, Subscribe } from './layout'
-import * as Remark from './remark'
-import { Image, CSSBundle, JSScript, JSBundle, Img } from './assets'
+import { Layout, Navbar, Consultation, Footer, Subscribe } from './layout.v2'
+import * as Remark from './remark.v2'
 import marked from 'marked'
 import moment = require('moment')
 
@@ -30,12 +28,12 @@ export interface Details {
   seoTitle: string
   title: string
   description: string
-  openGraphImage: Image
+  openGraphImage: JSX.Element
   publishedDate: string
-  previewImage: Image
+  previewImage: JSX.Element
   author: {
     fullName: string
-    avatar: Image
+    avatar: JSX.Element
     link: string
     shortDescription: string
   }
@@ -43,7 +41,6 @@ export interface Details {
 
 export function BiteSizedRender(markdownPath: string) {
   return function render(website: Sitemap, currentNode: LinkedNode<Details>, siteUrl: string): string {
-    const { css, js, html } = Remark.render(markdownPath)
     return renderToStaticMarkup(
       <Article
         website={website}
@@ -55,10 +52,6 @@ export function BiteSizedRender(markdownPath: string) {
         authorFullName={currentNode.payload.author.fullName}
         authorAvatar={currentNode.payload.author.avatar}
         authorLink={currentNode.payload.author.link}
-        cssBundle={CSSBundle({
-          paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-          styles: css,
-        })}
         publishedDate={currentNode.payload.publishedDate}
       >
         <JsonLd<BlogPosting>
@@ -66,7 +59,7 @@ export function BiteSizedRender(markdownPath: string) {
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
             headline: currentNode.payload.title,
-            image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+            image: `${currentNode.payload.previewImage.props.src}`,
             author: {
               '@type': 'Person',
               name: currentNode.payload.author.fullName,
@@ -76,7 +69,7 @@ export function BiteSizedRender(markdownPath: string) {
               name: 'Learnk8s',
               logo: {
                 '@type': 'ImageObject',
-                url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
+                url: `assets/learnk8s_logo_square.png`,
               },
             },
             url: getAbsoluteUrl(currentNode, siteUrl),
@@ -129,15 +122,9 @@ export function BiteSizedRender(markdownPath: string) {
             .
           </em>
         </p>
-        {html}
+        {Remark.render(markdownPath)}
 
         <Subscribe identifier={currentNode.payload.title.replace(/[^\w]+/g, '-')} />
-
-        <JSScript
-          js={JSBundle({
-            scripts: js,
-          })}
-        />
       </Article>,
     )
   }
@@ -154,7 +141,7 @@ export const Details = {
   title: 'Bite-sized Kubernetes learning',
   description:
     'A regular column on the most interesting questions that we see online and during our workshops answered by a Kubernetes expert',
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
@@ -166,9 +153,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
         <Navbar root={website} />
@@ -204,7 +188,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
   )
 }
 
-export const Block: React.StatelessComponent<{ image: Image; title: string; description: string }> = ({
+export const Block: React.StatelessComponent<{ image: JSX.Element; title: string; description: string }> = ({
   title,
   description,
   children,
@@ -212,9 +196,7 @@ export const Block: React.StatelessComponent<{ image: Image; title: string; desc
 }) => {
   return (
     <li className='bg-white br2 relative pt4 w-100 mw6-m center-m w-30-l mv5'>
-      <div className='w3 h3 bg-white br-100 shadow-1 absolute top--2 left-0 absolute-center'>
-        <Img image={image} />
-      </div>
+      <div className='w3 h3 bg-white br-100 shadow-1 absolute top--2 left-0 absolute-center'>{image}</div>
       <h2 className='navy normal tc'>{title}</h2>
       <p className='lh-copy black-70 ph4 measure-narrow'>{description}</p>
       <div className='tc bg-evian br2 br--bottom pv3'>{children}</div>
