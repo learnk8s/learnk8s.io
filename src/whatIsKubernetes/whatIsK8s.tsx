@@ -16,7 +16,9 @@ export const Details = {
   description: `In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month.`,
   openGraphImage: <img src='src/whatIsKubernetes/why-kube.png' alt='Kubernetes bucks' />,
   publishedDate: '2018-09-04',
-  previewImage: <img src='src/whatIsKubernetes/why-kube.png' alt='What is Kubernetes? Optimise your hosting costs and efficiency' />,
+  previewImage: (
+    <img src='src/whatIsKubernetes/why-kube.png' alt='What is Kubernetes? Optimise your hosting costs and efficiency' />
+  ),
   author: {
     fullName: 'Daniele Polencic',
     avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,

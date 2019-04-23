@@ -1,52 +1,23 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Footer, Layout, ListItem, MailTo, mailto, FAQs, FAQ, Hero } from './layout'
-import { Image, Img, ExternalJavascript, ExternalScript, CSSBundle, JSScript, JSBundle } from './assets'
+import { Navbar, Footer, Layout, ListItem, MailTo, mailto, FAQs, FAQ, Hero } from './layout.v2'
 import { material, assets as materialAssets } from './material'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-export const Assets = {
-  page: {
-    down: Image({ url: 'assets/academy/down_arrow_white.svg', description: 'Down' }),
-    question: Image({ url: 'assets/question.svg', description: 'Question' }),
-    tick: Image({ url: 'assets/academy/tick.svg', description: 'Tick' }),
-    paddle: ExternalJavascript({ url: 'https://cdn.paddle.com/paddle/paddle.js' }),
-
-    nope: Image({ url: 'assets/academy/nope.svg', description: 'Kubernetes is hard' }),
-    rocks: Image({ url: 'assets/academy/rocks.svg', description: 'You may feel stranded while learning Kubernetes' }),
-    onfire: Image({
-      url: 'assets/academy/onfire.svg',
-      description: `In Kubernetes everything feels like it's on fire`,
-    }),
-    academy: Image({ url: 'assets/academy/academy.svg', description: `Learn Kubernetes online` }),
-  },
-  material: materialAssets,
-}
-
 export const Details = {
-  type: identity<'academy'>('academy'),
+  type: 'academy',
   url: '/academy',
   seoTitle: 'Learnk8s Academy ♦︎ Learnk8s',
   title: 'Kubernetes Online Course',
   description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+} as const
 
 const enterprisePackage: MailTo = {
   subject: 'Learnk8s Academy',
   body: `Hi Learnk8s,\n\nI'd like to discuss buying ___ licenses in bulk for the Learnk8s Academy.\n\nKind regards,\n`,
-  email: 'hello@learnk8s.io',
-}
-
-const privateGroupEnquiry: MailTo = {
-  subject: 'Advanced Kubernetes training — Private group enquiry',
-  body: `Hi Learnk8s,\n\nWe wish to train ___(number) people to Kubernetes and containers in ____(month). Can you help?\n\nBest regards,\n`,
   email: 'hello@learnk8s.io',
 }
 
@@ -104,42 +75,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: `
-        .numbered {
-          counter-reset: my-awesome-counter;
-        }
-        .numbered li {
-          counter-increment: my-awesome-counter;
-        }
-        .numbered li::before {
-          content: counter(my-awesome-counter);
-          background: #662974;
-          width: 2rem;
-          height: 2rem;
-          border-radius: 50%;
-          display: inline-block;
-          line-height: 2rem;
-          color: white;
-          text-align: center;
-          margin-right: 0.5rem;
-          font-weight: bold;
-        }
-        .feedback {
-          column-count: 1;
-        }
-        @media screen and (min-width: 30em) and (max-width:60em) {
-          .feedback {
-            column-count: 2;
-          }
-        }
-        @media screen and (min-width: 60em) {
-          .feedback {
-            column-count: 4;
-          }
-        }`,
-      })}
     >
       <script
         type='text/javascript'
@@ -170,7 +105,7 @@ setTimeout(ldinsp, 0);
       <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
         <Navbar root={website} />
 
-        <Hero image={Assets.page.academy} imageClass='i-academy'>
+        <Hero image={<img src='assets/academy/academy.svg' alt='Learn Kubernetes online' />} imageClass='i-academy'>
           <h1 className='f1 mt1-l pt5-l f-subheadline-l lh-solid'>Self-paced Kubernetes online course</h1>
           <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>
             A hands-on course on mastering Kubernetes and the tools you'll need to build real, working applications at
@@ -183,7 +118,11 @@ setTimeout(ldinsp, 0);
         <div className='w-50-l dn db-l tc'>
           <div className='dib'>
             <div className='i-rocks relative'>
-              <Img image={Assets.page.rocks} className='absolute top-0 right-0' />
+              <img
+                src='assets/academy/rocks.svg'
+                alt='You may feel stranded while learning Kubernetes'
+                className='absolute top-0 right-0'
+              />
             </div>
           </div>
         </div>
@@ -221,7 +160,11 @@ setTimeout(ldinsp, 0);
         <div className='w-50-l dn db-l tc'>
           <div className='dib'>
             <div className='i-onfire relative'>
-              <Img image={Assets.page.onfire} className='absolute top-0 right-0' />
+              <img
+                src='assets/academy/onfire.svg'
+                alt={`In Kubernetes everything feels like it's on fire`}
+                className='absolute top-0 right-0'
+              />
             </div>
           </div>
         </div>
@@ -231,7 +174,7 @@ setTimeout(ldinsp, 0);
         <div className='w-50-l dn db-l tc'>
           <div className='dib'>
             <div className='i-nope relative'>
-              <Img image={Assets.page.nope} className='absolute top-0 right-0' />
+              <img src='assets/academy/nope.svg' alt='Kubernetes is hard' className='absolute top-0 right-0' />
             </div>
           </div>
         </div>
@@ -276,6 +219,43 @@ setTimeout(ldinsp, 0);
           <span className='i'>from the comfort of wherever you are</span>, by joining the Learnk8s Academy.
         </h2>
         <div className='mw7 center'>
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+          .numbered {
+            counter-reset: my-awesome-counter;
+          }
+          .numbered li {
+            counter-increment: my-awesome-counter;
+          }
+          .numbered li::before {
+            content: counter(my-awesome-counter);
+            background: #662974;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: inline-block;
+            line-height: 2rem;
+            color: white;
+            text-align: center;
+            margin-right: 0.5rem;
+            font-weight: bold;
+          }
+          .feedback {
+            column-count: 1;
+          }
+          @media screen and (min-width: 30em) and (max-width:60em) {
+            .feedback {
+              column-count: 2;
+            }
+          }
+          @media screen and (min-width: 60em) {
+            .feedback {
+              column-count: 4;
+            }
+          }`,
+            }}
+          />
           <ul className='list numbered black-70 pl0 pt2'>
             <li className='f4-l lh-copy mv3'>You'll learn how to package apps into Linux containers</li>
             <li className='f4-l lh-copy mv3'>Then deploy them into a cluster</li>
@@ -317,7 +297,7 @@ setTimeout(ldinsp, 0);
 
         <div className='ma3 ma5-l pa3 mt0-l'>
           <Module
-            preview={[Assets.material.docker.docker, Assets.material.docker.containersVMs]}
+            preview={[materialAssets.docker.docker, materialAssets.docker.containersVMs]}
             title={`1. ${material.docker.name}`}
             description={material.docker.description}
           >
@@ -335,10 +315,7 @@ setTimeout(ldinsp, 0);
           </Module>
 
           <Module
-            preview={[
-              Assets.material.zeroToKubernetes.apiInfrastructure,
-              Assets.material.zeroToKubernetes.tetrisPlayer,
-            ]}
+            preview={[materialAssets.zeroToKubernetes.apiInfrastructure, materialAssets.zeroToKubernetes.tetrisPlayer]}
             title={`2. ${material.zeroToKubernetes.name}`}
             description={material.zeroToKubernetes.description}
           >
@@ -357,8 +334,8 @@ setTimeout(ldinsp, 0);
 
           <Module
             preview={[
-              Assets.material.deploymentStrategies.livenessProbe,
-              Assets.material.deploymentStrategies.rollingUpdates,
+              materialAssets.deploymentStrategies.livenessProbe,
+              materialAssets.deploymentStrategies.rollingUpdates,
             ]}
             title={`3. ${material.deploymentStrategies.name}`}
             description={material.deploymentStrategies.description}
@@ -377,7 +354,7 @@ setTimeout(ldinsp, 0);
           </Module>
 
           <Module
-            preview={[Assets.material.architecture.clusters, Assets.material.architecture.monzo]}
+            preview={[materialAssets.architecture.clusters, materialAssets.architecture.monzo]}
             title={`4. ${material.architecture.name}`}
             description={material.architecture.description}
           >
@@ -395,7 +372,7 @@ setTimeout(ldinsp, 0);
           </Module>
 
           <Module
-            preview={[Assets.material.networking.e2e, Assets.material.networking.kubeProxy]}
+            preview={[materialAssets.networking.e2e, materialAssets.networking.kubeProxy]}
             title={`5. ${material.networking.name}`}
             description={material.networking.description}
           >
@@ -413,10 +390,7 @@ setTimeout(ldinsp, 0);
           </Module>
 
           <Module
-            preview={[
-              Assets.material.managingState.clusteredDatabase,
-              Assets.material.managingState.distributedStorage,
-            ]}
+            preview={[materialAssets.managingState.clusteredDatabase, materialAssets.managingState.distributedStorage]}
             title={`6. ${material.managingState.name}`}
             description={material.managingState.description}
           >
@@ -433,7 +407,7 @@ setTimeout(ldinsp, 0);
           </Module>
 
           <Module
-            preview={[Assets.material.templating.helmArchitecture, Assets.material.templating.reusableTemplates]}
+            preview={[materialAssets.templating.helmArchitecture, materialAssets.templating.reusableTemplates]}
             title={`7. ${material.templating.name}`}
             description={material.templating.description}
           >
@@ -449,6 +423,7 @@ setTimeout(ldinsp, 0);
               ))}
             </ul>
           </Module>
+          <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
         </div>
       </section>
 
@@ -563,16 +538,16 @@ setTimeout(ldinsp, 0);
                 <h3 className='normal black-70 tc mt0'>From 10+ users</h3>
               </div>
               <ul className='list pl0 black-70 ph3'>
-                <Item tick={Assets.page.tick}>
+                <Item tick={<img src='assets/academy/tick.svg' alt='tick' />}>
                   <p className='mv0 f4-l lh-copy b'>Dedicated support</p>
                 </Item>
-                <Item tick={Assets.page.tick}>
+                <Item tick={<img src='assets/academy/tick.svg' alt='tick' />}>
                   <p className='mv0 f4-l lh-copy b'>Analytics and reports</p>
                 </Item>
-                <Item tick={Assets.page.tick}>
+                <Item tick={<img src='assets/academy/tick.svg' alt='tick' />}>
                   <p className='mv0 f4-l lh-copy b'>Live classes and webinars</p>
                 </Item>
-                <Item tick={Assets.page.tick}>
+                <Item tick={<img src='assets/academy/tick.svg' alt='tick' />}>
                   <p className='mv0 f4-l lh-copy b'>Host the Academy on your cloud</p>
                 </Item>
               </ul>
@@ -683,21 +658,17 @@ setTimeout(ldinsp, 0);
       <FAQs faqs={faqs} />
 
       <Footer root={website} />
-      <ExternalScript script={Assets.page.paddle} />
-      <JSScript
-        js={JSBundle({
-          scripts: [`(${CreateToggle.toString()})()`, `Paddle.Setup({vendor:${'49158'}});`],
-        })}
-      />
+      <script src='https://cdn.paddle.com/paddle/paddle.js' />
+      <script dangerouslySetInnerHTML={{ __html: `Paddle.Setup({vendor:${'49158'}});` }} />
     </Layout>,
   )
 }
 
-export const Item: React.StatelessComponent<{ tick: Image }> = ({ children, tick }) => {
+export const Item: React.StatelessComponent<{ tick: JSX.Element }> = ({ children, tick }) => {
   return (
     <li className='mv3 flex justify-center'>
       <div className='v-top tc'>
-        <Img image={tick} className='w2 h2' />
+        <img src={tick.props.src} alt={tick.props.alt} className='w2 h2' />
       </div>
       <div className='v-top pl3 w-90'>{children}</div>
     </li>
@@ -707,7 +678,7 @@ export const Item: React.StatelessComponent<{ tick: Image }> = ({ children, tick
 export const Module: React.StatelessComponent<{
   title: string
   description: string
-  preview: Image[]
+  preview: JSX.Element[]
   className?: string
 }> = ({ children, title, description, preview, className }) => {
   const id = title.toLowerCase().replace(/[^\w]+/g, '-')
@@ -741,7 +712,7 @@ export const Module: React.StatelessComponent<{
             return (
               <div className='w-80 w-50-l center'>
                 <div className='padding-hack-75 relative'>
-                  <Img image={it} className='absolute top-0 right-0' />
+                  <img src={it.props.src} alt={it.props.alt} className='absolute top-0 right-0' />
                 </div>
               </div>
             )
@@ -807,7 +778,7 @@ export const ListItemQuestion: React.StatelessComponent<{}> = ({ children }) => 
   return (
     <li className='mv3 flex justify-center'>
       <div className='v-top tc'>
-        <Img image={Assets.page.question} className='w2 h2' />
+        <img src='assets/question.svg' alt='Question' className='w2 h2' />
       </div>
       <div className='v-top pl3 w-90'>
         <p className='mv0 f4-l lh-copy'>{children}</p>
