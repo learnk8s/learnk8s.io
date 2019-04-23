@@ -1,7 +1,6 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Footer, Layout, FAQs, Hero, Testimonal, mailto, MailTo, Interlude } from './layout'
-import { Image, Img, Javascript, Script, CSSBundle, JSScript, JSBundle } from './assets'
+import { Navbar, Footer, Layout, FAQs, Hero, Testimonal, mailto, MailTo, Interlude } from './layout.v2'
 import { CourseRow, faqs, DashboardModule, PackageFeatures } from './training'
 import { material } from './material'
 import { PrimaryButton } from './homepage'
@@ -10,22 +9,22 @@ import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Timezone, Venue, Courses, isVenueOnline, CourseEvent } from './courses'
 
-export const Assets = {
-  slack: Image({ url: 'assets/training/slack_in_colours.svg', description: 'Slack' }),
-  downArrow: Image({ url: 'assets/training/down_arrow_white.svg', description: 'Down' }),
-  training: Image({ url: 'assets/training/training.svg', description: 'Training' }),
-  toggle: Javascript({ script: `(${CreateToggle.toString()})()` }),
-  previewDocker: Image({ url: 'assets/training/docker.png', description: 'Linux containers and Kubernetes' }),
-  previewZero: Image({ url: 'assets/training/zero.png', description: 'Zero to Kubernetes' }),
-  previewDeployments: Image({ url: 'assets/training/deploy.png', description: 'Deployment strategies' }),
-  previewArchitecture: Image({ url: 'assets/training/architecture.png', description: 'Kubernetes architecture' }),
-  previewNetworking: Image({ url: 'assets/training/networking.png', description: 'Kubernetes networking' }),
-  previewState: Image({ url: 'assets/training/state.png', description: 'Managing state with Kubernetes' }),
-  previewTemplating: Image({ url: 'assets/training/templating.png', description: 'Templating Kubernetes resources' }),
-  previewOptionals: Image({ url: 'assets/training/optionals.png', description: 'Optional modules' }),
-}
+// export const Assets = {
+//   slack: Image({ url: 'assets/training/slack_in_colours.svg', description: 'Slack' }),
+//   downArrow: Image({ url: 'assets/training/down_arrow_white.svg', description: 'Down' }),
+//   training: Image({ url: 'assets/training/training.svg', description: 'Training' }),
+//   toggle: Javascript({ script: `(${CreateToggle.toString()})()` }),
+//   previewDocker: Image({ url: 'assets/training/docker.png', description: 'Linux containers and Kubernetes' }),
+//   previewZero: Image({ url: 'assets/training/zero.png', description: 'Zero to Kubernetes' }),
+//   previewDeployments: Image({ url: 'assets/training/deploy.png', description: 'Deployment strategies' }),
+//   previewArchitecture: Image({ url: 'assets/training/architecture.png', description: 'Kubernetes architecture' }),
+//   previewNetworking: Image({ url: 'assets/training/networking.png', description: 'Kubernetes networking' }),
+//   previewState: Image({ url: 'assets/training/state.png', description: 'Managing state with Kubernetes' }),
+//   previewTemplating: Image({ url: 'assets/training/templating.png', description: 'Templating Kubernetes resources' }),
+//   previewOptionals: Image({ url: 'assets/training/optionals.png', description: 'Optional modules' }),
+// }
 
-export const Type = identity<'landing'>('landing')
+export const Type = 'landing' as const
 
 export function Details({
   url,
@@ -44,14 +43,10 @@ export function Details({
     seoTitle: `Kubernetes training in ${city} ♦︎ Learnk8s`,
     title: `Kubernetes training in ${city}`,
     description: `Become an expert in deploying application as scale with Kubernetes in ${city}.`,
-    openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
+    openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
     location,
     timezone,
   }
-}
-
-function identity<T>(value: T): T {
-  return value
 }
 
 const customRequest: MailTo = {
@@ -75,9 +70,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       {Courses.map((course, index) => {
         return (
@@ -125,7 +117,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
                         .toISOString(),
                       url: getAbsoluteUrl(currentNode, siteUrl),
                     },
-                    image: `${siteUrl}${currentNode.payload.openGraphImage}`,
+                    image: `${currentNode.payload.openGraphImage.props.src}`,
                     performer: {
                       '@type': 'Organization',
                       name: 'Learnk8s',
@@ -139,7 +131,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
       <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
         <Navbar root={website} />
 
-        <Hero image={Assets.training} imageClass='i-training'>
+        <Hero image={<img src='assets/training/training.svg' alt='Training' />} imageClass='i-training'>
           <h1 className='f1 f-subheadline-l'>
             Kubernetes <span className='no-wrap'>instructor-led</span> training course in{' '}
             {currentNode.payload.location.city}
@@ -149,7 +141,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
           </h2>
           <div className='dn db-l mw6 mh3 mh4-ns tc'>
             <div className='w3 h3 dib'>
-              <Img image={Assets.downArrow} />
+              <img src='assets/training/down_arrow_white.svg' alt='Down' />
             </div>
           </div>
         </Hero>
@@ -165,7 +157,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
           {Courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[])
             .filter(onlyCityOrOnline)
             .map(it => (
-              <CourseRow event={it} slackIcon={Assets.slack} />
+              <CourseRow event={it} slackIcon={<img src='assets/training/slack_in_colours.svg' alt='Slack' />} />
             ))}
         </ul>
       </section>
@@ -185,7 +177,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
         <div className='ma3 ma5-l flex-l flex-wrap justify-center'>
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewDocker}
+            preview={<img src='assets/training/docker.png' alt='Linux containers and Kubernetes' />}
             title={`1. ${material.docker.name}`}
             description={material.docker.description}
           >
@@ -204,7 +196,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewZero}
+            preview={<img src='assets/training/zero.png' alt='Zero to Kubernetes' />}
             title={`2. ${material.zeroToKubernetes.name}`}
             description={material.zeroToKubernetes.description}
           >
@@ -223,7 +215,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewDeployments}
+            preview={<img src='assets/training/deploy.png' alt='Deployment strategies' />}
             title={`3. ${material.deploymentStrategies.name}`}
             description={material.deploymentStrategies.description}
           >
@@ -242,7 +234,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewArchitecture}
+            preview={<img src='assets/training/architecture.png' alt='Kubernetes architecture' />}
             title={`4. ${material.architecture.name}`}
             description={material.architecture.description}
           >
@@ -261,7 +253,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewNetworking}
+            preview={<img src='assets/training/networking.png' alt='Kubernetes networking' />}
             title={`5. ${material.networking.name}`}
             description={material.networking.description}
           >
@@ -280,7 +272,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewState}
+            preview={<img src='assets/training/state.png' alt='Managing state with Kubernetes' />}
             title={`6. ${material.managingState.name}`}
             description={material.managingState.description}
           >
@@ -298,7 +290,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewTemplating}
+            preview={<img src='assets/training/templating.png' alt='Templating Kubernetes resources' />}
             title={`7. ${material.templating.name}`}
             description={material.templating.description}
           >
@@ -317,7 +309,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewOptionals}
+            preview={<img src='assets/training/optionals.png' alt='Optional modules' />}
             title='Optionals'
             description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}
           >
@@ -337,6 +329,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
               <li className='lh-copy mv1'>{material.extensions.name}</li>
             </ul>
           </DashboardModule>
+          <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
         </div>
 
         <div className='pt5-m pb4 pb5-ns ph3 measure-wide center'>
@@ -349,7 +342,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
         </div>
       </section>
 
-      <div className={`mv3 mh3 ml2-ns mr4-ns mw6 center`}>
+      <div className={`mv3 mw6 center`}>
         <div className='header ph3 pt1 bb b--light-gray'>
           <h2 className='navy tc f2'>Looking to train your team?</h2>
           <h3 className='normal black-70 tc mt0 measure lh-copy'>
@@ -375,11 +368,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
       <FAQs faqs={faqs} />
 
       <Footer root={website} />
-      <JSScript
-        js={JSBundle({
-          scripts: `(${CreateToggle.toString()})()`,
-        })}
-      />
     </Layout>,
   )
 
