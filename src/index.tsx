@@ -51,7 +51,7 @@ import cssnano = require('cssnano')
 import { minify } from 'terser'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-const isOptimisedBuild = true
+const isOptimisedBuild = !!process.env.IS_BUILD_OPTIMISED
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -258,9 +258,9 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     case AdvancedKubectl.Details.type: {
       const $ = Cheerio.of(AdvancedKubectl.render(root, node, siteUrl))
       isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
       optimiseCss({ $ })
       optimiseJs({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
       isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
       isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
       writeFileSync(generatePath(), $.html())
@@ -389,12 +389,12 @@ function rewriteImages({ $ }: { $: Cheerio }): Cheerio {
     if (schema.publisher && schema.publisher.log && schema.publisher.logo.url) {
       schema.publisher.logo.url = `/b/${schema.publisher.logo.url}`
     }
-    node.children = [{type: 'text', value: JSON.stringify(schema)}]
+    node.children = [{ type: 'text', value: JSON.stringify(schema) }]
   })
   return $
 }
 
-function optimiseImages({ $, siteUrl }: { $: Cheerio, siteUrl: string }): Cheerio {
+function optimiseImages({ $, siteUrl }: { $: Cheerio; siteUrl: string }): Cheerio {
   $.findAll('img').forEach(image => {
     const url: string = (image.properties as any).src
     ;(image.properties as any).src = digest(url)
@@ -402,12 +402,12 @@ function optimiseImages({ $, siteUrl }: { $: Cheerio, siteUrl: string }): Cheeri
   $.findAll('script[type="application/ld+json"]').forEach(node => {
     const schema = JSON.parse(toString(node))
     if (schema['@type'] && schema['@type'] === 'BlogPosting' && schema.image) {
-      schema.image = digest(schema.image)
+      schema.image = `${siteUrl}${digest(schema.image)}`
     }
-    if (schema.publisher && schema.publisher.log && schema.publisher.logo.url) {
+    if (schema.publisher && schema.publisher.logo && schema.publisher.logo.url) {
       schema.publisher.logo.url = `${siteUrl}${digest(schema.publisher.logo.url)}`
     }
-    node.children = [{type: 'text', value: JSON.stringify(schema)}]
+    node.children = [{ type: 'text', value: JSON.stringify(schema) }]
   })
   return $
 }
@@ -444,6 +444,6 @@ function rewriteOpenGraphImage({ $ }: { $: Cheerio }): Cheerio {
 
 function optimiseOpenGraphImage({ $, siteUrl }: { $: Cheerio; siteUrl: string }): Cheerio {
   const openGraphImage = $.find('[property="og:image"]').get()
-  ;(openGraphImage.properties as any).content = `${siteUrl}${digest((openGraphImage.properties as any).content)}}`
+  ;(openGraphImage.properties as any).content = `${siteUrl}${digest((openGraphImage.properties as any).content)}`
   return $
 }

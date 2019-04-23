@@ -7,7 +7,6 @@ import postcss from 'postcss'
 import cssnano from 'cssnano'
 import shell, { cat, mkdir, cp } from 'shelljs'
 import { minify } from 'terser'
-const { render } = require('svg-term')
 
 export interface Image {
   url: string
@@ -24,19 +23,6 @@ export function Image(image: { url: string; description: string }): Image {
 
 export const Img: React.StatelessComponent<{ image: Image; className?: string }> = ({ image, className }) => {
   return <img src={image.url} alt={image.description} className={className || ''} />
-}
-
-export interface AsciiCast {
-  url: string
-}
-
-export function AsciiCast({ castPath }: { castPath: string }): AsciiCast {
-  ok(existsSync(castPath), `ASCIICast ${castPath} doesn't exist.`)
-  const digest = md5(castPath)
-  mkdir('-p', '_site/a')
-  const svg = render(cat(castPath).toString(), { window: true })
-  writeFileSync(`_site/a/${digest}.svg`, svg)
-  return { url: `/a/${digest}.svg` }
 }
 
 export interface Javascript {

@@ -118,7 +118,9 @@ export function parse(content: string): Node {
 }
 
 export function render(path: string): JSX.Element {
-  const assetsPath = dirname(path).replace(resolve('.'), '').slice(1)
+  const assetsPath = dirname(path)
+    .replace(resolve('.'), '')
+    .slice(1)
   const content = readFileSync(path, 'utf8')
 
   const hastParser = unified()
@@ -436,7 +438,15 @@ export function render(path: string): JSX.Element {
 
   const mdastTree = parse(content)
   const hastTree = hastParser.runSync(mdastTree)
-  return <div dangerouslySetInnerHTML={{__html: unified().use(stringify).stringify(hastTree)}}></div>
+  return (
+    <div
+      dangerouslySetInnerHTML={{
+        __html: unified()
+          .use(stringify)
+          .stringify(hastTree),
+      }}
+    />
+  )
   // return (jsxStringifier.stringify(hastTree) as any) as JSX.Element
 }
 
