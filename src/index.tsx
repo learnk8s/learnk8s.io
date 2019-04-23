@@ -222,7 +222,14 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case K8sOnWindows.Details.type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${K8sOnWindows.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(K8sOnWindows.render(root, node, siteUrl))
+      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+      optimiseCss({ $ })
+      optimiseJs({ $ })
+      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case SolarPlants.Details.type: {
