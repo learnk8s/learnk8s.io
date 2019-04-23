@@ -1,37 +1,31 @@
-import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { BlogPosting } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import { Subscribe } from '../layout'
-import * as Remark from '../remark'
+import { Subscribe } from '../layout.v2'
+import * as Remark from '../remark.v2'
 
 export const Details = {
-  type: identity<'deployLaravel'>('deployLaravel'),
+  type: 'deployLaravel',
   url: '/kubernetes-deploy-laravel-the-easy-way',
   seoTitle: 'Kubernetes: deploy Laravel the easy way ♦︎ Learnk8s',
   title: 'Kubernetes: deploy Laravel the easy way',
   shortDescription: `In this article, I'll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
   description: `Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I'll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
-  openGraphImage: Image({ url: 'src/deployLaravel/laravel_k8s.jpg', description: 'Deploy Laravel on Kubernetes' }),
+  openGraphImage: <img src='src/deployLaravel/laravel_k8s.jpg' alt='Deploy Laravel on Kubernetes' />,
   publishedDate: '2018-04-25',
   lastModifiedDate: '2019-04-15',
-  previewImage: Image({ url: 'src/deployLaravel/laravel_k8s.jpg', description: 'Deploy Laravel the easy way' }),
+  previewImage: <img src='src/deployLaravel/laravel_k8s.jpg' alt='Deploy Laravel on Kubernetes' />,
   author: {
     fullName: 'Keith Mifsud',
-    avatar: Image({ url: 'assets/authors/keith_mifsud.jpg', description: 'Keith Mifsud' }),
+    avatar: <img src='assets/authors/keith_mifsud.jpg' alt='Keith Mifsud' />,
     link: 'https://keith-mifsud.me/',
   },
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Remark.render(`${__dirname}/content.md`)
   return renderToStaticMarkup(
     <Article
       website={website}
@@ -43,10 +37,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       authorFullName={currentNode.payload.author.fullName}
       authorAvatar={currentNode.payload.author.avatar}
       authorLink={currentNode.payload.author.link}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: css,
-      })}
       publishedDate={currentNode.payload.publishedDate}
       lastUpdated={currentNode.payload.lastModifiedDate}
     >
@@ -55,7 +45,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
           headline: currentNode.payload.title,
-          image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+          image: `${currentNode.payload.previewImage.props.src}`,
           author: {
             '@type': 'Person',
             name: currentNode.payload.author.fullName,
@@ -65,7 +55,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             name: 'Learnk8s',
             logo: {
               '@type': 'ImageObject',
-              url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
+              url: `assets/learnk8s_logo_square.png`,
             },
           },
           url: getAbsoluteUrl(currentNode, siteUrl),
@@ -77,7 +67,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
         }}
       />
-      {html}
+      {Remark.render(`${__dirname}/content.md`)}
 
       <RelatedConentContainer>
         <RelatedContentItem>
@@ -97,13 +87,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       </RelatedConentContainer>
 
       <Subscribe identifier='deploy-laravel' />
-
-      <JSScript
-        js={JSBundle({
-          scripts: js,
-          paths: ['src/deployLaravel/anime.min.js', 'src/deployLaravel/isScrolledIntoView.js'],
-        })}
-      />
     </Article>,
   )
 }

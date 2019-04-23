@@ -181,7 +181,6 @@ The Service acts as a load balancer for a set of Pods. So even if the IP address
 And since the Service always has the same IP, you won't need to update anything manually.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 829" id="service">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(163 316)">
@@ -314,7 +313,8 @@ And since the Service always has the same IP, you won't need to update anything 
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#service')
@@ -399,8 +399,6 @@ And since the Service always has the same IP, you won't need to update anything 
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 You can create a service with:
@@ -442,7 +440,6 @@ But what's the point of doing all of this? Well, you only have one deployment wi
 Let's scale this deployment to two more instances of the application.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 725" id="scaling">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(52 332)">
@@ -571,7 +568,8 @@ Let's scale this deployment to two more instances of the application.
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#scaling')
@@ -644,8 +642,6 @@ Let's scale this deployment to two more instances of the application.
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 So that you understand where you are at this moment, run the following command to get a list of desired and available Pods:
@@ -707,7 +703,6 @@ The Ingress is necessary because, in Kubernetes, resources such as Pods only hav
 Meaning that they are not accessible or reachable to and from the world outside.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 829" id="ingress">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(52 423)">
@@ -853,7 +848,8 @@ Meaning that they are not accessible or reachable to and from the world outside.
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#ingress')
