@@ -67,7 +67,6 @@ You have to deal with a myriad of things.
 From setting up the infrastructure that can serve the required models, to configuring monitoring tools, tuning resource management, supporting batched jobs and the list goes on!
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 611" id="complexity">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(16 70)">
@@ -124,7 +123,8 @@ From setting up the infrastructure that can serve the required models, to config
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#complexity')
@@ -176,8 +176,6 @@ From setting up the infrastructure that can serve the required models, to config
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 To become a data scientist, one has to quickly grasp and master other aspects of software development, operations and infrastructure management.
@@ -222,7 +220,6 @@ Kubeflow optimises your model and breaks it down into smaller tasks that can be 
 Then, it distributes the tasks to several computers and waits until the results are ready.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 597" id="break">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(58 253)">
@@ -399,7 +396,8 @@ Then, it distributes the tasks to several computers and waits until the results 
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#break')
@@ -513,8 +511,6 @@ Then, it distributes the tasks to several computers and waits until the results 
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 You can easily rent servers to run thousands of jobs allowing you to train your model orders of magnitude quicker than you're used to!
@@ -532,7 +528,6 @@ That's great news if you need to tune your hyperparameters.
 Instead of starting a single job and having it broken down to smaller tasks, you can submit several jobs and let Kubeflow optimise the processing for you.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 597" id="hyper">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(58 253)">
@@ -727,7 +722,8 @@ Instead of starting a single job and having it broken down to smaller tasks, you
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#hyper')
@@ -852,8 +848,6 @@ Instead of starting a single job and having it broken down to smaller tasks, you
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 And while you wait, you can observe the progress of each model on the built-in dashboard.
@@ -886,7 +880,6 @@ It can also do other things such as automatically adding more nodes as you run o
 It's good practice to start your cluster with a single compute resource and let Kubernetes add more as jobs are submitted.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 503" id="more">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(298 105)">
@@ -1053,7 +1046,8 @@ It's good practice to start your cluster with a single compute resource and let 
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#more')
@@ -1143,8 +1137,6 @@ It's good practice to start your cluster with a single compute resource and let 
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 _But what's so special about Kubernetes?_
@@ -1156,7 +1148,6 @@ You can install Kubernetes on Amazon Web Services, Azure or your private cloud.
 If you decide to move to another cloud, you can install Kubernetes and continue using the same resources and code.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 563" id="independent">
   <g fill="none" fill-rule="evenodd">
     <g id="independent-animejs-azure" transform="translate(75 318)">
@@ -1193,7 +1184,8 @@ If you decide to move to another cloud, you can install Kubernetes and continue 
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#independent')
@@ -1248,8 +1240,6 @@ If you decide to move to another cloud, you can install Kubernetes and continue 
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 But Kubernetes doesn't know how to do machine learning.
@@ -1273,7 +1263,6 @@ You should also pay attention to the Tensorflow API that you use.
 TensorFlow exposes three different kinds of APIs: low, mid and high-level APIs.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 443" id="tensor">
   <g fill="none" fill-rule="evenodd">
     <rect width="800" height="443" fill="#FFF"/>
@@ -1367,7 +1356,8 @@ TensorFlow exposes three different kinds of APIs: low, mid and high-level APIs.
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#tensor')
@@ -1419,8 +1409,6 @@ TensorFlow exposes three different kinds of APIs: low, mid and high-level APIs.
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 When you use the high-level APIs such as the [Estimators API](https://www.TensorFlow.org/programmers_guide/estimators) you benefit from:

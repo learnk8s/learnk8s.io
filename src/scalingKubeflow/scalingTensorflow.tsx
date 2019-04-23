@@ -1,39 +1,30 @@
-import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { Subscribe } from '../layout'
-import * as Remark from '../remark'
+import { Subscribe } from '../layout.v2'
+import * as Remark from '../remark.v2'
 
 export const Details = {
-  type: identity<'scalingTensorflow'>('scalingTensorflow'),
+  type: 'scalingTensorflow',
   url: '/scaling-machine-learning-with-kubeflow-tensorflow',
   seoTitle: 'Scaling Jupyter notebooks with Kubernetes, Tensorflow ♦︎ Learnk8s',
   title: 'Scaling Jupyter notebooks with Kubernetes and Tensorflow',
   shortDescription: `In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.`,
   description: `One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can operate at scale and in real-time. Data scientists and engineers are often expected to learn, develop and maintain the infrastructure for their experiments, but the process takes time away from focussing on training and developing the models. But what if you could outsource all of the non-data science to someone else while still retaining control? In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.`,
-  openGraphImage: Image({ url: 'src/scalingKubeflow/kubeflow.png', description: 'Big data' }),
+  openGraphImage: <img src='src/scalingKubeflow/kubeflow.png' alt='Big data' />,
   publishedDate: '2019-01-09',
-  previewImage: Image({
-    url: 'src/scalingKubeflow/kubeflow.png',
-    description: 'Scaling Jupyter notebooks with Kubernetes and Tensorflow',
-  }),
+  previewImage: <img src='src/scalingKubeflow/kubeflow.png' alt='Scaling Jupyter notebooks with Kubernetes and Tensorflow' />,
   author: {
     fullName: 'Salman Iqbal',
-    avatar: Image({ url: 'assets/authors/salman_iqbal.jpg', description: 'Salman Iqbal' }),
+    avatar: <img src='assets/authors/salman_iqbal.jpg' alt='Salman Iqbal' />,
     link: 'https://twitter.com/soulmaniqbal',
   },
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Remark.render(`${__dirname}/content.md`)
   return renderToStaticMarkup(
     <Article
       website={website}
@@ -45,10 +36,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       authorFullName={currentNode.payload.author.fullName}
       authorAvatar={currentNode.payload.author.avatar}
       authorLink={currentNode.payload.author.link}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: css,
-      })}
       publishedDate={currentNode.payload.publishedDate}
     >
       <JsonLd<BlogPosting>
@@ -56,7 +43,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
           headline: currentNode.payload.title,
-          image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+          image: `${currentNode.payload.previewImage.props.src}`,
           author: {
             '@type': 'Person',
             name: currentNode.payload.author.fullName,
@@ -66,7 +53,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             name: 'Learnk8s',
             logo: {
               '@type': 'ImageObject',
-              url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
+              url: `assets/learnk8s_logo_square.png`,
             },
           },
           url: getAbsoluteUrl(currentNode, siteUrl),
@@ -78,7 +65,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
         }}
       />
-      {html}
+      {Remark.render(`${__dirname}/content.md`)}
 
       <RelatedConentContainer>
         <RelatedContentItem>
@@ -102,13 +89,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       </RelatedConentContainer>
 
       <Subscribe identifier='scaling-tensorflow' />
-
-      <JSScript
-        js={JSBundle({
-          scripts: js,
-          paths: ['src/scalingKubeflow/anime.min.js', 'src/scalingKubeflow/isScrolledIntoView.js'],
-        })}
-      />
     </Article>,
   )
 }

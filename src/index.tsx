@@ -245,7 +245,14 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case ScalingTensorflow.Details.type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${ScalingTensorflow.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(ScalingTensorflow.render(root, node, siteUrl))
+      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+      optimiseCss({ $ })
+      optimiseJs({ $ })
+      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case ScalingSpringBoot.Details.type: {
@@ -389,9 +396,9 @@ function optimiseJs({ $ }: { $: Cheerio }): Cheerio {
   const inlineScripts = scriptTags.get().filter(it => !(it.properties as any).src)
   const thirdPartyScripts = externalScripts.filter(it => /^http/.test((it.properties as any).src))
   const includeScripts = externalScripts.filter(it => !/^http/.test((it.properties as any).src)).map(it => readFileSync((it.properties as any).src, 'utf8'))
-  const js: string[] = [...includeScripts, ...inlineScripts.map(it => toString(it)),].filter(onlyUnique)
+  const js: string = [...includeScripts, ...inlineScripts.map(it => toString(it)),].filter(onlyUnique).join('\n;')
   scriptTags.remove()
-  const digestJs = md5(js.join('\n;'))
+  const digestJs = md5(js)
   const minifiedJs = minify(js)
   if (minifiedJs.error) {
     console.log('ERROR minifying', minifiedJs.error)
