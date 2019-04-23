@@ -11,7 +11,6 @@ That's millions of people all buying an item at the same time.
 If you were to picture the Apple store's traffic as requests per second over time, this is what the graph could look like:
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 842 580" id="spike">
   <defs>
     <linearGradient id="linearGradient-1" x1="50%" x2="50%" y1="100%" y2="33.643%">
@@ -54,7 +53,8 @@ If you were to picture the Apple store's traffic as requests per second over tim
     </text>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#spike')
@@ -96,8 +96,6 @@ If you were to picture the Apple store's traffic as requests per second over tim
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 Now imagine you're tasked with the challenge of building such application.
@@ -111,7 +109,6 @@ You also build a backend REST API to process the incoming requests.
 You want the two components to be separated because with the same REST API you could serve the website and mobile apps.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 553" id="api">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(75 48)">
@@ -143,7 +140,8 @@ You want the two components to be separated because with the same REST API you c
     </text>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#api')
@@ -215,7 +213,6 @@ Today turned out to be the big day, and your store goes live.
 You decide to scale the application to four instances for the front-end and four instances for the backend because you predict the website to be busier than usual.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 751" id="normal-traffic">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(91 292)">
@@ -347,7 +344,8 @@ You decide to scale the application to four instances for the front-end and four
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#normal-traffic')
@@ -423,7 +421,6 @@ You notice that the backend that is connected to the database is struggling to k
 No worries, you can scale the number of replicas to 8 for the backend.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 820" id="scaling-in-response">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(91 292)">
@@ -654,7 +651,8 @@ No worries, you can scale the number of replicas to 8 for the backend.
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#scaling-in-response')
@@ -822,7 +820,6 @@ And now you're drowning in traffic.
 Your backend can't cope with it, and it drops plenty of connections.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 820" id="dropping-connections">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(91 292)">
@@ -1133,7 +1130,8 @@ Your backend can't cope with it, and it drops plenty of connections.
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#dropping-connections')
@@ -1269,7 +1267,6 @@ And lost transactions are lost revenues.
 You could redesign your architecture to decouple the front-end and the backend with a queue.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 485" id="queue">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(99 256)">
@@ -1343,7 +1340,8 @@ You could redesign your architecture to decouple the front-end and the backend w
     <path id="queue-animejs-message4" fill="#3C3C3C" d="M212.379911,351.688158 C213.488846,350.773635 214.548412,350.770578 215.559185,351.679263 L224.654989,358.367501 L220.759996,360.810302 L220.759996,356.457288 L207.239989,356.457288 L207.239989,360.864785 L203.315273,358.403368 L212.379911,351.688159 L212.379911,351.688158 Z M209.256931,357.709824 L218.743079,357.709824 L218.743079,358.485361 L209.256931,358.485361 L209.256931,357.709824 Z M209.256931,359.380148 L218.743079,359.380148 L218.743079,360.155407 L209.256931,360.155407 L209.256931,359.380148 Z M209.256931,361.050472 L218.743079,361.050472 L218.743079,361.825731 L209.256931,361.825731 L209.256931,361.050472 Z M224.673468,358.389458 C224.902127,358.667705 224.993647,359.089665 225,359.632818 L225,368.23461 C225,368.935928 224.833125,369.47269 224.456648,369.76178 L217.079521,364.244343 L224.673466,358.389443 L224.673468,358.389458 Z M224.38447,369.81237 C224.19421,369.934121 223.95689,370 223.667026,370 L204.332983,370 C204.022619,370 203.772885,369.92467 203.576275,369.785963 L211.984374,365.131894 C213.766869,366.528416 214.145945,366.528416 215.928718,365.131894 L224.384458,369.812369 L224.38447,369.81237 Z M203.501489,369.727867 C203.154459,369.432107 203,368.909523 203,368.234611 L203,359.632819 C203.006352,359.116071 203.089212,358.709124 203.293906,358.431152 L210.833561,364.244348 L203.501484,369.727872 L203.501489,369.727867 Z"/>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#queue')
@@ -1542,8 +1540,6 @@ You could redesign your architecture to decouple the front-end and the backend w
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 The front-end posts messages to the queue, while the backend processes the pending messages one at the time.
@@ -1825,7 +1821,6 @@ For each of them you should create:
 Each instance of your application in a deployment is called a _Pod_.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 580" id="k8s">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(280 41)">
@@ -2000,7 +1995,8 @@ Each instance of your application in a deployment is called a _Pod_.
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#k8s')
@@ -2073,8 +2069,6 @@ Each instance of your application in a deployment is called a _Pod_.
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 ### Deploy ActiveMQ
@@ -2552,7 +2546,6 @@ Good news!
 You can have a cluster autoscaler that adds more nodes to your Kubernetes cluster as you need more resources.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 798" id="autoscaling-cluster">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(248 79)">
@@ -5097,7 +5090,8 @@ You can have a cluster autoscaler that adds more nodes to your Kubernetes cluste
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#autoscaling-cluster')
@@ -5214,8 +5208,6 @@ You can have a cluster autoscaler that adds more nodes to your Kubernetes cluste
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 The cluster autoscaler comes in different shapes and sizes.

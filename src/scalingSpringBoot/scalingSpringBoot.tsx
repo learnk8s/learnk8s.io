@@ -1,39 +1,30 @@
-import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { Subscribe } from '../layout'
-import * as Remark from '../remark'
+import { Subscribe } from '../layout.v2'
+import * as Remark from '../remark.v2'
 
 export const Details = {
-  type: identity<'scalingSpringBoot'>('scalingSpringBoot'),
+  type: 'scalingSpringBoot',
   url: '/scaling-spring-boot-microservices',
   seoTitle: 'Scaling SpringBoot with Message Queues and Kubernetes ♦︎ Learnk8s',
   title: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
   description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
-  openGraphImage: Image({ url: 'src/scalingSpringBoot/autoscaling.png', description: 'Containers' }),
+  openGraphImage: <img src='src/scalingSpringBoot/autoscaling.png' alt='Containers' />,
   publishedDate: '2018-07-11',
   lastModifiedDate: '2019-04-15',
-  previewImage: Image({
-    url: 'src/scalingSpringBoot/autoscaling.png',
-    description: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
-  }),
+  previewImage: <img src='src/scalingSpringBoot/autoscaling.png' alt='Scaling Microservices with Message Queues, Spring Boot and Kubernetes' />,
   author: {
     fullName: 'Daniele Polencic',
-    avatar: Image({ url: 'assets/authors/daniele_polencic.jpg', description: 'Daniele Polencic' }),
+    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
     link: 'https://linkedin.com/in/danielepolencic',
   },
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Remark.render(`${__dirname}/content.md`)
   return renderToStaticMarkup(
     <Article
       website={website}
@@ -45,10 +36,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       authorFullName={currentNode.payload.author.fullName}
       authorAvatar={currentNode.payload.author.avatar}
       authorLink={currentNode.payload.author.link}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: css,
-      })}
       publishedDate={currentNode.payload.publishedDate}
       lastUpdated={currentNode.payload.lastModifiedDate}
     >
@@ -57,7 +44,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
           headline: currentNode.payload.title,
-          image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+          image: `${currentNode.payload.previewImage.props.src}`,
           author: {
             '@type': 'Person',
             name: currentNode.payload.author.fullName,
@@ -67,7 +54,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             name: 'Learnk8s',
             logo: {
               '@type': 'ImageObject',
-              url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
+              url: `assets/learnk8s_logo_square.png`,
             },
           },
           url: getAbsoluteUrl(currentNode, siteUrl),
@@ -79,7 +66,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
         }}
       />
-      {html}
+      {Remark.render(`${__dirname}/content.md`)}
 
       <RelatedConentContainer>
         <RelatedContentItem>
@@ -103,13 +90,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       </RelatedConentContainer>
 
       <Subscribe identifier='scaling-spring-boot' />
-
-      <JSScript
-        js={JSBundle({
-          scripts: js,
-          paths: ['src/scalingSpringBoot/anime.min.js', 'src/scalingSpringBoot/isScrolledIntoView.js'],
-        })}
-      />
     </Article>,
   )
 }
