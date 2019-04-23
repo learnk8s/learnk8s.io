@@ -1,39 +1,30 @@
-import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { Subscribe } from '../layout'
-import * as Remark from '../remark'
+import { Subscribe } from '../layout.v2'
+import * as Remark from '../remark.v2'
 
 export const Details = {
-  type: identity<'solarPlants'>('solarPlants'),
+  type: 'solarPlants',
   url: '/kubernetes-on-solar-plants',
   seoTitle: 'Internet of Things on solar plants with Kubernetes ♦︎ Learnk8s',
   title: 'Cloud infrastructure for the Internet of Things: Kubernetes on solar plants',
   shortDescription: `When you have thousands of solar panels and embedded computers how do you orchestrate software updates, monitor uptime and secure communications? Enter Kubernetes.`,
   description: `Solar panels are getting cheaper, and are becoming an economically viable source of renewable energy in many parts of the world. For solar panels to operate efficiently, they need to be kept clean and pointed at an optimal angle to the sun that balances power generation and prevents overheating. An embedded computer is in charge of monitoring metrics and driving the actuators. But when you have thousands of solar panels and embedded computers how do you orchestrate software updates, monitor uptime and secure communications?`,
-  openGraphImage: Image({ url: 'src/solarPlants/solar_panel.png', description: 'Solar panels and Kubernetes' }),
+  openGraphImage: <img src='src/solarPlants/solar_panel.png' alt='Solar panels and Kubernetes' />,
   publishedDate: '2018-12-04',
-  previewImage: Image({
-    url: 'src/solarPlants/solar_panel.png',
-    description: 'Cloud infrastructure for the Internet of Things: Kubernetes on solar plants',
-  }),
+  previewImage: <img src='src/solarPlants/solar_panel.png' alt='Cloud infrastructure for the Internet of Things: Kubernetes on solar plants' />,
   author: {
     fullName: 'Daniele Polencic',
-    avatar: Image({ url: 'assets/authors/daniele_polencic.jpg', description: 'Daniele Polencic' }),
+    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
     link: 'https://linkedin.com/in/danielepolencic',
   },
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Remark.render(`${__dirname}/content.md`)
   return renderToStaticMarkup(
     <Article
       website={website}
@@ -45,10 +36,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       authorFullName={currentNode.payload.author.fullName}
       authorAvatar={currentNode.payload.author.avatar}
       authorLink={currentNode.payload.author.link}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: css,
-      })}
       publishedDate={currentNode.payload.publishedDate}
     >
       <JsonLd<BlogPosting>
@@ -56,7 +43,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
           headline: currentNode.payload.title,
-          image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+          image: `${currentNode.payload.previewImage.props.src}`,
           author: {
             '@type': 'Person',
             name: currentNode.payload.author.fullName,
@@ -66,7 +53,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             name: 'Learnk8s',
             logo: {
               '@type': 'ImageObject',
-              url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
+              url: `assets/learnk8s_logo_square.png`,
             },
           },
           url: getAbsoluteUrl(currentNode, siteUrl),
@@ -78,7 +65,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
         }}
       />
-      {html}
+      {Remark.render(`${__dirname}/content.md`)}
 
       <RelatedConentContainer>
         <RelatedContentItem>
@@ -102,13 +89,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       </RelatedConentContainer>
 
       <Subscribe identifier='solar-plants' />
-
-      <JSScript
-        js={JSBundle({
-          scripts: js,
-          paths: ['src/solarPlants/anime.min.js', 'src/solarPlants/isScrolledIntoView.js'],
-        })}
-      />
     </Article>,
   )
 }

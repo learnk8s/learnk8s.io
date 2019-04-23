@@ -27,7 +27,6 @@ In larger plants, the solar arrays' data are passed through a wired network, but
 **Imagine controlling your solar panels over 5G:** the beauty of not having to deal with extra cables and the horror of long responses, dropped connections and timeouts.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 663" id="over_the_air">
   <defs>
     <linearGradient id="linearGradient-1" x1="50%" x2="50%" y1="0%" y2="100%">
@@ -249,7 +248,8 @@ In larger plants, the solar arrays' data are passed through a wired network, but
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#over_the_air')
@@ -303,8 +303,6 @@ In larger plants, the solar arrays' data are passed through a wired network, but
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 In a setup like that, deploying and managing applications becomes a real challenge.
@@ -316,7 +314,6 @@ If you're managing hundreds or thousands of devices, it's not practical to atten
 You should design a system that can be updated remotely.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 725" id="ota_updates">
   <defs>
     <linearGradient id="linearGradient-1" x1="50%" x2="50%" y1="0%" y2="100%">
@@ -543,7 +540,8 @@ You should design a system that can be updated remotely.
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#ota_updates')
@@ -605,8 +603,6 @@ You should design a system that can be updated remotely.
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 Ideally, you should design a mechanism to package software that has almost zero overhead without sacrificing portability.
@@ -648,7 +644,6 @@ It's designed so that you install an agent on the worker computer, which communi
 You tell ECS what to deploy and the software on the master node instructs one of the agents to download and run it.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 780" id="ecs">
   <g fill="none" fill-rule="evenodd">
     <g id="ecs-animejs-ecs" transform="translate(324 73)">
@@ -857,7 +852,8 @@ You tell ECS what to deploy and the software on the master node instructs one of
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#ecs')
@@ -924,8 +920,6 @@ You tell ECS what to deploy and the software on the master node instructs one of
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 That sounds a lot like what you want to do with your solar panels.
@@ -945,7 +939,6 @@ Kubernetes is similar to ECS: you install an agent called the kubelet on your de
 From that moment onwards your devices are acting as one, and you can schedule deployments and manage applications.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 780" id="k8s">
   <defs>
     <linearGradient id="linearGradient-1" x1="50%" x2="50%" y1="0%" y2="100%">
@@ -1182,7 +1175,8 @@ From that moment onwards your devices are acting as one, and you can schedule de
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#k8s')
@@ -1249,8 +1243,6 @@ From that moment onwards your devices are acting as one, and you can schedule de
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 **This time, however, you're not locked in.**
@@ -1296,7 +1288,6 @@ So instead of developing your mechanism to distribute applications, you can:
 When you update your package and wish to redistribute it, you can only ship the difference between the previous and the current container.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 733.7 487" id="layers">
   <path fill="#005FAD" d="M345.5 291.8V280h-293v11.8L199 376.3z"/>
   <path fill="#0071CE" d="M345.5 280L199 195.4 52.5 280 199 364.5z"/>
@@ -1330,7 +1321,8 @@ When you update your package and wish to redistribute it, you can only ship the 
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#layers')
@@ -1386,8 +1378,6 @@ When you update your package and wish to redistribute it, you can only ship the 
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 When the delta is received, the new package is recomputed from the diff, unzipped and run as a separate process.
@@ -1409,7 +1399,6 @@ Kubernetes continually watches your infrastructure for failing processes and age
 When a device fails, Kubernetes will reschedule all of the applications deployed on that computer to another.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 644" id="reschedule">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(512 113)">
@@ -1608,7 +1597,8 @@ When a device fails, Kubernetes will reschedule all of the applications deployed
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#reschedule')
@@ -1671,8 +1661,6 @@ When a device fails, Kubernetes will reschedule all of the applications deployed
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 If one of the application fails, perhaps because of a memory leak, Kubernetes will restart the app a predetermined number of times.
@@ -1682,7 +1670,6 @@ Kubernetes is designed with the understanding that nodes cannot be expected to c
 Where it finds a discrepancy, for example, if there isn't enough capacity to run all of your apps, it will ask the cloud provider to provision more compute resources.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 564" id="scaling">
   <g fill="none" fill-rule="evenodd">
     <g id="scaling-animejs-server2" transform="translate(555 110)">
@@ -1911,7 +1898,8 @@ Where it finds a discrepancy, for example, if there isn't enough capacity to run
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#scaling')
@@ -1983,8 +1971,6 @@ Where it finds a discrepancy, for example, if there isn't enough capacity to run
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 Kubernetes is excellent for deploying containers in a way that maximises the efficiency of your infrastructure.
@@ -1994,7 +1980,6 @@ When you deploy three instances of an application, those are scheduled to maximi
 There's no guarantee that three instances of your applications will end up on five different devices.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 608" id="allocations">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(512 77)">
@@ -2169,7 +2154,8 @@ There's no guarantee that three instances of your applications will end up on fi
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#allocations')
@@ -2211,8 +2197,6 @@ There's no guarantee that three instances of your applications will end up on fi
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 They could all be deployed on the same node, or they could be deployed across two nodes, depending on the physical resources available.
@@ -2244,7 +2228,6 @@ For this you need a _[DaemonSet](https://kubernetes.io/docs/concepts/workloads/c
 If you add a new IoT-connected solar panel to the cluster, Kubernetes will automatically schedule and deploy the application on that embedded device (node) too.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 725" id="daemonset">
   <defs>
     <linearGradient id="linearGradient-1" x1="50%" x2="50%" y1="0%" y2="100%">
@@ -2558,7 +2541,8 @@ If you add a new IoT-connected solar panel to the cluster, Kubernetes will autom
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#daemonset')
@@ -2660,8 +2644,6 @@ If you add a new IoT-connected solar panel to the cluster, Kubernetes will autom
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 So far so good.
