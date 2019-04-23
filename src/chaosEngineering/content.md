@@ -5,7 +5,6 @@ A node may be a physical machine or VM such as AWS EC2 or Google Compute Engine 
 If you have a cluster made of three nodes and decide to scale your application to have four replicas, Kubernetes will spread the replicas across the nodes evenly like so:
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 697" id="deployment">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(39 155)">
@@ -968,7 +967,8 @@ If you have a cluster made of three nodes and decide to scale your application t
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#deployment')
@@ -1025,8 +1025,6 @@ If you have a cluster made of three nodes and decide to scale your application t
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 The architecture described above works particularly well in case of failures.
@@ -1034,7 +1032,6 @@ The architecture described above works particularly well in case of failures.
 If the first node were to be unavailable, the other two could still serve the application. Meanwhile, Kubernetes has enough time to reschedule the fourth replica to another node.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 700" id="node-drained">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(39 156)">
@@ -2017,7 +2014,8 @@ If the first node were to be unavailable, the other two could still serve the ap
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#node-drained')
@@ -2079,14 +2077,11 @@ If the first node were to be unavailable, the other two could still serve the ap
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 Even better, if all of the nodes were to become isolated, they could still serve traffic. Let's scale down the application to two replicas:
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 700" id="two-replicas">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(39 156)">
@@ -3049,7 +3044,8 @@ Even better, if all of the nodes were to become isolated, they could still serve
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#two-replicas')
@@ -3096,8 +3092,6 @@ Even better, if all of the nodes were to become isolated, they could still serve
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 Now imagine that the three pods belong to a service of `type: NodePort`.
@@ -3109,7 +3103,6 @@ That means that every node can respond to incoming requests, even if the node it
 So how does the third node know that it doesn't run the pod and has to route the traffic to one of the other nodes?
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 980" id="kube-proxy">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(39 445)">
@@ -4087,7 +4080,8 @@ So how does the third node know that it doesn't run the pod and has to route the
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#kube-proxy')
@@ -4205,7 +4199,6 @@ In the simple scenario above, the list looks like this:
 It doesn't matter which node the traffic is coming from; `kube-proxy` knows where the traffic should be forwarded to by looking at the list.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 980" id="iptables">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(39 445)">
@@ -5171,7 +5164,8 @@ It doesn't matter which node the traffic is coming from; `kube-proxy` knows wher
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#iptables')

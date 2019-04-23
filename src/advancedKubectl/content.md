@@ -636,7 +636,6 @@ You might wonder how you could possibly remember 800 aliases? Actually, you don'
 > Try to hover over the example aliases for a visual effect.
 
 ```include
-<template>
 <div class="list pl0 flex flex-wrap f1">
 
   <div class="f3 w-100 gray order-last mb3 ttu">Example aliases</div>
@@ -697,7 +696,6 @@ You might wonder how you could possibly remember 800 aliases? Actually, you don'
     </li>
   </ul>
 </div>
-</template>
 <style>
 .example-1:hover ~ .abbreviations .alias-k,
 .example-1:hover ~ .abbreviations .alias-g,
@@ -733,7 +731,6 @@ As you can see, the aliases consist of **components**, each standing for a speci
 For example, the alias `kgpooyamlall` stands for the command `kubectl get pods -o yaml --all-namespaces`:
 
 ```include
-<template>
 <ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
 <li class="hover-sky relative hide-child pv2">k<span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="hover-sky relative hide-child pv2">g<span class="child absolute bottom--2 left-0 f2">get</span></li>
@@ -741,9 +738,6 @@ For example, the alias `kgpooyamlall` stands for the command `kubectl get pods -
 <li class="hover-sky relative hide-child pv2">oyaml<span class="child absolute bottom--2 left-0 f2" no-wrap>-o yaml</span></li>
 <li class="hover-sky relative hide-child pv2">all<span class="child absolute bottom--2 left-0 f2 no-wrap">--all-namespaces</span></li>
 </ul>
-</template>
-<script>
-</script>
 ```
 
 Note that the relative order of most option components doesn't matter. So, `kgpooyamlall` is equivalent to `kgpoalloyaml`.
@@ -753,49 +747,36 @@ You don't need to use all the components for an alias. For example, `k`, `kg`, `
 For example, you could use `k proxy` for running `kubectl proxy`:
 
 ```include
-<template>
 <ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
 <li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="relative hide-child pv2 gray">&nbsp;proxy</li>
 </ul>
-</template>
-<script>
-</script>
 ```
 
 Or you could use `kg roles` for running `kubectl get roles` (there doesn't currently exist an alias component for the Roles resource):
 
 ```include
-<template>
 <ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
 <li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="hover-sky relative hide-child pv2">g <span class="child absolute bottom--2 left-0 f2">get</span></li>
 <li class="relative hide-child pv2 gray">&nbsp;roles</li>
 </ul>
-</template>
-<script>
-</script>
 ```
 
 To get a specific Pod, you could use `kgpo my-pod` for running `kubectl get pod my-pod`:
 
 ```include
-<template>
 <ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
 <li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="hover-sky relative hide-child pv2">g <span class="child absolute bottom--2 left-0 f2">get</span></li>
 <li class="hover-sky relative hide-child pv2">po <span class="child absolute bottom--2 left-0 f2">pods</span></li>
 <li class="relative hide-child pv2 gray">&nbsp;my-pod</li>
 </ul>
-</template>
-<script>
-</script>
 ```
 
 Note that some aliases even _require_ a further argument on the command-line. For example, the `kgpol` alias stands for `kubectl get pods -l`. The `-l` option requires an argument (a label specification). So, you have to use this alias, for example, like this:
 
 ```include
-<template>
 <ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
 <li class="hover-sky relative hide-child pv2">k<span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="hover-sky relative hide-child pv2">g<span class="child absolute bottom--2 left-0 f2">get</span></li>
@@ -803,9 +784,6 @@ Note that some aliases even _require_ a further argument on the command-line. Fo
 <li class="hover-sky relative hide-child pv2">l<span class="child absolute bottom--2 left-0 f2 no-wrap">-l</span></li>
 <li class="relative hide-child pv2 gray">&nbsp;app=ui</li>
 </ul>
-</template>
-<script>
-</script>
 ```
 
 > For that reason, you can use the `a`, `f`, and `l` components only at the end of an alias.
