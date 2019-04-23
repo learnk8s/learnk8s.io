@@ -1,32 +1,17 @@
 import React from 'react'
 import { LinkedNode, getFullUrl, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, Hero } from './layout'
-import { Img, Image, CSSBundle } from './assets'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, Hero } from './layout.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-export const Assets = {
-  loadingCargos: Image({ url: 'assets/loading_cargos.svg', description: 'Shipping cargo' }),
-  mediumCargo: Image({ url: 'assets/medium_cargo.svg', description: 'Shipping cargo' }),
-  containers: Image({ url: 'assets/containers.svg', description: 'Shipping containers' }),
-  catAndDog: Image({ url: 'assets/cat_and_dog.svg', description: 'Learn at your own pace' }),
-  whiteboard: Image({ url: 'assets/whiteboard.svg', description: 'Instructor-led training' }),
-  team: Image({ url: 'assets/team.svg', description: 'Consulting' }),
-  downArrow: Image({ url: 'assets/down_arrow_sky.svg', description: 'Down' }),
-}
-
 export const Details = {
-  type: identity<'homepage'>('homepage'),
+  type: 'homepage',
   url: '/',
   seoTitle: 'Learnk8s',
   title: 'Learnk8s — the Kubernetes training company',
   description:
     'We help you get started on your Kubernetes journey through comprehensive online, in person or remote training.',
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   return renderToStaticMarkup(
@@ -37,14 +22,11 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
         <Navbar root={website} />
 
-        <Hero image={Assets.loadingCargos} imageClass='i-loading-cargos'>
+        <Hero image={<img src='assets/loading_cargos.svg' alt='Shipping cargo' />} imageClass='i-loading-cargos'>
           <h1 className='f1 pl3 pl4-ns pt5-l f-subheadline-l lh-solid'>Mastering Kubernetes</h1>
           <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l'>
             The fastest way to become an expert in deploying applications at scale.
@@ -54,7 +36,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           </a>
           <div className='dn db-l absolute bottom-0 left-0 translate-100-100'>
             <div className='i-medium-cargo relative'>
-              <Img image={Assets.mediumCargo} className='absolute top-0 right-0' />
+              <img src='assets/medium_cargo.svg' alt='Shipping cargo' className='absolute top-0 right-0' />
             </div>
           </div>
         </Hero>
@@ -65,7 +47,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           <div className='w-50-l tc'>
             <div className='dn dib-l'>
               <div className='i-containers relative'>
-                <Img image={Assets.containers} className='absolute top-0 right-0' />
+                <img src='assets/containers.svg' alt='Shipping containers' className='absolute top-0 right-0' />
               </div>
             </div>
           </div>
@@ -106,7 +88,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
               </ul>
               <div className='w-100 tc mt4'>
                 <div className='w3 h3 dib'>
-                  <Img image={Assets.downArrow} />
+                  <img src='assets/down_arrow_sky.svg' alt='Down' />
                 </div>
               </div>
             </div>
@@ -145,7 +127,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
         <div className='ml7-l dn db-ns'>
           <div className='i-cat-and-dog relative'>
-            <Img image={Assets.catAndDog} className='absolute top-0 right-0' />
+            <img src='assets/cat_and_dog.svg' alt='Learn at your own pace' className='absolute top-0 right-0' />
           </div>
         </div>
       </section>
@@ -154,7 +136,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <div className='tc'>
           <div className='mr7-l dib'>
             <div className='i-whiteboard relative'>
-              <Img image={Assets.whiteboard} className='absolute top-0 right-0' />
+              <img src='assets/whiteboard.svg' alt='Instructor-led training' className='absolute top-0 right-0' />
             </div>
           </div>
         </div>
@@ -220,7 +202,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
         <div className='ml7-l dn db-ns'>
           <div className='i-team relative'>
-            <Img image={Assets.team} className='absolute top-0 right-0' />
+            <img src='assets/team.svg' alt='Consulting' className='absolute top-0 right-0' />
           </div>
         </div>
       </section>
