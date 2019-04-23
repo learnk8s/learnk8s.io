@@ -261,6 +261,7 @@ export const Sitemap = createNode({
       children: {},
     }),
     bskHelm: bsk.bskHelm,
+    bskApiIngress: bsk.bskIngressApi,
   },
 })
 
@@ -299,7 +300,11 @@ export function getBlogPosts(website: Sitemap): typeof blogPosts[keyof typeof bl
 }
 
 export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bsk][] {
-  return [...Object.values(website.children.biteSizedKubernetes.children), website.children.bskHelm]
+  return [
+    ...Object.values(website.children.biteSizedKubernetes.children),
+    website.children.bskHelm,
+    website.children.bskApiIngress,
+  ]
     .filter(it => it.payload.type !== Redirect.Type)
     .slice(0)
 

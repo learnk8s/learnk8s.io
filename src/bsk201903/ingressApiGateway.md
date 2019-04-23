@@ -1,4 +1,4 @@
-## Can you have an API Gateway as an ingress?
+## Can you expose your microservices with an API gateway in Kubernetes?
 
 > **TL;DR:** yes, you can. Have a look at the [Kong](https://konghq.com/blog/kong-kubernetes-ingress-controller/), [Ambassador](https://www.getambassador.io/) and [Gloo](https://gloo.solo.io/) Ingress controllers.
 
