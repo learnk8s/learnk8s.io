@@ -50,6 +50,7 @@ import postcss = require('postcss')
 import cssnano = require('cssnano')
 import { minify } from 'terser'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { array } from 'prop-types';
 
 const isOptimisedBuild = !!process.env.IS_BUILD_OPTIMISED
 
@@ -159,7 +160,14 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Training.Details.type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${Training.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(Training.render(root, node, siteUrl))
+      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+      optimiseCss({ $ })
+      optimiseJs({ $ })
+      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case Academy.Details.type: {
@@ -302,7 +310,14 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Landing.Type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${Landing.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(Landing.render(root, node, siteUrl))
+      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+      optimiseCss({ $ })
+      optimiseJs({ $ })
+      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.MultipleClustersDetails.type: {
@@ -466,6 +481,11 @@ function rewriteImages({ $ }: { $: Cheerio }): Cheerio {
     if (schema.publisher && schema.publisher.log && schema.publisher.logo.url) {
       schema.publisher.logo.url = `/b/${schema.publisher.logo.url}`
     }
+    if (Array.isArray(schema.hasCourseInstance)) {
+      schema.hasCourseInstance.forEach((course: any) => {
+        course.image = `/b/${course.image}`
+      })
+    }
     node.children = [{ type: 'text', value: JSON.stringify(schema) }]
   })
   return $
@@ -483,6 +503,11 @@ function optimiseImages({ $, siteUrl }: { $: Cheerio; siteUrl: string }): Cheeri
     }
     if (schema.publisher && schema.publisher.logo && schema.publisher.logo.url) {
       schema.publisher.logo.url = `${siteUrl}${digest(schema.publisher.logo.url)}`
+    }
+    if (Array.isArray(schema.hasCourseInstance)) {
+      schema.hasCourseInstance.forEach((course: any) => {
+        course.image = `${siteUrl}${digest(course.image)}`
+      })
     }
     node.children = [{ type: 'text', value: JSON.stringify(schema) }]
   })

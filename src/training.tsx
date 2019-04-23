@@ -19,8 +19,7 @@ import {
   PackageLeft,
   PackageRight,
   Hero,
-} from './layout'
-import { Image, Img, Script, Javascript, CSSBundle, JSScript, JSBundle } from './assets'
+} from './layout.v2'
 import { PrimaryButton } from './homepage'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
@@ -86,35 +85,15 @@ const customRequest: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-export const Assets = {
-  tick: Image({ url: 'assets/training/tick.svg', description: 'Tick' }),
-  slack: Image({ url: 'assets/training/slack_in_colours.svg', description: 'Slack' }),
-  downArrow: Image({ url: 'assets/training/down_arrow_white.svg', description: 'Down' }),
-  training: Image({ url: 'assets/training/training.svg', description: 'Training' }),
-  cargoLoading: Image({ url: 'assets/training/more_cargo_loading.svg', description: 'Cargo loading' }),
-  previewDocker: Image({ url: 'assets/training/docker.png', description: 'Linux containers and Kubernetes' }),
-  previewZero: Image({ url: 'assets/training/zero.png', description: 'Zero to Kubernetes' }),
-  previewDeployments: Image({ url: 'assets/training/deploy.png', description: 'Deployment strategies' }),
-  previewArchitecture: Image({ url: 'assets/training/architecture.png', description: 'Kubernetes architecture' }),
-  previewNetworking: Image({ url: 'assets/training/networking.png', description: 'Kubernetes networking' }),
-  previewState: Image({ url: 'assets/training/state.png', description: 'Managing state with Kubernetes' }),
-  previewTemplating: Image({ url: 'assets/training/templating.png', description: 'Templating Kubernetes resources' }),
-  previewOptionals: Image({ url: 'assets/training/optionals.png', description: 'Optional modules' }),
-}
-
 export const Details = {
-  type: identity<'training'>('training'),
+  type: 'training',
   url: '/training',
   seoTitle: 'Kubernetes Training Courses ♦︎ Learnk8s',
   title: 'Kubernetes Training Courses',
   description:
     'Join an instructor-led, hands-on course on how to quickly deploy applications in Kubernetes — without having to wade through mountains of documentation — and learn how to orchestrate and manage containers at scale.',
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   return renderToStaticMarkup(
@@ -125,9 +104,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       {Courses.map((course, index) => {
         return (
@@ -175,7 +151,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
                         .toISOString(),
                       url: getAbsoluteUrl(currentNode, siteUrl),
                     },
-                    image: `${siteUrl}${currentNode.payload.openGraphImage}`,
+                    image: `${currentNode.payload.openGraphImage.props.src}`,
                     performer: {
                       '@type': 'Organization',
                       name: 'Learnk8s',
@@ -189,7 +165,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
         <Navbar root={website} />
 
-        <Hero image={Assets.training} imageClass='i-training'>
+        <Hero image={<img src='assets/training/training.svg' alt='Training' />} imageClass='i-training'>
           <h1 className='f1 f-subheadline-l'>
             Kubernetes <span className='no-wrap'>instructor-led</span> training
           </h1>
@@ -200,30 +176,30 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             <li className='flex items-center justify-between ph2 bb b--light-gray'>
               <p className='ttu'>Private courses</p>
               <div className='w2 h2'>
-                <Img image={Assets.tick} />
+                <img src='assets/training/tick.svg' alt='Tick' />
               </div>
             </li>
             <li className='flex items-center justify-between ph2 bb b--light-gray'>
               <p className='ttu'>Public courses</p>
               <div className='w2 h2'>
-                <Img image={Assets.tick} />
+                <img src='assets/training/tick.svg' alt='Tick' />
               </div>
             </li>
             <li className='flex items-center justify-between ph2'>
               <p className='ttu v-mid mt2 mb1'>
                 Online courses{' '}
                 <span className='dib w2 v-mid'>
-                  <Img image={Assets.slack} />
+                  <img src='assets/training/slack_in_colours.svg' alt='Slack' />
                 </span>
               </p>
               <div className='w2 h2'>
-                <Img image={Assets.tick} />
+                <img src='assets/training/tick.svg' alt='Tick' />
               </div>
             </li>
           </ul>
           <div className='dn db-l mw6 mh3 mh4-ns tc'>
             <div className='w3 h3 dib'>
-              <Img image={Assets.downArrow} />
+              <img src='assets/training/down_arrow_white.svg' alt='Down' />
             </div>
           </div>
         </Hero>
@@ -233,7 +209,11 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <div className='w-50-l dn db-l tc'>
           <div className='dib'>
             <div className='i-more-cargo-loading relative'>
-              <Img image={Assets.cargoLoading} className='absolute top-0 right-0' />
+              <img
+                src='assets/training/more_cargo_loading.svg'
+                alt='Cargo loading'
+                className='absolute top-0 right-0'
+              />
             </div>
           </div>
         </div>
@@ -348,7 +328,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <div className='ma3 ma5-l flex-l flex-wrap justify-center'>
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewDocker}
+            preview={<img src='assets/training/docker.png' alt='Linux containers and Kubernetes' />}
             title={`1. ${material.docker.name}`}
             description={material.docker.description}
           >
@@ -367,7 +347,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewZero}
+            preview={<img src='assets/training/zero.png' alt='Zero to Kubernetes' />}
             title={`2. ${material.zeroToKubernetes.name}`}
             description={material.zeroToKubernetes.description}
           >
@@ -386,7 +366,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewDeployments}
+            preview={<img src='assets/training/deploy.png' alt='Deployment strategies' />}
             title={`3. ${material.deploymentStrategies.name}`}
             description={material.deploymentStrategies.description}
           >
@@ -405,7 +385,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewArchitecture}
+            preview={<img src='assets/training/architecture.png' alt='Kubernetes architecture' />}
             title={`4. ${material.architecture.name}`}
             description={material.architecture.description}
           >
@@ -424,7 +404,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewNetworking}
+            preview={<img src='assets/training/networking.png' alt='Kubernetes networking' />}
             title={`5. ${material.networking.name}`}
             description={material.networking.description}
           >
@@ -443,7 +423,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewState}
+            preview={<img src='assets/training/state.png' alt='Managing state with Kubernetes' />}
             title={`6. ${material.managingState.name}`}
             description={material.managingState.description}
           >
@@ -461,7 +441,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewTemplating}
+            preview={<img src='assets/training/templating.png' alt='Templating Kubernetes resources' />}
             title={`7. ${material.templating.name}`}
             description={material.templating.description}
           >
@@ -480,7 +460,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
           <DashboardModule
             className='w-40-l'
-            preview={Assets.previewOptionals}
+            preview={<img src='assets/training/optionals.png' alt='Optional modules' />}
             title='Optionals'
             description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}
           >
@@ -500,6 +480,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
               <li className='lh-copy mv1'>{material.extensions.name}</li>
             </ul>
           </DashboardModule>
+          <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
         </div>
 
         <div className='pt5-m pb4 pb5-ns ph3 measure-wide center'>
@@ -538,7 +519,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           {Courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[])
             .sort((a, b) => a.startAt.valueOf() - b.startAt.valueOf())
             .map(it => (
-              <CourseRow event={it} slackIcon={Assets.slack} />
+              <CourseRow event={it} slackIcon={<img src='assets/training/slack_in_colours.svg' alt='Slack' />} />
             ))}
         </ul>
 
@@ -559,16 +540,14 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
       <Consultation />
       <Footer root={website} />
-      <JSScript
-        js={JSBundle({
-          scripts: `(${CreateToggle.toString()})()`,
-        })}
-      />
     </Layout>,
   )
 }
 
-export const CourseRow: React.StatelessComponent<{ event: CourseEvent; slackIcon: Image }> = ({ event, slackIcon }) => {
+export const CourseRow: React.StatelessComponent<{ event: CourseEvent; slackIcon: JSX.Element }> = ({
+  event,
+  slackIcon,
+}) => {
   const id = `e-${event.startAt.toISOString()}-${event.location.address}`.toLowerCase().replace(/[^\w]+/g, '-')
   return (
     <li className={`${event.timezone}`.split('/')[0].toLowerCase()}>
@@ -603,10 +582,7 @@ export const CourseRow: React.StatelessComponent<{ event: CourseEvent; slackIcon
               &nbsp;
               {isVenueOnline(event.location) ? (
                 <span className='link dib navy v-mid'>
-                  Online{' '}
-                  <span className='w1 v-mid dib'>
-                    <Img image={slackIcon} />
-                  </span>
+                  Online <span className='w1 v-mid dib'>{slackIcon}</span>
                 </span>
               ) : (
                 <span className='link dib navy underline v-mid'>
@@ -664,7 +640,7 @@ export const PackageFeatures: React.StatelessComponent<{ description: string; be
 export const DashboardModule: React.StatelessComponent<{
   title: string
   description: string
-  preview: Image
+  preview: JSX.Element
   className?: string
 }> = ({ children, title, description, preview, className }) => {
   const id = title.toLowerCase().replace(/[^\w]+/g, '-')
@@ -675,7 +651,7 @@ export const DashboardModule: React.StatelessComponent<{
         <div className=''>
           <div className='w-80 center'>
             <div className='padding-hack-75 relative'>
-              <Img image={preview} className='absolute top-0 right-0' />
+              <img src={preview.props.src} alt={preview.props.alt} className='absolute top-0 right-0' />
             </div>
           </div>
           <div className=''>
