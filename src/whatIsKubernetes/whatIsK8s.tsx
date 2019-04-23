@@ -1,39 +1,34 @@
-import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { Subscribe } from '../layout'
-import * as Remark from '../remark'
+import { Subscribe } from '../layout.v2'
+import * as Remark from '../remark.v2'
 
 export const Details = {
-  type: identity<'whatIsK8s'>('whatIsK8s'),
+  type: 'whatIsK8s',
   url: '/what-is-kubernetes',
   seoTitle: 'What is Kubernetes? ♦︎ Learnk8s',
   title: 'What is Kubernetes? Optimise your hosting costs and efficiency',
   shortDescription: `The industry has experienced a shift towards developing smaller applications. But how does that impact the infrastructure? Don't end up paying the extra price in your cloud bill; learn how you can fix it with Kubernetes.`,
   description: `In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month.`,
-  openGraphImage: Image({ url: 'src/whatIsKubernetes/why-kube.png', description: 'Kubernetes bucks' }),
+  openGraphImage: <img src='src/whatIsKubernetes/why-kube.png' alt='Kubernetes bucks' />,
   publishedDate: '2018-09-04',
-  previewImage: Image({
-    url: 'src/whatIsKubernetes/why-kube.png',
-    description: 'What is Kubernetes? Optimise your hosting costs and efficiency',
-  }),
+  previewImage: <img src='src/whatIsKubernetes/why-kube.png' alt='What is Kubernetes? Optimise your hosting costs and efficiency' />,
   author: {
     fullName: 'Daniele Polencic',
-    avatar: Image({ url: 'assets/authors/daniele_polencic.jpg', description: 'Daniele Polencic' }),
+    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
     link: 'https://linkedin.com/in/danielepolencic',
   },
-}
+} as const
 
 function identity<T>(value: T): T {
   return value
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Remark.render(`${__dirname}/content.md`)
   return renderToStaticMarkup(
     <Article
       website={website}
@@ -45,10 +40,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       authorFullName={currentNode.payload.author.fullName}
       authorAvatar={currentNode.payload.author.avatar}
       authorLink={currentNode.payload.author.link}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: css,
-      })}
       publishedDate={currentNode.payload.publishedDate}
     >
       <JsonLd<BlogPosting>
@@ -56,7 +47,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
           headline: currentNode.payload.title,
-          image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+          image: `${currentNode.payload.previewImage.props.src}`,
           author: {
             '@type': 'Person',
             name: currentNode.payload.author.fullName,
@@ -66,7 +57,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             name: 'Learnk8s',
             logo: {
               '@type': 'ImageObject',
-              url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
+              url: `assets/learnk8s_logo_square.png`,
             },
           },
           url: getAbsoluteUrl(currentNode, siteUrl),
@@ -78,7 +69,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
         }}
       />
-      {html}
+      {Remark.render(`${__dirname}/content.md`)}
 
       <RelatedConentContainer>
         <RelatedContentItem>
@@ -102,13 +93,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       </RelatedConentContainer>
 
       <Subscribe identifier='what-is-kube' />
-
-      <JSScript
-        js={JSBundle({
-          scripts: js,
-          paths: ['src/whatIsKubernetes/anime.min.js', 'src/whatIsKubernetes/isScrolledIntoView.js'],
-        })}
-      />
     </Article>,
   )
 }

@@ -29,7 +29,6 @@ You have several teams dedicated to developing, packaging and releasing applicat
 When for every application, you can refactor the same apps in a collection of four components, you have at least four times more apps to develop, package and release.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 644" id="monolith">
   <g fill="none" fill-rule="evenodd">
     <g id="monolith-animejs-monolith" transform="translate(187 105)">
@@ -67,7 +66,8 @@ When for every application, you can refactor the same apps in a collection of fo
     <polygon id="monolith-animejs-vertical" fill="#FFF" points="380 542 380 104 420 104 420 542"/>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#monolith')
@@ -124,8 +124,6 @@ When for every application, you can refactor the same apps in a collection of fo
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 It's not uncommon for a small service to be made out of a dozen components such as a front-end app, a backend API, an authorisation server, an admin application, etc.
@@ -133,7 +131,6 @@ It's not uncommon for a small service to be made out of a dozen components such 
 Indeed when you develop services that interact with each other, you see an explosion of components deployed on your infrastructure.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 780" id="explosion">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(194 94)">
@@ -454,7 +451,8 @@ Indeed when you develop services that interact with each other, you see an explo
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#explosion')
@@ -506,8 +504,6 @@ Indeed when you develop services that interact with each other, you see an explo
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 It gets harder, though.
@@ -521,7 +517,6 @@ Each virtual machine comes with an operating system that consumes part of the me
 When you create a 1GB of memory and 1 vCPU droplet on Digital Ocean, you end up using 700MB in memory and 0.8 vCPU after you remove the overhead of the operating system.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" id="overhead">
   <g fill="none" fill-rule="evenodd">
     <text id="overhead-animejs-cpu-label" fill="#4A4A4A" font-size="31.68" font-weight="bold" class="sans-serif">
@@ -544,7 +539,8 @@ When you create a 1GB of memory and 1 vCPU droplet on Digital Ocean, you end up 
     </text>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#overhead')
@@ -601,8 +597,6 @@ When you create a 1GB of memory and 1 vCPU droplet on Digital Ocean, you end up 
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 Or in other words, for every fifth virtual machine the overhead adds up to a full virtual machine.
@@ -628,7 +622,6 @@ Some components such as data processing and data mining applications are CPU int
 Others, such as servers for real-time applications might use more memory than CPU.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 551" id="profiles">
   <g fill="none" fill-rule="evenodd">
     <g stroke-linejoin="round" transform="translate(137 123)">
@@ -679,7 +672,8 @@ Others, such as servers for real-time applications might use more memory than CP
     </g>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#profiles')
@@ -723,8 +717,6 @@ Others, such as servers for real-time applications might use more memory than CP
   })
 })();
 </script>
-<style>
-</style>
 ```
 
 Amazon Web Services and the other cloud providers have indeed a long list of compute resources that fit every need: general purpose, CPU optimised, memory optimised, storage optimised and GPU computing.
@@ -764,7 +756,6 @@ So you end up taking the only sensible choice: selecting a small, medium and lar
 You know you have to live with wasting hundreds of megabytes of RAM and plenty of CPU cycles.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 583" id="waste">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(242 118)">
@@ -823,7 +814,8 @@ You know you have to live with wasting hundreds of megabytes of RAM and plenty o
     </text>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#waste')
@@ -901,8 +893,6 @@ You know you have to live with wasting hundreds of megabytes of RAM and plenty o
   })
 })();
 </script>
-<style>
-</style>
 ```
 
 If it makes you feel any better, there are plenty of companies suffering from similar inefficiencies.
@@ -996,7 +986,6 @@ They also have to emulate hardware and come with the extra baggage of an operati
 Linux containers, on the other hand, are merely processes running on your host.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 683" id="vmless">
   <g fill="none" fill-rule="evenodd">
     <g id="vmless-animejs-vm-16" transform="translate(521 426)">
@@ -1171,7 +1160,8 @@ Linux containers, on the other hand, are merely processes running on your host.
     </text>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#vmless')
@@ -1230,8 +1220,6 @@ Linux containers, on the other hand, are merely processes running on your host.
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 Indeed, for the same operating system and server, you could have dozens of containers running on that host.
@@ -1347,7 +1335,6 @@ In other words, Kubernetes will play Tetris with your infrastructure.
 Docker containers are the blocks; servers are the boards, and Kubernetes is the player.
 
 ```include
-<template>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" id="tetris">
   <g fill="none" fill-rule="evenodd">
     <g transform="translate(237 216)">
@@ -1397,7 +1384,8 @@ Docker containers are the blocks; servers are the boards, and Kubernetes is the 
     <rect id="tetris-animejs-block-4" width="50" height="164" x="459" y="366" fill="#3D1C00"/>
   </g>
 </svg>
-</template>
+<script src="anime.min.js"></script>
+<script src="isScrolledIntoView.js"></script>
 <script>
 (function() {
   const svg = document.querySelector('#tetris')
@@ -1536,8 +1524,6 @@ Docker containers are the blocks; servers are the boards, and Kubernetes is the 
   }
 })();
 </script>
-<style>
-</style>
 ```
 
 Having Kubernetes efficiently packing your infrastructure means that you get more computing for your money. You can do a lot more with a lot less.
