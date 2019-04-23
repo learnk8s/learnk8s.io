@@ -251,7 +251,14 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case WhatIsKubernetes.Details.type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${WhatIsKubernetes.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(WhatIsKubernetes.render(root, node, siteUrl))
+      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+      optimiseCss({ $ })
+      optimiseJs({ $ })
+      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case SpotInstances.Details.type: {
