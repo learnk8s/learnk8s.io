@@ -3,9 +3,10 @@
   publish = "_site"
   command = "npm install && npm test && npm run fmt && npm run build"
 [context.deploy-preview]
+  command = "npm install && npm test && mkdir -p _site && echo -e \"\nDisallow: /\" >> _site/robots.txt && npm run fmt && npm run build"
+[context.deploy-preview.environment]
   NODE_ENV = "preview"
   IS_BUILD_OPTIMISED = "yes"
-  command = "npm install && npm test && mkdir -p _site && echo -e \"\nDisallow: /\" >> _site/robots.txt && npm run fmt && npm run build"
 [context.production.environment]
   NODE_ENV = "production"
   IS_BUILD_OPTIMISED = "yes"
