@@ -5,12 +5,11 @@ const remark2rehype = require('remark-rehype')
 const raw = require('rehype-raw')
 import Prism from 'prismjs'
 const map = require('unist-util-map')
-import cheerio from 'cheerio'
 import React from 'react'
 const all: all = require('mdast-util-to-hast/lib/all')
 const one: one = require('mdast-util-to-hast/lib/one')
-const rehype2react = require('rehype-react')
 const { selectAll, select } = require('unist-util-select')
+const UtilHast = require('hast-util-select')
 import { readFileSync } from 'fs'
 import { dirname, resolve } from 'path'
 
@@ -71,23 +70,9 @@ export function parse(content: string): Node {
                 }
               }
               case 'include': {
-                const $ = cheerio.load(node.value, { decodeEntities: false })
                 return {
                   type: 'include',
-                  children: [
-                    {
-                      type: 'html',
-                      value: $('template').html() || '',
-                    },
-                    {
-                      type: 'style',
-                      value: $('style').html() || '',
-                    },
-                    {
-                      type: 'script',
-                      value: $('script').html() || '',
-                    },
-                  ],
+                  value: node.value,
                 }
               }
               default: {
@@ -352,14 +337,7 @@ export function render(path: string): JSX.Element {
           return H('code.code.f5.lh-copy.bg-near-white.br2.pv1.ph2.fs-normal', [{ type: 'text', value: node.value }])
         },
         include: (h: h, node: Mdast.Include): Node => {
-          const html = select('html', node)
-          const css = select('style', node)
-          const js = select('script', node)
-          return H('div.mv4.mv5-l', [
-            { type: 'raw', value: html.value },
-            H('style', {}, [{ type: 'text', value: css.value }]),
-            H('script', {}, [{ type: 'text', value: js.value }]),
-          ])
+          return H('div.mv4.mv5-l', [{ type: 'raw', value: node.value }])
         },
         image: (h: h, node: Mdast.Image): Node => {
           const props = {} as any
@@ -426,15 +404,21 @@ export function render(path: string): JSX.Element {
       },
     })
     .use(raw)
-    .use(() => (it: any) => {
-      return remove(it, { cascade: false }, (node: Node, index: number, parent?: Node) => {
+    .use(() => (tree: Node) => {
+      return remove(tree, { cascade: false }, (node: Node, index: number, parent?: Node) => {
         return parent && parent.type === 'root' && node.type === 'text' && /^\s*$/.test(node.value as string)
       })
     })
-
-  const jsxStringifier = unified().use(rehype2react, {
-    createElement: React.createElement,
-  })
+    .use(() => (tree: Node) => {
+      // adjust paths for images, stylesheets and scripts
+      UtilHast.selectAll('script[src]', tree).forEach((it: any) => {
+        it.properties.src = `${assetsPath}/${it.properties.src}`
+      })
+      UtilHast.selectAll('link[rel="stylesheet"]', tree).forEach((it: any) => {
+        it.properties.href = `${assetsPath}/${it.properties.href}`
+      })
+      return tree
+    })
 
   const mdastTree = parse(content)
   const hastTree = hastParser.runSync(mdastTree)
@@ -447,7 +431,6 @@ export function render(path: string): JSX.Element {
       }}
     />
   )
-  // return (jsxStringifier.stringify(hastTree) as any) as JSX.Element
 }
 
 export function extractCodeFences<T extends string>(
@@ -715,8 +698,4 @@ function Slideshow() {
   }
 
   document.querySelectorAll<HTMLElement>('.slideshow-js').forEach(setupSlideshow)
-}
-
-function onlyUnique(value: string, index: number, self: string[]) {
-  return self.indexOf(value) === index
 }

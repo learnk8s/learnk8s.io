@@ -204,7 +204,14 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case ChaosEngineering.Details.type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${ChaosEngineering.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(ChaosEngineering.render(root, node, siteUrl))
+      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+      optimiseCss({ $ })
+      optimiseJs({ $ })
+      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case K8sOnWindows.Details.type: {
@@ -346,7 +353,7 @@ function optimiseCss({ $ }: { $: Cheerio }): Cheerio {
   const css: string = [
     ...linkTags.get().map(it => readFileSync((it as any).properties.href, 'utf8')),
     ...styleTags.get().map(it => toString(it)),
-  ].join('\n')
+  ].filter(onlyUnique).join('\n')
   styleTags.remove()
   linkTags.remove()
   const digestCss = md5(css)
@@ -364,7 +371,11 @@ function optimiseCss({ $ }: { $: Cheerio }): Cheerio {
 
 function optimiseJs({ $ }: { $: Cheerio }): Cheerio {
   const scriptTags = $.findAll('script:not([type="application/ld+json"])')
-  const js: string[] = scriptTags.get().map(it => toString(it))
+  const externalScripts = scriptTags.get().filter(it => !!(it.properties as any).src)
+  const inlineScripts = scriptTags.get().filter(it => !(it.properties as any).src)
+  const thirdPartyScripts = externalScripts.filter(it => /^http/.test((it.properties as any).src))
+  const includeScripts = externalScripts.filter(it => !/^http/.test((it.properties as any).src)).map(it => readFileSync((it.properties as any).src, 'utf8'))
+  const js: string[] = [...includeScripts, ...inlineScripts.map(it => toString(it)),].filter(onlyUnique)
   scriptTags.remove()
   const digestJs = md5(js.join('\n;'))
   const minifiedJs = minify(js)
@@ -372,6 +383,9 @@ function optimiseJs({ $ }: { $: Cheerio }): Cheerio {
     console.log('ERROR minifying', minifiedJs.error)
   }
   writeFileSync(`_site/a/${digestJs}.js`, minifiedJs.code)
+  thirdPartyScripts.forEach(it => {
+    $.find('body').append(<script src={(it.properties as any).src} />)
+  })
   $.find('body').append(<script src={`/a/${digestJs}.js`} />)
   return $
 }
@@ -446,4 +460,8 @@ function optimiseOpenGraphImage({ $, siteUrl }: { $: Cheerio; siteUrl: string })
   const openGraphImage = $.find('[property="og:image"]').get()
   ;(openGraphImage.properties as any).content = `${siteUrl}${digest((openGraphImage.properties as any).content)}`
   return $
+}
+
+function onlyUnique(value: string, index: number, self: string[]) {
+  return self.indexOf(value) === index
 }
