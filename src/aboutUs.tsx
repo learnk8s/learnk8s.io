@@ -1,31 +1,15 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Consultation, Footer, Layout } from './layout'
-import { Image, Img, CSSBundle } from './assets'
+import { Navbar, Consultation, Footer, Layout } from './layout.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-const Assets = {
-  daniele: Image({ url: 'assets/about-us/daniele_polencic.jpg', description: 'Daniele Polencic' }),
-  miriam: Image({ url: 'assets/about-us/miriam_menegatti.jpg', description: 'Miriam Menegatti' }),
-  alessandro: Image({ url: 'assets/about-us/alessandro_moretti.jpg', description: 'Alessandro Moretti' }),
-  chris: Image({ url: 'assets/about-us/chris_nesbitt-smith.jpg', description: 'Chris Nesbitt-Smith' }),
-  mehdi: Image({ url: 'assets/about-us/mehdi_avdi.jpg', description: 'Mehdi Avdi' }),
-  valentin: Image({ url: 'assets/about-us/valentin_ouvrard.jpg', description: 'Valentin Ouvrard' }),
-  keith: Image({ url: 'assets/about-us/keith_mifsud.jpg', description: 'Keith Mifsud' }),
-  bruno: Image({ url: 'assets/about-us/bruno_bonanno.jpg', description: 'Bruno Bonanno' }),
-}
-
 export const Details = {
-  type: identity<'aboutUs'>('aboutUs'),
+  type: 'aboutUs',
   url: '/about-us',
   seoTitle: 'Team ♦︎ Learnk8s',
   title: 'Team',
   description: 'Experienced software consultants, specialising in Kubernetes.',
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
-}
-
-function identity<T>(value: T): T {
-  return value
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
@@ -37,9 +21,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
         <Navbar root={website} />
@@ -57,7 +38,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       <section>
         <ul className='list pl0 flex flex-wrap justify-center'>
           <Profile
-            profile={Assets.daniele}
+            profile={<img src='assets/about-us/daniele_polencic.jpg' alt='Daniele Polencic' />}
             name='Daniele Polencic'
             bio='Daniele is a technical consultant and instructor based in London. Daniele is a certified Kubernetes administrator by the Linux Foundation. In the last decade, Daniele trained developers for companies in the e-commerce, finance and public sector.'
             role='Managing director and instructor'
@@ -67,7 +48,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             <LinkedIn link='https://www.linkedin.com/in/danielepolencic' />
           </Profile>
           <Profile
-            profile={Assets.miriam}
+            profile={<img src='assets/about-us/miriam_menegatti.jpg' alt='Miriam Menegatti' />}
             name='Miriam Menegatti'
             bio='Miriam is a professional based in London specializing in LNG Trading. She is focused on business development and driving strategic growth. Miriam has also extensive experience in contract negotiation, within the commodity sector.'
             role='Managing director and head of strategy'
@@ -75,7 +56,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             <LinkedIn link='https://www.linkedin.com/in/miriam-menegatti-46263915/' />
           </Profile>
           <Profile
-            profile={Assets.bruno}
+            profile={<img src='assets/about-us/bruno_bonanno.jpg' alt='Bruno Bonanno' />}
             name='Bruno Bonanno'
             bio='Bruno has worked as a software engineer for 15+. He spent 5 years teaching at UTN BA before moving to the consulting arena and helping companies such as Morgan Stanley, Barclays and Lloyds deliver better and more secure software.'
             role='Senior software engineer'
@@ -84,7 +65,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             <LinkedIn link='https://www.linkedin.com/in/bbonanno/' />
           </Profile>
           <Profile
-            profile={Assets.alessandro}
+            profile={<img src='assets/about-us/alessandro_moretti.jpg' alt='Alessandro Moretti' />}
             name='Alessandro Moretti'
             bio='Alessandro is a digital marketer passionate about emerging technology and blockchain. He has vast expertise in the digital advertising space having worked with companies such as Coca Cola, The Times and Discovery Channel.'
             role='Head of marketing'
@@ -92,7 +73,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             <LinkedIn link='https://www.linkedin.com/in/alemoretti/' />
           </Profile>
           <Profile
-            profile={Assets.mehdi}
+            profile={<img src='assets/about-us/mehdi_avdi.jpg' alt='Mehdi Avdi' />}
             name='Mehdi Avdi'
             bio='Mehdi is a highly experienced software developer and technical lead, with 12+ years industry experience in software engineering practices. Mehdi has helped built infrastructure for companies such as Pearson, Which? and AGCO.'
             role='Instructor'
@@ -101,7 +82,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             <LinkedIn link='https://www.linkedin.com/in/mehdiavdi/' />
           </Profile>
           <Profile
-            profile={Assets.chris}
+            profile={<img src='assets/about-us/chris_nesbitt-smith.jpg' alt='Chris Nesbitt-Smith' />}
             name='Chris Nesbitt-Smith'
             bio='Chris, a test-fanatic software engineer, always focused on how apply that same level of vigour and assurance to infrastructure. Chris has considerable experience delivering complex, scalable software and training to many UK private, public and third sector organisations.'
             role='Instructor'
@@ -110,7 +91,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             <LinkedIn link='https://www.linkedin.com/in/cnesbittsmith/' />
           </Profile>
           <Profile
-            profile={Assets.valentin}
+            profile={<img src='assets/about-us/valentin_ouvrard.jpg' alt='Valentin Ouvrard' />}
             name='Valentin Ouvrard'
             bio='Valentin is a DevOps engineer with a passion for container technology. Having jumped onto Kubernetes at the beginning of 2015, he has more than 2yrs of production experience in public clouds and bare metal environments alike.'
             role='Kubernetes Specialist'
@@ -120,7 +101,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             <LinkedIn link='https://www.linkedin.com/in/valentin-ouvrard-57823aa7' />
           </Profile>
           <Profile
-            profile={Assets.keith}
+            profile={<img src='assets/about-us/keith_mifsud.jpg' alt='Keith Mifsud' />}
             name='Keith Mifsud'
             bio='Keith has over ten years of professional experience in software development. He built one of the first ever enterprise insurance policy generator software and had worked with clients of the calibre of Renault, Xerox and Hilton Hotels.'
             role='Senior software developer'
@@ -139,7 +120,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
   )
 }
 
-export const Profile: React.StatelessComponent<{ profile: Image; name: string; bio: string; role: string }> = ({
+export const Profile: React.StatelessComponent<{ profile: JSX.Element; name: string; bio: string; role: string }> = ({
   profile,
   name,
   role,
@@ -149,7 +130,7 @@ export const Profile: React.StatelessComponent<{ profile: Image; name: string; b
   return (
     <li className='mw5 ma4' id={`${name.replace(/\s/gi, '_').toLowerCase()}`}>
       <div className='relative padding-hack-100'>
-        <Img image={profile} className='db shadow-1 absolute top-0 left-0' />
+        <img src={profile.props.src} alt={profile.props.alt} className='db shadow-1 absolute top-0 left-0' />
       </div>
       <h2 className='f4 navy mb1'>{name}</h2>
       <p className='black-70 mt0'>{role}</p>
