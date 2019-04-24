@@ -8,12 +8,13 @@ const map = require('unist-util-map')
 import React from 'react'
 const all: all = require('mdast-util-to-hast/lib/all')
 const one: one = require('mdast-util-to-hast/lib/one')
-const { selectAll, select } = require('unist-util-select')
+const { selectAll, select, matches } = require('unist-util-select')
 const UtilHast = require('hast-util-select')
 import { readFileSync } from 'fs'
 import { dirname, resolve } from 'path'
 
-const stringify = require('rehype-stringify')
+const rehypeStringify = require('rehype-stringify')
+const remarkStringify = require('remark-stringify')
 const remove = require('unist-util-remove')
 const toString = require('mdast-util-to-string')
 const H: Hastscript = require('hastscript')
@@ -29,6 +30,50 @@ interface Hastscript {
 const prismSolarizedCss = readFileSync('src/prism-solarizedlight.css', 'utf8')
 const prismOkaidiadCss = readFileSync('src/prism-okaidia.css', 'utf8')
 require('prismjs/components/')()
+
+export function toMd(tree: Node): string {
+  return unified()
+    .use(remarkStringify, { listItemIndent: '1', incrementListMarker: false })
+    .use(plugin)
+    .stringify(tree)
+
+  function plugin(this: any) {
+    const fences = '```'
+    this.Compiler.prototype.visitors.terminal = (node: Node) => {
+      return `${fences}terminal${node.command ? `|command=${node.command}` : ''}${
+        node.title ? `|title=${node.title}` : ''
+      }\n${node.value}\n${fences}`
+    }
+    this.Compiler.prototype.visitors.slideshow = (node: Node) => {
+      const slides = selectAll('slide', node).map((node: Node) => {
+        return {
+          image: select('image', node).url,
+          description: toMd({
+            type: 'root',
+            children: (node.children as any).filter((it: Node) => matches(':not(image)', it)),
+          }).trim(),
+        }
+      })
+      const description = toMd({
+        type: 'root',
+        children: (node.children as any).filter((it: Node) => matches(':not(slide)', it)),
+      }).trim()
+      return `${fences}slideshow\n${JSON.stringify({ description, slides }, null, 2)}\n${fences}`
+    }
+    this.Compiler.prototype.visitors.slide = (node: Node) => {}
+    this.Compiler.prototype.visitors.include = (node: Node) => {
+      return `${fences}include\n${node.value}\n${fences}`
+    }
+    this.Compiler.prototype.visitors.code = (node: Node & { data: any }) => {
+      const head = ([] as string[])
+        .concat((node.lang as string) || [])
+        .concat(node.data.highlight ? `highlight=${node.data.highlight}` : [])
+        .concat(node.data.title ? `title=${node.data.title}` : [])
+        .join('|')
+      return `${fences}${head}\n${node.value}\n${fences}`
+    }
+  }
+}
 
 export function parse(content: string): Node {
   const tree = unified()
@@ -426,7 +471,7 @@ export function render(path: string): JSX.Element {
     <div
       dangerouslySetInnerHTML={{
         __html: unified()
-          .use(stringify)
+          .use(rehypeStringify)
           .stringify(hastTree),
       }}
     />

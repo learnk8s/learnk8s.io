@@ -180,7 +180,7 @@ If everything works as expected, you should see an empty list of containers runn
 
 If your Docker daemon isn't running, you're probably banging your head against this error:
 
-> error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.37/containers/json: open //./pipe/docker_engine: The system cannot find the file specified. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.
+> error during connect: Get <http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.37/containers/json>: open //./pipe/docker_engine: The system cannot find the file specified. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.
 
 ![Docker daemon failed to start](powershell_failed_to_connect.png)
 
@@ -229,7 +229,7 @@ Don't forget to insert the adapter that you selected earlier.
 If you fail to create the network switch, you should see the following error when you start minikube:
 
 > E0427 09:06:16.000298 3252 start.go:159] Error starting host: Error creating host: Error executing step: Running precreate checks.
-> no External vswitch found. A valid vswitch must be available for this command to run. Check https://docs.docker.com/machine/drivers/hyper-v/.
+> no External vswitch found. A valid vswitch must be available for this command to run. Check <https://docs.docker.com/machine/drivers/hyper-v/>.
 
 You can test your minikube installation with:
 
@@ -394,7 +394,7 @@ docker run -ti -p 8080:80 nginx
 
 > Please note how the container exposes port 80 and you mapped that port to 8080.
 
-You can visit [http://localhost:8080](http://localhost:8080) and see the _"Welcome to Nginx"_ page.
+You can visit <http://localhost:8080> and see the _"Welcome to Nginx"_ page.
 
 If you run the same command using the remote Docker daemon and visit the same page, you won't see anything.
 
@@ -430,7 +430,7 @@ In your terminal type:
 docker run -ti -p 8080:80 wordpress
 ```
 
-Once Docker has completed downloading all the package, you should visit [http://localhost:8080/](http://localhost:8080/).
+Once Docker has completed downloading all the package, you should visit <http://localhost:8080/>.
 
 > Please note that, if you're running minikube as your remote Docker daemon, you should use `http://minikube_ip:8080` as your URL.
 

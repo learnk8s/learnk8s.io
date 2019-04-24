@@ -143,7 +143,7 @@ If you wish to apply rate limiting to your API, this is what it looks like in Am
 
 You have a RateLimiting object that defines the requirements:
 
-```yaml|title=rate-limit.yaml|highlight=2
+```yaml|highlight=2|title=rate-limit.yaml
 apiVersion: getambassador.io/v1beta1
 kind: RateLimit
 metadata:
@@ -208,7 +208,7 @@ If your API is developed using standard tools such as the OpenAPI, then Gloo aut
 
 If you list all the endpoint served by Gloo after the discovery phase, this is what you see:
 
-```yaml|highlight=14-22,24-33,35-44|title=gloo upstream service-8080
+```yaml|highlight=14-22,24-33,35-44|title=gloo
 upstreamSpec:
   kube:
     selector:
@@ -272,7 +272,7 @@ Which makes it the perfect companion when you wish to mix and match Kubernetes a
 Here's a handy recap of the three Ingress controllers:
 
 |                 |                                     Kong                                    |            Ambassador           |                     Gloo                    |
-|:----------------|:---------------------------------------------------------------------------:|:-------------------------------:|:-------------------------------------------:|
+| :-------------- | :-------------------------------------------------------------------------: | :-----------------------------: | :-----------------------------------------: |
 | protocol        |                           http,https,grpc,tcp,udp                           | http,https,grpc,tcp,udp,tcp+ssl |               http,https,grpc               |
 | based on        |                                    Nginx                                    |              Envoy              |                    Envoy                    |
 | resiliency      |     active and passive health check, circuit break, rate limit, retries     |            rate limit           | rate limit, circuit break, retries, caching |

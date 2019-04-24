@@ -49,7 +49,9 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 6.4 Your legal right to cancel a Contract starts from the date of the Order Confirmation (discussed in section 9), which is when the Contract between us is formed. How long You have depends on what You have ordered and how it is delivered:
 
 - (a) Have You bought services? If so, You have 14 days after the date of Order Confirmation. However, once we have completed the services You cannot change Your mind, even if the period is still running. If You cancel after we have started the services, You must pay us for the services provided up until the time You tell us that You have changed Your mind.
+
 - (b) Have You bought digital content for download or streaming? if so, You have 14 days after the date of Order Confirmation, or, if earlier, until You start downloading or streaming. If we delivered the digital content to You immediately, and You agreed to this when ordering, You will not have a right to change Your mind.
+
 - (c) Have You bought goods? if so You have 14 days after the day You (or someone You nominate) receives the goods, unless:
 
   - I. Your goods are split into several deliveries over different days. In this case You have until 14 days after the day You (or someone You nominate) receives the last delivery to change Your mind about the goods.
@@ -58,8 +60,11 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
     6.5 When You don't have the right to change Your mind. You do not have a right to change Your mind in respect of:
 
 - (a) digital products after You have started to download or stream these;
+
 - (b) services, once these have been completed, even if the cancellation period is still running;
+
 - (c) sealed audio or sealed video recordings or sealed computer software, once these products are unsealed after You receive them; and
+
 - (d) any products which become mixed inseparably with other items after their delivery.
 
   6.6 We will process any refund due to You as soon as possible and refund You on the credit card or debit card (if any) used by You to pay.
@@ -134,18 +139,27 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 12.2 We only supply the Services for internal use by Your business, and You agree not to use the Services for any resale purposes.
 
 - (a) Nothing in these Terms limits or excludes our liability for:
+
 - (b) death or personal injury caused by our negligence;
+
 - (c) fraud or fraudulent misrepresentation;
+
 - (d) breach of the terms implied by section 12 of the Sale of Goods Act 1979 (title and quiet possession); or
+
 - (e) defective products under the Consumer Protection Act 1987.
 
   12.3 Subject to clause 12.2, we will under no circumstances whatever be liable to You, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, arising under or in connection with the Contract for:
 
 - (a) any loss of profits, sales, business, or revenue;
+
 - (b) loss or corruption of data, information or software;
+
 - (c) loss of business opportunity;
+
 - (d) loss of anticipated savings;
+
 - (e) loss of goodwill; or
+
 - (f) any indirect or consequential loss.
 
   12.4 Subject to clause 12.2, our total liability to You in respect of all losses arising under or in connection with the Contract, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, shall in no circumstances exceed 100% of the price of the Services.

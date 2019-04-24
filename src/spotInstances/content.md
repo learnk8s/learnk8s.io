@@ -29,10 +29,10 @@ With reserved instances, you need to **commit** to compute resources for at leas
 
 The discount that you get will depend on how long you are willing to commit and how much you can pay upfront. For example on Amazon Web Services, the _m4.large_ instance type can be discounted as follow:
 
-| Pricing Model                | \$/hour | Instance/year | Total 1 year |
-| ---------------------------- | ------: | ------------: | -----------: |
-| Pay-as-you-go                | \$0.111 |         \$960 |       \$3847 |
-| 1 Year reserved 100% upfront | \$0.071 |         \$615 |       \$2460 |
+| Pricing Model                | $/hour | Instance/year | Total 1 year |
+| ---------------------------- | -----: | ------------: | -----------: |
+| Pay-as-you-go                | $0.111 |          $960 |        $3847 |
+| 1 Year reserved 100% upfront | $0.071 |          $615 |        $2460 |
 
 As you can see, the discount offered from reserved instances **typically range from 30% to 40%**.
 
