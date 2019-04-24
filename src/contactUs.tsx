@@ -1,28 +1,16 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Consultation, Footer, Layout } from './layout'
-import { Image, Img, CSSBundle } from './assets'
+import { Navbar, Consultation, Footer, Layout } from './layout.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-export const Assets = {
-  sales: Image({ url: 'assets/contact-us/sales.svg', description: 'Man on the phone' }),
-  lineChart: Image({ url: 'assets/contact-us/line_chart.svg', description: 'Line chart' }),
-  logo: Image({ url: 'assets/contact-us/square_logo.svg', description: 'Learnk8s logo' }),
-  slack: Image({ url: 'assets/contact-us/slack_in_colours.svg', description: 'Slack logo' }),
-}
-
 export const Details = {
-  type: identity<'contactUs'>('contactUs'),
+  type: 'contactUs',
   url: '/contact-us',
   seoTitle: 'Contact us ♦︎ Learnk8s',
   title: 'Contact us',
   description: 'Feel free to get in touch and let us know how we can help. ',
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   return renderToStaticMarkup(
@@ -33,9 +21,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
         <Navbar root={website} />
@@ -49,7 +34,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           </div>
           <ul className='list pl0 flex-l items-start-l justify-around-l ph3'>
             <Block
-              image={Assets.lineChart}
+              image={<img src='assets/contact-us/line_chart.svg' alt='Line chart' />}
               title={`Sales`}
               description={`We'd love to talk about how we can work together.`}
             >
@@ -57,13 +42,17 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
                 Contact sales →
               </a>
             </Block>
-            <Block image={Assets.sales} title={`Help & support`} description={`We're here to help with any question.`}>
+            <Block
+              image={<img src='assets/contact-us/sales.svg' alt='Man on the phone' />}
+              title={`Help & support`}
+              description={`We're here to help with any question.`}
+            >
               <a href='mailto:support@learnk8s.io' className='link navy b'>
                 Contact support →
               </a>
             </Block>
             <Block
-              image={Assets.logo}
+              image={<img src='assets/contact-us/square_logo.svg' alt='Learnk8s logo' />}
               title={`Media & press`}
               description={`Get learnk8s news, company info, and media resources.`}
             >
@@ -80,7 +69,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           <h2 className='navy'>
             Join us on Slack{' '}
             <span className='w2 dib v-mid'>
-              <Img image={Assets.slack} />
+              <img src='assets/contact-us/slack_in_colours.svg' alt='Slack logo' />
             </span>
           </h2>
           <p className='measure black-70 center'>
@@ -108,7 +97,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
   )
 }
 
-export const Block: React.StatelessComponent<{ image: Image; title: string; description: string }> = ({
+export const Block: React.StatelessComponent<{ image: JSX.Element; title: string; description: string }> = ({
   title,
   description,
   children,
@@ -116,9 +105,7 @@ export const Block: React.StatelessComponent<{ image: Image; title: string; desc
 }) => {
   return (
     <li className='bg-white br2 relative pt4 w-100 mw6-m center-m w-30-l mv5'>
-      <div className='w3 h3 bg-white br-100 shadow-1 absolute top--2 left-0 absolute-center'>
-        <Img image={image} />
-      </div>
+      <div className='w3 h3 bg-white br-100 shadow-1 absolute top--2 left-0 absolute-center'>{image}</div>
       <h2 className='navy normal tc'>{title}</h2>
       <p className='lh-copy black-70 ph4 measure-narrow'>{description}</p>
       <div className='tc bg-evian br2 br--bottom pv3'>{children}</div>
