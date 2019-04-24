@@ -1,34 +1,19 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, mailto, MailTo } from './layout'
-import { Image, Img, CSSBundle } from './assets'
+import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, mailto, MailTo } from './layout.v2'
 import { PrimaryButton } from './homepage'
 import { ProfessionalService } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-export const Assets = {
-  kcsp: Image({ url: 'assets/consulting/kcsp.png', description: 'Kubernetes Certified Service Provider' }),
-  cka: Image({ url: 'assets/consulting/cka.png', description: 'Certified Kubernetes administrator' }),
-  cargoLoading: Image({ url: 'assets/consulting/more_cargo_loading.svg', description: 'Loading cargos' }),
-  containers: Image({ url: 'assets/consulting/containers.svg', description: 'Containers' }),
-  cloudProviders: Image({ url: 'assets/consulting/managed-services.svg', description: 'AKS, EKS and GKE' }),
-  team: Image({ url: 'assets/consulting/team.svg', description: 'Team' }),
-  logoConsulting: Image({ url: 'assets/consulting/learnk8s-consulting.svg', description: 'Learnk8s consulting' }),
-}
-
 export const Details = {
-  type: identity<'consulting'>('consulting'),
+  type: 'consulting',
   url: '/consulting',
   seoTitle: 'Consulting ♦︎ Learnk8s',
   title: 'Consulting',
   description: 'Expertise in software development, strategy and operations to help you innovate at speed and scale.',
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+} as const
 
 const continuousDeliveryEnquiry: MailTo = {
   subject: 'Learnk8s Consulting',
@@ -57,16 +42,13 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       <JsonLd<ProfessionalService>
         item={{
           '@type': 'ProfessionalService',
           '@context': 'https://schema.org',
           name: 'Learnk8s',
-          image: `${siteUrl}${Assets.logoConsulting.url}`,
+          image: `assets/consulting/learnk8s-consulting.svg`,
           address: ['London, UK', 'Milan, Italy', 'Singapore'],
           telephone: ['+44 07583438976', '+39 02 8088 8106'],
           priceRange: ['1200GBP - 2400GBP per day', '1300EUR - 2600EUR al giorno', '2100SGD - 4200SGD per day'],
@@ -88,10 +70,10 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
           <div className='dn db-l mt4 tr'>
             <div className='padding-hack-100 relative'>
-              <Img image={Assets.kcsp} />
+              <img src='assets/consulting/kcsp.png' alt='Kubernetes Certified Service Provider' />
             </div>
             <div className='padding-hack-100 relative'>
-              <Img image={Assets.cka} />
+              <img src='assets/consulting/cka.png' alt='Certified Kubernetes administrator' />
             </div>
           </div>
         </section>
@@ -101,7 +83,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <div className='w-50-l dn db-l tc'>
           <div className='dib'>
             <div className='i-more-cargo-loading relative'>
-              <Img image={Assets.cargoLoading} className='absolute top-0 right-0' />
+              <img src='assets/consulting/more_cargo_loading.svg' alt='Loading cargos' className='absolute top-0 right-0' />
             </div>
           </div>
         </div>
@@ -143,7 +125,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
         <div className='ml7-l dn db-ns'>
           <div className='i-containers relative'>
-            <Img image={Assets.containers} className='absolute top-0 right-0' />
+            <img src='assets/consulting/containers.svg' alt='Containers' className='absolute top-0 right-0' />
           </div>
         </div>
       </section>
@@ -151,7 +133,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       <section className='pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100 bg-evian'>
         <div className='dn db-ns mr7-l'>
           <div className='i-cloud-providers relative'>
-            <Img image={Assets.cloudProviders} className='absolute top-0 right-0' />
+            <img src='assets/consulting/managed-services.svg' alt='AKS, EKS and GKE' className='absolute top-0 right-0' />
           </div>
         </div>
 
@@ -183,7 +165,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
         <div className='ml7-l dn db-ns'>
           <div className='i-team relative'>
-            <Img image={Assets.team} className='absolute top-0 right-0' />
+            <img src='assets/consulting/team.svg' alt='Team' className='absolute top-0 right-0' />
           </div>
         </div>
       </section>
