@@ -149,89 +149,49 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
   switch (page.type) {
     case Homepage.Details.type: {
       const $ = Cheerio.of(Homepage.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case Training.Details.type: {
       const $ = Cheerio.of(Training.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case Academy.Details.type: {
       const $ = Cheerio.of(Academy.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case Consulting.Details.type: {
       const $ = Cheerio.of(Consulting.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case ContactUs.Details.type: {
       const $ = Cheerio.of(ContactUs.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case Careers.Details.type: {
       const $ = Cheerio.of(Careers.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case TermsAndConditions.Details.type: {
       const $ = Cheerio.of(TermsAndConditions.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case AboutUs.Details.type: {
       const $ = Cheerio.of(AboutUs.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
@@ -241,210 +201,115 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     }
     case Newsletter.Details.type: {
       const $ = Cheerio.of(Newsletter.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case Blog.Details.type: {
       const $ = Cheerio.of(Blog.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized.Details.type: {
       const $ = Cheerio.of(BiteSized.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case SmallerImages.Details.type: {
       const $ = Cheerio.of(SmallerImages.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case DeployLaravel.Details.type: {
       const $ = Cheerio.of(DeployLaravel.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case ChaosEngineering.Details.type: {
       const $ = Cheerio.of(ChaosEngineering.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case K8sOnWindows.Details.type: {
       const $ = Cheerio.of(K8sOnWindows.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case SolarPlants.Details.type: {
       const $ = Cheerio.of(SolarPlants.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case WhatIsKubernetes.Details.type: {
       const $ = Cheerio.of(WhatIsKubernetes.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case SpotInstances.Details.type: {
       const $ = Cheerio.of(SpotInstances.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case ScalingTensorflow.Details.type: {
       const $ = Cheerio.of(ScalingTensorflow.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case ScalingSpringBoot.Details.type: {
       const $ = Cheerio.of(ScalingSpringBoot.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case Landing.Type: {
       const $ = Cheerio.of(Landing.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.MultipleClustersDetails.type: {
       const $ = Cheerio.of(BiteSized201903.MultipleClustersRender(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.IngressApiGatewayDetails.type: {
       const $ = Cheerio.of(BiteSized201903.IngressApiGatewayRender(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.VisualiseYamlDetails.type: {
       const $ = Cheerio.of(BiteSized201903.VisualiseYamlRender(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.HelmDetails.type: {
       const $ = Cheerio.of(BiteSized201903.HelmRender(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
     case NotFound.Details.type: {
       const $ = Cheerio.of(NotFound.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(`_site/404.html`, $.html())
       return
     }
     case AdvancedKubectl.Details.type: {
       const $ = Cheerio.of(AdvancedKubectl.render(root, node, siteUrl))
-      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
-      optimiseCss({ $ })
-      optimiseJs({ $ })
-      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
-      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
     }
@@ -546,6 +411,13 @@ function optimiseCss({ $ }: { $: Cheerio }): Cheerio {
   return $
 }
 
+function rewriteCss({ $ }: { $: Cheerio }): Cheerio {
+  const linkTags = $.findAll('link[rel="stylesheet"]').forEach(link => {
+    ;(link.properties as any).href = `/b/${(link.properties as any).href}`
+  })
+  return $
+}
+
 function optimiseJs({ $ }: { $: Cheerio }): Cheerio {
   const scriptTags = $.findAll('script:not([type="application/ld+json"])')
   const externalScripts = scriptTags.get().filter(it => !!(it.properties as any).src)
@@ -566,6 +438,17 @@ function optimiseJs({ $ }: { $: Cheerio }): Cheerio {
     $.find('body').append(<script src={(it.properties as any).src} />)
   })
   $.find('body').append(<script src={`/a/${digestJs}.js`} />)
+  return $
+}
+
+function rewriteJs({ $ }: { $: Cheerio }): Cheerio {
+  const scriptTags = $.findAll('script:not([type="application/ld+json"])')
+  const externalScripts = scriptTags
+    .get()
+    .filter(it => !!(it.properties as any).src && !/^http/.test((it.properties as any).src))
+  externalScripts.forEach(script => {
+    ;(script.properties as any).src = `/b/${(script.properties as any).src}`
+  })
   return $
 }
 
@@ -653,4 +536,13 @@ function optimiseOpenGraphImage({ $, siteUrl }: { $: Cheerio; siteUrl: string })
 
 function onlyUnique(value: string, index: number, self: string[]) {
   return self.indexOf(value) === index
+}
+
+function optimise({ $, siteUrl }: { $: Cheerio; siteUrl: string }) {
+  isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+  isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+  isOptimisedBuild ? optimiseCss({ $ }) : rewriteCss({ $ })
+  isOptimisedBuild ? optimiseJs({ $ }) : rewriteJs({ $ })
+  isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+  isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
 }
