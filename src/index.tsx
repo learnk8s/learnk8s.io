@@ -181,7 +181,14 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Consulting.Details.type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${Consulting.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(Consulting.render(root, node, siteUrl))
+      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+      optimiseCss({ $ })
+      optimiseJs({ $ })
+      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case ContactUs.Details.type: {
@@ -543,7 +550,7 @@ function optimiseImages({ $, siteUrl }: { $: Cheerio; siteUrl: string }): Cheeri
   })
   $.findAll('script[type="application/ld+json"]').forEach(node => {
     const schema = JSON.parse(toString(node))
-    if (schema['@type'] && schema['@type'] === 'BlogPosting' && schema.image) {
+    if (schema.image) {
       schema.image = `${siteUrl}${digest(schema.image)}`
     }
     if (schema.publisher && schema.publisher.logo && schema.publisher.logo.url) {
