@@ -1,25 +1,16 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Footer, Layout } from './layout'
-import { Javascript, Script, Image, CSSBundle } from './assets'
+import { Navbar, Footer, Layout } from './layout.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 
-export const Assets = {
-  submit: Javascript({ script: `(${SubmitWithAjax.toString()})()` }),
-}
-
 export const Details = {
-  type: identity<'newsletter'>('newsletter'),
+  type: 'newsletter',
   url: '/newsletter',
   seoTitle: 'Newsletter ♦︎ Learnk8s',
   title: 'Newsletter',
   description: 'Keep yourself up to date with the latest news from Learnk8s.',
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   return renderToStaticMarkup(
@@ -30,9 +21,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
         <Navbar root={website} />
@@ -90,6 +78,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
                 Invalid email.
               </p>
             </form>
+            <script dangerouslySetInnerHTML={{ __html: `(${SubmitWithAjax.toString()})()` }} />
           </div>
         </section>
       </div>
@@ -97,7 +86,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       <hr className='pa3 bn' />
 
       <Footer root={website} />
-      <Script script={Assets.submit} />
     </Layout>,
   )
 }
