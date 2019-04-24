@@ -139,7 +139,7 @@ docker run -p 3000:3000 -ti --rm --init node-vanilla
 Example app listening on port 3000!
 ```
 
-You should be able to visit [http://localhost:3000](http://localhost:3000) and be greeted by _"Hello World!"_.
+You should be able to visit <http://localhost:3000> and be greeted by _"Hello World!"_.
 
 There is a `COPY` and a `RUN` statements in the `Dockerfile`. So you should expect to see at least two layers more than the base image:
 
@@ -172,7 +172,7 @@ Let's try the multi-stage Docker build.
 
 You will use the same `Dockerfile` above, but twice:
 
-```dockerfile|title=Dockerfile|highlight=7-11
+```dockerfile|highlight=7-11|title=Dockerfile
 FROM node:8 as build
 
 WORKDIR /app
@@ -319,7 +319,7 @@ This is precisely what you need!
 
 You can tweak the `Dockerfile` to leverage the new base image like this:
 
-```dockerfile|title=Dockerfile|highlight=7
+```dockerfile|highlight=7|title=Dockerfile
 FROM node:8 as build
 
 WORKDIR /app
@@ -345,7 +345,7 @@ The application should run as normal. To verify that is still the case, you coul
 docker run -p 3000:3000 -ti --rm --init node-distroless
 ```
 
-And visit the page at [http://localhost:3000](http://localhost:3000).
+And visit the page at <http://localhost:3000>.
 
 Is the image without all the extra binaries smaller?
 
@@ -400,7 +400,7 @@ You shouldn't take their words for granted. Let's check if the image is smaller.
 
 You should tweak the `Dockerfile` and use `node:8-alpine`:
 
-```dockerfile|title=Dockerfile|highlight=7
+```dockerfile|highlight=7|title=Dockerfile
 FROM node:8 as build
 
 WORKDIR /app

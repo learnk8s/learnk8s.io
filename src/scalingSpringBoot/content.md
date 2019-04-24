@@ -2413,7 +2413,7 @@ cd spring-boot-k8s-hpa/monitoring
 
 From there you can create the Custom Metrics API with:
 
-```terminal|title=bash|command=1,2,3,4
+```terminal|command=1,2,3,4|title=bash
 kubectl create -f ./metrics-server
 kubectl create -f ./namespaces.yaml
 kubectl create -f ./prometheus

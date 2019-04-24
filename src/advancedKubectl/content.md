@@ -146,8 +146,8 @@ This double usage of the Kubernetes API for internal components as well as for e
 With this knowledge, you can summarise how Kubernetes works as follows:
 
 1. The storage backend stores the state (i.e. resources) of Kubernetes.
-2. The API server provides an interface to the storage backend in the form of the Kubernetes API.
-3. All other Kubernetes components and users read, watch, and manipulate the state (i.e. resources) of Kubernetes through the Kubernetes API.
+1. The API server provides an interface to the storage backend in the form of the Kubernetes API.
+1. All other Kubernetes components and users read, watch, and manipulate the state (i.e. resources) of Kubernetes through the Kubernetes API.
 
 Being familiar with these concepts **will help you a lot** to understand kubectl better and make the most use of it!
 
@@ -173,7 +173,7 @@ In general, command completion is a shell feature that works by the means of a *
 
 Kubectl can automatically generate and print out the completion scripts for Bash and Zsh with the following commands:
 
-```terminal|title=bash|command=1,3
+```terminal|command=1,3|title=bash
 kubectl completion bash
 # or
 kubectl completion zsh
@@ -347,7 +347,7 @@ This command displays the resource names in their plural form (e.g. `deployments
 
 For example, all of the following commands are equivalent:
 
-```terminal|title=bash|command=1,3,5
+```terminal|command=1,3,5|title=bash
 kubectl explain deployments.spec
 # or
 kubectl explain deployment.spec
@@ -426,7 +426,7 @@ JSONPath is a language to extract data from JSON documents (it is similar to XPa
 
 However, with `kubectl explain`, only a subset of the JSONPath capabilities is supported. The following summarises these supported features with example usages:
 
-```terminal|title=bash|command=2,5,8,11,14
+```terminal|command=2,5,8,11,14|title=bash
 # Select all elements of a list
 kubectl get pods -o custom-columns='DATA:spec.containers[*].image'
 
@@ -451,7 +451,7 @@ Below you will find some examples that use this notation.
 
 The possibilities for using the custom columns output format are endless, as you can display any field, or combination of fields, of a resource in the output. Here are some example applications, but feel free to explore on your own and find applications that are useful to you!
 
-> **Tip:** if you end up using one of these a commands frequently, you can create a [shell alias](<https://en.wikipedia.org/wiki/Alias_(command)#Creating_aliases>) for it.
+> **Tip:** if you end up using one of these a commands frequently, you can create a [shell alias](https://en.wikipedia.org/wiki/Alias_(command)#Creating_aliases) for it.
 
 #### Display container images of Pods
 
@@ -488,7 +488,7 @@ The availability zones for each node are obtained through the special [`failure-
 
 Labels are not part of the Kubernetes resource specifications, so you can't find the above label in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/). However, you can see it (as well as all other labels), if you output the nodes as YAML or JSON:
 
-```terminal|title=bash|command=2,4
+```terminal|command=2,4|title=bash
 # output as yaml
 kubectl get nodes -o yaml
 #output as json
@@ -916,7 +916,7 @@ As you can see, krew itself is a kubectl plugin. That means, **installing krew**
 
 The most important krew commands are as follows:
 
-```terminal|title=bash|command=2,4,6,8,10,12
+```terminal|command=2,4,6,8,10,12|title=bash
 # Search the krew index (with an optional search query)
 kubectl krew search [<query>]
 # Display information about a plugin

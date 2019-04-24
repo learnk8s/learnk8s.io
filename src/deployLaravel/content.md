@@ -58,8 +58,8 @@ git clone git@github.com:learnk8s/laravel-kubernetes-demo.git .
 To follow with this demonstration, you will need the following installed on your local system:
 
 1. [Docker](https://docs.docker.com/install/)
-2. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-3. [minikube](https://github.com/kubernetes/minikube/releases)
+1. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+1. [minikube](https://github.com/kubernetes/minikube/releases)
 
 > Are you having problems installing and running these applications on Windows? Check out the article [Getting started with Docker and Kubernetes on Windows 10](/installing-docker-and-kubernetes-on-windows), for a step by step guide.
 
@@ -130,7 +130,7 @@ kubectl config use-context minikube
 
 then you can deploy the container image:
 
-```terminal|title=bash|command=1-5
+```terminal|command=1-5|title=bash
 kubectl run laravel-kubernetes-demo \
   --image=yourname/laravel-kubernetes-demo \
   --port=80 \
@@ -146,7 +146,7 @@ Do note that you still need to be logged on to Docker's so that `kubectl` can ch
 
 You can check that a Pod is created for the application by running:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 kubectl get pods
 NAME                                       READY     STATUS    RESTARTS   AGE
 laravel-kubernetes-demo-7dbb9d6b48-q54wp   1/1       Running   0          18m
@@ -403,7 +403,7 @@ And since the Service always has the same IP, you won't need to update anything 
 
 You can create a service with:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 kubectl expose deployment laravel-kubernetes-demo --type=NodePort --port=80
 service "laravel-kubernetes-demo" exposed
 ```
@@ -420,7 +420,7 @@ A more exciting way to verify this deployment and the service exposure is obviou
 
 To obtain the URL of the application (service), you can use the following command:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 minikube service --url=true laravel-kubernetes-demo
 http://192.168.99.101:31399
 ```
@@ -646,7 +646,7 @@ Let's scale this deployment to two more instances of the application.
 
 So that you understand where you are at this moment, run the following command to get a list of desired and available Pods:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 kubectl get deployment
 NAME                      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 laravel-kubernetes-demo   1         1         1            1           57m
@@ -654,14 +654,14 @@ laravel-kubernetes-demo   1         1         1            1           57m
 
 The output will be "1" for each. You want to have three available Pods so let's scale this up:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 kubectl scale --replicas=3 deployment/laravel-kubernetes-demo
 deployment "laravel-kubernetes-demo" scaled
 ```
 
 Done. You have replicated the first Pod to another two, giving you three Pods running this service. Running the `get deployment` command will verify this.
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 kubectl get deployment
 NAME                      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 laravel-kubernetes-demo   3         3         3            3           59m
@@ -679,7 +679,7 @@ In the past, you may have been busy writing more scripts to create more instance
 
 In Kubernetes you can scale to multiple instances in a snap:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 kubectl scale --replicas=10 deployment/laravel-kubernetes-demo
 deployment "laravel-kubernetes-demo" scaled
 ```
@@ -978,7 +978,7 @@ kubectl create -f path-to-your-ingress-file.yaml
 
 You can verify and obtain the Ingress' information by running the following command:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 kubectl describe ing laravel-kubernetes-demo-ingress
 Name:             laravel-kubernetes-demo-ingress
 Namespace:        default

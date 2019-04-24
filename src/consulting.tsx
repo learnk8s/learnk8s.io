@@ -83,7 +83,11 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <div className='w-50-l dn db-l tc'>
           <div className='dib'>
             <div className='i-more-cargo-loading relative'>
-              <img src='assets/consulting/more_cargo_loading.svg' alt='Loading cargos' className='absolute top-0 right-0' />
+              <img
+                src='assets/consulting/more_cargo_loading.svg'
+                alt='Loading cargos'
+                className='absolute top-0 right-0'
+              />
             </div>
           </div>
         </div>
@@ -133,7 +137,11 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       <section className='pa3 pa4-ns flex-ns items-center-ns justify-center-ns w-100 bg-evian'>
         <div className='dn db-ns mr7-l'>
           <div className='i-cloud-providers relative'>
-            <img src='assets/consulting/managed-services.svg' alt='AKS, EKS and GKE' className='absolute top-0 right-0' />
+            <img
+              src='assets/consulting/managed-services.svg'
+              alt='AKS, EKS and GKE'
+              className='absolute top-0 right-0'
+            />
           </div>
         </div>
 

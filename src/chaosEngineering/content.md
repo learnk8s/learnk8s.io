@@ -5358,7 +5358,7 @@ In a separate shell, you should monitor the application for time and dropped req
 
 You could write a loop that every second prints the time and request the application:
 
-```terminal|title=bash|command=1-3
+```terminal|command=1-3|title=bash
 while sleep 1;
   do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello;
 done
@@ -5386,7 +5386,7 @@ So you could log in into one of the node servers and delete the iptables rules w
 
 If everything went according to plan you should experience something similar to this:
 
-```terminal|title=bash|command=1-3
+```terminal|command=1-3|title=bash
 while sleep 1;
   do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello;
 done
@@ -5405,7 +5405,7 @@ _Why is everything back to normal after 27 seconds?_
 
 Perhaps it's just a coincidence. Let's flush the rules again:
 
-```terminal|title=bash|command=1-3
+```terminal|command=1-3|title=bash
 while sleep 1;
   do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello;
 done
@@ -5432,7 +5432,7 @@ while sleep 1; printf %"s\n" $(curl -sS http://<ip of the node>:30000); done
 
 And let's drop the iptables rules. The log from the previous command is:
 
-```terminal|title=bash|command=1-3
+```terminal|command=1-3|title=bash
 while sleep 1;
   do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello;
 done
@@ -5507,14 +5507,14 @@ If you inspect the kubelet process in the node, you should be able to see the ku
 
 Running a simple `ls` reveals the truth:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 ls -l /etc/kubernetes/manifests
 total 4 -rw-r--r-- 1 root root 1398 Feb 24 08:08 kube-proxy.manifest
 ```
 
 And a quick `cat` of `kube-proxy.manifest` reveals the content:
 
-```yaml|title=kube-proxy.manifest|highlight=22
+```yaml|highlight=22|title=kube-proxy.manifest
 apiVersion: v1
 kind: Pod
 metadata:

@@ -19,7 +19,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
       <meta charSet='utf-8' />
       <title>Redirecting…</title>
       <link rel='canonical' href={redirectUrl} />
-      <script dangerouslySetInnerHTML={{__html: `location='${redirectUrl}'`}}></script>
+      <script dangerouslySetInnerHTML={{ __html: `location='${redirectUrl}'` }} />
       <meta httpEquiv='refresh' content={`0; url=${redirectUrl}`} />
       <meta name='robots' content='noindex' />
       <h1>Redirecting…</h1>

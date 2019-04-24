@@ -80,7 +80,7 @@ You have a Custom Resource Definition (CRD) for each resource that you wish to f
 
 Here's an example of a federated Deployment with placements and overrides.
 
-```yaml|title=federated-deployment.yaml|highlight=2,24-32
+```yaml|highlight=2,24-32|title=federated-deployment.yaml
 apiVersion: types.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
@@ -121,7 +121,7 @@ The first cluster deploys three replicas whereas the second overrides the value 
 
 If you wish to have more control on the number of replicas, kubefed2 exposes a new object called ReplicaSchedulingPreference where you can distribute replicas in weighted proportions:
 
-```yaml|title=preference.yaml|highlight=9-13
+```yaml|highlight=9-13|title=preference.yaml
 apiVersion: scheduling.federation.k8s.io/v1alpha1
 kind: ReplicaSchedulingPreference
 metadata:
@@ -165,7 +165,7 @@ Here's a high-level overview of how Shipper works.
 
 Instead of creating a standard Deployment, you should create an Application resource that wraps a Helm chart like this:
 
-```yaml|title=application.yaml|highlight=2
+```yaml|highlight=2|title=application.yaml
 apiVersion: shipper.booking.com/v1alpha1
 kind: Application
 metadata:

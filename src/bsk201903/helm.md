@@ -30,7 +30,7 @@ Helm is a convenient templating engine: it uses the [Go templating engine](https
 
 You can compile and deploy the `pod.yaml` resource above with:
 
-```terminal|title=bash|command=1-3
+```terminal|command=1-3|title=bash
 helm template . \
   -x templates/pod.yaml \
   --set env_name=production
@@ -61,7 +61,7 @@ Charts became such a ubiquitous tool to share collections of YAML files and that
 
 > Please note that you can use `helm search <keyword>` to search for a specific chart on the official registry.
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 helm search mysql
 NAME                              DESCRIPTION
 stable/mysql                      Fast, reliable, scalable, and easy to use open-source rel...
@@ -214,7 +214,7 @@ resources:
 
 When you run `kubectl apply -k .` the following resource is submitted to the cluster:
 
-```yaml|title=kustomized-pod.yaml|highlight=4-5
+```yaml|highlight=4-5|title=kustomized-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:

@@ -1280,8 +1280,8 @@ You probably don't want processes to interfere with one another, so Linux contai
 So instead of developing your mechanism to distribute applications, you can:
 
 1. Ask Kubernetes to schedule a deployment
-2. Wait for the agent on each node (the kubelet) to pick up the task
-3. Let the kubelet download the archive and run it as an isolated process.
+1. Wait for the agent on each node (the kubelet) to pick up the task
+1. Let the kubelet download the archive and run it as an isolated process.
 
 **Containers are also designed to be efficient.**
 

@@ -39,7 +39,7 @@ Se cancelli la tua partecipazione 14 giorni prima dell'evento ti rimborsiamo tut
 **Come posso contattarvi se ho delle domande sul corso?**
 Puoi mandarci una mail a [ciao@learnk8s.io](mailto:ciao@learnk8s.io).
 
----
+* * *
 
 With the explosive momentum of Docker, Kubernetes has become the de-facto standard for orchestrating and managing containerized apps in production.
 
