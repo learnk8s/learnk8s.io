@@ -1,21 +1,16 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Consultation, Footer, Layout } from './layout'
-import { Image, CSSBundle } from './assets'
+import { Navbar, Consultation, Footer, Layout } from './layout.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 export const Details = {
-  type: identity<'careers'>('careers'),
+  type: 'careers',
   url: '/careers',
   seoTitle: 'Team ♦︎ Learnk8s',
   title: 'Careers',
   description: 'Join Learnk8s and help others learn Docker and Kubernetes.',
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   return renderToStaticMarkup(
@@ -26,9 +21,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
         <Navbar root={website} />
