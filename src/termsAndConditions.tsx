@@ -1,9 +1,8 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Consultation, Footer, Layout } from './layout'
+import { Navbar, Consultation, Footer, Layout } from './layout.v2'
 import marked from 'marked'
 import { cat } from 'shelljs'
-import { Image, CSSBundle } from './assets'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 const renderer = new marked.Renderer()
@@ -13,17 +12,13 @@ renderer.heading = (text: string) => {
 }
 
 export const Details = {
-  type: identity<'termsAndConditions'>('termsAndConditions'),
+  type: 'termsAndConditions',
   url: '/terms-and-conditions',
   seoTitle: 'Terms and Conditions ♦︎ Learnk8s',
   title: 'Terms and Conditions',
   description: 'Terms and Conditions that applies to all services offered by Learnk8s',
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   return renderToStaticMarkup(
@@ -34,9 +29,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
         <Navbar root={website} />
