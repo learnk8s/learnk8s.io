@@ -1,22 +1,17 @@
 import React from 'react'
 import { LinkedNode, getFullUrl, Sitemap, getAbsoluteUrl, getBlogPosts } from './sitemap'
-import { Navbar, Consultation, Footer, Layout } from './layout'
-import { Image, Img, CSSBundle } from './assets'
+import { Navbar, Consultation, Footer, Layout } from './layout.v2'
 import moment = require('moment')
 import { renderToStaticMarkup } from 'react-dom/server'
 
-function identity<T>(value: T): T {
-  return value
-}
-
 export const Details = {
-  type: identity<'blog'>('blog'),
+  type: 'blog',
   url: '/blog',
   seoTitle: 'Blog ♦︎ Learnk8s',
   title: 'Blog',
   description: 'The fastest way to become an expert in deploying applications at scale with Kubernetes.',
-  openGraphImage: Image({ url: 'assets/open_graph_preview.png', description: 'Learnk8s preview' }),
-}
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   return renderToStaticMarkup(
@@ -27,9 +22,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       description={currentNode.payload.description}
       openGraphImage={currentNode.payload.openGraphImage}
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-      })}
     >
       <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
         <Navbar root={website} />
@@ -62,23 +54,5 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       <Consultation />
       <Footer root={website} />
     </Layout>,
-  )
-}
-
-export const Block: React.StatelessComponent<{ image: Image; title: string; description: string }> = ({
-  title,
-  description,
-  children,
-  image,
-}) => {
-  return (
-    <li className='bg-white br2 relative pt4 w-100 mw6-m center-m w-30-l mv5'>
-      <div className='w3 h3 bg-white br-100 shadow-1 absolute top--2 left-0 absolute-center'>
-        <Img image={image} />
-      </div>
-      <h2 className='navy normal tc'>{title}</h2>
-      <p className='lh-copy black-70 ph4 measure-narrow'>{description}</p>
-      <div className='tc bg-evian br2 br--bottom pv3'>{children}</div>
-    </li>
   )
 }

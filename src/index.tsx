@@ -223,7 +223,14 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Blog.Details.type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${Blog.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(Blog.render(root, node, siteUrl))
+      isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
+      isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
+      optimiseCss({ $ })
+      optimiseJs({ $ })
+      isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
+      isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized.Details.type: {
