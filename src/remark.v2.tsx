@@ -455,7 +455,7 @@ export function render(path: string): JSX.Element {
       })
     })
     .use(() => (tree: Node) => {
-      // adjust paths for images, stylesheets and scripts
+      // adjust paths for stylesheets and scripts
       UtilHast.selectAll('script[src]', tree).forEach((it: any) => {
         it.properties.src = `${assetsPath}/${it.properties.src}`
       })
