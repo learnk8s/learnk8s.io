@@ -9,21 +9,6 @@ import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Timezone, Venue, Courses, isVenueOnline, CourseEvent } from './courses'
 
-// export const Assets = {
-//   slack: Image({ url: 'assets/training/slack_in_colours.svg', description: 'Slack' }),
-//   downArrow: Image({ url: 'assets/training/down_arrow_white.svg', description: 'Down' }),
-//   training: Image({ url: 'assets/training/training.svg', description: 'Training' }),
-//   toggle: Javascript({ script: `(${CreateToggle.toString()})()` }),
-//   previewDocker: Image({ url: 'assets/training/docker.png', description: 'Linux containers and Kubernetes' }),
-//   previewZero: Image({ url: 'assets/training/zero.png', description: 'Zero to Kubernetes' }),
-//   previewDeployments: Image({ url: 'assets/training/deploy.png', description: 'Deployment strategies' }),
-//   previewArchitecture: Image({ url: 'assets/training/architecture.png', description: 'Kubernetes architecture' }),
-//   previewNetworking: Image({ url: 'assets/training/networking.png', description: 'Kubernetes networking' }),
-//   previewState: Image({ url: 'assets/training/state.png', description: 'Managing state with Kubernetes' }),
-//   previewTemplating: Image({ url: 'assets/training/templating.png', description: 'Templating Kubernetes resources' }),
-//   previewOptionals: Image({ url: 'assets/training/optionals.png', description: 'Optional modules' }),
-// }
-
 export const Type = 'landing' as const
 
 export function Details({
