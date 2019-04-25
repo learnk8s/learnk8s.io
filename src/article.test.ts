@@ -1,5 +1,5 @@
 import test from 'tape'
-import { groupHighlightedCode, Group, extractCodeFences } from './remark'
+import { groupHighlightedCode, Group, extractCodeFences } from './remark.v2'
 
 test('it should group code when highlighted', assert => {
   const grouped = groupHighlightedCode('12-13,23-30', 34)
