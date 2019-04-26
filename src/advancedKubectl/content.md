@@ -597,7 +597,7 @@ alias kcc='kubectl config use-context "$(klc | fzf -e | sed "s/^..//")"'
 # Get current namespace
 alias krn='kubectl config get-contexts --no-headers "$(krc)" | awk "{print \$5}" | sed "s/^$/default/"'
 # List all namespaces
-alias kln='kubectl get -o name ns | sed "s|^.*/|  |;\|$(krn)|s/ /*/"'
+alias kln='kubectl get -o name ns | sed "s|^.*/|  |;\|^  $(krn)$|s/ /*/"'
 # Change current namespace
 alias kcn='kubectl config set-context --current --namespace "$(kln | fzf -e | sed "s/^..//")"'
 ```
