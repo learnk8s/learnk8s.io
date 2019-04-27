@@ -124,7 +124,7 @@ CMD ["npm", "start"]
 
 You can build the image with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 docker build -t node-vanilla .
 ```
 
@@ -254,7 +254,7 @@ The first part of the `Dockerfile` creates three layers. The layers are then mer
 
 Go ahead and verify yourself. First, build the container:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 docker build -t node-multi-stage .
 ```
 
@@ -335,13 +335,13 @@ CMD ["index.js"]
 
 And you can compile the image as usual with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 docker build -t node-distroless .
 ```
 
 The application should run as normal. To verify that is still the case, you could run the container like this:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 docker run -p 3000:3000 -ti --rm --init node-distroless
 ```
 
@@ -362,7 +362,7 @@ Excellent news! But there's something you should pay attention to when it comes 
 
 When your container is running, and you wish to inspect it, you can attach to a running container with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 docker exec -ti <insert_docker_id> bash
 ```
 
@@ -376,7 +376,7 @@ The good and the bad news is that you can't.
 
 It's bad news because you can only execute the binaries in the container. The only binary you could run is Node.js:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 docker exec -ti <insert_docker_id> node
 ```
 
@@ -416,7 +416,7 @@ CMD ["npm", "start"]
 
 You can build the image with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 docker build -t node-alpine .
 ```
 

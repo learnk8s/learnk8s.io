@@ -1739,7 +1739,7 @@ minikube start \
 
 You should verify that the installation was successful with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl get all
 ```
 
@@ -1779,7 +1779,7 @@ In fact, you will create the container image directly in `minikube`.
 
 First, connect your Docker client to `minikube` by following the instruction printed by this command:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 minikube docker-env
 ```
 
@@ -1787,13 +1787,13 @@ minikube docker-env
 
 and from the root of the project build the container image with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 docker build -t spring-k8s-hpa .
 ```
 
 You can verify that the image was built and is ready to run with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 docker images | grep spring
 ```
 
@@ -2139,7 +2139,7 @@ kubectl create -f activemq-service.yaml
 
 You can verify that one instance of the database is running with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl get pods -l=app=queue
 ```
 
@@ -2216,7 +2216,7 @@ kubectl create -f fe-service.yaml
 
 You can verify that one instance of the front-end application is running with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl get pods -l=app=fe
 ```
 
@@ -2288,7 +2288,7 @@ kubectl create -f backend-service.yaml
 
 You can verify that one instance of the backend is running with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl get pods -l=app=backend
 ```
 
@@ -2298,13 +2298,13 @@ _Does it really work, though?_
 
 You can visit the application in your browser with the following command:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 minikube service backend
 ```
 
 and
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 minikube service frontend
 ```
 
@@ -2335,13 +2335,13 @@ Let's start with the basics first.
 
 You can scale the backend to three instances with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl scale --replicas=5 deployment/backend
 ```
 
 You can verify that Kubernetes created five more instances with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl get pods
 ```
 
@@ -2349,7 +2349,7 @@ And the application can process five times more messages.
 
 Once the workers drained the queue, you can scale down with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl scale --replicas=1 deployment/backend
 ```
 
@@ -2407,7 +2407,7 @@ All the files needed to install the Custom Metrics API are conveniently packaged
 
 You should download the content of that repository and change the current directory to be in the `monitoring` folder of that project.
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 cd spring-boot-k8s-hpa/monitoring
 ```
 
@@ -2422,7 +2422,7 @@ kubectl create -f ./custom-metrics-api
 
 You should wait until the following command returns a list of custom metrics:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1" | jq .
 ```
 
@@ -2432,7 +2432,7 @@ _You're ready to consume metrics._
 
 In fact, you should already find a custom metric for the number of messages in the queue:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1/namespaces/default/pods/*/messages" | jq .
 ```
 
@@ -2475,13 +2475,13 @@ The file is cryptic, let me translate it for you:
 
 You can create the resource with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl create -f hpa.yaml
 ```
 
 After you submitted the autoscaler, you should notice that the number of replicas for the backend is two:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl get pods
 ```
 
@@ -2489,7 +2489,7 @@ It makes sense since you asked the autoscaler always to have at least two replic
 
 You can inspect the conditions that triggered the autoscaler and the events generated as a consequence with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl describe hpa
 ```
 
@@ -2505,7 +2505,7 @@ Head over to the front-end application and start adding a lot of messages.
 
 As you add messages, monitor the status of the Horizontal Pod Autoscaler with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl describe hpa
 ```
 

@@ -393,10 +393,7 @@ export function render(path: string): JSX.Element {
         },
         terminal: (h: h, node: Mdast.Terminal): Node => {
           const codeAsLines = node.value.split('\n')
-          const groupedCode = groupHighlightedCode(
-            node.command ? node.command : `1-${codeAsLines.length}`,
-            codeAsLines.length,
-          )
+          const groupedCode = groupHighlightedCode(node.command, codeAsLines.length)
           const codeBlocks = groupedCode.map(([groupType, lines], index, array) => {
             const start = lines[0]
             const end = lines[lines.length - 1]

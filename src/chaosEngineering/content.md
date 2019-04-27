@@ -5267,7 +5267,7 @@ The application is simple. It displays the hostname of the current pod in a web 
 
 You should scale the deployments to ten replicas with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl scale --replicas 10 deployment/k8s-hello-world
 ```
 
@@ -5309,7 +5309,7 @@ The service is exposed to the outside world using `NodePort` on port 30000. In o
 
 You should try to request the node on port 30000:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 curl <node ip>:30000
 ```
 
@@ -5364,6 +5364,7 @@ while sleep 1;
 done
 10:14:41 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
 10:14:43 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
+^C
 ```
 
 In this case, you have the time in the first column and the response from the pod in the other.
@@ -5395,6 +5396,7 @@ done
 # this is when `iptables -F` was issued
 10:15:10 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
 10:15:11 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
+^C
 ```
 
 As you noticed, it took about 27 seconds from when you dropped the iptables rules and the next response, from 10:14:43 to 10:15:10.
@@ -5414,6 +5416,7 @@ done
 # this is when `iptables -F` was issued
 11:30:25 Hello world! via k8s-hello-world-55f48f8c94-npkn6
 11:30:27 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
+^C
 ```
 
 There was a gap of 29 seconds, from 11:29:56 to 11:30:25, but the cluster is back to normal.
@@ -5426,15 +5429,17 @@ Maybe you could investigate what happens to the node in this 30 seconds.
 
 In another terminal, you should write a loop to make requests to the application every second. But this time, you should request the node and not the load balancer:
 
-```terminal|title=bash
-while sleep 1; printf %"s\n" $(curl -sS http://<ip of the node>:30000); done
+```terminal|command=1-3|title=bash
+while sleep 1;
+  do printf %"s\n" $(curl -sS http://<ip of the node>:30000);
+done
 ```
 
 And let's drop the iptables rules. The log from the previous command is:
 
 ```terminal|command=1-3|title=bash
 while sleep 1;
-  do date +%X; curl -sS http://<your load balancer ip>/ | grep ^Hello;
+  do printf %"s\n" $(curl -sS http://<ip of the node>:30000);
 done
 Hello world! via k8s-hello-world-55f48f8c94-xzvlc
 Hello world! via k8s-hello-world-55f48f8c94-tjg4n
@@ -5443,6 +5448,7 @@ curl: (28) Connection timed out after 10003 milliseconds
 curl: (28) Connection timed out after 10004 milliseconds
 Hello world! via k8s-hello-world-55f48f8c94-npkn6
 Hello world! via k8s-hello-world-55f48f8c94-vrkr9
+^C
 ```
 
 It shouldn't come as a surprise that connections to the node are timing out after you drop the iptables rules. What's more interesting is that `curl` waits for ten seconds before giving up.
@@ -5457,7 +5463,7 @@ _Who is putting the iptables rules back?_
 
 Before you drop the iptables rules, you can inspect them with:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 iptables -L
 ```
 

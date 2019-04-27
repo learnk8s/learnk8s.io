@@ -124,7 +124,7 @@ Now that the application's image is built and available in Minikube you can go a
 
 I always start with making sure that `kubectl` is in the correct context. In this case, the context is Minikube. You can quickly switch context as follows:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl config use-context minikube
 ```
 
@@ -158,13 +158,13 @@ The GUI also helps with visualising most of the discussed concepts.
 
 To view the dashboard, just run the following:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 minikube dashboard
 ```
 
 or to acquire the dashboard's URL address:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 minikube dashboard --url=true
 ```
 
@@ -410,7 +410,7 @@ service "laravel-kubernetes-demo" exposed
 
 Running the following command:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl get services
 ```
 
@@ -427,7 +427,7 @@ http://192.168.99.101:31399
 
 or, launch the application directly in the browser:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 minikube service laravel-kubernetes-demo
 ```
 
@@ -964,7 +964,7 @@ The Ingress resource is useless without an Ingress controller so you will need t
 
 This tutorial uses the Nginx Ingress controller for routing the traffic. Minikube (v0.14 and above) comes with the Nginx setup as an addon which you will need to enable manually:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 minikube addons enable ingress
 ```
 
@@ -972,7 +972,7 @@ minikube addons enable ingress
 
 Once you have enabled the Ingress addon, you can create the Ingress in this way:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl create -f path-to-your-ingress-file.yaml
 ```
 

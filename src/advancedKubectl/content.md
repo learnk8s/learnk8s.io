@@ -34,7 +34,7 @@ Let's consider an example.
 
 Imagine you want to create a [ReplicaSet](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#replicaset-v1-apps) resource. To do so, you would define the ReplicaSet in a file named `replicaset.yaml` file, and then run the following command:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl create -f replicaset.yaml
 ```
 
@@ -201,13 +201,13 @@ yum install bash-completion
 
 You can test if bash-completion is correctly installed with the following command:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 type _init_completion
 ```
 
 If this outputs the code of shell function, then bash-completion has been correctly installed. If the command outputs a `not found` error, you have to add the following line to your `~/.bashrc` file:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 source /usr/share/bash-completion/bash_completion
 ```
 
@@ -223,7 +223,7 @@ source <(kubectl completion bash)
 
 Another possibility is to add the kubectl completion script to the `/etc/bash_completion.d` directory (create it, if it doesn't exist):
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl completion bash >/etc/bash_completion.d/kubectl
 ```
 
@@ -249,7 +249,7 @@ The completion script for Bash depends on the [**bash-completion**](https://gith
 
 You can install bash-completion with [Homebrew](https://brew.sh):
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 brew install bash-completion@2
 ```
 
@@ -266,7 +266,7 @@ You have to do this in order to complete the installation of bash-completion. Ho
 
 After reloading your shell, you can test if bash-completion is correctly installed with the following command:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 type _init_completion
 ```
 
@@ -282,7 +282,7 @@ source <(kubectl completion bash)
 
 Another possibility is to add the kubectl completion script to the `/usr/local/etc/bash_completion.d` directory:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl completion bash >/usr/local/etc/bash_completion.d/kubectl
 ```
 
@@ -321,7 +321,7 @@ However, switching to a web browser each time you need to look up something is t
 
 The usage of `kubectl explain` is as follows:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl explain resource[.field]...
 ```
 
@@ -333,13 +333,13 @@ Here you can see `kubectl explain` in action:
 
 By default, `kubectl explain` displays only a single level of fields. You can display the **entire tree** of fields with the `--recursive` flag:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl explain deployment.spec --recursive
 ```
 
 In case you're not sure about which **resource names** you can use with `kubectl explain`, you can display all of them with the following command:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl api-resources
 ```
 
@@ -804,7 +804,7 @@ That's it! After reloading your shell, you should be able to use all the 800 kub
 
 As you have seen, you often append further words to an alias on the command-line. For example:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kgpooyaml test-pod-d4b77b989
 ```
 
@@ -848,7 +848,7 @@ To hook this up with a specific alias, you have to use the [`complete`](https://
 
 As an example, let's take the `k` alias that stands for the `kubectl` command. To set `_complete_alias` as the completion function for this alias, you have to execute the following command:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 complete -F _complete_alias k
 ```
 
@@ -856,7 +856,7 @@ The effect of this is that whenever you auto-complete on the `k` alias, the `_co
 
 As another example, let's take the `kg` alias that stands for `kubectl get`:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 complete -F _complete_alias kg
 ```
 
@@ -896,7 +896,7 @@ To [install a plugin](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-pl
 
 You can use the following command to list all the plugins that are currently installed on your system:
 
-```terminal|title=bash
+```terminal|command=1|title=bash
 kubectl plugin list
 ```
 
