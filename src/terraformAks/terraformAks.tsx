@@ -1,42 +1,33 @@
-import { Image, CSSBundle, JSScript, JSBundle } from '../assets'
 import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article'
-import { cat } from 'shelljs'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { PromoAcademy } from '../layout'
-import { Markdown } from '../markdown'
+import * as Markdown from '../remark.v2'
+import { Subscribe } from '../layout.v2'
 
 export const Details = {
-  type: identity<'terraformAks'>('terraformAks'),
+  type: 'terraformAks',
   url: '/get-start-terraform-aks',
   seoTitle: 'Getting started with Terraform and Kubernetes on Azure AKS ♦︎ Learnk8s',
   title: 'Getting started with Terraform and Kubernetes on Azure AKS',
   description: ``,
-  openGraphImage: Image({
-    url: 'src/terraformAks/terraforming.png',
-    description: 'Getting started with Terraform and Kubernetes on Azure AKS',
-  }),
-  publishedDate: '2019-03-30',
-  previewImage: Image({
-    url: 'src/terraformAks/terraforming.png',
-    description: 'Getting started with Terraform and Kubernetes on Azure AKS',
-  }),
+  openGraphImage: (
+    <img src='src/terraformAks/terraforming.jpg' alt='Getting started with Terraform and Kubernetes on Azure AKS' />
+  ),
+  publishedDate: '2019-05-07',
+  previewImage: (
+    <img src='src/terraformAks/terraforming.jpg' alt='Getting started with Terraform and Kubernetes on Azure AKS' />
+  ),
   author: {
     fullName: 'Daniele Polencic',
-    avatar: Image({ url: 'assets/authors/daniele_polencic.jpg', description: 'Daniele Polencic' }),
+    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
     link: 'https://linkedin.com/in/danielepolencic',
   },
-}
-
-function identity<T>(value: T): T {
-  return value
-}
+} as const
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  const { css, js, html } = Markdown(cat(`${__dirname}/content.md`).toString(), __dirname)
   return renderToStaticMarkup(
     <Article
       website={website}
@@ -48,10 +39,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       authorFullName={currentNode.payload.author.fullName}
       authorAvatar={currentNode.payload.author.avatar}
       authorLink={currentNode.payload.author.link}
-      cssBundle={CSSBundle({
-        paths: ['node_modules/tachyons/css/tachyons.css', 'assets/style.css'],
-        styles: css,
-      })}
       publishedDate={currentNode.payload.publishedDate}
     >
       <JsonLd<BlogPosting>
@@ -59,7 +46,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           '@context': 'https://schema.org',
           '@type': 'BlogPosting',
           headline: currentNode.payload.title,
-          image: `${siteUrl}${currentNode.payload.previewImage.url}`,
+          image: `${siteUrl}${currentNode.payload.previewImage.props.src}`,
           author: {
             '@type': 'Person',
             name: currentNode.payload.author.fullName,
@@ -69,7 +56,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             name: 'Learnk8s',
             logo: {
               '@type': 'ImageObject',
-              url: `${siteUrl}${Image({ url: 'assets/learnk8s_logo_square.png', description: 'Learnk8s logo' }).url}`,
+              url: `assets/learnk8s_logo_square.png`,
             },
           },
           url: getAbsoluteUrl(currentNode, siteUrl),
@@ -81,7 +68,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           },
         }}
       />
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+      {Markdown.render(`${__dirname}/content.md`)}
 
       <RelatedConentContainer>
         <RelatedContentItem>
@@ -104,14 +91,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         </RelatedContentItem>
       </RelatedConentContainer>
 
-      <PromoAcademy sitemap={website} />
-
-      <JSScript
-        js={JSBundle({
-          scripts: js,
-          paths: ['src/whatIsKubernetes/anime.min.js', 'src/whatIsKubernetes/isScrolledIntoView.js'],
-        })}
-      />
+      <Subscribe identifier='terraform-aks' />
     </Article>,
   )
 }

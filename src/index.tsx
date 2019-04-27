@@ -322,7 +322,9 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case TerraformAks.Details.type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${TerraformAks.render(root, node, siteUrl)}`)
+      const $ = Cheerio.of(TerraformAks.render(root, node, siteUrl))
+      optimise({ $, siteUrl })
+      writeFileSync(generatePath(), $.html())
       return
     }
     case WebAppManifest.Details.type: {
