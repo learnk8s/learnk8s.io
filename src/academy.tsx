@@ -185,12 +185,12 @@ setTimeout(ldinsp, 0);
           </h2>
           <div className='measure-wide'>
             <p className='lh-copy f4-l black-70'>
-              There's plenty of tutorials to learn Kubernetes online, but it can be hard to tell high-quality resources
-              from noisy ones.
+              There's plenty of tutorials that look simple, but they are nothing but frustrating. You're spending hours
+              debugging, reading Github issues, and going around in loops.
             </p>
             <p className='lh-copy f4-l black-70'>
-              <span className='b'>Youtube videos often repeat the same things</span> and don't cover anything other than
-              the typical "Hello World".
+              When the instruction doesn't work, or a component doesn't load, there's always someone recommending
+              upgrading and downgrading. <span className='b'>Which one is right? Who should you trust?</span>
             </p>
           </div>
         </div>
@@ -200,7 +200,7 @@ setTimeout(ldinsp, 0);
         <h2 className='f3 f2-l navy tc'>What if</h2>
         <ul className='pa2'>
           <ListItemQuestion>you didn't have to waste time and jump from tutorial to tutorial</ListItemQuestion>
-          <ListItemQuestion>you could master the basics as well as learn the really hard stuff&trade;</ListItemQuestion>
+          <ListItemQuestion>you could master the basics as well as learn the nitty-gritty details</ListItemQuestion>
           <ListItemQuestion>
             you could gain <span className='b'>real</span> production knowledge
           </ListItemQuestion>
@@ -478,7 +478,7 @@ setTimeout(ldinsp, 0);
           >
             The demand for engineers grows exponentially
           </a>
-          . <span className='b'>Learn Kubernetes now and don't get left behind.</span>
+          . <span className='b'>Learn Kubernetes now and stay ahead of the game.</span>
         </p>
 
         <ul className='list pl0 flex-ns items-center justify-center'>
