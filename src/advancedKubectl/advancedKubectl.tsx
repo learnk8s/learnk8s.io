@@ -4,7 +4,7 @@ import { Article, RelatedConentContainer, RelatedContentItem } from '../article.
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { Subscribe } from '../layout'
+import { Subscribe } from '../layout.v2'
 import * as Remark from '../remark.v2'
 
 export const Details = {
