@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "learnk8s.io static website",
   "scripts": {
-    "minify": "for i in `find _site -name \"*.html\" -type f`; do inline-source --root ./_site $i $i; done",
+    "visual:test": "ts-node --files test.ts --test",
+    "visual:approve": "ts-node --files test.ts --approve",
     "build": "npx ts-node --files src/index.tsx && cp favicon.ico _site",
     "svgo": "npx ts-node src/svgo.ts",
     "fmt:ts": "prettier 'src/**/*.{ts,tsx}' --list-different",
@@ -75,5 +76,8 @@
     "unist-util-map": "^1.0.4",
     "unist-util-remove": "^1.0.1",
     "unist-util-select": "^2.0.0"
+  },
+  "devDependencies": {
+    "backstopjs": "^3.8.8"
   }
 }
