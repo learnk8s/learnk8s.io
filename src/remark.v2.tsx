@@ -389,7 +389,7 @@ export function render(path: string): JSX.Element {
           if (node.title !== null && node.title !== undefined) {
             props.title = node.title
           }
-          return H('img.db.pv3', { ...props, src: `${assetsPath}/${node.url}`, alt: node.alt || '' })
+          return H('img.db.pv3.center', { ...props, src: `${assetsPath}/${node.url}`, alt: node.alt || '' })
         },
         terminal: (h: h, node: Mdast.Terminal): Node => {
           const codeAsLines = node.value.split('\n')
