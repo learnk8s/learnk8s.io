@@ -314,11 +314,25 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case WebAppManifest.Details.type: {
-      writeFileSync(`_site${WebAppManifest.Details.url}`, WebAppManifest.render(root, node, siteUrl))
+      const manifest = WebAppManifest.render(root, node, siteUrl)
+      const icons = manifest.icons.map(icon => {
+        return { ...icon, src: isOptimisedBuild ? digest(icon.src) : `/b/${icon.src}` }
+      })
+      writeFileSync(`_site${WebAppManifest.Details.url}`, JSON.stringify({ ...manifest, icons }))
       return
     }
     case BrowserConfig.Details.type: {
-      writeFileSync(`_site${BrowserConfig.Details.url}`, BrowserConfig.render(root, node, siteUrl))
+      let content = BrowserConfig.render(root, node, siteUrl)
+      const matches = content.match(/<square150x150logo src="(.*)"\/>/im)
+      if (!(Array.isArray(matches) && matches.length > 1)) {
+        throw new Error('Could not find a valid image to replace in browserconfig.xml')
+      }
+      if (isOptimisedBuild) {
+        content = content.replace(matches[1], `${digest(matches[1])}`)
+      } else {
+        content = content.replace(matches[1], `/b/${matches[1]}`)
+      }
+      writeFileSync(`_site${BrowserConfig.Details.url}`, content)
       return
     }
     case RSS.Details.type: {
@@ -326,12 +340,8 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     default:
-      assertUnreachable(page)
+      throw new Error('Did not expect to get here')
   }
-}
-
-function assertUnreachable(x: any): any {
-  throw new Error('Did not expect to get here')
 }
 
 interface Settings {
