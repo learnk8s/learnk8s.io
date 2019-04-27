@@ -40,7 +40,7 @@ Pulumi was released at the beginning of 2018 and some of the features are not as
 
 > As an example, you are force to connect to the Pulumi servers to store the state of your infrastructure. But there're efforts to [make it work with Azure blob storage and Amazon S3](https://github.com/pulumi/pulumi/pull/2455).
 
-Creating an Azure load balancer in Pulumi looks like this using Typescript:
+Creating an Azure load balancer in Pulumi using Typescript looks like this:
 
 ```typescript|title=lb.ts
 import * as azure from '@pulumi/azure'
@@ -80,7 +80,7 @@ In the example above, you created three resources:
 
 Note how IP address and load balancer are referencing the resource group.
 
-```typescript|title=lb.ts|highlight=12,24
+```typescript|highlight=12,24|title=lb.ts
 import * as azure from '@pulumi/azure'
 
 const testResourceGroup = new azure.core.ResourceGroup('test', {
@@ -110,7 +110,7 @@ const testLoadBalancer = new azure.lb.LoadBalancer('test', {
 
 Assuming that you have the `pulumi` binary installed, you can execute the script and create the load balancer with:
 
-```bash
+```terminal|command=1|title=bash
 pulumi up
 ```
 
@@ -135,7 +135,7 @@ Here you can [find the generic template for the Azure Load Balancer](https://git
 
 Creating an Azure load balancer in ARM looks like this:
 
-```powershell
+```terminal|command=1-3|title=powershell
 New-AzResourceGroupDeployment -Name TestRG -Location uswest `
     -TemplateFile 'https://raw.githubusercontent.com/azure/azure-quickstart-templates/master/201-2-vms-loadbalancer-lbrules/azuredeploy.json' `
     -TemplateParameterFile 'https://raw.githubusercontent.com/azure/azure-quickstart-templates/master/201-2-vms-loadbalancer-lbrules/azuredeploy.parameters.json'
@@ -230,13 +230,13 @@ The first step is to install the Azure CLI. You can find detailed [instructions 
 
 You can link your Azure CLI to your account with:
 
-```bash
+```terminal|title=bash|command=1
 az login
 ```
 
 And you can list your accounts with:
 
-```bash
+```terminal|title=bash|command=1
 az account list
 ```
 
@@ -254,8 +254,10 @@ In your case, you need a _Contributor_ Service Principal — enough permissions 
 
 You can create the Service Principal with:
 
-```bash
-az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/SUBSCRIPTION_ID"
+```terminal|title=bash|command=1-3
+az ad sp create-for-rbac \
+  --role="Contributor" \
+  --scopes="/subscriptions/SUBSCRIPTION_ID"
 ```
 
 The previous command should print a JSON payload like this:
@@ -274,7 +276,7 @@ Make a note of the `appId`, `password` and `tenant`. You need those to set up Te
 
 Export the following environment variables:
 
-```bash
+```terminal|title=bash|command=1-4
 export ARM_CLIENT_ID=<insert the appId from above>
 export ARM_SUBSCRIPTION_ID=<insert your subscription id>
 export ARM_TENANT_ID=<insert the tenant from above>
@@ -287,7 +289,7 @@ You should install the Terraform CLI. You can [follow the instructions from the 
 
 If the installation is successful, you should be able to test it by printing the current version of the binary:
 
-```bash
+```terminal|title=bash|command=1
 terraform version
 ```
 
@@ -310,20 +312,20 @@ The file contains the provider and an empty resource group.
 
 In the same directory initialise Terraform with:
 
-```bash
+```terminal|title=bash|command=1
 terraform init
 ```
 
 The command executes two crucial tasks:
 
-1. it downloads the Azure provider which is necessary to translate the Terraform instructions into API calls
+1. it downloads the Azure provider that is necessary to translate the Terraform instructions into API calls
 1. it initialises the state where it keeps track of all the resources that are created.
 
 You're ready to create your resource group using Terraform.
 
 There're two commands that are frequently used in succession. The first is:
 
-```bash
+```terminal|title=bash|command=1
 terraform plan
 ```
 
@@ -335,7 +337,7 @@ It's always a good idea to double check what happens to your infrastructure, bef
 
 Once, you are happy with the changes, you can create the resources for real with:
 
-```bash
+```terminal|title=bash|command=1
 terraform apply
 ```
 
@@ -353,7 +355,7 @@ Before you provision a cluster, let's clean up the existing resources.
 
 You can delete the resource group with:
 
-```bash
+```terminal|title=bash|command=1
 terraform destroy
 ```
 
@@ -371,7 +373,7 @@ The bill of material to provision a Kubernetes cluster on Azure is as follow. Yo
 
 The list translates to the following Terraform code:
 
-```hcl|title=main.tf|highlight=41-42
+```hcl|highlight=41-42|title=main.tf
 provider "azurerm" {
   version = "1.23"
 }
@@ -433,7 +435,7 @@ Also, pay attention to the `azurerm_kubernetes_cluster` resource block:
 
 Before you apply the changes, execute a dry-run with:
 
-```bash
+```terminal|title=bash|command=1
 terraform plan
 ```
 
@@ -441,7 +443,7 @@ You should notice that there are a lot of resources that are ready to be created
 
 If the proposed changes resonate with what you asked for, you can apply them with:
 
-```hcl
+```terminal|title=bash|command=1
 terraform apply
 ```
 
@@ -481,19 +483,19 @@ You could copy the content and save it locally.
 
 Or, if you prefer, you can use the following command to access the value and save it to disk:
 
-```bash
+```terminal|title=bash|command=1
 echo "$(terraform output kube_config)" > azurek8s
 ```
 
 You can load that kubeconfig with:
 
-```bash
+```terminal|title=bash|command=1
 export KUBECONFIG="$PWD/azurek8s"
 ```
 
 Assuming you have kubectl installed locally, you can test the connection to the cluster with:
 
-```bash
+```terminal|title=bash|command=1
 kubectl get pods --all-namespaces
 ```
 
@@ -505,9 +507,15 @@ _The cluster is empty, though._
 
 _And it doesn't expose any port to the public._
 
-Let's fix that by adding a security group:
+Let's fix that by adding a [security group](https://docs.microsoft.com/en-us/azure/virtual-network/security-overview).
 
-```hcl|title=main.tf|highlight=36
+A security group is a set of rules designed to filter the traffic to and from Azure resources.
+
+If you don't define any rule, all the traffic to your cluster is discarded.
+
+You can add security groups as follow:
+
+```hcl|highlight=36|title=main.tf
 resource "azurerm_network_security_group" "sg" {
   name                = "aks-nsg"
   location            = "${azurerm_resource_group.rg.location}"
@@ -553,9 +561,9 @@ resource "azurerm_subnet" "subnet" {
 
 Even if you can reach the cluster now, you don't have an Ingress controller to route the traffic to the pods.
 
-## Installing an Ingress
+## Installing an Ingress controller
 
-In Kubernetes, the Ingress is that component in charge of routing the traffic from outside the cluster to your Pods.
+In Kubernetes, the Ingress controller is that component in charge of routing the traffic from outside the cluster to your Pods.
 
 You could think about the Ingress as a reverse proxy.
 
@@ -563,9 +571,11 @@ All the traffic is proxied to the Ingress and it's then distributed to one of th
 
 If you wish to do intelligent path based routing, TLS termination or simply route the traffic to different backends based on the domain, you can do so in the Ingress.
 
-While there're several kind of Ingresses such as Kong, HAProxy and Ambassador, the ingress-nginx is the most popular.
+![An Ingress controller in Kubernetes](ingress-generated.svg)
 
-You'll use the ingress-nginx in this guide.
+While there're several kind of Ingresses such as [Kong](https://konghq.com/blog/kong-kubernetes-ingress-controller/), [HAProxy](https://www.haproxy.com/blog/haproxy_ingress_controller_for_kubernetes/) and [Ambassador](https://www.getambassador.io/), the ingress-nginx is the most popular.
+
+You'll use the [ingress-nginx](https://github.com/kubernetes/ingress-nginx) in this guide.
 
 When you install the ingress controller you have two options.
 
@@ -575,7 +585,7 @@ Each node in your agent pool will expose a fixed port and you can route the traf
 
 To reach the port on a node, you need the node's IP address.
 
-Unfortunately, you can't reach the node's IP address directly because the it's private.
+Unfortunately, you can't reach the node's IP address directly because the IP is private.
 
 You're left with another option: using a Service of `type: LoadBalancer`.
 
@@ -687,7 +697,7 @@ The following snippet illustrates how you can integrate Helm in your existing Te
 
 > Please pay extra attention to how you can reuse the credentials from the cluster to initialise Helm.
 
-```hcl|title=main.tf|highlight=4-7
+```hcl|highlight=4-7|title=main.tf
 provider "helm" {
   version = "0.9.0"
   kubernetes {
@@ -747,7 +757,7 @@ You can reuse the existing Terraform code and provision two clusters simultaneou
 
 The interpolation is straightforward, have a look at an example of a parametrised resource group:
 
-```hcl|title=main.tf|highlight=5-7,10
+```hcl|highlight=5-7,10|title=main.tf
 provider "azurerm" {
   version = "~> 1.23"
 }
@@ -776,7 +786,7 @@ The first step consist in parametrising the Terraform file.
 
 Instead of having a fixed named for the resources, you can interpolate a variable called name:
 
-```hcl|title=main.tf|highlight=1,4,9
+```hcl|highlight=1,4,9|title=main.tf
 variable "name" {}
 
 resource "azurerm_resource_group" "rg" {
