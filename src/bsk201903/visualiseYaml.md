@@ -20,7 +20,7 @@ The relationship isn't expressed in the YAML but in the application.
 
 However, if your goal is to visualise dependencies, you could focus on the cluster and ignore the YAML.
 
-### Option #1 — Weave Scope, the Kubernetes dashboard
+## Option #1 — Weave Scope, the Kubernetes dashboard
 
 [Weave Scope](https://github.com/weaveworks/scope) is one of those tools that — once installed into your cluster — can help you visualise your Kubernetes resources in a dependency graph.
 
@@ -42,7 +42,7 @@ And even better, Weave Scope has a mechanism to create custom plugins.
 
 Weavescope isn't the only tool that can identify and visualise dependencies in your cluster.
 
-### Option #2 — Tracing the traffic
+## Option #2 — Tracing the traffic
 
 If you could trace all the traffic between your components, you should be able to visualise the dependency and observe the state of your system in real time.
 
@@ -76,7 +76,31 @@ Adding it to an existing cluster is not trivial, because you have to recreate al
 
 And having an extra container attached to every Pod affects latency and resource consumption.
 
-### More options
+The idea of statically analysing your YAML resources sounds even more appealing now.
+
+## The start of something new
+
+_How hard is exactly to write a tool that inspects YAML files and visually connects resources?_
+
+[Chris Nesbitt-Smith](https://www.linkedin.com/in/cnesbittsmith/) is an instructor at Learnk8s and had the same question but didn't take a _no_ as an answer.
+
+Chris decided to code [chrisns/k8sdraw](https://github.com/chrisns/k8sdraw/) a simple tool that draws a diagram using the DOT language and Graphviz.
+
+The tool is just a proof of concept and perhaps isn't ready to read your YAML files, **yet**.
+
+But it's promising and could make mapping your components a lot easier — you don't have to install anything at all in your cluster.
+
+![k8sdraw — a tool designed to visualise Kubernetes resources](k8sdraw.svg)
+
+There're a lot of unanswered questions, such as:
+
+- _how do you know if a Pod is consuming the data from another service?_
+- _how do you detect resources deployed in other namespaces?_
+- _how do you represent nullable fields and resources?_
+
+If you think k8sdraw should be a reality and you know the answer to those questions, [feel free to discuss it on the Github project](https://github.com/chrisns/k8sdraw/).
+
+## More options
 
 Two noteworthy tools can help visualise dependencies in your cluster:
 

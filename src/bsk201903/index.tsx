@@ -42,7 +42,7 @@ export const VisualiseYamlDetails = identity<Details>({
   title: 'Is there any tool to visualise the dependency between YAML files?',
   description: `When you have a large number of resources in your cluster, you might lose track of all relationships between them. Learn how you can build a dependency graph with all your resources.`,
   openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
-  publishedDate: '2019-01-09',
+  publishedDate: '2019-04-30',
   previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
   author: {
     fullName: 'Daniele Polencic',

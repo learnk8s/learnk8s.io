@@ -262,6 +262,7 @@ export const Sitemap = createNode({
     }),
     bskHelm: bsk.bskHelm,
     bskApiIngress: bsk.bskIngressApi,
+    bskVisualiseYaml: bsk.bskVisualiseYaml,
   },
 })
 
@@ -304,6 +305,7 @@ export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bs
     ...Object.values(website.children.biteSizedKubernetes.children),
     website.children.bskHelm,
     website.children.bskApiIngress,
+    website.children.bskVisualiseYaml,
   ]
     .filter(it => it.payload.type !== Redirect.Type)
     .slice(0)
