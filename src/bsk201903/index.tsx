@@ -38,8 +38,8 @@ export const IngressApiGatewayDetails = identity<Details>({
 export const VisualiseYamlDetails = identity<Details>({
   type: 'bsk-march-03' as const,
   url: '/visualise-dependencies-kubernetes',
-  seoTitle: 'Is there any tool to visualise the dependency between YAML files?',
-  title: 'Is there any tool to visualise the dependency between YAML files?',
+  seoTitle: 'How do you visualise dependencies in your Kubernetes YAML files?',
+  title: 'How do you visualise dependencies in your Kubernetes YAML files?',
   description: `When you have a large number of resources in your cluster, you might lose track of all relationships between them. Learn how you can build a dependency graph with all your resources.`,
   openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
   publishedDate: '2019-04-30',
