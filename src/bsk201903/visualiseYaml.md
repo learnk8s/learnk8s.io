@@ -1,12 +1,12 @@
-## Is there any tool to visualise the dependency between YAML files?
+## How do you visualise dependencies in your Kubernetes YAML files?
 
-> **TL;DR:** Not for YAML. But you can visualise your dependencies in the cluster with [Weave Scope](https://github.com/weaveworks/scope) or [Istio](https://istio.io).
+> **TL;DR:** There isn't any static tool that analyses YAML files. But you can visualise your dependencies in the cluster with [Weave Scope](https://github.com/weaveworks/scope), [KubeView](https://github.com/benc-uk/kubeview) or tracing the traffic with [Istio](https://istio.io).
 
 When you have a large number of resources in your cluster, you might lose track of all relationships between them.
 
 Keeping track of dependencies is even more challenging when you're managing distributed teams or have several clusters.
 
-_Wouldn't be nice if you could have a tool that reads a repository and show the dependencies between your Deployments, Services, Persistent Volume Claims, etc.?_
+_Would not be nice if you could have a tool that reads a repository and show the dependencies between your Deployments, Services, Persistent Volume Claims, etc.?_
 
 Unfortunately, such a tool doesn't exist for YAML.
 
@@ -42,7 +42,25 @@ And even better, Weave Scope has a mechanism to create custom plugins.
 
 Weavescope isn't the only tool that can identify and visualise dependencies in your cluster.
 
-## Option #2 — Tracing the traffic
+## Option #2 — A view on Kubernetes resources
+
+In many aspects, [KubeView](https://github.com/benc-uk/kubeview) is similar to WeaveScope.
+
+It is deployed as a pod in your cluster and consumes the Kubernetes API in real-time.
+
+And, as Weavescope, it can analyse dependencies between resources and present them as a concise graph.
+
+![Kubeview](kubeview.gif)
+
+Kubeview is a less ambitious project and doesn't include plugins or a mechanism to surface metrics such as CPU usage or memory consumption.
+
+However, the project is small in scope, and it's easy to hack on the code and extended with other features.
+
+It's also an excellent example to learn how you could write your controller to interact with the Kubernetes API using Javascript.
+
+The entire logic that queries and retrieves resources from the API [is self-contained in a single file](https://github.com/benc-uk/kubeview/blob/5cbb08986de2fd478bd940d33513d5867c8867c7/server/server.js).
+
+## Option #3 — Tracing the traffic
 
 If you could trace all the traffic between your components, you should be able to visualise the dependency and observe the state of your system in real time.
 
@@ -75,30 +93,6 @@ Using a service mesh such as Istio, isn't a free lunch, though.
 Adding it to an existing cluster is not trivial, because you have to recreate all the Pods with the proxy container.
 
 And having an extra container attached to every Pod affects latency and resource consumption.
-
-The idea of statically analysing your YAML resources sounds even more appealing now.
-
-## The start of something new
-
-_How hard is exactly to write a tool that inspects YAML files and visually connects resources?_
-
-[Chris Nesbitt-Smith](https://www.linkedin.com/in/cnesbittsmith/) is an instructor at Learnk8s and had the same question but didn't take a _no_ as an answer.
-
-Chris decided to code [chrisns/k8sdraw](https://github.com/chrisns/k8sdraw/) a simple tool that draws a diagram using the DOT language and Graphviz.
-
-The tool is just a proof of concept and perhaps isn't ready to read your YAML files, **yet**.
-
-But it's promising and could make mapping your components a lot easier — you don't have to install anything at all in your cluster.
-
-![k8sdraw — a tool designed to visualise Kubernetes resources](k8sdraw.svg)
-
-There're a lot of unanswered questions, such as:
-
-- _how do you know if a Pod is consuming the data from another service?_
-- _how do you detect resources deployed in other namespaces?_
-- _how do you represent nullable fields and resources?_
-
-If you think k8sdraw should be a reality and you know the answer to those questions, [feel free to discuss it on the Github project](https://github.com/chrisns/k8sdraw/).
 
 ## More options
 
