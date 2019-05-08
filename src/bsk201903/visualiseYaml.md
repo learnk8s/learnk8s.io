@@ -8,7 +8,7 @@ Keeping track of dependencies is even more challenging when you're managing dist
 
 _Would not be nice if you could have a tool that reads a repository and show the dependencies between your Deployments, Services, Persistent Volume Claims, etc.?_
 
-Unfortunately, such a tool doesn't exist for YAML.
+**Unfortunately, such a tool doesn't exist for YAML.**
 
 YAML is a human-readable configuration language, and it doesn't have a way to express relationships with other YAML files.
 
@@ -40,7 +40,7 @@ You can use Weave Scope to monitor for CPU and memory in your nodes [as well as 
 
 And even better, Weave Scope has a mechanism to create custom plugins.
 
-Weavescope isn't the only tool that can identify and visualise dependencies in your cluster.
+_Weavescope isn't the only tool that can identify and visualise dependencies in your cluster._
 
 ## Option #2 — A view on Kubernetes resources
 
@@ -66,13 +66,13 @@ If you could trace all the traffic between your components, you should be able t
 
 **Even if you don't use Kubernetes.**
 
-A tool such as [Istio](https://istio.io) or [Linkerd2](https://linkerd.io/2/overview/) are designed to do just that: augment your network so you can debug, observe, and secure your traffic without requiring any changes to your code.
+A tool such as [Istio](https://istio.io) or [Linkerd2](https://linkerd.io/2/overview/) is designed to do just that: augment your network so you can debug, observe, and secure your traffic without requiring any changes to your code.
 
 In this example, you will have a look at Istio, but the same applies to any other similar technology.
 
 After you install Istio in your cluster, every new Pod has a companion container that is in charge of routing all the inbound and outbound traffic to that Pod.
 
-You can think about it as a proxy container.
+**You can think about it as a proxy container.**
 
 The proxy does a lot more than just routing the traffic, though.
 
@@ -88,7 +88,7 @@ As you can see the graph is identical to the one drawn by Weave Scope.
 
 Note that Istio didn't have to interrogate the Kubernetes API to draw any of it.
 
-Using a service mesh such as Istio, isn't a free lunch, though.
+_Using a service mesh such as Istio, isn't a free lunch, though._
 
 Adding it to an existing cluster is not trivial, because you have to recreate all the Pods with the proxy container.
 
@@ -96,10 +96,11 @@ And having an extra container attached to every Pod affects latency and resource
 
 ## More options
 
-Two noteworthy tools can help visualise dependencies in your cluster:
+Three noteworthy tools can help visualise dependencies in your cluster:
 
 - [Linkerd2](https://linkerd.io/2/overview/), another service mesh similar to Istio
 - [Kubebricks](https://github.com/kubricksllc/Kubricks), an electron app that connects to your cluster using kubectl and helps you visualise your dependencies
+- [Jaeger](https://github.com/jaegertracing/jaeger) is a distributing tracing system. You could use Jaeger to trace the request in your network and visualise the traffic as well as the dependencies.
 
 ## That's all folks
 
