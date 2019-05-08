@@ -122,6 +122,12 @@ export function BiteSizedRender(markdownPath: string) {
             .
           </em>
         </p>
+        <p className='lh-copy measure-wide f4'>
+          Did you miss the previous episodes?{' '}
+          <a href={getFullUrl(website.children.bskVisualiseYaml)} className='link navy underline hover-sky'>
+            You can find them here.
+          </a>
+        </p>
         {Remark.render(markdownPath)}
 
         <Subscribe identifier={currentNode.payload.title.replace(/[^\w]+/g, '-')} />

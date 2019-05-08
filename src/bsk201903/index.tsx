@@ -40,7 +40,7 @@ export const VisualiseYamlDetails = identity<Details>({
   url: '/visualise-dependencies-kubernetes',
   seoTitle: 'How do you visualise dependencies in your Kubernetes YAML files?',
   title: 'How do you visualise dependencies in your Kubernetes YAML files?',
-  description: `When you have a large number of resources in your cluster, you might lose track of all relationships between them. Learn how you can build a dependency graph with all your resources.`,
+  description: `When you have a large number of resources in your Kubernetes cluster, you might lose track of all relationships between them. Learn how to visualise your dependencies.`,
   openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
   publishedDate: '2019-05-08',
   previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
