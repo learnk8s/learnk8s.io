@@ -515,7 +515,7 @@ setTimeout(ldinsp, 0);
               <div className='flex item-start justify-center dib relative navy tc f2 pt4'>
                 <p className='f1 mv0 lh-solid relative'>
                   <span className='paddle-net' data-product='557376'>
-                    $83
+                    $81.50
                   </span>
                 </p>
               </div>
