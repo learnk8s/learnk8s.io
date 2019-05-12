@@ -6,7 +6,7 @@ In Kubernetes, an Ingress is a component that routes the traffic from outside th
 
 In simple terms, **the Ingress works as a reverse proxy** or a load balancer: all external traffic is routed to the Ingress and then is routed to the other components.
 
-![Ingress as a load balancer](ingress-generated.svg)
+![Ingress as a load balancer](ingress.svg)
 
 While the most popular ingress is the [ingress-nginx project](https://github.com/kubernetes/ingress-nginx), there're several other options when it comes to selecting and using an Ingress.
 
