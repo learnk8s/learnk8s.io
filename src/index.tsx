@@ -467,6 +467,10 @@ function rewriteImages({ $ }: { $: Cheerio }): Cheerio {
     const url: string = (image.properties as any).src
     ;(image.properties as any).src = `/b/${url}`
   })
+  $.findAll('object').forEach(image => {
+    const url: string = (image.properties as any).data
+    ;(image.properties as any).data = `/b/${url}`
+  })
   $.findAll('script[type="application/ld+json"]').forEach(node => {
     const schema = JSON.parse(toString(node))
     if (schema['@type'] && schema['@type'] === 'BlogPosting' && schema.image) {
@@ -489,6 +493,10 @@ function optimiseImages({ $, siteUrl }: { $: Cheerio; siteUrl: string }): Cheeri
   $.findAll('img').forEach(image => {
     const url: string = (image.properties as any).src
     ;(image.properties as any).src = digest(url)
+  })
+  $.findAll('object').forEach(image => {
+    const url: string = (image.properties as any).data
+    ;(image.properties as any).data = digest(url)
   })
   $.findAll('script[type="application/ld+json"]').forEach(node => {
     const schema = JSON.parse(toString(node))

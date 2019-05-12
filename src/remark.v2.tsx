@@ -60,6 +60,10 @@ export function toMd(tree: Node): string {
       }).trim()
       return `${fences}slideshow\n${JSON.stringify({ description, slides }, null, 2)}\n${fences}`
     }
+    this.Compiler.prototype.visitors.animation = (node: Node) => {
+      const img = (node.children as Node[])[0] as Mdast.Image
+      return `${fences}animation\n${JSON.stringify({ description: img.alt, image: img.url }, null, 2)}\n${fences}`
+    }
     this.Compiler.prototype.visitors.slide = (node: Node) => {}
     this.Compiler.prototype.visitors.include = (node: Node) => {
       return `${fences}include\n${node.value}\n${fences}`
@@ -86,6 +90,16 @@ export function parse(content: string): Node {
         return map(tree, (node: Node, parent: Node) => {
           if (isCode(node)) {
             switch (node.lang) {
+              case 'animation': {
+                const { description, image } = JSON.parse(node.value) as {
+                  description: string
+                  image: string
+                }
+                return {
+                  type: 'animation',
+                  children: [{ type: 'image', url: image, alt: description }],
+                }
+              }
               case 'slideshow': {
                 const { slides, description } = JSON.parse(node.value) as {
                   description: string
@@ -171,6 +185,12 @@ export function render(path: string): JSX.Element {
           function toId(raw: string): string {
             return raw.toLowerCase().replace(/[^\w]+/g, '-')
           }
+        },
+        animation: (h: h, node: Mdast.Animation): Node => {
+          return H('.js-animation-svg', [
+            H('object', { type: 'image/svg+xml', data: `${assetsPath}/${node.children[0].url}` }),
+            H('script', { type: 'text', value: `(${ResetAnimation.toString()})()` }),
+          ])
         },
         slideshow: (h: h, node: Mdast.Slideshow): Node => {
           return H('div.slideshow-js.overflow-hidden', [
@@ -572,6 +592,11 @@ namespace Mdast {
     children: (Slide | Paragraph)[]
   }
 
+  export interface Animation extends Node {
+    type: 'animation'
+    children: (Image)[]
+  }
+
   export interface Slide extends Node {
     type: 'slide'
     children: (Image | Paragraph)[]
@@ -740,4 +765,75 @@ function Slideshow() {
   }
 
   document.querySelectorAll<HTMLElement>('.slideshow-js').forEach(setupSlideshow)
+}
+
+function ResetAnimation() {
+  ;([].slice.call(document.querySelectorAll('.js-animation-svg')) as HTMLElement[]).forEach(it => {
+    const obj = it.querySelector('object') as HTMLObjectElement | null
+    if (!obj) {
+      return
+    }
+    obj.onload = () => init(it)
+  })
+
+  function init(element: HTMLElement) {
+    if (element.className.indexOf('ok') > 0) {
+      return
+    }
+    const register = throttle(() => {
+      if (isScrolledIntoView(element)) {
+        reset(element)
+        window.removeEventListener('scroll', register)
+      }
+    }, 100)
+    window.addEventListener('scroll', register)
+    element.className += ' ok relative pv3 pv4-ns'
+    const buttonWrapper = document.createElement('div')
+    buttonWrapper.innerHTML =
+      '<svg viewBox="0 0 90 96" xmlns="http://www.w3.org/2000/svg"><g fill="#aaa" fill-rule="nonzero"><path d="M39.1 34.8c-2.5-1.5-5.8.3-5.8 3.3v26.5c0 3 3.2 4.8 5.8 3.3L61 54.7c2.4-1.5 2.4-5 0-6.5L39.1 34.8z"/><path d="M82.8 28.2c-1.6-2.5-4.9-3.4-7.4-1.8-2.6 1.6-3.4 4.9-1.8 7.6 3.6 5.9 5.4 13.1 4.7 20.7-1.6 16.1-14.8 28.9-31 30C27.7 86 11.4 70.4 11.6 51c.2-18 14.9-32.8 32.8-33.1 1 0 1.9 0 2.9.1v4.2c0 1.7 1.9 2.7 3.3 1.8l15.6-9.7c1.3-.8 1.3-2.8 0-3.6L50.5.8c-1.4-.9-3.3.1-3.3 1.8V7H45C19.5 7-1.1 28.7.9 54.6 2.5 76.3 20 93.8 41.6 95.4c25.9 1.9 47.7-18.6 47.7-44.1 0-8.5-2.4-16.4-6.5-23.1z"/></g></svg>'
+    buttonWrapper.className = ' absolute bottom-0 left-0 w2 dim pointer z-3'
+    buttonWrapper.addEventListener('click', () => reset(element))
+    element.appendChild(buttonWrapper)
+  }
+
+  function reset(element: HTMLElement) {
+    element.setAttribute('style', `height:${element.clientHeight}px`)
+    const obj = element.querySelector('object')
+    if (!obj) {
+      return
+    }
+    const newObject = obj.cloneNode() as HTMLObjectElement
+    newObject.className = ' absolute top right z-1'
+    newObject.setAttribute('style', `height:${obj.clientHeight}px`)
+    element.appendChild(newObject)
+    element.removeChild(obj)
+  }
+
+  function isScrolledIntoView(el: HTMLElement) {
+    var rect = el.getBoundingClientRect()
+    var elemTop = rect.top
+    var elemBottom = rect.bottom
+
+    // Only completely visible elements return true:
+    var isVisible = elemTop >= 0 && elemBottom <= window.innerHeight
+    // Partially visible elements return true:
+    //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+    return isVisible
+  }
+
+  function throttle(callback: Function, wait: number) {
+    let timeout: number | null = null
+
+    return function(this: any) {
+      const args = [].slice.call(arguments)
+      const next = () => {
+        callback.apply(this, args)
+        timeout = null
+      }
+
+      if (!timeout) {
+        timeout = setTimeout(next, wait) as any
+      }
+    }
+  }
 }
