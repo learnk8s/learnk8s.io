@@ -204,7 +204,7 @@ export function render(path: string): JSX.Element {
                   delete (imageNode as any).properties.className
                   return H('li.mv3', [
                     imageNode,
-                    H('div.bt.b-solid.bw2.b--black-70.relative.mt3', [
+                    H('div.bt.b-solid.bw2.b--black-70.relative.mt0', [
                       H('div.bg-black-10.br1.pa1.dib.mt2.absolute.bottom-1.left-0', [
                         H('span.b.black-60', [{ type: 'text', value: `${index + 1}` }]),
                         H('span.f7.black-50', [{ type: 'text', value: `/${slides.length}` }]),
@@ -729,8 +729,11 @@ function Slideshow() {
     if (!slider) {
       return console.log(`I couldn't find the slider`)
     }
+    if (([].slice.call(slider.classList) as string[]).indexOf('ok') > 0) {
+      return
+    }
     slider.style.width = `${width * slides.length}px`
-    slider.classList.add('flex')
+    slider.classList.add('flex', 'ok')
     slides.forEach(slide => (slide.style.width = `${width}px`))
 
     function createEmptyNav() {
