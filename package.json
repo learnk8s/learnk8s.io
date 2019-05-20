@@ -11,7 +11,7 @@
     "fmt:ts!": "prettier 'src/**/*.{ts,tsx}' --write",
     "fmt:md": "./cli/lintmd '{src,repositories}/**/*.md'",
     "fmt:md!": "./cli/lintmd '{src,repositories}/**/*.md' --write",
-    "fmt:svg": "exit 0",
+    "fmt:svg": "./cli/svgo 'src/smallerDockerImages/*.svg'",
     "fmt:svg!": "./cli/svgo 'src/smallerDockerImages/*.svg' --write",
     "fmt": "npm run fmt:ts && npm run fmt:md && npm run fmt:svg",
     "test": "ts-node --files node_modules/tape/bin/tape 'src/**/test.ts' 'src/**/*.test.ts' 'src/**/*.integration.ts' 'src/**/integration.ts'",

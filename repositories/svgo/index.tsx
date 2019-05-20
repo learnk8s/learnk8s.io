@@ -49,7 +49,7 @@ const svgo = new SVGO({
       convertPathData: true,
     },
     {
-      convertTransform: true,
+      convertTransform: false, // breaks animations
     },
     {
       removeUnknownsAndDefaults: true,
@@ -77,6 +77,12 @@ const svgo = new SVGO({
     },
     {
       minifyStyles: false,
+    },
+    {
+      moveGroupAttrsToElems: false,
+    },
+    {
+      moveElemsAttrsToGroup: false,
     },
   ],
 })
