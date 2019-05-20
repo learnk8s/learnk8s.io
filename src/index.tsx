@@ -13,7 +13,7 @@ const inspect = require('unist-util-inspect')
 const { selectAll, select, matches } = require('hast-util-select')
 const remove = require('unist-util-remove')
 const stringify = require('rehype-stringify')
-const toString = require('mdast-util-to-string')
+const toString = require('hast-util-to-string')
 
 import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
