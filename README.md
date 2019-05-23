@@ -31,7 +31,7 @@ npm install
 You can compile the website with:
 
 ```bash
-npx ts-node --files src/index.tsx
+AUTH_CODE=1 ENVENTBRITE_TOKEN=1 ENVENTBRITE_ORG=1 npx ts-node --files src/index.tsx
 ```
 
 You can serve the website with:
