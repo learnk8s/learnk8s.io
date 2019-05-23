@@ -329,7 +329,7 @@ The command outputs the specification of the requested resource or field. The in
 
 Here you can see `kubectl explain` in action:
 
-![Kubectl explain](kubectl-explain.svg)
+![Kubectl explain](asciicast-kubectl-explain.svg)
 
 By default, `kubectl explain` displays only a single level of fields. You can display the **entire tree** of fields with the `--recursive` flag:
 
@@ -880,7 +880,7 @@ Since [version 1.12](https://github.com/kubernetes/kubernetes/blob/master/CHANGE
 
 Here is an example of a kubectl plugin that can be invoked as `kubectl hello`:
 
-![Hello World kubectl plugin](hello-world-plugin.svg)
+![Hello World kubectl plugin](asciicast-plugins-hello.svg)
 
 > In case you're familiar with it, the kubectl plugin mechanisms closely follows the design of the [Git plugin mechanism](https://adamcod.es/2013/07/12/how-to-create-git-plugin.html).
 
@@ -910,7 +910,7 @@ The [**krew**](https://github.com/GoogleContainerTools/krew) project aims at pro
 
 Krew is centred around an [index](https://github.com/GoogleContainerTools/krew-index) of kubectl plugins from which you can choose and install. Here you can see krew in action:
 
-![Krew plugin](krew-in-action.svg)
+![Krew plugin](asciicast-plugins-krew.svg)
 
 As you can see, krew itself is a kubectl plugin. That means, **installing krew** works in essence like installing any other kubectl plugin. You can find the detailed installation instructions for krew on the [GitHub page](https://github.com/GoogleContainerTools/krew/#installation).
 
