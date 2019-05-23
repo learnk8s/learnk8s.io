@@ -12,10 +12,10 @@ export const Details = {
   url: '/kubectl-productivity',
   seoTitle: 'Boosting your kubectl productivity ♦︎ Learnk8s',
   title: 'Boosting your kubectl productivity',
-  shortDescription: `If you work with Kubernetes, then kubectl is probably one of your most-used tools. This article contains a series of tips and tricks to make your usage of kubectl more efficient.`,
+  shortDescription: `If you work with Kubernetes, then kubectl is probably one of your most-used tools. This article contains a series of tips and tricks to make your usage of kubectl more efficient and effective.`,
   description: `If you work with Kubernetes, then kubectl is probably one of your most-used tools. Whenever you spend a lot of time working with a specific tool, it is worth to get to know it very well and learn how to use it efficiently.
 
-This article contains a series of tips and tricks to help you boost your kubectl productivity. At the same time, it aims at deepening your understanding of how various aspects of Kubernetes work.
+This article contains a series of tips and tricks to make your usage of kubectl more efficient and effective. At the same time, it aims at deepening your understanding of how various aspects of Kubernetes work.
 
 The goal of this article is not only to make your daily work with Kubernetes more efficient but also more enjoyable!`,
   openGraphImage: <img src='src/advancedKubectl/magic.jpg' alt='Advanced kubectl usage' />,

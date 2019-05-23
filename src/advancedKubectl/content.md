@@ -1,6 +1,6 @@
 If you work with Kubernetes, then kubectl is probably one of your most-used tools. Whenever you spend a lot of time working with a specific tool, it is worth to get to know it very well and learn how to use it efficiently.
 
-This article contains a series of tips and tricks to help you boost your kubectl productivity. At the same time, it aims at deepening your understanding of how various aspects of Kubernetes work.
+This article contains a series of tips and tricks to make your usage of kubectl more efficient and effective. At the same time, it aims at deepening your understanding of how various aspects of Kubernetes work.
 
 The goal of this article is not only to make your daily work with Kubernetes more efficient but also more enjoyable!
 
@@ -75,7 +75,7 @@ To see how these components work together, let's consider an example.
 
 Assume, you just executed `kubectl create -f replicaset.yaml`, upon which kubectl made an HTTP POST request to the [_create ReplicaSet_ API endpoint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#create-replicaset-v1-apps) (passing along your ReplicaSet resource definition).
 
-What happens now inside Kubernetes?
+What effects causes this in the cluster? Watch it below:
 
 ```slideshow
 {
@@ -112,6 +112,8 @@ What happens now inside Kubernetes?
   ]
 }
 ```
+
+And here follows the textual description.
 
 The API request to the _create ReplicaSet_ endpoint is handled by the **API server**. The API server authenticates the request and saves your ReplicaSet resource definition in the storage backend.
 
@@ -489,9 +491,8 @@ The availability zones for each node are obtained through the special [`failure-
 Labels are not part of the Kubernetes resource specifications, so you can't find the above label in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/). However, you can see it (as well as all other labels), if you output the nodes as YAML or JSON:
 
 ```terminal|command=2,4|title=bash
-# output as yaml
 kubectl get nodes -o yaml
-#output as json
+# or
 kubectl get nodes -o json
 ```
 
