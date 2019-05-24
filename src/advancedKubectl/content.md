@@ -490,7 +490,7 @@ The availability zones for each node are obtained through the special [`failure-
 
 Labels are not part of the Kubernetes resource specifications, so you can't find the above label in the [API reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/). However, you can see it (as well as all other labels), if you output the nodes as YAML or JSON:
 
-```terminal|command=2,4|title=bash
+```terminal|command=1,3|title=bash
 kubectl get nodes -o yaml
 # or
 kubectl get nodes -o json
