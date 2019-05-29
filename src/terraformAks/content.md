@@ -230,13 +230,13 @@ The first step is to install the Azure CLI. You can find detailed [instructions 
 
 You can link your Azure CLI to your account with:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 az login
 ```
 
 And you can list your accounts with:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 az account list
 ```
 
@@ -254,7 +254,7 @@ In your case, you need a _Contributor_ Service Principal — enough permissions 
 
 You can create the Service Principal with:
 
-```terminal|title=bash|command=1-3
+```terminal|command=1-3|title=bash
 az ad sp create-for-rbac \
   --role="Contributor" \
   --scopes="/subscriptions/SUBSCRIPTION_ID"
@@ -276,7 +276,7 @@ Make a note of the `appId`, `password` and `tenant`. You need those to set up Te
 
 Export the following environment variables:
 
-```terminal|title=bash|command=1-4
+```terminal|command=1-4|title=bash
 export ARM_CLIENT_ID=<insert the appId from above>
 export ARM_SUBSCRIPTION_ID=<insert your subscription id>
 export ARM_TENANT_ID=<insert the tenant from above>
@@ -289,7 +289,7 @@ You should install the Terraform CLI. You can [follow the instructions from the 
 
 If the installation is successful, you should be able to test it by printing the current version of the binary:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 terraform version
 ```
 
@@ -312,7 +312,7 @@ The file contains the provider and an empty resource group.
 
 In the same directory initialise Terraform with:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 terraform init
 ```
 
@@ -325,7 +325,7 @@ You're ready to create your resource group using Terraform.
 
 There're two commands that are frequently used in succession. The first is:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 terraform plan
 ```
 
@@ -337,7 +337,7 @@ It's always a good idea to double check what happens to your infrastructure, bef
 
 Once, you are happy with the changes, you can create the resources for real with:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 terraform apply
 ```
 
@@ -355,7 +355,7 @@ Before you provision a cluster, let's clean up the existing resources.
 
 You can delete the resource group with:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 terraform destroy
 ```
 
@@ -435,7 +435,7 @@ Also, pay attention to the `azurerm_kubernetes_cluster` resource block:
 
 Before you apply the changes, execute a dry-run with:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 terraform plan
 ```
 
@@ -443,7 +443,7 @@ You should notice that there are a lot of resources that are ready to be created
 
 If the proposed changes resonate with what you asked for, you can apply them with:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 terraform apply
 ```
 
@@ -483,19 +483,19 @@ You could copy the content and save it locally.
 
 Or, if you prefer, you can use the following command to access the value and save it to disk:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 echo "$(terraform output kube_config)" > azurek8s
 ```
 
 You can load that kubeconfig with:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 export KUBECONFIG="$PWD/azurek8s"
 ```
 
 Assuming you have kubectl installed locally, you can test the connection to the cluster with:
 
-```terminal|title=bash|command=1
+```terminal|command=1|title=bash
 kubectl get pods --all-namespaces
 ```
 
