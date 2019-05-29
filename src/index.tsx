@@ -531,6 +531,7 @@ function optimiseImages({ $, siteUrl }: { $: Cheerio; siteUrl: string }): Cheeri
 }
 
 function digest(url: string) {
+  console.log('>>', url)
   ok(existsSync(url), `Asset ${url} doesn't exist.`)
   const digest = md5(readFileSync(url, 'utf8'))
   mkdir('-p', '_site/a')
