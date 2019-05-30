@@ -42,6 +42,7 @@ import * as ScalingTensorflow from './scalingKubeflow/scalingTensorflow'
 import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
+import * as KubeflowTutorial from './kubeflowTutorial/scalingTensorflow'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
@@ -337,6 +338,10 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     }
     case RSS.Details.type: {
       writeFileSync(`_site${RSS.Details.url}`, RSS.render(root, node, siteUrl))
+      return
+    }
+    case KubeflowTutorial.Details.type: {
+      writeFileSync(generatePath(), KubeflowTutorial.render(root, node, siteUrl))
       return
     }
     default:
