@@ -84,7 +84,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           <Profile
             profile={<img src='assets/about-us/chris_nesbitt-smith.jpg' alt='Chris Nesbitt-Smith' />}
             name='Chris Nesbitt-Smith'
-            bio='Chris, a test-fanatic software engineer, always focused on how apply that same level of vigour and assurance to infrastructure. Chris has considerable experience delivering complex, scalable software and training to many UK private, public and third sector organisations.'
+            bio='Chris, a test-fanatic software engineer, always focused on how to apply that same level of vigour and assurance to infrastructure. Chris has considerable experience delivering complex, scalable software and training to many UK private, public and third sector organisations.'
             role='Instructor'
           >
             <GitHub link='https://github.com/chrisns' />
