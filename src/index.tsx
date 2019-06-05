@@ -174,10 +174,13 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     case ContactUs.Details.type: {
       const $ = Cheerio.of(ContactUs.render(root, node, siteUrl))
       optimise({ $, siteUrl })
-      $.findAll('a').get().filter((it: any) => /\.zip$/i.test(it.properties.href)).forEach((it: any) => {
-        cp(resolve(it.properties.href), `_site/a`)
-        it.properties.href = `/a/${basename(it.properties.href)}`
-      })
+      $.findAll('a')
+        .get()
+        .filter((it: any) => /\.zip$/i.test(it.properties.href))
+        .forEach((it: any) => {
+          cp(resolve(it.properties.href), `_site/a`)
+          it.properties.href = `/a/${basename(it.properties.href)}`
+        })
       writeFileSync(generatePath(), $.html())
       return
     }
