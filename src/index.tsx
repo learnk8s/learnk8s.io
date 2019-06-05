@@ -1,6 +1,6 @@
 import React from 'react'
 import { writeFileSync, readFileSync, existsSync } from 'fs'
-import { resolve, extname } from 'path'
+import { resolve, extname, basename } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { syncEvents } from './eventbrite'
 import eventbrite from 'eventbrite'
@@ -174,6 +174,10 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     case ContactUs.Details.type: {
       const $ = Cheerio.of(ContactUs.render(root, node, siteUrl))
       optimise({ $, siteUrl })
+      $.findAll('a').get().filter((it: any) => /\.zip$/i.test(it.properties.href)).forEach((it: any) => {
+        cp(resolve(it.properties.href), `_site/a`)
+        it.properties.href = `/a/${basename(it.properties.href)}`
+      })
       writeFileSync(generatePath(), $.html())
       return
     }

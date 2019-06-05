@@ -56,8 +56,8 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
               title={`Media & press`}
               description={`Get learnk8s news, company info, and media resources.`}
             >
-              <a href='mailto:hello@learnk8s.io' className='link navy b'>
-                Contact us →
+              <a href='assets/contact-us/media.zip' className='link navy b'>
+                Download →
               </a>
             </Block>
           </ul>
