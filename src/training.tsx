@@ -596,12 +596,11 @@ export const CourseRow: React.StatelessComponent<{ event: CourseEvent; slackIcon
             </p>
             <p className='ma0 mv3'>
               <span className='ttu b black-20 f6'>Price:</span>{' '}
-              <span className='f4 black-70 relative dib'>
+              <span className='f4 black-70 dib'>
                 {event.offer.price.toLocaleString(event.offer.locale, {
                   style: 'currency',
                   currency: event.offer.currency,
                 })}{' '}
-                <span className='f7 v-mid absolute right--2 top-0'>+TAX</span>
               </span>
             </p>
             <p>
