@@ -12,11 +12,11 @@ export const Details = {
   url: '/get-start-terraform-aks',
   seoTitle: 'Getting started with Terraform and Kubernetes on Azure AKS ♦︎ Learnk8s',
   title: 'Getting started with Terraform and Kubernetes on Azure AKS',
-  description: ``,
+  description: `Learn how to use Terraform to provision Kubernetes clusters on Azure with a single command.`,
   openGraphImage: (
     <img src='src/terraformAks/terraforming.jpg' alt='Getting started with Terraform and Kubernetes on Azure AKS' />
   ),
-  publishedDate: '2019-05-07',
+  publishedDate: '2019-08-21',
   previewImage: (
     <img src='src/terraformAks/terraforming.jpg' alt='Getting started with Terraform and Kubernetes on Azure AKS' />
   ),
