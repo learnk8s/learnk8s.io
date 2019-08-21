@@ -155,7 +155,7 @@ It's something in between.
 
 It's a sort of DSL — a domain specific language that's designed to be easy to read and write.
 
-Terraform configurations can be written in HashiCorp Configuration Language (HCL) or in JSON.
+Terraform configurations can be written in HashiCorp Configuration Language (HCL).
 
 **HCL is also fully JSON compatible.**
 
@@ -206,7 +206,7 @@ Terraform has a powerful mechanism where it can trace dependencies across resour
 
 The graph is used to optimise creating infrastructure: resources that are independent are created in parallel instead of sequentially.
 
-The dependency graph for the load balancer above is simple.
+The dependency graph for the load balancer above is straightforward.
 
 ![Dependency graph for provisioning a load balancer](simple-graph.svg)
 
@@ -224,7 +224,9 @@ In the rest of this article you will explore why Terraform is loved by small and
 
 Terraform uses a different set of credentials to provision the infrastructure, so you should create those first.
 
-The first step is to install the Azure CLI. You can find detailed [instructions on how to install it on the official website](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
+The first step is to install the Azure CLI.
+
+You can find detailed [instructions on how to install it on the official website](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
 
 > [Sign up for an Azure account](https://azure.microsoft.com/en-us/free/), if you don't own one already. You will receive USD200 in free credits.
 
@@ -276,7 +278,7 @@ Make a note of the `appId`, `password` and `tenant`. You need those to set up Te
 
 Export the following environment variables:
 
-```terminal|command=1-4|title=bash
+```terminal|command=1,2,3,4|title=bash
 export ARM_CLIENT_ID=<insert the appId from above>
 export ARM_SUBSCRIPTION_ID=<insert your subscription id>
 export ARM_TENANT_ID=<insert the tenant from above>
@@ -299,7 +301,7 @@ Create a file named `main.tf` with the following content:
 
 ```hcl|title=main.tf
 provider "azurerm" {
-  version = "~> 1.23"
+  version = "=1.28.0"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -375,7 +377,7 @@ The list translates to the following Terraform code:
 
 ```hcl|highlight=41-42|title=main.tf
 provider "azurerm" {
-  version = "1.23"
+  version = "=1.28.0"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -681,13 +683,13 @@ Terraform doesn't recognise resources that it hasn't created.
 
 You can delete the existing Ingress with:
 
-```bash
+```terminal|command=1|title=bash
 helm delete ingress
 ```
 
 You can also remove the Tiller with:
 
-```bash
+```terminal|command=1|title=bash
 helm reset
 ```
 
@@ -727,7 +729,7 @@ When you're ready, you can apply the changes with `terraform apply`.
 
 If the installation was successful, you can retrieve the IP address of the new load balancer with:
 
-```bash
+```terminal|command=1|title=bash
 kubectl describe service ingress-nginx-ingress-controller
 ```
 
@@ -735,7 +737,7 @@ kubectl describe service ingress-nginx-ingress-controller
 
 And you can repeat the test that you did earlier:
 
-```bash
+```terminal|command=1|title=bash
 curl <ip of the load balancer>
 ```
 
@@ -759,7 +761,7 @@ The interpolation is straightforward, have a look at an example of a parametrise
 
 ```hcl|highlight=5-7,10|title=main.tf
 provider "azurerm" {
-  version = "~> 1.23"
+  version = "=1.28.0"
 }
 
 variable "name" {
@@ -832,7 +834,7 @@ module "preprod" {
 }
 ```
 
-> Please note that the script and module are available in the GitHub repository in full.
+> Please note that the script and module are [available in the GitHub repository in full](https://github.com/learnk8s/terraform-aks).
 
 The `module` keyword is used to define a new module.
 
