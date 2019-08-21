@@ -10,9 +10,9 @@ import { Subscribe } from '../layout.v2'
 export const Details = {
   type: 'terraformAks',
   url: '/get-start-terraform-aks',
-  seoTitle: 'Getting started with Terraform and Kubernetes on Azure AKS ♦︎ Learnk8s',
+  seoTitle: 'Getting started with Terraform and Kubernetes on Azure AKS',
   title: 'Getting started with Terraform and Kubernetes on Azure AKS',
-  description: `Learn how to use Terraform to provision Kubernetes clusters on Azure with a single command.`,
+  description: `Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.`,
   openGraphImage: (
     <img src='src/terraformAks/terraforming.jpg' alt='Getting started with Terraform and Kubernetes on Azure AKS' />
   ),
