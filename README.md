@@ -22,20 +22,20 @@ When you paste your text, Grammarly sends the content to its servers and runs a 
 
 ## Running locally
 
-After you cloned the repository, cd in the project directory and run:
+Install dependencies:
 
 ```bash
-npm install
+npm ci
 ```
 
-You can compile the website with:
+Build:
 
 ```bash
-AUTH_CODE=1 ENVENTBRITE_TOKEN=1 ENVENTBRITE_ORG=1 npx ts-node --files src/index.tsx
+ENVENTBRITE_TOKEN=1 ENVENTBRITE_ORG=1 npm run build
 ```
 
-You can serve the website with:
+Run:
 
 ```bash
-npx http-serve _site -p 4000
+npx http-serve _site
 ```
