@@ -16,6 +16,7 @@ export const Details = {
   description: `TODO`,
   openGraphImage: <img src='src/smallOrLargeNodes/nodes.jpg' alt='Small vs large nodes' />,
   publishedDate: '2019-09-01',
+  lastModifiedDate: '2019-09-01',
   previewImage: <img src='src/smallOrLargeNodes/nodes.jpg' alt='Small vs large nodes' />,
   author: {
     fullName: 'Daniel Weibel',
