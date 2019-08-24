@@ -291,14 +291,3 @@ In fact, this is what Kubernetes shines at — to turn a set of possibly heterog
 This might allow you to combine the pros of both approaches and reduce the effect of the cons.
 
 _In the end, the proof of the pudding is in the eating, and the best way to go is to experiment and find the combination that works best for you!_
-
-## Different topic: many small clusters or few large clusters?
-
-If you have 10 applications, should you run each of them on its own small cluster, or run all of them on one big cluster?
-
-Here the level of granularty (to split across the small or big clusters) are applications, not Pods.
-
-- https://srcco.de/posts/many-kubernetes-clusters.html
-- https://thenewstack.io/the-optimal-kubernetes-cluster-size-lets-look-at-the-data/
-- https://content.pivotal.io/blog/kubernetes-one-cluster-or-many
-
