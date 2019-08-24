@@ -76,7 +76,7 @@ _Having seen the pros of few large nodes, let's see what the cons are._
 
 ### Cons
 
-#### Large number of pods per node 
+#### Large number of pods per node
 
 Running the same workload on fewer nodes naturally means that more pods are running on each node.
 
@@ -92,7 +92,7 @@ If the number of pods becomes large, these things might start to slow down the s
 
 There are reports of [nodes being reported as non-ready](https://github.com/kubernetes/kubernetes/issues/45419) because the regular kubelet health checks took too long for iterating over all the containers on the node.
 
-*For these reasons, Kubernetes [recommends a maximum number of 110 pods per node](https://kubernetes.io/docs/setup/best-practices/cluster-large/).*
+_For these reasons, Kubernetes [recommends a maximum number of 110 pods per node](https://kubernetes.io/docs/setup/best-practices/cluster-large/)._
 
 Up to this number, Kubernetes has been tested to work reliably on common node types.
 
