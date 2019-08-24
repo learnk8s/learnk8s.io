@@ -38,7 +38,7 @@ _Let's look at the advantages such an approach could have._
 
 #### Less management overhead
 
-Simply said, having to manage a small number of machines is less labourious than having to manage a large number of machines.
+Simply said, having to manage a small number of machines is less laborious than having to manage a large number of machines.
 
 Updates and patches can be applied more quickly, the machines can be kept in sync more easily.
 
@@ -46,13 +46,13 @@ Furthermore, the absolute number of failures to expect is smaller with few machi
 
 _However, note that this applies primarily to bare metal servers and not to cloud instances._
 
-If you use cloud instnaces (as part of a managed Kubernetes service or your own Kubernetes installation on cloud infrastructure) you outsource the management of the underlying machines to the cloud provider.
+If you use cloud instances (as part of a managed Kubernetes service or your own Kubernetes installation on cloud infrastructure) you outsource the management of the underlying machines to the cloud provider.
 
 Thus managing, 10 nodes in the cloud is not much more work than managing a 1 node in the cloud.
 
 #### Lower costs per node
 
-While a more powerful machine is clearly more expensive than a low-end machine, the price increase is not necessarily linear.
+While a more powerful machine is more expensive than a low-end machine, the price increase is not necessarily linear.
 
 In other words, a single machine with 10 CPU cores and 10 GB of RAM might be cheaper than 10 machines with 1 CPU core and 1 GB of RAM.
 
@@ -62,9 +62,9 @@ In the current pricing schemes of the major cloud providers [Amazon Web Services
 
 For example, on Google Cloud Platform, 64 `n1-standard-1` instances cost you exactly the same as a single `n1-standard-64` instance — both options provide you 64 CPU cores and 240 GB of memory.
 
-So, in the cloud you typically can't save any money by using larger machines.
+So, in the cloud, you typically can't save any money by using larger machines.
 
-#### Allows to run resource-hungry applications
+#### Allows running resource-hungry applications
 
 Having large nodes might be simply a requirement for the type of application that you are running.
 
@@ -100,9 +100,9 @@ Depending on the performance of the node, you might be able to successfully run 
 
 _Most managed Kubernetes services even impose hard limits on the number of pods per node:_
 
-- On [Amazon Elastic Kubernetes Service (EKS)](https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt), the maximum numer of pods per node depends on the node type and ranges from 4 to 737.
+- On [Amazon Elastic Kubernetes Service (EKS)](https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt), the maximum number of pods per node depends on the node type and ranges from 4 to 737.
 - On [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/quotas), the limit is 100 pods per node, regardless of the type of node.
-- On [Azure Kubernetes Servcie (AKS)](https://docs.microsoft.com/bs-latn-ba/azure/aks/configure-azure-cni#maximum-pods-per-node), the default limit is 30 pods per node but it can be increased up to 250.
+- On [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/bs-latn-ba/azure/aks/configure-azure-cni#maximum-pods-per-node), the default limit is 30 pods per node but it can be increased up to 250.
 
 So, if you have many pods but few nodes, you should probably do some tests to check whether Kubernetes still runs smoothly in this situation.
 
@@ -120,11 +120,11 @@ Thus, if you have high-availability requirements, you might require a certain mi
 
 #### Higher blast radius
 
-If you have only few nodes, then the impact of a failing node is bigger than if you have many nodes.
+If you have only a few nodes, then the impact of a failing node is bigger than if you have many nodes.
 
 For example, if you have only two nodes, and one of them fails, then about half of your pods disappear.
 
-Kubernetes can reschedule workloads of failed nodes to other nodes, but if you have only few nodes, the risk is higher that there is not enough spare capacity on the remaining node to accommodate all the workloads of the failed node.
+Kubernetes can reschedule workloads of failed nodes to other nodes, but if you have only a few nodes, the risk is higher that there is not enough spare capacity on the remaining node to accommodate all the workloads of the failed node.
 
 The effect is that parts of your applications will be permanently down until you bring up the failed node again.
 
@@ -160,9 +160,9 @@ If you have more nodes, you naturally have fewer pods on each node.
 
 For example, if you have 100 pods and 10 nodes, then each node contains on average only 10 pods.
 
-Thus, if one of the node fails, the impact is limited to a smaller proportion of your total workload.
+Thus, if one of the nodes fails, the impact is limited to a smaller proportion of your total workload.
 
-Chances are that only some of your apps are affected, and potentially only a small number of replicas, so that the apps as a whole stay up.
+Chances are that only some of your apps are affected, and potentially only a small number of replicas so that the apps as a whole stay up.
 
 Furthermore, there are most likely enough spare resources on the remaining nodes to accommodate the workload of the failed node, so that Kubernetes can reschedule all the pods and your apps return to a fully functional state relatively quickly.
 
@@ -186,9 +186,9 @@ _But large numbers of nodes can be a challenge for the Kubernetes control plane.
 
 For example, every node needs to be able to communicate with every other node, which makes the number of possible communication paths grow exponentially with the number of nodes — all of which has to be managed by the control plane.
 
-The node controller in the Kubernetes controller manager regularly has to iterate through all the nodes in the cluster and run health checks — more nodes means thus more load for the node controller.
+The node controller in the Kubernetes controller manager regularly has to iterate through all the nodes in the cluster and run health checks — more nodes mean thus more load for the node controller.
 
-More nodes means also more load on the etcd database — this is because the kubelet and kube-proxy of every node register themselves as etcd clients and etcd must provide them with all updates to certain object types.
+More nodes mean also more load on the etcd database — this is because the kubelet and kube-proxy of every node register themselves as etcd clients and etcd must provide them with all updates to certain object types.
 
 In general, each worker node imposes some overhead on the system components on the master nodes.
 
@@ -280,7 +280,7 @@ For example, if your application requires 10 GB of memory, you probably shouldn'
 
 Or if your application requires 10 degrees of replication for high-availability, then you probably shouldn't use just 2 nodes — your cluster should have at least have 10 nodes.
 
-_For all the scenarios inbetween it depends on your specific requirements — which of the above pros and cons are relevant for you? Which are not?_
+_For all the scenarios in-between it depends on your specific requirements — which of the above pros and cons are relevant for you? Which are not?_
 
 That being said, there is no rule that all your nodes must have the same size.
 
