@@ -34,7 +34,7 @@ In the above example, this would be a single worker node with 16 CPU cores and 1
 
 _Let's look at the advantages such an approach could have._
 
-### Pro
+### Pros
 
 #### Less management overhead
 
