@@ -296,13 +296,14 @@ export function getAbsoluteUrl(currentPage: LinkedNode<any>, siteUrl: string): s
 }
 
 export function getBlogPosts(website: Sitemap): typeof blogPosts[keyof typeof blogPosts][] {
-  return Object.values(website.children.blog.children)
-    .filter(it => it.payload.type !== Redirect.Type)
-    .slice(0)
-
-    .sort((a: any, b: any) => {
-      return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
-    }) as any
+  return [
+    ...Object.values(website.children.blog.children)
+      .filter(it => it.payload.type !== Redirect.Type)
+      .slice(0),
+    ...getBiteSizedSeries(website),
+  ].sort((a: any, b: any) => {
+    return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
+  }) as any
 }
 
 export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bsk][] {
