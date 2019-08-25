@@ -129,6 +129,10 @@ const bsk = {
     page: BiteSized201909.SmallOrLargeDetails,
     children: {},
   }),
+  bskSecrets: createNode({
+    page: BiteSized201909.SecretsDetails,
+    children: {},
+  }),
 }
 
 const rss = createNode({
@@ -279,6 +283,7 @@ export const Sitemap = createNode({
     bskApiIngress: bsk.bskIngressApi,
     bskVisualiseYaml: bsk.bskVisualiseYaml,
     bskSmallOrLarge: bsk.bskSmallOrLarge,
+    bskSecrets: bsk.bskSecrets,
   },
 })
 
@@ -324,6 +329,7 @@ export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bs
     website.children.bskApiIngress,
     website.children.bskVisualiseYaml,
     website.children.bskSmallOrLarge,
+    website.children.bskSecrets,
   ]
     .filter(it => it.payload.type !== Redirect.Type)
     .slice(0)

@@ -323,6 +323,12 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       writeFileSync(generatePath(), $.html())
       return
     }
+    case BiteSized201909.SecretsDetails.type: {
+      const $ = Cheerio.of(BiteSized201909.SecretsRender(root, node, siteUrl))
+      optimise({ $, siteUrl })
+      writeFileSync(generatePath(), $.html())
+      return
+    }
     case NotFound.Details.type: {
       const $ = Cheerio.of(NotFound.render(root, node, siteUrl))
       optimise({ $, siteUrl })
