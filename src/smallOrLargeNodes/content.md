@@ -36,7 +36,7 @@ _Let's look at the advantages such an approach could have._
 
 ### Pros
 
-#### Less management overhead
+#### 1. Less management overhead
 
 Simply said, having to manage a small number of machines is less laborious than having to manage a large number of machines.
 
@@ -50,7 +50,7 @@ If you use cloud instances (as part of a managed Kubernetes service or your own 
 
 Thus managing, 10 nodes in the cloud is not much more work than managing a 1 node in the cloud.
 
-#### Lower costs per node
+#### 2. Lower costs per node
 
 While a more powerful machine is more expensive than a low-end machine, the price increase is not necessarily linear.
 
@@ -64,7 +64,7 @@ For example, on Google Cloud Platform, 64 `n1-standard-1` instances cost you exa
 
 So, in the cloud, you typically can't save any money by using larger machines.
 
-#### Allows running resource-hungry applications
+#### 3. Allows running resource-hungry applications
 
 Having large nodes might be simply a requirement for the type of application that you are running.
 
@@ -76,7 +76,7 @@ _Having seen the pros of few large nodes, let's see what the cons are._
 
 ### Cons
 
-#### Large number of pods per node
+#### 1. Large number of pods per node
 
 Running the same workload on fewer nodes naturally means that more pods are running on each node.
 
@@ -106,7 +106,7 @@ _Most managed Kubernetes services even impose hard limits on the number of pods 
 
 So, if you have many pods but few nodes, you should probably do some tests to check whether Kubernetes still runs smoothly in this situation.
 
-#### Limited replication
+#### 2. Limited replication
 
 A small number of nodes may limit the degree of replication for high-availability applications.
 
@@ -118,7 +118,7 @@ On the other hand, if you have at least 5 nodes, each replica can run on a separ
 
 Thus, if you have high-availability requirements, you might require a certain minimum number of nodes in your cluster.
 
-#### Higher blast radius
+#### 3. 3. 3. Higher blast radius
 
 If you have only a few nodes, then the impact of a failing node is bigger than if you have many nodes.
 
@@ -132,7 +132,7 @@ The effect is that parts of your applications will be permanently down until you
 
 So, if you want to reduce the impact of hardware failures, you might want to choose a larger number of nodes.
 
-#### Large scaling increments
+#### 4. Large scaling increments
 
 Kubernetes provides a [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) for cloud infrastructure that allows to automatically add or remove nodes based on the current demand.
 
@@ -156,7 +156,7 @@ _What are the pros and cons of this approach?_
 
 The pros of using many small nodes correspond mainly to the cons of using few large nodes.
 
-#### Reduced blast radius
+#### 1. Reduced blast radius
 
 If you have more nodes, you naturally have fewer pods on each node.
 
@@ -168,7 +168,7 @@ Chances are that only some of your apps are affected, and potentially only a sma
 
 Furthermore, there are most likely enough spare resources on the remaining nodes to accommodate the workload of the failed node, so that Kubernetes can reschedule all the pods and your apps return to a fully functional state relatively quickly.
 
-#### Allows high replication
+#### 2. Allows high replication
 
 If you have replicated high-availability apps, and enough available nodes, the Kubernetes scheduler can assign each replica to a different node.
 
@@ -180,7 +180,7 @@ _Having seen the pros of using many small nodes, what are the cons?_
 
 ### Cons
 
-#### Large number of nodes
+#### 1. Large number of nodes
 
 If you use smaller nodes, you naturally need more of them to achieve a given cluster capacity.
 
@@ -218,7 +218,7 @@ So, if you intend to compose your cluster of a large number of small nodes, ther
 - The more worker nodes you have, the larger master nodes you need
 - If you plan to use more than 500 nodes, you can expect to hit some performance bottlenecks that require some effort to solve
 
-#### More system overhead
+#### 2. More system overhead
 
 Kubernetes runs a set of system daemons on every worker node — these include the container runtime (e.g. Docker), kube-proxy, and the kubelet including cAdvisor.
 
@@ -238,7 +238,7 @@ Thus, in the second case, 10% of the resources that you pay for are used for the
 
 So, if you prefer your computing resources to be used for your workloads rather than for the system, you might prefer larger nodes.
 
-#### Lower resource utilisation
+#### 3. Lower resource utilisation
 
 If you use smaller nodes, then you might end up with a larger number of resource fragments that are too small to be assigned to any workload and thus remain unused.
 
@@ -254,7 +254,7 @@ Thus, in this case, you waste only 2.5% of your memory.
 
 So, if you want to minimise resource waste, using larger nodes might provide better results.
 
-#### Pod limits on small nodes
+#### 4. Pod limits on small nodes
 
 On some cloud infrastructure, the maximum number of pods allowed on small nodes is more restricted than you might expect.
 
