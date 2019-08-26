@@ -80,7 +80,7 @@ _Having seen the pros of few large nodes, let's see what the cons are._
 
 Running the same workload on fewer nodes naturally means that more pods are running on each node.
 
-_This can become an issue._
+_This could become an issue._
 
 The reason is that each pod introduces some overhead on the Kubernetes agents that run on the node — such as the container runtime (e.g. Docker), the kubelet, and cAdvisor.
 
@@ -112,7 +112,7 @@ A small number of nodes may limit the degree of replication for high-availabilit
 
 For example, if you have a high-availability application consisting of 5 replicas, but you have only 2 nodes, then the effective degree of replication of the app is reduced to 2.
 
-This is because the 5 replicas can be distributed only across 2 nodes, and if one of them fails, it potentially takes down multiple replicas at once.
+The 5 replicas can be distributed only across 2 nodes, and if one of them fails, it potentially takes down multiple replicas at once.
 
 On the other hand, if you have at least 5 nodes, each replica can run on a separate node, and a failure of a single node takes down at most one replica.
 
@@ -124,7 +124,9 @@ If you have only a few nodes, then the impact of a failing node is bigger than i
 
 For example, if you have only two nodes, and one of them fails, then about half of your pods disappear.
 
-Kubernetes can reschedule workloads of failed nodes to other nodes, but if you have only a few nodes, the risk is higher that there is not enough spare capacity on the remaining node to accommodate all the workloads of the failed node.
+Kubernetes can reschedule workloads of failed nodes to other nodes.
+
+However, if you have only a few nodes, the risk is higher that there is not enough spare capacity on the remaining node to accommodate all the workloads of the failed node.
 
 The effect is that parts of your applications will be permanently down until you bring up the failed node again.
 
@@ -184,11 +186,11 @@ If you use smaller nodes, you naturally need more of them to achieve a given clu
 
 _But large numbers of nodes can be a challenge for the Kubernetes control plane._
 
-For example, every node needs to be able to communicate with every other node, which makes the number of possible communication paths grow exponentially with the number of nodes — all of which has to be managed by the control plane.
+For example, every node needs to be able to communicate with every other node, which makes the number of possible communication paths grow by square of the number of nodes — all of which has to be managed by the control plane.
 
-The node controller in the Kubernetes controller manager regularly has to iterate through all the nodes in the cluster and run health checks — more nodes mean thus more load for the node controller.
+The node controller in the Kubernetes controller manager regularly iterates through all the nodes in the cluster to run health checks — more nodes mean thus more load for the node controller.
 
-More nodes mean also more load on the etcd database — this is because the kubelet and kube-proxy of every node register themselves as etcd clients and etcd must provide them with all updates to certain object types.
+More nodes mean also more load on the etcd database — each kubelet and kube-proxy [watches](https://etcd.io/docs/v3.3.12/dev-guide/interacting_v3/#watch-key-changes) certain objects in etcd (through the API server) which results in more etcd clients to be provided with updates.
 
 In general, each worker node imposes some overhead on the system components on the master nodes.
 
