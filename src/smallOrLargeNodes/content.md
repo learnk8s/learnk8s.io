@@ -190,7 +190,7 @@ For example, every node needs to be able to communicate with every other node, w
 
 The node controller in the Kubernetes controller manager regularly iterates through all the nodes in the cluster to run health checks — more nodes mean thus more load for the node controller.
 
-More nodes mean also more load on the etcd database — each kubelet and kube-proxy [watches](https://etcd.io/docs/v3.3.12/dev-guide/interacting_v3/#watch-key-changes) certain objects in etcd (through the API server) which results in more etcd clients to be provided with updates.
+More nodes mean also more load on the etcd database — each kubelet and kube-proxy results in a [watcher](https://etcd.io/docs/v3.3.12/dev-guide/interacting_v3/#watch-key-changes) client of etcd (through the API server) that etcd must broadcast object updates to.
 
 In general, each worker node imposes some overhead on the system components on the master nodes.
 
