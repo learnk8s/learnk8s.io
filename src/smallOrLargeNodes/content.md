@@ -82,6 +82,8 @@ Running the same workload on fewer nodes naturally means that more pods are runn
 
 _This could become an issue._
 
+![Many pods per node](many-pods-per-node.svg)
+
 The reason is that each pod introduces some overhead on the Kubernetes agents that run on the node — such as the container runtime (e.g. Docker), the kubelet, and cAdvisor.
 
 For example, the kubelet executes regular liveness and readiness probes against each container on the node — more containers means more work for the kubelet in each iteration.
@@ -118,7 +120,7 @@ On the other hand, if you have at least 5 nodes, each replica can run on a separ
 
 Thus, if you have high-availability requirements, you might require a certain minimum number of nodes in your cluster.
 
-#### 3. 3. 3. Higher blast radius
+#### 3. Higher blast radius
 
 If you have only a few nodes, then the impact of a failing node is bigger than if you have many nodes.
 
@@ -185,6 +187,8 @@ _Having seen the pros of using many small nodes, what are the cons?_
 If you use smaller nodes, you naturally need more of them to achieve a given cluster capacity.
 
 _But large numbers of nodes can be a challenge for the Kubernetes control plane._
+
+![Many worker nodes per cluster](many-nodes-per-cluster.svg)
 
 For example, every node needs to be able to communicate with every other node, which makes the number of possible communication paths grow by square of the number of nodes — all of which has to be managed by the control plane.
 
