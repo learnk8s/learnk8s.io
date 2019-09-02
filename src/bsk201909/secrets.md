@@ -43,9 +43,9 @@ Base64 translates those binaries files in standard strings such as "aGVsbG8gdGhl
 
 But we still haven't answered how to properly secure those secrets.
 
-In Kubernetes, you can opt-in to encryption at rest: by enabling this feature, Kubernetes API encrypts the secrets (optionally, using an external KMS system) before storing them in etcd.
+In Kubernetes, you can opt-in to [encryption at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/): by enabling this feature, Kubernetes API encrypts the secrets (optionally, using an external KMS system) before storing them in etcd.
 
-You solved the issue of storing sensitive files such as certificates inside the cluster.
+So, using Secrets you solved the issue of storing sensitive files such as certificates inside the cluster.
 
 You also protected your secrets at rest with a suitable encryption provider.
 
@@ -65,17 +65,21 @@ You could store the secrets with the other manifests files - for example, in Git
 
 That could solve most of the challenges related to secret management:
 
-- You get a full audit history for free thanks to GIT
+- You get a full audit history for free thanks to Git
 - You can reuse the same merging strategy and approve changes to your secrets as you do with the rest of the code
 - Your code and your secrets are kept in sync at all times
 
-_But can you secure the secrets in GIT?_
+_But can you secure the secrets in Git?_
 
 _Can anyone who has access to the repository run away with your precious credentials?_
 
-There are some existing tools that let you create "encrypted secrets" that can be stored on GIT alongside the rest of the deployment files.
+There are some existing tools that let you create "encrypted secrets" that can be stored on Git alongside the rest of the deployment files.
 
 The tools also provide a mechanism to decrypt back to regular secrets so your app can consume them seamlessly.
+
+Let's discuss some of them.
+
+### Sealed Secretes
 
 A popular project in this space is Sealed Secrets.
 
@@ -87,6 +91,14 @@ You can install the operator with:
 kubectl apply -f \
   https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.8.1/controller.yaml
 ```
+
+You can install the command-line tool (on MacOS) with:
+
+```terminal|command=1|title=bash
+brew install kubeseal
+```
+
+(For other operations systems, use the [releases pages](https://github.com/bitnami-labs/sealed-secrets/releases) and download the relevant executable).
 
 When the operator starts it generates a private and public key.
 
@@ -181,17 +193,15 @@ Also, kubeseal supports secrets rotation.
 
 You can generate a new public and private key and re-encrypt your secrets.
 
-There are some downsides to consider, though.
+There are some downsides to consider, though:
 
-You can't see what's inside the secret.
+- First,  you can't see what's inside the secret - so every time you want to add a new value you might need to re-encrypt all values or create a separate secret.
 
-So every time you want to add a new value you might need to re-encrypt all values or create a separate secret.
+- Second, sealed Secret use one key pair to encrypt all your secrets and keep it inside the cluster - without any protection (for example, using Hardware Security Model).
 
-Sealed Secret use one key pair to encrypt all your secrets and keep it inside the cluster - without any protection (for example, using Hardware Security Model).
+There are alternative tools to Sealed secrets that address those two shortcomings.
 
-There are two alternative tools to Sealed secrets that address those two shortcomings.
-
-The first is Helm Secrets.
+### Helm Secrets
 
 While the underlying mechanism to secure the secrets is similar to Sealed Secrets, there are some noteworthy differences.
 
@@ -211,9 +221,9 @@ However, if you care about security and want to reduce your blast radius, you mi
 
 Also, Helm Secrets is a Helm plugin and it is strongly coupled to Helm, making it harder to change to other templating mechanisms such as kustomize.
 
-You can learn more about Helm secrets on the official project page.
+You can learn more about Helm secrets on the [official project page](https://github.com/futuresimple/helm-secrets).
 
-The last solution I'll discuss is Kamus.
+### Kamus
 
 > Full disclosure - the author is the lead developer.
 
@@ -224,6 +234,19 @@ The more granular permissions make Kamus more suitable to zero-trust environment
 Kamus works by associating a service account to your secrets.
 
 Only applications running with this service account are allowed to decrypt it.
+
+You can install Kamus in your cluster with the official Helm chart:
+
+```terminal|command=1,2|title=bash
+helm repo add soluto https://charts.soluto.io
+helm upgrade --install kamus soluto/kamus
+```
+
+And you can install the Kamus CLI with:
+
+```terminal|command=1|title=bash
+npm install -g @soluto-asurion/kamus-cli
+```
 
 You can create a secret with the Kamus CLI:
 
@@ -245,11 +268,11 @@ To use the secret in your app, you need to add a special init container to your 
 
 The init container is responsible to read the secrets, decrypt them and produce files in various formats.
 
-Your application can than consume this file to consume the decrypted secrets.
+Your application can then consume this file to consume the decrypted secrets.
 
 Being able to encrypt and store one secret at the time is convenient if you gradually need to add more secrets to your app.
 
-You can find more examples of how to use Kamus on the official project page.
+You can find more examples of how to use Kamus on the [official project page](https://github.com/Soluto/kamus).
 
 ## Summary
 
