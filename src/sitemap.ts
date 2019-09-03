@@ -26,10 +26,10 @@ import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
 import * as TerraformAks from './terraformAks/terraformAks'
-import * as SmallOrLargeNodes from './smallOrLargeNodes/smallOrLargeNodes'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
+import * as BiteSized201909 from './bsk201909'
 
 import { Venues, Timezone } from './courses'
 import moment from 'moment-timezone'
@@ -105,10 +105,6 @@ const blogPosts = {
     page: TerraformAks.Details,
     children: {},
   }),
-  smallOrLargeNodes: createNode({
-    page: SmallOrLargeNodes.Details,
-    children: {},
-  }),
 }
 
 const bsk = {
@@ -126,6 +122,10 @@ const bsk = {
   }),
   bskVisualiseYaml: createNode({
     page: BiteSized201903.VisualiseYamlDetails,
+    children: {},
+  }),
+  bskSmallOrLarge: createNode({
+    page: BiteSized201909.SmallOrLargeDetails,
     children: {},
   }),
 }
@@ -273,6 +273,7 @@ export const Sitemap = createNode({
     bskHelm: bsk.bskHelm,
     bskApiIngress: bsk.bskIngressApi,
     bskVisualiseYaml: bsk.bskVisualiseYaml,
+    bskSmallOrLarge: bsk.bskSmallOrLarge,
   },
 })
 
@@ -317,6 +318,7 @@ export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bs
     website.children.bskHelm,
     website.children.bskApiIngress,
     website.children.bskVisualiseYaml,
+    website.children.bskSmallOrLarge,
   ]
     .filter(it => it.payload.type !== Redirect.Type)
     .slice(0)

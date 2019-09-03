@@ -1,8 +1,8 @@
-When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use and how many of them?".
+**When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use and how many of them?".**
 
 If you're building an on-premises cluster, should you order some last-generation power servers, or use the dozen or so old machines that are lying around in your data centre?
 
-Or if you're using a managed Kubernetes service like [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/), should you use 8 `n1-standard-1` or 2 `n1-standard-4` instances to achieve your desired computing capacity?
+_Or if you're using a managed Kubernetes service like [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/), should you use 8 `n1-standard-1` or 2 `n1-standard-4` instances to achieve your desired computing capacity?_
 
 ## Cluster capacity
 
@@ -272,7 +272,7 @@ Any pods that exceed these limits, fail to be scheduled by the Kubernetes schedu
 
 If you are not aware of these limits, this can lead to hard-to-find bugs.
 
-Thus, if you plan to use small nodes on Amazon EKS, [check the corresponding pods-per-node limits](https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt) and count twice whether the nodes can accommodate your workload. 
+Thus, if you plan to use small nodes on Amazon EKS, [check the corresponding pods-per-node limits](https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt) and count twice whether the nodes can accommodate your workload.
 
 ## Conclusion
 

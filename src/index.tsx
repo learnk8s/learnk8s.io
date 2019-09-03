@@ -43,10 +43,10 @@ import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
 import * as TerraformAks from './terraformAks/terraformAks'
-import * as SmallOrLargeNodes from './smallOrLargeNodes/smallOrLargeNodes'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
+import * as BiteSized201909 from './bsk201909'
 import md5 = require('md5')
 import postcss = require('postcss')
 import cssnano = require('cssnano')
@@ -310,6 +310,12 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       writeFileSync(generatePath(), $.html())
       return
     }
+    case BiteSized201909.SmallOrLargeDetails.type: {
+      const $ = Cheerio.of(BiteSized201909.SmallOrLargeRender(root, node, siteUrl))
+      optimise({ $, siteUrl })
+      writeFileSync(generatePath(), $.html())
+      return
+    }
     case NotFound.Details.type: {
       const $ = Cheerio.of(NotFound.render(root, node, siteUrl))
       optimise({ $, siteUrl })
@@ -324,12 +330,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     }
     case TerraformAks.Details.type: {
       const $ = Cheerio.of(TerraformAks.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
-      return
-    }
-    case SmallOrLargeNodes.Details.type: {
-      const $ = Cheerio.of(SmallOrLargeNodes.render(root, node, siteUrl))
       optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
