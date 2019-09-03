@@ -30,6 +30,7 @@ import * as SmallOrLargeNodes from './smallOrLargeNodes/smallOrLargeNodes'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
+import * as BiteSized201909 from './bsk201909'
 
 import { Venues, Timezone } from './courses'
 import moment from 'moment-timezone'
@@ -126,6 +127,10 @@ const bsk = {
   }),
   bskVisualiseYaml: createNode({
     page: BiteSized201903.VisualiseYamlDetails,
+    children: {},
+  }),
+  bskSmallOrLarge: createNode({
+    page: BiteSized201909.SmallOrLargeDetails,
     children: {},
   }),
 }
@@ -273,6 +278,7 @@ export const Sitemap = createNode({
     bskHelm: bsk.bskHelm,
     bskApiIngress: bsk.bskIngressApi,
     bskVisualiseYaml: bsk.bskVisualiseYaml,
+    bskSmallOrLarge: bsk.bskSmallOrLarge,
   },
 })
 
@@ -301,13 +307,14 @@ export function getAbsoluteUrl(currentPage: LinkedNode<any>, siteUrl: string): s
 }
 
 export function getBlogPosts(website: Sitemap): typeof blogPosts[keyof typeof blogPosts][] {
-  return Object.values(website.children.blog.children)
-    .filter(it => it.payload.type !== Redirect.Type)
-    .slice(0)
-
-    .sort((a: any, b: any) => {
-      return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
-    }) as any
+  return [
+    ...Object.values(website.children.blog.children)
+      .filter(it => it.payload.type !== Redirect.Type)
+      .slice(0),
+    ...getBiteSizedSeries(website),
+  ].sort((a: any, b: any) => {
+    return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
+  }) as any
 }
 
 export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bsk][] {
@@ -316,6 +323,7 @@ export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bs
     website.children.bskHelm,
     website.children.bskApiIngress,
     website.children.bskVisualiseYaml,
+    website.children.bskSmallOrLarge,
   ]
     .filter(it => it.payload.type !== Redirect.Type)
     .slice(0)

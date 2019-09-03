@@ -47,6 +47,7 @@ import * as SmallOrLargeNodes from './smallOrLargeNodes/smallOrLargeNodes'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
+import * as BiteSized201909 from './bsk201909'
 import md5 = require('md5')
 import postcss = require('postcss')
 import cssnano = require('cssnano')
@@ -306,6 +307,12 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     }
     case BiteSized201903.HelmDetails.type: {
       const $ = Cheerio.of(BiteSized201903.HelmRender(root, node, siteUrl))
+      optimise({ $, siteUrl })
+      writeFileSync(generatePath(), $.html())
+      return
+    }
+    case BiteSized201909.SmallOrLargeDetails.type: {
+      const $ = Cheerio.of(BiteSized201909.SmallOrLargeRender(root, node, siteUrl))
       optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
