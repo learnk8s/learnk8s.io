@@ -3,7 +3,7 @@ import * as React from 'react'
 
 export const SmallOrLargeDetails = identity<Details>({
   type: 'bsk-sept-01' as const,
-  url: '/kubernestes-cluster-design-node-size',
+  url: '/kubernetes-node-size',
   seoTitle: 'Architecting a Kubernetes clusters — choosing a node size',
   title: 'Architecting a Kubernetes clusters — choosing a node size',
   description: `When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use and how many of them?". This article looks at the pros and cons of either using many small nodes or few large nodes.`,
@@ -14,7 +14,7 @@ export const SmallOrLargeDetails = identity<Details>({
     fullName: 'Daniel Weibel',
     avatar: <img src='assets/authors/daniel_weibel.jpg' alt='Daniel Weibel' />,
     link: 'https://medium.com/@weibeld',
-    shortDescription: 'Daniel is a software engineer and instructor at Learnk8s.'
+    shortDescription: 'Daniel is a software engineer and instructor at Learnk8s.',
   },
 })
 

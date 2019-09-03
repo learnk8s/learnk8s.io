@@ -124,7 +124,7 @@ export function BiteSizedRender(markdownPath: string) {
         </p>
         <p className='lh-copy measure-wide f4'>
           Did you miss the previous episodes?{' '}
-          <a href={getFullUrl(website.children.bskVisualiseYaml)} className='link navy underline hover-sky'>
+          <a href={getFullUrl(website.children.biteSizedKubernetes)} className='link navy underline hover-sky'>
             You can find them here.
           </a>
         </p>
