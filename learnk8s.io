@@ -1,1 +1,0 @@
-/Users/pole/Sites/learnk8s/learnk8s.io
