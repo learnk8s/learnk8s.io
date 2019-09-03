@@ -105,10 +105,6 @@ const blogPosts = {
     page: TerraformAks.Details,
     children: {},
   }),
-  smallOrLargeNodes: createNode({
-    page: SmallOrLargeNodes.Details,
-    children: {},
-  }),
 }
 
 const bsk = {

@@ -334,12 +334,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       writeFileSync(generatePath(), $.html())
       return
     }
-    case SmallOrLargeNodes.Details.type: {
-      const $ = Cheerio.of(SmallOrLargeNodes.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
-      return
-    }
     case WebAppManifest.Details.type: {
       const manifest = WebAppManifest.render(root, node, siteUrl)
       const icons = manifest.icons.map(icon => {
