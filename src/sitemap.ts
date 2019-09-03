@@ -26,7 +26,6 @@ import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
 import * as TerraformAks from './terraformAks/terraformAks'
-import * as SmallOrLargeNodes from './smallOrLargeNodes/smallOrLargeNodes'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
