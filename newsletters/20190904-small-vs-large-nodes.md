@@ -1,6 +1,6 @@
 Hi there!
 
-_Have you ever created a cluster and wondered what type of worker nodes you should use?_
+_Have you ever created a Kubernetes cluster and wondered what type of worker nodes you should use?_
 
 For example, if you're on Amazon Web Services, should you use a large number of of small and cheap `t2.micro` instances?
 
@@ -18,7 +18,7 @@ In general, you can achieve a certain CPU and memory capacity across your cluste
 
 If you're interested what these pros and cons are, then read our latest article:
 
-[**Should you have many small nodes or few large nodes in your cluster?**](TODO)
+[**READ: small or large nodes in your Kubernetes cluster?**](https://learnk8s.io/kubernetes-node-size/ "Should you have many small nodes or few large nodes in your cluster?")
 
 What are your own experiences with using many small nodes vs. few larges nodes?
 
