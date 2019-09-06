@@ -253,14 +253,16 @@
 
 .events .europe,
 .events .america,
-.events .asia {
+.events .asia,
+.events .australia {
   display: none;
 }
 
 #america:checked ~ .legend .america,
 #all:checked ~ .legend .all,
 #europe:checked ~ .legend .europe,
-#asia:checked ~ .legend .asia {
+#asia:checked ~ .legend .asia,
+#australia:checked ~ .legend .australia {
   font-weight: bold;
   color: white;
   background-color: #3a89c9;
@@ -270,7 +272,8 @@
 #all:checked ~ .events li,
 #america:checked ~ .events .america,
 #europe:checked ~ .events .europe,
-#asia:checked ~ .events .asia {
+#asia:checked ~ .events .asia,
+#australia:checked ~ .events .australia {
   display: block;
 }
 

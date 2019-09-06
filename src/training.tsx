@@ -57,11 +57,11 @@ export const faqs: FAQ[] = [
   },
 ]
 
-const publicCourseEnquiry = (date: moment.Moment, venue: Venue): MailTo => ({
+const publicCourseEnquiry = (date: moment.Moment, timezone: string, venue: Venue): MailTo => ({
   subject: 'Kubernetes training — Public course enquiry',
   body: `Hello Learnk8s,\n\nI'd like to know more about the ${
     isVenueOnline(venue) ? 'online ' : ''
-  }Kubernetes course that will be held on the ${date.format('Do')} of ${date.format('MMMM')}${
+  }Kubernetes course that will be held on the ${date.tz(timezone).format('Do')} of ${date.tz(timezone).format('MMMM')}${
     isVenueOnline(venue) ? '' : ` in ${venue.city || venue.name}`
   }.\n\nKind regards,\n`,
   email: 'hello@learnk8s.io',
@@ -282,9 +282,9 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
                 'How to expose services to the public internet',
                 'The Kubernetes architecture and core components',
                 'The Kubernetes networking model',
-                'Autoscaling the cluster and the applicaions',
+                'Autoscaling the cluster and the applications',
                 'Secure your cluster and your network',
-                'Design automated processes to leverage Kubernetes and continuon integration',
+                'Design automated processes to leverage Kubernetes and continuous integration',
               ]}
             />
             <p className='tc pb4'>
@@ -500,18 +500,22 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <input className='dn' id='america' type='radio' name='country' />
         <input className='dn' id='europe' type='radio' name='country' />
         <input className='dn' id='asia' type='radio' name='country' />
+        <input className='dn' id='australia' type='radio' name='country' />
         <ul className='legend list pl0 flex'>
           <li className='all dib pa2 navy bb bw1 b--near-white bg-evian br1 br--left'>
             <label htmlFor='all'>All</label>
           </li>
-          <li className='america dib pa2 navy bb bw1 b--near-white bg-evian'>
+          <li className='america dib pa2 navy bb bl bw1 b--near-white bg-evian'>
             <label htmlFor='america'>North America</label>
           </li>
-          <li className='europe dib pa2 navy bb bw1 b--near-white bg-evian'>
+          <li className='europe dib pa2 navy bb bl bw1 b--near-white bg-evian'>
             <label htmlFor='europe'>Europe</label>
           </li>
-          <li className='asia dib pa2 navy bb bw1 b--near-white bg-evian br1 br--right'>
+          <li className='asia dib pa2 navy bb bl bw1 b--near-white bg-evian'>
             <label htmlFor='asia'>Asia</label>
+          </li>
+          <li className='australia dib pa2 navy bb bw1 b--near-white bg-evian br1 br--right'>
+            <label htmlFor='australia'>Australia & New Zeland</label>
           </li>
         </ul>
 
@@ -548,13 +552,15 @@ export const CourseRow: React.StatelessComponent<{ event: CourseEvent; slackIcon
   event,
   slackIcon,
 }) => {
-  const id = `e-${event.startAt.toISOString()}-${event.location.address}`.toLowerCase().replace(/[^\w]+/g, '-')
+  const id = `e-${event.startAt.toISOString()}-${event.location.address}-${event.location.city}`
+    .toLowerCase()
+    .replace(/[^\w]+/g, '-')
   return (
     <li className={`${event.timezone}`.split('/')[0].toLowerCase()}>
       <div className='mv3 flex-ns items-start pb3 pb0-l module'>
         <div className='date bg-sky w3 h3 white tc b'>
-          <p className='f2 ma0'>{event.startAt.format('D')}</p>
-          <p className='ttu ma0'>{event.startAt.format('MMM')}</p>
+          <p className='f2 ma0'>{event.startAt.tz(event.timezone).format('D')}</p>
+          <p className='ttu ma0'>{event.startAt.tz(event.timezone).format('MMM')}</p>
         </div>
         <div className='bg-evian ph4 pt2 flex-auto relative'>
           <h3 className='f3 ma0 mt3 mb2'>
@@ -606,7 +612,7 @@ export const CourseRow: React.StatelessComponent<{ event: CourseEvent; slackIcon
             <p>
               <PrimaryButton
                 text='Get in touch &#8594;'
-                mailto={mailto(publicCourseEnquiry(event.startAt, event.location))}
+                mailto={mailto(publicCourseEnquiry(event.startAt, event.timezone, event.location))}
               />
             </p>
           </div>
@@ -679,35 +685,31 @@ export const DashboardModule: React.StatelessComponent<{
 }
 
 function CreateToggle() {
-  function doesntExist<T>(it: T): boolean {
-    return !it
-  }
-  function Toggle(element: Element) {
-    var target = element.getAttribute('data-toggle')
+  function Toggle(element: HTMLElement) {
+    const target = element.dataset.toggle
     if (!target) {
       return
     }
-    var targetElements = target.split(',').map(function(selector) {
-      return document.querySelector(selector)
-    })
-    if (targetElements.some(doesntExist)) {
+    const targetElements = target.split(',').map(selector => document.querySelector(selector))
+    if (targetElements.some(it => !it)) {
       return
     }
     if (targetElements[0]!.classList.contains('toggle-collapse')) {
-      targetElements.forEach(function(it) {
-        return it!.classList.remove('toggle-collapse')
-      })
+      targetElements.forEach(it => it!.classList.remove('toggle-collapse'))
     } else {
-      targetElements.forEach(function(it) {
-        return it!.classList.add('toggle-collapse')
-      })
+      targetElements.forEach(it => it!.classList.add('toggle-collapse'))
     }
   }
 
-  ;[].slice.call(document.querySelectorAll('[data-toggle]')).forEach(function(element: Element) {
-    element.addEventListener('click', function() {
-      Toggle(element)
-    })
+  document.querySelectorAll<HTMLElement>('[data-toggle]').forEach(element => {
+    if (element.classList.contains('active')) {
+      return
+    }
+    element.classList.add('active')
+    element.addEventListener('click', () => Toggle(element))
+    if (!('toggleCollapsed' in element.dataset)) {
+      return
+    }
+    Toggle(element)
   })
-  ;[].slice.call(document.querySelectorAll('[data-toggle-collapsed]')).forEach(Toggle)
 }
