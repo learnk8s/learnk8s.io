@@ -391,46 +391,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
   )
 }
 
-function SubmitWithAjax() {
-  var form = document.querySelector('form')
-  var success = document.querySelector('.success')
-  var failure = document.querySelector('.failure')
-  if (!form || !success || !failure) {
-    return
-  }
-  form.addEventListener('submit', function(event) {
-    success!.classList.add('dn')
-    failure!.classList.add('dn')
-    const emailElement = form!.querySelector('#MERGE0') as HTMLInputElement
-    const firstnameElement = form!.querySelector('#MERGE1') as HTMLInputElement
-    const user = form!.querySelector('[name=u]') as HTMLInputElement
-    const id = form!.querySelector('[name=id]') as HTMLInputElement
-    if (!emailElement || !firstnameElement || !user || !id) {
-      return
-    }
-    event.preventDefault()
-    var email = (emailElement.value + '').trim()
-    if (email === '' || !/\w+@\w+\.\w{2,10}/gi.test(email)) {
-      return failure!.classList.remove('dn')
-    }
-    var firstname = (firstnameElement.value + '').trim()
-    var url = form!.getAttribute('action')
-    var args = [
-      'id=' + encodeURIComponent(id.value),
-      'u=' + encodeURIComponent(user.value),
-      'EMAIL=' + encodeURIComponent(email),
-      'FNAME=' + encodeURIComponent(firstname),
-    ]
-    submit(`${url}-json?${args.join('&')}`)
-    success!.classList.remove('dn')
-  })
-  function submit(url: string) {
-    var request = new XMLHttpRequest()
-    request.open('GET', url, true)
-    request.send()
-  }
-}
-
 const FAQs: React.StatelessComponent<{ faqs: FAQ[] }> = ({ faqs }) => {
   return (
     <section className='pv4'>
@@ -454,30 +414,30 @@ const FAQs: React.StatelessComponent<{ faqs: FAQ[] }> = ({ faqs }) => {
 export const Form: React.StatelessComponent<{}> = ({ children }) => {
   return (
     <div id='subscription-form' className='mb5 mt5 mt0-l measure'>
-      <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST' className='relative'>
+      <form action='https://academy.learnk8s.io/login' method='POST' className='relative'>
         <ol className='list pl0'>
           <li>
-            <label htmlFor='MERGE1' className='db tl ttu pb2 fw6'>
+            <label htmlFor='name' className='db tl ttu pb2 fw6'>
               Your first name
             </label>
             <input
               className='pa3 w-100 br3 input-reset ba b--silver'
               type='text'
-              name='MERGE1'
-              id='MERGE1'
+              name='name'
+              id='name'
               placeholder='Your first name'
             />
           </li>
           <li className='mt4'>
-            <label htmlFor='MERGE0' className='db tl ttu pb2 fw6'>
+            <label htmlFor='email' className='db tl ttu pb2 fw6'>
               Your email address
             </label>
             <input
               className='pa3 w-100 br3 input-reset ba b--silver'
               type='email'
               required={true}
-              name='MERGE0'
-              id='MERGE0'
+              name='email'
+              id='email'
               placeholder='Your email address'
             />
           </li>
@@ -486,13 +446,12 @@ export const Form: React.StatelessComponent<{}> = ({ children }) => {
           Start now ⇢
         </button>
         <p className='success absolute bottom mt1 w-100 bg-light-green pa2 dark-green b--dark-green bw1 b--solid dn'>
-          Thank you for subscribing!
+          Look out for an invite in your inbox!
         </p>
         <p className='failure absolute bottom mt1 w-100 bg-light-red pa2 black b--dark-red bw1 b--solid dn'>
           Invalid email.
         </p>
       </form>
-      <script dangerouslySetInnerHTML={{ __html: `(${SubmitWithAjax.toString()})()` }} />
     </div>
   )
 }
