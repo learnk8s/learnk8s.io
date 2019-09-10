@@ -1,10 +1,10 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Layout, ListItem } from './layout.v2'
+import { Layout, ListItem, FAQ, InlineMarkdown } from './layout.v2'
 import { Course, Boolean } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { ListItemQuestion } from './academy'
+import { ListItemQuestion, Feedback } from './academy'
 
 export const Details = {
   type: 'zero-to-k8s',
@@ -14,6 +14,25 @@ export const Details = {
   description: `Zero to Kubernetes is a step-by-step course on how to design, develop and deploy Node.js applications on Kubernetes.`,
   openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
 } as const
+
+const faqs: FAQ[] = [
+  {
+    title: `Is it really free?`,
+    content: `Yes, you can log in into the Learnk8s and start learning.`,
+  },
+  {
+    title: `Kubernetes is a vast subject, what does this course cover?`,
+    content: `This course is designed to get you up to speed with container and Kubernetes. It doesn't cover advanced topics such as networking, deployment strategies or templating resources.`,
+  },
+  {
+    title: `What are the prerequisites to join the course?`,
+    content: `You should be familiar with Bash/Powershell, git, curl and SSH. You should be familiar with web servers such as Apache or Nginx.`,
+  },
+  {
+    title: 'I have another question!',
+    content: `Sure - send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io).`,
+  },
+]
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   return renderToStaticMarkup(
@@ -42,7 +61,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         }}
       />
       <div className='center mw7 ph3'>
-        <h1 className='f1 lh-solid navy'>
+        <h1 className='f1 lh-solid navy pt4'>
           The modern course on deploying Node.js, Express and MongoDB with Docker and Kubernetes
         </h1>
         <p className='lh-copy f4-l black-70'>The traditional way of deploying Node.js apps:</p>
@@ -79,7 +98,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           }
           @media screen and (min-width: 60em) {
             .feedback {
-              column-count: 4;
+              column-count: 3;
             }
           }`,
           }}
@@ -250,58 +269,123 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           <ListItem className='black-70'>manage shared storage for your application</ListItem>
           <ListItem className='black-70'>deploy and scale your application on Amazon EKS</ListItem>
         </ul>
-        <p className='f2 lh-solid navy b'>Another certification in the books</p>
         <p className='lh-copy f4-l black-70'>
-          Complete the online course and receive your certification of completion. [todo]
+          The course includes a certificate of completion when you complete online.
         </p>
+        <img src='assets/02k8s/certificate.svg' alt='' className='w-60 shadow-4 center db mv4' />
+        <p className='lh-copy f4-l black-70'>
+          However, if you wish to study and want practice offline (during the morning commute),{' '}
+          <span className='b'>you can download the ebook too.</span>
+        </p>
+        <img src='assets/02k8s/zero2k8s-js.svg' alt='' className='w-60 shadow-1 center db mv4' />
         <p className='lh-copy f4-l black-70'>The course is free, and you can start your Kubernetes journey now.</p>
       </div>
-      <div className='center mw7 ph4 pt2'>
-        <h2 className='f2 lh-solid navy'>Start learning Kubernetes and containers</h2>
+      <div className='center mw7 ph3 pt2'>
+        <h2 className='f2 lh-solid navy'>The course is free, and you can start learning Kubernetes now</h2>
         <p className='lh-copy measure f4 black-70'>
           Enter your email address and receive a link to access the Learnk8s Academy.
         </p>
-        <div id='subscription-form' className='mb5 mt5 mt0-l measure'>
-          <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST' className='relative'>
-            <ol className='list pl0'>
-              <li>
-                <label htmlFor='MERGE1' className='db tl ttu pb2 fw6'>
-                  Your first name
-                </label>
-                <input
-                  className='pa3 w-100 br3 input-reset ba b--silver'
-                  type='text'
-                  name='MERGE1'
-                  id='MERGE1'
-                  placeholder='Your first name'
-                />
-              </li>
-              <li className='mt4'>
-                <label htmlFor='MERGE0' className='db tl ttu pb2 fw6'>
-                  Your email address
-                </label>
-                <input
-                  className='pa3 w-100 br3 input-reset ba b--silver'
-                  type='email'
-                  required={true}
-                  name='MERGE0'
-                  id='MERGE0'
-                  placeholder='Your email address'
-                />
-              </li>
-            </ol>
-            <button className='link dib white bg-blue br1 ph4 pv3 b f4 shadow-4 mv3 submit tl br2' type='submit'>
-              Start now ⇢
-            </button>
-            <p className='success absolute bottom mt1 w-100 bg-light-green pa2 dark-green b--dark-green bw1 b--solid dn'>
-              Thank you for subscribing!
-            </p>
-            <p className='failure absolute bottom mt1 w-100 bg-light-red pa2 black b--dark-red bw1 b--solid dn'>
-              Invalid email.
-            </p>
-          </form>
-          <script dangerouslySetInnerHTML={{ __html: `(${SubmitWithAjax.toString()})()` }} />
-        </div>
+
+        <Form />
+
+        <section className='mv4'>
+          <p className='f3 f2-l navy b'>Learnk8s trains over 300+ engineers a year in Kubernetes</p>
+          <p className='lh-copy f4-l black-70 measure'>
+            The systems, techniques, and processes you'll learn in the Learnk8s Academy have been developed over 2+
+            years during our hands-on, instructor-led workshops.
+          </p>
+          <div className='feedback tc'>
+            <Feedback
+              className='mw5 dib mv3'
+              author='Mauricio Salatino'
+              role='Activiti Cloud Team Lead'
+              description='The course is totally worth the money and time, if you have a team that is getting started with Kubernetes and want to validate the approach that you are taking as well as to level up your knowledge on K8s, this is the way to go.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Marcello Teodori'
+              role='Architect'
+              description='This is the course you have to do to put all the pieces in the right place and challenge yourself to really master your knowledge of Kubernetes. Wish I had done it long ago.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Yawwani Gunawardaba'
+              role='Data Scientist'
+              description='Good course with practical labs.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Sandeep Sarthavalli Ramesh'
+              role='Software developer'
+              description='A good course to get started with Kubernetes with enough confidence to deploy, debug and progress in the world of k8s.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='David Heward'
+              role='Senior DevOps Engineer'
+              description='A really enjoyable 3-day workshop on Kubernetes. I cemented my understanding of Kubernetes and can now start implementing and furthering my knowledge with real examples and workflows. Next stop, production experience.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Chris Cooney'
+              role='Senior Software Engineer'
+              description={`We previously had a couple of people talking about Kubernetes in the pub. Now half the office are raving about it. I don't think reading documentation alone would have done that for us, it needed some people to come in and show us what is possible, validate the ideas we've already had and give us guidance on where to go next. Now everyone has a clear, shared vision and a mission. All that's left is to take the first few steps.`}
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Luke Anderson'
+              role='Senior IT Engineer'
+              description='It is an excellent course covering a wide range of Kubernetes concepts, that will give you more than enough knowledge to go back to experiment and be productive with Kubernetes.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Mark Gardiner'
+              role='Infrastructure Developer'
+              description='This is very intensive course, particularly if you are new to cloud computing or networking concepts.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Przemek Anuszek'
+              role='Cloud architect'
+              description='The training is very well prepared and also very well performed.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Eda Meadows'
+              role='Polyglott Developer'
+              description='Clear, good explanations with good use of diagrams.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Sara Aspery'
+              role='Software Engineer'
+              description='Be prepared to learn a lot and enjoy the hands-on sessions.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Ryan Dawson'
+              role='Software Developer'
+              description='Learnk8s know this stuff, have put a lot of thought into the course and will put a lot of thought into your questions too!'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Grant Hammond'
+              role='Senior Linux Engineer'
+              description='Essential knowledge. I mostly enjoyed finding out how the components were doing their thing under the hood and how traffic is/was actually being shunted around.'
+            />
+            <Feedback
+              className='mw5 dib mv3'
+              author='Antonio Troina'
+              role='Senior Software Developer'
+              description='Great experience. Going back to the office with a much better understanding of the topic. Useful exercises, great Q&A session with clarification.'
+            />
+          </div>
+        </section>
+
+        <FAQs faqs={faqs} />
+
+        <p className='f2 b lh-solid navy'>Start learning Kubernetes now</p>
+        <Form />
       </div>
     </Layout>,
   )
@@ -345,4 +429,70 @@ function SubmitWithAjax() {
     request.open('GET', url, true)
     request.send()
   }
+}
+
+const FAQs: React.StatelessComponent<{ faqs: FAQ[] }> = ({ faqs }) => {
+  return (
+    <section className='pv4'>
+      <h3 className='f3 f2-l navy pb3'>Frequently asked questions</h3>
+      <ul className='list pl0'>
+        {faqs.map((it, index) => {
+          return (
+            <li key={index}>
+              <h4 className='navy f4 f3-l mb2'>{it.title}</h4>
+              <p className='lh-copy black-70 measure-wide'>
+                <InlineMarkdown content={it.content} />
+              </p>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
+  )
+}
+
+export const Form: React.StatelessComponent<{}> = ({ children }) => {
+  return (
+    <div id='subscription-form' className='mb5 mt5 mt0-l measure'>
+      <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST' className='relative'>
+        <ol className='list pl0'>
+          <li>
+            <label htmlFor='MERGE1' className='db tl ttu pb2 fw6'>
+              Your first name
+            </label>
+            <input
+              className='pa3 w-100 br3 input-reset ba b--silver'
+              type='text'
+              name='MERGE1'
+              id='MERGE1'
+              placeholder='Your first name'
+            />
+          </li>
+          <li className='mt4'>
+            <label htmlFor='MERGE0' className='db tl ttu pb2 fw6'>
+              Your email address
+            </label>
+            <input
+              className='pa3 w-100 br3 input-reset ba b--silver'
+              type='email'
+              required={true}
+              name='MERGE0'
+              id='MERGE0'
+              placeholder='Your email address'
+            />
+          </li>
+        </ol>
+        <button className='link dib white bg-blue br1 ph4 pv3 b f4 shadow-4 mv3 submit tl br2' type='submit'>
+          Start now ⇢
+        </button>
+        <p className='success absolute bottom mt1 w-100 bg-light-green pa2 dark-green b--dark-green bw1 b--solid dn'>
+          Thank you for subscribing!
+        </p>
+        <p className='failure absolute bottom mt1 w-100 bg-light-red pa2 black b--dark-red bw1 b--solid dn'>
+          Invalid email.
+        </p>
+      </form>
+      <script dangerouslySetInnerHTML={{ __html: `(${SubmitWithAjax.toString()})()` }} />
+    </div>
+  )
 }
