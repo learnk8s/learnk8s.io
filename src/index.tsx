@@ -169,7 +169,7 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case ZeroToK8s.Details.type: {
-    const $ = Cheerio.of(ZeroToK8s.render(root, node, siteUrl))
+      const $ = Cheerio.of(ZeroToK8s.render(root, node, siteUrl))
       optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
