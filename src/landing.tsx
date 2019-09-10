@@ -182,15 +182,15 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
           <DashboardModule
             className='w-40-l'
             preview={<img src='assets/training/zero.png' alt='Zero to Kubernetes' />}
-            title={`2. ${material.zeroToKubernetes.name}`}
-            description={material.zeroToKubernetes.description}
+            title={`2. ${material.kubernetesFundamentals.name}`}
+            description={material.kubernetesFundamentals.description}
           >
             <p className='lh-copy measure-wide'>
               You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the
               following topics:
             </p>
             <ul>
-              {Object.values(material.zeroToKubernetes.topics).map((it, index) => (
+              {Object.values(material.kubernetesFundamentals.topics).map((it, index) => (
                 <li key={index} className='lh-copy mv1'>
                   {it}
                 </li>

@@ -51,8 +51,8 @@ const content = {
       },
     },
   },
-  zeroToKubernetes: {
-    name: 'Zero to k8s',
+  kubernetesFundamentals: {
+    name: 'Kubernetes fundamentals',
     description:
       'Learn the basics of Kubernetes and deploy your first application to minikube — a Kubernetes cluster for local development. Learn how to declare resources in YAML files, how to send those to the cluster and retrieve them. Understand how Kubernetes reconciles the desired state of the infrastructure.',
     topics: {
