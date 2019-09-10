@@ -1,7 +1,7 @@
 import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
 import * as Academy from './academy'
-import * as ZeroToK8s from './zeroTok8s'
+import * as ZeroToK8s from './zeroToK8s'
 import * as Blog from './blog'
 import * as BrowserConfig from './browserConfig'
 import * as Careers from './careers'

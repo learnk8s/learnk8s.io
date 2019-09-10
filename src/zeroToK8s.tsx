@@ -250,6 +250,10 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           <ListItem className='black-70'>manage shared storage for your application</ListItem>
           <ListItem className='black-70'>deploy and scale your application on Amazon EKS</ListItem>
         </ul>
+        <p className='f2 lh-solid navy b'>Another certification in the books</p>
+        <p className='lh-copy f4-l black-70'>
+          Complete the online course and receive your certification of completion. [todo]
+        </p>
         <p className='lh-copy f4-l black-70'>The course is free, and you can start your Kubernetes journey now.</p>
       </div>
       <div className='center mw7 ph4 pt2'>
