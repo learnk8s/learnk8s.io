@@ -781,7 +781,7 @@ export const ListItemQuestion: React.StatelessComponent<{}> = ({ children }) => 
         <img src='assets/question.svg' alt='Question' className='w2 h2' />
       </div>
       <div className='v-top pl3 w-90'>
-        <p className='mv0 f4-l lh-copy'>{children}</p>
+        <p className='mv0 f4-l lh-copy black-70'>{children}</p>
       </div>
     </li>
   )
