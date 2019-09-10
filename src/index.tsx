@@ -18,6 +18,7 @@ const toString = require('hast-util-to-string')
 import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
 import * as Academy from './academy'
+import * as ZeroToK8s from './zeroToK8s'
 import * as Blog from './blog'
 import * as BrowserConfig from './browserConfig'
 import * as Careers from './careers'
@@ -163,6 +164,12 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     }
     case Academy.Details.type: {
       const $ = Cheerio.of(Academy.render(root, node, siteUrl))
+      optimise({ $, siteUrl })
+      writeFileSync(generatePath(), $.html())
+      return
+    }
+    case ZeroToK8s.Details.type: {
+    const $ = Cheerio.of(ZeroToK8s.render(root, node, siteUrl))
       optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return
