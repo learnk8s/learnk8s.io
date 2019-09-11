@@ -65,7 +65,8 @@ export const Navbar: React.StatelessComponent<{ root: Sitemap }> = ({ root }) =>
       </a>
       <ul className='list fl w-80-m w-90-l pa2 tr dn db-ns'>
         <li className='dib ttu'>
-          <a href={getFullUrl(root.children.academy)} className='link white mh3 dib f6 ribbon' title='Academy'>
+          {/* <a href={getFullUrl(root.children.academy)} className='link white mh3 dib f6 ribbon' title='Academy'> */}
+          <a href={getFullUrl(root.children.academy)} className='link white mh3 dib f6' title='Academy'>
             Academy
           </a>
         </li>
