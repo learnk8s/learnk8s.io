@@ -24,7 +24,7 @@ const enterprisePackage: MailTo = {
 const faqs: FAQ[] = [
   {
     title: `Can I see a preview of the videos?`,
-    content: `This is not a video course. This is a learn-by-doing course. There's no shortcut in learning Kubernetes, you have to put the effort in and practice.`,
+    content: `This is not a video course. This is a learn-by-doing course. There's no shortcut in learning Kubernetes. You have to put the effort in and practice.`,
   },
   {
     title: `Kubernetes is a vast subject, what topics I won't find in this course?`,
@@ -39,11 +39,11 @@ const faqs: FAQ[] = [
   },
   {
     title: 'Do you offer a student discount?',
-    content: `Absolutely! [Fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform) with some proof that you are a student and we'll send you a discount code. This applies to anyone in any type of schooling, including evening classes and coding bootcamps!`,
+    content: `Absolutely! [Fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform) with some proof that you are a student and we'll send you a discount code. This applies to anyone in any schooling, including evening classes and coding bootcamps!`,
   },
   {
     title: `What if I'm not thrilled?`,
-    content: `We want to make sure you get real value out of this so we only want your money if you are happy with the product! If you aren't satisfied, within 30 days send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt and I will refund you.`,
+    content: `We want to make sure you get real value out of this, so we only want your money if you are happy with the product! If you aren't satisfied, within 30 days send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt and, we will refund you.`,
   },
   {
     title: `What are the prerequisites to join the Learnk8s Academy?`,
@@ -164,16 +164,16 @@ setTimeout(ldinsp, 0);
               You keep hearing people talking about Kubernetes as if it were the holy grail of tech.
             </p>
             <p className='lh-copy f4-l black-70'>
-              But every time you read the docs you struggle to understand why you should spent time on it.
+              But every time you read the docs, you struggle to understand why you should spend time on it.
             </p>
             <p className='lh-copy f4-l black-70 b'>It' so complex.</p>
             <p className='lh-copy f4-l black-70'>
               How can it even compete with{' '}
-              <span className='code f6 bg-light-gray pa1 br2'>SSH → docker-compose up</span>.
+              <span className='code f6 bg-light-gray pa1 br2'>SSH → docker-compose up</span>?
             </p>
             <p className='lh-copy f4-l black-70 i'>That's only two commands!</p>
             <p className='lh-copy f4-l black-70'>
-              But maybe your're convinced that <span className='b'>Kubernetes can handle Google kind of load</span> and
+              But maybe you're convinced that <span className='b'>Kubernetes can handle Google kind of load</span> and
               you should learn it.
             </p>
           </div>
@@ -184,7 +184,7 @@ setTimeout(ldinsp, 0);
         <div className='w-40-l center pt3'>
           <h2 className='f3 navy f2-l measure-narrow'>According to the experts</h2>
           <div className='measure-wide'>
-            <p className='lh-copy f4-l black-70'>To work effectively within Kubernetes you should understand:</p>
+            <p className='lh-copy f4-l black-70'>To work effectively within Kubernetes, you should understand:</p>
             <ul>
               <li className='lh-copy black-70 f4-l'>1. Docker (images, containers, volumes, layers, etc.)</li>
               <li className='lh-copy black-70 f4-l'>
@@ -252,7 +252,7 @@ setTimeout(ldinsp, 0);
         </h2>
         <div className='mw7 center'>
           <p className='lh-copy f4-l black-70'>
-            In this course you will learn on how to design, develop and deploy applications in Kubernetes.
+            In this course, you will learn how to design, develop and deploy applications in Kubernetes.
           </p>
           <p className='lh-copy f4-l black-70'>And you will learn how to:</p>
           <ul className='list numbered black-70 pl3 pt2'>
@@ -280,7 +280,7 @@ setTimeout(ldinsp, 0);
             </li>
             <li className='f4-l lh-copy mv2 cf'>
               <p className='pl4 ml2 lh-copy measure mt0'>
-                not repeat yourself using an templating engine for Kubernetes resources
+                not repeat yourself using a templating engine for Kubernetes resources
               </p>
             </li>
           </ul>
@@ -421,7 +421,7 @@ setTimeout(ldinsp, 0);
             We care more about our students' success than taking their money.
           </p>
           <p className='lh-copy f4-l black-70 mt1'>
-            If you follow the lectures and practice the material and still DO NOT feel like you are making progress 30
+            If you follow the lectures and practise the material and still DO NOT feel like you are making progress 30
             days after you begin doing the work, we will try to work with you to identify what's missing. And if that
             doesn't work, we'll give you a full refund.
           </p>
@@ -431,8 +431,8 @@ setTimeout(ldinsp, 0);
           <p className='lh-copy f4-l black-70 mt1'>
             This is not a <span className='i'>"master Kubernetes in 3 hours"</span> or{' '}
             <span className='i'>watch someone else deploying containers in Kubernetes</span> video course. Completing
-            the Learnk8s Academy's modules takes time, and effort… <span className='b'>but it does work.</span> The
-            learning curve is steep, then the plateau of usefulness is very long and smooth. It's a great feeling
+            the Learnk8s Academy's modules takes time and effort… <span className='b'>but it does work.</span> The
+            learning curve is steep; then, the plateau of usefulness is very long and smooth. It's a great feeling
             operating Kubernetes after you've mastered it.
           </p>
         </div>
@@ -463,13 +463,13 @@ setTimeout(ldinsp, 0);
           </ul>
           <p className='lh-copy f5 pl4 black-80'>Also included:</p>
           <ul className='list flex flex-wrap'>
-            <ListItem className='w-50'>Downloadable ebook for each course</ListItem>
+            <ListItem className='w-50'>Downloadable ebook for each session</ListItem>
             <ListItem className='w-50'>Interactive content and diagrams</ListItem>
-            <ListItem className='w-50'>Practice excercises</ListItem>
+            <ListItem className='w-50'>Practice exercises</ListItem>
             <ListItem className='w-50'>Discounted CKA exam</ListItem>
             <ListItem className='w-50'>Certificate of completion</ListItem>
             <ListItem className='w-50'>Access to the online portal</ListItem>
-            <ListItem className='w-50'>CKA tips and tricks</ListItem>
+            <ListItem className='w-50'>CKAD tips and tricks</ListItem>
             <ListItem className='w-50'>Unlimited access</ListItem>
             <ListItem className='w-50'>Lifetime updates</ListItem>
           </ul>
@@ -494,9 +494,9 @@ setTimeout(ldinsp, 0);
           </ul>
           <p className='lh-copy f5 pl4 black-80'>Also included:</p>
           <ul className='list flex flex-wrap'>
-            <ListItem className='w-50'>Downloadable ebook for each course</ListItem>
+            <ListItem className='w-50'>Downloadable ebook for each session</ListItem>
             <ListItem className='w-50'>Interactive content and diagrams</ListItem>
-            <ListItem className='w-50'>Practice excercises</ListItem>
+            <ListItem className='w-50'>Practice exercises</ListItem>
             <ListItem className='w-50'>Certificate of completion</ListItem>
             <ListItem className='w-50'>Access to the online portal</ListItem>
             <ListItem className='w-50'>Unlimited access</ListItem>
@@ -813,7 +813,7 @@ const ComingSoon: React.StatelessComponent<{ className?: string }> = ({ children
       </p>
       <div className='measure center bg-evian ph4 pt2 pb4 b--blue bl bw2'>
         <p className='lh-copy black-70'>
-          Subscriber to the Learnk8s newsletter will receive a discount ahead of the announcement.
+          Subscribers to the Learnk8s newsletter will receive a discount ahead of the announcement.
         </p>
         <a href='https://learnk8s.io/newsletter' target='_blank' className='navy underline'>
           Subscribe now →

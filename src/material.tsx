@@ -108,7 +108,7 @@ const content = {
   },
   deploymentStrategies: {
     name: 'Deployment strategies',
-    description: `Every time you deploy new features in production you don't want to stop your service, load a new version and remove the holding page. Ideally, you should be able to transition to a new version of your application without anyone noticing any downtime. You can leverage Kubernetes to do that.`,
+    description: `Every time you deploy new features in production, you don't want to stop your service, load a new version and remove the holding page. Ideally, you should be able to transition to a new version of your application without anyone noticing any downtime. You can leverage Kubernetes to do that.`,
     topics: {
       uptime: {
         title: 'Monitoring for uptime',
@@ -312,7 +312,7 @@ const content = {
   },
   templating: {
     name: 'Templating Kubernetes resources',
-    description: `Resources in Kubernetes are described as YAML files. If you wish to have the same resources for different environments such as development, preproduction and production you may be tempted to copy the files three times. Or you could use a templating engine. Learn how to do precisely that with Helm — the Kubernetes package manager.`,
+    description: `Resources in Kubernetes are described as YAML files. If you wish to have the same resources for different environments such as development, preproduction and production, you may be tempted to copy the files three times. Or you could use a templating engine. Learn how to do precisely that with Helm — the Kubernetes package manager.`,
     topics: {
       reusableTemplates: {
         title: 'Creating reusable templates',
