@@ -815,7 +815,7 @@ const ComingSoon: React.StatelessComponent<{ className?: string }> = ({ children
         <p className='lh-copy black-70'>
           Subscribers to the Learnk8s newsletter will receive a discount ahead of the announcement.
         </p>
-        <a href='https://learnk8s.io/newsletter' target='_blank' className='navy underline'>
+        <a href='https://learnk8s.io/newsletter' target='_blank' rel='noreferrer' className='navy underline'>
           Subscribe now →
         </a>
       </div>
