@@ -176,9 +176,8 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <ul className='pl0 pt2'>
           <ListItemQuestion>
             <span className='b'>But what if</span> instead of starting from scratch{' '}
-            <span className='b'>you could use a standard stack</span>
-            that includes the components that you need such as automatic deployments, scaling and a reverse proxy to
-            handle the routes?
+            <span className='b'>you could use a standard stack</span> that includes the components that you need such as
+            automatic deployments, scaling and a reverse proxy to handle the routes?
           </ListItemQuestion>
           <ListItemQuestion>
             <span className='b'>And what if you could create it with a single click?</span> Ideally creating more
@@ -274,7 +273,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         </p>
         <img src='assets/02k8s/certificate.svg' alt='' className='w-60 shadow-4 center db mv4' /> */}
         <p className='lh-copy f4-l black-70'>
-          However, if you wish to study and want practice offline (during the morning commute),{' '}
+          However, if you wish to study and want to practice offline (during the morning commute),{' '}
           <span className='b'>you can download the ebook too.</span>
         </p>
         <img src='assets/02k8s/zero2k8s-js.svg' alt='' className='w-60 shadow-1 center db mv4' />
