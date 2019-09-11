@@ -18,7 +18,7 @@ export const Details = {
 const faqs: FAQ[] = [
   {
     title: `Is it really free?`,
-    content: `Yes, you can log in into the Learnk8s and start learning.`,
+    content: `Yes, you can log in into the Learnk8s Academy and start learning.`,
   },
   {
     title: `Kubernetes is a vast subject, what does this course cover?`,
@@ -269,10 +269,10 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           <ListItem className='black-70'>manage shared storage for your application</ListItem>
           <ListItem className='black-70'>deploy and scale your application on Amazon EKS</ListItem>
         </ul>
-        <p className='lh-copy f4-l black-70'>
+        {/* <p className='lh-copy f4-l black-70'>
           The course includes a certificate of completion when you complete online.
         </p>
-        <img src='assets/02k8s/certificate.svg' alt='' className='w-60 shadow-4 center db mv4' />
+        <img src='assets/02k8s/certificate.svg' alt='' className='w-60 shadow-4 center db mv4' /> */}
         <p className='lh-copy f4-l black-70'>
           However, if you wish to study and want practice offline (during the morning commute),{' '}
           <span className='b'>you can download the ebook too.</span>
