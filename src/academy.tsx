@@ -540,7 +540,7 @@ setTimeout(ldinsp, 0);
               </div>
             </div>
             <div className='w-30 flex items-center'>
-              <img src='assets/academy/containers.svg' alt='' className='shadow-4' />
+              <img src='assets/academy/containers.svg' alt='Linux containers — ebook' className='shadow-4' />
             </div>
           </div>
         </section>
@@ -557,7 +557,7 @@ setTimeout(ldinsp, 0);
               </div>
             </div>
             <div className='w-30 flex items-center'>
-              <img src='assets/academy/fundamentals.svg' alt='' className='shadow-4' />
+              <img src='assets/academy/fundamentals.svg' alt='Kubernetes fundamentals — ebook' className='shadow-4' />
             </div>
           </div>
         </section>
@@ -574,7 +574,11 @@ setTimeout(ldinsp, 0);
               </div>
             </div>
             <div className='w-30 flex items-center'>
-              <img src='assets/academy/deployment-strategies.svg' alt='' className='shadow-4' />
+              <img
+                src='assets/academy/deployment-strategies.svg'
+                alt='Advanced deployment strategies — ebook'
+                className='shadow-4'
+              />
             </div>
           </div>
         </section>

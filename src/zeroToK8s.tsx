@@ -9,7 +9,7 @@ import { ListItemQuestion, Feedback } from './academy'
 export const Details = {
   type: 'zero-to-k8s',
   url: '/start-kubernetes-nodejs',
-  seoTitle: 'The modern course on deploying Node.js, Express and MongoDB with Docker and Kubernetes',
+  seoTitle: 'Deploying Node.js, Express and MongoDB with Kubernetes',
   title: 'The modern course on deploying Node.js, Express and MongoDB with Docker and Kubernetes',
   description: `Zero to Kubernetes is a step-by-step course on how to design, develop and deploy Node.js applications on Kubernetes.`,
   openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -276,7 +276,11 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           However, if you wish to study and want to practice offline (during the morning commute),{' '}
           <span className='b'>you can download the ebook too.</span>
         </p>
-        <img src='assets/02k8s/zero2k8s-js.svg' alt='' className='w-60 shadow-1 center db mv4' />
+        <img
+          src='assets/02k8s/zero2k8s-js.svg'
+          alt='Zero to Kubernetes with Node.js — ebook'
+          className='w-60 shadow-1 center db mv4'
+        />
         <p className='lh-copy f4-l black-70'>The course is free, and you can start your Kubernetes journey now.</p>
       </div>
       <div className='center mw7 ph3 pt2'>
