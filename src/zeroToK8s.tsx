@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Layout, ListItem, FAQ, InlineMarkdown } from './layout.v2'
+import { Layout, ListItem, FAQ, InlineMarkdown, Navbar } from './layout.v2'
 import { Course, Boolean } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
@@ -60,6 +60,13 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           isAccessibleForFree: Boolean.True,
         }}
       />
+
+      <div className='mw8 center pl3'>
+        <a href='/' className='db pt4 w4' target='_self' ref='noreferrer'>
+          <img src='assets/logo_color.svg' alt='Learnk8s logo' />
+        </a>
+      </div>
+
       <div className='center mw7 ph3'>
         <h1 className='f1 lh-solid navy pt4'>
           The modern course on deploying Node.js, Express and MongoDB with Docker and Kubernetes
