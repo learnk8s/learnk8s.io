@@ -466,7 +466,7 @@ setTimeout(ldinsp, 0);
             <ListItem className='w-50'>Downloadable ebook for each session</ListItem>
             <ListItem className='w-50'>Interactive content and diagrams</ListItem>
             <ListItem className='w-50'>Practice exercises</ListItem>
-            <ListItem className='w-50'>Discounted CKA exam</ListItem>
+            <ListItem className='w-50'>Discounted CKAD exam</ListItem>
             <ListItem className='w-50'>Certificate of completion</ListItem>
             <ListItem className='w-50'>Access to the online portal</ListItem>
             <ListItem className='w-50'>CKAD tips and tricks</ListItem>
