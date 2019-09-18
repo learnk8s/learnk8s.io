@@ -575,11 +575,6 @@ setTimeout(ldinsp, 0);
             <li className='f4-l lh-copy mv2 w-50'>Advanced deployment strategies</li>
             <li className='f4-l lh-copy mv2 w-50'>Templating</li>
           </ul>
-          <p className='lh-copy f5 pl4 black-80'>Also included:</p>
-          <ul className='list flex flex-wrap'>
-            <ListItem className='w-50'>Unlimited access</ListItem>
-            <ListItem className='w-50'>Lifetime updates</ListItem>
-          </ul>
           <p className='f1 navy tc'>
             <span className='db' id='architecting-bundle'>
               {(121).toLocaleString('US', {
