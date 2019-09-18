@@ -8,11 +8,11 @@ _There's some news for you._
 
 When you complete the Zero to Kubernetes course, you can also apply for a certificate of completion.
 
-There's a catch, though._
+_There's a catch, though._
 
 The certificate is hidden behind a challenge, and you can reveal it only by solving it.
 
-[Download your certificate →](https://academy.learnk8s.io/dashboard "Download your certificate")
+[Solve the challenge and download your certificate →](https://academy.learnk8s.io/dashboard "Download your certificate")
 
 **2️⃣ More hands-on challenges**
 
@@ -24,21 +24,21 @@ The challenges are designed to help you practice deployments in Kubernetes.
 
 In the past six months you asked for:
 
-- offline access to the Academy
-- tracking progress online
-- no more subscription — a single, one-time fee
+- Offline access to the Academy
+- Tracking progress online
+- No more subscription — a single, one-time fee
 
 Your voice was heard loud and clear.
 
-The Learnk8s Academy is **available as ebooks** so that you can download and study when you're commuting.
+The Learnk8s Academy is **available as a set of ebooks** so that you can download it and study whenever and wherever you want, for example, when you're commuting.
 
-You can **track progress as you read** through the content.
+You can **track progress** through the content.
 
-And best of all, **no more subscriptions**.
+And best of all, **no more subscription fees**.
 
-You can buy access to the content and use it how many times you want for as long as you want.
+You buy access to the content once, and then you can use it as much as you want for as long as you want.
 
-_Interested in getting access to the rest of the material?_
+_Interested in getting access to the new Academy?_
 
 [Read more →](https://learnk8s.io/academy "Learn more about the Learnk8s Academy")
 
