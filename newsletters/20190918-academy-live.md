@@ -26,7 +26,7 @@ _Still not convinced?_
 
 As if that weren't enough, [the demand for Kubernetes engineers is raising sharply](https://www.hntrends.com/2019/sep-react-reaches-thirty-percent-posts.html?compare=Kubernetes&compare=&compare=&compare=).
 
-💰 To celebrate the release of the Learnk8s Academy, we have discounted 30% to all products!
+💰 To celebrate the release of the Learnk8s Academy, we have discounted the most popular package by 30%!
 
 The offer is available for one week only, though.
 

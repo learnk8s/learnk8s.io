@@ -474,20 +474,11 @@ setTimeout(ldinsp, 0);
             <ListItem className='w-50 b'>Lifetime updates</ListItem>
           </ul>
           <p className='f1 navy tc'>
-            <span className='db strike f2 black-60' id='architecting-full'>
+            <span className='db' id='architecting-full'>
               {(597).toLocaleString('US', {
                 style: 'currency',
                 currency: 'USD',
               })}
-            </span>
-            <span className='db orange' id='architecting-full-discount'>
-              {Math.ceil(597 * 0.7).toLocaleString('US', {
-                style: 'currency',
-                currency: 'USD',
-              })}
-            </span>
-            <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
-              Promotion ends the 25th of Sep 2019
             </span>
           </p>
           <div className='tc'>
@@ -590,20 +581,11 @@ setTimeout(ldinsp, 0);
             <ListItem className='w-50'>Lifetime updates</ListItem>
           </ul>
           <p className='f1 navy tc'>
-            <span className='db strike f2 black-60' id='architecting-bundle'>
-              {(97).toLocaleString('US', {
+            <span className='db' id='architecting-bundle'>
+              {(121).toLocaleString('US', {
                 style: 'currency',
                 currency: 'USD',
               })}
-            </span>
-            <span className='db orange' id='architecting-bundle-discount'>
-              {Math.ceil(97 * 0.7).toLocaleString('US', {
-                style: 'currency',
-                currency: 'USD',
-              })}
-            </span>
-            <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
-              Promotion ends the 25th of Sep 2019
             </span>
           </p>
           <div className='tc'>
@@ -621,139 +603,6 @@ setTimeout(ldinsp, 0);
               Learnk8s offers competitive corporate prices.{' '}
               <span className='underline'>Get in touch to learn more.</span>
             </a>
-          </div>
-        </section>
-
-        <section className='center mw7 bg-white pa3 pb4 br2 shadow-4 mv5'>
-          <div className='flex'>
-            <div className='w-70'>
-              <div className='ph3'>
-                <h2 className='navy lh-solid f3'>Deployment strategies</h2>
-                <p className='lh-copy measure back-80'>
-                  Everything you need to architect, develop and deploy applications at scale.
-                </p>
-                <p className='f2 navy mt1 mb3'>
-                  <span className='db strike f3 black-60' id='deployment-strategies'>
-                    {(27).toLocaleString('US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
-                  </span>
-                  <span className='db orange' id='deployment-strategies-discount'>
-                    {Math.ceil(27 * 0.7).toLocaleString('US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
-                  </span>
-                  <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
-                    Promotion ends the 25th of Sep 2019
-                  </span>
-                </p>
-                <div className=''>
-                  <a
-                    href='https://academy.learnk8s.io/deployment-strategies'
-                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
-                    target='_self'
-                    ref='noreferrer'
-                  >
-                    Buy now →
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className='w-30 flex items-center'>
-              <img
-                src='assets/academy/deployment-strategies.svg'
-                alt='Advanced deployment strategies — ebook'
-                className='shadow-4'
-              />
-            </div>
-          </div>
-        </section>
-
-        <section className='center mw7 bg-white pa3 pb4 br2 shadow-4 mv5'>
-          <div className='flex'>
-            <div className='w-70'>
-              <div className='ph3'>
-                <h2 className='navy lh-solid f3'>Kubernetes fundamentals ebook</h2>
-                <p className='lh-copy measure back-80'>
-                  Everything you need to architect, develop and deploy applications at scale.
-                </p>
-                <p className='f2 navy mt1 mb3'>
-                  <span className='db strike f3 black-60' id='fundamentals'>
-                    {(27).toLocaleString('US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
-                  </span>
-                  <span className='db orange' id='fundamentals-discount'>
-                    {Math.ceil(27 * 0.7).toLocaleString('US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
-                  </span>
-                  <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
-                    Promotion ends the 25th of Sep 2019
-                  </span>
-                </p>
-                <div className=''>
-                  <a
-                    href='https://academy.learnk8s.io/fundamentals'
-                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
-                    target='_self'
-                    ref='noreferrer'
-                  >
-                    Buy now →
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className='w-30 flex items-center'>
-              <img src='assets/academy/fundamentals.svg' alt='Kubernetes fundamentals — ebook' className='shadow-4' />
-            </div>
-          </div>
-        </section>
-
-        <section className='center mw7 bg-white pa3 pb4 br2 shadow-4 mv5'>
-          <div className='flex'>
-            <div className='w-70'>
-              <div className='ph3'>
-                <h2 className='navy lh-solid f3'>Linux containers and Kubernetes ebook</h2>
-                <p className='lh-copy measure back-80'>
-                  Everything you need to architect, develop and deploy applications at scale.
-                </p>
-                <p className='f2 navy mt1 mb3'>
-                  <span className='db strike f3 black-60' id='containers'>
-                    {(21).toLocaleString('US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
-                  </span>
-                  <span className='db orange' id='containers-discount'>
-                    {Math.ceil(21 * 0.7).toLocaleString('US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
-                  </span>
-                  <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
-                    Promotion ends the 25th of Sep 2019
-                  </span>
-                </p>
-                <div className=''>
-                  <a
-                    href='https://academy.learnk8s.io/containers'
-                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
-                    target='_self'
-                    ref='noreferrer'
-                  >
-                    Buy now →
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className='w-30 flex items-center'>
-              <img src='assets/academy/containers.svg' alt='Linux containers — ebook' className='shadow-4' />
-            </div>
           </div>
         </section>
       </section>
