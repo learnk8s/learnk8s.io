@@ -12,6 +12,8 @@ _There's a catch, though._
 
 The certificate is hidden behind a challenge, and you can reveal it only by solving it.
 
+![Learnk8s Academy certificate sample](https://gallery.mailchimp.com/2f82ec7d5caaa9ced71141211/images/1ecb8758-5a41-4bc5-ba1a-6065dd1e01e0.jpg)
+
 [Solve the challenge and download your certificate →](https://academy.learnk8s.io/dashboard "Download your certificate")
 
 **2️⃣ More hands-on challenges**
