@@ -16,7 +16,7 @@ export const Details = {
 } as const
 
 const enterprisePackage: MailTo = {
-  subject: 'Learnk8s Academy',
+  subject: 'Learnk8s Academy — Enterprise license',
   body: `Hi Learnk8s,\n\nI'd like to discuss buying ___ licenses in bulk for the Learnk8s Academy.\n\nKind regards,\n`,
   email: 'hello@learnk8s.io',
 }
@@ -444,7 +444,7 @@ setTimeout(ldinsp, 0);
         </p>
         <p className='lh-copy f4-l black-70 measure center tc ph3'>Learn Kubernetes now and stay ahead of the game.</p>
 
-        <section className='center mw7 bg-white pa3 pb5 br2 shadow-4 mv5'>
+        <section className='center mw7 bg-white pa3 pb4 br2 shadow-4 mv5'>
           <h2 className='f2 tc navy'>The full package</h2>
           <p className='f4 lh-copy measure tc center black-80'>
             Everything you need to architect, develop and deploy applications at scale and get officially certified by
@@ -466,17 +466,49 @@ setTimeout(ldinsp, 0);
             <ListItem className='w-50'>Downloadable ebook for each session</ListItem>
             <ListItem className='w-50'>Interactive content and diagrams</ListItem>
             <ListItem className='w-50'>Practice exercises</ListItem>
-            <ListItem className='w-50'>Discounted CKAD exam</ListItem>
+            <ListItem className='w-50'>Discounted CKAD exam (30%)</ListItem>
             <ListItem className='w-50'>Certificate of completion</ListItem>
             <ListItem className='w-50'>Access to the online portal</ListItem>
             <ListItem className='w-50'>CKAD tips and tricks</ListItem>
-            <ListItem className='w-50'>Unlimited access</ListItem>
-            <ListItem className='w-50'>Lifetime updates</ListItem>
+            <ListItem className='w-50 b'>Unlimited access</ListItem>
+            <ListItem className='w-50 b'>Lifetime updates</ListItem>
           </ul>
-          <ComingSoon />
+          <p className='f1 navy tc'>
+            <span className='db strike f2 black-60' id='architecting-full'>
+              {(597).toLocaleString('US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </span>
+            <span className='db orange' id='architecting-full-discount'>
+              {Math.ceil(597 * 0.7).toLocaleString('US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </span>
+            <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
+              Promotion ends the 25th of Sep 2019
+            </span>
+          </p>
+          <div className='tc'>
+            <a
+              href='https://academy.learnk8s.io/architecting-full'
+              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+              target='_self'
+              ref='noreferrer'
+            >
+              Buy now →
+            </a>
+          </div>
+          <div className='tc pt4'>
+            <a href={mailto(enterprisePackage)} className='f7 black-70 no-underline'>
+              Learnk8s offers competitive corporate prices.{' '}
+              <span className='underline'>Get in touch to learn more.</span>
+            </a>
+          </div>
         </section>
 
-        <section className='center mw7 bg-white pa3 pb5 br2 shadow-4 mv5'>
+        <section className='center mw7 bg-white pa3 pb4 br2 shadow-4 mv5'>
           <h2 className='f2 tc navy'>The expert package</h2>
           <p className='f4 lh-copy measure tc center black-80'>
             Everything you need to architect, develop and deploy applications at scale.
@@ -499,13 +531,45 @@ setTimeout(ldinsp, 0);
             <ListItem className='w-50'>Practice exercises</ListItem>
             <ListItem className='w-50'>Certificate of completion</ListItem>
             <ListItem className='w-50'>Access to the online portal</ListItem>
-            <ListItem className='w-50'>Unlimited access</ListItem>
-            <ListItem className='w-50'>Lifetime updates</ListItem>
+            <ListItem className='w-50 b'>Unlimited access</ListItem>
+            <ListItem className='w-50 b'>Lifetime updates</ListItem>
           </ul>
-          <ComingSoon />
+          <p className='f1 navy tc'>
+            <span className='db strike f2 black-60' id='architecting-expert'>
+              {(397).toLocaleString('US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </span>
+            <span className='db orange' id='architecting-expert-discount'>
+              {Math.ceil(397 * 0.7).toLocaleString('US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </span>
+            <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
+              Promotion ends the 25th of Sep 2019
+            </span>
+          </p>
+          <div className='tc'>
+            <a
+              href='https://academy.learnk8s.io/architecting-expert'
+              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+              target='_self'
+              ref='noreferrer'
+            >
+              Buy now →
+            </a>
+          </div>
+          <div className='tc pt4'>
+            <a href={mailto(enterprisePackage)} className='f7 black-70 no-underline'>
+              Learnk8s offers competitive corporate prices.{' '}
+              <span className='underline'>Get in touch to learn more.</span>
+            </a>
+          </div>
         </section>
 
-        <section className='center mw7 bg-white pa3 pb5 br2 shadow-4 mv5'>
+        <section className='center mw7 bg-white pa3 pb4 br2 shadow-4 mv5'>
           <h2 className='f2 tc navy'>Ebooks bundle</h2>
           <p className='f4 lh-copy measure tc center black-80'>
             Everything you need to architect, develop and deploy applications at scale.
@@ -525,22 +589,84 @@ setTimeout(ldinsp, 0);
             <ListItem className='w-50'>Unlimited access</ListItem>
             <ListItem className='w-50'>Lifetime updates</ListItem>
           </ul>
-          <ComingSoon />
+          <p className='f1 navy tc'>
+            <span className='db strike f2 black-60' id='architecting-bundle'>
+              {(97).toLocaleString('US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </span>
+            <span className='db orange' id='architecting-bundle-discount'>
+              {Math.ceil(97 * 0.7).toLocaleString('US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </span>
+            <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
+              Promotion ends the 25th of Sep 2019
+            </span>
+          </p>
+          <div className='tc'>
+            <a
+              href='https://academy.learnk8s.io/architecting-bundle'
+              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+              target='_self'
+              ref='noreferrer'
+            >
+              Buy now →
+            </a>
+          </div>
+          <div className='tc pt4'>
+            <a href={mailto(enterprisePackage)} className='f7 black-70 no-underline'>
+              Learnk8s offers competitive corporate prices.{' '}
+              <span className='underline'>Get in touch to learn more.</span>
+            </a>
+          </div>
         </section>
 
         <section className='center mw7 bg-white pa3 pb4 br2 shadow-4 mv5'>
           <div className='flex'>
             <div className='w-70'>
               <div className='ph3'>
-                <h2 className='navy lh-solid f3'>Linux containers and Kubernetes ebook</h2>
+                <h2 className='navy lh-solid f3'>Deployment strategies</h2>
                 <p className='lh-copy measure back-80'>
                   Everything you need to architect, develop and deploy applications at scale.
                 </p>
-                <MiniComingSoon />
+                <p className='f2 navy mt1 mb3'>
+                  <span className='db strike f3 black-60' id='deployment-strategies'>
+                    {(27).toLocaleString('US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </span>
+                  <span className='db orange' id='deployment-strategies-discount'>
+                    {Math.ceil(27 * 0.7).toLocaleString('US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </span>
+                  <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
+                    Promotion ends the 25th of Sep 2019
+                  </span>
+                </p>
+                <div className=''>
+                  <a
+                    href='https://academy.learnk8s.io/deployment-strategies'
+                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                    target='_self'
+                    ref='noreferrer'
+                  >
+                    Buy now →
+                  </a>
+                </div>
               </div>
             </div>
             <div className='w-30 flex items-center'>
-              <img src='assets/academy/containers.svg' alt='Linux containers — ebook' className='shadow-4' />
+              <img
+                src='assets/academy/deployment-strategies.svg'
+                alt='Advanced deployment strategies — ebook'
+                className='shadow-4'
+              />
             </div>
           </div>
         </section>
@@ -553,7 +679,33 @@ setTimeout(ldinsp, 0);
                 <p className='lh-copy measure back-80'>
                   Everything you need to architect, develop and deploy applications at scale.
                 </p>
-                <MiniComingSoon />
+                <p className='f2 navy mt1 mb3'>
+                  <span className='db strike f3 black-60' id='fundamentals'>
+                    {(27).toLocaleString('US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </span>
+                  <span className='db orange' id='fundamentals-discount'>
+                    {Math.ceil(27 * 0.7).toLocaleString('US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </span>
+                  <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
+                    Promotion ends the 25th of Sep 2019
+                  </span>
+                </p>
+                <div className=''>
+                  <a
+                    href='https://academy.learnk8s.io/fundamentals'
+                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                    target='_self'
+                    ref='noreferrer'
+                  >
+                    Buy now →
+                  </a>
+                </div>
               </div>
             </div>
             <div className='w-30 flex items-center'>
@@ -566,19 +718,41 @@ setTimeout(ldinsp, 0);
           <div className='flex'>
             <div className='w-70'>
               <div className='ph3'>
-                <h2 className='navy lh-solid f3'>Deployment strategies</h2>
+                <h2 className='navy lh-solid f3'>Linux containers and Kubernetes ebook</h2>
                 <p className='lh-copy measure back-80'>
                   Everything you need to architect, develop and deploy applications at scale.
                 </p>
-                <MiniComingSoon />
+                <p className='f2 navy mt1 mb3'>
+                  <span className='db strike f3 black-60' id='containers'>
+                    {(21).toLocaleString('US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </span>
+                  <span className='db orange' id='containers-discount'>
+                    {Math.ceil(21 * 0.7).toLocaleString('US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </span>
+                  <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
+                    Promotion ends the 25th of Sep 2019
+                  </span>
+                </p>
+                <div className=''>
+                  <a
+                    href='https://academy.learnk8s.io/containers'
+                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                    target='_self'
+                    ref='noreferrer'
+                  >
+                    Buy now →
+                  </a>
+                </div>
               </div>
             </div>
             <div className='w-30 flex items-center'>
-              <img
-                src='assets/academy/deployment-strategies.svg'
-                alt='Advanced deployment strategies — ebook'
-                className='shadow-4'
-              />
+              <img src='assets/academy/containers.svg' alt='Linux containers — ebook' className='shadow-4' />
             </div>
           </div>
         </section>
@@ -681,6 +855,48 @@ setTimeout(ldinsp, 0);
       <FAQs faqs={faqs} />
 
       <Footer root={website} />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+var request = new XMLHttpRequest();
+request.open('GET', 'https://academy.learnk8s.io/api/v1/prices', true);
+
+request.onload = function() {
+  if (this.status >= 200 && this.status < 400) {
+    try {
+      var resp = JSON.parse(this.response);
+      const keys = Object.keys(resp)
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i]
+        var element = document.querySelector('#' + key)
+        if (!!element) {
+          var price = resp[key]
+          element.innerHTML = price.gross.toLocaleString(price.country, {
+            style: 'currency',
+            currency: price.currency,
+          })
+        }
+        var discount = document.querySelector('#' + key + '-discount')
+        if (!!discount) {
+          var price = resp[key]
+          discount.innerHTML = Math.ceil(price.gross * 0.7).toLocaleString(price.country, {
+            style: 'currency',
+            currency: price.currency,
+          })
+        }
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  } else {}
+};
+
+request.onerror = function() {};
+
+request.send();
+      `,
+        }}
+      />
     </Layout>,
   )
 }
