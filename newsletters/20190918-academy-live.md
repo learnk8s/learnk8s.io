@@ -2,7 +2,7 @@ Hi there!
 
 At around 2 pm today (that's London time zone, [check in your time zone](https://everytimezone.com/s/6344c718)) the Learnk8s Academy will be live!
 
-here are the four most important details you should know before joining:
+Here are the four most important details you should know before joining:
 
 **1️⃣ The Learnk8s Academy is a hands-on, online course**
 
@@ -16,13 +16,13 @@ That's a must-have if you want to build your cluster later.
 
 The content is nicely formatted as an ebook too.
 
-**4️⃣ One time fee, lifetime updates — even if Kubernetes ever goes 2.0**
+**4️⃣ One-time fee, lifetime updates**
 
 Kubernetes changes at a fast pace, but you can rely on the Academy to be always up to date.
 
 _Still not convinced?_
 
-**🚀 Software engineers and DevOps that master Kubernetes have 10 to 20% higher wages than the who don't.**
+**🚀 Software engineers and DevOps that master Kubernetes have 10 to 20% higher wages than those who don't.**
 
 As if that weren't enough, [the demand for Kubernetes engineers is raising sharply](https://www.hntrends.com/2019/sep-react-reaches-thirty-percent-posts.html?compare=Kubernetes&compare=&compare=&compare=).
 
