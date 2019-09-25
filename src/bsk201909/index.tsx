@@ -20,9 +20,9 @@ export const SmallOrLargeDetails = identity<Details>({
 
 export const SecretsDetails = identity<Details>({
   type: 'bsk-september-02' as const,
-  url: '/zero-trust-security-in-kubernetes',
-  seoTitle: 'Securing Kubernetes secrets in zero-trust environments',
-  title: 'Securing Kubernetes secrets in zero-trust environments',
+  url: '/kubernetes-secrets-in-git',
+  seoTitle: 'How to keep your Kubernetes secrets secure in Git',
+  title: 'How to keep your Kubernetes secrets secure in Git',
   description: `Kubernetes secrets that you load into the cluster must exist somewhere. Do you keep a copy or rely on Kubernetes to be the only source of truth? How do you back them up? What if you keep a copy and they go out of sync?`,
   openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
   publishedDate: '2019-09-25',
