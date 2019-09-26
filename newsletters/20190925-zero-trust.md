@@ -1,6 +1,6 @@
 Hey there!
 
-_TL;DR: Learnk8s Academy discount ends today, and we published an article on securing Secrets in Kubernetes._
+_TL;DR: Learnk8s Academy discount ends today, and we published an article on securing Kubernetes secrets in Git._
 
 **1. Last call**
 
@@ -18,14 +18,14 @@ But we don't make deadline exceptions because it's not fair to the people who DO
 
 [Learn more about the Learnk8s Academy](https://learnk8s.io/academy/ 'Learn more about the Learnk8s Academy')
 
-**2. Securing Kubernetes secrets in zero-trust environments**
+**2. Securing Kubernetes secrets in Git**
 
 Kubernetes secrets hold the most sensitive information of your application - API keys, tokens, database passwords, etc.
 
 If a hacker can retrieve one of these secrets, they could connect to your database without you even noticing it.
 
-- ❓How do you secure your secrets?
-- ❓Do you keep a copy or rely on Kubernetes to be the only source of truth?
+- ❓How do you manage your Kubernetes secrets?
+- ❓Do you keep a copy outside the cluster or rely on Kubernetes to be the only source of truth?
 - ❓How do you back them up?
 - ❓What if you keep a copy and they go out of sync?
 
