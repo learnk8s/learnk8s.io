@@ -343,6 +343,12 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       writeFileSync(generatePath(), $.html())
       return
     }
+    case BiteSized201910.RollbacksDetails.type: {
+      const $ = Cheerio.of(BiteSized201910.RollbacksRender(root, node, siteUrl))
+      optimise({ $, siteUrl })
+      writeFileSync(generatePath(), $.html())
+      return
+    }
     case NotFound.Details.type: {
       const $ = Cheerio.of(NotFound.render(root, node, siteUrl))
       optimise({ $, siteUrl })

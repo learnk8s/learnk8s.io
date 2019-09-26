@@ -139,6 +139,10 @@ const bsk = {
     page: BiteSized201910.AutoscalingDetails,
     children: {},
   }),
+  bskRollbacks: createNode({
+    page: BiteSized201910.RollbacksDetails,
+    children: {},
+  }),
 }
 
 const rss = createNode({
@@ -295,6 +299,7 @@ export const Sitemap = createNode({
     bskSmallOrLarge: bsk.bskSmallOrLarge,
     bskSecrets: bsk.bskSecrets,
     bskAutoscaling: bsk.bskAutoscaling,
+    bskRollbacks: bsk.bskRollbacks,
   },
 })
 
@@ -342,6 +347,7 @@ export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bs
     website.children.bskSmallOrLarge,
     website.children.bskSecrets,
     website.children.bskAutoscaling,
+    website.children.bskRollbacks,
   ]
     .filter(it => it.payload.type !== Redirect.Type)
     .slice(0)

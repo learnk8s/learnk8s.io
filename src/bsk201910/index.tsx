@@ -70,6 +70,71 @@ export const AutoscalingRender = BiteSizedRender(`${__dirname}/autoscaling.md`, 
   </React.Fragment>
 ))
 
+export const RollbacksDetails = identity<Details>({
+  type: 'bsk-october-01' as const,
+  url: '/kubernetes-rollbacks',
+  seoTitle: 'Kubernetes rollbacks',
+  title: 'Kubernetes rollbacks',
+  description: ``,
+  openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  publishedDate: '2019-10-09',
+  previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  author: {
+    fullName: 'Gergely Risko',
+    avatar: <img src='assets/authors/gergely-risko.jpeg' alt='Gergely Risko' />,
+    link: 'https://github.com/errge',
+    shortDescription: 'Gergely is an instructor at Learnk8s.',
+  },
+})
+
+export const RollbacksRender = BiteSizedRender(`${__dirname}/rollbacks.md`, website => (
+  <React.Fragment>
+    <div>
+      <h2 className='f2 pt4 pb2'>Advanced deployment strategies and rollbacks</h2>
+      <p className='lh-copy measure-wide f4'>
+        <span className='b'>
+          The article is an excerpt from the Advanced Deployment course on the Learnk8s Academy.
+        </span>{' '}
+        The full course includes a deep dive into the three different deployment strategies you can practice in
+        Kubernetes:
+      </p>
+      <ul>
+        <li className='mv3 f4-l lh-copy'>Rolling updates</li>
+        <li className='mv3 f4-l lh-copy'>Canary deployments</li>
+        <li className='mv3 f4-l lh-copy'>Blue-green deployments</li>
+      </ul>
+      <div className='mt4 mb5'>
+        <a
+          href={getFullUrl(website.children.academy)}
+          className='dib white bg-blue br1 pv3 ph4 b f4 bn pointer no-underline'
+        >
+          Learn more ⇢
+        </a>
+      </div>
+    </div>
+    <RelatedConentContainer>
+      <RelatedContentItem>
+        <a href={getFullUrl(website.children.bskSmallOrLarge)} className='link navy underline hover-sky'>
+          Architecting Kubernetes clusters — choosing a worker node size
+        </a>{' '}
+        where you'll learn the pros and cons of having clusters with large and small instance types for your cluster
+        nodes.
+      </RelatedContentItem>
+      <RelatedContentItem>
+        <a
+          href={getFullUrl(website.children.blog.children.scalingTensorflow)}
+          className='link navy underline hover-sky'
+        >
+          Scaling Jupyter notebooks with Kubernetes and Tensorflow
+        </a>{' '}
+        One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can
+        operate at scale and in real-time. In this article, you will explore how you can leverage Kubernetes, Tensorflow
+        and Kubeflow to scale your models without having to worry about scaling the infrastructure.
+      </RelatedContentItem>
+    </RelatedConentContainer>
+  </React.Fragment>
+))
+
 function identity<T>(value: T): T {
   return value
 }
