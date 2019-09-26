@@ -526,20 +526,11 @@ setTimeout(ldinsp, 0);
             <ListItem className='w-50 b'>Lifetime updates</ListItem>
           </ul>
           <p className='f1 navy tc'>
-            <span className='db strike f2 black-60' id='architecting-expert'>
+            <span className='db' id='architecting-expert'>
               {(397).toLocaleString('US', {
                 style: 'currency',
                 currency: 'USD',
               })}
-            </span>
-            <span className='db orange' id='architecting-expert-discount'>
-              {Math.ceil(397 * 0.7).toLocaleString('US', {
-                style: 'currency',
-                currency: 'USD',
-              })}
-            </span>
-            <span className='dib black-80 bg-light-yellow f7 pa2 br2 b ttu mv0'>
-              Promotion ends the 25th of Sep 2019
             </span>
           </p>
           <div className='tc'>
