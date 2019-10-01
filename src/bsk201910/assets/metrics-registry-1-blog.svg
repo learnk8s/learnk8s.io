@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1216px" height="434px" viewBox="0 0 1216 434" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>metrics-registry-1-blog</title>
+    <desc>Created with Sketch.</desc>
+    <g id="metrics-registry-1-blog" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="Line-6" d="M888.98839,211.87616 L1057.98852,211.488545 L1058.01145,221.488519 L889.011326,221.876134 L889.061784,243.876076 L835,217 L888.937932,189.876218 L888.98839,211.87616 Z" fill="#2469D4" fill-rule="nonzero"></path>
+        <g id="Group-12" transform="translate(376.000000, 25.000000)" fill="#DD3333" fill-opacity="0.6">
+            <rect id="Rectangle" x="0" y="0" width="349" height="383"></rect>
+        </g>
+        <g id="Group-2" transform="translate(28.000000, 119.000000)">
+            <g id="Group">
+                <rect id="Rectangle" stroke="#FFFFFF" fill="#2469D4" x="0.5" y="0.5" width="134" height="134"></rect>
+                <text id="Metrics-Source" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="20" font-weight="bold" letter-spacing="-0.8" fill="#FFFFFF">
+                    <tspan x="25.07" y="64">METRICS</tspan>
+                    <tspan x="27.61" y="88">SOURCE</tspan>
+                </text>
+            </g>
+        </g>
+        <g id="Group-2" transform="translate(38.000000, 129.000000)">
+            <g id="Group">
+                <rect id="Rectangle" stroke="#FFFFFF" fill="#2469D4" x="0.5" y="0.5" width="134" height="134"></rect>
+                <text id="Metrics-Source" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="20" font-weight="bold" letter-spacing="-0.8" fill="#FFFFFF">
+                    <tspan x="25.07" y="64">METRICS</tspan>
+                    <tspan x="27.61" y="88">SOURCE</tspan>
+                </text>
+            </g>
+        </g>
+        <g id="Group-2" transform="translate(48.000000, 139.000000)">
+            <g id="Group">
+                <rect id="Rectangle" stroke="#FFFFFF" fill="#2469D4" x="0.5" y="0.5" width="134" height="134"></rect>
+                <text id="Metrics-Source" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="20" font-weight="bold" letter-spacing="-0.8" fill="#FFFFFF">
+                    <tspan x="25.07" y="64">METRICS</tspan>
+                    <tspan x="27.61" y="88">SOURCE</tspan>
+                </text>
+            </g>
+        </g>
+        <path id="Line-6" d="M247,212.5 L381,212.5 L381,222.5 L247,222.5 L247,244.5 L193,217.5 L247,190.5 L247,212.5 Z" fill="#2469D4" fill-rule="nonzero"></path>
+        <g id="Group-2" transform="translate(58.000000, 149.000000)">
+            <g id="Group">
+                <rect id="Rectangle" stroke="#FFFFFF" fill="#2469D4" x="0.5" y="0.5" width="134" height="134"></rect>
+                <text id="Metrics-Source" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="20" font-weight="bold" letter-spacing="-0.8" fill="#FFFFFF">
+                    <tspan x="25.07" y="64">METRICS</tspan>
+                    <tspan x="27.61" y="88">SOURCE</tspan>
+                </text>
+            </g>
+        </g>
+        <g id="Group-2" transform="translate(1053.000000, 150.000000)">
+            <g id="Group">
+                <rect id="Rectangle" stroke="#979797" fill="#2469D4" x="0.5" y="0.5" width="134" height="134"></rect>
+                <text id="Client" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="20" font-weight="bold" letter-spacing="-0.8" fill="#FFFFFF">
+                    <tspan x="34.11" y="76">CLIENT</tspan>
+                </text>
+            </g>
+        </g>
+        <g id="Group-7" transform="translate(725.000000, 25.000000)">
+            <rect id="Rectangle" fill="#DD3333" x="0" y="0" width="110" height="125"></rect>
+            <text id="API" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="17" font-weight="bold" letter-spacing="-0.4857143" fill="#FFFFFF">
+                <tspan x="8.9263572" y="48">RESOURCE</tspan>
+                <tspan x="17.8295" y="69">METRICS</tspan>
+                <tspan x="41.7290714" y="90">API</tspan>
+            </text>
+        </g>
+        <g id="Group-7" transform="translate(725.000000, 156.000000)">
+            <rect id="Rectangle" fill="#DD3333" x="0" y="0" width="110" height="123"></rect>
+            <text id="API" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="17" font-weight="bold" letter-spacing="-0.4857143" fill="#FFFFFF">
+                <tspan x="18.8276429" y="47">CUSTOM</tspan>
+                <tspan x="17.8295" y="68">METRICS</tspan>
+                <tspan x="41.7290714" y="89">API</tspan>
+            </text>
+        </g>
+        <g id="Group-7" transform="translate(725.000000, 285.000000)">
+            <rect id="Rectangle" fill="#DD3333" x="0" y="0" width="110" height="123"></rect>
+            <text id="API" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="17" font-weight="bold" letter-spacing="-0.4857143" fill="#FFFFFF">
+                <tspan x="11.7653572" y="47">EXTERNAL</tspan>
+                <tspan x="17.8295" y="68">METRICS</tspan>
+                <tspan x="41.7290714" y="89">API</tspan>
+            </text>
+        </g>
+        <path id="Line-6" d="M889.023747,82.263471 L942.52433,82.5244494 L942.475551,92.5243305 L888.974968,92.263352 L888.867652,114.26309 L835,87 L889.131063,60.2637327 L889.023747,82.263471 Z" fill="#2469D4" fill-rule="nonzero"></path>
+        <path id="Line-6" d="M889,341 L942.5,341 L942.5,351 L889,351 L889,373 L835,346 L889,319 L889,341 Z" fill="#2469D4" fill-rule="nonzero"></path>
+        <path d="M937.5,344.5 L937.5,87.5" id="Line-4" stroke="#2469D4" stroke-width="10" stroke-linecap="square"></path>
+        <text id="Metrics-Registry" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="30" font-weight="bold" letter-spacing="-1.071429" fill="#FFFFFF">
+            <tspan x="485.655001" y="210">METRICS</tspan>
+            <tspan x="479" y="246">REGISTRY</tspan>
+        </text>
+    </g>
+</svg>
