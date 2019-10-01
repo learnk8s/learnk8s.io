@@ -32,6 +32,7 @@ import * as TerraformAks from './terraformAks/terraformAks'
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
 import * as BiteSized201909 from './bsk201909'
+import * as BiteSized201910 from './bsk201910'
 
 import { Venues, Timezone } from './courses'
 import moment from 'moment-timezone'
@@ -132,6 +133,10 @@ const bsk = {
   }),
   bskSecrets: createNode({
     page: BiteSized201909.SecretsDetails,
+    children: {},
+  }),
+  bskAutoscaling: createNode({
+    page: BiteSized201910.AutoscalingDetails,
     children: {},
   }),
 }
@@ -289,6 +294,7 @@ export const Sitemap = createNode({
     bskVisualiseYaml: bsk.bskVisualiseYaml,
     bskSmallOrLarge: bsk.bskSmallOrLarge,
     bskSecrets: bsk.bskSecrets,
+    bskAutoscaling: bsk.bskAutoscaling,
   },
 })
 
@@ -335,6 +341,7 @@ export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bs
     website.children.bskVisualiseYaml,
     website.children.bskSmallOrLarge,
     website.children.bskSecrets,
+    website.children.bskAutoscaling,
   ]
     .filter(it => it.payload.type !== Redirect.Type)
     .slice(0)

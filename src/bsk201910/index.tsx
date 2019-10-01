@@ -2,7 +2,7 @@ import { Details, BiteSizedRender } from '../biteSized'
 import * as React from 'react'
 
 export const AutoscalingDetails = identity<Details>({
-  type: 'bsk-sept-01' as const,
+  type: 'bsk-oct-01' as const,
   url: '/autoscaling',
   seoTitle: 'How to autoscale your app on Kubernetes?',
   title: 'How to autoscale your app on Kubernetes?',
