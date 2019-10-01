@@ -169,7 +169,7 @@ So, to autoscale an app, your task is now not only to configure the Horizontal P
 
 **You also have to expose your desired scaling metric through the metric registry.**
 
-_So, how do you expose a metric through a metric API?_
+_How do you expose a metric through a metric API?_
 
 By installing and configuring additional components in your cluster.
 
@@ -212,7 +212,7 @@ Also, assume that you want to use a Prometheus-based setup for exposing the requ
 
 > The request rate is a custom metric associated with a Kubernetes object (Pods), so it must be exposed through the Custom Metrics API.
 
-Here's the sequence of steps to reach your goal:
+Here's a sequence of steps to reach your goal:
 
 1. [Instrument](https://prometheus.io/docs/practices/instrumentation/) your app to expose the total number of received requests as a Prometheus metric
 1. Install Prometheus and configure it to collect this metric from all the Pods of your app
