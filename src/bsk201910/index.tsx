@@ -6,7 +6,7 @@ export const AutoscalingDetails = identity<Details>({
   url: '/autoscaling',
   seoTitle: 'How to autoscale your app on Kubernetes?',
   title: 'How to autoscale your app on Kubernetes?',
-  description: `Deploying an app in a static configuration is not optimal. Traffic patterns can change quickly an the app should be able to adapt to them. Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
+  description: `Deploying an app to production with a static configuration is not optimal. Traffic patterns can change quickly and the app should be able to adapt to them. Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
   openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
   publishedDate: '2019-10-02',
   previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
