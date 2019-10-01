@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="839px" height="290px" viewBox="0 0 839 290" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>hpa-1</title>
+    <desc>Created with Sketch.</desc>
+    <g id="hpa-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="Line-6" d="M83.6803914,211.02864 L83.4703272,246.529498 L73.4705022,246.470327 L73.6805665,210.969469 L51.6809516,210.839294 L79,157 L105.680006,211.158815 L83.6803914,211.02864 Z" fill="#2469D4" fill-rule="nonzero"></path>
+        <path id="Line-6" d="M766,118 L789,118 L789,128 L766,128 L766,150 L712,123 L766,96 L766,118 Z" fill="#2469D4" fill-rule="nonzero"></path>
+        <path id="Line-6" d="M200.011456,84.6253031 L582.011587,85.5116144 L581.988386,95.5115874 L199.988254,94.6252762 L199.93721,116.625217 L146,89.5 L200.062499,62.6253624 L200.011456,84.6253031 Z" fill="#2469D4" fill-rule="nonzero"></path>
+        <g id="Group-3" transform="translate(577.000000, 22.000000)">
+            <rect id="Rectangle" fill="#2469D4" x="0" y="0" width="135" height="135"></rect>
+            <text id="Horizontal-Pod-Autos" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="19" font-weight="bold" letter-spacing="-0.76" fill="#FFFFFF">
+                <tspan x="10.05" y="52">HORIZONTAL</tspan>
+                <tspan x="48.373" y="75">POD</tspan>
+                <tspan x="6.6965" y="98">AUTOSCALER</tspan>
+            </text>
+        </g>
+        <g id="Group-4" transform="translate(11.000000, 22.000000)">
+            <rect id="Rectangle" fill="#2469D4" x="0" y="0" width="135" height="135"></rect>
+            <text id="App" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="19" font-weight="bold" letter-spacing="-0.76" fill="#FFFFFF">
+                <tspan x="49.4595" y="75">APP</tspan>
+            </text>
+        </g>
+        <path d="M79,241.5 L644,241.5" id="Line-11" stroke="#2469D4" stroke-width="10" stroke-linecap="square"></path>
+        <path d="M644.5,241.5 L644.5,162" id="Line" stroke="#2469D4" stroke-width="10" stroke-linecap="square"></path>
+        <path d="M791,50 L714,50" id="Line" stroke="#2469D4" stroke-width="10" stroke-linecap="square"></path>
+        <path d="M791,50 L791,123" id="Line" stroke="#2469D4" stroke-width="10" stroke-linecap="square"></path>
+        <text id="3.-Scale" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="19" font-weight="bold" letter-spacing="-0.9499995" fill="#2469D4">
+            <tspan x="341.233998" y="271">3. SCALE</tspan>
+        </text>
+        <text id="1.-Query" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="19" font-weight="bold" letter-spacing="-0.9499995" fill="#2469D4">
+            <tspan x="339.305498" y="71">1. QUERY</tspan>
+        </text>
+        <text id="2.-Calculate" transform="translate(812.500000, 86.500000) rotate(90.000000) translate(-812.500000, -86.500000) " font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="19" font-weight="bold" letter-spacing="-0.9499995" fill="#2469D4">
+            <tspan x="751.148997" y="94">2. CALCULATE</tspan>
+        </text>
+        <g id="Group" transform="translate(322.000000, 123.000000)">
+            <circle id="Oval" stroke="#525863" stroke-width="10" cx="52.5" cy="40.5" r="40.5"></circle>
+            <rect id="Rectangle" fill="#FFFFFF" x="69" y="21" width="46" height="37"></rect>
+            <polygon id="Triangle" fill="#525863" transform="translate(87.500000, 32.500000) scale(1, -1) translate(-87.500000, -32.500000) " points="87.5 20 103 45 72 45"></polygon>
+            <text id="15-sec" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="19" font-weight="bold" letter-spacing="-1.3" fill="#525863">
+                <tspan x="22.334" y="50">15 SEC</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
