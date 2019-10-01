@@ -86,7 +86,7 @@
         <path d="M559,133.5 L543,133.5" id="Line-6" stroke="#2469D4" stroke-width="10" stroke-linecap="square"></path>
         <path d="M720,133.5 L704,133.5" id="Line-6" stroke="#2469D4" stroke-width="10" stroke-linecap="square"></path>
         <g id="Group-3" transform="translate(397.000000, 90.000000)">
-            <rect id="Rectangle" fill="#6794D9" x="0" y="0" width="142" height="87"></rect>
+            <rect id="Rectangle" fill="#2469D4" x="0" y="0" width="142" height="87"></rect>
             <text id="cAdvisor" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="17" font-weight="bold" letter-spacing="-0.4857143" fill="#FFFFFF">
                 <tspan x="28.3943572" y="50">CADVISOR</tspan>
             </text>
