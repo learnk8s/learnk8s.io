@@ -291,7 +291,7 @@ setTimeout(ldinsp, 0);
         <p className='f3 f2-l navy b tc'>What's inside</p>
         <ul className='flex flex-wrap pl0 mw7 center ph3'>
           <ListItem className='w-50'>Content-based, hands-on tutorials</ListItem>
-          <ListItem className='w-50'>5 courses with ebooks</ListItem>
+          <ListItem className='w-50'>6 courses with ebooks</ListItem>
           <ListItem className='w-50'>
             Concise lectures with plenty of diagrams <span className='i'>(great if you are a visual learner)</span>
           </ListItem>
