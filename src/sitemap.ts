@@ -1,6 +1,7 @@
 import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
 import * as Academy from './academy'
+import * as ArchitectingAndScaling from './architecting'
 import * as ZeroToK8s from './zeroToK8s'
 import * as Blog from './blog'
 import * as BrowserConfig from './browserConfig'
@@ -149,6 +150,10 @@ export const Sitemap = createNode({
     }),
     academy: createNode({
       page: Academy.Details,
+      children: {},
+    }),
+    architectingAndScaling: createNode({
+      page: ArchitectingAndScaling.Details,
       children: {},
     }),
     zeroToK8s: createNode({
