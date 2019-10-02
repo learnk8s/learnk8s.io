@@ -70,28 +70,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       <section className='pt4'>
         <div className='ma3 ma5-l pa3 mt0-l'>
           <Module
-            preview={<img src={resolve('assets/academy/zero-to-k8s-js.svg')} alt='Zero to Kubernetes with Node.js' />}
-            title='Zero to Kubernetes with Node.js'
-            tag='free course'
-          >
-            <p className='f4-l lh-copy measure-wide black-80'>
-              This course walks you through the full path from coding an application, packaging it into a container and
-              deploying it to a production-grade Kubernetes cluster. It forms an optimal basis upon which you can
-              explore various scaling topics in more detail.
-            </p>
-            <p className='f4-l lh-copy measure-wide black-80'>The course covers the following topics:</p>
-            <ul className='pl0 list'>
-              <ListItem>Writing a note-taking app</ListItem>
-              <ListItem>Containerisation with Docker</ListItem>
-              <ListItem>Deploying to Kubernetes</ListItem>
-              <ListItem>Scaling</ListItem>
-              <ListItem>Deploying to cloud</ListItem>
-            </ul>
-            <p className='f4-l lh-copy measure-wide black-80'>The course includes a certificate of completions.</p>
-            <PrimaryButton href={getFullUrl(website.children.zeroToK8s)} text='Learn more &#8594;' />
-          </Module>
-
-          <Module
             preview={
               <img
                 src={resolve('assets/academy/architecting-scaling.svg')}
@@ -153,6 +131,28 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
             </ul>
             <p className='f4-l lh-copy measure-wide black-80'>The course includes a certificate of completion.</p>
             <PrimaryButton href={getFullUrl(website.children.architectingAndScaling)} text='Learn more &#8594;' />
+          </Module>
+
+          <Module
+            preview={<img src={resolve('assets/academy/zero-to-k8s-js.svg')} alt='Zero to Kubernetes with Node.js' />}
+            title='Zero to Kubernetes with Node.js'
+            tag='free course'
+          >
+            <p className='f4-l lh-copy measure-wide black-80'>
+              This course walks you through the full path from coding an application, packaging it into a container and
+              deploying it to a production-grade Kubernetes cluster. It forms an optimal basis upon which you can
+              explore various scaling topics in more detail.
+            </p>
+            <p className='f4-l lh-copy measure-wide black-80'>The course covers the following topics:</p>
+            <ul className='pl0 list'>
+              <ListItem>Writing a note-taking app</ListItem>
+              <ListItem>Containerisation with Docker</ListItem>
+              <ListItem>Deploying to Kubernetes</ListItem>
+              <ListItem>Scaling</ListItem>
+              <ListItem>Deploying to cloud</ListItem>
+            </ul>
+            <p className='f4-l lh-copy measure-wide black-80'>The course includes a certificate of completions.</p>
+            <PrimaryButton href={getFullUrl(website.children.zeroToK8s)} text='Learn more &#8594;' />
           </Module>
         </div>
       </section>
