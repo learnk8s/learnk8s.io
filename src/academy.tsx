@@ -287,23 +287,6 @@ setTimeout(ldinsp, 0);
         </div>
       </section>
 
-      {/* <section className='mv5 mv6-ns ph3'>
-        <h2 className='f3 f2-l navy measure-narrow center tc'>The reality of Kubernetes</h2>
-        <div className='mw7 center'>
-          <p className='lh-copy f4-l black-70 b mb1 mt5-l mt4'>
-            You don't need to build your cluster to be good at Kubernetes.
-          </p>
-          <p className='lh-copy f4-l black-70 mt1'>
-            You don't have to memorise all Kubernetes and Docker nomenclature to get started.
-          </p>
-          <p className='lh-copy f4-l black-70 mt1'>You don't have to be at Google scale to use Kubernetes.</p>
-          <p className='lh-copy f4-l black-70 mt1'>
-            You don't have to be an expert in Networking, Linux administration, Security, Databases to deploy apps.
-          </p>
-        </div>
-        <p>But</p>
-      </section> */}
-
       <section className='bg-evian pt4'>
         <p className='f3 f2-l navy b tc'>What's inside</p>
         <ul className='flex flex-wrap pl0 mw7 center ph3'>
@@ -404,6 +387,25 @@ setTimeout(ldinsp, 0);
             </p>
             <ul>
               {Object.values(material.templating.topics).map((it, index) => (
+                <li key={index} className='lh-copy mv1'>
+                  {it}
+                </li>
+              ))}
+            </ul>
+          </Module>
+
+          <Module
+            preview={[materialAssets.autoscaling.intro, materialAssets.autoscaling.registry]}
+            title={`6. ${material.autoscaling.name}`}
+            description={material.autoscaling.description}
+            className='ribbon-module'
+          >
+            <p className='lh-copy measure-wide'>
+              You will learn how to autoscale your applications based on CPU, memory and application-specific custom
+              metrics. The module covers the following topics:
+            </p>
+            <ul>
+              {Object.values(material.autoscaling.topics).map((it, index) => (
                 <li key={index} className='lh-copy mv1'>
                   {it}
                 </li>

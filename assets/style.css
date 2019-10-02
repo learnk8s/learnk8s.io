@@ -201,10 +201,12 @@
   transform: translateX(-50%);
 }
 
-.ribbon {
+.ribbon,
+.ribbon-module {
   position: relative;
 }
 
+.ribbon-module::after,
 .ribbon::after {
   position: absolute;
   top: -1em;
@@ -216,6 +218,11 @@
   transform: rotate(-25deg);
   font-weight: bold;
   border-radius: 0.125em;
+}
+
+.ribbon-module::after {
+  top: 0;
+  left: 0;
 }
 
 @media screen and (min-width: 30em) {

@@ -380,11 +380,30 @@ const content = {
   },
   autoscaling: {
     name: 'Autoscaling',
-    description: ``,
+    description: `After deploying your app to production, the received traffic may change in unpredictable ways. How do you keep your app responsive at all times? You can adapt the number of replicas. But is it feasible to do this manually, or are there better ways?`,
     topics: {
-      clusterAutoscaler: {
-        title: 'Cluster autoscaler',
+      intro: {
+        title: 'Introduction to autoscaling',
         image: <img src='assets/material/cluster-autoscaler.svg' alt='Cluster autoscaler' />,
+      },
+      hpa: {
+        title: 'The Horizontal Pod Autoscaler',
+      },
+      registry: {
+        title: 'The Kubernetes metrics registry',
+        image: <img src='assets/material/scaling-external-metrics.svg' alt='Scaling with external registry metrics' />,
+      },
+      app: {
+        title: 'Exposing metrics from your apps',
+      },
+      prometheus: {
+        title: 'Installing and configuring Prometheus',
+      },
+      adapters: {
+        title: 'Understanding custom and external metrics adapters',
+      },
+      tuning: {
+        title: 'Tuning the Horizontal Pod Autoscaler',
       },
     },
   },
