@@ -4,7 +4,7 @@ import { Layout, ListItem, FAQ, InlineMarkdown, Navbar } from './layout.v2'
 import { Course, Boolean } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { ListItemQuestion, Feedback } from './academy'
+import { ListItemQuestion, Feedback } from './architecting'
 
 export const Details = {
   type: 'zero-to-k8s',
