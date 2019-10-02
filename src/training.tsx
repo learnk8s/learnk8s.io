@@ -499,7 +499,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <div className='bg-evian ph4 pt2 pb4 b--blue bl bw2'>
           <p className='lh-copy black-70 measure-wide'>
             🚨 BREAKING NEWS: We're running an online,{' '}
-            <span className='b'>instructor-led class on the 2-3-4th of October starting at 9.30 CET.</span>
+            <span className='b'>instructor-led class on the 21-22-23rd of October starting at 9.30 CET.</span>
             <br />
             <span className='i'>The class is guaranteed to run.</span>
           </p>
