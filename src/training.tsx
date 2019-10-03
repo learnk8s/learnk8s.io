@@ -584,7 +584,7 @@ export const CourseRow: React.StatelessComponent<{ event: CourseEvent; slackIcon
           <h3 className='f3 ma0 mt3 mb2'>
             {event.details.title} — {isVenueOnline(event.location) ? 'Online' : event.location.city}
           </h3>
-          <h4 className='normal black-70 mt1 mb4'>{event.duration.asDays()} days course</h4>
+          <h4 className='normal black-70 mt1 mb4'>3 days course</h4>
           <div className={`controls controls-${id} absolute top-1 right-1`}>
             <button
               className='open bg-sky pa2 white f7 tc lh-solid bn br1'
