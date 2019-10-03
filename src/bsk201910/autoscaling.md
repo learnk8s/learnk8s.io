@@ -1,4 +1,4 @@
-## How to autoscale your app on Kubernetes?
+## How do you scale apps on Kubernetes?
 
 Deploying an app to production with a static configuration is not optimal.
 

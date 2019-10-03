@@ -6,11 +6,11 @@ import { getFullUrl } from '../sitemap'
 export const AutoscalingDetails = identity<Details>({
   type: 'bsk-oct-01' as const,
   url: '/autoscaling-apps-kubernetes',
-  seoTitle: 'How to autoscale your apps on Kubernetes with custom metrics',
-  title: 'How to autoscale your apps on Kubernetes with custom metrics',
+  seoTitle: 'How to autoscale apps on Kubernetes with custom metrics',
+  title: 'How to autoscale apps on Kubernetes with custom metrics',
   description: `Deploying an app to production with a static configuration is not optimal. Traffic patterns can change quickly and the app should be able to adapt to them. Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
   openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
-  publishedDate: '2019-10-02',
+  publishedDate: '2019-10-03',
   previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
   author: {
     fullName: 'Daniel Weibel',
