@@ -39,7 +39,7 @@ export interface Details {
   }
 }
 
-export function BiteSizedRender(markdownPath: string) {
+export function BiteSizedRender(markdownPath: string, extra?: (website: Sitemap) => JSX.Element) {
   return function render(website: Sitemap, currentNode: LinkedNode<Details>, siteUrl: string): string {
     return renderToStaticMarkup(
       <Article
@@ -129,8 +129,7 @@ export function BiteSizedRender(markdownPath: string) {
           </a>
         </p>
         {Remark.render(markdownPath)}
-
-        <Subscribe identifier={currentNode.payload.title.replace(/[^\w]+/g, '-')} />
+        {extra ? extra(website) : <Subscribe identifier={currentNode.payload.title.replace(/[^\w]+/g, '-')} />}
       </Article>,
     )
   }
