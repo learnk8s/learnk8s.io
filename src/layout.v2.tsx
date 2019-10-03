@@ -577,9 +577,11 @@ export const Subscribe: React.StatelessComponent<{ identifier: string }> = ({ id
         </div>
 
         <div className=''>
-          <button className='dib white bg-blue br1 pv3 ph4 b f4 bn pointer' type='submit'>
-            Subscribe ⇢
-          </button>
+          {
+            <button className='dib white bg-blue br1 pv3 ph4 b f4 bn pointer' type='submit'>
+              Subscribe ⇢
+            </button>
+          }
         </div>
         <input type='hidden' name='MERGE2' id='MERGE2' value={identifier} />
         <input type='hidden' name='ht' value='aca6953f09c7fcc43d98b4366d71b6e0c79fbb81:MTU1NDE3Njc3OC40MzAz' />
