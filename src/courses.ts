@@ -58,6 +58,7 @@ export enum Timezone {
   ZURICH = 'Europe/Zurich',
   BERLIN = 'Europe/Berlin',
   VIENNA = 'Europe/Vienna',
+  PARIS = 'Europe/Paris',
 }
 
 export interface CourseEvent {
@@ -201,6 +202,14 @@ export const Venues = {
     city: 'Hong Kong',
     country: 'Hong Kong',
     countryCode: 'HK',
+    address: null,
+    postcode: null,
+  },
+  Paris: {
+    name: 'Paris',
+    city: 'Paris',
+    country: 'France',
+    countryCode: 'FR',
     address: null,
     postcode: null,
   },
@@ -405,6 +414,23 @@ export const Courses: KubernetesCourse[] = [
           price: 2550,
           currency: CurrencyCode.SGD,
           locale: 'en-SG',
+        },
+        language: Language.ENGLISH,
+        description: marked(cat(`${__dirname}/description_en.md`).toString(), { renderer }),
+        eventbriteLogoId: '48505063',
+      },
+      {
+        code: 'LK8S|PARIS|20200217',
+        startAt: moment('2020-02-17T09:30:00+01:00'),
+        timezone: Timezone.PARIS,
+        duration: moment.duration(56, 'hours'),
+        canBookInAdvanceFrom: moment.duration(90, 'days'),
+        details: AdvancedDetails,
+        location: Venues.Paris,
+        offer: {
+          price: 1950,
+          currency: CurrencyCode.EUR,
+          locale: 'fr-FR',
         },
         language: Language.ENGLISH,
         description: marked(cat(`${__dirname}/description_en.md`).toString(), { renderer }),
