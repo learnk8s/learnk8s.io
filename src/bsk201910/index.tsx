@@ -32,13 +32,14 @@ export const AutoscalingRender = BiteSizedRender(`${__dirname}/autoscaling.md`, 
       </RelatedContentItem>
       <RelatedContentItem>
         <a
-          href={getFullUrl(website.children.blog.children.smallerDockerImage)}
+          href={getFullUrl(website.children.blog.children.scalingTensorflow)}
           className='link navy underline hover-sky'
         >
-          Boosting your kubectl productivity.
+          Scaling Jupyter notebooks with Kubernetes and Tensorflow
         </a>{' '}
-        If you work with Kubernetes, then kubectl is probably one of your most-used tools. Whenever you spend a lot of
-        time working with a specific tool, it is worth to get to know it very well and learn how to use it efficiently.
+        One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can
+        operate at scale and in real-time. In this article, you will explore how you can leverage Kubernetes, Tensorflow
+        and Kubeflow to scale your models without having to worry about scaling the infrastructure.
       </RelatedContentItem>
     </RelatedConentContainer>
     <div>

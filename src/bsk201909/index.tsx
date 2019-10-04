@@ -1,5 +1,7 @@
 import { Details, BiteSizedRender } from '../biteSized'
 import * as React from 'react'
+import { RelatedConentContainer, RelatedContentItem } from '../article.v2'
+import { getFullUrl } from '../sitemap'
 
 export const SmallOrLargeDetails = identity<Details>({
   type: 'bsk-sept-01' as const,
@@ -35,8 +37,62 @@ export const SecretsDetails = identity<Details>({
   },
 })
 
-export const SecretsRender = BiteSizedRender(`${__dirname}/secrets.md`)
-export const SmallOrLargeRender = BiteSizedRender(`${__dirname}/smallOrLarge.md`)
+export const SecretsRender = BiteSizedRender(`${__dirname}/secrets.md`, website => (
+  <React.Fragment>
+    <RelatedConentContainer>
+      <RelatedContentItem>
+        <a href={getFullUrl(website.children.bskSmallOrLarge)} className='link navy underline hover-sky'>
+          Architecting Kubernetes clusters — choosing a worker node size
+        </a>{' '}
+        where you'll learn the pros and cons of having clusters with large and small instance types for your cluster
+        nodes.
+      </RelatedContentItem>
+      <RelatedContentItem>
+        <a
+          href={getFullUrl(website.children.blog.children.smallerDockerImage)}
+          className='link navy underline hover-sky'
+        >
+          Is Helm used just for templating Kubernetes YAML files?
+        </a>{' '}
+        Maybe not.
+      </RelatedContentItem>
+    </RelatedConentContainer>
+  </React.Fragment>
+))
+export const SmallOrLargeRender = BiteSizedRender(`${__dirname}/smallOrLarge.md`, website => (
+  <React.Fragment>
+    <RelatedConentContainer>
+      <RelatedContentItem>
+        <a
+          href={getFullUrl(website.children.blog.children.scalingSpringBoot)}
+          className='link navy underline hover-sky'
+        >
+          Scaling Microservices with Message Queues, Spring Boot and Kubernetes.
+        </a>{' '}
+        Now that you master scaling, why not getting your hands dirty and autoscale your Spring Boot app with a message
+        broker and Kubernetes.
+      </RelatedContentItem>
+      <RelatedContentItem>
+        <a href={getFullUrl(website.children.blog.children.spotInstances)} className='link navy underline hover-sky'>
+          Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes.
+        </a>{' '}
+        Spot Instances are unused servers that are available for less than the regular price. Therefore, you can
+        significantly save on your infrastructure costs. It does come with a price, though.
+      </RelatedContentItem>
+      <RelatedContentItem>
+        <a
+          href={getFullUrl(website.children.biteSizedKubernetes.children.bskMultiCluster)}
+          className='link navy underline hover-sky'
+        >
+          How do you connect Kubernetes clusters located in different data centres?
+        </a>{' '}
+        In Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and
+        availability. Should you use a single cluster over a unified network or multiple clusters? Learn what options
+        you have.
+      </RelatedContentItem>
+    </RelatedConentContainer>
+  </React.Fragment>
+))
 
 function identity<T>(value: T): T {
   return value

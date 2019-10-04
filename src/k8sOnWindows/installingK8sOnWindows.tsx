@@ -1,6 +1,6 @@
-import { Sitemap, LinkedNode, getAbsoluteUrl } from '../sitemap'
+import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article } from '../article.v2'
+import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
@@ -73,7 +73,21 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       />
       {Remark.render(`${__dirname}/content.md`)}
 
-      <Subscribe identifier='install-win-docker-k8s' />
+      <RelatedConentContainer>
+        <RelatedContentItem>
+          <a href={getFullUrl(website.children.blog.children.terraformAks)} className='link navy underline hover-sky'>
+            Getting started with Terraform and Kubernetes on Azure AKS
+          </a>{' '}
+          — an in-depth tutorial on how to use infrastructure as code to generate Kubernetes cluster on Azure.
+        </RelatedContentItem>
+        <RelatedContentItem>
+          <a href={getFullUrl(website.children.bskApiIngress)} className='link navy underline hover-sky'>
+            Can you expose your microservices with an API gateway in Kubernetes?
+          </a>{' '}
+          In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and
+          Pods inside the cluster. You can select an Ingress that is also an API gateway. Learn how.
+        </RelatedContentItem>
+      </RelatedConentContainer>
     </Article>,
   )
 }
