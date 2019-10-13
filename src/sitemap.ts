@@ -361,7 +361,11 @@ function render(node: LinkedNode<any, object>, siteUrl: string): string {
 function renderTree(node: LinkedNode<any, object>, siteUrl: string): string[] {
   return [
     render(node, siteUrl),
-    ...Object.values(node.children).reduce((acc, it) => acc.concat(renderTree(it as any, siteUrl)), [] as string[]),
+    ...Object.values(node.children)
+      .filter(it => {
+        return it.payload.url !== '/404'
+      })
+      .reduce((acc, it) => acc.concat(renderTree(it as any, siteUrl)), [] as string[]),
   ]
 }
 
