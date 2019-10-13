@@ -1,5 +1,5 @@
 import React from 'react'
-import { writeFileSync, readFileSync, existsSync } from 'fs'
+import { writeFileSync, readFileSync, existsSync, copyFileSync } from 'fs'
 import { resolve, extname, basename } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { syncEvents } from './eventbrite'
@@ -416,6 +416,7 @@ run({
 })(Sitemap)
 
 writeFileSync('_site/sitemap.xml', runSiteMap(Sitemap, 'https://learnk8s.io'))
+copyFileSync('robots.txt', resolve('_site', 'robots.txt'))
 
 function injectGoogleAnalytics({ $, gaId }: { gaId: string; $: Cheerio }): Cheerio {
   $.find('head').append(

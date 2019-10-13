@@ -1,4 +1,4 @@
 User-agent: *
 
 Sitemap: https://learnk8s.io/sitemap.xml
-Disallow: /404/
+Disallow: /404
