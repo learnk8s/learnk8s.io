@@ -1,8 +1,92 @@
-[TODO: Nice intro]
+**TL;DR: Kubernetes has a built-in rollback mechanism.**
 
-Even if you use techniques such as Rolling updates, Canary and Blue-green Deployments, there's still risk that your application doesn't work the way you expect.
+There are several strategies when it comes to deploying apps into production.
 
-**When you introduce a change that breaks production, you should have a plan to roll back that change.**
+In Kubernetes, rolling updates are the default strategy to update the running version of your app.
+
+The rolling update cycles previous Pod out and bring newer Pod in incrementally.
+
+Let's have a look at an example:
+
+```slideshow
+{
+  "description": "Rolling updates",
+  "slides": [
+    {
+      "image": "assets/rolling-2.svg",
+      "description": "You have a Service and a Deployment with three replicas on version `1.0.0`. You change the `image` in your Deployment to version `2.0.0`, here's what happens next."
+    },
+    {
+      "image": "assets/rolling-3.svg",
+      "description": "In a rolling update, Kubernetes create a Pod with a new version of the image."
+    },
+    {
+      "image": "assets/rolling-4.svg",
+      "description": "Kubernetes waits for readiness and liveness probe. When both are healthy, the Pod is running and can receive traffic."
+    },
+    {
+      "image": "assets/rolling-5.svg",
+      "description": "Kubernetes waits for readiness and liveness probe. When both are healthy, the Pod is running and can receive traffic."
+    },
+    {
+      "image": "assets/rolling-6.svg",
+      "description": "The previous Pod is removed and Kubernetes is ready to start again."
+    },
+    {
+      "image": "assets/rolling-7.svg",
+      "description": "The previous Pod is removed and Kubernetes is ready to start again."
+    },
+    {
+      "image": "assets/rolling-8.svg",
+      "description": "Another Pod with the current image is created."
+    },
+    {
+      "image": "assets/rolling-9.svg",
+      "description": "Kubernetes waits for readiness and liveness probe. When both are healthy, the Pod is running and can receive traffic."
+    },
+    {
+      "image": "assets/rolling-10.svg",
+      "description": "Kubernetes waits for readiness and liveness probe. When both are healthy, the Pod is running and can receive traffic."
+    },
+    {
+      "image": "assets/rolling-11.svg",
+      "description": "The previous Pod is removed."
+    },
+    {
+      "image": "assets/rolling-12.svg",
+      "description": "The previous Pod is removed."
+    },
+    {
+      "image": "assets/rolling-13.svg",
+      "description": "And for the last time, a Pod with the current image is created."
+    },
+    {
+      "image": "assets/rolling-14.svg",
+      "description": "Kubernetes waits for readiness and liveness probe. When both are healthy, the Pod is running and can receive traffic."
+    },
+    {
+      "image": "assets/rolling-15.svg",
+      "description": "Kubernetes waits for readiness and liveness probe. When both are healthy, the Pod is running and can receive traffic."
+    },
+    {
+      "image": "assets/rolling-16.svg",
+      "description": "The previous Pod is removed."
+    },
+    {
+      "image": "assets/rolling-17.svg",
+      "description": "The migration from the previous to current version is complete."
+    }
+  ]
+}
+```
+
+Zero-downtime deployment is convenient when you wish not to interrupt your live traffic.
+
+You can deploy as many time as you want and your user won't be able to notice the difference.
+
+However, even if you use techniques such as Rolling updates, there's still risk that your application doesn't work the way you expect it at the end of the deployment.
+
+## When you introduce a change that breaks production, you should have a plan to roll back that change
 
 Kubernetes and `kubectl` offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.
 
@@ -20,7 +104,7 @@ Since the replicas is a field in the Deployment, you might be tempted to conclud
 
 _This is not the case, unfortunately._
 
-**Deployments delegate counting Pods to another component called the ReplicaSet.**
+## Deployments delegate counting Pods to another component: the ReplicaSet
 
 Every time you create a Deployment, the deployment creates a ReplicaSet and delegates creating (and deleting) the Pods.
 
@@ -62,7 +146,7 @@ You have a Deployment with a container on version 1 and three replicas.
 
 You change the spec for your template and upgrade your container from version 1 to version 2.
 
-**The ReplicaSet can hold only a single type of Pod.**
+## The ReplicaSet can hold only a single type of Pod
 
 So you can't have version 1 and version 2 of the Pods in the same ReplicaSet.
 
@@ -176,7 +260,7 @@ _Aren't those the same?_
 
 They are in this example.
 
-However, in a Deployment, you can define properties such _how long to wait before considering the Pod live (`minReadySeconds`)._
+However, in a Deployment, you can define properties such _how many Pods to create and destroy during a rolling update (the field is `strategy`)._
 
 The same property isn't available in the ReplicaSet.
 
@@ -394,7 +478,7 @@ REVISION  CHANGE-CAUSE
 2         kubectl apply --filename=deployment.yaml --record=true
 ```
 
-The `--record` command can be used with any resource type, but it has an effect only on Deployment, DaemonSet, and StatefulSet resources, i.e. resources that can be "rolled out" (see `kubectl rollout -h`).
+The `--record` command can be used with any resource type, but it affects only on Deployment, DaemonSet, and StatefulSet resources, i.e. resources that can be "rolled out" (see `kubectl rollout -h`).
 
 But you should remember:
 
