@@ -4,7 +4,7 @@ Even if you use techniques such as Rolling updates, Canary and Blue-green Deploy
 
 **When you introduce a change that breaks production, you should have a plan to roll back that change.**
 
-Kubernetes and `kubectl` offer a simple mechanism to roll back changes to resources such as Deployments.
+Kubernetes and `kubectl` offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.
 
 But before talking about rollbacks, you should learn an important detail about Deployments.
 
@@ -64,9 +64,9 @@ You change the spec for your template and upgrade your container from version 1 
 
 **The ReplicaSet can hold only a single type of Pod.**
 
-So you can't have version 1 and version 2 of the Pods on the same ReplicaSet.
+So you can't have version 1 and version 2 of the Pods in the same ReplicaSet.
 
-The Deployment knows that the two Pods can't coexist on the same ReplicaSet, so it creates a second ReplicaSet to hold version 2.
+The Deployment knows that the two Pods can't coexist in the same ReplicaSet, so it creates a second ReplicaSet to hold version 2.
 
 Then gradually it decreases the count of replicas from the previous ReplicaSet and increases the count on the current one until the latter ReplicaSet has all the Pods.
 
@@ -319,7 +319,7 @@ kubectl rollout undo deployment/app --to-revision=2
 
 - Kubectl finds the ReplicaSets that belong to the Deployment
 - Each ReplicaSet has a revision number. Revision 2 is selected
-- The current replicas count is decreased, and the count is gradually increased in the RepiicaSet belonging to revision 2
+- The current replicas count is decreased, and the count is gradually increased in the ReplicaSet belonging to revision 2
 - The `deployment.kubernetes.io/revision` annotation is updated. The current ReplicaSet changes from revision 2 to 4
 
 If before the undo you had three ReplicaSets with revision 1, 2 and 3, now you should have 1, 3 and 4.
