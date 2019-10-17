@@ -41,7 +41,7 @@ export const faqs: FAQ[] = [
   },
   {
     title: 'What version of Kubernetes was this created for?',
-    content: 'The material was authored for Minikube 0.28, Kubernetes 1.10, Helm 2.9',
+    content: 'The material was authored for Minikube 1.4.0, Kubernetes 1.16, Helm 2.14',
   },
   {
     title: `What if I'm not thrilled?`,
