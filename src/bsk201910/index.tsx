@@ -73,8 +73,8 @@ export const AutoscalingRender = BiteSizedRender(`${__dirname}/autoscaling.md`, 
 export const RollbacksDetails = identity<Details>({
   type: 'bsk-october-01' as const,
   url: '/kubernetes-rollbacks',
-  seoTitle: 'Do you have a rollback plan in Kubernetes?',
-  title: 'Do you have a rollback plan in Kubernetes?',
+  seoTitle: 'How do you rollback deployments in Kubernetes?',
+  title: 'How do you rollback deployments in Kubernetes?',
   description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.`,
   openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
   publishedDate: '2019-10-09',
@@ -114,7 +114,7 @@ export const RollbacksRender = BiteSizedRender(`${__dirname}/rollbacks.md`, webs
     </div>
     <RelatedConentContainer>
       <RelatedContentItem>
-        <a href={getFullUrl(website.children.bskSmallOrLarge)} className='link navy underline hover-sky'>
+        <a href={getFullUrl(website.children.bskApiIngress)} className='link navy underline hover-sky'>
           Architecting Kubernetes clusters — choosing a worker node size
         </a>{' '}
         where you'll learn the pros and cons of having clusters with large and small instance types for your cluster
@@ -125,11 +125,10 @@ export const RollbacksRender = BiteSizedRender(`${__dirname}/rollbacks.md`, webs
           href={getFullUrl(website.children.blog.children.scalingTensorflow)}
           className='link navy underline hover-sky'
         >
-          Scaling Jupyter notebooks with Kubernetes and Tensorflow
+          Can you expose your microservices with an API gateway in Kubernetes?
         </a>{' '}
-        One of the most common hurdles with developing AI and deep learning models is to design data pipelines that can
-        operate at scale and in real-time. In this article, you will explore how you can leverage Kubernetes, Tensorflow
-        and Kubeflow to scale your models without having to worry about scaling the infrastructure.
+        In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and
+        Pods inside the cluster. You can select an Ingress that is also an API gateway.
       </RelatedContentItem>
     </RelatedConentContainer>
   </React.Fragment>

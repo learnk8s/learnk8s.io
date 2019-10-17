@@ -478,7 +478,7 @@ REVISION  CHANGE-CAUSE
 2         kubectl apply --filename=deployment.yaml --record=true
 ```
 
-The `--record` command can be used with any resource type, but it affects only on Deployment, DaemonSet, and StatefulSet resources, i.e. resources that can be "rolled out" (see `kubectl rollout -h`).
+The `--record` command can be used with any resource type, but the value is only used in Deployment, DaemonSet, and StatefulSet resources, i.e. resources that can be "rolled out" (see `kubectl rollout -h`).
 
 But you should remember:
 
