@@ -77,7 +77,7 @@ export const RollbacksDetails = identity<Details>({
   title: 'How do you rollback deployments in Kubernetes?',
   description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.`,
   openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
-  publishedDate: '2019-10-09',
+  publishedDate: '2019-17-10',
   previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
   author: {
     fullName: 'Gergely Risko',
