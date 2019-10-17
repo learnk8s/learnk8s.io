@@ -70,6 +70,70 @@ export const AutoscalingRender = BiteSizedRender(`${__dirname}/autoscaling.md`, 
   </React.Fragment>
 ))
 
+export const RollbacksDetails = identity<Details>({
+  type: 'bsk-october-01' as const,
+  url: '/kubernetes-rollbacks',
+  seoTitle: 'How do you rollback deployments in Kubernetes?',
+  title: 'How do you rollback deployments in Kubernetes?',
+  description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.`,
+  openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  publishedDate: '2019-17-10',
+  previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  author: {
+    fullName: 'Gergely Risko',
+    avatar: <img src='assets/authors/gergely-risko.jpg' alt='Gergely Risko' />,
+    link: 'https://github.com/errge',
+    shortDescription: 'Gergely is an instructor at Learnk8s.',
+  },
+})
+
+export const RollbacksRender = BiteSizedRender(`${__dirname}/rollbacks.md`, website => (
+  <React.Fragment>
+    <div>
+      <h2 className='f2 pt4 pb2'>Advanced deployment strategies and rollbacks</h2>
+      <p className='lh-copy measure-wide f4'>
+        <span className='b'>
+          The article is an excerpt from the Advanced Deployment course on the Learnk8s Academy.
+        </span>{' '}
+        The full course includes a deep dive into the three different deployment strategies you can practice in
+        Kubernetes:
+      </p>
+      <ul>
+        <li className='mv3 f4-l lh-copy'>Rolling updates</li>
+        <li className='mv3 f4-l lh-copy'>Canary deployments</li>
+        <li className='mv3 f4-l lh-copy'>Blue-green deployments</li>
+      </ul>
+      <div className='mt4 mb5'>
+        <a
+          href={getFullUrl(website.children.academy)}
+          className='dib white bg-blue br1 pv3 ph4 b f4 bn pointer no-underline'
+        >
+          Learn more ⇢
+        </a>
+      </div>
+    </div>
+    <RelatedConentContainer>
+      <RelatedContentItem>
+        <a href={getFullUrl(website.children.bskApiIngress)} className='link navy underline hover-sky'>
+          Architecting Kubernetes clusters — choosing a worker node size
+        </a>{' '}
+        where you'll learn the pros and cons of having clusters with large and small instance types for your cluster
+        nodes.
+      </RelatedContentItem>
+      <RelatedContentItem>
+        <a
+          href={getFullUrl(website.children.blog.children.scalingTensorflow)}
+          className='link navy underline hover-sky'
+        >
+          Can you expose your microservices with an API gateway in Kubernetes?
+        </a>{' '}
+        In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and
+        Pods inside the cluster. You can select an Ingress that is also an API gateway.
+      </RelatedContentItem>
+    </RelatedConentContainer>
+  </React.Fragment>
+))
+
 function identity<T>(value: T): T {
   return value
 }
