@@ -30,6 +30,14 @@
   color:var(--sky)
 }
 
+.w6 {
+  width: 32em
+}
+
+.w7 {
+  width: 48em
+}
+
 .trapezoid-1,
 .trapezoid-2,
 .trapezoidr-1 {
@@ -336,4 +344,30 @@
 
 .table th:empty {
   background: none;
+}
+
+.more-content {
+  position: relative
+}
+
+.more-content::after {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 5%;
+  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.19791666666666663) 100%);
+}
+
+@media screen and (min-width: 64em) {
+  .more-content {
+    position: static;
+  }
+  .more-content::after {
+    position: static;
+    height: 0;
+    background: none;
+    width: 0;
+  }
 }

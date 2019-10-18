@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
 import { Navbar, Footer, Layout, MailTo, mailto, FAQs, FAQ, Hero } from './layout.v2'
 import { material, assets as materialAssets } from './material'
@@ -53,6 +53,57 @@ const faqs: FAQ[] = [
     title: 'I have another question!',
     content: `Sure - send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io).`,
   },
+]
+
+const table = [
+  [
+    <div className='overflow-hidden'>
+      <div className='w5'>
+        <div className='h4'>&nbsp;</div>
+        <div className='padding-hack-75'>&nbsp;</div>
+      </div>
+    </div>,
+    <Fragment>
+      <div className='header h4 flex items-center'>
+        <div>
+          <h2 className='f3 f2-l tc navy mt0 mb1'>The expert package</h2>
+          <p className='f5 f4-l lh-copy measure tc center black-80 ma0'>
+            Everything you need to architect, develop and deploy applications at scale.
+          </p>
+        </div>
+      </div>
+      <div className='padding-hack-75'>
+        <img src='assets/academy/expert-package.svg' alt='The full package' />
+      </div>
+    </Fragment>,
+    <Fragment>
+      <div className='header h4 flex items-center'>
+        <div>
+          <h2 className='f3 f2-l tc navy mt0 mb1'>The expert package</h2>
+          <p className='f5 f4-l lh-copy measure tc center black-80 ma0'>
+            Everything you need to architect, develop and deploy applications at scale.
+          </p>
+        </div>
+      </div>
+      <div className='padding-hack-75'>
+        <img src='assets/academy/expert-package.svg' alt='The full package' />
+      </div>
+    </Fragment>,
+    <Fragment>
+      <div className='header h4 flex items-center'>
+        <div>
+          <h2 className='f3 f2-l tc navy mt0 mb1'>The expert package</h2>
+          <p className='f5 f4-l lh-copy measure tc center black-80 ma0'>
+            Everything you need to architect, develop and deploy applications at scale.
+          </p>
+        </div>
+      </div>
+      <div className='padding-hack-75'>
+        <img src='assets/academy/expert-package.svg' alt='The full package' />
+      </div>
+    </Fragment>,
+  ],
+  [<p>Courses</p>, <p>6</p>, <p>6</p>, <p>4</p>],
 ]
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
@@ -441,163 +492,178 @@ setTimeout(ldinsp, 0);
       </section>
 
       <section className='pv4 bg-evian'>
-        <p className='center f3 f2-l navy b tc ph3 measure-narrow'>
-          There is no better time than now to learn Kubernetes
+        <p className='center f3 f2-l navy b tc ph3 measure-narrow'>Start your Kubernetes journey now</p>
+        <p className='lh-copy f4-l black-70 measure center tc ph3 mb5'>
+          Join the Learnk8s Academy and learn how to deploy and manage applications at scale with Kubernetes.
         </p>
-        <p className='lh-copy f4-l black-70 measure center tc ph3'>Learn Kubernetes now and stay ahead of the game.</p>
 
-        <section className='center mw7 bg-white pa3 pb4 br2 shadow-4 mv5'>
-          <h2 className='f2 tc navy'>The full package</h2>
-          <p className='f4 lh-copy measure tc center black-80'>
-            Everything you need to architect, develop and deploy applications at scale and get officially certified by
-            the Linux Foundation.
-          </p>
-          <div className='ph3'>
-            <img src='assets/academy/full-package.svg' alt='The full package' />
+        <section className='flex mw8 center more-content mb5'>
+          <div className='left w-30 mw5'>
+            <div className='pl3'>
+              <div className='overflow-hidden'>
+                <div className='w5'>
+                  <div className='h2 mb3'>&nbsp;</div>
+                  <div className='padding-hack-75'>&nbsp;</div>
+                </div>
+              </div>
+              <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center b pl2'>Courses</p>
+              <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center bg-white pl2 b'>Ebooks</p>
+              <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center b pl2'>Online material</p>
+              <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center bg-white pl2 b'>Online challenges</p>
+              <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center b pl2'>Certificate of completion</p>
+              <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center bg-white pl2 b'>Lifetime updates</p>
+              <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center b pl2'>CKAD tips and tricks</p>
+              <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center bg-white pl2 b'>Discounted CKAD</p>
+            </div>
           </div>
-          <p className='lh-copy f5 pl4 black-80'>Courses included:</p>
-          <ul className='list numbered black-70 pt2 flex flex-wrap'>
-            <li className='f4-l lh-copy mv2 w-50'>Linux containers and Kubernetes</li>
-            <li className='f4-l lh-copy mv2 w-50'>Kubernetes fundamentals</li>
-            <li className='f4-l lh-copy mv2 w-50'>Advanced deployment strategies</li>
-            <li className='f4-l lh-copy mv2 w-50'>Managing state</li>
-            <li className='f4-l lh-copy mv2 w-50'>Templating</li>
-            <li className='f4-l lh-copy mv2 w-50'>Autoscaling</li>
-          </ul>
-          <p className='lh-copy f5 pl4 black-80'>Also included:</p>
-          <ul className='list flex flex-wrap'>
-            <ListItem className='w-50'>Downloadable ebook for each session</ListItem>
-            <ListItem className='w-50'>Interactive content and diagrams</ListItem>
-            <ListItem className='w-50'>Practice exercises</ListItem>
-            <ListItem className='w-50'>Discounted CKAD exam (30%)</ListItem>
-            <ListItem className='w-50'>Certificate of completion</ListItem>
-            <ListItem className='w-50'>Access to the online portal</ListItem>
-            <ListItem className='w-50'>CKAD tips and tricks</ListItem>
-            <ListItem className='w-50 b'>Unlimited access</ListItem>
-            <ListItem className='w-50 b'>Lifetime updates</ListItem>
-          </ul>
-          <p className='f1 navy tc'>
-            <span className='db' id='architecting-full'>
-              {(597).toLocaleString('US', {
-                style: 'currency',
-                currency: 'USD',
-              })}
-            </span>
-          </p>
-          <div className='tc'>
-            <a
-              href='https://academy.learnk8s.io/architecting-full'
-              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
-              target='_self'
-              ref='noreferrer'
-            >
-              Buy now →
-            </a>
-          </div>
-          <div className='tc pt4'>
-            <a href={mailto(enterprisePackage)} className='f7 black-70 no-underline'>
-              Learnk8s offers competitive corporate prices.{' '}
-              <span className='underline'>Get in touch to learn more.</span>
-            </a>
+          <div className='right mw7 overflow-auto'>
+            <div className='flex w7'>
+              <div className='w5'>
+                <div className='header h2 mb3'>
+                  <h2 className='f3 tc navy mt0'>Professional</h2>
+                </div>
+                <div className='padding-hack-75'>
+                  <img src='assets/academy/full-package.svg' alt='The full package' />
+                </div>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>6</p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>20%</p>
+                <div>
+                  <p className='f3 navy tc mv4 bs'>
+                    <span className='db' id='architecting-full'>
+                      {(597).toLocaleString('US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      })}
+                    </span>
+                  </p>
+                  <div className='tc'>
+                    <a
+                      href='https://academy.learnk8s.io/architecting-full'
+                      className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                      target='_self'
+                      ref='noreferrer'
+                    >
+                      Buy now →
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className='w5'>
+                <div className='header h2 mb3'>
+                  <h2 className='f3 tc navy mt0'>Expert</h2>
+                </div>
+                <div className='padding-hack-75'>
+                  <img src='assets/academy/expert-package.svg' alt='The expert package' />
+                </div>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>6</p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>&nbsp;</p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>&nbsp;</p>
+                <div>
+                  <p className='f3 navy tc mv4 bs'>
+                    <span className='db' id='architecting-expert'>
+                      {(397).toLocaleString('US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      })}
+                    </span>
+                  </p>
+                  <div className='tc'>
+                    <a
+                      href='https://academy.learnk8s.io/architecting-expert'
+                      className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                      target='_self'
+                      ref='noreferrer'
+                    >
+                      Buy now →
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className='w5'>
+                <div className='header h2 mb3'>
+                  <h2 className='f3 tc navy mt0'>Beginner</h2>
+                </div>
+                <div className='padding-hack-75'>
+                  <img src='assets/academy/ebooks-bundle.png' alt='The eBooks bundle' />
+                </div>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>4</p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
+                  <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+                </p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>&nbsp;</p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>&nbsp;</p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>&nbsp;</p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>&nbsp;</p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>&nbsp;</p>
+                <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>&nbsp;</p>
+                <div>
+                  <p className='f3 navy tc mv4 bs'>
+                    <span className='db' id='architecting-bundle'>
+                      {(121).toLocaleString('US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      })}
+                    </span>
+                  </p>
+                  <div className='tc'>
+                    <a
+                      href='https://academy.learnk8s.io/architecting-bundle'
+                      className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                      target='_self'
+                      ref='noreferrer'
+                    >
+                      Buy now →
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
-        <section className='center mw7 bg-white pa3 pb4 br2 shadow-4 mv5'>
-          <h2 className='f2 tc navy'>The expert package</h2>
-          <p className='f4 lh-copy measure tc center black-80'>
-            Everything you need to architect, develop and deploy applications at scale.
-          </p>
-          <div className='ph3'>
-            <img src='assets/academy/expert-package.svg' alt='The full package' />
-          </div>
-          <p className='lh-copy f5 pl4 black-80'>Courses included:</p>
-          <ul className='list numbered black-70 pt2 flex flex-wrap'>
-            <li className='f4-l lh-copy mv2 w-50'>Linux containers and Kubernetes</li>
-            <li className='f4-l lh-copy mv2 w-50'>Kubernetes fundamentals</li>
-            <li className='f4-l lh-copy mv2 w-50'>Advanced deployment strategies</li>
-            <li className='f4-l lh-copy mv2 w-50'>Managing state</li>
-            <li className='f4-l lh-copy mv2 w-50'>Templating</li>
-            <li className='f4-l lh-copy mv2 w-50'>Autoscaling</li>
-          </ul>
-          <p className='lh-copy f5 pl4 black-80'>Also included:</p>
-          <ul className='list flex flex-wrap'>
-            <ListItem className='w-50'>Downloadable ebook for each session</ListItem>
-            <ListItem className='w-50'>Interactive content and diagrams</ListItem>
-            <ListItem className='w-50'>Practice exercises</ListItem>
-            <ListItem className='w-50'>Certificate of completion</ListItem>
-            <ListItem className='w-50'>Access to the online portal</ListItem>
-            <ListItem className='w-50 b'>Unlimited access</ListItem>
-            <ListItem className='w-50 b'>Lifetime updates</ListItem>
-          </ul>
-          <p className='f1 navy tc'>
-            <span className='db' id='architecting-expert'>
-              {(397).toLocaleString('US', {
-                style: 'currency',
-                currency: 'USD',
-              })}
-            </span>
-          </p>
-          <div className='tc'>
-            <a
-              href='https://academy.learnk8s.io/architecting-expert'
-              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
-              target='_self'
-              ref='noreferrer'
-            >
-              Buy now →
-            </a>
-          </div>
-          <div className='tc pt4'>
-            <a href={mailto(enterprisePackage)} className='f7 black-70 no-underline'>
-              Learnk8s offers competitive corporate prices.{' '}
-              <span className='underline'>Get in touch to learn more.</span>
-            </a>
-          </div>
-        </section>
-
-        <section className='center mw7 bg-white pa3 pb4 br2 shadow-4 mv5'>
-          <h2 className='f2 tc navy'>Ebooks bundle</h2>
-          <p className='f4 lh-copy measure tc center black-80'>
-            Everything you need to architect, develop and deploy applications at scale.
-          </p>
-          <div className='ph3'>
-            <img src='assets/academy/ebooks-bundle.jpg' alt='The full package' />
-          </div>
-          <p className='lh-copy f5 pl4 black-80'>Courses included:</p>
-          <ul className='list numbered black-70 pt2 flex flex-wrap'>
-            <li className='f4-l lh-copy mv2 w-50'>Linux containers and Kubernetes</li>
-            <li className='f4-l lh-copy mv2 w-50'>Kubernetes fundamentals</li>
-            <li className='f4-l lh-copy mv2 w-50'>Advanced deployment strategies</li>
-            <li className='f4-l lh-copy mv2 w-50'>Templating</li>
-          </ul>
-          <p className='f1 navy tc'>
-            <span className='db' id='architecting-bundle'>
-              {(121).toLocaleString('US', {
-                style: 'currency',
-                currency: 'USD',
-              })}
-            </span>
-          </p>
-          <div className='tc'>
-            <a
-              href='https://academy.learnk8s.io/architecting-bundle'
-              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
-              target='_self'
-              ref='noreferrer'
-            >
-              Buy now →
-            </a>
-          </div>
-          <div className='tc pt4'>
-            <a href={mailto(enterprisePackage)} className='f7 black-70 no-underline'>
-              Learnk8s offers competitive corporate prices.{' '}
-              <span className='underline'>Get in touch to learn more.</span>
-            </a>
-          </div>
-        </section>
+        <div className='tc pv4'>
+          <a href={mailto(enterprisePackage)} className='f7 black-70 no-underline'>
+            Learnk8s offers competitive corporate prices. <span className='underline'>Get in touch to learn more.</span>
+          </a>
+        </div>
       </section>
 
-      <section className='mv4'>
+      <section className='mt5 mb4'>
         <p className='f3 f2-l navy b tc'>Learnk8s trains over 300+ engineers per year in Kubernetes</p>
         <p className='lh-copy f4-l black-70 measure center tc ph3 pb4'>
           The systems, techniques, and processes you'll learn in the Learnk8s Academy have been developed over 2+ years
