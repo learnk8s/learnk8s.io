@@ -1,41 +1,41 @@
 :root {
   --navy: #001b44;
-  --sky: #569AD1;
-  --evian: #F7F9FC;
+  --sky: #569ad1;
+  --evian: #f7f9fc;
   --illustration_ratio: 0.1;
 }
 
 .sky {
-  color: var(--sky)
+  color: var(--sky);
 }
 
 .bg-sky {
-  background-color: var(--sky)
+  background-color: var(--sky);
 }
 
 .b--sky {
-  border-color: var(--sky)
+  border-color: var(--sky);
 }
 
 .bg-evian {
-  background-color: var(--evian)
+  background-color: var(--evian);
 }
 
 .bg-black-02 {
-  background-color: rgba(0, 0, 0, 0.02)
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
 .hover-sky:hover,
 .hover-sky:focus {
-  color:var(--sky)
+  color: var(--sky);
 }
 
 .w6 {
-  width: 32em
+  width: 32em;
 }
 
 .w7 {
-  width: 48em
+  width: 48em;
 }
 
 .trapezoid-1,
@@ -92,7 +92,7 @@
 
 .triangle-1 {
   position: relative;
-  z-index: 1
+  z-index: 1;
 }
 
 .triangle-1::before {
@@ -220,7 +220,7 @@
   top: -1em;
   left: -2em;
   content: 'NEW!';
-  background-color: #FF4136;
+  background-color: #ff4136;
   color: white;
   padding: 0.125em;
   transform: rotate(-25deg);
@@ -281,7 +281,7 @@
   font-weight: bold;
   color: white;
   background-color: #3a89c9;
-  border-bottom-color: #19507C;
+  border-bottom-color: #19507c;
 }
 
 #all:checked ~ .events li,
@@ -307,26 +307,26 @@
 }
 
 .translate-100-100 {
-  transform: translate(100%, 100%)
+  transform: translate(100%, 100%);
 }
 
 .restart {
   border-style: solid;
   border-width: 1px;
   display: inline-block;
-  font-size: .75rem;
+  font-size: 0.75rem;
   border-color: #00449e;
   color: #00449e;
-  border-radius: .125rem;
+  border-radius: 0.125rem;
   cursor: pointer;
 }
 .restart span {
   display: inline-block;
   text-transform: uppercase;
-  padding-top: .25rem;
-  padding-bottom: .25rem;
-  padding-left: .5rem;
-  padding-right: .5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .restart.inactive {
@@ -347,7 +347,7 @@
 }
 
 .more-content {
-  position: relative
+  position: relative;
 }
 
 .more-content::after {
@@ -357,7 +357,7 @@
   right: 0;
   height: 100%;
   width: 5%;
-  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.19791666666666663) 100%);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.19791666666666663) 100%);
 }
 
 @media screen and (min-width: 64em) {
@@ -370,4 +370,45 @@
     background: none;
     width: 0;
   }
+}
+
+.yesno input.yes:checked ~ ol .yes .radio,
+.yesno input.no:checked ~ ol .no .radio {
+  background-color: black;
+  box-shadow: inset 0 0 0 0.2em white;
+}
+
+.yesno.first-right input.yes:checked ~ ol .yes {
+  background: rgba(158, 235, 207, 0.5);
+}
+.yesno.first-right input.no:checked ~ ol .no {
+  background: rgba(255, 114, 92, 0.3);
+}
+
+.yesno.second-right input.yes:checked ~ ol .yes {
+  background: rgba(255, 114, 92, 0.3);
+}
+.yesno.second-right input.no:checked ~ ol .no {
+  background: rgba(158, 235, 207, 0.5);
+}
+
+.yesno input.yes:checked ~ .answer .hide,
+.yesno input.no:checked ~ .answer .hide {
+  background-color: unset;
+}
+
+.yesno .hide {
+  background-color: black;
+}
+
+.yesno .hide::selection {
+  background-color: transparent;
+}
+.yesno .hide::-moz-selection {
+  background-color: transparent;
+}
+
+.checkbox:checked {
+  background-color: black;
+  box-shadow: inset 0 0 0 0.2em white;
 }
