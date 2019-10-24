@@ -900,6 +900,48 @@ setTimeout(ldinsp, 0);
       <FAQs faqs={faqs} />
 
       <Footer root={website} />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+var request = new XMLHttpRequest();
+request.open('GET', 'https://academy.learnk8s.io/api/v1/prices', true);
+
+request.onload = function() {
+  if (this.status >= 200 && this.status < 400) {
+    try {
+      var resp = JSON.parse(this.response);
+      const keys = Object.keys(resp)
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i]
+        var element = document.querySelector('#' + key)
+        if (!!element) {
+          var price = resp[key]
+          element.innerHTML = price.gross.toLocaleString(price.country, {
+            style: 'currency',
+            currency: price.currency,
+          })
+        }
+        var discount = document.querySelector('#' + key + '-discount')
+        if (!!discount) {
+          var price = resp[key]
+          discount.innerHTML = Math.ceil(price.gross * 0.7).toLocaleString(price.country, {
+            style: 'currency',
+            currency: price.currency,
+          })
+        }
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  } else {}
+};
+
+request.onerror = function() {};
+
+request.send();
+      `,
+        }}
+      />
     </Layout>,
   )
 }
