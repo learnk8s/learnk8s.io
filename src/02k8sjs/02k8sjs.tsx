@@ -14,11 +14,11 @@ export const Details = {
   title: 'Hands-on guide: developing and deploying Node.js apps in Kubernetes',
   description: `Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
   openGraphImage: (
-    <img src='src/02k8sjs/jury.jpg' alt='dHands-on guide: developing and deploying Node.js apps in Kubernetes' />
+    <img src='src/02k8sjs/jury.jpg' alt='Hands-on guide: developing and deploying Node.js apps in Kubernetes' />
   ),
   publishedDate: '2019-10-31',
   previewImage: (
-    <img src='src/02k8sjs/jury.jpg' alt='dHands-on guide: developing and deploying Node.js apps in Kubernetes' />
+    <img src='src/02k8sjs/jury.jpg' alt='Hands-on guide: developing and deploying Node.js apps in Kubernetes' />
   ),
   author: {
     fullName: 'Daniele Polencic',
