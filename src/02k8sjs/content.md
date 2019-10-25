@@ -33,7 +33,7 @@ The app is available [in this repository](https://github.com/learnk8s/knote-js/t
 
 Go and check out the code with:
 
-```terminal|title=bash|command=1,2
+```terminal|command=1,2|title=bash
 git clone https://github.com/learnk8s/knote-js
 cd knote-js/01
 ```
@@ -42,7 +42,7 @@ You should launch and test the app locally.
 
 You can install and start it with:
 
-```terminal|title=bash|command=1,2
+```terminal|command=1,2|title=bash
 npm install
 node index.js
 ```
@@ -67,7 +67,7 @@ When you create a note with an attachment and click on "Publish", the form submi
 
 The route is handled in Express as follows:
 
-```js|title=index.js|highlight=5
+```js|highlight=5|title=index.js
 async function start() {
   // ...
   app.post(
@@ -208,8 +208,7 @@ The command executes the steps outlined in the `Dockerfile`, one by one:
 ```animation
 {
   "description": "Layers in Docker images",
-  "animation": "layers.svg",
-  "fallback": "layers-fallback.svg"
+  "image": "layers.svg"
 }
 ```
 
@@ -224,8 +223,7 @@ You can create many Docker containers from the same Docker image:
 ```animation
 {
   "description": "Relationship between Dockerfiles, images and containers",
-  "animation": "dockerfile-image-container.svg",
-  "fallback": "docker-image-container-fallback.svg"
+  "image": "dockerfile-image-container.svg"
 }
 ```
 
@@ -481,8 +479,7 @@ Containers are the blocks, servers are the boards, and the container orchestrato
 ```animation
 {
   "description": "Kubernetes is the best tetris player",
-  "animation": "tetris.svg",
-  "fallback": "tetris-fallback.svg"
+  "image": "tetris.svg"
 }
 ```
 
@@ -922,8 +919,7 @@ Also, when the Pod is restarted, and a new IP address is assigned, the Service a
 ```animation
 {
   "description": "A load balancer can remove the need of keeping track of IP addresses",
-  "animation": "service-come-and-go.svg",
-  "fallback": "service-come-and-go-fallback.svg"
+  "image": "service-come-and-go.svg"
 }
 ```
 
@@ -1195,8 +1191,7 @@ But when it selects the other Pod, the picture isn't displayed, because the cont
 ```animation
 {
   "description": "Uploading files inside the app makes it stateful",
-  "animation": "stateful.svg",
-  "fallback": "stateful-fallback.svg"
+  "image": "stateful.svg"
 }
 ```
 
@@ -1226,4 +1221,3 @@ The next steps are:
 1. deploying the same app in the cloud
 
 This guide in a excerpt of the Learnk8s Academy — the online course designed to learn Kubernetes.
-
