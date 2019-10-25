@@ -567,7 +567,12 @@ setTimeout(ldinsp, 0);
           <p className='measure f3-l f4 lh-copy center'>Here is the feedback from our students.</p>
           <ul className='list pl0'>
             <li className='mv5'>
-              <img src='assets/academy/testimonial1.png' alt='Testimonial' className='shadow-4' />
+              {React.createElement('img', {
+                src: 'assets/academy/testimonial1.png',
+                alt: 'Testimonial',
+                loading: 'lazy',
+                className: 'shadow-4',
+              })}
               <p className='f5 lh-copy bt pv2 ph4 bw1 b--light-gray bg-evian'>
                 That's the response from Shawn when Daniele reached him out and offered to help on the material.
               </p>
@@ -579,17 +584,32 @@ setTimeout(ldinsp, 0);
               </p>
             </li>
             <li className='mv5'>
-              <img src='assets/academy/testimonial3.png' alt='Testimonial' className='shadow-4' />
+              {React.createElement('img', {
+                src: 'assets/academy/testimonial3.png',
+                alt: 'Testimonial',
+                loading: 'lazy',
+                className: 'shadow-4',
+              })}
               <p className='f5 lh-copy bt pv2 ph4 bw1 b--light-gray bg-evian'>
                 Karl was looking for an in-depth course to learn Kubernetes inside-out and kept us updated with his
                 progress.
               </p>
               <div className='flex-l'>
                 <div className='w-50-l'>
-                  <img src='assets/academy/testimonial3b.png' alt='Testimonial' className='shadow-4' />
+                  {React.createElement('img', {
+                    src: 'assets/academy/testimonial3b.png',
+                    alt: 'Testimonial',
+                    loading: 'lazy',
+                    className: 'shadow-4',
+                  })}
                 </div>
                 <div className='w-50-l'>
-                  <img src='assets/academy/testimonial3c.png' alt='Testimonial' className='shadow-4' />
+                  {React.createElement('img', {
+                    src: 'assets/academy/testimonial3c.png',
+                    alt: 'Testimonial',
+                    loading: 'lazy',
+                    className: 'shadow-4',
+                  })}
                 </div>
               </div>
               <p className='f5 lh-copy bt pv2 ph4 bw1 b--light-gray bg-evian'>
@@ -598,7 +618,12 @@ setTimeout(ldinsp, 0);
               </p>
             </li>
             <li className='mv5'>
-              <img src='assets/academy/testimonial4.png' alt='Testimonial' className='shadow-4' />
+              {React.createElement('img', {
+                src: 'assets/academy/testimonial4.png',
+                alt: 'Testimonial',
+                loading: 'lazy',
+                className: 'shadow-4',
+              })}
               <p className='f5 lh-copy bt pv2 ph4 bw1 b--light-gray bg-evian'>
                 The Learnk8s Academy courses are excellent if you're a beginner and wish to get started with containers
                 and Kubernetes.
@@ -640,7 +665,11 @@ setTimeout(ldinsp, 0);
                   <h2 className='f3 tc navy mt0'>Professional</h2>
                 </div>
                 <div className='padding-hack-75'>
-                  <img src='assets/academy/full-package.svg' alt='The full package' />
+                  {React.createElement('img', {
+                    src: 'assets/academy/full-package.svg',
+                    alt: 'The full package',
+                    loading: 'lazy',
+                  })}
                 </div>
                 <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>6</p>
                 <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
@@ -689,7 +718,11 @@ setTimeout(ldinsp, 0);
                   <h2 className='f3 tc navy mt0'>Expert</h2>
                 </div>
                 <div className='padding-hack-75'>
-                  <img src='assets/academy/expert-package.svg' alt='The expert package' />
+                  {React.createElement('img', {
+                    src: 'assets/academy/expert-package.svg',
+                    alt: 'The expert package',
+                    loading: 'lazy',
+                  })}
                 </div>
                 <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>6</p>
                 <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
@@ -736,7 +769,11 @@ setTimeout(ldinsp, 0);
                   <h2 className='f3 tc navy mt0'>Beginner</h2>
                 </div>
                 <div className='padding-hack-75'>
-                  <img src='assets/academy/ebooks-bundle.png' alt='The eBooks bundle' />
+                  {React.createElement('img', {
+                    src: 'assets/academy/ebooks-bundle.png',
+                    alt: 'The ebooks bundle',
+                    loading: 'lazy',
+                  })}
                 </div>
                 <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>4</p>
                 <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
@@ -1007,7 +1044,12 @@ const Module: React.StatelessComponent<{
             return (
               <div className='w-80 w-50-l center'>
                 <div className='padding-hack-75 relative'>
-                  <img src={it.props.src} alt={it.props.alt} className='absolute top-0 right-0' />
+                  {React.createElement('img', {
+                    src: it.props.src,
+                    alt: it.props.alt,
+                    loading: 'lazy',
+                    className: 'absolute top-0 right-0',
+                  })}
                 </div>
               </div>
             )
