@@ -45,6 +45,7 @@ import * as ScalingSpringBoot from './scalingSpringBoot/scalingSpringBoot'
 import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
 import * as TerraformAks from './terraformAks/terraformAks'
+import * as ZeroToK8sJs from './02k8sjs/02k8sjs'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
@@ -363,6 +364,12 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     }
     case TerraformAks.Details.type: {
       const $ = Cheerio.of(TerraformAks.render(root, node, siteUrl))
+      optimise({ $, siteUrl })
+      writeFileSync(generatePath(), $.html())
+      return
+    }
+    case ZeroToK8sJs.Details.type: {
+      const $ = Cheerio.of(ZeroToK8sJs.render(root, node, siteUrl))
       optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
       return

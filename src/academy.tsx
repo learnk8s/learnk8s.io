@@ -912,12 +912,6 @@ setTimeout(ldinsp, 0);
             <button className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv2' type='submit'>
               Get access ⇢
             </button>
-            <p className='success absolute bottom mt1 w-100 bg-light-green pa2 dark-green b--dark-green bw1 b--solid dn'>
-              Thank you for subscribing!
-            </p>
-            <p className='failure absolute bottom mt1 w-100 bg-light-red pa2 black b--dark-red bw1 b--solid dn'>
-              Invalid email.
-            </p>
           </form>
         </div>
       </Section>

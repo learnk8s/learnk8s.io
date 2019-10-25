@@ -91,13 +91,14 @@ export function parse(content: string): Node {
           if (isCode(node)) {
             switch (node.lang) {
               case 'animation': {
-                const { description, image } = JSON.parse(node.value) as {
+                const { description, image, animation } = JSON.parse(node.value) as {
                   description: string
-                  image: string
+                  image?: string
+                  animation?: string
                 }
                 return {
                   type: 'animation',
-                  children: [{ type: 'image', url: image, alt: description }],
+                  children: [{ type: 'image', url: image || animation, alt: description }],
                 }
               }
               case 'slideshow': {
