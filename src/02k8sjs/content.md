@@ -886,7 +886,7 @@ spec:
 
 In this case, the Service listens for requests on port 80 and forwards them to port 3000 of the target Pods:
 
-![Service and ports](assets/service-with-ports.svg)
+![Service and ports](service-with-ports.svg)
 
 The last important part is the type of the Service:
 
