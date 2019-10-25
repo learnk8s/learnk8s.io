@@ -99,6 +99,23 @@ setTimeout(ldinsp, 0);
       <Section>
         <div className='mt4 pb4 pb5-l'>
           <div className='measure f3-l f4 center'>
+            <h1 className='f1-l f2 navy'>Kubernetes online courses</h1>
+          </div>
+          <p className='measure f3-l f4 lh-copy center bl bw3 b--blue ph3'>
+            Learn <span className='b'>best practices and common pitfall</span> of deploying and scale apps in Kubernetes
+            with the Learnk8s' hands-on, <span className='b'>online courses.</span>
+          </p>
+          <div className='mw6 center'>
+            <div className='padding-hack-75'>
+              <img src='assets/academy/full-package.svg' alt='The expert package' />
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section className='bg-evian'>
+        <div className='mt4 pb4 pb5-l'>
+          <div className='measure f3-l f4 center'>
             <h1 className='f1-l f2 navy'>
               Can you deploy and operate Kubernetes{' '}
               <span className='underline'>without shooting yourself in the foot</span>?
@@ -109,14 +126,10 @@ setTimeout(ldinsp, 0);
           </p>
           <p className='measure f3-l f4 lh-copy center i'>Do they pass all security checks?</p>
           <p className='measure f3-l f4 lh-copy center i'>Are you confident debugging incidents in the prod cluster?</p>
-          <p className='measure f3-l f4 lh-copy center bl bw3 b--blue ph3'>
-            Learn <span className='b'>best practices and common pitfall</span> of deploying and scale apps in Kubernetes
-            with the Learnk8s' hands-on, <span className='b'>online courses.</span>
-          </p>
         </div>
       </Section>
 
-      <Section className='bg-evian'>
+      <Section>
         <div className='mt4 measure f3-l f4 center'>
           <h2 className='f1-l f2 navy'>
             Forget a simple health check, and it's game over — <span className='i'>already</span>
@@ -143,7 +156,7 @@ setTimeout(ldinsp, 0);
         </div>
       </Section>
 
-      <Section>
+      {/* <Section>
         <div className='mt4 measure f3-l f4 center'>
           <h2 className='f1-l f2 navy'>
             It is easy to overcommit CPU and memory and <span className='underline'>crash your nodes</span>
@@ -169,7 +182,7 @@ setTimeout(ldinsp, 0);
             You can easily crash your nodes because there's no memory left on the machine.
           </p>
         </div>
-      </Section>
+      </Section> */}
 
       <Section className='bg-evian'>
         <div className='mt4 measure f3-l f4 center'>
