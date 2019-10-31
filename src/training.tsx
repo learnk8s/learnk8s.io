@@ -495,25 +495,6 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
       <section id='start' className='w-60-ns ph3 center pt3 pb3 pb5-l'>
         <h2 className='navy f4 f3-l'>Upcoming events</h2>
-
-        <div className='bg-evian ph4 pt2 pb4 b--blue bl bw2'>
-          <p className='lh-copy black-70 measure-wide'>
-            🚨 BREAKING NEWS: We're running an online,{' '}
-            <span className='b'>instructor-led class on the 21-22-23rd of October starting at 9.30 CET.</span>
-            <br />
-            <span className='i'>The class is guaranteed to run.</span>
-          </p>
-          <p className='lh-copy black-70' />
-          <a
-            href='https://www.eventbrite.com/e/advanced-kubernetes-course-online-tickets-57952946824'
-            target='_blank'
-            rel='noreferrer'
-            className='navy underline'
-          >
-            More info and bookings →
-          </a>
-        </div>
-
         <input className='dn' defaultChecked id='all' type='radio' name='country' />
         <input className='dn' id='america' type='radio' name='country' />
         <input className='dn' id='europe' type='radio' name='country' />
