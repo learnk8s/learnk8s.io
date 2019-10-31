@@ -10,7 +10,7 @@ import { Subscribe } from '../layout.v2'
 export const Details = {
   type: '02k8sjs',
   url: '/nodejs-kubernetes-guide',
-  seoTitle: 'Hands-on guide: developing and deploying Node.js apps in Kubernetes',
+  seoTitle: 'Hands-on guide: developing & deploying Node.js apps in Kubernetes',
   title: 'Hands-on guide: developing and deploying Node.js apps in Kubernetes',
   description: `Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
   openGraphImage: (
