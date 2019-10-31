@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import { Sdk } from 'eventbrite/lib/types'
 import { State, getVenues, getCourses } from './store'
 
-export async function SyncVenues({state, sdk}: {state: State, sdk: Sdk}): Promise<VenueEventBrite[]> {
+export async function SyncVenues({ state, sdk }: { state: State; sdk: Sdk }): Promise<VenueEventBrite[]> {
   const venues = getVenues(state)
   const response = (await sdk.request(`/organizations/${state.organisationId}/venues/`)) as ResponseVenues
   const { added } = diff({ previous: response.venues.map(it => it.name), current: venues.map(it => it.name) })
@@ -15,21 +15,17 @@ export async function SyncVenues({state, sdk}: {state: State, sdk: Sdk}): Promis
       return addVenue(venue, sdk, state.organisationId)
     }),
   )
-  return SyncVenues({state, sdk})
+  return SyncVenues({ state, sdk })
 }
 
-export async function SyncEvents({state, sdk}: {state: State, sdk: Sdk}) {
+export async function SyncEvents({ state, sdk }: { state: State; sdk: Sdk }) {
   const events = await getEventsFromEventBrite(state.organisationId, sdk)
   const courses = getCourses(state)
   const { added, unchanged } = diff({ previous: events.map(it => it.code), current: courses.map(it => it.id) })
 
-  await Promise.all(added.map(async courseId => {
+  await Promise.all(added.map(async courseId => {}))
 
-  }))
-
-  await Promise.all(unchanged.map(async courseId => {
-
-  }))
+  await Promise.all(unchanged.map(async courseId => {}))
 }
 
 // export async function syncEvents(

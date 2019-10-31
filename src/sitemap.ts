@@ -109,6 +109,9 @@ const blogPosts = {
     page: TerraformAks.Details,
     children: {},
   }),
+}
+
+const newBlog = {
   zro2k8sjs: createNode({
     page: ZeroToK8sJs.Details,
     children: {},
@@ -305,6 +308,7 @@ export const Sitemap = createNode({
     bskSecrets: bsk.bskSecrets,
     bskAutoscaling: bsk.bskAutoscaling,
     bskRollbacks: bsk.bskRollbacks,
+    // zro2k8sjs: newBlog.zro2k8sjs,
   },
 })
 
@@ -338,6 +342,7 @@ export function getBlogPosts(website: Sitemap): typeof blogPosts[keyof typeof bl
       .filter(it => it.payload.type !== Redirect.Type)
       .slice(0),
     ...getBiteSizedSeries(website),
+    // ...Object.values(newBlog),
   ].sort((a: any, b: any) => {
     return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
   }) as any
