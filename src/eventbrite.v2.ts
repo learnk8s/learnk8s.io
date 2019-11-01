@@ -1,11 +1,11 @@
 import cheerio from 'cheerio'
 import { Sdk } from 'eventbrite/lib/types'
-import { State, getVenues, getWorkshops } from './store'
 import { zonedTimeToUtc } from 'date-fns-tz'
+import { getVenues, State, getWorkshops } from './store'
 
 export async function SyncVenues({ state, sdk }: { state: State; sdk: Sdk }): Promise<VenueEventBrite[]> {
   const venues = getVenues(state)
-  const response = (await sdk.request(`/organizations/${state.organisationId}/venues/`)) as ResponseVenues
+  const response = (await sdk.request(`/organizations/${state.config.organisationId}/venues/`)) as ResponseVenues
   const { added } = diff({ previous: response.venues.map(it => it.name), current: venues.map(it => it.locationName) })
   if (added.length === 0) {
     return response.venues
@@ -13,7 +13,7 @@ export async function SyncVenues({ state, sdk }: { state: State; sdk: Sdk }): Pr
   await Promise.all(
     added.map(venueName => {
       const venue = venues.find(it => it.locationName === venueName)!
-      return addVenue(venue, sdk, state.organisationId)
+      return addVenue(venue, sdk, state.config.organisationId)
     }),
   )
   return SyncVenues({ state, sdk })
@@ -32,7 +32,7 @@ export async function SyncEvents({
 }) {
   try {
     const venues = await SyncVenues({ state, sdk })
-    const events = await getEventsFromEventBrite(state.organisationId, sdk)
+    const events = await getEventsFromEventBrite(state.config.organisationId, sdk)
     const workshops = getWorkshops(state)
     const { added, unchanged } = diff({ previous: events.map(it => it.code), current: workshops.map(it => it.id) })
 
@@ -43,25 +43,25 @@ export async function SyncEvents({
         const event = await upsertEvent(
           {
             duration: course.duration,
-            city: course.city,
+            city: course.venue.city,
             code: course.id,
             description: course.description,
             timezone: course.timezone,
-            currency: course.currency,
-            locationName: course.locationName,
+            currency: course.price.currency,
+            locationName: course.venue.locationName,
             startAt: course.startAt,
             endsAt: course.endsAt,
           },
           venues,
-          `/organizations/${state.organisationId}/events/`,
+          `/organizations/${state.config.organisationId}/events/`,
           sdk,
         )
         log(`Adding a ticket to ${courseId}`)
         await upsertTicket(
           {
             endpoint: `/events/${event.id}/ticket_classes/`,
-            currencyCode: course.currency,
-            price: course.price,
+            currencyCode: course.price.currency,
+            price: course.price.price,
           },
           sdk,
         )
@@ -81,18 +81,18 @@ export async function SyncEvents({
         if (
           !isSameDescription({ code: course.id, description: course.description }, referenceEvent.details) ||
           !isSameDate(course, referenceEvent.details) ||
-          !isSameVenue(course, referenceEvent.details, venues)
+          !isSameVenue(course.venue, referenceEvent.details, venues)
         ) {
           log(`Updating description and starting date for ${courseId}`)
           await upsertEvent(
             {
               duration: course.duration,
-              city: course.city,
+              city: course.venue.city,
               code: course.id,
               description: course.description,
               timezone: course.timezone,
-              currency: course.currency,
-              locationName: course.locationName,
+              currency: course.price.currency,
+              locationName: course.venue.locationName,
               startAt: course.startAt,
               endsAt: course.endsAt,
             },
@@ -101,13 +101,13 @@ export async function SyncEvents({
             sdk,
           )
         }
-        if (!isSamePrice(course, referenceEvent.details)) {
+        if (!isSamePrice(course.price, referenceEvent.details)) {
           log(`Updating ticket price to ${courseId}`)
           await upsertTicket(
             {
               endpoint: `/events/${referenceEvent.id}/ticket_classes/${referenceEvent.details.ticket_classes[0].id}/`,
-              currencyCode: course.currency,
-              price: course.price,
+              currencyCode: course.price.currency,
+              price: course.price.price,
             },
             sdk,
           )

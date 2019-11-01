@@ -13,14 +13,19 @@ export const Action = {
   registerWorkshop(args: Workshop) {
     return { type: 'REGISTER_WORKSHOP' as const, ...args }
   },
+  registerCoursePicture(args: CoursePicture) {
+    return { type: 'REGISTER_COURSE_PIC' as const, ...args }
+  },
 }
 
 export type Actions = ReturnType<typeof Action[keyof typeof Action]>
 
-type FullWorkshop = Omit<Workshop, 'courseId' | 'priceId' | 'venueId'> &
-  Omit<CourseVenue, 'id'> &
-  Omit<CoursePrice, 'id'> &
-  Omit<Course, 'id'>
+export type FullWorkshop = Omit<Workshop, 'courseId' | 'priceId' | 'venueId'> &
+  Omit<Course, 'id'> & {
+    venue: Omit<CourseVenue, 'id'>
+    price: Omit<CoursePrice, 'id'>
+    picture: Omit<CoursePicture, 'id'>
+  }
 
 type Workshop = {
   id: string
@@ -30,6 +35,7 @@ type Workshop = {
   courseId: string
   priceId: string
   venueId: string
+  pictureId: string
 }
 
 type Course = {
@@ -40,7 +46,12 @@ type Course = {
   description: string
 }
 
-type CourseVenue = {
+type CoursePicture = {
+  id: string
+  src: string
+}
+
+export type CourseVenue = {
   id: string
   locationName: string
   country: string
@@ -53,20 +64,21 @@ type CourseVenue = {
 type CoursePrice = { id: string; price: number; currency: string; locale: string }
 
 export interface State {
-  organisationId: string
   courses: Record<string, Course>
   venues: Record<string, CourseVenue>
   prices: Record<string, CoursePrice>
   workshops: Record<string, Workshop>
+  pics: Record<string, CoursePicture>
 }
 
-export function createInitialState(options: { organisationId: string }): State {
+export function createInitialState(options: {}): State {
   return {
     ...options,
     courses: {},
     venues: {},
     prices: {},
     workshops: {},
+    pics: {},
   }
 }
 
@@ -94,7 +106,13 @@ export const RootReducer: Reducer<State, Actions> = (
       if (!(action.priceId in state.prices)) {
         throw new Error(`I couldn't find the price ${action.priceId}. Please fix Workshop ${action.id}`)
       }
+      if (!(action.pictureId in state.pics)) {
+        throw new Error(`I couldn't find the picture ${action.pictureId}. Please fix Workshop ${action.id}`)
+      }
       return { ...state, workshops: { ...state.workshops, [action.id]: { ...action } } }
+    }
+    case 'REGISTER_COURSE_PIC': {
+      return { ...state, pics: { ...state.pics, [action.id]: { ...action } } }
     }
     default:
       assertUnreachable(action)
@@ -103,18 +121,3 @@ export const RootReducer: Reducer<State, Actions> = (
 }
 
 function assertUnreachable(x: never): void {}
-
-export function getVenues(state: State): CourseVenue[] {
-  return Object.values(state.venues)
-}
-
-export function getWorkshops(state: State): FullWorkshop[] {
-  return Object.values(state.workshops).map(workshop => {
-    return {
-      ...Object.values(state.prices).find(it => it.id === workshop.priceId)!,
-      ...Object.values(state.venues).find(it => it.id === workshop.venueId)!,
-      ...Object.values(state.courses).find(it => it.id === workshop.courseId)!,
-      ...workshop,
-    }
-  })
-}

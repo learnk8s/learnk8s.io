@@ -1,6 +1,6 @@
 import React from 'react'
 import { writeFileSync, readFileSync, existsSync, copyFileSync } from 'fs'
-import { resolve, extname, basename } from 'path'
+import { resolve, extname, basename, join } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { syncEvents } from './eventbrite'
 import { SyncEvents } from './eventbrite.v2'
@@ -57,14 +57,14 @@ import postcss = require('postcss')
 import cssnano = require('cssnano')
 import { minify } from 'terser'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { createStore } from 'redux'
-import { RootReducer, createInitialState } from './store'
-import { Register } from './courses'
+import { store } from './store'
+import * as Courses from './courses'
+import * as Training2 from './training.v2'
 
 const isOptimisedBuild = !!process.env.IS_BUILD_OPTIMISED
 
-const store = createStore(RootReducer, createInitialState({ organisationId: process.env.ENVENTBRITE_ORG as string }))
-Register(store)
+Courses.Register(store)
+Training2.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -140,6 +140,10 @@ export function run(options: Settings) {
     //     canPublish: options.canPublishEvents,
     //   })
     // }
+
+    const $ = Cheerio.of(Training2.Mount({ store }))
+    optimise({ $, siteUrl: options.siteUrl })
+    writeFileSync(generatePath('/training'), $.html())
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       syncEvents(
         console.log,
@@ -149,6 +153,12 @@ export function run(options: Settings) {
       )
     } else {
       console.log('Skipping Eventbrite publishing')
+    }
+
+    function generatePath(fullUrl: string) {
+      const path = `_site${resolve('.', fullUrl, 'index.html')}`
+      mkdir('-p', `_site${resolve('.', fullUrl)}`)
+      return path
     }
   }
 
@@ -175,9 +185,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Training.Details.type: {
-      const $ = Cheerio.of(Training.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case Academy.Details.type: {

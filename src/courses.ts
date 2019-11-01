@@ -643,8 +643,15 @@ const NewCourses = {
   },
 }
 
+const NewPictures = {
+  one: {
+    id: 'one',
+    src: 'assets/open_graph_preview.png',
+  },
+}
+
 export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerCourse(NewCourses.threeDays))
+  Object.values(NewPictures).forEach(picture => store.dispatch(Action.registerCoursePicture(picture)))
   Object.values(NewCourses).forEach(course => store.dispatch(Action.registerCourse(course)))
   Object.values(NewVenues).forEach(venue => store.dispatch(Action.registerCourseVenue(venue)))
   Object.values(NewCoursePrice).forEach(price => store.dispatch(Action.registerCoursePrice(price)))
@@ -657,6 +664,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Singapore.id,
       venueId: NewVenues.JustCoSg.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -668,6 +676,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.GreatBritain.id,
       venueId: NewVenues.LondonCitizenM.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -679,6 +688,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Sydney.id,
       venueId: NewVenues.GenericSydney.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -690,6 +700,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Canada.id,
       venueId: NewVenues.GenericToronto.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -701,6 +712,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.UnitedStates.id,
       venueId: NewVenues.GenericSanFrancisco.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -712,6 +724,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Switzerland.id,
       venueId: NewVenues.GenericZurich.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -723,6 +736,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Austria.id,
       venueId: NewVenues.GenericVienna.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -734,6 +748,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Singapore.id,
       venueId: NewVenues.JustCoSg.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -745,6 +760,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.France.id,
       venueId: NewVenues.GenericParis.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -756,6 +772,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Sydney.id,
       venueId: NewVenues.GenericSydney.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -767,6 +784,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Germany.id,
       venueId: NewVenues.GenericBerlin.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -778,6 +796,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.GreatBritain.id,
       venueId: NewVenues.LondonCitizenM.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -789,6 +808,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.HongKong.id,
       venueId: NewVenues.GenericHongKong.id,
+      pictureId: NewPictures.one.id,
     }),
   )
   store.dispatch(
@@ -800,6 +820,7 @@ export function Register(store: Store<State, Actions>) {
       courseId: NewCourses.threeDaysIT.id,
       priceId: NewCoursePrice.Italy.id,
       venueId: NewVenues.GenericMilan.id,
+      pictureId: NewPictures.one.id,
     }),
   )
 }
