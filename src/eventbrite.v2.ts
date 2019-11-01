@@ -188,11 +188,15 @@ function upsertEvent(
       },
       start: {
         timezone: event.timezone,
-        utc: zonedTimeToUtc(event.startAt, event.timezone).toISOString().replace('.000Z', 'Z'),
+        utc: zonedTimeToUtc(event.startAt, event.timezone)
+          .toISOString()
+          .replace('.000Z', 'Z'),
       },
       end: {
         timezone: event.timezone,
-        utc: zonedTimeToUtc(event.endsAt, event.timezone).toISOString().replace('.000Z', 'Z'),
+        utc: zonedTimeToUtc(event.endsAt, event.timezone)
+          .toISOString()
+          .replace('.000Z', 'Z'),
       },
       currency: event.currency,
       online_event: true,
