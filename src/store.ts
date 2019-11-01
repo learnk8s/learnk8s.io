@@ -10,23 +10,39 @@ export const Action = {
   registerCoursePrice(args: CoursePrice) {
     return { type: 'REGISTER_COURSE_PRICE' as const, ...args }
   },
+  registerWorkshop(args: Workshop) {
+    return { type: 'REGISTER_WORKSHOP' as const, ...args }
+  },
 }
 
 export type Actions = ReturnType<typeof Action[keyof typeof Action]>
 
-export type Course = {
+type FullWorkshop = Omit<Workshop, 'courseId' | 'priceId' | 'venueId'> &
+  Omit<CourseVenue, 'id'> &
+  Omit<CoursePrice, 'id'> &
+  Omit<Course, 'id'>
+
+type Workshop = {
   id: string
   startAt: string
+  endsAt: string
+  timezone: string
+  courseId: string
+  priceId: string
+  venueId: string
+}
+
+type Course = {
+  id: string
   duration: string
   title: string
   language: string
   description: string
 }
 
-export type CourseVenue = {
+type CourseVenue = {
   id: string
-  courseId: string
-  name: string
+  locationName: string
   country: string
   countryCode: string
   city: string
@@ -34,13 +50,14 @@ export type CourseVenue = {
   address?: string
 }
 
-export type CoursePrice = { id: string; courseId: string; price: number; currency: string; locale: string }
+type CoursePrice = { id: string; price: number; currency: string; locale: string }
 
 export interface State {
   organisationId: string
   courses: Record<string, Course>
   venues: Record<string, CourseVenue>
   prices: Record<string, CoursePrice>
+  workshops: Record<string, Workshop>
 }
 
 export function createInitialState(options: { organisationId: string }): State {
@@ -49,6 +66,7 @@ export function createInitialState(options: { organisationId: string }): State {
     courses: {},
     venues: {},
     prices: {},
+    workshops: {},
   }
 }
 
@@ -66,6 +84,18 @@ export const RootReducer: Reducer<State, Actions> = (
     case 'REGISTER_COURSE_PRICE': {
       return { ...state, prices: { ...state.prices, [action.id]: { ...action } } }
     }
+    case 'REGISTER_WORKSHOP': {
+      if (!(action.courseId in state.courses)) {
+        throw new Error(`I couldn't find the course ${action.courseId}. Please fix Workshop ${action.id}`)
+      }
+      if (!(action.venueId in state.venues)) {
+        throw new Error(`I couldn't find the venue ${action.venueId}. Please fix Workshop ${action.id}`)
+      }
+      if (!(action.priceId in state.prices)) {
+        throw new Error(`I couldn't find the price ${action.priceId}. Please fix Workshop ${action.id}`)
+      }
+      return { ...state, workshops: { ...state.workshops, [action.id]: { ...action } } }
+    }
     default:
       assertUnreachable(action)
       return state
@@ -78,6 +108,13 @@ export function getVenues(state: State): CourseVenue[] {
   return Object.values(state.venues)
 }
 
-export function getCourses(state: State): Course[] {
-  return Object.values(state.courses)
+export function getWorkshops(state: State): FullWorkshop[] {
+  return Object.values(state.workshops).map(workshop => {
+    return {
+      ...Object.values(state.prices).find(it => it.id === workshop.priceId)!,
+      ...Object.values(state.venues).find(it => it.id === workshop.venueId)!,
+      ...Object.values(state.courses).find(it => it.id === workshop.courseId)!,
+      ...workshop,
+    }
+  })
 }

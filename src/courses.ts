@@ -478,8 +478,7 @@ export const Courses: KubernetesCourse[] = [
 export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerCourse({
-      id: 'LK8S|SINGAPORE|20191127',
-      startAt: new Date('2019-11-27').toISOString(),
+      id: '3days-eng',
       duration: '3 days',
       title: 'Advanced Kubernetes training',
       description: marked(cat(`${__dirname}/description_en.md`).toString(), { renderer }),
@@ -488,8 +487,7 @@ export function Register(store: Store<State, Actions>) {
   )
   store.dispatch(
     Action.registerCoursePrice({
-      id: 'LK8S|SINGAPORE|20191127|price',
-      courseId: 'LK8S|SINGAPORE|20191127',
+      id: 'sgd3days',
       price: 2550,
       currency: 'SGD',
       locale: 'en-SG',
@@ -497,12 +495,22 @@ export function Register(store: Store<State, Actions>) {
   )
   store.dispatch(
     Action.registerCourseVenue({
-      id: 'LK8S|SINGAPORE|20191127|venue',
-      courseId: 'LK8S|SINGAPORE|20191127',
-      name: 'JustCo Singapore',
+      id: 'justcosg',
+      locationName: 'JustCo Singapore',
       country: 'Singapore',
       countryCode: 'SG',
       city: 'Singapore',
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|SINGAPORE|20191127',
+      startAt: new Date('2019-11-27T10:00:00').toISOString(),
+      endsAt: new Date('2019-11-29T17:00:00').toISOString(),
+      timezone: 'Asia/Singapore',
+      courseId: '3days-eng',
+      priceId: 'sgd3days',
+      venueId: 'justcosg'
     }),
   )
 }

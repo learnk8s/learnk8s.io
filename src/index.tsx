@@ -3,6 +3,7 @@ import { writeFileSync, readFileSync, existsSync, copyFileSync } from 'fs'
 import { resolve, extname, basename } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { syncEvents } from './eventbrite'
+import { SyncEvents } from './eventbrite.v2'
 import eventbrite from 'eventbrite'
 import { ok } from 'assert'
 import { Sitemap, LinkedNode, getFullUrl, runSiteMap } from './sitemap'
@@ -56,8 +57,14 @@ import postcss = require('postcss')
 import cssnano = require('cssnano')
 import { minify } from 'terser'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { createStore } from 'redux'
+import { RootReducer, createInitialState } from './store'
+import { Register } from './courses'
 
 const isOptimisedBuild = !!process.env.IS_BUILD_OPTIMISED
+
+const store = createStore(RootReducer, createInitialState({ organisationId: process.env.ENVENTBRITE_ORG as string }))
+Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -125,6 +132,14 @@ class CheerioSelectionAll {
 export function run(options: Settings) {
   return function mount(root: Sitemap) {
     renderTree(root, root)
+    // if (!!options.eventBriteToken && !!options.eventBriteOrg) {
+    //   SyncEvents({
+    //     log: console.log,
+    //     sdk: eventbrite({ token: options.eventBriteToken }),
+    //     state: store.getState(),
+    //     canPublish: options.canPublishEvents,
+    //   })
+    // }
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       syncEvents(
         console.log,
