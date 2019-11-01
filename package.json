@@ -14,7 +14,7 @@
     "fmt:svg": "./cli/svgo 'src/smallerDockerImages/*.svg'",
     "fmt:svg!": "./cli/svgo 'src/smallerDockerImages/*.svg' --write",
     "fmt": "npm run fmt:ts && npm run fmt:md && npm run fmt:svg",
-    "test": "ts-node --files node_modules/tape/bin/tape 'src/**/test.ts' 'src/**/*.test.ts' 'src/**/*.integration.ts' 'src/**/integration.ts'",
+    "test": "tsc --noEmit && ts-node --files node_modules/tape/bin/tape 'src/**/test.ts' 'src/**/*.test.ts' 'src/**/*.integration.ts' 'src/**/integration.ts'",
     "start": "ln -fs $PWD $PWD/_site/b && http-server -p 4000 _site"
   },
   "author": "Learnk8s",

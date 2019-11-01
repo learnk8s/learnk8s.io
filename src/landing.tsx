@@ -1,7 +1,7 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
 import { Navbar, Footer, Layout, FAQs, Hero, Testimonal, mailto, MailTo, Interlude } from './layout.v2'
-import { CourseRow, faqs, DashboardModule, PackageFeatures } from './training'
+import { CourseRow, faqs, DashboardModule, PackageFeatures } from './training.v2'
 import { material } from './material'
 import { PrimaryButton } from './homepage'
 import { Course, Boolean, ItemAvailabilityEnum, CourseInstance } from 'schema-dts'
@@ -142,7 +142,19 @@ export function render(website: Sitemap, currentNode: LinkedNode<ReturnType<type
           {Courses.reduce((acc, course) => acc.concat(course.events), [] as CourseEvent[])
             .filter(onlyCityOrOnline)
             .map(it => (
-              <CourseRow event={it} slackIcon={<img src='assets/training/slack_in_colours.svg' alt='Slack' />} />
+              <CourseRow
+                event={{
+                  timezone: it.timezone,
+                  startAt: it.startAt.toString(),
+                  location: {
+                    address: it.location.address || undefined,
+                    city: `${it.location.city}`,
+                    country: `${it.location.country}`,
+                  },
+                  details: { title: it.details.title },
+                  offer: it.offer,
+                }}
+              />
             ))}
         </ul>
       </section>
