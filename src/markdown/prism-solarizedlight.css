@@ -1,0 +1,137 @@
+/*
+ Solarized Color Schemes originally by Ethan Schoonover
+ http://ethanschoonover.com/solarized
+
+ Ported for PrismJS by Hector Matos
+ Website: https://krakendev.io
+ Twitter Handle: https://twitter.com/allonsykraken)
+*/
+
+/*
+SOLARIZED HEX
+--------- -------
+base03    #002b36
+base02    #073642
+base01    #586e75
+base00    #657b83
+base0     #839496
+base1     #93a1a1
+base2     #eee8d5
+base3     #fdf6e3
+yellow    #b58900
+orange    #cb4b16
+red       #dc322f
+magenta   #d33682
+violet    #6c71c4
+blue      #268bd2
+cyan      #2aa198
+green     #859900
+*/
+
+.code-light-theme {
+  color: #657b83; /* base00 */
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+.code-light-theme::-moz-selection, .code-light-theme ::-moz-selection,
+.code-light-theme::-moz-selection, .code-light-theme ::-moz-selection {
+  background: #073642; /* base02 */
+}
+
+.code-light-theme::selection, .code-light-theme ::selection,
+.code-light-theme::selection, .code-light-theme ::selection {
+  background: #073642; /* base02 */
+}
+
+/* Code blocks */
+.code-light-theme {
+  background-color: #fdf6e3; /* base3 */
+}
+
+.code-light-theme .token.comment,
+.code-light-theme .token.prolog,
+.code-light-theme .token.doctype,
+.code-light-theme .token.cdata {
+  color: #93a1a1; /* base1 */
+}
+
+.code-light-theme .token.punctuation {
+  color: #586e75; /* base01 */
+}
+
+.code-light-theme .namespace {
+  opacity: .7;
+}
+
+.code-light-theme .token.property,
+.code-light-theme .token.tag,
+.code-light-theme .token.boolean,
+.code-light-theme .token.number,
+.code-light-theme .token.constant,
+.code-light-theme .token.symbol,
+.code-light-theme .token.deleted {
+  color: #268bd2; /* blue */
+}
+
+.code-light-theme .token.selector,
+.code-light-theme .token.attr-name,
+.code-light-theme .token.string,
+.code-light-theme .token.char,
+.code-light-theme .token.builtin,
+.code-light-theme .token.url,
+.code-light-theme .token.inserted {
+  color: #2aa198; /* cyan */
+}
+
+.code-light-theme .token.entity {
+  color: #657b83; /* base00 */
+  background: #eee8d5; /* base2 */
+}
+
+.code-light-theme .token.atrule,
+.code-light-theme .token.attr-value,
+.code-light-theme .token.keyword {
+  color: #859900; /* green */
+}
+
+.code-light-theme .token.function,
+.code-light-theme .token.class-name {
+  color: #b58900; /* yellow */
+}
+
+.code-light-theme .token.regex,
+.code-light-theme .token.important,
+.code-light-theme .token.variable {
+  color: #cb4b16; /* orange */
+}
+
+.code-light-theme .token.important,
+.code-light-theme .token.bold {
+  font-weight: bold;
+}
+.code-light-theme .token.italic {
+  font-style: italic;
+}
+
+.code-light-theme .token.entity {
+  cursor: help;
+}
+
+.code-light-theme .highlight {
+  background: #ffe6c3 /* base2 */
+}
+
+.code-light-theme .highlight,
+.code-light-theme .standard {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: block;
+  min-width: 100%;
+  box-sizing: border-box;
+}
