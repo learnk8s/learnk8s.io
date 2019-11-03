@@ -2,9 +2,7 @@ import React from 'react'
 import { writeFileSync, readFileSync, existsSync, copyFileSync } from 'fs'
 import { resolve, extname, basename, join } from 'path'
 import { mkdir, cp } from 'shelljs'
-import { syncEvents } from './eventbrite'
 import { SyncEvents } from './eventbrite.v2'
-import eventbrite from 'eventbrite'
 import { ok } from 'assert'
 import { Sitemap, LinkedNode, getFullUrl, runSiteMap } from './sitemap'
 import unified from 'unified'
@@ -15,6 +13,7 @@ const { selectAll, select, matches } = require('hast-util-select')
 const remove = require('unist-util-remove')
 const stringify = require('rehype-stringify')
 const toString = require('hast-util-to-string')
+import Axios from 'axios'
 
 import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
@@ -132,25 +131,17 @@ class CheerioSelectionAll {
 export function run(options: Settings) {
   return function mount(root: Sitemap) {
     renderTree(root, root)
-    // if (!!options.eventBriteToken && !!options.eventBriteOrg) {
-    //   SyncEvents({
-    //     log: console.log,
-    //     sdk: eventbrite({ token: options.eventBriteToken }),
-    //     state: store.getState(),
-    //     canPublish: options.canPublishEvents,
-    //   })
-    // }
 
     const $ = Cheerio.of(Training2.Mount({ store }))
     optimise({ $, siteUrl: options.siteUrl })
     writeFileSync(generatePath('/training'), $.html())
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
-      syncEvents(
-        console.log,
-        eventbrite({ token: options.eventBriteToken }),
-        options.eventBriteOrg,
-        options.canPublishEvents,
-      )
+      SyncEvents({
+        log: console.log,
+        sdk: Axios.create({ headers: { Authorization: `Bearer ${options.eventBriteToken}` } }),
+        state: store.getState(),
+        canPublish: options.canPublishEvents,
+      })
     } else {
       console.log('Skipping Eventbrite publishing')
     }

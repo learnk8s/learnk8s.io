@@ -1,14 +1,17 @@
 import cheerio from 'cheerio'
-import { Sdk } from 'eventbrite/lib/types'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import { getVenues, State, getWorkshops } from './store'
+import { AxiosInstance } from 'axios'
 
-export async function SyncVenues({ state, sdk }: { state: State; sdk: Sdk }): Promise<VenueEventBrite[]> {
+export async function SyncVenues({ state, sdk }: { state: State; sdk: AxiosInstance }): Promise<VenueEventBrite[]> {
   const venues = getVenues(state)
-  const response = (await sdk.request(`/organizations/${state.config.organisationId}/venues/`)) as ResponseVenues
-  const { added } = diff({ previous: response.venues.map(it => it.name), current: venues.map(it => it.locationName) })
+  const response = await sdk.get<ResponseVenues>(`/organizations/${state.config.organisationId}/venues/`)
+  const { added } = diff({
+    previous: response.data.venues.map(it => it.name),
+    current: venues.map(it => it.locationName),
+  })
   if (added.length === 0) {
-    return response.venues
+    return response.data.venues
   }
   await Promise.all(
     added.map(venueName => {
@@ -26,7 +29,7 @@ export async function SyncEvents({
   log,
 }: {
   state: State
-  sdk: Sdk
+  sdk: AxiosInstance
   canPublish: boolean
   log: (...args: any[]) => void
 }) {
@@ -119,10 +122,9 @@ export async function SyncEvents({
   }
 }
 
-async function getEventsFromEventBrite(organisationId: string, sdk: Sdk) {
-  const res = await sdk.request(`/organizations/${organisationId}/events?expand=ticket_classes,venue`)
-  const response = res as ResponseEvents
-  const events = response.events.map(it => {
+async function getEventsFromEventBrite(organisationId: string, sdk: AxiosInstance) {
+  const res = await sdk.get<ResponseEvents>(`/organizations/${organisationId}/events?expand=ticket_classes,venue`)
+  const events = res.data.events.map(it => {
     const $ = cheerio.load(it.description.html || '', { decodeEntities: false })
     return {
       id: it.id,
@@ -176,7 +178,7 @@ function upsertEvent(
   },
   venues: VenueEventBrite[],
   endpoint: string,
-  sdk: Sdk,
+  sdk: AxiosInstance,
 ) {
   const body: any = {
     event: {
@@ -214,14 +216,9 @@ function upsertEvent(
     body.event.venue_id = venue.id
     body.event.online_event = false
   }
-  return sdk
-    .request(endpoint, {
-      method: 'POST',
-      body: JSON.stringify(body),
-    })
-    .then(res => {
-      return { id: (res as any).id as string }
-    })
+  return sdk.post(endpoint, body).then(res => {
+    return { id: (res as any).id as string }
+  })
 }
 
 function addVenue(
@@ -233,7 +230,7 @@ function addVenue(
     country?: string
     countryCode: string
   },
-  sdk: Sdk,
+  sdk: AxiosInstance,
   organisationId: string,
 ) {
   const address = {} as any
@@ -243,14 +240,11 @@ function addVenue(
   if (venue.address) address.address_1 = venue.address
   console.log(address)
   return sdk
-    .request(`/organizations/${organisationId}/venues/`, {
-      method: 'POST',
-      body: JSON.stringify({
-        venue: {
-          name: venue.locationName,
-          address,
-        },
-      }),
+    .post(`/organizations/${organisationId}/venues/`, {
+      venue: {
+        name: venue.locationName,
+        address,
+      },
     })
     .then(it => console.log(it))
     .catch(err => console.log(err))
@@ -258,28 +252,25 @@ function addVenue(
 
 function upsertTicket(
   { endpoint, currencyCode, price }: { endpoint: string; currencyCode: string; price: number },
-  sdk: Sdk,
+  sdk: AxiosInstance,
 ) {
   return sdk
-    .request(endpoint, {
-      method: 'POST',
-      body: JSON.stringify({
-        ticket_class: {
-          name: 'Standard',
-          description: `General admission`,
-          quantity_total: 10,
-          cost: `${currencyCode},${price}00`,
-          include_fee: true,
-          hide_description: false,
-          sales_channels: ['online'],
-        },
-      }),
+    .post(endpoint, {
+      ticket_class: {
+        name: 'Standard',
+        description: `General admission`,
+        quantity_total: 10,
+        cost: `${currencyCode},${price}00`,
+        include_fee: true,
+        hide_description: false,
+        sales_channels: ['online'],
+      },
     })
     .catch(err => console.log(err))
 }
 
-function publishEvent({ eventId }: { eventId: string }, sdk: Sdk) {
-  return sdk.request(`/events/${eventId}/publish/`, { method: 'POST' }).catch(err => console.log(err))
+function publishEvent({ eventId }: { eventId: string }, sdk: AxiosInstance) {
+  return sdk.post(`/events/${eventId}/publish/`).catch(err => console.log(err))
 }
 
 export function diff({
