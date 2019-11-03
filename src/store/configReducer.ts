@@ -7,6 +7,7 @@ export interface State {
   isProduction: boolean
   googleAnalytics: string
   outputFolder: string
+  canPublishEvents: boolean
 }
 
 export function createInitialState(options: {
@@ -17,6 +18,7 @@ export function createInitialState(options: {
   eventBriteToken: string
   googleAnalytics: string
   outputFolder: string
+  canPublishEvents: boolean
 }): State {
   return {
     ...options,
@@ -32,6 +34,7 @@ export const RootReducer: Reducer<State, any> = (
     eventBriteToken: 'invalid',
     googleAnalytics: 'invalid',
     outputFolder: '_site',
+    canPublishEvents: false,
   }),
   action: any,
 ): State => {

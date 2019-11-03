@@ -33,6 +33,7 @@ export const store = createStore<State, Actions, {}, {}>(
       eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
       googleAnalytics: process.env.GOOGLE_ANALYTICS as string,
       outputFolder: '_site',
+      canPublishEvents: process.env.PUBLISH_EVENTS === 'yes',
     }),
   },
 )

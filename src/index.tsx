@@ -430,7 +430,7 @@ run({
   siteUrl: 'https://learnk8s.io',
   eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
   eventBriteOrg: process.env.ENVENTBRITE_ORG as string,
-  canPublishEvents: process.env.NODE_ENV === 'production',
+  canPublishEvents: process.env.PUBLISH_EVENTS === 'yes',
 })(Sitemap)
 
 writeFileSync('_site/sitemap.xml', runSiteMap(Sitemap, 'https://learnk8s.io'))
