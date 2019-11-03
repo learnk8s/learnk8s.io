@@ -446,3 +446,6 @@
   -webkit-transform: rotate(45deg) translate(-0.2em, -0.2em);
 }
 /* </best practices> */
+.flex-shrink-0 {
+  flex-shrink: 0;
+}

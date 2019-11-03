@@ -9,6 +9,12 @@ import { toVFile } from '../files'
 import { readFileSync } from 'fs'
 import inspect from 'unist-util-inspect'
 import { defaultAssetsPipeline } from '../optimise'
+import { selectAll, matches } from 'unist-util-select'
+import * as Mdast from 'mdast'
+import { Node } from 'unist'
+import toString from 'mdast-util-to-string'
+import { mdast2JsxInline, mdast2Jsx } from '../markdown/jsx'
+import { transform } from '../markdown/utils'
 
 export const BestPractices = {
   id: 'kubernetes-best-practices',
@@ -32,12 +38,48 @@ export function Register(store: Store<State, Actions>) {
   )
 }
 
+function collectUntil(children: Mdast.Content[], startingElement: Node, untilSelector: string): Mdast.Content[] {
+  let index = children.findIndex(it => it === startingElement) + 1
+  const out: Mdast.Content[] = []
+  while (!matches(untilSelector, children[index]) && index <= children.length) {
+    out.push(children[index])
+    index = index + 1
+  }
+  return out
+}
+
 export function Mount({ store }: { store: Store<State, Actions> }) {
   const mdast = toMdast(toVFile({ contents: readFileSync(join(__dirname, 'list.md'), 'utf8') }))
-  console.log(inspect(mdast))
+  inspect(mdast)
+  const Sections = selectAll<Mdast.Heading>('heading[depth=3]', mdast)
+    .map(heading => {
+      return { heading, content: collectUntil(mdast.children, heading, 'heading[depth=3]') }
+    })
+    .map(({ heading, content }) => {
+      return {
+        heading: { type: 'root', children: [heading] } as Mdast.Root,
+        items: content
+          .filter(it => matches('html[value^="<details>"]', it))
+          .map(detail => {
+            return {
+              title: toMdast(
+                toVFile({
+                  contents: toString(detail)
+                    .replace('\n', '')
+                    .replace(/.*☐ (.*)<\/summary>/gim, '$1'),
+                }),
+              ),
+              content: {
+                type: 'root',
+                children: collectUntil(content, detail, 'html[value^="</details>"]'),
+              } as Mdast.Root,
+            }
+          }),
+      }
+    })
   const state = store.getState()
   defaultAssetsPipeline({
-    jsx: renderPage(state),
+    jsx: renderPage(state, Sections),
     isOptimisedBuild: getConfig(state).isProduction,
     siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
     url: BestPractices.url,
@@ -45,7 +87,15 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
   })
 }
 
-function renderPage(state: State) {
+type Sections = {
+  heading: Mdast.Root
+  items: {
+    title: Mdast.Root
+    content: Mdast.Root
+  }[]
+}[]
+
+function renderPage(state: State, sections: Sections) {
   const page = getPages(state).find(it => it.id === BestPractices.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === BestPractices.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
@@ -65,35 +115,41 @@ function renderPage(state: State) {
       </Head>
       <Body>
         <div className='flex-l mt5 center justify-center-l'>
-          <div className='left mw5-l w-third js-left'>
+          <div className='left mw5-l w-third-l ph3 ph4-m pn-l js-left'>
             <section>
               <p className='b f3'>Categories</p>
               <ul className='list pl0'>
-                <li className='mv2'>
-                  <a href='#' className='pv2 no-underline f4 black-80'>
-                    Containers
-                  </a>
-                </li>
-                <li className='mv2'>
-                  <a href='#' className='pv2 no-underline f4 black-80'>
-                    Apps
-                  </a>
-                </li>
+                {sections.map(it => {
+                  return (
+                    <li className='mv2'>
+                      <a href={`#${toId(toString(it.heading))}`} className='pv2 no-underline f4 black-80'>
+                        {transform(it.heading, mdast2JsxInline())}
+                      </a>
+                    </li>
+                  )
+                })}
               </ul>
             </section>
           </div>
-          <div className='right mw8-l w-two-thirds js-checklist'>
-            <section className='pl4-l'>
-              <h2>Containers</h2>
-              <ul className='list pl0'>
-                <li>
-                  <ListItem />
-                </li>
-                <li>
-                  <ListItem />
-                </li>
-              </ul>
-            </section>
+          <div className='right mw8-l w-two-thirds-l ph3 ph4-m pn-l js-checklist'>
+            {sections.map(it => {
+              return (
+                <section className='pl4-l'>
+                  <h2 id={toId(toString(it.heading))}>{transform(it.heading, mdast2JsxInline())}</h2>
+                  <ul className='list pl0 bb b--light-gray'>
+                    {it.items.map(it => {
+                      return (
+                        <li>
+                          <ListItem title={transform(it.title, mdast2JsxInline())}>
+                            {transform(it.content, mdast2Jsx())}
+                          </ListItem>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </section>
+              )
+            })}
           </div>
         </div>
         <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
@@ -120,55 +176,38 @@ const ProgressWidget: React.StatelessComponent<{}> = ({ children }) => {
   )
 }
 
-const ListItem: React.StatelessComponent<{}> = ({ children }) => {
+const ListItem: React.StatelessComponent<{ title: JSX.Element }> = ({ children, title }) => {
   const id = `${Math.random()}`.replace('.', '')
   return (
     <div className='module'>
       <div className='pv2 ph3 flex items-center bt bl br b--light-gray bg-evian relative'>
         <label htmlFor='one' className='dn'>
-          Accustom everyone to good security practices
+          {title}
         </label>
         <input
           type='checkbox'
           name='one'
           id='one'
-          className='tick-checkbox input-reset h2 w2 ba bw2 b--light-gray br-100 v-mid bg-white pointer'
+          className='tick-checkbox input-reset h2 w2 ba bw2 b--light-gray br-100 v-mid bg-white pointer flex-shrink-0'
         />
-        <p className='f3 b v-mid pl3 navy pointer' data-toggle={`.details-${id},.controls-${id}`}>
-          Accustom everyone to good security practices
+        <p className='f4 f3-ns b v-mid pl3 navy pointer' data-toggle={`.details-${id},.controls-${id}`}>
+          {title}
         </p>
         <div className={`controls controls-${id} absolute top-50 right-1`}>
           <button
-            className='open dib bg-evian bn pointer'
+            className='open dib bg-transparent bn pointer'
             data-toggle={`.details-${id},.controls-${id}`}
             data-toggle-collapsed
           >
             <i className='arr-down' />
           </button>
-          <button className='close dib bg-evian bn pointer' data-toggle={`.details-${id},.controls-${id}`}>
+          <button className='close dib bg-transparent bn pointer' data-toggle={`.details-${id},.controls-${id}`}>
             <i className='arr-up' />
           </button>
         </div>
       </div>
       <div className={`bg-white bl br b--light-gray details details-${id}`}>
-        <div className='ph4 pt2 pb4'>
-          <p className='lh-copy measure-wide f4'>
-            People are often the weakest links in any company's security. By holding trainings to explain how an
-            attacker could infiltrate your company, you will increase their awareness and thus minimize the chance of
-            them falling for common traps. Some things to cover include phishing emails, and the dangers of USB drives
-            and email attachments.
-          </p>
-          <p className='lh-copy measure-wide f4'>Read more:</p>
-          <ul className='f4 measure'>
-            <li className='mv2 lh-copy'>
-              https://www.secureworks.com/blog/cybersecurity-awareness-training-best-practices
-            </li>
-            <li className='mv2 lh-copy'>
-              https://resources.infosecinstitute.com/top-10-security-awareness-training-topics-for-your-employees/
-            </li>
-            <li className='mv2 lh-copy'>https://sudo.pagerduty.com/</li>
-          </ul>
-        </div>
+        <div className='ph4 pt2 pb4'>{children}</div>
       </div>
     </div>
   )
@@ -239,4 +278,11 @@ function TrackProgress(progressTemplate: string) {
     activeProgressBar!.style.width = `${percentage * totalWidth}px`
     percentageProgressBar!.innerText = `${Math.ceil(percentage * 100)}% complete`
   }
+}
+
+function toId(raw: string): string {
+  return raw
+    .toLowerCase()
+    .replace(/[^\w]+/g, '-')
+    .replace('_', '-')
 }
