@@ -3,7 +3,7 @@ import React from 'react'
 import parents, { NestedParent, NestedNode } from 'unist-util-parents'
 import { select, matches } from 'unist-util-select'
 import * as Mdast from 'mdast'
-import {Node} from 'unist'
+import { Node } from 'unist'
 
 test('it should retrieve the last heading', assert => {
   const element = parentUntil(
