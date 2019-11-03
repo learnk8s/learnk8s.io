@@ -59,7 +59,7 @@ export async function SyncEvents({
           `/organizations/${state.config.organisationId}/events/`,
           sdk,
         )
-        log(`Adding a ticket to ${courseId}`)
+        log(`Adding a ticket to ${courseId} (${event.id})`)
         await upsertTicket(
           {
             endpoint: `/events/${event.id}/ticket_classes/`,
@@ -136,7 +136,6 @@ async function getEventsFromEventBrite(organisationId: string, sdk: AxiosInstanc
 }
 
 function isSameDescription(a: { code: string; description: string }, b: { description: { html: string | null } }) {
-  console.log('desc', a, b)
   return (
     cheerio
       .load(renderDescription(a), { decodeEntities: false })('body')
@@ -216,8 +215,8 @@ function upsertEvent(
     body.event.venue_id = venue.id
     body.event.online_event = false
   }
-  return sdk.post(endpoint, body).then(res => {
-    return { id: (res as any).id as string }
+  return sdk.post<any>(endpoint, body).then(res => {
+    return { id: res.data.id as string }
   })
 }
 

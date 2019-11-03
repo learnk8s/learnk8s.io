@@ -139,7 +139,10 @@ export function run(options: Settings) {
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
         log: console.log,
-        sdk: Axios.create({ headers: { Authorization: `Bearer ${options.eventBriteToken}` } }),
+        sdk: Axios.create({
+          baseURL: 'https://www.eventbriteapi.com/v3/',
+          headers: { Authorization: `Bearer ${options.eventBriteToken}` },
+        }),
         state: store.getState(),
         canPublish: options.canPublishEvents,
       })

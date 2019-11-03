@@ -343,7 +343,7 @@ export function Register(store: Store<State, Actions>) {
   )
   store.dispatch(
     Action.registerWorkshop({
-      id: 'LK8S|MILAN|20190923',
+      id: 'LK8S|MILAN|20200318',
       startAt: new Date('2020-03-18T09:30:00').toISOString(),
       endsAt: new Date('2020-03-20T05:00:00').toISOString(),
       timezone: 'Europe/Rome',
