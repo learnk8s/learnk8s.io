@@ -2,8 +2,7 @@ import React from 'react'
 import { writeFileSync, readFileSync, existsSync, copyFileSync } from 'fs'
 import { resolve, extname, basename } from 'path'
 import { mkdir, cp } from 'shelljs'
-import { syncEvents } from './eventbrite'
-import eventbrite from 'eventbrite'
+import { SyncEvents } from './eventbrite.v2'
 import { ok } from 'assert'
 import { Sitemap, LinkedNode, getFullUrl, runSiteMap } from './sitemap'
 import unified from 'unified'
@@ -14,6 +13,7 @@ const { selectAll, select, matches } = require('hast-util-select')
 const remove = require('unist-util-remove')
 const stringify = require('rehype-stringify')
 const toString = require('hast-util-to-string')
+import Axios from 'axios'
 
 import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
@@ -31,7 +31,7 @@ import * as Newsletter from './newsletter'
 import * as Redirect from './redirect'
 import * as RSS from './rss'
 import * as TermsAndConditions from './termsAndConditions'
-import * as Training from './training'
+import * as Training from './training.v2'
 import * as WebAppManifest from './webAppManifest'
 
 import * as SmallerImages from './smallerDockerImages/smallerImages'
@@ -56,8 +56,15 @@ import postcss = require('postcss')
 import cssnano = require('cssnano')
 import { minify } from 'terser'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { store } from './store'
+import * as Courses from './courses'
+import * as Training2 from './training.v2'
 
 const isOptimisedBuild = !!process.env.IS_BUILD_OPTIMISED
+
+Courses.Register(store)
+Training2.Register(store)
+Landing.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -125,13 +132,20 @@ class CheerioSelectionAll {
 export function run(options: Settings) {
   return function mount(root: Sitemap) {
     renderTree(root, root)
+
+    Landing.Mount({ store })
+    Training2.Mount({ store })
+
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
-      syncEvents(
-        console.log,
-        eventbrite({ token: options.eventBriteToken }),
-        options.eventBriteOrg,
-        options.canPublishEvents,
-      )
+      SyncEvents({
+        log: console.log,
+        sdk: Axios.create({
+          baseURL: 'https://www.eventbriteapi.com/v3/',
+          headers: { Authorization: `Bearer ${options.eventBriteToken}` },
+        }),
+        state: store.getState(),
+        canPublish: options.canPublishEvents,
+      })
     } else {
       console.log('Skipping Eventbrite publishing')
     }
@@ -160,9 +174,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Training.Details.type: {
-      const $ = Cheerio.of(Training.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case Academy.Details.type: {
@@ -297,9 +308,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Landing.Type: {
-      const $ = Cheerio.of(Landing.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.MultipleClustersDetails.type: {
@@ -425,7 +433,7 @@ run({
   siteUrl: 'https://learnk8s.io',
   eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
   eventBriteOrg: process.env.ENVENTBRITE_ORG as string,
-  canPublishEvents: process.env.NODE_ENV === 'production',
+  canPublishEvents: process.env.PUBLISH_EVENTS === 'yes',
 })(Sitemap)
 
 writeFileSync('_site/sitemap.xml', runSiteMap(Sitemap, 'https://learnk8s.io'))
