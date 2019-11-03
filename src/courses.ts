@@ -120,8 +120,8 @@ const NewCoursePrice = {
   },
   Switzerland: {
     id: 'sw3days',
-    price: 2800,
-    currency: 'CHF',
+    price: 2500,
+    currency: 'EUR',
     locale: 'de-CH',
   },
   Austria: {
@@ -188,8 +188,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SINGAPORE|20191127',
-      startAt: new Date('2019-11-27T10:00:00').toISOString(),
-      endsAt: new Date('2019-11-29T17:00:00').toISOString(),
+      startAt: '2019-11-27T10:00:00',
+      endsAt: '2019-11-29T17:00:00',
       timezone: 'Asia/Singapore',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Singapore.id,
@@ -200,8 +200,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|LONDON|20191202',
-      startAt: new Date('2019-12-02T09:30:00').toISOString(),
-      endsAt: new Date('2019-12-04T05:00:00').toISOString(),
+      startAt: '2019-12-02T09:30:00',
+      endsAt: '2019-12-04T05:00:00',
       timezone: 'Europe/London',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.GreatBritain.id,
@@ -212,8 +212,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SYDNEY|20191216',
-      startAt: new Date('2019-12-16T09:30:00').toISOString(),
-      endsAt: new Date('2019-12-18T05:00:00').toISOString(),
+      startAt: '2019-12-16T09:30:00',
+      endsAt: '2019-12-18T05:00:00',
       timezone: 'Australia/Sydney',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Sydney.id,
@@ -224,8 +224,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|TORONTO|20200129',
-      startAt: new Date('2020-01-29T09:30:00').toISOString(),
-      endsAt: new Date('2020-01-31T05:00:00').toISOString(),
+      startAt: '2020-01-29T09:30:00',
+      endsAt: '2020-01-31T05:00:00',
       timezone: 'America/Toronto',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Canada.id,
@@ -236,8 +236,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SANFRANCISCO|20200203',
-      startAt: new Date('2020-02-03T09:30:00').toISOString(),
-      endsAt: new Date('2020-02-05T05:00:00').toISOString(),
+      startAt: '2020-02-03T09:30:00',
+      endsAt: '2020-02-05T05:00:00',
       timezone: 'America/Los_Angeles',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.UnitedStates.id,
@@ -248,8 +248,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|ZURICH|20200210',
-      startAt: new Date('2020-02-10T09:30:00').toISOString(),
-      endsAt: new Date('2020-02-12T05:00:00').toISOString(),
+      startAt: '2020-02-10T09:30:00',
+      endsAt: '2020-02-12T05:00:00',
       timezone: 'Europe/Zurich',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Switzerland.id,
@@ -260,8 +260,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|VIENNA|20200217',
-      startAt: new Date('2020-02-17T09:30:00').toISOString(),
-      endsAt: new Date('2020-02-19T05:00:00').toISOString(),
+      startAt: '2020-02-17T09:30:00',
+      endsAt: '2020-02-19T05:00:00',
       timezone: 'Europe/Vienna',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Austria.id,
@@ -272,8 +272,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SINGAPORE|20200217',
-      startAt: new Date('2020-02-17T10:00:00').toISOString(),
-      endsAt: new Date('2020-02-19T17:00:00').toISOString(),
+      startAt: '2020-02-17T10:00:00',
+      endsAt: '2020-02-19T17:00:00',
       timezone: 'Asia/Singapore',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Singapore.id,
@@ -284,8 +284,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|PARIS|20200217',
-      startAt: new Date('2020-02-17T10:00:00').toISOString(),
-      endsAt: new Date('2020-02-19T17:00:00').toISOString(),
+      startAt: '2020-02-17T10:00:00',
+      endsAt: '2020-02-19T17:00:00',
       timezone: 'Europe/Paris',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.France.id,
@@ -296,8 +296,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SYDNEY|20200304',
-      startAt: new Date('2020-03-04T09:30:00').toISOString(),
-      endsAt: new Date('2020-03-06T05:00:00').toISOString(),
+      startAt: '2020-03-04T09:30:00',
+      endsAt: '2020-03-06T05:00:00',
       timezone: 'Australia/Sydney',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Sydney.id,
@@ -308,8 +308,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|BERLIN|20200304',
-      startAt: new Date('2020-02-26T09:30:00').toISOString(),
-      endsAt: new Date('2020-02-28T05:00:00').toISOString(),
+      startAt: '2020-02-26T09:30:00',
+      endsAt: '2020-02-28T05:00:00',
       timezone: 'Europe/Berlin',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.Germany.id,
@@ -320,8 +320,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|LONDON|20200311',
-      startAt: new Date('2020-03-11T09:30:00').toISOString(),
-      endsAt: new Date('2020-03-13T05:00:00').toISOString(),
+      startAt: '2020-03-11T09:30:00',
+      endsAt: '2020-03-13T05:00:00',
       timezone: 'Europe/London',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.GreatBritain.id,
@@ -332,8 +332,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|HONGKONG|20200311',
-      startAt: new Date('2020-03-11T09:30:00').toISOString(),
-      endsAt: new Date('2020-03-13T05:00:00').toISOString(),
+      startAt: '2020-03-11T09:30:00',
+      endsAt: '2020-03-13T05:00:00',
       timezone: 'Asia/Hong_Kong',
       courseId: NewCourses.threeDays.id,
       priceId: NewCoursePrice.HongKong.id,
@@ -344,8 +344,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|MILAN|20200318',
-      startAt: new Date('2020-03-18T09:30:00').toISOString(),
-      endsAt: new Date('2020-03-20T05:00:00').toISOString(),
+      startAt: '2020-03-18T09:30:00',
+      endsAt: '2020-03-20T05:00:00',
       timezone: 'Europe/Rome',
       courseId: NewCourses.threeDaysIT.id,
       priceId: NewCoursePrice.Italy.id,

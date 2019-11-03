@@ -146,8 +146,8 @@ function isSameDescription(a: { code: string; description: string }, b: { descri
   )
 }
 
-function isSameDate(a: { startAt: string }, b: EventEventBrite) {
-  return new Date(a.startAt).valueOf() === new Date(b.start.utc).valueOf()
+function isSameDate(a: { startAt: string; timezone: string }, b: EventEventBrite) {
+  return zonedTimeToUtc(a.startAt, a.timezone).valueOf() === new Date(b.start.utc).valueOf()
 }
 
 function isSamePrice(a: { price: number }, b: EventEventBrite) {
@@ -189,11 +189,15 @@ function upsertEvent(
       },
       start: {
         timezone: event.timezone,
-        utc: new Date(event.startAt).toISOString().replace('.000Z', 'Z'),
+        utc: zonedTimeToUtc(event.startAt, event.timezone)
+          .toISOString()
+          .replace('.000Z', 'Z'),
       },
       end: {
         timezone: event.timezone,
-        utc: new Date(event.endsAt).toISOString().replace('.000Z', 'Z'),
+        utc: zonedTimeToUtc(event.endsAt, event.timezone)
+          .toISOString()
+          .replace('.000Z', 'Z'),
       },
       currency: event.currency,
       online_event: true,
