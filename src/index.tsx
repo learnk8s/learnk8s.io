@@ -1,6 +1,6 @@
 import React from 'react'
 import { writeFileSync, readFileSync, existsSync, copyFileSync } from 'fs'
-import { resolve, extname, basename, join } from 'path'
+import { resolve, extname, basename } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { SyncEvents } from './eventbrite.v2'
 import { ok } from 'assert'
@@ -31,7 +31,7 @@ import * as Newsletter from './newsletter'
 import * as Redirect from './redirect'
 import * as RSS from './rss'
 import * as TermsAndConditions from './termsAndConditions'
-import * as Training from './training'
+import * as Training from './training.v2'
 import * as WebAppManifest from './webAppManifest'
 
 import * as SmallerImages from './smallerDockerImages/smallerImages'
@@ -64,6 +64,7 @@ const isOptimisedBuild = !!process.env.IS_BUILD_OPTIMISED
 
 Courses.Register(store)
 Training2.Register(store)
+Landing.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -132,9 +133,9 @@ export function run(options: Settings) {
   return function mount(root: Sitemap) {
     renderTree(root, root)
 
-    const $ = Cheerio.of(Training2.Mount({ store }))
-    optimise({ $, siteUrl: options.siteUrl })
-    writeFileSync(generatePath('/training'), $.html())
+    Landing.Mount({ store })
+    Training2.Mount({ store })
+
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
         log: console.log,
@@ -144,12 +145,6 @@ export function run(options: Settings) {
       })
     } else {
       console.log('Skipping Eventbrite publishing')
-    }
-
-    function generatePath(fullUrl: string) {
-      const path = `_site${resolve('.', fullUrl, 'index.html')}`
-      mkdir('-p', `_site${resolve('.', fullUrl)}`)
-      return path
     }
   }
 
@@ -310,9 +305,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Landing.Type: {
-      const $ = Cheerio.of(Landing.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.MultipleClustersDetails.type: {

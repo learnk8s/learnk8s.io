@@ -26,11 +26,21 @@ import { PrimaryButton } from './homepage'
 import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
-import { renderToStaticMarkup } from 'react-dom/server'
 import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getWorkshops } from './store'
+import { State, Actions, Action, getPages, getOpenGraph, getWorkshops, getConfig } from './store'
 import { join } from 'path'
 import { format } from 'date-fns'
+import { defaultAssetsPipeline } from './optimise'
+
+export const Details = {
+  type: 'training',
+  url: '/training',
+  seoTitle: 'Kubernetes Training Courses ♦︎ Learnk8s',
+  title: 'Kubernetes Training Courses',
+  description:
+    'Join an instructor-led, hands-on course on how to quickly deploy applications in Kubernetes — without having to wade through mountains of documentation — and learn how to orchestrate and manage containers at scale.',
+  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+} as const
 
 export const faqs: FAQ[] = [
   {
@@ -112,7 +122,13 @@ export function Register(store: Store<State, Actions>) {
 
 export function Mount({ store }: { store: Store<State, Actions> }) {
   const state = store.getState()
-  return renderToStaticMarkup(renderPage(state))
+  defaultAssetsPipeline({
+    jsx: renderPage(state),
+    isOptimisedBuild: getConfig(state).isProduction,
+    siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
+    url: Training.url,
+    outputFolder: getConfig(state).outputFolder,
+  })
 }
 
 function renderPage(state: State) {

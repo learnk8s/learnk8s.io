@@ -32,6 +32,7 @@ export const store = createStore<State, Actions, {}, {}>(
       protocol: 'https',
       eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
       googleAnalytics: process.env.GOOGLE_ANALYTICS as string,
+      outputFolder: '_site',
     }),
   },
 )
@@ -52,10 +53,18 @@ export function getWorkshops(state: State): CoursesReducer.FullWorkshop[] {
   })
 }
 
+export function getConfig(state: State): ConfigReducer.State {
+  return state.config
+}
+
 export function getPages(state: State): WebsiteReducer.Page[] {
   return Object.values(state.website.pages)
 }
 
 export function getOpenGraph(state: State): WebsiteReducer.OpenGraph[] {
   return Object.values(state.website.openGraph)
+}
+
+export function getLandingPageLocations(state: State): WebsiteReducer.LandingPage[] {
+  return Object.values(state.website.landingPages)
 }

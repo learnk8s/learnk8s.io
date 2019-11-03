@@ -4,6 +4,9 @@ export const Action = {
   registerPage(args: Page) {
     return { type: 'REGISTER_PAGE' as const, ...args }
   },
+  registerLandingPageLocation(args: LandingPage) {
+    return { type: 'REGISTER_LANDING' as const, ...args }
+  },
   registerOpenGraph(args: OpenGraph) {
     return { type: 'REGISTER_OG' as const, ...args }
   },
@@ -18,6 +21,12 @@ export type Page = {
   description: string
 }
 
+export type LandingPage = {
+  id: string
+  pageId: string
+  city: string
+}
+
 export type OpenGraph = {
   id: string
   pageId: string
@@ -29,6 +38,7 @@ export type OpenGraph = {
 export interface State {
   pages: Record<string, Page>
   openGraph: Record<string, OpenGraph>
+  landingPages: Record<string, LandingPage>
 }
 
 export function createInitialState(options: {}): State {
@@ -36,6 +46,7 @@ export function createInitialState(options: {}): State {
     ...options,
     pages: {},
     openGraph: {},
+    landingPages: {},
   }
 }
 
@@ -51,7 +62,13 @@ export const RootReducer: Reducer<State, Actions> = (
       return { ...state, pages: { ...state.pages, [action.id]: { ...action } } }
     }
     case 'REGISTER_OG': {
+      if (action.id in state.openGraph) {
+        throw new Error(`Duplicate openGraph id ${action.id}`)
+      }
       return { ...state, openGraph: { ...state.openGraph, [action.id]: { ...action } } }
+    }
+    case 'REGISTER_LANDING': {
+      return { ...state, landingPages: { ...state.landingPages, [action.id]: { ...action } } }
     }
     default:
       assertUnreachable(action)

@@ -14,7 +14,7 @@ import * as Newsletter from './newsletter'
 import * as Redirect from './redirect'
 import * as RSS from './rss'
 import * as TermsAndConditions from './termsAndConditions'
-import * as Training from './training'
+import * as Training from './training.v2'
 import * as WebAppManifest from './webAppManifest'
 
 import * as SmallerImages from './smallerDockerImages/smallerImages'
@@ -35,7 +35,6 @@ import * as BiteSized201903 from './bsk201903'
 import * as BiteSized201909 from './bsk201909'
 import * as BiteSized201910 from './bsk201910'
 
-import { Venues, Timezone } from './courses'
 import moment from 'moment-timezone'
 
 export function createNode<T extends {}, U extends { [name: string]: LinkedNode<any> }>({
@@ -242,8 +241,6 @@ export const Sitemap = createNode({
     london: createNode({
       page: Landing.Details({
         url: '/london',
-        location: Venues.London,
-        timezone: Timezone.LONDON,
         city: 'London',
       }),
       children: {},
@@ -251,26 +248,13 @@ export const Sitemap = createNode({
     toronto: createNode({
       page: Landing.Details({
         url: '/toronto',
-        location: Venues.TorontoGK,
-        timezone: Timezone.TORONTO,
         city: 'Toronto',
-      }),
-      children: {},
-    }),
-    cardiff: createNode({
-      page: Landing.Details({
-        url: '/cardiff',
-        location: Venues.Cardiff,
-        timezone: Timezone.LONDON,
-        city: 'Cardiff',
       }),
       children: {},
     }),
     singapore: createNode({
       page: Landing.Details({
         url: '/singapore',
-        location: Venues.Singapore,
-        timezone: Timezone.SINGAPORE,
         city: 'Singapore',
       }),
       children: {},
@@ -278,18 +262,7 @@ export const Sitemap = createNode({
     sanFrancisco: createNode({
       page: Landing.Details({
         url: '/san-francisco',
-        location: Venues.SanFrancisco,
-        timezone: Timezone.SAN_FRANCISCO,
         city: 'San Francisco',
-      }),
-      children: {},
-    }),
-    milan: createNode({
-      page: Landing.Details({
-        url: '/milan',
-        location: Venues.Milan,
-        timezone: Timezone.ROME,
-        city: 'Milan',
       }),
       children: {},
     }),
