@@ -31,6 +31,7 @@ import {
 } from './layout.v3'
 import { join } from 'path'
 import { defaultAssetsPipeline } from './optimise'
+import { subDays } from 'date-fns'
 
 export const Type = 'landing' as const
 
@@ -184,6 +185,7 @@ export function renderPage(state: State, pageId: string): JSX.Element {
                       price: course.price.price,
                       priceCurrency: course.price.currency,
                       url: currentAbsoluteUrl,
+                      validFrom: subDays(new Date(course.startAt), 90).toISOString(),
                     },
                     image: `${course.picture.src}`,
                     performer: {
@@ -217,7 +219,7 @@ export function renderPage(state: State, pageId: string): JSX.Element {
         </div>
 
         <section className='w-60-ns ph3 center relative z3 bg-white pt3 pb5 mb4'>
-          <p className='f2 navy b tc ph3'>Join the next class in {landingPageLocation.city} or online</p>
+          <p className='f2 navy b tc ph3'>Join the next class in {landingPageLocation.city}</p>
           <p className='lh-copy f4 black-70 measure center tc ph3 pb3'>
             Public classes are great to get started mastering Kubernetes or prepare for your CKA or CKAD exam. The
             starting time is 9.30 am local time.

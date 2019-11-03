@@ -29,7 +29,7 @@ import { material } from './material'
 import { Store } from 'redux'
 import { State, Actions, Action, getPages, getOpenGraph, getWorkshops, getConfig } from './store'
 import { join } from 'path'
-import { format } from 'date-fns'
+import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
 
 export const Details = {
@@ -186,6 +186,7 @@ function renderPage(state: State) {
                       price: course.price.price,
                       priceCurrency: course.price.currency,
                       url: currentAbsoluteUrl,
+                      validFrom: subDays(new Date(course.startAt), 90).toISOString(),
                     },
                     image: `${course.picture.src}`,
                     performer: {
