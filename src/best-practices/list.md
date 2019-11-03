@@ -19,9 +19,141 @@ details blah blah
 
 </details>
 
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
+<details>
+  <summary>☐ Use caching</summary>
+
+details blah blah
+
+1. one
+1. two
+
+</details>
+
 ### Apps
 
 <details>
-  <summary>☐ Use liveness and readiness probes</summary>
+  <summary>☐ Use *liveness and readiness* probes</summary>
+
 details blah blah
+
 </details>

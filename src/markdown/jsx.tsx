@@ -453,6 +453,143 @@ export function mdast2Jsx(): MdastVisitors<JSX.Element> {
   }
 }
 
+export function mdast2JsxInline(): MdastVisitors<JSX.Element> {
+  return {
+    root(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    text(node) {
+      return <Fragment>{node.value}</Fragment>
+    },
+    slideshow(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    slide(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    heading(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    paragraph(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    blockquote(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    list(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    listItem(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    inlineCode(node) {
+      return <code className='code f5 lh-copy bg-near-white br2 pv1 ph2 fs-normal'>{node.value}</code>
+    },
+    code(node) {
+      return <Fragment />
+    },
+    terminal(node) {
+      return <Fragment />
+    },
+    powershell(node) {
+      return <Fragment />
+    },
+    html(node) {
+      return <div dangerouslySetInnerHTML={{ __html: node.value }} />
+    },
+    thematicBreak() {
+      throw new Error('thematicBreak not implemented')
+    },
+    strong(node, parent, { all }) {
+      return <strong className='b'>{all(node)}</strong>
+    },
+    emphasis(node, parent, { all }) {
+      return <em className='i'>{all(node)}</em>
+    },
+    break() {
+      throw new Error('break not implemented')
+    },
+    delete() {
+      throw new Error('break not implemented')
+    },
+    link(node, parent, { all }) {
+      return parseLink(node)({
+        absolute: external.bind(null, node),
+        relative: internal.bind(null, node),
+        inline: internal.bind(null, node),
+        file: internal.bind(null, node),
+      })
+      function external(node: Mdast.Link) {
+        return (
+          <a
+            href={node.url}
+            target='_blank'
+            rel='noreferrer'
+            className={
+              !!node.title
+                ? 'link dib white bg-blue pv2 ph3 b f5 br2 mv3 hover-bg-dark-blue pointer'
+                : 'link navy underline hover-sky'
+            }
+          >
+            {all(node)}
+          </a>
+        )
+      }
+      function internal(node: Mdast.Link) {
+        return (
+          <a
+            href={node.url}
+            target='_self'
+            className={
+              !!node.title
+                ? 'link dib white bg-blue pv2 ph3 b f5 br2 mv3 hover-bg-dark-blue pointer'
+                : 'link navy underline hover-sky'
+            }
+          >
+            {all(node)}
+          </a>
+        )
+      }
+    },
+    linkReference(node, parent) {
+      throw new Error('linkReference not implemented')
+    },
+    imageReference() {
+      throw new Error('imageReference not implemented')
+    },
+    definition() {
+      throw new Error('definition not implemented')
+    },
+    image(node) {
+      return <img className='db pv3 center' src={node.url} alt={node.alt || ''} title={node.title} />
+    },
+    footnote() {
+      throw new Error('footnote not implemented')
+    },
+    footnoteReference() {
+      throw new Error('footnoteReference not implemented')
+    },
+    footnoteDefinition() {
+      throw new Error('footnoteDefinition not implemented')
+    },
+    table(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    tableCell(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    tableRow(node, parent, { all }) {
+      return <Fragment>{all(node)}</Fragment>
+    },
+    animation(node) {
+      return <Fragment />
+    },
+    include(node) {
+      return <div dangerouslySetInnerHTML={{ __html: node.value }} />
+    },
+  }
+}
+
 export const enum Group {
   STANDARD = 'standard',
   HIGHLIGHT = 'highlight',
