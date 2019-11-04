@@ -51,32 +51,24 @@ function collectUntil(children: Mdast.Content[], startingElement: Node, untilSel
 export function Mount({ store }: { store: Store<State, Actions> }) {
   const mdast = toMdast(toVFile({ contents: readFileSync(join(__dirname, 'list.md'), 'utf8') }))
   inspect(mdast)
-  const Sections = selectAll<Mdast.Heading>('heading[depth=3]', mdast)
+  const Sections = selectAll<Mdast.Heading>('heading[depth=2]', mdast)
     .map(heading => {
-      return { heading, content: collectUntil(mdast.children, heading, 'heading[depth=3]') }
+      return { heading, content: collectUntil(mdast.children, heading, 'heading[depth=2]') }
     })
     .map(({ heading, content }) => {
+      const subheadings = content.filter(it => matches('heading[depth=3]', it))
       return {
         heading: { type: 'root', children: [heading] } as Mdast.Root,
-        items: content
-          .filter(it => matches('html[value^="<details>"]', it))
-          .map(detail => {
-            return {
-              title: toMdast(
-                toVFile({
-                  contents: toString(detail)
-                    .replace('\n', '')
-                    .replace(/.*☐ (.*)<\/summary>/gim, '$1'),
-                }),
-              ),
-              content: {
-                type: 'root',
-                children: collectUntil(content, detail, 'html[value^="</details>"]'),
-              } as Mdast.Root,
-            }
-          }),
+        description: { type: 'root', children: collectUntil(content, content[0], 'heading') } as Mdast.Root,
+        references: { type: 'root', children: collectUntil(content, subheadings[0], 'heading') } as Mdast.Root,
+        checklist: collectUntil(content, subheadings[1], 'heading')
+          .filter(it => matches('list', it))
+          .reduce((acc, it) => acc.concat(it.children as any), [] as Mdast.Content[])
+          .map(it => ({ type: 'root', children: it.children } as Mdast.Root)),
       }
     })
+  console.log(Sections)
+
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state, Sections),
@@ -87,15 +79,14 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
   })
 }
 
-type Sections = {
+type Section = {
   heading: Mdast.Root
-  items: {
-    title: Mdast.Root
-    content: Mdast.Root
-  }[]
-}[]
+  description: Mdast.Root
+  references: Mdast.Root
+  checklist: Mdast.Root[]
+}
 
-function renderPage(state: State, sections: Sections) {
+function renderPage(state: State, sections: Section[]) {
   const page = getPages(state).find(it => it.id === BestPractices.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === BestPractices.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
@@ -119,7 +110,7 @@ function renderPage(state: State, sections: Sections) {
             <section>
               <p className='b f3'>Categories</p>
               <ul className='list pl0'>
-                {sections.map(it => {
+                {/* {sections.map(it => {
                   return (
                     <li className='mv2'>
                       <a href={`#${toId(toString(it.heading))}`} className='pv2 no-underline f4 black-80'>
@@ -127,7 +118,12 @@ function renderPage(state: State, sections: Sections) {
                       </a>
                     </li>
                   )
-                })}
+                })} */}
+                <li className='mv2'>
+                  <a href={`#`} className='pv2 no-underline f4 black-80'>
+                    Application development
+                  </a>
+                </li>
               </ul>
             </section>
           </div>
@@ -135,14 +131,14 @@ function renderPage(state: State, sections: Sections) {
             {sections.map(it => {
               return (
                 <section className='pl4-l'>
-                  <h2 id={toId(toString(it.heading))}>{transform(it.heading, mdast2JsxInline())}</h2>
+                  <Category title={transform(it.heading, mdast2JsxInline())}>
+                    {transform(it.description, mdast2Jsx())}
+                  </Category>
                   <ul className='list pl0 bb b--light-gray'>
-                    {it.items.map(it => {
+                    {it.checklist.map(it => {
                       return (
                         <li>
-                          <ListItem title={transform(it.title, mdast2JsxInline())}>
-                            {transform(it.content, mdast2Jsx())}
-                          </ListItem>
+                          <ListItem>{transform(it, mdast2JsxInline())}</ListItem>
                         </li>
                       )
                     })}
@@ -176,20 +172,11 @@ const ProgressWidget: React.StatelessComponent<{}> = ({ children }) => {
   )
 }
 
-const ListItem: React.StatelessComponent<{ title: JSX.Element }> = ({ children, title }) => {
+const Category: React.StatelessComponent<{ title: JSX.Element }> = ({ children, title }) => {
   const id = `${Math.random()}`.replace('.', '')
   return (
     <div className='module'>
-      <div className='pv2 ph3 flex items-center bt bl br b--light-gray bg-evian relative'>
-        <label htmlFor='one' className='dn'>
-          {title}
-        </label>
-        <input
-          type='checkbox'
-          name='one'
-          id='one'
-          className='tick-checkbox input-reset h2 w2 ba bw2 b--light-gray br-100 v-mid bg-white pointer flex-shrink-0'
-        />
+      <div className='ph3 flex items-center ba b--light-gray bg-evian relative'>
         <p className='f4 f3-ns b v-mid pl3 navy pointer' data-toggle={`.details-${id},.controls-${id}`}>
           {title}
         </p>
@@ -208,6 +195,25 @@ const ListItem: React.StatelessComponent<{ title: JSX.Element }> = ({ children, 
       </div>
       <div className={`bg-white bl br b--light-gray details details-${id}`}>
         <div className='ph4 pt2 pb4'>{children}</div>
+      </div>
+    </div>
+  )
+}
+
+const ListItem: React.StatelessComponent<{}> = ({ children }) => {
+  return (
+    <div className='module'>
+      <div className='ph3 flex items-center bt bl br b--light-gray'>
+        <label htmlFor='one' className='dn'>
+          {children}
+        </label>
+        <input
+          type='checkbox'
+          name='one'
+          id='one'
+          className='tick-checkbox input-reset h2 w2 ba bw2 b--light-gray br-100 v-mid bg-white pointer flex-shrink-0'
+        />
+        <p className='f5 f4-ns v-mid pl3 navy pointer'>{children}</p>
       </div>
     </div>
   )

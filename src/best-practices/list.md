@@ -2,158 +2,102 @@
 
 Are you following the best practices?
 
-## TOC
+## Configure the health checks
 
-1. [Containers](#containers)
-1. [Apps](#apps)
+Kubernetes offers two mechanisms to track the lifecycle of your containers and Pods: liveness and readiness probes.
 
-### Containers
+The readiness probe determines when a container can receive traffic.
 
-<details>
-  <summary>☐ Use caching</summary>
+The kubelet executes the checks and decides if the app can receive traffic or not.
 
-details blah blah
+The liveness probe determines when a container should be restarted.
 
-1. one
-1. two
+The kubelet executes the check and decides if the container should be restarted.
 
-</details>
+Please note that there's no default value for readiness and liveness.
 
-<details>
-  <summary>☐ Use caching</summary>
+If you don't set the readiness probe, the kubelet assumes that the app is ready to receive traffic as soon as the container starts.
 
-details blah blah
+If the container takes 2 minutes to start, all the requests to it will fail for those 2 minutes.
 
-1. one
-1. two
+Omitting the liveness probe won't cause as much troubles.
 
-</details>
+The probe is designed to restart your container when it's stuck due to edge-case scenarios such as a dead-lock.
 
-<details>
-  <summary>☐ Use caching</summary>
+_But if you can detect the deadlock and signal a failing liveness probe, why not fixing the deadlock in the first place?_
 
-details blah blah
+It's a fair question, and that's perhaps the reason why liveness probes are generally not recommended.
 
-1. one
-1. two
+Instead your should let your app crash.
 
-</details>
+Kubernetes will restart your container and you can start fresh.
 
-<details>
-  <summary>☐ Use caching</summary>
+### References
 
-details blah blah
+- [Configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+- [Liveness probes are dangerous](https://srcco.de/posts/kubernetes-liveness-probes-are-dangerous.html)"
+- [10 Ways to Shoot Yourself in the Foot with Kubernetes, #9 Will Surprise You - Laurent Bernaille](https://www.youtube.com/watch?v=QKI-JRs2RIE)
 
-1. one
-1. two
+### Checklist
 
-</details>
+- [ ] Containers have readiness probes
+- [ ] Avoid using the liveness probe (if you can)
+- [ ] Don't use `exec` for your probes
 
-<details>
-  <summary>☐ Use caching</summary>
+## Make your apps dependency free
 
-details blah blah
+You might be tempted to signal the readiness of your app only if all of the dependencies such as databases or backend API are also ready.
 
-1. one
-1. two
+If the app connects to a database, you might think that returning a failing readiness probe until the database is available is a good idea — it is not.
 
-</details>
+Consider the following scenario: you have one front-end app that depends on a backend API.
 
-<details>
-  <summary>☐ Use caching</summary>
+If the API is flaky (e.g. it's unavailable from time to time due to a bug), the readiness probe fails, and the dependent readiness in the front-end app fail as well.
 
-details blah blah
+And you have downtime.
 
-1. one
-1. two
+More in general, a failure in a dependecy downstream could propagate to all apps upstream and eventually bring down your front-end facing layer as well.
 
-</details>
+But it doesn't stop there.
 
-<details>
-  <summary>☐ Use caching</summary>
+You can't deploy the front-end unless you deploy the backend first.
 
-details blah blah
+And you can't deploy an upgrade of the front-end unless you upgrade the backend first.
 
-1. one
-1. two
+While it might not sound like a lot of work with two components, imagine when you have a complex collection of apps interacting together.
 
-</details>
+You shouldn't create dependencies between your apps.
 
-<details>
-  <summary>☐ Use caching</summary>
+### References
 
-details blah blah
+- [Configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+- [Liveness probes are dangerous](https://srcco.de/posts/kubernetes-liveness-probes-are-dangerous.html)
 
-1. one
-1. two
+### Checklist
 
-</details>
+- [ ] The Readiness probes is independent
+- [ ] The app retries connecting to dependent services
 
-<details>
-  <summary>☐ Use caching</summary>
+## Gracefully shutdown apps
 
-details blah blah
+When a Pod is deleted you don't want to abruptly terminate all the live connections.
 
-1. one
-1. two
+Instead, you should wait for the existing connection to drain and stop processing new ones.
 
-</details>
+In Kubernetes, when a Pod is terminated, the endpoints for that Pod are removed from the Service.
 
-<details>
-  <summary>☐ Use caching</summary>
+However, it might take some time before component such as kube-proxy or the Ingress controller are notified of the change.
 
-details blah blah
+Hence, traffic might still flow to the Pod despite it being marked as terminated.
 
-1. one
-1. two
+> You might want to consider using the container lifecycle events such as [the preStop handler](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/#define-poststart-and-prestop-handlers) to customise what happened after a Pod is deleted
 
-</details>
+### References
 
-<details>
-  <summary>☐ Use caching</summary>
+- [Handling Client Requests Properly with Kubernetes](https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/)
+- [Graceful shutdown of pods with Kubernetes](https://pracucci.com/graceful-shutdown-of-kubernetes-pods.html)"
 
-details blah blah
+### Checklist
 
-1. one
-1. two
-
-</details>
-
-<details>
-  <summary>☐ Use caching</summary>
-
-details blah blah
-
-1. one
-1. two
-
-</details>
-
-<details>
-  <summary>☐ Use caching</summary>
-
-details blah blah
-
-1. one
-1. two
-
-</details>
-
-<details>
-  <summary>☐ Use caching</summary>
-
-details blah blah
-
-1. one
-1. two
-
-</details>
-
-### Apps
-
-<details>
-  <summary>☐ Use *liveness and readiness* probes</summary>
-
-details blah blah
-
-</details>
+- [ ] The app doesn't shut down on SIGTERM, but it waits
+- [ ] The CMD in the `Dockerfile` forwards the SIGTERM to the process
