@@ -489,7 +489,7 @@
   background: url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzAgMzAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0iIzNCREJCOCIgZmlsbC1ydWxlPSJldmVub2RkIj48Y2lyY2xlIGZpbGwtb3BhY2l0eT0iLjIiIGN4PSIxNSIgY3k9IjE1IiByPSIxNSIvPjxwYXRoIGQ9Ik0yMi42MSAxMi4xMTZjMCAuMjM1LS4wOTQuNDctLjI2My42NGwtOC4wOTkgOC4wOThhLjkxMy45MTMgMCAwIDEtMS4yOCAwbC00LjY5LTQuNjlhLjkxMy45MTMgMCAwIDEgMC0xLjI4bDEuMjgtMS4yOGEuOTEzLjkxMyAwIDAgMSAxLjI4MSAwbDIuNzcgMi43NzcgNi4xNzctNi4xODZhLjkxMy45MTMgMCAwIDEgMS4yOCAwbDEuMjggMS4yOGMuMTcuMTcuMjY1LjQwNS4yNjUuNjR6Ii8+PC9nPjwvc3ZnPg==');
   border: none;
 }
-.tick-checkbox:checked ~ p {
+.tick-checkbox:checked ~ span {
   text-decoration: line-through;
   color: lightgray;
 }
@@ -517,6 +517,11 @@
   -webkit-transform: rotate(45deg) translate(-0.2em, -0.2em);
 }
 /* </best practices> */
+
 .flex-shrink-0 {
   flex-shrink: 0;
+}
+
+.sticky {
+  position: sticky;
 }
