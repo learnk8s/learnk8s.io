@@ -120,8 +120,8 @@ const NewCoursePrice = {
   },
   Switzerland: {
     id: 'sw3days',
-    price: 2500,
-    currency: 'EUR',
+    price: 2800,
+    currency: 'CHF',
     locale: 'de-CH',
   },
   Austria: {
