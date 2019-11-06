@@ -61,7 +61,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
         return {
           heading: { type: 'root', children: [heading] } as Mdast.Root,
           description: { type: 'root', children: collectUntil(content, content[0], 'heading') } as Mdast.Root,
-          references: { type: 'root', children: collectUntil(content, subheadings[0], 'heading') } as Mdast.Root,
+          resources: { type: 'root', children: collectUntil(content, subheadings[0], 'heading') } as Mdast.Root,
           checklist: collectUntil(content, subheadings[1], 'heading')
             .filter(it => matches('list', it))
             .reduce((acc, it) => acc.concat(it.children as any), [] as Mdast.Content[])
@@ -87,7 +87,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 type Section = {
   heading: Mdast.Root
   description: Mdast.Root
-  references: Mdast.Root
+  resources: Mdast.Root
   checklist: Mdast.Root[]
 }
 
@@ -132,7 +132,7 @@ function renderPage(state: State, checklists: { title: string; sections: Section
               </section>
             </div>
           </div>
-          <div className='right mw8-l w-two-thirds-l ph3 ph4-m pn-l js-checklist'>
+          <div className='right mw8-l w-two-thirds-l ph3 ph4-m pn-l js-checklist black-80'>
             {checklists.map((checklist, index) => {
               return (
                 <div className={`${index === 0 ? '' : 'mt5'}`}>
@@ -144,6 +144,8 @@ function renderPage(state: State, checklists: { title: string; sections: Section
                       <section className='pl4-l'>
                         <Category title={transform(it.heading, mdast2JsxInline())}>
                           {transform(it.description, mdast2Jsx())}
+                          <h3 className='f4 navy'>Resources</h3>
+                          {transform(it.resources, mdast2Jsx())}
                         </Category>
                         <ul className='list pl0 mv0 bb b--light-gray'>
                           {it.checklist.map((item, index) => {

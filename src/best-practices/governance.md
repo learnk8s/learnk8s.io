@@ -4,11 +4,13 @@ Are you following the best practices?
 
 ## Define namespace limits
 
+When you decide to segragate your cluster in namespaces, you should protect against misuses in resources.
+
+You shouldn't allow your user to user more resources than what you agreed in advance.
+
 Cluster administrators can set constraints to limit the number of objects or amount of compute resources that are used in your project with quotas and limit ranges.
 
 Containers without limits can lead to resource contention with other containers and unoptimized consumption of compute resources.
-
-You should ensure all containers are allotted the _right_ amount of resources.
 
 Kubernetes has two feature to constraing resource utilisation: ResourceQuota and LimitRange.
 
@@ -24,10 +26,9 @@ You can also set quotas for other Kubernetes objects such as the number of Pods 
 
 If you're thinking that someone could exploit your cluster and create 20000 ConfigMaps, using the LimitRange is how you can prevent that.
 
-### References
+### Resources
 
-- [Resource quotas](https://kubernetes.io/docs/concepts/policy/resource-quotas/)
-- [Limit ranges](https://kubernetes.io/docs/concepts/policy/limit-range/)
+- You should checkout the official documentation if you need a refresher on [resource quotas](https://kubernetes.io/docs/concepts/policy/resource-quotas/) andd [limit ranges](https://kubernetes.io/docs/concepts/policy/limit-range/)
 
 ### Checklist
 
@@ -36,7 +37,14 @@ If you're thinking that someone could exploit your cluster and create 20000 Conf
 
 ## Define Pod security policies
 
-Pod Security Policies are cluster-wide resources that control what policies a Pod must comply with to be accepted into the cluster.
+When a Pod is deployed into the cluster, you should guard against:
+
+- the container being compromised
+- the container using resources on the node that shouldn't use such as process, network or file system
+
+More in general, you should restrict what the Pod can do to the bare minimum.
+
+Kubernetes has Pod Security Policies — cluster-wide resources that control what policies a Pod must comply with to be accepted into the cluster.
 
 For example you can use Kubernetes Pod security policies for restricting:
 
@@ -46,14 +54,13 @@ For example you can use Kubernetes Pod security policies for restricting:
 - Access the host filesystem
 - Linux capabilities, Seccomp or SELinux profiles
 
-Choosing the right level of security depends on the nature of your cluster.
+Choosing the right policy depends on the nature of your cluster.
 
-Please note that you can't set Pod Security Policies on a per namespace basis.
+### Resources
 
-### References
-
-- [Kubernetes Pod Security Policy Best Practices](https://resources.whitesourcesoftware.com/blog-whitesource/kubernetes-pod-security-policy)
-- [Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/)
+- If you are not familiar with [Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/), the official documentation gives an excellent head start.
+- If you wish to learn about Pod Security Policies (PSPs) with hands-on example, [you should check out this article](https://sysdig.com/blog/kubernetes-security-guide/).
+- The following article explains some of the [Kubernetes Pod Security Policy best practices](https://resources.whitesourcesoftware.com/blog-whitesource/kubernetes-pod-security-policy)
 
 ### Checklist
 
@@ -73,11 +80,15 @@ A Kubernetes network must adhere to three basic rules:
 
 The first rule isn't helping if you plan to segregate your cluster in smaller chunks and have isolation between namespaces.
 
-You can define how Pods should be allowed to communicate in the current namespace and cross-namespace using Network Policies.
+_Imagine if a user in your cluster were able to use any other service in the cluster._
+
+Now _imagine if a malicious user in the cluster were to obtain access to the cluster_ — they could make requests to the whole cluster.
+
+To fix that, you can define how Pods should be allowed to communicate in the current namespace and cross-namespace using Network Policies.
 
 Kubernetes network policies specify the access permissions for groups of pods, much like security groups in the cloud are used to control access to VM instances.
 
-### References
+### Resources
 
 - [Kubernetes Pod Security Policy Best Practices](https://resources.whitesourcesoftware.com/blog-whitesource/kubernetes-pod-security-policy)
 - [Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/)
@@ -85,7 +96,7 @@ Kubernetes network policies specify the access permissions for groups of pods, m
 ### Checklist
 
 - [ ] Enable network policies
-- [ ] There's at least a deny-all policy in the namespace
+- [ ] There's a conservative NetworkPolicy in every namespace
 
 ## Define Role Based Access Control (RBAC) policies
 
@@ -110,34 +121,36 @@ If you're giving away as much access as possible, remember that there're some re
 - **Secrets.** They should be read only only to a restricted set of ServiceAccounts
 - **ServiceAccounts.** Users shouldn't be allowed to create more ServiceAccounts
 - **Namespaces.** Users shouldn't be allowed to edit the current namespace
+- **Network Policies.** Users shouldn't be allowed to relax the rules and reach the rest of the containers in the cluster.
 
-### References
+### Resources
 
-- [3 Realistic Approaches to Kubernetes RBAC](https://thenewstack.io/three-realistic-approaches-to-kubernetes-rbac/)
 - [How to: RBAC best practices and workarounds](http://docs.heptio.com/content/tutorials/rbac.html)
 - [Privilege Escalation Prevention and Bootstrapping](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#privilege-escalation-prevention-and-bootstrapping)
+- It's difficult to find good advice on how to set up your RBAC rules. In [3 realistic approaches to Kubernetes RBAC](https://thenewstack.io/three-realistic-approaches-to-kubernetes-rbac/) you can find three practical scenarios and practical advices on how to get started.
+- Please note that, [the default ServiceAccount is automatically mounted into the file system of all Pods](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server). You might want to disable that and provide more granular policies.
 
 ### Checklist
 
-- [ ] Prevent users from writing LimitRanges
-- [ ] Prevent users from writing ResourcesQuotas
-- [ ] Prevent users from reading and writing Secrets
-- [ ] Prevent users from writing ServiceAccounts
-- [ ] Prevent users from editing Namespaces
-- [ ] Prevent users from editing NetworkPolicies
-- [ ] Don't use the default ServiceAccount, prefer individual ServiceAccounts
+- [ ] Disable auto-mounting of the default ServiceAccount
+- [ ] RBAC policies are set to the least amount of privileges necessary
+- [ ] RBAC policies are granular and not shared
 
 ## Define custom policies
 
-Even if you're able to assign policies in your cluster to resources such as Secrets and ServiceAccounts, there are some cases where Role Based Access Control (RBAC) falls short.
+Even if you're able to assign policies in your cluster to resources such as Secrets and Pods, there are some cases where Pod Security Policies (PSPs), Role Based Access Control (RBAC), and Network Policies fall short.
 
 As an example, you might want to avoiding downloading containers from the public internet and prefer to approve those containers first.
 
 Perhaps you have an internal registry and only the images in this registry can be deployed in your cluster.
 
-_How do you enforce that only _trusted_ containers can be deployed in the cluster?_
+_How do you enforce that only \_trusted_ containers can be deployed in the cluster?\_
 
 There's no RBAC policy for that.
+
+Network policies won't work.
+
+_What should you do?_
 
 You could use the [Admission controller](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/) to vet resources that are submitted to the cluster.
 
@@ -147,10 +160,10 @@ One of such tools is the [Open Policy Agent](https://www.openpolicyagent.org/).
 
 You can use the Open Policy Agent to write custom policy rules and validate and mutate resources before they are stored in the cluster.
 
-### References
+### Resources
 
-- [Kubernetes Pod Security Policy Best Practices](https://resources.whitesourcesoftware.com/blog-whitesource/kubernetes-pod-security-policy)
-- [Pod Security Policies](https://kubernetes.io/docs/concepts/policy/pod-security-policy/)
+- The best way to get started with custom admission controllers it the Open Policy Agent. On the official website you can find [a tutorial on how to secure your Ingress resources](openpolicyagent.org/docs/latest/kubernetes-tutorial/) and make sure that are whitelisted and unique.
+- At the moment of writing, there is no open source list of common rego policies for Kubernetes.
 
 ### Checklist
 

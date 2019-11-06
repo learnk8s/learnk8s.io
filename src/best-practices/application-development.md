@@ -30,19 +30,17 @@ It's a fair question, and that's perhaps the reason why liveness probes are gene
 
 It's a best practice to let the app crash rather than signalling a failing liveness probe.
 
-It's worth noting that [using the `exec` command to probe the process inside the container could lead to zombie processes](https://www.youtube.com/watch?v=QKI-JRs2RIE).
+### Resources
 
-You should avoid using it if you can.
-
-### References
-
-- [Configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-- [Liveness probes are dangerous](https://srcco.de/posts/kubernetes-liveness-probes-are-dangerous.html)"
+- The official Kubernetes documentation offers some practical advices on how to [configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+- [Liveness probes are dangerous](https://srcco.de/posts/kubernetes-liveness-probes-are-dangerous.html) collects some of the best practices for setting liveness and readiness probes.
+- It's worth noting that [using the `exec` command to probe the process inside the container could lead to zombie processes](https://www.youtube.com/watch?v=QKI-JRs2RIE). Avoid using it, if you can.
 
 ### Checklist
 
 - [ ] Containers have readiness probes
 - [ ] Avoid using the liveness probe (if you can)
+- [ ] Liveness probes values aren't the same as the Readiness
 - [ ] Don't use `exec` for your probes
 
 ## Apps are independent
@@ -75,10 +73,10 @@ In general, you shouldn't create dependencies between your apps.
 
 Instead, you should make sure that apps are self-sufficient and they try to reconnect to their dependencies (perhaps with an exponential backoff strategy).
 
-### References
+### Resources
 
-- [Configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-- [Liveness probes are dangerous](https://srcco.de/posts/kubernetes-liveness-probes-are-dangerous.html)
+- The official Kubernetes documentation offers some practical advices on how to [configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+- [Liveness probes are dangerous](https://srcco.de/posts/kubernetes-liveness-probes-are-dangerous.html) has some advice on how to set (or not) dependencies in your readiness probes.
 
 ### Checklist
 
@@ -106,16 +104,16 @@ In other words, you should:
 - wait "long enough" to process the few "late" incoming connections
 - terminate the current process
 
-> You might want to consider using the container lifecycle events such as [the preStop handler](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/#define-poststart-and-prestop-handlers) to customise what happened after a Pod is deleted.
+### Resources
 
-### References
-
-- [Handling Client Requests Properly with Kubernetes](https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/)
-- [Graceful shutdown of pods with Kubernetes](https://pracucci.com/graceful-shutdown-of-kubernetes-pods.html)"
+- You can find a detail explanation on how graceful shutdown works in [handling client requests properly with Kubernetes](https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/).
+- You should also pay attention to [forwarding the signal to the right process in your container](https://pracucci.com/graceful-shutdown-of-kubernetes-pods.html).
+- You might want to consider using the container lifecycle events such as [the preStop handler](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/#define-poststart-and-prestop-handlers) to customise what happened before a Pod is deleted.
 
 ### Checklist
 
-- [ ] The app doesn't shut down on SIGTERM, but it waits
+- [ ] The app doesn't shut down on SIGTERM, but it gracefully terminate connections
+- [ ] The app still process incoming requests in the grace period
 - [ ] The CMD in the `Dockerfile` forwards the SIGTERM to the process
 
 ## Fault tolerance
@@ -138,11 +136,11 @@ Any of the above scenarios could affect the availability of your app and potenti
 
 You should protect from a scenario where all of your Pods are made unavailble and you aren't able to serve live traffic.
 
-### References
+### Resources
 
-- [Disruptions](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)
-- [Node Management in GKE](https://cloudmark.github.io/Node-Management-In-GKE)
-- [Inter-pod affinity and anti-affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity)
+- The official documentation is an excellent place to start to understand [Pod Disruption Budgets](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/).
+- You can find some practical scenarios and actionable advice on how to configure replicas, Pod Disruption Budgets and spreading your Pods in several nodes [in this article](https://cloudmark.github.io/Node-Management-In-GKE).
+- The [inter-pod affinity and anti-affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity) documentation describe how you can you could change your Pod to be located (or not) in the same node.
 
 ### Checklist
 
@@ -151,11 +149,11 @@ You should protect from a scenario where all of your Pods are made unavailble an
 - [ ] Avoid Pods being places into a single node
 - [ ] Set Pod disruption budgets
 
-## Define resource limits
+## Manage resource utilisation
 
-Resource limits are used to constraint how much CPU and memory your containers can utilise and are set using the resources property of a containerSpec.
+Resource limits are used to constraint how much CPU and memory your containers can utilise and are set using the resources property of a `containerSpec`.
 
-The scheduler uses limits as one of metrics to decide which node is best suited for the current Pod.
+The scheduler uses those as one of metrics to decide which node is best suited for the current Pod.
 
 You can think about the Kubernetes scheduler as a skilled Tetris player.
 
@@ -169,38 +167,33 @@ _Have you ever tried to play tetris when the blocks don't have width (CPU) and h
 
 An unlimited number of Pods if schedulable on any nodes leading to resource overcommitment and potential node (and kubelet) crashes.
 
-The same applies to CPU limits, but it's more complicated.
+The same applies to CPU limits.
 
-CPU resources are measured as CPU timeunits per timeunit.
+_But should you always set limits and requests for memory and CPU?_
 
-`cpu: 1` means 1 CPU second per second.
+Yes and no.
 
-If you have 1 thread, you can't consume more than 1 CPU second per second.
+If your process goes over the memory limit, the process is terminated.
 
-If you have 2 threads, you can consume 1 CPU second in as little as 0.5 seconds.
+Since CPU is a compressable resource, if your container goes over the limit, the process is throttled.
 
-8 threads can consume 1 CPU second in 0.125 seconds.
+Even if it could have used some of the CPU that was available at that moment.
 
-_What happens when you run out of CPU?_
+> [CPU limits are hard.](https://www.reddit.com/r/kubernetes/comments/cmp7jj/multithreading_in_a_container_with_limited/ew52fcj/)
 
-The process is throttled.
+### Resources
 
-If you can't get your head around CPU limits, [it's fine, don't use them](https://www.reddit.com/r/kubernetes/comments/cmp7jj/multithreading_in_a_container_with_limited/ew52fcj/).
-
-Please note that if you are not sure what should be the _right_ CPU or memory limit, you can use the [Vertical Pod Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler) in Kubernetes with the recommendation mode turned on.
-
-The autoscaler profiles your app and recommends limits for it.
-
-If you think you might forget to set limits in your containers, you should think about including a [LimitRange object](https://kubernetes.io/docs/concepts/policy/limit-range/) to give containers default limits.
-
-### Reference
-
-- [Managing Compute Resources for Containers](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/)
-- [Understanding resource limits in kubernetes: memory](https://medium.com/@betz.mark/understanding-resource-limits-in-kubernetes-memory-6b41e9a955f9)
-- [Understanding resource limits in kubernetes: cpu time](https://medium.com/@betz.mark/understanding-resource-limits-in-kubernetes-cpu-time-9eff74d3161b)"
+- If you wish to dig deeper into CPU and memory limits you should check out the following articles:
+  - [Understanding resource limits in kubernetes: memory](https://medium.com/@betz.mark/understanding-resource-limits-in-kubernetes-memory-6b41e9a955f9)
+  - [Understanding resource limits in kubernetes: cpu time](https://medium.com/@betz.mark/understanding-resource-limits-in-kubernetes-cpu-time-9eff74d3161b)
+- You can find a quick recap on th [best practices for requests and limits in this video](https://www.youtube.com/watch?v=xjpHggHKm78).
+- Please note that if you are not sure what should be the _right_ CPU or memory limit, you can use the [Vertical Pod Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler) in Kubernetes with the recommendation mode turned on. The autoscaler profiles your app and recommends limits for it.
+- When a node goes into an overcommited state (i.e. using too many resources) Kubernetes tries to evict some of the Pod in that Node. Kubernetes ranks and evicts the Pods according to a well defined logic. You can find more about [configuring the quality of service for your Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) on the official documentation.
 
 ### Checklist
 
-- [ ] Set memory limits for all containers
-- [ ] Set CPU limits for all containers, _only if you understand how to use them_
+- [ ] Set memory limits and requests for all containers
+- [ ] Set CPU request to 1 CPU or below
+- [ ] Disable CPU limits — unless you have a good use case
 - [ ] The namespace has a LimitRange with default values for memory and CPU
+- [ ] Set an appropriate Quality of Service (QoS) for Pods
