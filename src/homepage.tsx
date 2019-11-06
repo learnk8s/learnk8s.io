@@ -27,9 +27,10 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <Navbar root={website} />
 
         <Hero image={<img src='assets/loading_cargos.svg' alt='Shipping cargo' />} imageClass='i-loading-cargos'>
-          <h1 className='f1 pl3 pl4-ns pt5-l f-subheadline-l lh-solid'>Mastering Kubernetes</h1>
+          <h1 className='f1 pl3 pl4-ns pt5-l f-subheadline-l lh-solid'>Learn Kubernetes in depth</h1>
           <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns pb3-ns f3-l'>
-            The fastest way to become an expert in deploying applications at scale.
+            Develop the knowledge and skills to get the most out of Kubernetes with hands-on online courses and
+            instructor-led classes.
           </h2>
           <a href='#start' className='link dib blue bg-white br1 pa3 b f5 shadow-3 mt4 ml3 ph4 ml4-ns mb3 mb5-l'>
             Get started &#8594;
