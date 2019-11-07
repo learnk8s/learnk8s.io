@@ -69,7 +69,7 @@ export const Body: React.StatelessComponent<{}> = ({ children }) => {
 export const Navbar: React.StatelessComponent<{}> = ({}) => {
   return (
     <nav id='main-menu' className='nav bg-sky flex items-center justify-between ph3 pv2'>
-      <a href='/' className='logo db w-20 mw4 ml3-l'>
+      <a href='/' className='logo db w-40 mw4 ml3-l'>
         <img src='assets/logo.svg' alt='Learnk8s' />
       </a>
       <div className='mw6 relative'>
@@ -81,7 +81,7 @@ export const Navbar: React.StatelessComponent<{}> = ({}) => {
         </a>
         <ul className='reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
           <li className='ttu mh2 bb bn-l'>
-            <a href='/training' className='white link db b ph1 mv2 pv2 f5 underline-hover' title='Training'>
+            <a href='/training' className='white link db b ph1 mv2 pv2 f5 underline-hover mr4 mr0-l' title='Training'>
               Training
             </a>
           </li>
