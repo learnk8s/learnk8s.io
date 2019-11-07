@@ -49,7 +49,12 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
           <div className='w-50-l tc'>
             <div className='dn dib-l'>
               <div className='i-containers relative'>
-                <img src='assets/containers.svg' alt='Shipping containers' className='absolute top-0 right-0' />
+                {React.createElement('img', {
+                  src: 'assets/containers.svg',
+                  alt: 'Shipping containers',
+                  loading: 'lazy',
+                  className: 'absolute top-0 right-0',
+                })}
               </div>
             </div>
           </div>
@@ -90,7 +95,11 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
               </ul>
               <div className='w-100 tc mt4'>
                 <div className='w3 h3 dib'>
-                  <img src='assets/down_arrow_sky.svg' alt='Down' />
+                  {React.createElement('img', {
+                    src: 'assets/down_arrow_sky.svg',
+                    alt: 'Down',
+                    loading: 'lazy',
+                  })}
                 </div>
               </div>
             </div>
@@ -129,7 +138,12 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
         <div className='ml7-l dn db-ns'>
           <div className='i-cat-and-dog relative'>
-            <img src='assets/cat_and_dog.svg' alt='Learn at your own pace' className='absolute top-0 right-0' />
+            {React.createElement('img', {
+              src: 'assets/cat_and_dog.svg',
+              alt: 'Learn at your own pace',
+              loading: 'lazy',
+              className: 'absolute top-0 right-0',
+            })}
           </div>
         </div>
       </section>
@@ -138,7 +152,12 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         <div className='tc'>
           <div className='mr7-l dib'>
             <div className='i-whiteboard relative'>
-              <img src='assets/whiteboard.svg' alt='Instructor-led training' className='absolute top-0 right-0' />
+              {React.createElement('img', {
+                src: 'assets/whiteboard.svg',
+                alt: 'Instructor-led training',
+                loading: 'lazy',
+                className: 'absolute top-0 right-0',
+              })}
             </div>
           </div>
         </div>
@@ -204,7 +223,12 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
 
         <div className='ml7-l dn db-ns'>
           <div className='i-team relative'>
-            <img src='assets/team.svg' alt='Consulting' className='absolute top-0 right-0' />
+            {React.createElement('img', {
+              src: 'assets/team.svg',
+              alt: 'Consulting',
+              loading: 'lazy',
+              className: 'absolute top-0 right-0',
+            })}
           </div>
         </div>
       </section>

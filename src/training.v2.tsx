@@ -248,11 +248,12 @@ function renderPage(state: State) {
           <div className='w-50-l dn db-l tc'>
             <div className='dib'>
               <div className='i-more-cargo-loading relative'>
-                <img
-                  src='assets/training/more_cargo_loading.svg'
-                  alt='Cargo loading'
-                  className='absolute top-0 right-0'
-                />
+                {React.createElement('img', {
+                  src: 'assets/training/more_cargo_loading.svg',
+                  alt: 'Cargo loading',
+                  loading: 'lazy',
+                  className: 'absolute top-0 right-0',
+                })}
               </div>
             </div>
           </div>
@@ -703,7 +704,12 @@ export const DashboardModule: React.StatelessComponent<{
         <div className=''>
           <div className='w-80 center'>
             <div className='padding-hack-75 relative'>
-              <img src={preview.props.src} alt={preview.props.alt} className='absolute top-0 right-0' />
+              {React.createElement('img', {
+                src: preview.props.src,
+                alt: preview.props.alt,
+                loading: 'lazy',
+                className: 'absolute top-0 right-0',
+              })}
             </div>
           </div>
           <div className=''>
