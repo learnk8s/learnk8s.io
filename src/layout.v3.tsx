@@ -68,34 +68,49 @@ export const Body: React.StatelessComponent<{}> = ({ children }) => {
 
 export const Navbar: React.StatelessComponent<{}> = ({}) => {
   return (
-    <nav className='nav cf bb-ns b--lightest-blue-ns pl3 ph0-m ph3l flex-ns items-center-ns bg-sky'>
-      <a href='/' className='logo fl-ns w-100 mw4 mw-none-ns dib w-20-m w-10-l pa2-ns'>
+    <nav id='main-menu' className='nav bg-sky flex items-center justify-between ph3 pv2'>
+      <a href='/' className='logo db w-20 mw4 ml3-l'>
         <img src='assets/logo.svg' alt='Learnk8s' />
       </a>
-      <ul className='list fl w-80-m w-90-l tr dn db-ns'>
-        <li className='dib ttu'>
-          {/* <a href={getFullUrl(root.children.academy)} className='link white mh3 dib f6 ribbon' title='Academy'> */}
-          <a href='/academy' className='link white mh3 dib f6 pv2 pl2 underline-hover' title='Academy'>
-            Online academy
-          </a>
-        </li>
-        <li className='dib ttu'>
-          <a href='/training' className='link white mh3 dib f6 pv2 pr2 underline-hover' title='Training'>
-            Classroom training
-          </a>
-        </li>
-        <li className='dn dib-l ttu'>
-          <a href='/blog' className='link white mh3 dib f6 pv2 pr2 underline-hover' title='Blog'>
-            Blog
-          </a>
-        </li>
-        <li className='dn dib-l ttu'>
-          <a href='/contact-us' className='link white mh3 dib pv2 pr2 f6 underline-hover' title='Contact us'>
-            Contact us
-          </a>
-        </li>
-      </ul>
+      <div className='mw6 relative'>
+        <a href='#main-menu' className='db h2 dn-l' title='Open menu'>
+          <span className='hamburger-icon' />
+        </a>
+        <a href='#' className='reveal pt2 pr2 tc white absolute top-0 right-0 z-5 dn-l'>
+          <span className='x-icon' />
+        </a>
+        <ul className='reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
+          <li className='ttu mh2 bb bn-l'>
+            <a href='/training' className='white link db b ph1 mv2 pv2 f5 underline-hover' title='Training'>
+              Training
+            </a>
+          </li>
+          <li className='ttu mh2 bb bn-l'>
+            <a href='/blog' className='white link db b ph1 mv2 pv2 f5 underline-hover' title='Blog'>
+              Blog
+            </a>
+          </li>
+          <li className='ttu mh2 bb bn-l'>
+            <a href='/academy' className='white link db b ph1 mv2 pv2 f5 underline-hover' title='Academy'>
+              Online courses
+            </a>
+          </li>
+          {/* <li className='ttu mh2'>
+            <a href='/free-tools' className='white link db b ph1 mv2 pv2 f5 underline-hover' title='Academy'>
+              Free tools
+            </a>
+          </li> */}
+        </ul>
+      </div>
     </nav>
+  )
+}
+
+export const Hamburger: React.StatelessComponent<{}> = ({ children }) => {
+  return (
+    <div className='hamburger h2 w2 relative'>
+      <div className='absolute ' />
+    </div>
   )
 }
 

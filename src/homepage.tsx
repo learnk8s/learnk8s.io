@@ -1,7 +1,8 @@
 import React from 'react'
 import { LinkedNode, getFullUrl, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, Hero } from './layout.v2'
+import { Consultation, Footer, Layout, ListItem, Interlude, Hero } from './layout.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { Navbar } from './layout.v3'
 
 export const Details = {
   type: 'homepage',
@@ -24,7 +25,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
     >
       <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
-        <Navbar root={website} />
+        <Navbar />
 
         <Hero image={<img src='assets/loading_cargos.svg' alt='Shipping cargo' />} imageClass='i-loading-cargos'>
           <h1 className='f1 pl3 pl4-ns pt5-l f-subheadline-l lh-solid'>Learn Kubernetes in depth</h1>

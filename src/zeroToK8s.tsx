@@ -1,6 +1,6 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Layout, ListItem, FAQ, InlineMarkdown, Navbar } from './layout.v2'
+import { Layout, ListItem, FAQ, InlineMarkdown } from './layout.v2'
 import { Course, Boolean } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'

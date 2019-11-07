@@ -1,10 +1,11 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Footer, Layout, mailto, MailTo, FAQs, FAQ } from './layout.v2'
+import { Footer, Layout, mailto, MailTo, FAQs, FAQ } from './layout.v2'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { material, assets as materialAssets } from './material'
+import { Navbar } from './layout.v3'
 
 export const Details = {
   type: 'academy',
@@ -94,7 +95,7 @@ setTimeout(ldinsp, 0);
         }}
       />
 
-      <Navbar root={website} />
+      <Navbar />
 
       <Section>
         <div className='mt4 pb4 pb5-l'>
