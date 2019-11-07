@@ -90,7 +90,7 @@ export const Navbar: React.StatelessComponent<{}> = ({}) => {
               Blog
             </a>
           </li>
-          <li className='ttu mh2 bb bn-l'>
+          <li className='ttu mh2'>
             <a href='/academy' className='white link db b ph1 mv2 pv2 f5 underline-hover' title='Academy'>
               Online courses
             </a>
