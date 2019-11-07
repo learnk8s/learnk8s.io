@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Footer, Layout, MailTo, mailto, FAQs, FAQ, Hero } from './layout.v2'
+import { Footer, Layout, MailTo, mailto, FAQs, FAQ, Hero } from './layout.v2'
 import { material, assets as materialAssets } from './material'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { Navbar } from './layout.v3'
 
 export const Details = {
   type: 'academy-architecting-and-scaling',
@@ -182,7 +183,7 @@ setTimeout(ldinsp, 0);
       />
 
       <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
-        <Navbar root={website} />
+        <Navbar />
 
         <Hero image={<img src='assets/academy/academy.svg' alt='Learn Kubernetes online' />} imageClass='i-academy'>
           <h1 className='f1 mt1-l pt5-l f-subheadline-l lh-solid'>Architecting and scaling apps on Kubernetes</h1>

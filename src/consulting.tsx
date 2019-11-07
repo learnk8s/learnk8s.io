@@ -1,10 +1,11 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Navbar, Consultation, Footer, Layout, ListItem, Interlude, mailto, MailTo } from './layout.v2'
+import { Consultation, Footer, Layout, ListItem, Interlude, mailto, MailTo } from './layout.v2'
 import { PrimaryButton } from './homepage'
 import { ProfessionalService } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { Navbar } from './layout.v3'
 
 export const Details = {
   type: 'consulting',
@@ -55,7 +56,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
         }}
       />
       <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
-        <Navbar root={website} />
+        <Navbar />
 
         <section className='flex-ns items-center-ns ph5-l pt5-l'>
           <div className=''>

@@ -58,55 +58,6 @@ export const Layout: React.StatelessComponent<{
   )
 }
 
-export const Navbar: React.StatelessComponent<{ root: Sitemap }> = ({ root }) => {
-  return (
-    <nav className='nav cf bb-ns b--lightest-blue-ns pl3 ph0-m ph3l flex-ns items-center-ns bg-sky'>
-      <a href={getFullUrl(root)} className='logo fl-ns w-100 mw4 mw-none-ns dib w-20-m w-10-l pa2-ns'>
-        <img src='assets/logo.svg' alt='Learnk8s' />
-      </a>
-      <ul className='list fl w-80-m w-90-l tr dn db-ns'>
-        <li className='dib ttu'>
-          {/* <a href={getFullUrl(root.children.academy)} className='link white mh3 dib f6 ribbon' title='Academy'> */}
-          <a
-            href={getFullUrl(root.children.academy)}
-            className='link white mh3 dib f6 pv2 pl2 underline-hover'
-            title='Academy'
-          >
-            Online academy
-          </a>
-        </li>
-        <li className='dib ttu'>
-          <a
-            href={getFullUrl(root.children.training)}
-            className='link white mh3 dib f6 pv2 pr2 underline-hover'
-            title='Training'
-          >
-            Classroom training
-          </a>
-        </li>
-        <li className='dn dib-l ttu'>
-          <a
-            href={getFullUrl(root.children.blog)}
-            className='link white mh3 dib f6 pv2 pr2 underline-hover'
-            title='Blog'
-          >
-            Blog
-          </a>
-        </li>
-        <li className='dn dib-l ttu'>
-          <a
-            href={getFullUrl(root.children.contactUs)}
-            className='link white mh3 dib pv2 pr2 f6 underline-hover'
-            title='Contact us'
-          >
-            Contact us
-          </a>
-        </li>
-      </ul>
-    </nav>
-  )
-}
-
 export const Footer: React.StatelessComponent<{ root: Sitemap }> = ({ root }) => {
   return (
     <footer className='footer white ph3 ph4-ns pt4 pt5-ns pb3 bg-sky'>

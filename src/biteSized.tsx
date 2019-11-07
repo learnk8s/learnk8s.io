@@ -4,10 +4,11 @@ import { Article } from './article.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import { Layout, Navbar, Consultation, Footer, Subscribe } from './layout.v2'
+import { Layout, Consultation, Footer, Subscribe } from './layout.v2'
 import * as Remark from './remark.v2'
 import marked from 'marked'
 import moment = require('moment')
+import { Navbar } from './layout.v3'
 
 const inlineRenderer = new marked.Renderer()
 
@@ -160,7 +161,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
     >
       <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
-        <Navbar root={website} />
+        <Navbar />
 
         <section className='ph5-l'>
           <div className='w-100'>

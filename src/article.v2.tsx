@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Sitemap } from './sitemap'
-import { Layout, Navbar, Footer } from './layout.v2'
+import { Layout, Footer } from './layout.v2'
 import moment from 'moment'
+import { Navbar } from './layout.v3'
 
 export const Article: React.StatelessComponent<{
   website: Sitemap
@@ -38,8 +39,8 @@ export const Article: React.StatelessComponent<{
       openGraphImage={openGraphImage}
       absoluteUrl={absolutUrl}
     >
-      <div className='white pv2 pv0-ns mb4 mb5-ns'>
-        <Navbar root={website} />
+      <div className='white mb4 mb5-ns'>
+        <Navbar />
       </div>
       <div className='tc mb4 db mw4 center'>
         <Author name={authorFullName} avatar={authorAvatar} link={authorLink} />

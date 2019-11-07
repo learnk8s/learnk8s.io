@@ -1,8 +1,9 @@
 import React from 'react'
 import { LinkedNode, getFullUrl, Sitemap, getAbsoluteUrl, getBlogPosts } from './sitemap'
-import { Navbar, Consultation, Footer, Layout } from './layout.v2'
+import { Consultation, Footer, Layout } from './layout.v2'
 import moment = require('moment')
 import { renderToStaticMarkup } from 'react-dom/server'
+import { Navbar } from './layout.v3'
 
 export const Details = {
   type: 'blog',
@@ -24,7 +25,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
     >
       <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
-        <Navbar root={website} />
+        <Navbar />
 
         <section className='ph5-l'>
           <div className='w-100'>
