@@ -1,4 +1,4 @@
-The essential ingredient to learn how to deploy and scale applications in Kubernetes is the application itself.
+The essential ingredient to learning how to deploy and scale applications in Kubernetes is the application itself.
 
 As you'll learn throughout this guide, **mastering Kubernetes doesn't guarantee that you have zero incidents in production.**
 
@@ -8,13 +8,13 @@ You should also be aware that Kubernetes makes a few assumptions on how your app
 
 As an example, Kubernetes assumes that your app can be stopped and restarted in another node at any given time.
 
-But what if you're building a real-time app that uses Websockets, **would you fine with your app to be terminated and restarted at any time?**
+But what if you're building a real-time app that uses Websockets, **would you be okay with your app being terminated and restarted at any time?**
 
 _Probably not._
 
 Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to 30 million requests and beyond.
 
-In this guide, you will develop a small application for note taking similar to [Evernote](https://evernote.com/) and [Google Keep](https://www.google.com/keep/).
+In this guide, you will develop a small application for note-taking similar to [Evernote](https://evernote.com/) and [Google Keep](https://www.google.com/keep/).
 
 The app lets you:
 
