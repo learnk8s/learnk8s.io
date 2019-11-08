@@ -59,39 +59,50 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
       .map(({ heading, content }) => {
         const subheadings = content.filter(it => matches('heading[depth=3]', it))
         return {
-          heading: { type: 'root', children: [heading] } as Mdast.Root,
+          title: { type: 'root', children: [heading] } as Mdast.Root,
           description: { type: 'root', children: collectUntil(content, content[0], 'heading') } as Mdast.Root,
-          resources: { type: 'root', children: collectUntil(content, subheadings[0], 'heading') } as Mdast.Root,
-          checklist: collectUntil(content, subheadings[1], 'heading')
-            .filter(it => matches('list', it))
-            .reduce((acc, it) => acc.concat(it.children as any), [] as Mdast.Content[])
-            .map(it => ({ type: 'root', children: it.children } as Mdast.Root)),
+          items: subheadings.map(it => {
+            return {
+              title: { type: 'root' as const, children: [it] },
+              content: { type: 'root' as const, children: collectUntil(content, it, 'heading').filter(it => !!it) },
+            }
+          }),
         }
       })
-    return { title, sections: Sections }
+    return { title, description: { type: 'root' as const, children: [] }, categories: Sections }
   }
 
-  const state = store.getState()
-  defaultAssetsPipeline({
-    jsx: renderPage(state, [
-      parseMd({ title: 'Application development', file: 'application-development.md' }),
-      parseMd({ title: 'Governance', file: 'governance.md' }),
-    ]),
-    isOptimisedBuild: getConfig(state).isProduction,
-    siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-    url: BestPractices.url,
-    outputFolder: getConfig(state).outputFolder,
-  })
+  try {
+    const state = store.getState()
+    defaultAssetsPipeline({
+      jsx: renderPage(state, [
+        parseMd({ title: 'Application development', file: 'application-development.v2.md' }),
+        // parseMd({ title: 'Governance', file: 'governance.md' }),
+      ]),
+      isOptimisedBuild: getConfig(state).isProduction,
+      siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
+      url: BestPractices.url,
+      outputFolder: getConfig(state).outputFolder,
+    })
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 type Section = {
-  heading: Mdast.Root
+  title: string
   description: Mdast.Root
-  resources: Mdast.Root
-  checklist: Mdast.Root[]
+  categories: {
+    title: Mdast.Root
+    description: Mdast.Root
+    items: {
+      title: Mdast.Root
+      content: Mdast.Root
+    }[]
+  }[]
 }
 
-function renderPage(state: State, checklists: { title: string; sections: Section[] }[]) {
+function renderPage(state: State, sections: Section[]) {
   const page = getPages(state).find(it => it.id === BestPractices.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === BestPractices.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
@@ -116,7 +127,7 @@ function renderPage(state: State, checklists: { title: string; sections: Section
               <section>
                 <p className='b f3'>Categories</p>
                 <ul className='list pl0'>
-                  {checklists.map(it => {
+                  {sections.map(it => {
                     return (
                       <li className='mv3'>
                         <a
@@ -133,26 +144,27 @@ function renderPage(state: State, checklists: { title: string; sections: Section
             </div>
           </div>
           <div className='right mw8-l w-two-thirds-l ph3 ph4-m pn-l js-checklist black-80'>
-            {checklists.map((checklist, index) => {
+            {sections.map((section, index) => {
               return (
                 <div className={`${index === 0 ? '' : 'mt5'}`}>
-                  <h2 className='ph4-l f3-l f4-l pb3' id={toId(checklist.title)}>
-                    {checklist.title}
+                  <h2 className='ph4-l f3-l f4-l pb3' id={toId(section.title)}>
+                    {section.title}
                   </h2>
-                  {checklist.sections.map(it => {
+                  {section.categories.map(category => {
                     return (
                       <section className='pl4-l'>
-                        <Category title={transform(it.heading, mdast2JsxInline())}>
-                          {transform(it.description, mdast2Jsx())}
-                          <h3 className='f4 navy'>Resources</h3>
-                          {transform(it.resources, mdast2Jsx())}
+                        <Category title={transform(category.title, mdast2JsxInline())}>
+                          {category.description ? transform(category.description, mdast2Jsx()) : null}
                         </Category>
                         <ul className='list pl0 mv0 bb b--light-gray'>
-                          {it.checklist.map((item, index) => {
+                          {category.items.map((item, index) => {
                             return (
                               <li>
-                                <ListItem id={`${toId(toString(it.heading))}-${index}`}>
-                                  {transform(item, mdast2JsxInline())}
+                                <ListItem
+                                  id={`${toId(toString(category.title))}-${index}`}
+                                  title={transform(item.title, mdast2JsxInline())}
+                                >
+                                  {transform(item.content, mdast2Jsx())}
                                 </ListItem>
                               </li>
                             )
@@ -218,19 +230,37 @@ const Category: React.StatelessComponent<{ title: JSX.Element }> = ({ children, 
   )
 }
 
-const ListItem: React.StatelessComponent<{ id: string }> = ({ children, id }) => {
+const ListItem: React.StatelessComponent<{ id: string; title: JSX.Element }> = ({ children, title, id }) => {
   return (
     <div className='module'>
-      <div className='ph3 bt bl br b--light-gray'>
-        <label htmlFor={id} className='flex pv3 items-center db'>
-          <input
-            type='checkbox'
-            name={id}
-            id={id}
-            className='tick-checkbox input-reset h2 w2 ba bw2 b--light-gray br-100 v-mid bg-white pointer flex-shrink-0'
-          />
-          <span className='f5 f4-ns v-mid pl3 navy pointer'>{children}</span>
+      <div className='ph3 flex items-center bt bl br b--light-gray relative'>
+        <label htmlFor='one' className='dn'>
+          {title}
         </label>
+        <input
+          type='checkbox'
+          name={id}
+          id={id}
+          className='tick-checkbox input-reset h2 w2 ba bw2 b--light-gray br-100 v-mid bg-white pointer flex-shrink-0'
+        />
+        <p className='f5 f4-ns v-mid pl3 navy pointer' data-toggle={`.details-${id},.controls-${id}`}>
+          {title}
+        </p>
+        <div className={`controls controls-${id} absolute top-50 right-1`}>
+          <button
+            className='open dib bg-transparent bn pointer'
+            data-toggle={`.details-${id},.controls-${id}`}
+            data-toggle-collapsed
+          >
+            <i className='arr-down' />
+          </button>
+          <button className='close dib bg-transparent bn pointer' data-toggle={`.details-${id},.controls-${id}`}>
+            <i className='arr-up' />
+          </button>
+        </div>
+      </div>
+      <div className={`bg-white bl br b--light-gray details details-${id}`}>
+        <div className='ph4 pt2 pb4'>{children}</div>
       </div>
     </div>
   )
