@@ -428,42 +428,42 @@
   position: relative;
   display: inline-block;
   width: 1.625em;
-  height: .213em;
+  height: 0.213em;
   background: #fff;
   border-radius: 0.2rem;
 }
 
 .hamburger-icon::before,
 .hamburger-icon::after {
-  content: "";
+  content: '';
   position: absolute;
 }
 
 .hamburger-icon::before,
 .hamburger-icon::after {
   width: 1.625em;
-  height: .213em;
+  height: 0.213em;
   background: #fff;
 }
 
 .hamburger-icon::before {
-  top: -.625em;
+  top: -0.625em;
 }
 
 .hamburger-icon::after {
-  bottom: -.625em;
+  bottom: -0.625em;
 }
 
 .x-icon {
   position: relative;
   display: inline-block;
   width: 1.625em;
-  height: .213em;
+  height: 0.213em;
 }
 
 .x-icon::before,
 .x-icon::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   left: 0;
@@ -473,7 +473,7 @@
 .x-icon::before,
 .x-icon::after {
   width: 1.625em;
-  height: .213em;
+  height: 0.213em;
   background: #fff;
 }
 
@@ -524,4 +524,10 @@
 
 .sticky {
   position: sticky;
+}
+
+.new-hero {
+  border-bottom-right-radius: 80% 36%;
+  border-bottom-left-radius: 0% 52%;
+  background: linear-gradient(180deg, hsl(206.79999999999995, 57.2%, 57.8%) 18%, hsl(206, 56%, 50%) 72%);
 }

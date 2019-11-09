@@ -1,5 +1,5 @@
 import React from 'react'
-import { Html, Head, OpenGraph, Body } from '../layout.v3'
+import { Html, Head, OpenGraph, Body, Navbar } from '../layout.v3'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Store } from 'redux'
 import { State, Actions, Action, getPages, getOpenGraph, getConfig } from '../store'
@@ -121,7 +121,20 @@ function renderPage(state: State, sections: Section[]) {
         <link rel='stylesheet' href='assets/style.css' />
       </Head>
       <Body>
-        <div className='flex-l mt5 center justify-center-l'>
+        <Navbar />
+        <div className='new-hero pt4 pb5-l pb4'>
+          <div className='mw8 center ph3 ph4-ns'>
+            <h1 className='f-subheadline-l f1 b white mv0 lh-solid pb4'>
+              Kubernetes
+              <br />
+              best practices
+              <br />
+              checklist
+            </h1>
+            <div />
+          </div>
+        </div>
+        <div className='flex-l mt5-l mt4 center justify-center-l'>
           <div className='left mw5-l w-third-l ph3 ph4-m pn-l relative'>
             <div className='sticky top-0 left-0 js-left pt3'>
               <section>
@@ -216,7 +229,7 @@ const Category: React.StatelessComponent<{ title: JSX.Element }> = ({ children, 
             data-toggle={`.details-${id},.controls-${id}`}
             data-toggle-collapsed
           >
-            <i className='arr-down' />
+            <img src='assets/info.svg' alt='Info' className='w1 h1' />
           </button>
           <button className='close dib bg-transparent bn pointer' data-toggle={`.details-${id},.controls-${id}`}>
             <i className='arr-up' />
