@@ -16,9 +16,9 @@ import { mdast2JsxInline, mdast2Jsx } from '../markdown/jsx'
 import { transform } from '../markdown/utils'
 
 export const BestPractices = {
-  id: 'kubernetes-best-practices',
-  url: '/kubernetes-best-practices',
-  title: 'Kubernetes best practices',
+  id: 'kubernetes-best-practices-production',
+  url: '/kubernetes-best-practices-production',
+  title: 'Kubernetes production best practices',
   description:
     'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes',
 }
@@ -127,9 +127,9 @@ function renderPage(state: State, sections: Section[]) {
             <h1 className='f-subheadline-l f1 b white mv0 lh-solid pb4'>
               Kubernetes
               <br />
-              best practices
+              production
               <br />
-              checklist
+              best practices
             </h1>
             <div />
           </div>
@@ -219,8 +219,8 @@ const Category: React.StatelessComponent<{ title: JSX.Element }> = ({ children, 
   const id = `${Math.random()}`.replace('.', '')
   return (
     <div className='module'>
-      <div className='ph3 flex items-center ba b--light-gray bg-evian relative'>
-        <p className='f4 f3-ns b v-mid pl3 navy pointer' data-toggle={`.details-${id},.controls-${id}`}>
+      <div className='ph3 flex items-center ba b--light-gray bg-navy relative'>
+        <p className='f4 f3-ns b v-mid pl3 white pointer mv3' data-toggle={`.details-${id},.controls-${id}`}>
           {title}
         </p>
         <div className={`controls controls-${id} absolute top-50 right-1`}>
@@ -246,7 +246,7 @@ const Category: React.StatelessComponent<{ title: JSX.Element }> = ({ children, 
 const ListItem: React.StatelessComponent<{ id: string; title: JSX.Element }> = ({ children, title, id }) => {
   return (
     <div className='module'>
-      <div className='ph3 flex items-center bt bl br b--light-gray relative'>
+      <div className='ph3 flex items-center bt bl br b--light-gray relative bg-evian'>
         <label htmlFor='one' className='dn'>
           {title}
         </label>
