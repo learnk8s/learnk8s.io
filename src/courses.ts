@@ -163,8 +163,8 @@ const CoursePrice = {
   },
   UnitedArabEmirates: {
     id: 'uae3days',
-    price: 7000,
-    currency: 'AED',
+    price: 1900,
+    currency: 'USD',
     locale: 'ar-AE',
   },
 }
