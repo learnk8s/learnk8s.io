@@ -172,7 +172,24 @@ It's challenging to find good advice on how to set up your RBAC rules. In [3 rea
 
 ### RBAC policies are granular and not shared
 
-[How to: RBAC best practices and workarounds](http://docs.heptio.com/content/tutorials/rbac.html) has some advice on how to share (or not) RBAC policies.
+Zalando has a concise policy to define roles and ServiceAccounts.
+
+First, they describe they requirements:
+
+- Users should be able to deploy but they shouldn't be allowed to read Secrets for example
+- Admins should get full access to all resources
+- Applications should not get write access to the Kubernetes API by default
+- It should be possible to write to the Kubernetes API for some applications.
+
+The four requirements translate into five separate Roles:
+
+- ReadOnly
+- PowerUser
+- Operator
+- Controller
+- Admin
+
+You can read about [their decision in this link](https://kubernetes-on-aws.readthedocs.io/en/latest/dev-guide/arch/access-control/adr-004-roles-and-service-accounts.html).
 
 ## Custom policies
 
@@ -209,12 +226,12 @@ metadata:
   name: example-ingress
 spec:
   rules:
-  - host: first.example.com
-    http:
-      paths:
-      - backend:
-          serviceName: service
-          servicePort: 80
+    - host: first.example.com
+      http:
+        paths:
+          - backend:
+              serviceName: service
+              servicePort: 80
 ```
 
 However, you might want to prevent users using **the same hostname multiple times** and overriding each other.
@@ -232,12 +249,12 @@ metadata:
   name: example-ingress
 spec:
   rules:
-  - host: first.example.com
-    http:
-      paths:
-      - backend:
-          serviceName: service
-          servicePort: 80
+    - host: first.example.com
+      http:
+        paths:
+          - backend:
+              serviceName: service
+              servicePort: 80
 ```
 
 However, you might want to prevent users using **invalid hostnames**.
