@@ -104,7 +104,7 @@ Hence, traffic might still flow to the Pod despite it being marked as terminated
 
 You should wait before shutting down your process and process _late_ connections.
 
-If you need a refresher on how endpoints are propagate in your cluster, [read this article on how to handle client requests properly](<(https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/)>).
+If you need a refresher on how endpoints are propagate in your cluster, [read this article on how to handle client requests properly]((https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/)).
 
 ### The app still process incoming requests in the grace period
 
