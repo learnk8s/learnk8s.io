@@ -340,8 +340,16 @@ spec:
 
 ### Resources have business labels defined
 
+TODO
+
 ### Resources have security labels defined
+
+TODO
 
 ## Logging
 
+TODO
+
 ### The application logs to `stdout` and `stderr`
+
+TODO
