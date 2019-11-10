@@ -5,7 +5,7 @@ import { State, Actions, Action } from './store'
 
 const renderer = new marked.Renderer()
 
-const NewVenues = {
+const Venues = {
   JustCoSg: {
     id: 'justcosg',
     locationName: 'JustCo Singapore',
@@ -85,9 +85,16 @@ const NewVenues = {
     country: 'Italy',
     countryCode: 'IT',
   },
+  GenericDubai: {
+    id: 'genericdu',
+    locationName: 'Dubai',
+    city: 'Dubai',
+    country: 'United Arab Emirates',
+    countryCode: 'AE',
+  },
 }
 
-const NewCoursePrice = {
+const CoursePrice = {
   Singapore: {
     id: 'sgd3days',
     price: 2550,
@@ -154,9 +161,15 @@ const NewCoursePrice = {
     currency: 'EUR',
     locale: 'it-IT',
   },
+  UnitedArabEmirates: {
+    id: 'uae3days',
+    price: 7000,
+    currency: 'AED',
+    locale: 'ar-AE',
+  },
 }
 
-const NewCourses = {
+const Courses = {
   threeDays: {
     id: '3days-eng',
     duration: '3 days',
@@ -182,18 +195,18 @@ const NewPictures = {
 
 export function Register(store: Store<State, Actions>) {
   Object.values(NewPictures).forEach(picture => store.dispatch(Action.registerCoursePicture(picture)))
-  Object.values(NewCourses).forEach(course => store.dispatch(Action.registerCourse(course)))
-  Object.values(NewVenues).forEach(venue => store.dispatch(Action.registerCourseVenue(venue)))
-  Object.values(NewCoursePrice).forEach(price => store.dispatch(Action.registerCoursePrice(price)))
+  Object.values(Courses).forEach(course => store.dispatch(Action.registerCourse(course)))
+  Object.values(Venues).forEach(venue => store.dispatch(Action.registerCourseVenue(venue)))
+  Object.values(CoursePrice).forEach(price => store.dispatch(Action.registerCoursePrice(price)))
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SINGAPORE|20191127',
       startAt: '2019-11-27T10:00:00',
       endsAt: '2019-11-29T17:00:00',
       timezone: 'Asia/Singapore',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.Singapore.id,
-      venueId: NewVenues.JustCoSg.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Singapore.id,
+      venueId: Venues.JustCoSg.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -203,9 +216,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2019-12-02T09:30:00',
       endsAt: '2019-12-04T05:00:00',
       timezone: 'Europe/London',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.GreatBritain.id,
-      venueId: NewVenues.LondonCitizenM.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.GreatBritain.id,
+      venueId: Venues.LondonCitizenM.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -215,9 +228,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2019-12-16T09:30:00',
       endsAt: '2019-12-18T05:00:00',
       timezone: 'Australia/Sydney',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.Sydney.id,
-      venueId: NewVenues.GenericSydney.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Sydney.id,
+      venueId: Venues.GenericSydney.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -227,9 +240,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-01-29T09:30:00',
       endsAt: '2020-01-31T05:00:00',
       timezone: 'America/Toronto',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.Canada.id,
-      venueId: NewVenues.GenericToronto.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Canada.id,
+      venueId: Venues.GenericToronto.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -239,9 +252,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-02-03T09:30:00',
       endsAt: '2020-02-05T05:00:00',
       timezone: 'America/Los_Angeles',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.UnitedStates.id,
-      venueId: NewVenues.GenericSanFrancisco.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.UnitedStates.id,
+      venueId: Venues.GenericSanFrancisco.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -251,9 +264,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-02-10T09:30:00',
       endsAt: '2020-02-12T05:00:00',
       timezone: 'Europe/Zurich',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.Switzerland.id,
-      venueId: NewVenues.GenericZurich.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Switzerland.id,
+      venueId: Venues.GenericZurich.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -263,9 +276,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-02-17T09:30:00',
       endsAt: '2020-02-19T05:00:00',
       timezone: 'Europe/Vienna',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.Austria.id,
-      venueId: NewVenues.GenericVienna.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Austria.id,
+      venueId: Venues.GenericVienna.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -275,9 +288,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-02-17T10:00:00',
       endsAt: '2020-02-19T17:00:00',
       timezone: 'Asia/Singapore',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.Singapore.id,
-      venueId: NewVenues.JustCoSg.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Singapore.id,
+      venueId: Venues.JustCoSg.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -287,9 +300,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-02-17T10:00:00',
       endsAt: '2020-02-19T17:00:00',
       timezone: 'Europe/Paris',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.France.id,
-      venueId: NewVenues.GenericParis.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.France.id,
+      venueId: Venues.GenericParis.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -299,9 +312,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-03-04T09:30:00',
       endsAt: '2020-03-06T05:00:00',
       timezone: 'Australia/Sydney',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.Sydney.id,
-      venueId: NewVenues.GenericSydney.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Sydney.id,
+      venueId: Venues.GenericSydney.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -311,9 +324,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-02-26T09:30:00',
       endsAt: '2020-02-28T05:00:00',
       timezone: 'Europe/Berlin',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.Germany.id,
-      venueId: NewVenues.GenericBerlin.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Germany.id,
+      venueId: Venues.GenericBerlin.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -323,9 +336,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-03-11T09:30:00',
       endsAt: '2020-03-13T05:00:00',
       timezone: 'Europe/London',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.GreatBritain.id,
-      venueId: NewVenues.LondonCitizenM.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.GreatBritain.id,
+      venueId: Venues.LondonCitizenM.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -335,9 +348,9 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-03-11T09:30:00',
       endsAt: '2020-03-13T05:00:00',
       timezone: 'Asia/Hong_Kong',
-      courseId: NewCourses.threeDays.id,
-      priceId: NewCoursePrice.HongKong.id,
-      venueId: NewVenues.GenericHongKong.id,
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.HongKong.id,
+      venueId: Venues.GenericHongKong.id,
       pictureId: NewPictures.one.id,
     }),
   )
@@ -347,9 +360,21 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-03-18T09:30:00',
       endsAt: '2020-03-20T05:00:00',
       timezone: 'Europe/Rome',
-      courseId: NewCourses.threeDaysIT.id,
-      priceId: NewCoursePrice.Italy.id,
-      venueId: NewVenues.GenericMilan.id,
+      courseId: Courses.threeDaysIT.id,
+      priceId: CoursePrice.Italy.id,
+      venueId: Venues.GenericMilan.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|DUBAI|20200318',
+      startAt: '2020-03-18T09:30:00',
+      endsAt: '2020-03-20T05:00:00',
+      timezone: 'Asia/Dubai',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.UnitedArabEmirates.id,
+      venueId: Venues.GenericDubai.id,
       pictureId: NewPictures.one.id,
     }),
   )
