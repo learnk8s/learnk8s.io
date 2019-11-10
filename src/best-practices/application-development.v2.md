@@ -298,17 +298,18 @@ However, you might want to consider using labels to cover the following categori
 
 ### Resources have technical labels defined
 
-You should tag your Pods with:
+You could tag your Pods with:
 
 - `name`, the name of the application such "User API"
 - `instance`, a unique name identifying the instance of an application (you could use the container image tag)
 - `version`, the current version of the application (an incremental counter)
 - `component`, the component within the architecture such as "API" or "database"
 - `part-of`, the name of a higher level application this one is part of such as "payment gateway"
+- `managed-by`, the tool being used to manage the operation of an application such "kubectl" or "Helm"
 
 Here's an example on how you could use such labels in a Deployment:
 
-```yaml|highlight=6-10,19-23|title=deployment.yaml
+```yaml|highlight=6-11,20-24|title=deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -319,6 +320,7 @@ metadata:
     app.kubernetes.io/version: "42"
     app.kubernetes.io/component: api
     app.kubernetes.io/part-of: payment-gateway
+    app.kubernetes.io/managed-by: kubectl
 spec:
   replicas: 3
   selector:
@@ -338,18 +340,111 @@ spec:
         image: myapp
 ```
 
+Those labels are [recommended by the official documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/).
+
 ### Resources have business labels defined
 
-TODO
+You could tag your Pods with:
+
+- `owner`, used to identify who is responsible for the resource
+- `project`, used to identify the project that the resource belongs to
+- `business-unit`, used to identify the cost center or business unit associated with a resource; typically for cost allocation and tracking
+
+Here's an example on how you could use such labels in a Deployment:
+
+```yaml|highlight=6-8,17-19|title=deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+  labels:
+    owner: payment-team
+    project: fraud-detection
+    business-unit: "80432"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      application: my-app
+  template:
+    metadata:
+      labels:
+        owner: payment-team
+        project: fraud-detection
+        business-unit: "80432"
+    spec:
+      containers:
+      - name: app
+        image: myapp
+```
+
+You can explore label and [tagging for resources on the AWS tagging strategy page](https://aws.amazon.com/answers/account-management/aws-tagging-strategies/).
+
+The article isn't specific to Kubernetes but explores some of the most common strategies for tagging resources.
 
 ### Resources have security labels defined
 
-TODO
+You could tag your Pods with:
+
+- `confidentiality`, an identifier for the specific data-confidentiality level a resource supports
+- `compliance`, an identifier for workloads designed to adhere to specific compliance requirements
+
+Here's an example on how you could use such labels in a Deployment:
+
+```yaml|highlight=6-11,20-24|title=deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+  labels:
+    confidentiality: official
+    compliance: pci
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      application: my-app
+  template:
+    metadata:
+      labels:
+        confidentiality: official
+        compliance: pci
+    spec:
+      containers:
+      - name: app
+        image: myapp
+```
+
+You can explore label and [tagging for resources on the AWS tagging strategy page](https://aws.amazon.com/answers/account-management/aws-tagging-strategies/).
+
+The article isn't specific to Kubernetes but explores some of the most common strategies for tagging resources.
 
 ## Logging
 
-TODO
+Application logs can help you understand what is happening inside your app.
+
+The logs are particularly useful for debugging problems and monitoring app activity.
 
 ### The application logs to `stdout` and `stderr`
 
-TODO
+There are two logging strategies: _passive_ and _active_.
+
+Apps that use passive logging are unaware of the logging infrastructure and simply log messages to standard outputs.
+
+This best practice is part of [the twelve-factor app](https://12factor.net/logs).
+
+In active logging, the app makes network connections to intermediate aggregators, sends data to third-party logging services, or writes directly to a database or index.
+
+Active logging is considered an antipattern and it should be avoided.
+
+### Avoid sidecars for logging (if you can)
+
+If you wish to apply log transformations to an application with a non-standard log event model, you may want to use a sidecar container.
+
+With a sidecar container you can normalise the log entries before they are shipped elsewhere.
+
+For example, you may want to transform Apache logs into Logstash JSON format prior to shipping it to the log infrastructure.
+
+However, if you have control over the application you could output the right format to begin with.
+
+You could save on running an extra container for each Pod in your cluster.
