@@ -60,7 +60,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
         const subheadings = content.filter(it => matches('heading[depth=3]', it))
         return {
           title: { type: 'root', children: [heading] } as Mdast.Root,
-          description: { type: 'root', children: collectUntil(content, content[0], 'heading') } as Mdast.Root,
+          description: { type: 'root', children: collectUntil(content, content[0], 'heading').filter(it => !!it) } as Mdast.Root,
           items: subheadings.map(it => {
             return {
               title: { type: 'root' as const, children: [it] },
@@ -78,6 +78,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
       jsx: renderPage(state, [
         parseMd({ title: 'Application development', file: 'application-development.v2.md' }),
         parseMd({ title: 'Governance', file: 'governance.v2.md' }),
+        parseMd({ title: 'Cluster configuration', file: 'configuration.md' }),
       ]),
       isOptimisedBuild: getConfig(state).isProduction,
       siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
