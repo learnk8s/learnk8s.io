@@ -96,13 +96,23 @@ However, it might take some time before component such as kube-proxy or the Ingr
 
 You can find a detail explanation on how graceful shutdown works in [handling client requests properly with Kubernetes](https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/).
 
+The correct graceful shutdown sequence is:
+
+1. upon receiving SIGTERM
+1. the server stops accepting new connections
+1. completes all active requests
+1. then immediately kills all keepalive connections and
+1. the process exits
+
+You can [test that your app gracefully shuts down with this tool: kube-sigterm-test](https://github.com/mikkeloscar/kube-sigterm-test).
+
 ### The app doesn't shut down on SIGTERM, but it gracefully terminate connections
 
 It might take some time before component such as kube-proxy or the Ingress controller are notified of the endpoint changes.
 
 Hence, traffic might still flow to the Pod despite it being marked as terminated.
 
-You should wait before shutting down your process and process _late_ connections.
+The app should stop accepting new requests on all remaining connections, and close these once the outgoing queue is drained.
 
 If you need a refresher on how endpoints are propagate in your cluster, [read this article on how to handle client requests properly]((https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/)).
 
@@ -115,6 +125,22 @@ You might want to consider using the container lifecycle events such as [the pre
 You can be notifed when the Pod is about to be terminated by capturing the SIGTERM signal in your app.
 
 You should also pay attention to [forwarding the signal to the right process in your container](https://pracucci.com/graceful-shutdown-of-kubernetes-pods.html).
+
+### Close all idle keep-alive sockets
+
+If the calling app is not closing the TCP connection (e.g. using TCP keep-alive or a connection pool) it will connect to one Pod and not use the other Pods in that Service.
+
+_But what happens when a Pod is deleted?_
+
+Ideally, the request should go to another Pod.
+
+However, the calling app has a long lived connection open with the Pod that is about to be terminated and it will keep using it.
+
+On the other hand, you shouldn't abruptly terminate long lived connections.
+
+Instead, you should terminate them before shutting down the app.
+
+You can read about keep-alive connections on this article about [gracefully shutting down a Nodejs HTTP server](http://dillonbuchanan.com/programming/gracefully-shutting-down-a-nodejs-http-server/).
 
 ## Fault tolerance
 
@@ -248,3 +274,74 @@ When a node goes into an overcommited state (i.e. using too many resources) Kube
 Kubernetes ranks and evicts the Pods according to a well defined logic.
 
 You can find more about [configuring the quality of service for your Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) on the official documentation.
+
+## Tagging resources
+
+Labels are the mechanism you use to organize Kubernetes objects.
+
+A label is a key-value pair without any pre-defined meaning.
+
+They can be applied to all resources in your cluster from Pods to Service, Ingress manifests, Endpoints, etc.
+
+You can use labels to categorize resources by purpose, owner, environment, or other criteria.
+
+So you could choose a label to tag a Pod in an environment such as "this pod is running in production" or "the payment team owns that Deployment".
+
+You can also omit labels all together.
+
+However, you might want to consider using labels to cover the following categories:
+
+- technical labels such as the environment
+- labels for automation
+- label related to your business such as cost-center allocation
+- label related to security such as compliance requirements
+
+### Resources have technical labels defined
+
+You should tag your Pods with:
+
+- `name`, the name of the application such "User API"
+- `instance`, a unique name identifying the instance of an application (you could use the container image tag)
+- `version`, the current version of the application (an incremental counter)
+- `component`, the component within the architecture such as "API" or "database"
+- `part-of`, the name of a higher level application this one is part of such as "payment gateway"
+
+Here's an example on how you could use such labels in a Deployment:
+
+```yaml|highlight=6-10,19-23|title=deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+  labels:
+    app.kubernetes.io/name: user-api
+    app.kubernetes.io/instance: user-api-5fa65d2
+    app.kubernetes.io/version: "42"
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: payment-gateway
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      application: my-app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: user-api
+        app.kubernetes.io/instance: user-api-5fa65d2
+        app.kubernetes.io/version: "42"
+        app.kubernetes.io/component: api
+        app.kubernetes.io/part-of: payment-gateway
+    spec:
+      containers:
+      - name: app
+        image: myapp
+```
+
+### Resources have business labels defined
+
+### Resources have security labels defined
+
+## Logging
+
+### The application logs to `stdout` and `stderr`

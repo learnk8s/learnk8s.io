@@ -24,7 +24,7 @@ By default, no resource requests and limits are set, which means that the schedu
 Setting a request and limit for both the memory and CPU resources ensures that:
 
 1. All pods are able to run, because they are only scheduled to nodes that have the amount of free resources that they need
-2. Pods are prevented from monopolising all the resources on a given node for themselves
+1. Pods are prevented from monopolising all the resources on a given node for themselves
 
 #### How?
 
