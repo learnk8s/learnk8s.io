@@ -448,3 +448,15 @@ For example, you may want to transform Apache logs into Logstash JSON format pri
 However, if you have control over the application you could output the right format to begin with.
 
 You could save on running an extra container for each Pod in your cluster.
+
+## Scaling
+
+### The app is stateless
+
+## Secrets and configurations
+
+### Secrets as files, not enviroment variables
+
+File secrets where possible. It’s trivial to inspect a Containers environment - anything secret would easily be visible if it’s an environment variable. Also possible risk of leakage via console output.
+
+### Externalise all configuration

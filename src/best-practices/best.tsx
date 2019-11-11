@@ -60,7 +60,10 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
         const subheadings = content.filter(it => matches('heading[depth=3]', it))
         return {
           title: { type: 'root', children: [heading] } as Mdast.Root,
-          description: { type: 'root', children: collectUntil(content, content[0], 'heading').filter(it => !!it) } as Mdast.Root,
+          description: {
+            type: 'root',
+            children: collectUntil(content, content[0], 'heading').filter(it => !!it),
+          } as Mdast.Root,
           items: subheadings.map(it => {
             return {
               title: { type: 'root' as const, children: [it] },
