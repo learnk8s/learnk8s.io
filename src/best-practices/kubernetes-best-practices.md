@@ -51,7 +51,38 @@ O'Reilly, 2019.
 
 ## Chapter 9. Networking, Network Security, and Service Mesh
 
+## Services and Ingresses
 
+_Services:
+
+- ClusterIP (headless service has no label selector but an explicitly assigned Endpoint; is not managed by kube-proxy)
+- NodePort
+- ExternalName
+- LoadBalancer
+
+Ingress:
+
+Provides HTTP application-level routing in contrast to level 3/4 of services.
+
+Ingress controller enables the use of Ingress resources (all of them are third-party)_
+
+- All services that don't need to be accessed from outside the cluster should be ClusterIP
+- Use Ingress for external-facing HTTP services and choose appropriate ingress controller
+
+### NetworkPolicy
+
+_Defines how pods within the cluster are allowed to communicate with each other._
+
+- _Requires a CNI that suppports NetworkPolicy (Calico, Cilium, Weave Net)_
+- Start with restricting ingress, then restrict egress if needed
+- Create a deny-all policy in all namespaces
+- Try to restrict inter-pod communication to within namespaces (avoid cross-namespace communication)
+
+### Service meshes
+
+_Manage traffic between services of an application (or multiple applications)._
+
+- Most probably only needed for large deployments with hundreds of services and thousands of endpoints
 
 ## Chapter 10. Pod and Container Security
 
