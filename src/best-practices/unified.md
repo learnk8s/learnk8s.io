@@ -102,7 +102,6 @@ The amounts for CPU are measured in fractions of CPU time of a single CPU core a
 
 - [Kubernetes documentation: Managing Compute Resources for Containers](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/)
 
-
 ## Scheduling constraints
 
 Influence the Kubernetes scheduler's decision to which nodes to schedule pods.
