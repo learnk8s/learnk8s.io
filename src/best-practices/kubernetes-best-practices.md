@@ -51,20 +51,20 @@ O'Reilly, 2019.
 
 ## Chapter 9. Networking, Network Security, and Service Mesh
 
-## Services and Ingresses
+### Services and Ingresses
 
-_Services:
+_Service:_
 
 - ClusterIP (headless service has no label selector but an explicitly assigned Endpoint; is not managed by kube-proxy)
 - NodePort
 - ExternalName
 - LoadBalancer
 
-Ingress:
+_Ingress:_
 
 Provides HTTP application-level routing in contrast to level 3/4 of services.
 
-Ingress controller enables the use of Ingress resources (all of them are third-party)_
+Ingress controller enables the use of Ingress resources (all of them are third-party)jjj
 
 - All services that don't need to be accessed from outside the cluster should be ClusterIP
 - Use Ingress for external-facing HTTP services and choose appropriate ingress controller
