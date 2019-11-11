@@ -1,10 +1,54 @@
 # Kubernetes best practices
 
-## Resource management
+## Defining resource objects
 
-Manage the resource usage (CPU and memory) of the workloads in your cluster.
+### All resources have a common set recommended labels
 
-### Set resource requests and limits (memory and CPU) for all containers of all pods
+#### What?
+
+The [Kubernetes documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/) recommends a set of common labels to be applied to all resource objects.
+
+#### Why?
+
+Having a set of common labels allows third-party tools to interoperate with the resources in your cluster. Furthermore, a common set of labels facilitates and standardises manual management of the resources.
+
+#### How?
+
+The recommended labels are:
+
+- `app.kubernetes.io/name`: the name of the application
+- `app.kubernetes.io/instance`: a unique name identifying the instance of an application
+- `app.kubernetes.io/version`: the current version of the application (e.g., a semantic version, revision hash, etc.)
+- `app.kubernetes.io/component`: the component within the architecture
+- `app.kubernetes.io/part-of`: the name of a higher level application this one is part of
+- `app.kubernetes.io/managed-by`: the tool being used to manage the operation of an application
+
+Here is an example of applying these labels to a StatefulSet resource:
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/name: mysql
+    app.kubernetes.io/instance: wordpress-abcxzy
+    app.kubernetes.io/version: "5.7.21"
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: wordpress
+    app.kubernetes.io/managed-by: helm
+```
+
+Note that depending on the application, only some of these labels may be defined (for example, `app.kubernetes.io/name` and `app.kubernetes.io/instance`), but they should be applied to _all_ resource objects.
+
+#### References
+
+- [Kubernetes documentation: Recommended Labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/)
+
+## Compute resource management
+
+Manage the compute resource usage (CPU and memory) of the workloads in your cluster.
+
+### All containers have defined resource requests and limits (memory and CPU)
 
 #### What?
 
@@ -57,6 +101,7 @@ The amounts for CPU are measured in fractions of CPU time of a single CPU core a
 #### References
 
 - [Kubernetes documentation: Managing Compute Resources for Containers](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/)
+
 
 ## Scheduling constraints
 
