@@ -29,13 +29,27 @@ Here is an example of applying these labels to a StatefulSet resource:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  name: mysql-abcxyz
   labels:
     app.kubernetes.io/name: mysql
-    app.kubernetes.io/instance: wordpress-abcxzy
+    app.kubernetes.io/instance: mysql-abcxzy
     app.kubernetes.io/version: "5.7.21"
     app.kubernetes.io/component: database
     app.kubernetes.io/part-of: wordpress
     app.kubernetes.io/managed-by: helm
+spec:
+  # ...
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mysql
+        app.kubernetes.io/instance: mysql-abcxzy
+        app.kubernetes.io/version: "5.7.21"
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: wordpress
+        app.kubernetes.io/managed-by: helm
+    spec:
+      # ...
 ```
 
 Note that depending on the application, only some of these labels may be defined (for example, `app.kubernetes.io/name` and `app.kubernetes.io/instance`), but they should be applied to _all_ resource objects.
