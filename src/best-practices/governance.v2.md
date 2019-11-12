@@ -1,6 +1,6 @@
-# Governance
+# Namespaces governance
 
-Are you following the best practices?
+Best practices for creating, managing and administering namespaces.
 
 ## Namespace limits
 

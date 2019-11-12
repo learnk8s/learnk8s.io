@@ -16,7 +16,6 @@ _Resource manifests are the declarative state of an application._
   - Deploy to production only from a specific Git branch using some automation (e.g. a CI/CD pipeline)
 - Use CI/CD from the beginning (difficult to retrofit into an existing application)
 
-
 ### Managing container images
 
 - Base images on well-known and trusted image providers
@@ -94,7 +93,6 @@ _Collect and centrally store logs from all the workloads running in the cluster 
   - Use SaaS/cloud service offerings for stateful services
   - If running on premises and public SaaS is not an option, have a dedicated team that provides internal stateful SaaS to the rest of the organisation
 
-
 ### RBAC
 
 - Use specific service accounts for all "users" of the Kubernetes API that are assigned tailored roles with the least amount of privileges to do the job
@@ -141,7 +139,7 @@ _Ingress:_
 
 Provides HTTP application-level routing in contrast to level 3/4 of services.
 
-Ingress controller enables the use of Ingress resources (all of them are third-party)jjj
+Ingress controller enables the use of Ingress resources (all of them are third-party)s
 
 - All services that don't need to be accessed from outside the cluster should be ClusterIP
 - Use Ingress for external-facing HTTP services and choose appropriate ingress controller
@@ -171,7 +169,7 @@ _Many fields of PodSecurityPolicy match those of securityContext in the Pod spec
 
 - Using PodSecurityPolicies requires the PodSecurityPolicy admission controller to be enabled, but in most Kubernetes deployments it is not enabled. As soon as the PodSecurityPolicy admission controller is enabled, you need appropriate PodSecurityPolicy resources to allow any Pods to be created.
   - You also need to grant "use" access to the created PodSecurityPolicies to the service account of the workload or the controller of the workload (you can use  `system:serviceaccounts` group which compromises all controller service accounts).
-- Use https://github.com/sysdiglabs/kube-psp-advisor to generate PodSecurityPolicies automatically based on exisiting Pods
+- Use <https://github.com/sysdiglabs/kube-psp-advisor> to generate PodSecurityPolicies automatically based on exisiting Pods
 
 ### RuntimeClass
 
@@ -189,12 +187,12 @@ _Allow to specify which container runtime to use for a Pod (if there are multipl
 
 Explanation:
 
-_Only allow compliant Kubernetes resources (of any kind) to be applied to the cluster (compliant with the defined policies).
+\_Only allow compliant Kubernetes resources (of any kind) to be applied to the cluster (compliant with the defined policies).
 
 - Open Policy Agent (OPA): policy engine
 - Gatekeeper
-   - Validating admission control webhook
-   - Kubernetes Operator for installing, configuring and managing Open Policy Agent policies
+  - Validating admission control webhook
+  - Kubernetes Operator for installing, configuring and managing Open Policy Agent policies
 
 Example policies that can be implemented with Gatekeeper:
 
@@ -202,7 +200,7 @@ Example policies that can be implemented with Gatekeeper:
 - Allow containers only from trusted container registries
 - All containers must have resource limits
 - Ingress hostnames must not overlap
-- Ingresses must use only HTTPs_
+- Ingresses must use only HTTPs\_
 
 ## Chapter 12. Managing Multiple Clusters
 
@@ -215,4 +213,3 @@ Example policies that can be implemented with Gatekeeper:
 ## Chapter 16. Managing State and Stateful Applications
 
 ## Chapter 17. Admission Control and Authorization
-

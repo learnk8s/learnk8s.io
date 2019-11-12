@@ -80,7 +80,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
     defaultAssetsPipeline({
       jsx: renderPage(state, [
         parseMd({ title: 'Application development', file: 'application-development.v2.md' }),
-        parseMd({ title: 'Governance', file: 'governance.v2.md' }),
+        parseMd({ title: 'Namespaces governance', file: 'governance.v2.md' }),
         parseMd({ title: 'Cluster configuration', file: 'configuration.md' }),
       ]),
       isOptimisedBuild: getConfig(state).isProduction,
@@ -128,30 +128,50 @@ function renderPage(state: State, sections: Section[]) {
         <Navbar />
         <div className='new-hero pt4 pb5-l pb4'>
           <div className='mw8 center ph3 ph4-ns'>
-            <h1 className='f-subheadline-l f1 b white mv0 lh-solid pb4'>
+            <h1 className='f-subheadline-l f1 b white mv0 lh-solid'>
               Kubernetes
               <br />
               production
               <br />
               best practices
             </h1>
-            <div />
+            <div className='f4 measure'>
+              <p className='f2-l f3 white bt bw2 pt3 o-90'>
+                An curated checklist of best practices designed to help you release to production
+              </p>
+            </div>
           </div>
         </div>
+        <div className='mw8 center ph3 ph4-ns mt5-l mt4'>
+          <p className='f4-l f5 lh-copy measure'>
+            This checklist provides actionable best practices for deploying secure, scalable, and resilient services on
+            Kubernetes.
+          </p>
+          <p className='f4-l f5 lh-copy measure'>
+            The content is open source and available{' '}
+            <a href='#' className='link navy underline'>
+              in this repository
+            </a>
+            .<br />
+            If you think there are missing best practices or they are not right, consider submitting an issue.
+          </p>
+          <p className='f4-l f5 lh-copy b measure'>Check things off to keep track as you go.</p>
+        </div>
+
         <div className='flex-l mt5-l mt4 center justify-center-l'>
           <div className='left mw5-l w-third-l ph3 ph4-m pn-l relative'>
             <div className='sticky top-0 left-0 js-left pt3'>
               <section>
                 <p className='b f3'>Categories</p>
                 <ul className='list pl0'>
-                  {sections.map(it => {
+                  {sections.map((it, index) => {
                     return (
                       <li className='mv3'>
                         <a
                           href={`#${toId(it.title)}`}
                           className='pv2 no-underline f4 black-80 hover-navy underline-hover'
                         >
-                          {it.title}
+                          {index + 1}. {it.title}
                         </a>
                       </li>
                     )
@@ -165,7 +185,7 @@ function renderPage(state: State, sections: Section[]) {
               return (
                 <div className={`${index === 0 ? '' : 'mt5'}`}>
                   <h2 className='ph4-l f3-l f4-l pb3' id={toId(section.title)}>
-                    {section.title}
+                    {index + 1}. {section.title}
                   </h2>
                   {section.categories.map(category => {
                     return (
