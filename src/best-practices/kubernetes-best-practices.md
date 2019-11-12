@@ -38,6 +38,20 @@ _Resource manifests are the declarative state of an application._
 
 ## Chapter 2. Developer Workflows
 
+_Creating a development cluster (where developers can deploy and test the applications they are working on)._
+
+- One cluster per organisation or team (10-20 people)
+- One namespace for each developer
+- Use an external identity systems for cluster user management (Azure Active Directory, AWS IAM)
+  - Authentication with bearer token and API server validates token with the external service
+- Grant develoepers the `edit` ClusterRole for their namespace with a RoleBinding (not ClusterRoleBinding)
+- Grant developers the `view` ClusterRole for the entire cluster with a ClusterRoleBinding (not RoleBinding)
+- Assign a ResourceQuota to each namespace
+- Make developer namespaces transient by assigning them a time to live (TTL) after which they are automatically deleted
+  - So that no unused resources accumulate in the cluster
+- Assign the following annotations to each namespace: TTL, assignee, resource quotas, team, purpose
+  - You could define a CRD that creates a namespace with all this metadata
+
 ## Chapter 3. Monitoring and Logging in Kubernetes
 
 ## Chapter 4. Configuration, Secrets, and RBAC
