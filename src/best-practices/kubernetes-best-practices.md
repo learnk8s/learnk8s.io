@@ -4,6 +4,38 @@ O'Reilly, 2019.
 
 ## Chapter 1. Setting Up a Basic Service
 
+### Managing resource manifests
+
+_Resource manifests are the declarative state of an application._
+
+- Store resource manifests in Git (version control)
+- Manage Git repository on GitHub (code review)
+- Use a single top-level directory for all manifests of an application
+- Use subdirectories for subcomponents (e.g. services) of the application
+- Use GitOps: ensure that contents of cluster match content of Git repository
+  - Deploy to production only from a specific Git branch using some automation (e.g. a CI/CD pipeline)
+- Use CI/CD from the beginning (difficult to retrofit into an existing application)
+
+
+### Managing container images
+
+- Base images on well-known and trusted image providers
+  - Alternatively, build all images "from scratch" (e.g. with Go)
+- The tag of an image is immutable (i.e. images with different content have different tags
+  - Combine semantic versioning with the hash of the corrsponding Git commit (e.g. _v1.0.1-bfeda01f_)
+- Avoid the _latest_ tag (is not immutable)
+
+### Deploying applications
+
+- Set resource requests equal to limits: provides predictability at the expense of maximising the resource utilisation (the app can't make use of excess idle resources)
+  - Set requests and limits to different values only when you have more experience
+- Always use an Ingress for exposing services, even for simple applications (for production, you don't need to use an Ingress for experimentation)
+- Manage configuration data that is likely to be updated during runtime separately from the code in a ConfigMap
+- Put a version number in the name of each ConfigMap (e.g. `myconfig-v1`). When you make an update to the configuration, create a new ConfigMap with an increased version number (e.g. `myconfig-v2`), and then update the application to use the new ConfigMap. This ensure that the new configuration is loaded into the application, no matter how the ConfigMap is mounted in the app (as an env var or a file, and in the latter case, if the app watches the file for changes)
+  - Don't delete the previous ConfigMap (e.g. `myconfig-v1`). This allows to roll back to a previous configuration at any time.
+- If deploying an application to multiple environments, use a template system (don't maintain multiple copies of resource manifest directories)
+  - Helm, kustomize, Kapitan, ...
+
 ## Chapter 2. Developer Workflows
 
 ## Chapter 3. Monitoring and Logging in Kubernetes
@@ -16,7 +48,13 @@ O'Reilly, 2019.
 - PodPresets: automatically mount a ConfigMap or Secret to a pod based on annotations
 - In the application, watch the configuration file for changes, so that the configuration can be changed at runtime by updating the ConfigMap or Secret
 - When using values from a ConfigMap/Secret as environment variables, the environment variables in the containers are NOT updated when updating the ConfigMap/Secret
-- CI/CD pipeline that restarts pods whenever a ConfigMap/Secret is updated (this ensures that the new data is being used by the pods, even if the application does not watch the configuration file for changes or if the configuration data is mounted as environment variables)
+- Use CI/CD pipeline that restarts pods whenever a ConfigMap/Secret is updated (this ensures that the new data is being used by the pods, even if the application does not watch the configuration file for changes or if the configuration data is mounted as environment variables)
+  - Alternatively, include a version name in the name of the ConfigMap and when configuration changes, create a new ConfigMap and update applications to use the new ConfigMap (see Chapter 1).
+- Always mount Secrets as volumes (files), never as env vars
+- Avoid stateful applications in Kubernetes
+  - Use SaaS/cloud service offerings for stateful services
+  - If running on premises and public SaaS is not an option, have a dedicated team that provides internal stateful SaaS to the rest of the organisation
+
 
 ### RBAC
 
@@ -55,7 +93,7 @@ O'Reilly, 2019.
 
 _Service:_
 
-- ClusterIP (headless service has no label selector but an explicitly assigned Endpoint; is not managed by kube-proxy)
+- ClusterIP (headless service has no label selector but an explicitly assigned Endpoint; is not managed by kube-proxy; has no ClusterIP address but creates a DNS entry for every Pod in the Endpoint)
 - NodePort
 - ExternalName
 - LoadBalancer
