@@ -112,6 +112,8 @@ _By properly identifying the operational and development states by the means of 
 - _Rollout: how a replicated app is put into production (this is taken care of automatically by the Deployment resource when there are changes to the `deployment.spec.template` field)_
 - _Rollback: revert an application to the state of a previous release_
 
+Best practices:
+
 - Label each resource with at least: `app`, `version`, `environment`
   - Pods can additionally be labelled with `tier` and top-level objects like Deployments or Jobs should be labelled with `release` and `release-number`
 - Use independent versions for container images, Pods, and Deployments
