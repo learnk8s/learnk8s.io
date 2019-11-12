@@ -54,6 +54,31 @@ _Creating a development cluster (where developers can deploy and test the applic
 
 ## Chapter 3. Monitoring and Logging in Kubernetes
 
+### Monitoring
+
+- Run monitoring system in a dedicated "utility cluster" (to avoid problems with the target cluster affecting the monitoring system)
+
+### Logging
+
+_Collect and centrally store logs from all the workloads running in the cluster and from the cluster components themselves._
+
+- Implement a retention and archival strategy for logs (retain 30-45 days of historical logs)
+- What to collect logs from:
+  - Nodes (kubelet, container runtime)
+  - Control plane (API server, scheduler, controller mananger)
+  - Kubernetes auditing (all requests to the API server)
+- Applications should log to stdout rather than to files
+  - Allows a daemon on each node to collect the logs from the container runtime (if logging to files, a sidecar container for each pod might be necessary)
+- Some log aggregation tools: EFK stack (Elasticsearch, Fluentd, Kibana), DataDog, Sumo Logic, Sysdig, GCP Stackdriver, Azure Monitor, AWS CloudWatch
+- Use a hosted logging solution (e.g. DataDog, Stackdriver) rather than a self-hosted one (e.g. EFK stack)
+
+### Alerting
+
+- Only alert on events that affect service level objectives (SLO)
+- Only alert on events that require immediate human intervention
+- Automate remediation of events that don't require immediate human intervention
+- Include relevant information in the alert notification (e.g. link to troubleshooting playbook, context information)
+
 ## Chapter 4. Configuration, Secrets, and RBAC
 
 ### ConfigMaps and Secrets
