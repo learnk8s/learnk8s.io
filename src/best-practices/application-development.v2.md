@@ -1,6 +1,6 @@
 # Application development
 
-Are you following the best practices?
+Best practices for application development on Kubernetes.
 
 ## Health checks
 
@@ -162,7 +162,7 @@ Any of the above scenarios could affect the availability of your app and potenti
 
 You should protect from a scenario where all of your Pods are made unavailble and you aren't able to serve live traffic.
 
-### Run mor than one replica for your Deployment
+### Run more than one replica for your Deployment
 
 Never run a single Pod individually.
 
@@ -170,7 +170,7 @@ Instead consider deploying your Pod as part of a Deployment, DaemonSet, ReplicaS
 
 [Running more than one instance your of your Pods guarantees that deleting a single Pod won't cause downtime](https://cloudmark.github.io/Node-Management-In-GKE/#replicas).
 
-### Avoid Pods being places into a single node
+### Avoid Pods being placed into a single node
 
 **Even if you run several copies of your Pods, there are no guarantees that losing a node won't take down your service.**
 

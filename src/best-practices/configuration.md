@@ -1,53 +1,52 @@
-# Configuration
+# Cluster configuration
 
-Are you following the best practices?
+Cluster configuration best practices.
 
-## Secure Baseline
+## Approved Kubernetes configuration
 
-Ensure that your underlying hosts are hardened and secure. I recommend CIS benchmarks as a starting point.
+### Master Node Configuration Files
 
-✅ Ensure that Docker itself is configured per security best-practices. Check out my previous article: Docker Security Best-Practices
+### API Server
 
-✅ Ensure that you're starting off with Kubernetes with a secure baseline.
+### Controller Manager
 
-Center for Internet Security (CIS) maintains documentation available for free.
-The fine folks at Aqua Security also open-sourced an automated checker based on CIS recommendations. Check it out: kube-bench
+### Scheduler
 
-## Authentication
+### etcd
 
-Most interactions with Kubernetes are done by talking to the control plane, specifically the kube-apiserver component of the control plane. Requests pass through 3 steps in the kube-apiserver before the request is served or rejected: Authentication, Authorization, and Admission Control. Once requests pass these 3 steps, kube-apiserver communicates with Kubelets over the network. Therefore, Kubelets also have to check authentications and authorizations as well.
+### Control Plane Configuration
 
-The behavior of kube-apiserver and kubelet can be controlled or modified by launching them with certain command-line flags. The full list of supported command-line flags are documented here:
+### Authentication and Authorization
 
-kube-apiserver
-kubelet
-Let's examine some common Kubernetes authentication security mistakes:
+### Logging
 
-❌ By default, anonymous authentication is enabled
-✅ Disable anonymous authentication by passing the --anonymous-auth=false flag
-❌ Running kube-apiserver with --insecure-port=<PORT>
+### Worker Nodes
 
-🗒️ In older versions of Kubernetes, you could run kube-apiserver with an API port that does not have any protections around it
+### Worker Node Configuration Files
 
-✅ Disable insecure port by passing the --insecure-port=0 flag. In recent versions, this has been disabled by default with the intention of completely deprecating it
-✅ Prefer OpenID Connect or X509 Client Certificate-based authentication strategies over the others when authenticating users
+### Kubelet
 
-🗒️ Kubernetes supports different authentication strategies:
+### Policies
 
-X509 client certs: decent authentication strategy, but you'd have to address renewing and redistributing client certs on a regular basis
-Static Tokens: avoid them due to their non-ephemeral nature
-Bootstrap Tokens: same as static tokens above
-Basic Authentication: avoid them due to credentials being transmitted over the network in cleartext
+### RBAC and Service Accounts
+
+### Pod Security Policies
+
+### Network Policies and CNI
+
+### Secrets Management
+
+### Extensible Admission Control
+
+### General Policies
+
+### ServiceAccount tokens are for applications and controllers **only**
+
 Service Account Tokens: should not be used for end-users trying to interact with Kubernetes clusters, but they are the preferred authentication strategy for applications & workloads running on Kubernetes
+
+### Use OpenID (OIDC) tokens as a user authentication strategy
+
 OpenID Connect (OIDC) Tokens: best authentication strategy for end users as OIDC integrates with your identity provider (e.g. AD, AWS IAM, GCP IAM ...etc)
-
-## Admission Controls
-
-Admission controllers are pieces of code that intercept requests to the Kubernetes API in the 3rd and last step of the authentication/authorization process. The full list of admission control options are documented here:
-
-## TLS traffic
-
-## DNS entries
 
 ## Logging
 
@@ -77,3 +76,11 @@ Kubelet can be instructed to reserve a certain amount of resources for the syste
 
 <https://itnext.io/on-grpc-load-balancing-683257c5b7b3>
 <https://kubernetes.io/blog/2018/11/07/grpc-load-balancing-on-kubernetes-without-tears/>
+
+## Securing the kubelet
+
+Cloud platforms (AWS, Azure, GCE, etc.) often expose metadata services locally to instances. By default these APIs are accessible by pods running on an instance and can contain cloud credentials for that node, or provisioning data such as kubelet credentials. These credentials can be used to escalate within the cluster or to other cloud services under the same account.
+
+## Restrict access to alpha or beta features
+
+Alpha and beta Kubernetes features are in active development and may have limitations or bugs that result in security vulnerabilities. Always assess the value an alpha or beta feature may provide against the possible risk to your security posture. When in doubt, disable features you do not use.
