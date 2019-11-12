@@ -16,6 +16,7 @@ _Resource manifests are the declarative state of an application._
   - Deploy to production only from a specific Git branch using some automation (e.g. a CI/CD pipeline)
 - Use CI/CD from the beginning (difficult to retrofit into an existing application)
 
+
 ### Managing container images
 
 - Base images on well-known and trusted image providers
@@ -93,6 +94,7 @@ _Collect and centrally store logs from all the workloads running in the cluster 
   - Use SaaS/cloud service offerings for stateful services
   - If running on premises and public SaaS is not an option, have a dedicated team that provides internal stateful SaaS to the rest of the organisation
 
+
 ### RBAC
 
 - Use specific service accounts for all "users" of the Kubernetes API that are assigned tailored roles with the least amount of privileges to do the job
@@ -100,6 +102,33 @@ _Collect and centrally store logs from all the workloads running in the cluster 
 ## Chapter 5. Continuous Integration, Testing, and Deployment
 
 ## Chapter 6. Versioning, Releases, and Rollouts
+
+_The true declarative nature of Kubernetes really shines when planning the proper use of labels._
+
+_By properly identifying the operational and development states by the means of labels in the resource manifests, it becomes possible to tie in tooling and automation to more easily manage the complex processes of upgrades, rollouts, and rollbacks._
+
+- _Version: increments when the code specification changes_
+- _Release; increments when the applicatoin is (re)-deployed (even if it's the same version of the app)_
+- _Rollout: how a replicated app is put into production (this is taken care of automatically by the Deployment resource when there are changes to the `deployment.spec.template` field)_
+- _Rollback: revert an application to the state of a previous release_
+
+- Label each resource with at least: `app`, `version`, `environment`
+  - Pods can additionally be labelled with `tier` and top-level objects like Deployments or Jobs should be labelled with `release` and `release-number`
+- Use independent versions for container images, Pods, and Deployments
+  - E.g. if Pod specification changes, update only the Pod and Deployment version, but not the container image version
+- Use a `release` (e.g. `frontend-stable`, `frontend-alpha`) and `release-number (e.g. `34e57f01`) label for top-level objects (e.g. Deployment, StatefulSet, Job)
+  - If the same version of the app is deployed again, it results in a new release number
+  - The release number is created by the CI/CD tool that deploys the application
+
+_Compare this with the officially [recommended labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/) in the Kubernetes documentation._
+
+- `app.kubernetes.io/name`
+- `app.kubernetes.io/instance
+- `app.kubernetes.io/version`
+- `app.kubernetes.io/component`
+- `app.kubernetes.io/part-of`
+- `app.kubernetes.io/managed-by`
+
 
 ## Chapter 7. Worldwide Application Distribution and Staging
 
@@ -139,7 +168,7 @@ _Ingress:_
 
 Provides HTTP application-level routing in contrast to level 3/4 of services.
 
-Ingress controller enables the use of Ingress resources (all of them are third-party)s
+Ingress controller enables the use of Ingress resources (all of them are third-party)jjj
 
 - All services that don't need to be accessed from outside the cluster should be ClusterIP
 - Use Ingress for external-facing HTTP services and choose appropriate ingress controller
@@ -169,7 +198,7 @@ _Many fields of PodSecurityPolicy match those of securityContext in the Pod spec
 
 - Using PodSecurityPolicies requires the PodSecurityPolicy admission controller to be enabled, but in most Kubernetes deployments it is not enabled. As soon as the PodSecurityPolicy admission controller is enabled, you need appropriate PodSecurityPolicy resources to allow any Pods to be created.
   - You also need to grant "use" access to the created PodSecurityPolicies to the service account of the workload or the controller of the workload (you can use  `system:serviceaccounts` group which compromises all controller service accounts).
-- Use <https://github.com/sysdiglabs/kube-psp-advisor> to generate PodSecurityPolicies automatically based on exisiting Pods
+- Use https://github.com/sysdiglabs/kube-psp-advisor to generate PodSecurityPolicies automatically based on exisiting Pods
 
 ### RuntimeClass
 
@@ -187,12 +216,12 @@ _Allow to specify which container runtime to use for a Pod (if there are multipl
 
 Explanation:
 
-\_Only allow compliant Kubernetes resources (of any kind) to be applied to the cluster (compliant with the defined policies).
+_Only allow compliant Kubernetes resources (of any kind) to be applied to the cluster (compliant with the defined policies).
 
 - Open Policy Agent (OPA): policy engine
 - Gatekeeper
-  - Validating admission control webhook
-  - Kubernetes Operator for installing, configuring and managing Open Policy Agent policies
+   - Validating admission control webhook
+   - Kubernetes Operator for installing, configuring and managing Open Policy Agent policies
 
 Example policies that can be implemented with Gatekeeper:
 
@@ -200,7 +229,7 @@ Example policies that can be implemented with Gatekeeper:
 - Allow containers only from trusted container registries
 - All containers must have resource limits
 - Ingress hostnames must not overlap
-- Ingresses must use only HTTPs\_
+- Ingresses must use only HTTPs_
 
 ## Chapter 12. Managing Multiple Clusters
 
@@ -213,3 +242,4 @@ Example policies that can be implemented with Gatekeeper:
 ## Chapter 16. Managing State and Stateful Applications
 
 ## Chapter 17. Admission Control and Authorization
+
