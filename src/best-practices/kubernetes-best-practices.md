@@ -108,7 +108,7 @@ _The true declarative nature of Kubernetes really shines when planning the prope
 _By properly identifying the operational and development states by the means of labels in the resource manifests, it becomes possible to tie in tooling and automation to more easily manage the complex processes of upgrades, rollouts, and rollbacks._
 
 - _Version: increments when the code specification changes_
-- _Release; increments when the applicatoin is (re)-deployed (even if it's the same version of the app)_
+- _Release: increments when the applicatoin is (re)-deployed (even if it's the same version of the app)_
 - _Rollout: how a replicated app is put into production (this is taken care of automatically by the Deployment resource when there are changes to the `deployment.spec.template` field)_
 - _Rollback: revert an application to the state of a previous release_
 
@@ -118,14 +118,14 @@ Best practices:
   - Pods can additionally be labelled with `tier` and top-level objects like Deployments or Jobs should be labelled with `release` and `release-number`
 - Use independent versions for container images, Pods, and Deployments
   - E.g. if Pod specification changes, update only the Pod and Deployment version, but not the container image version
-- Use a `release` (e.g. `frontend-stable`, `frontend-alpha`) and `release-number (e.g. `34e57f01`) label for top-level objects (e.g. Deployment, StatefulSet, Job)
+- Use a `release` (e.g. `frontend-stable`, `frontend-alpha`) and `release-number` (e.g. `34e57f01`) label for top-level objects (e.g. Deployment, StatefulSet, Job)
   - If the same version of the app is deployed again, it results in a new release number
   - The release number is created by the CI/CD tool that deploys the application
 
 _Compare this with the officially [recommended labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/) in the Kubernetes documentation._
 
 - `app.kubernetes.io/name`
-- `app.kubernetes.io/instance
+- `app.kubernetes.io/instance`
 - `app.kubernetes.io/version`
 - `app.kubernetes.io/component`
 - `app.kubernetes.io/part-of`
