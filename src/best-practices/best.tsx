@@ -17,7 +17,7 @@ import { transform } from '../markdown/utils'
 
 export const BestPractices = {
   id: 'kubernetes-best-practices-production',
-  url: '/kubernetes-best-practices-production',
+  url: '/best-practices-production',
   title: 'Kubernetes production best practices',
   description:
     'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
@@ -25,7 +25,7 @@ export const BestPractices = {
 
 export const Details = {
   type: 'kubernetes-best-practices-production',
-  url: '/kubernetes-best-practices-production',
+  url: '/best-practices-production',
   title: 'Kubernetes production best practices',
   description:
     'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
