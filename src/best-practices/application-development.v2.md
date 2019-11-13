@@ -453,12 +453,54 @@ You could save on running an extra container for each Pod in your cluster.
 
 ### The app is stateless
 
-## Secrets and configurations
+A containerised app is stateless if it doesn't store any state in the local filesystem of its container.
 
-### Secrets as files, not enviroment variables
+For an app to be horizontally scalable, it must be stateless. The reason is that if each container stores its own state, there is no "ground truth" and the states saved by each container may diverge. This results in inconsistent behaviour (for example, a certain piece of data is available in one Pod, but not in another).
 
-Use file secrets where possible.
+To make an app stateless, all state must be saved at a central place that is independent of the running containers, for example, in a data store outside the cluster.
 
-It’s trivial to inspect a Containers environment - anything secret would easily be visible if it’s an environment variable. Also, a possible risk of leakage via the console output.
+### Use the Horizontal Pod Autoscaler for apps with variable usage patterns
+
+The [Horizontal Pod Autoscaler (HPA)](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) is a built-in Kubernetes feature that monitors your application and automatically adds or removes Pod replicas based on the current usage.
+
+Configuring the HPA allows your app to stay available and responsive under any traffic conditions, including unexpected spikes.
+
+To configure the HPA to autoscale your app, you have to create a [HorizontalPodAutoscaler](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#horizontalpodautoscaler-v1-autoscaling) resource, which defines what metric to monitor for your app.
+
+The HPA can monitor either built-in resource metric (CPU and memory usage of your Pods) or custom metrics. In the case of custom metrics, you are also responsible to collect and expose these metrics, which you can do, for example, with [Prometheus](https://prometheus.io/) and the [Prometheus Adapter](https://github.com/DirectXMan12/k8s-prometheus-adapter).
+
+### Don't use the Vertical Pod Autoscaler
+
+Analogous to the [Horizontal Pod Autoscaler (HPA)](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/), there exists the [Vertical Pod Autoscaler (VPA)](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler).
+
+The VPA can automatically adapt the resource requests and limits of your Pods, so that when a Pod needs more resources, it can get them. This can be useful for applications that can't be scaled horizontally (by adding or removing replicas).
+
+The VPA is currently in beta and is **not recommended for production**. Given that, and that most applications deployed to Kubernetes actually can be scaled horizontally, it is best to not use the VPA at the moment.
+
+### Don't use the Cluster Autoscaler unless you have extremely variable workloads
+
+The [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) is another type of "autoscaler" (besides the [Horizontal Pod Autoscaler]((https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) and [Vertical Pod Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler)).
+
+The Cluster Autoscaler can automatically add or remove worker nodes from your cluster. It becomes active when a Pod can't be scheduled to one of the existing nodes because of inefficient resources. In that case, the Cluster Autoscaler will create a new worker node, so that the Pod can be scheduled.
+
+Configuring the Cluster Autoscaler includes some overhead, and another downside is that it only becomes active when a Pod already failed to schedule. Given that it takes some time to spin up a new worker node, this can result in a considerable delay until the Pods can finally run.
+
+In most cases, it's sufficient to choose a cluster size manually and scale up or down manually when it's needed. However, for scenarios with extremely variable amounts of workloads, using the Cluster Autoscaler can make sense.
+
+## Configuration and secrets
 
 ### Externalise all configuration
+
+Configuration should be maintained outside the application code.
+
+This has several benefits. First, changing the configuration does not require recompiling the application. Second, the configuration can be updated when the application is running. Third, the same code can be used for different environments.
+
+In Kubernetes, configuration can be saved in ConfigMaps, which can then be mounted into containers as volumes are passed in as environment variables.
+
+Save only non-sensitive configuration in ConfigMaps. For sensitive information (such as credentials), use the Secret resource.
+
+### Mount Secrets as volumes, not enviroment variables
+
+The content of Secret resources should be mounted into containers as volumes rather than passed in as environment variables.
+
+This is to prevent that the secret values appear in the command that was used to start the container, which may be inspected by individuals that shouldn't have access to the secret values.
