@@ -23,6 +23,14 @@ export const BestPractices = {
     'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
 }
 
+export const Details = {
+  type: 'kubernetes-best-practices-production',
+  url: '/kubernetes-best-practices-production',
+  title: 'Kubernetes production best practices',
+  description:
+    'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
+} as const
+
 export function Register(store: Store<State, Actions>) {
   store.dispatch(Action.registerPage(BestPractices))
   store.dispatch(

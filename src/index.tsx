@@ -385,6 +385,9 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       writeFileSync(generatePath(), $.html())
       return
     }
+    case BestPractices.Details.type: {
+      return
+    }
     case WebAppManifest.Details.type: {
       const manifest = WebAppManifest.render(root, node, siteUrl)
       const icons = manifest.icons.map(icon => {

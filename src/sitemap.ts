@@ -29,6 +29,7 @@ import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
 import * as TerraformAks from './terraformAks/terraformAks'
 import * as ZeroToK8sJs from './02k8sjs/02k8sjs'
+import * as BestPractices from './best-practices/best'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
@@ -282,6 +283,10 @@ export const Sitemap = createNode({
     bskAutoscaling: bsk.bskAutoscaling,
     bskRollbacks: bsk.bskRollbacks,
     zro2k8sjs: newBlog.zro2k8sjs,
+    bestPractices: createNode({
+      page: BestPractices.Details,
+      children: {},
+    }),
   },
 })
 
