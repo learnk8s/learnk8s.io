@@ -16,8 +16,8 @@ The kubelet executes the check and decides if the container should be restarted.
 
 **Resources:**
 
-- The official Kubernetes documentation offers some practical advices on how to [configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
-- [Liveness probes are dangerous](https://srcco.de/posts/kubernetes-liveness-probes-are-dangerous.html) has some advice on how to set (or not) dependencies in your readiness probes.
+- The official Kubernetes documentation offers some practical advice on how to [configure Liveness, Readiness and Startup Probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+- [Liveness probes are dangerous](https://srcco.de/posts/kubernetes-liveness-probes-are-dangerous.html) has some information on how to set (or not) dependencies in your readiness probes.
 
 ### Containers have readiness probes
 
@@ -45,7 +45,7 @@ When Liveness and Readiness probes are pointing to the same endpoint, the effect
 
 When the app signals that it's not ready or live, the kubelet detaches the container from the Service and delete it **at the same time**.
 
-You might notice dropping connections, because the container there isn't enough time to drain the current connections or process the incoming ones.
+You might notice dropping connections because the container there isn't enough time to drain the current connections or process the incoming ones.
 
 You can dig deeper in the following [article that discussed graceful shutdown](https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/).
 
@@ -61,7 +61,7 @@ If the API is flaky (e.g. it's unavailable from time to time due to a bug), the 
 
 And you have downtime.
 
-More in general, **a failure in a dependecy downstream could propagate to all apps upstream** and eventually bring down your front-end facing layer as well.
+More in general, **a failure in a dependency downstream could propagate to all apps upstream** and eventually, bring down your front-end facing layer as well.
 
 ### The Readiness probes are independent
 
@@ -82,19 +82,19 @@ Instead, the app should keep retrying to connect to the database until it succee
 
 Kubernetes expects that application components can be started in any order.
 
-Making sure that your app reconnect to a dependecy such as a database helps you deliver more robust services.
+When you make sure that your app can reconnect to a dependency such as a database you know you can deliver a more robust and resilient service.
 
-## Graceful shut down
+## Graceful shutdown
 
-When a Pod is deleted you don't want to abruptly terminate all connections.
+When a Pod is deleted, you don't want to terminate all connections abruptly.
 
 Instead, you should wait for the existing connection to drain and stop processing new ones.
 
 Please notice that, when a Pod is terminated, the endpoints for that Pod are removed from the Service.
 
-However, it might take some time before component such as kube-proxy or the Ingress controller are notified of the change.
+However, it might take some time before component such as kube-proxy or the Ingress controller is notified of the change.
 
-You can find a detail explanation on how graceful shutdown works in [handling client requests properly with Kubernetes](https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/).
+You can find a detail explanation on how graceful shutdown works in [handling client requests correctly with Kubernetes](https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/).
 
 The correct graceful shutdown sequence is:
 
@@ -106,15 +106,15 @@ The correct graceful shutdown sequence is:
 
 You can [test that your app gracefully shuts down with this tool: kube-sigterm-test](https://github.com/mikkeloscar/kube-sigterm-test).
 
-### The app doesn't shut down on SIGTERM, but it gracefully terminate connections
+### The app doesn't shut down on SIGTERM, but it gracefully terminates connections
 
-It might take some time before component such as kube-proxy or the Ingress controller are notified of the endpoint changes.
+It might take some time before component such as kube-proxy or the Ingress controller is notified of the endpoint changes.
 
 Hence, traffic might still flow to the Pod despite it being marked as terminated.
 
 The app should stop accepting new requests on all remaining connections, and close these once the outgoing queue is drained.
 
-If you need a refresher on how endpoints are propagate in your cluster, [read this article on how to handle client requests properly]((https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/)).
+If you need a refresher on how endpoints are propagated in your cluster, [read this article on how to handle client requests properly](https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/).
 
 ### The app still process incoming requests in the grace period
 
@@ -122,7 +122,7 @@ You might want to consider using the container lifecycle events such as [the pre
 
 ### The CMD in the `Dockerfile` forwards the SIGTERM to the process
 
-You can be notifed when the Pod is about to be terminated by capturing the SIGTERM signal in your app.
+You can be notified when the Pod is about to be terminated by capturing the SIGTERM signal in your app.
 
 You should also pay attention to [forwarding the signal to the right process in your container](https://pracucci.com/graceful-shutdown-of-kubernetes-pods.html).
 
@@ -134,9 +134,9 @@ _But what happens when a Pod is deleted?_
 
 Ideally, the request should go to another Pod.
 
-However, the calling app has a long lived connection open with the Pod that is about to be terminated and it will keep using it.
+However, the calling app has a long-lived connection open with the Pod that is about to be terminated, and it will keep using it.
 
-On the other hand, you shouldn't abruptly terminate long lived connections.
+On the other hand, you shouldn't abruptly terminate long-lived connections.
 
 Instead, you should terminate them before shutting down the app.
 
@@ -160,7 +160,7 @@ Also, there are other scenarios where Pods could be deleted:
 
 Any of the above scenarios could affect the availability of your app and potentially cause downtime.
 
-You should protect from a scenario where all of your Pods are made unavailble and you aren't able to serve live traffic.
+You should protect from a scenario where all of your Pods are made unavailable, and you aren't able to serve live traffic.
 
 ### Run more than one replica for your Deployment
 
@@ -176,7 +176,7 @@ Instead consider deploying your Pod as part of a Deployment, DaemonSet, ReplicaS
 
 Consider the following scenario: you have 11 replicas on a single cluster node.
 
-If the node is made unavailable, the 11 replicas are lost and you have downtime.
+If the node is made unavailable, the 11 replicas are lost, and you have downtime.
 
 [You should apply anti-affinity rules to your Deployments so that Pods are spread in all the nodes of your cluster](https://cloudmark.github.io/Node-Management-In-GKE/#pod-anti-affinity-rules).
 
@@ -204,13 +204,13 @@ You can think about the Kubernetes as a skilled Tetris player.
 
 Docker containers are the blocks; servers are the boards, and the scheduler is the player.
 
-![Kubernetes is the best tetris player](tetris.svg)
+![Kubernetes is the best Tetris player](tetris.svg)
 
-To maximise the efficiency of the scheduler you should share with Kubernetes details such as resource utilisation, workload priorities and overheads.
+To maximise the efficiency of the scheduler, you should share with Kubernetes details such as resource utilisation, workload priorities and overheads.
 
 ### Set memory limits and requests for all containers
 
-Resource limits are used to constraint how much CPU and memory your containers can utilise and are set using the resources property of a `containerSpec`.
+Resource limits are used to constrain how much CPU and memory your containers can utilise and are set using the resources property of a `containerSpec`.
 
 The scheduler uses those as one of metrics to decide which node is best suited for the current Pod.
 
@@ -226,7 +226,7 @@ Yes and no.
 
 If your process goes over the memory limit, the process is terminated.
 
-Since CPU is a compressable resource, if your container goes over the limit, the process is throttled.
+Since CPU is a compressible resource, if your container goes over the limit, the process is throttled.
 
 Even if it could have used some of the CPU that was available at that moment.
 
@@ -241,7 +241,7 @@ If you wish to dig deeper into CPU and memory limits you should check out the fo
 
 ### Set CPU request to 1 CPU or below
 
-Unless you have computetional intensive jobs, [it is recommended to set the request to 1 CPU or below](https://www.youtube.com/watch?v=xjpHggHKm78).
+Unless you have computational intensive jobs, [it is recommended to set the request to 1 CPU or below](https://www.youtube.com/watch?v=xjpHggHKm78).
 
 ### Disable CPU limits — unless you have a good use case
 
@@ -255,9 +255,9 @@ If you have 2 threads, you can consume 1 CPU second in 0.5 seconds.
 
 8 threads can consume 1 CPU second in 0.125 seconds.
 
-After that your process is throttled.
+After that, your process is throttled.
 
-If you're not sure about what's the best settings for your app, it's better to not set the CPU limits.
+If you're not sure about what's the best settings for your app, it's better not to set the CPU limits.
 
 If you wish to learn more, [this article digs deeper in CPU requests and limits](https://medium.com/@betz.mark/understanding-resource-limits-in-kubernetes-cpu-time-9eff74d3161b).
 
@@ -269,9 +269,9 @@ If you think you might forget to set memory and CPU limits, you should consider 
 
 ### Set an appropriate Quality of Service (QoS) for Pods
 
-When a node goes into an overcommited state (i.e. using too many resources) Kubernetes tries to evict some of the Pod in that Node.
+When a node goes into an overcommitted state (i.e. using too many resources) Kubernetes tries to evict some of the Pod in that Node.
 
-Kubernetes ranks and evicts the Pods according to a well defined logic.
+Kubernetes ranks and evicts the Pods according to a well-defined logic.
 
 You can find more about [configuring the quality of service for your Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) on the official documentation.
 
@@ -287,13 +287,13 @@ You can use labels to categorize resources by purpose, owner, environment, or ot
 
 So you could choose a label to tag a Pod in an environment such as "this pod is running in production" or "the payment team owns that Deployment".
 
-You can also omit labels all together.
+You can also omit labels altogether.
 
 However, you might want to consider using labels to cover the following categories:
 
 - technical labels such as the environment
 - labels for automation
-- label related to your business such as cost-center allocation
+- label related to your business such as cost-centre allocation
 - label related to security such as compliance requirements
 
 ### Resources have technical labels defined
@@ -302,10 +302,10 @@ You could tag your Pods with:
 
 - `name`, the name of the application such "User API"
 - `instance`, a unique name identifying the instance of an application (you could use the container image tag)
-- `version`, the current version of the application (an incremental counter)
+- `version`, the current version of the appl (an incremental counter)
 - `component`, the component within the architecture such as "API" or "database"
-- `part-of`, the name of a higher level application this one is part of such as "payment gateway"
-- `managed-by`, the tool being used to manage the operation of an application such "kubectl" or "Helm"
+- `part-of`, the name of a higher-level application this one is part of such as "payment gateway"
+- `managed-by`, the tool being used to manage the operation of an application such as "kubectl" or "Helm"
 
 Here's an example on how you could use such labels in a Deployment:
 
@@ -347,8 +347,8 @@ Those labels are [recommended by the official documentation](https://kubernetes.
 You could tag your Pods with:
 
 - `owner`, used to identify who is responsible for the resource
-- `project`, used to identify the project that the resource belongs to
-- `business-unit`, used to identify the cost center or business unit associated with a resource; typically for cost allocation and tracking
+- `project`, used to determine the project that the resource belongs to
+- `business-unit`, used to identify the cost centre or business unit associated with a resource; typically for cost allocation and tracking
 
 Here's an example on how you could use such labels in a Deployment:
 
@@ -378,7 +378,7 @@ spec:
         image: myapp
 ```
 
-You can explore label and [tagging for resources on the AWS tagging strategy page](https://aws.amazon.com/answers/account-management/aws-tagging-strategies/).
+You can explore labels and [tagging for resources on the AWS tagging strategy page](https://aws.amazon.com/answers/account-management/aws-tagging-strategies/).
 
 The article isn't specific to Kubernetes but explores some of the most common strategies for tagging resources.
 
@@ -429,23 +429,23 @@ The logs are particularly useful for debugging problems and monitoring app activ
 
 There are two logging strategies: _passive_ and _active_.
 
-Apps that use passive logging are unaware of the logging infrastructure and simply log messages to standard outputs.
+Apps that use passive logging are unaware of the logging infrastructure and log messages to standard outputs.
 
 This best practice is part of [the twelve-factor app](https://12factor.net/logs).
 
 In active logging, the app makes network connections to intermediate aggregators, sends data to third-party logging services, or writes directly to a database or index.
 
-Active logging is considered an antipattern and it should be avoided.
+Active logging is considered an antipattern, and it should be avoided.
 
 ### Avoid sidecars for logging (if you can)
 
 If you wish to apply log transformations to an application with a non-standard log event model, you may want to use a sidecar container.
 
-With a sidecar container you can normalise the log entries before they are shipped elsewhere.
+With a sidecar container, you can normalise the log entries before they are shipped elsewhere.
 
-For example, you may want to transform Apache logs into Logstash JSON format prior to shipping it to the log infrastructure.
+For example, you may want to transform Apache logs into Logstash JSON format before shipping it to the logging infrastructure.
 
-However, if you have control over the application you could output the right format to begin with.
+However, if you have control over the application, you could output the right format, to begin with.
 
 You could save on running an extra container for each Pod in your cluster.
 
@@ -457,6 +457,8 @@ You could save on running an extra container for each Pod in your cluster.
 
 ### Secrets as files, not enviroment variables
 
-File secrets where possible. It’s trivial to inspect a Containers environment - anything secret would easily be visible if it’s an environment variable. Also possible risk of leakage via console output.
+Use file secrets where possible.
+
+It’s trivial to inspect a Containers environment - anything secret would easily be visible if it’s an environment variable. Also, a possible risk of leakage via the console output.
 
 ### Externalise all configuration
