@@ -20,7 +20,7 @@ export const BestPractices = {
   url: '/kubernetes-best-practices-production',
   title: 'Kubernetes production best practices',
   description:
-    'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes',
+    'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -29,10 +29,10 @@ export function Register(store: Store<State, Actions>) {
     Action.registerOpenGraph({
       id: 'og-best-practices',
       pageId: BestPractices.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: <img src='src/best-practices/checklist.jpg' alt='Kubernetes production best practices' />,
       description:
-        'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes',
-      title: 'Kubernetes best practices',
+        'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
+      title: 'Kubernetes production best practices',
     }),
   )
 }
