@@ -43,7 +43,7 @@ _Creating a development cluster (where developers can deploy and test the applic
 - One namespace for each developer
 - Use an external identity systems for cluster user management (Azure Active Directory, AWS IAM)
   - Authentication with bearer token and API server validates token with the external service
-- Grant develoepers the `edit` ClusterRole for their namespace with a RoleBinding (not ClusterRoleBinding)
+- Grant developers the `edit` ClusterRole for their namespace with a RoleBinding (not ClusterRoleBinding)
 - Grant developers the `view` ClusterRole for the entire cluster with a ClusterRoleBinding (not RoleBinding)
 - Assign a ResourceQuota to each namespace
 - Make developer namespaces transient by assigning them a time to live (TTL) after which they are automatically deleted
@@ -98,6 +98,7 @@ _Collect and centrally store logs from all the workloads running in the cluster 
 - Use specific service accounts for all "users" of the Kubernetes API that are assigned tailored roles with the least amount of privileges to do the job
 
 ## Chapter 5. Continuous Integration, Testing, and Deployment
+
 
 ## Chapter 6. Versioning, Releases, and Rollouts
 
@@ -240,4 +241,48 @@ Example policies that can be implemented with Gatekeeper:
 
 ## Chapter 16. Managing State and Stateful Applications
 
+### Basic volumes
+
+_Mounting directories from the host into containers._
+
+- Use `emptyDir` for sharing data between containers in the same pod
+- Use `hostPath` if the data needs to be accessed also by agents running on the node 
+
+### Storage managed by Kubernetes
+
+_Kubernetes support for managing persistent storage._
+
+- _PersistentVolume: a "disk" that exists independently from any nodes in the cluster and has its own Kubernetes resource_
+- _PersistentVolumeClaim: a request for a PersistentVolume referenced from a Pod spec. This exists to prevent that specific PersistentVolumes must be referenced from a Pod spec (making the Pod spec non-portable) by referencing the generic PersistentVolumeClaim instead._
+- _StorageClass: defines a provisioner to create the disk backing a PersistentVolume to automate the creation of PersistentVolumes. A StorageClass name is referenced from PersistenVolumeClaim._
+- _Default StorageClass: used by any PersistentVolumeClaim that doesn't explicitly define a StorageClass name. Requires the [DefaultStorageClass](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#defaultstorageclass) admission controller to be enabled._
+
+Best practices:
+
+- Avoid managing state in the cluster if you can: use an outside service for persisting state
+  - Even if it involves modifying the app to become stateless
+- Define a default StorageClass named `default` (because this is often used by default in Helm charts)
+- If cluster is distributed across multiple availability zones, ensure that PersistentVolumes and Pod using them are in the same availability zone
+  - By properly labelling all objects and using node affinity, etc.
+
+### Running stateful applications
+
+- Check if an operator exists for the type of application, and if yes, use it
+
 ## Chapter 17. Admission Control and Authorization
+
+### Admission control
+
+- Recommended set of admission controllers to enabled: `NamespaceLifecycle, LimitRanger, ServiceAccount, DefaultStorageClass, DefaultTolerationSeconds, MutatingAdmissionWebhook, ValidatingAdmissionWebhook, Priority, ResourceQuota, PodSecurityPolicy`
+- If you use multiple mutating admission control webhooks, don't modify the same fields of the same resources (the order in which admission control webhook are called is undefined)
+- If you use mutating admission webhooks, also create a validating admission webhook that verifies that the resources have been modified in the way you expected
+- Define the least amount of requests to be sent to an admission webhook (avoid `resources: [*]`, etc.)
+- Always use the `namespaceSelector` field in MutatingWebhookConfiguration/ValidatingWebhookConfiguration, which causes the admission control webhook to be only applied in certain namespaces. Select the least amount of namespaces that are necessary.
+- Always exclude the `kube-system` namespace from the scope of an admisson control webhook by the means of the `namespaceSelector` field
+- Don't give anyone RBAC rules to create MutatingWebhookConfiguration/ValidatingWebhookConfiguration unless it's really needed 
+- Don't send Secret resources to an admission control webhook if it's not needed (scope the requests that are passed to the webhook to the bare minimum)
+
+### Authorization
+
+- Only use the default RBAC mode (there's also ABAC and webhook, but don't use them)
+- For RBAC best practices, see Chapter 4
