@@ -41,13 +41,36 @@ Example output:
 
 ## Authentication
 
-### ServiceAccount tokens are for applications and controllers **only**
+When you use `kubectl` you authenticate yourself against the kube-apiserver component.
 
-Service Account Tokens: should not be used for end-users trying to interact with Kubernetes clusters, but they are the preferred authentication strategy for applications & workloads running on Kubernetes
+Kubernetes supports different authentication strategies:
+
+- **Static Tokens**: are difficult to invalidate and should be avoided
+- **Bootstrap Tokens**: same as static tokens above
+- **Basic Authentication** transmits credentials over the network in cleartext
+- **X509 client certs** requires renewing and redistributing client certs on a regular basis
+- **Service Account Tokens** are the preferred authentication strategy for applications and workloads running in the cluster
+- **OpenID Connect (OIDC) Tokens**: best authentication strategy for end users as OIDC integrates with your identity provider such as AD, AWS IAM, GCP IAM, etc.
+
+You can learn about the strategies in more detail [in the official documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/).
 
 ### Use OpenID (OIDC) tokens as a user authentication strategy
 
-OpenID Connect (OIDC) Tokens: best authentication strategy for end users as OIDC integrates with your identity provider (e.g. AD, AWS IAM, GCP IAM ...etc)
+Kubernetes supports various authentication methods including OpenID Connect (OIDC).
+
+OpenID Connect allows single sign on (SSO) such as your Google Identity to connect to a Kubernetes cluster and other development tools.
+
+You don't need to remember or manage credentials separately, you could have several clusters connect to the same OpenID provider.
+
+You can [learn more about the OpenID connect in Kubernetes](https://thenewstack.io/kubernetes-single-sign-one-less-identity/) in this article.
+
+## Role-Based Access Control (RBAC)
+
+Role-Based Access Control (RBAC) allows you to define policies on how to access resources in your cluster.
+
+### ServiceAccount tokens are for applications and controllers **only**
+
+Service Account Tokens should not be used for end-users trying to interact with Kubernetes clusters, but they are the preferred authentication strategy for applications and workloads running on Kubernetes.
 
 ## Logging
 
