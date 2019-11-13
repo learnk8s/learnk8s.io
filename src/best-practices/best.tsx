@@ -88,7 +88,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
     defaultAssetsPipeline({
       jsx: renderPage(state, [
         parseMd({ title: 'Application development', file: 'application-development.md' }),
-        parseMd({ title: 'Namespaces governance', file: 'governance.md' }),
+        parseMd({ title: 'Governance', file: 'governance.md' }),
         parseMd({ title: 'Cluster configuration', file: 'configuration.md' }),
       ]),
       isOptimisedBuild: getConfig(state).isProduction,
@@ -157,7 +157,7 @@ function renderPage(state: State, sections: Section[]) {
           </p>
           <p className='f4-l f5 lh-copy measure'>
             The content is open source and available{' '}
-            <a href='#' className='link navy underline'>
+            <a href='https://github.com/learnk8s/kubernetes-production-best-practices' className='link navy underline' target='_blank'>
               in this repository
             </a>
             .<br />
@@ -200,7 +200,7 @@ function renderPage(state: State, sections: Section[]) {
                       <p className='pl3 bl bw2 b--blue bg-evian pv3 ph4 lh-copy f4-l f5'>
                         This section is a work in progress. Do you have an opinion on what you should be included?
                         <br />
-                        <a href='#' className='link navy underline'>
+                        <a href='https://github.com/learnk8s/kubernetes-production-best-practices/issues' className='link navy underline' target='_blank'>
                           File an issue.
                         </a>
                       </p>

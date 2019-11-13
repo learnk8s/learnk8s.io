@@ -1,4 +1,4 @@
-# Namespaces governance
+# Governance
 
 Best practices for creating, managing and administering namespaces.
 
