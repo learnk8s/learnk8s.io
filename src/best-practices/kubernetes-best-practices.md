@@ -142,6 +142,10 @@ _Compare this with the officially [recommended labels](https://kubernetes.io/doc
 
 ## Chapter 7. Worldwide Application Distribution and Staging
 
+_Deploying app in multiple regions around the world (for scaling, reduced latency, etc.)._
+
+_Distributing container images, load balancing, canary regions, testing..._
+
 ## Chapter 8. Resource Management
 
 ### Advanced scheduling
@@ -243,11 +247,21 @@ Example policies that can be implemented with Gatekeeper:
 
 ## Chapter 12. Managing Multiple Clusters
 
+_How to manange multiple clusters, making application in different clusters interact with each other, deploying applications to multiple clusters at once, Kubernetes Federation..._
+
 ## Chapter 13. Integrating External Services and Kubernetes
+
+- _Application in Kubernetes consuming a service from outside the cluster_
+- _Application outside the cluster consuming a service in Kubernetes_
+- _Application in Kubernetes consuming a service in another Kubernetes cluster_
 
 ## Chapter 14. Running Machine Learning in Kubernetes
 
+_Apparently, Kubernetes is "perfect environment toenable the machine learning workflow and lifecycle"._
+
 ## Chapter 15. Building Higher-Level Application Patterns on Top of Kubernetes
+
+_Develop higher-level abstractions in order to provide more developer-friendly primitives on topof Kubernetes._
 
 ## Chapter 16. Managing State and Stateful Applications
 
