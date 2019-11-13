@@ -17,7 +17,7 @@ import { transform } from '../markdown/utils'
 
 export const BestPractices = {
   id: 'kubernetes-best-practices-production',
-  url: '/best-practices-production',
+  url: '/production-best-practices',
   title: 'Kubernetes production best practices',
   description:
     'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
@@ -25,7 +25,7 @@ export const BestPractices = {
 
 export const Details = {
   type: 'kubernetes-best-practices-production',
-  url: '/best-practices-production',
+  url: '/production-best-practices',
   title: 'Kubernetes production best practices',
   description:
     'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
@@ -157,7 +157,12 @@ function renderPage(state: State, sections: Section[]) {
           </p>
           <p className='f4-l f5 lh-copy measure'>
             The content is open source and available{' '}
-            <a href='https://github.com/learnk8s/kubernetes-production-best-practices' className='link navy underline' target='_blank'>
+            <a
+              href='https://github.com/learnk8s/kubernetes-production-best-practices'
+              className='link navy underline'
+              target='_blank'
+              rel='noreferrer'
+            >
               in this repository
             </a>
             .<br />
@@ -200,7 +205,12 @@ function renderPage(state: State, sections: Section[]) {
                       <p className='pl3 bl bw2 b--blue bg-evian pv3 ph4 lh-copy f4-l f5'>
                         This section is a work in progress. Do you have an opinion on what you should be included?
                         <br />
-                        <a href='https://github.com/learnk8s/kubernetes-production-best-practices/issues' className='link navy underline' target='_blank'>
+                        <a
+                          href='https://github.com/learnk8s/kubernetes-production-best-practices/issues'
+                          className='link navy underline'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
                           File an issue.
                         </a>
                       </p>
@@ -307,10 +317,15 @@ const ListItem: React.StatelessComponent<{ id: string; title: JSX.Element }> = (
             className='open dib bg-transparent bn pointer'
             data-toggle={`.details-${id},.controls-${id}`}
             data-toggle-collapsed
+            aria-label='Open'
           >
             <i className='arr-down' />
           </button>
-          <button className='close dib bg-transparent bn pointer' data-toggle={`.details-${id},.controls-${id}`}>
+          <button
+            className='close dib bg-transparent bn pointer'
+            data-toggle={`.details-${id},.controls-${id}`}
+            aria-label='Close'
+          >
             <i className='arr-up' />
           </button>
         </div>
