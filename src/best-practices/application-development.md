@@ -479,7 +479,7 @@ The VPA is currently in beta and is **not recommended for production**. Given th
 
 ### Don't use the Cluster Autoscaler unless you have extremely variable workloads
 
-The [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) is another type of "autoscaler" (besides the [Horizontal Pod Autoscaler]((https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) and [Vertical Pod Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler)).
+The [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) is another type of "autoscaler" (besides the [Horizontal Pod Autoscaler]\((<https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/>) and [Vertical Pod Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler)).
 
 The Cluster Autoscaler can automatically add or remove worker nodes from your cluster. It becomes active when a Pod can't be scheduled to one of the existing nodes because of inefficient resources. In that case, the Cluster Autoscaler will create a new worker node, so that the Pod can be scheduled.
 

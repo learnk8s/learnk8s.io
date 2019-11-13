@@ -79,8 +79,8 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
     const state = store.getState()
     defaultAssetsPipeline({
       jsx: renderPage(state, [
-        parseMd({ title: 'Application development', file: 'application-development.v2.md' }),
-        parseMd({ title: 'Namespaces governance', file: 'governance.v2.md' }),
+        parseMd({ title: 'Application development', file: 'application-development.md' }),
+        parseMd({ title: 'Namespaces governance', file: 'governance.md' }),
         parseMd({ title: 'Cluster configuration', file: 'configuration.md' }),
       ]),
       isOptimisedBuild: getConfig(state).isProduction,

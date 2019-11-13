@@ -110,7 +110,6 @@ _Common steps of a CI/CD pipeline: (1) push code to Git repository, (2) build en
 - Include extensive tests in CI (build should fail if any test fails)
 - Set up extensive monitoring in the production environment
 
-
 ## Chapter 6. Versioning, Releases, and Rollouts
 
 _The true declarative nature of Kubernetes really shines when planning the proper use of labels._
