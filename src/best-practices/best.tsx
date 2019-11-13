@@ -187,6 +187,17 @@ function renderPage(state: State, sections: Section[]) {
                   <h2 className='ph4-l f3-l f4-l pb3' id={toId(section.title)}>
                     {index + 1}. {section.title}
                   </h2>
+                  {index === 2 ? (
+                    <div className='ph4-l'>
+                      <p className='pl3 bl bw2 b--blue bg-evian pv3 ph4 lh-copy f4-l f5'>
+                        This section is a work in progress. Do you have an opinion on what you should be included?
+                        <br />
+                        <a href='#' className='link navy underline'>
+                          File an issue.
+                        </a>
+                      </p>
+                    </div>
+                  ) : null}
                   {section.categories.map(category => {
                     return (
                       <section className='pl4-l'>

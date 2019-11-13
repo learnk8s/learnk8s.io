@@ -6,7 +6,7 @@ Cluster configuration best practices.
 
 Kubernetes is flexible and can be configured in several different ways.
 
-But how do you know what's the recommended configuration for your cluster.
+But how do you know what's the recommended configuration for your cluster?
 
 The best option is to compare your cluster with a standard reference.
 
@@ -14,7 +14,7 @@ In the case of Kubernetes, the reference is the Centre for Internet Security (CI
 
 ### The cluster passes the CIS benchmark
 
-The Center for Internet Security provides a number of guidelines and benchmark tests for best practices in securing your code.
+The Center for Internet Security provides several guidelines and benchmark tests for best practices in securing your code.
 
 They also maintain a benchmark for Kubernetes which you can [download from the official website](https://www.cisecurity.org/benchmark/kubernetes/).
 
@@ -39,28 +39,46 @@ Example output:
 
 > Please note that it is not possible to inspect the master nodes of managed clusters such as GKE, EKS and AKS, using `kube-bench`. The master nodes are controlled and managed by the cloud provider.
 
+### Disable metadata cloud providers metada API
+
+Cloud platforms (AWS, Azure, GCE, etc.) often expose metadata services locally to instances.
+
+By default, these APIs are accessible by pods running on an instance and can contain cloud credentials for that node, or provisioning data such as kubelet credentials.
+
+These credentials can be used to escalate within the cluster or to other cloud services under the same account.
+
+### Restrict access to alpha or beta features
+
+Alpha and beta Kubernetes features are in active development and may have limitations or bugs that result in security vulnerabilities.
+
+Always assess the value an alpha or beta feature may provide against the possible risk to your security posture.
+
+When in doubt, disable features you do not use.
+
 ## Authentication
 
-When you use `kubectl` you authenticate yourself against the kube-apiserver component.
+When you use `kubectl`, you authenticate yourself against the kube-api server component.
 
 Kubernetes supports different authentication strategies:
 
 - **Static Tokens**: are difficult to invalidate and should be avoided
 - **Bootstrap Tokens**: same as static tokens above
 - **Basic Authentication** transmits credentials over the network in cleartext
-- **X509 client certs** requires renewing and redistributing client certs on a regular basis
+- **X509 client certs** requires renewing and redistributing client certs regularly
 - **Service Account Tokens** are the preferred authentication strategy for applications and workloads running in the cluster
-- **OpenID Connect (OIDC) Tokens**: best authentication strategy for end users as OIDC integrates with your identity provider such as AD, AWS IAM, GCP IAM, etc.
+- **OpenID Connect (OIDC) Tokens**: best authentication strategy for end-users as OIDC integrates with your identity provider such as AD, AWS IAM, GCP IAM, etc.
 
 You can learn about the strategies in more detail [in the official documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/).
 
 ### Use OpenID (OIDC) tokens as a user authentication strategy
 
-Kubernetes supports various authentication methods including OpenID Connect (OIDC).
+Kubernetes supports various authentication methods, including OpenID Connect (OIDC).
 
-OpenID Connect allows single sign on (SSO) such as your Google Identity to connect to a Kubernetes cluster and other development tools.
+OpenID Connect allows single sign-on (SSO) such as your Google Identity to connect to a Kubernetes cluster and other development tools.
 
-You don't need to remember or manage credentials separately, you could have several clusters connect to the same OpenID provider.
+You don't need to remember or manage credentials separately.
+
+You could have several clusters connect to the same OpenID provider.
 
 You can [learn more about the OpenID connect in Kubernetes](https://thenewstack.io/kubernetes-single-sign-one-less-identity/) in this article.
 
@@ -72,39 +90,40 @@ Role-Based Access Control (RBAC) allows you to define policies on how to access 
 
 Service Account Tokens should not be used for end-users trying to interact with Kubernetes clusters, but they are the preferred authentication strategy for applications and workloads running on Kubernetes.
 
-## Logging
+## Logging setup
 
-application
-Application ID. Retrieved from metadata labels.
-version
-Application version. Retrieved from metadata labels.
-release
-Application release. Retrieved from metadata labels. [optional]
-cluster
-Cluster ID. Retrieved from Kubernetes cluster.
-container
-Container name. Retrieved from Kubernetes API.
-node
-Cluster node running this container. Retrieved from Kubernetes cluster.
-pod
-Pod name running the container. Retrieved from Kubernetes cluster.
-namespace
+You should collect and centrally store logs from all the workloads running in the cluster and from the cluster components themselves.
 
-## Reserve priority and space for Kubernetes resources
+### There's a retention and archival strategy for logs
 
-Kubelet can be instructed to reserve a certain amount of resources for the system and for Kubernetes components (kubelet itself and Docker etc). Reserved resources are subtracted from the node’s allocatable resources. This improves scheduling and makes resource allocation/usage more transparent.
-<https://github.com/kubernetes/kubernetes/blob/1fc1e5efb5e5e1f821bfff8e2ef2dc308bfade8a/cmd/kubelet/app/options/options.go#L227>
-<https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable>
+You should retain 30-45 days of historical logs.
 
-## Handling long lived connections
+### Logs are collected from Nodes, Control Plane, Auditing
 
-<https://itnext.io/on-grpc-load-balancing-683257c5b7b3>
-<https://kubernetes.io/blog/2018/11/07/grpc-load-balancing-on-kubernetes-without-tears/>
+What to collect logs from:
 
-## Securing the kubelet
+- Nodes (kubelet, container runtime)
+- Control plane (API server, scheduler, controller manager)
+- Kubernetes auditing (all requests to the API server)
 
-Cloud platforms (AWS, Azure, GCE, etc.) often expose metadata services locally to instances. By default these APIs are accessible by pods running on an instance and can contain cloud credentials for that node, or provisioning data such as kubelet credentials. These credentials can be used to escalate within the cluster or to other cloud services under the same account.
+What you should collect:
 
-## Restrict access to alpha or beta features
+- Application name. Retrieved from metadata labels.
+- Application instance. Retrieved from metadata labels.
+- Application version. Retrieved from metadata labels.
+- Cluster ID. Retrieved from Kubernetes cluster.
+- Container name. Retrieved from Kubernetes API.
+- Cluster node running this container. Retrieved from Kubernetes cluster.
+- Pod name running the container. Retrieved from Kubernetes cluster.
+- The namespace. Retrieved from Kubernetes cluster.
 
-Alpha and beta Kubernetes features are in active development and may have limitations or bugs that result in security vulnerabilities. Always assess the value an alpha or beta feature may provide against the possible risk to your security posture. When in doubt, disable features you do not use.
+### Prefer a daemon on each node to collect the logs instead of sidecars
+
+Applications should log to stdout rather than to files.
+
+A daemon on each node can collect the logs from the container runtime (if logging to files, a sidecar container for each pod might be necessary).
+
+### Provision a log aggregation tool
+
+Some log aggregation tools: EFK stack (Elasticsearch, Fluentd, Kibana), DataDog, Sumo Logic, Sysdig, GCP Stackdriver, Azure Monitor, AWS CloudWatch
+Use a hosted logging solution (e.g. DataDog, Stackdriver) rather than a self-hosted one (e.g. EFK stack)

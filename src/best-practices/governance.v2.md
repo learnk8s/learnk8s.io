@@ -61,23 +61,23 @@ The following article explains some of the [Kubernetes Pod Security Policy best 
 
 In a Pod, containers can run in "privileged" mode and have almost unrestricted access to resources on the host system.
 
-While there are certain use cases where this level of access is necessary, in general, it's a security risk to let your containers do this.
+While there are specific use cases where this level of access is necessary, in general, it's a security risk to let your containers do this.
 
-Valid uses cases for priviliged Pods include using hardware on the node such as GPUs.
+Valid uses cases for privileged Pods include using hardware on the node such as GPUs.
 
-You can [learn more about securty contexts and privileges containers from this article](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+You can [learn more about security contexts and privileges containers from this article](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
 
 ### Use a read-only filesystem in containers
 
 Running a read-only file system in your containers forces your containers to be immutable.
 
-Not only this mitigates some old (and risky) practices such as hot patching, but also helps you prevent the risks of malicious processes storing or manipulating data inside a container.
+Not only this mitigates some old (and risky) practices such as hot patching but also helps you prevent the risks of malicious processes storing or manipulating data inside a container.
 
-Running containers with a read-only file system might sounds straightforward, but it might come with some complexity.
+Running containers with a read-only file system might sound straightforward, but it might come with some complexity.
 
 _What if you need to write logs or store files in a temporary folder?_
 
-You can learn about the trade-offs in this article on [running containers securly in production](https://medium.com/@axbaretto/running-docker-containers-securely-in-production-98b8104ef68).
+You can learn about the trade-offs in this article on [running containers securely in production](https://medium.com/@axbaretto/running-docker-containers-securely-in-production-98b8104ef68).
 
 ### Prevent containers from running as root
 
@@ -97,7 +97,7 @@ Linux capabilities give processes the ability to do some of the many privileged 
 
 For example, `CAP_CHOWN` allows a process to "make arbitrary changes to file UIDs and GIDs".
 
-Even if you process doesn't run as `root`, there's a chance that a process could use those root-like feature by escalting privileges.
+Even if your process doesn't run as `root`, there's a chance that a process could use those root-like features by escalating privileges.
 
 In other words, you should enable only the capabilities that you need if you don't want to be compromised.
 
@@ -110,7 +110,7 @@ The following two articles dive into the theory and practical best-practices abo
 
 ### Prevent privilege escalation
 
-You should run your container with privilege escalation turned off in order to prevent escalating privileges using `setuid` or `setgid` binaries.
+You should run your container with privilege escalation turned off to prevent escalating privileges using `setuid` or `setgid` binaries.
 
 ## Network policies
 
@@ -138,7 +138,7 @@ If you are not familiar with Network Policies, you can read [Securing Kubernetes
 
 ### There's a conservative NetworkPolicy in every namespace
 
-This repository contains various use cases of Kubernetes Network Policies and sample YAML files to leverage in your setup. If you ever wondered [how to drop/restrict traffic to applications running on Kubernetes](https://github.com/ahmetb/kubernetes-network-policy-recipes), read on.
+This repository contains various use cases of Kubernetes Network Policies and samples YAML files to leverage in your setup. If you ever wondered [how to drop/restrict traffic to applications running on Kubernetes](https://github.com/ahmetb/kubernetes-network-policy-recipes), read on.
 
 ## Role-Based Access Control (RBAC) policies
 
@@ -146,9 +146,9 @@ Role-Based Access Control (RBAC) allows you to define policies on how to access 
 
 It's common practice to give away the least permission needed, _but what is practical and how do you quantify the least privilege?_
 
-Fine-grained policies provide greater security, but require more effort to administrate.
+Fine-grained policies provide greater security but require more effort to administrate.
 
-Broader grants can give unnecessary API access to service accounts, but are easier to controls.
+Broader grants can give unnecessary API access to service accounts but are easier to controls.
 
 _Should you create a single policy per namespace and share it?_
 
@@ -174,12 +174,12 @@ It's challenging to find good advice on how to set up your RBAC rules. In [3 rea
 
 Zalando has a concise policy to define roles and ServiceAccounts.
 
-First, they describe they requirements:
+First, they describe their requirements:
 
-- Users should be able to deploy but they shouldn't be allowed to read Secrets for example
+- Users should be able to deploy, but they shouldn't be allowed to read Secrets for example
 - Admins should get full access to all resources
-- Applications should not get write access to the Kubernetes API by default
-- It should be possible to write to the Kubernetes API for some applications.
+- Applications should not gain write access to the Kubernetes API by default
+- It should be possible to write to the Kubernetes API for some uses.
 
 The four requirements translate into five separate Roles:
 
@@ -241,6 +241,7 @@ The official documentation for the Open Policy Agent has [a tutorial on how to c
 ### Only use approved domain names in the Ingress hostnames
 
 When a user creates an Ingress manifest, they can use any hostname in it.
+a
 
 ```yaml|highlight=7|title=ingress.yaml
 apiVersion: networking.k8s.io/v1beta1
