@@ -145,7 +145,7 @@ function renderPage(state: State, sections: Section[]) {
             </h1>
             <div className='f4 measure'>
               <p className='f2-l f3 white bt bw2 pt3 o-90'>
-                An curated checklist of best practices designed to help you release to production
+                A curated checklist of best practices designed to help you release to production
               </p>
             </div>
           </div>
