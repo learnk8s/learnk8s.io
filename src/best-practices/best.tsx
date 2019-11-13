@@ -169,7 +169,7 @@ function renderPage(state: State, sections: Section[]) {
                       <li className='mv3'>
                         <a
                           href={`#${toId(it.title)}`}
-                          className='pv2 no-underline f4 black-80 hover-navy underline-hover'
+                          className='pv2 no-underline f5 black-80 hover-navy underline-hover'
                         >
                           {index + 1}. {it.title}
                         </a>
