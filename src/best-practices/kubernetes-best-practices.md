@@ -99,6 +99,17 @@ _Collect and centrally store logs from all the workloads running in the cluster 
 
 ## Chapter 5. Continuous Integration, Testing, and Deployment
 
+_Common steps of a CI/CD pipeline: (1) push code to Git repository, (2) build entire application code, (3) running tests against the built code, (4) building the container images, (5) push the container images to a container registry, (6) deploy the application to Kubernetes (use one of various deployment strategies, such as rolling update, blue/green deployment, canary deployment, or A/B deployment), (7) run tests against the deployed application (e.g. a chaos experiment)_
+
+- Keep production code in the master branch
+- Keep container images sizes small (use scratch images with multistage builds, distroless base images, or optimised base images, e.g. Alpine, Debian Slim)
+- Use an image tagging strategy: each image that is built by the CI system should have a unique tag (image tags should be immutable, that is, if two images have differing content, they can't have the same tag, see Chapter 1)
+  - Use the build ID as part of the tag
+  - Use the Git commit hash as part of the tag
+- Minimise CI build times
+- Include extensive tests in CI (build should fail if any test fails)
+- Set up extensive monitoring in the production environment
+
 
 ## Chapter 6. Versioning, Releases, and Rollouts
 
