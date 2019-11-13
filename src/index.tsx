@@ -59,12 +59,14 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { store } from './store'
 import * as Courses from './courses'
 import * as Training2 from './training.v2'
+import * as BestPractices from './best-practices/best'
 
 const isOptimisedBuild = !!process.env.IS_BUILD_OPTIMISED
 
 Courses.Register(store)
 Training2.Register(store)
 Landing.Register(store)
+BestPractices.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -135,6 +137,7 @@ export function run(options: Settings) {
 
     Landing.Mount({ store })
     Training2.Mount({ store })
+    BestPractices.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -380,6 +383,9 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       const $ = Cheerio.of(ZeroToK8sJs.render(root, node, siteUrl))
       optimise({ $, siteUrl })
       writeFileSync(generatePath(), $.html())
+      return
+    }
+    case BestPractices.Details.type: {
       return
     }
     case WebAppManifest.Details.type: {
