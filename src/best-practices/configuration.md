@@ -18,9 +18,9 @@ The Center for Internet Security provides several guidelines and benchmark tests
 
 They also maintain a benchmark for Kubernetes which you can [download from the official website](https://www.cisecurity.org/benchmark/kubernetes/).
 
-While you can read the lengthy guide and manually check if your cluster is compliant, an easier way is to download and execute `kube-bench`.
+While you can read the lengthy guide and manually check if your cluster is compliant, an easier way is to download and execute [`kube-bench`](https://github.com/aquasecurity/kube-bench).
 
-`kube-bench` is a tool designed to automate the CIS Kubernetes benchmark and report on misconfigurations in your cluster.
+[`kube-bench`](https://github.com/aquasecurity/kube-bench) is a tool designed to automate the CIS Kubernetes benchmark and report on misconfigurations in your cluster.
 
 Example output:
 
