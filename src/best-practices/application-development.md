@@ -72,7 +72,7 @@ The readiness probe doesn't include dependencies to services such as:
 - APIs
 - third party services
 
-You can [explore what happens when there're dependencies in the readiness probes in this eassy](https://blog.colinbreck.com/kubernetes-liveness-and-readiness-probes-how-to-avoid-shooting-yourself-in-the-foot/#shootingyourselfinthefootwithreadinessprobes).
+You can [explore what happens when there're dependencies in the readiness probes in this essay](https://blog.colinbreck.com/kubernetes-liveness-and-readiness-probes-how-to-avoid-shooting-yourself-in-the-foot/#shootingyourselfinthefootwithreadinessprobes).
 
 ### The app retries connecting to dependent services
 
@@ -108,7 +108,7 @@ You can [test that your app gracefully shuts down with this tool: kube-sigterm-t
 
 ### The app doesn't shut down on SIGTERM, but it gracefully terminates connections
 
-It might take some time before component such as kube-proxy or the Ingress controller is notified of the endpoint changes.
+It might take some time before a component such as kube-proxy or the Ingress controller is notified of the endpoint changes.
 
 Hence, traffic might still flow to the Pod despite it being marked as terminated.
 
@@ -116,9 +116,9 @@ The app should stop accepting new requests on all remaining connections, and clo
 
 If you need a refresher on how endpoints are propagated in your cluster, [read this article on how to handle client requests properly](https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/).
 
-### The app still process incoming requests in the grace period
+### The app still processes incoming requests in the grace period
 
-You might want to consider using the container lifecycle events such as [the preStop handler](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/#define-poststart-and-prestop-handlers) to customise what happened before a Pod is deleted.
+You might want to consider using the container lifecycle events such as [the preStop handler](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/#define-poststart-and-prestop-handlers) to customize what happened before a Pod is deleted.
 
 ### The CMD in the `Dockerfile` forwards the SIGTERM to the process
 
@@ -451,13 +451,15 @@ You could save on running an extra container for each Pod in your cluster.
 
 ## Scaling
 
-### The app is stateless
+### Containers do not store any state in their local filesystem
 
-A containerised app is stateless if it doesn't store any state in the local filesystem of its container.
+Containers have their own local filesystem and you might be tempted to use it for persisting data.
 
-For an app to be horizontally scalable, it must be stateless. The reason is that if each container stores its own state, there is no "ground truth" and the states saved by each container may diverge. This results in inconsistent behaviour (for example, a certain piece of data is available in one Pod, but not in another).
+However, storing persistent data in a container's local filesystem prevents the encompassing Pod from being scaled horizontally (that is, by adding or removing replicas of the Pod).
 
-To make an app stateless, all state must be saved at a central place that is independent of the running containers, for example, in a data store outside the cluster.
+This is because, by using the local filesystem, each container maintains its own "state", which means that the states of Pod replicas may diverge over time. This results in inconsistent behaviour from the user's point of view (for example, a certain piece of user information is available when the request hits one Pod, but not when the request hits another Pod).
+
+Instead, any persistent information should be saved at a central place outside the Pods. For example, in a PersistentVolume in the cluster, or even better in some storage service outside the cluster.
 
 ### Use the Horizontal Pod Autoscaler for apps with variable usage patterns
 
@@ -481,9 +483,9 @@ The VPA is currently in beta and is **not recommended for production**. Given th
 
 The [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) is another type of "autoscaler" (besides the [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) and [Vertical Pod Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler)).
 
-The Cluster Autoscaler can automatically add or remove worker nodes from your cluster. It becomes active when a Pod can't be scheduled to one of the existing nodes because of inefficient resources. In that case, the Cluster Autoscaler will create a new worker node, so that the Pod can be scheduled.
+The Cluster Autoscaler can automatically add or remove worker nodes from your cluster. It becomes active when a Pod can't be scheduled to one of the existing nodes because of insufficient resources. In that case, the Cluster Autoscaler will create a new worker node, so that the Pod can be scheduled.
 
-Configuring the Cluster Autoscaler includes some overhead, and another downside is that it only becomes active when a Pod already failed to schedule. Given that it takes some time to spin up a new worker node, this can result in a considerable delay until the Pods can finally run.
+Configuring the Cluster Autoscaler includes some overhead, and another downside is that it only becomes active when a Pod has already failed to schedule. Given that it takes some time to spin up a new worker node, this can result in a considerable delay until the Pods can finally run.
 
 In most cases, it's sufficient to choose a cluster size manually and scale up or down manually when it's needed. However, for scenarios with extremely variable amounts of workloads, using the Cluster Autoscaler can make sense.
 
