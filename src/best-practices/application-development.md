@@ -471,7 +471,7 @@ To configure the HPA to autoscale your app, you have to create a [HorizontalPodA
 
 The HPA can monitor either built-in resource metric (CPU and memory usage of your Pods) or custom metrics. In the case of custom metrics, you are also responsible for collecting and exposing these metrics, which you can do, for example, with [Prometheus](https://prometheus.io/) and the [Prometheus Adapter](https://github.com/DirectXMan12/k8s-prometheus-adapter).
 
-### Don't use the Vertical Pod Autoscaler while it's still in beta 
+### Don't use the Vertical Pod Autoscaler while it's still in beta
 
 Analogous to the [Horizontal Pod Autoscaler (HPA)](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/), there exists the [Vertical Pod Autoscaler (VPA)](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler).
 
