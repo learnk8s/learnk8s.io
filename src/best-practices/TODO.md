@@ -13,7 +13,6 @@ You can [explore how to reserve resources on the official documentation](https:/
 
 * * *
 
-
 ## Building container images
 
 ### Use only base images from trusted image providers
@@ -25,7 +24,6 @@ You can [explore how to reserve resources on the official documentation](https:/
 If the content of an image changes, the image tag must change too.
 
 Common strategies are to use the Git commit hash or the CI build ID as part of the image tag.
-
 
 * * *
 
@@ -43,9 +41,16 @@ This causes all Pods to be restarted, whih ensures that the new configuration is
 
 You can automate this process with a CD system.
 
+### Mount Secrets as volumes, not environment variables
+
+TODO: integrate with existing "Mount Secrets as volumes, not environment variables".
+
+- Injected environment variables are always present and may become artifacts in logs for the entire system.
+- Secret-based environment variables should be mounted as a volume (not environment variables). In this way, they're only available to the desired process/container. Not the whole pod.
+
+See #5
 
 * * *
-
 
 ## Labelling resources
 
@@ -117,9 +122,7 @@ Resources that compromise an entire app (e.g. Deployment, StatefulSet) should ha
 
 This label should change every time the application is deployed (the release should be updated even if the version of the app stays the same).
 
-
 * * *
-
 
 ## Resource management
 
@@ -191,9 +194,7 @@ TODO: how does this affect the QoS class? Where's the source that this is a best
 
 ### Use PriorityClass to define the order in which Pods are scheduled and evicted
 
-
 * * *
-
 
 ## Health checks
 
@@ -201,9 +202,7 @@ TODO: integrate with current "Health checks"
 
 ### Set initialDelaySeconds to appropriate value for all liveness and readiness probes
 
-
 * * *
-
 
 ## Advanced scheduling
 
@@ -215,9 +214,7 @@ TODO: integrate with current "Health checks"
 
 ### Use Taints and Tolerations to reserve nodes for certain Pods
 
-
 * * *
-
 
 ## Application lifecycle
 
