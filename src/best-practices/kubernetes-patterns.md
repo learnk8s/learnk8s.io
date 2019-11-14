@@ -50,8 +50,8 @@ The app should implement these interfaces to provide the maximum amount of infor
 Kubernetes (kubelet) performs three types of periodic health checks:
 
 1. **Process:** is main process of container still running? → restart container
-2. **Liveness:** implemented by app, is app running? → restart container
-3. **Readiness:** implemented by app, is app ready to serve requests? → remove Pod from Service
+1. **Liveness:** implemented by app, is app running? → restart container
+1. **Readiness:** implemented by app, is app ready to serve requests? → remove Pod from Service
 
 **Best practices:**
 
