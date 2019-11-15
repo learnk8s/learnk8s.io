@@ -936,7 +936,7 @@ Meaning that they are not accessible or reachable to and from the world outside.
 I have included an `ingress.yaml` file with the source code of this demo application with the following contents:
 
 ```yaml|title=ingress.yaml
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: laravel-kubernetes-demo-ingress

@@ -35,7 +35,7 @@ So you could use in your cluster as a gateway between your users and your backen
 You can expose your API to external traffic with the standard Ingress object:
 
 ```yaml|title=ingress.yaml
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: my-ingress
@@ -73,7 +73,7 @@ plugin: rate-limiting
 And you can reference the limit with an annotation in your ingress with:
 
 ```yaml|highlight=5-6|title=ingress.yaml
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: my-ingress

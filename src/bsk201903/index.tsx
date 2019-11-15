@@ -28,6 +28,7 @@ export const IngressApiGatewayDetails = identity<Details>({
   description: `In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster. You can select an Ingress that is also an API gateway.`,
   openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
   publishedDate: '2019-04-23',
+  lastModifiedDate: '2019-11-15',
   previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
   author: {
     fullName: 'Daniele Polencic',

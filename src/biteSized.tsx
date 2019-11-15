@@ -31,6 +31,7 @@ export interface Details {
   description: string
   openGraphImage: JSX.Element
   publishedDate: string
+  lastModifiedDate?: string
   previewImage: JSX.Element
   author: {
     fullName: string
@@ -75,7 +76,7 @@ export function BiteSizedRender(markdownPath: string, extra?: (website: Sitemap)
             },
             url: getAbsoluteUrl(currentNode, siteUrl),
             datePublished: currentNode.payload.publishedDate,
-            dateModified: currentNode.payload.publishedDate,
+            dateModified: currentNode.payload.lastModifiedDate || currentNode.payload.publishedDate,
             description: currentNode.payload.description,
             mainEntityOfPage: {
               '@type': 'SoftwareSourceCode',
