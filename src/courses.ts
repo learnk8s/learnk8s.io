@@ -177,13 +177,6 @@ const Courses = {
     description: marked(cat(`${__dirname}/description_en.md`).toString(), { renderer }),
     language: 'English',
   },
-  threeDaysIT: {
-    id: '3days-it',
-    duration: '3 days',
-    title: 'Advanced Kubernetes training',
-    description: marked(cat(`${__dirname}/description_it.md`).toString(), { renderer }),
-    language: 'Italiano',
-  },
 }
 
 const NewPictures = {
@@ -360,7 +353,7 @@ export function Register(store: Store<State, Actions>) {
       startAt: '2020-03-18T09:30:00',
       endsAt: '2020-03-20T05:00:00',
       timezone: 'Europe/Rome',
-      courseId: Courses.threeDaysIT.id,
+      courseId: Courses.threeDays.id,
       priceId: CoursePrice.Italy.id,
       venueId: Venues.GenericMilan.id,
       pictureId: NewPictures.one.id,
