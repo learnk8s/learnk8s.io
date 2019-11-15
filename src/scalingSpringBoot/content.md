@@ -2078,26 +2078,29 @@ Let's start with ActiveMQ.
 You should create a `activemq-deployment.yaml` file with the following content:
 
 ```yaml|title=activemq-deployment.yaml
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: queue
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: queue
   template:
     metadata:
       labels:
         app: queue
     spec:
       containers:
-        - name: web
-          image: webcenter/activemq:5.14.3
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 61616
-          resources:
-            limits:
-              memory: 512Mi
+      - name: web
+        image: webcenter/activemq:5.14.3
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 61616
+        resources:
+          limits:
+            memory: 512Mi
 ```
 
 The template is verbose but straightforward to read:
@@ -2148,39 +2151,42 @@ kubectl get pods -l=app=queue
 Create a `fe-deployment.yaml` file with the following content:
 
 ```yaml|title=fe-deployment.yaml
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
   template:
     metadata:
       labels:
         app: frontend
     spec:
       containers:
-        - name: frontend
-          image: spring-boot-hpa
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: ACTIVEMQ_BROKER_URL
-              value: 'tcp://queue:61616'
-            - name: STORE_ENABLED
-              value: 'true'
-            - name: WORKER_ENABLED
-              value: 'false'
-          ports:
-            - containerPort: 8080
-          livenessProbe:
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            httpGet:
-              path: /health
-              port: 8080
-          resources:
-            limits:
-              memory: 512Mi
+      - name: frontend
+        image: spring-boot-hpa
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: ACTIVEMQ_BROKER_URL
+          value: "tcp://queue:61616"
+        - name: STORE_ENABLED
+          value: "true"
+        - name: WORKER_ENABLED
+          value: "false"
+        ports:
+          - containerPort: 8080
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          httpGet:
+            path: /health
+            port: 8080
+        resources:
+          limits:
+            memory: 512Mi
 ```
 
 The _Deployment_ looks a lot like the previous one.
@@ -2225,12 +2231,15 @@ kubectl get pods -l=app=fe
 Create a `backend-deployment.yaml` file with the following content:
 
 ```yaml|title=backend-deployment.yaml
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: backend
   template:
     metadata:
       labels:
@@ -2239,27 +2248,27 @@ spec:
         prometheus.io/scrape: 'true'
     spec:
       containers:
-        - name: backend
-          image: spring-boot-hpa
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: ACTIVEMQ_BROKER_URL
-              value: 'tcp://queue:61616'
-            - name: STORE_ENABLED
-              value: 'false'
-            - name: WORKER_ENABLED
-              value: 'true'
-          ports:
-            - containerPort: 8080
-          livenessProbe:
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            httpGet:
-              path: /health
-              port: 8080
-          resources:
-            limits:
-              memory: 512Mi
+      - name: backend
+        image: spring-boot-hpa
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: ACTIVEMQ_BROKER_URL
+          value: "tcp://queue:61616"
+        - name: STORE_ENABLED
+          value: "false"
+        - name: WORKER_ENABLED
+          value: "true"
+        ports:
+          - containerPort: 8080
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          httpGet:
+            path: /health
+            port: 8080
+        resources:
+          limits:
+            memory: 256Mi
 ```
 
 Create a `backend-service.yaml` file with the following content:

@@ -15,7 +15,7 @@ export const Details = {
   description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
   openGraphImage: <img src='src/scalingSpringBoot/autoscaling.png' alt='Containers' />,
   publishedDate: '2018-07-11',
-  lastModifiedDate: '2019-04-15',
+  lastModifiedDate: '2019-11-15',
   previewImage: (
     <img
       src='src/scalingSpringBoot/autoscaling.png'
