@@ -43,10 +43,7 @@ export const Head: React.StatelessComponent<{
       <link rel='apple-touch-icon' sizes='180x180' href='assets/apple-touch-icon.png' />
       <link rel='icon' type='image/png' sizes='32x32' href='assets/favicon-32x32.png' />
       <link rel='icon' type='image/png' sizes='16x16' href='assets/favicon-16x16.png' />
-      <link rel='manifest' href='/manifest.json' />
-      <link rel='mask-icon' href='assets/safari-pinned-tab.svg' color='#326ce5' />
       <link rel='alternate' type='application/rss+xml' title='Subscribe to Learnk8s RSS' href='/rss.xml' />
-      <meta name='theme-color' content='#ffffff' />
       <meta property='og:site_name' content='Learnk8s' />
       <meta name='pocket-site-verification' content='1476398dfb5a771a94da9466e0bb43' />
       {children}
