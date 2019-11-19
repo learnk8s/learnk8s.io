@@ -1,7 +1,7 @@
 import React from 'react'
 import { writeFileSync, readFileSync, existsSync, copyFileSync } from 'fs'
-import { resolve, extname, basename } from 'path'
-import * as Url from 'url'
+
+import { resolve, extname, basename, join } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { SyncEvents } from './eventbrite.v2'
 import { ok } from 'assert'
@@ -139,6 +139,7 @@ export function run(options: Settings) {
     Landing.Mount({ store })
     Training2.Mount({ store })
     BestPractices.Mount({ store })
+    Careers.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -165,8 +166,8 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
   const page = node.payload
   const fullUrl = getFullUrl(node)
   function generatePath() {
-    const path = `_site${Url.resolve(Url.resolve('/', fullUrl), 'index.html')}`
-    mkdir('-p', `_site${Url.resolve('/', fullUrl)}`)
+    const path = `_site${join('/', fullUrl, 'index.html')}`
+    mkdir('-p', `_site${join('/', fullUrl)}`)
     return path
   }
 
@@ -218,9 +219,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Careers.Details.type: {
-      const $ = Cheerio.of(Careers.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case TermsAndConditions.Details.type: {
