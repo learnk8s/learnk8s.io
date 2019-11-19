@@ -9,7 +9,8 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { ok } from 'assert'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import md5 = require('md5')
-import { extname, resolve } from 'path'
+import { extname } from 'path'
+import * as Url from 'url'
 import { mkdir, cp } from 'shelljs'
 import { minify } from 'terser'
 import postcss from 'postcss'
@@ -35,8 +36,8 @@ export function defaultAssetsPipeline({
   writeFileSync(generatePath(url), $.html())
 
   function generatePath(url: string) {
-    const path = `${outputFolder}${resolve('.', url, 'index.html')}`
-    mkdir('-p', `${outputFolder}${resolve('.', url)}`)
+    const path = `${outputFolder}${Url.resolve(Url.resolve('/', url), 'index.html')}`
+    mkdir('-p', `${outputFolder}${Url.resolve('/', url)}`)
     return path
   }
 }

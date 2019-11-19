@@ -64,8 +64,7 @@
     "washed-blue": "#f6fffe",
     "washed-green": "#e8fdf5",
     "washed-yellow": "#fffceb",
-    "washed-red": "#ffdfdf",
-    "inherit": "inherit"
+    "washed-red": "#ffdfdf"
   },
   "typography": { "measure": [30, 34, 20] },
   "borderWidths": [0, 0.125, 0.25, 0.5, 1, 2],

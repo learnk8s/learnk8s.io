@@ -1,6 +1,7 @@
 import React from 'react'
 import { writeFileSync, readFileSync, existsSync, copyFileSync } from 'fs'
 import { resolve, extname, basename } from 'path'
+import * as Url from 'url'
 import { mkdir, cp } from 'shelljs'
 import { SyncEvents } from './eventbrite.v2'
 import { ok } from 'assert'
@@ -164,8 +165,8 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
   const page = node.payload
   const fullUrl = getFullUrl(node)
   function generatePath() {
-    const path = `_site${resolve('.', fullUrl, 'index.html')}`
-    mkdir('-p', `_site${resolve('.', fullUrl)}`)
+    const path = `_site${Url.resolve(Url.resolve('/', fullUrl), 'index.html')}`
+    mkdir('-p', `_site${Url.resolve('/', fullUrl)}`)
     return path
   }
 
