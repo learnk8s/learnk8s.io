@@ -229,6 +229,18 @@ export function Register(store: Store<State, Actions>) {
   )
   store.dispatch(
     Action.registerWorkshop({
+      id: 'LK8S|LONDON|20200122',
+      startAt: '2020-01-22T09:30:00',
+      endsAt: '2020-01-24T05:00:00',
+      timezone: 'Europe/London',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.GreatBritain.id,
+      venueId: Venues.LondonCitizenM.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
       id: 'LK8S|TORONTO|20200129',
       startAt: '2020-01-29T09:30:00',
       endsAt: '2020-01-31T05:00:00',
