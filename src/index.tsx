@@ -68,6 +68,8 @@ Courses.Register(store)
 Training2.Register(store)
 Landing.Register(store)
 BestPractices.Register(store)
+Careers.Register(store)
+TermsAndConditions.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -140,6 +142,7 @@ export function run(options: Settings) {
     Training2.Mount({ store })
     BestPractices.Mount({ store })
     Careers.Mount({ store })
+    TermsAndConditions.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -222,9 +225,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case TermsAndConditions.Details.type: {
-      const $ = Cheerio.of(TermsAndConditions.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case AboutUs.Details.type: {
