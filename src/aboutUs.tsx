@@ -24,6 +24,15 @@ export const AboutUs = {
   description: 'Experienced software consultants, specialising in Kubernetes.',
 }
 
+export const Authors = {
+  danielWeibel: {
+    id: 'daniel-weibel',
+    fullName: 'Daniel Weibel',
+    avatar: <img src='assets/authors/daniel_weibel.jpg' alt='Daniel Weibel' />,
+    link: 'https://medium.com/@weibeld',
+  },
+}
+
 export function Register(store: Store<State, Actions>) {
   store.dispatch(Action.registerPage(AboutUs))
   store.dispatch(
@@ -35,6 +44,7 @@ export function Register(store: Store<State, Actions>) {
       description: 'Experienced software consultants, specialising in Kubernetes.',
     }),
   )
+  store.dispatch(Action.registerAuthor(Authors.danielWeibel))
 }
 
 export function Mount({ store }: { store: Store<State, Actions> }) {

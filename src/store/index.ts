@@ -69,3 +69,11 @@ export function getOpenGraph(state: State): WebsiteReducer.OpenGraph[] {
 export function getLandingPageLocations(state: State): WebsiteReducer.LandingPage[] {
   return Object.values(state.website.landingPages)
 }
+
+export function getAuthors(state: State): WebsiteReducer.Author[] {
+  return Object.values(state.website.authors)
+}
+
+export function getBlogPosts(state: State): WebsiteReducer.BlogPost[] {
+  return Object.values(state.website.blogPosts)
+}

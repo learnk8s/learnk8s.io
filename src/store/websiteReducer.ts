@@ -10,6 +10,12 @@ export const Action = {
   registerOpenGraph(args: OpenGraph) {
     return { type: 'REGISTER_OG' as const, ...args }
   },
+  registerBlogPost(args: BlogPost) {
+    return { type: 'REGISTER_BLOG_POST' as const, ...args }
+  },
+  registerAuthor(args: Author) {
+    return { type: 'REGISTER_AUTHOR' as const, ...args }
+  },
 }
 
 export type Actions = ReturnType<typeof Action[keyof typeof Action]>
@@ -19,6 +25,24 @@ export type Page = {
   url: string
   title: string
   description: string
+}
+
+export type BlogPost = {
+  id: string
+  pageId: string
+  authorId: string
+  title: string
+  description: string
+  publishedDate: string
+  lastModifiedDate?: string
+}
+
+export type Author = {
+  id: string
+  fullName: string
+  avatar: JSX.Element
+  link: string
+  description?: string
 }
 
 export type LandingPage = {
@@ -39,6 +63,8 @@ export interface State {
   pages: Record<string, Page>
   openGraph: Record<string, OpenGraph>
   landingPages: Record<string, LandingPage>
+  blogPosts: Record<string, BlogPost>
+  authors: Record<string, Author>
 }
 
 export function createInitialState(options: {}): State {
@@ -47,6 +73,8 @@ export function createInitialState(options: {}): State {
     pages: {},
     openGraph: {},
     landingPages: {},
+    blogPosts: {},
+    authors: {},
   }
 }
 
@@ -69,6 +97,15 @@ export const RootReducer: Reducer<State, Actions> = (
     }
     case 'REGISTER_LANDING': {
       return { ...state, landingPages: { ...state.landingPages, [action.id]: { ...action } } }
+    }
+    case 'REGISTER_BLOG_POST': {
+      if (!(action.authorId in state.authors)) {
+        throw new Error(`The author ${action.authorId} for the blog post ${action.title} doesn't exist`)
+      }
+      return { ...state, blogPosts: { ...state.blogPosts, [action.id]: { ...action } } }
+    }
+    case 'REGISTER_AUTHOR': {
+      return { ...state, authors: { ...state.authors, [action.id]: { ...action } } }
     }
     default:
       assertUnreachable(action)
