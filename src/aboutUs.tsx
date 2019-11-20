@@ -1,8 +1,12 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Consultation, Footer, Layout } from './layout.v2'
+import { Consultation, Layout } from './layout.v2'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { Navbar } from './layout.v3'
+import { Navbar, Html, OpenGraph, Head, Body, Footer } from './layout.v3'
+import { Store } from 'redux'
+import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
+import { defaultAssetsPipeline } from './optimise'
+import { join } from 'path'
 
 export const Details = {
   type: 'aboutUs',
@@ -13,111 +17,152 @@ export const Details = {
   openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
 }
 
-export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(
-    <Layout
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.description}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absoluteUrl={getAbsoluteUrl(currentNode, siteUrl)}
-    >
-      <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
-        <Navbar />
+export const AboutUs = {
+  id: 'aboutUs',
+  url: '/about-us',
+  title: 'Team',
+  description: 'Experienced software consultants, specialising in Kubernetes.',
+}
 
-        <section className='ph5-l'>
-          <div className='w-100'>
-            <h1 className='f1 pl3 pl4-ns f-subheadline-l'>About us</h1>
-            <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns f3-l pb4'>
-              Experienced software consultants, specialising in Kubernetes.
-            </h2>
-          </div>
+export function Register(store: Store<State, Actions>) {
+  store.dispatch(Action.registerPage(AboutUs))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-about-us',
+      pageId: AboutUs.id,
+      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      title: 'Team',
+      description: 'Experienced software consultants, specialising in Kubernetes.',
+    }),
+  )
+}
+
+export function Mount({ store }: { store: Store<State, Actions> }) {
+  const state = store.getState()
+  defaultAssetsPipeline({
+    jsx: renderPage(state),
+    isOptimisedBuild: getConfig(state).isProduction,
+    siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
+    url: AboutUs.url,
+    outputFolder: getConfig(state).outputFolder,
+  })
+}
+
+function renderPage(state: State) {
+  const page = getPages(state).find(it => it.id === AboutUs.id)!
+  const openGraph = getOpenGraph(state).find(it => it.pageId === AboutUs.id)
+  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  return (
+    <Html>
+      <Head title={page.title} description={page.description}>
+        {openGraph ? (
+          <OpenGraph
+            title={openGraph.title}
+            description={openGraph.description}
+            image={openGraph.image}
+            currentAbsoluteUrl={currentAbsoluteUrl}
+          />
+        ) : null}
+        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <link rel='stylesheet' href='assets/style.css' />
+      </Head>
+      <Body>
+        <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
+          <Navbar />
+
+          <section className='ph5-l'>
+            <div className='w-100'>
+              <h1 className='f1 pl3 pl4-ns f-subheadline-l'>About us</h1>
+              <h2 className='f4 normal measure-narrow lh-copy ph3 ph4-ns f3-l pb4'>
+                Experienced software consultants, specialising in Kubernetes.
+              </h2>
+            </div>
+          </section>
+        </div>
+
+        <section>
+          <ul className='list pl0 flex flex-wrap justify-center'>
+            <Profile
+              profile={<img src='assets/about-us/daniele_polencic.jpg' alt='Daniele Polencic' />}
+              name='Daniele Polencic'
+              bio='Daniele is a technical consultant and instructor based in London. Daniele is a certified Kubernetes administrator by the Linux Foundation. In the last decade, Daniele trained developers for companies in the e-commerce, finance and public sector.'
+              role='Managing director and instructor'
+            >
+              <GitHub link='https://github.com/danielepolencic' />
+              <Twitter link='https://twitter.com/danielepolencic' />
+              <LinkedIn link='https://www.linkedin.com/in/danielepolencic' />
+            </Profile>
+            <Profile
+              profile={<img src='assets/about-us/miriam_menegatti.jpg' alt='Miriam Menegatti' />}
+              name='Miriam Menegatti'
+              bio='Miriam is a professional based in London specializing in LNG Trading. She is focused on business development and driving strategic growth. Miriam has also extensive experience in contract negotiation, within the commodity sector.'
+              role='Managing director and head of strategy'
+            >
+              <LinkedIn link='https://www.linkedin.com/in/miriam-menegatti-46263915/' />
+            </Profile>
+            <Profile
+              profile={<img src='assets/about-us/bruno_bonanno.jpg' alt='Bruno Bonanno' />}
+              name='Bruno Bonanno'
+              bio='Bruno has worked as a software engineer for 15+. He spent 5 years teaching at UTN BA before moving to the consulting arena and helping companies such as Morgan Stanley, Barclays and Lloyds deliver better and more secure software.'
+              role='Senior software engineer'
+            >
+              <GitHub link='https://github.com/bbonanno' />
+              <LinkedIn link='https://www.linkedin.com/in/bbonanno/' />
+            </Profile>
+            <Profile
+              profile={<img src='assets/about-us/alessandro_moretti.jpg' alt='Alessandro Moretti' />}
+              name='Alessandro Moretti'
+              bio='Alessandro is a digital marketer passionate about emerging technology and blockchain. He has vast expertise in the digital advertising space having worked with companies such as Coca Cola, The Times and Discovery Channel.'
+              role='Head of marketing'
+            >
+              <LinkedIn link='https://www.linkedin.com/in/alemoretti/' />
+            </Profile>
+            <Profile
+              profile={<img src='assets/about-us/mehdi_avdi.jpg' alt='Mehdi Avdi' />}
+              name='Mehdi Avdi'
+              bio='Mehdi is a highly experienced software developer and technical lead, with 12+ years industry experience in software engineering practices. Mehdi has helped built infrastructure for companies such as Pearson, Which? and AGCO.'
+              role='Instructor'
+            >
+              <GitHub link='https://github.com/mavdi' />
+              <LinkedIn link='https://www.linkedin.com/in/mehdiavdi/' />
+            </Profile>
+            <Profile
+              profile={<img src='assets/about-us/chris_nesbitt-smith.jpg' alt='Chris Nesbitt-Smith' />}
+              name='Chris Nesbitt-Smith'
+              bio='Chris, a test-fanatic software engineer, always focused on how to apply that same level of vigour and assurance to infrastructure. Chris has considerable experience delivering complex, scalable software and training to many UK private, public and third sector organisations.'
+              role='Instructor'
+            >
+              <GitHub link='https://github.com/chrisns' />
+              <LinkedIn link='https://www.linkedin.com/in/cnesbittsmith/' />
+            </Profile>
+            <Profile
+              profile={<img src='assets/about-us/valentin_ouvrard.jpg' alt='Valentin Ouvrard' />}
+              name='Valentin Ouvrard'
+              bio='Valentin is a DevOps engineer with a passion for container technology. Having jumped onto Kubernetes at the beginning of 2015, he has more than 2yrs of production experience in public clouds and bare metal environments alike.'
+              role='Kubernetes Specialist'
+            >
+              <GitHub link='https://github.com/valentin2105' />
+              <Twitter link='https://twitter.com/valentin_nc' />
+              <LinkedIn link='https://www.linkedin.com/in/valentin-ouvrard-57823aa7' />
+            </Profile>
+            <Profile
+              profile={<img src='assets/about-us/keith_mifsud.jpg' alt='Keith Mifsud' />}
+              name='Keith Mifsud'
+              bio='Keith has over ten years of professional experience in software development. He built one of the first ever enterprise insurance policy generator software and had worked with clients of the calibre of Renault, Xerox and Hilton Hotels.'
+              role='Senior software developer'
+            >
+              <GitHub link='https://github.com/keithmifsud' />
+              <Twitter link='https://twitter.com/keithmifsud' />
+              <LinkedIn link='https://www.linkedin.com/in/keith-mifsud-369275157' />
+              <World link='https://keith-mifsud.me' />
+            </Profile>
+          </ul>
         </section>
-      </div>
 
-      <section>
-        <ul className='list pl0 flex flex-wrap justify-center'>
-          <Profile
-            profile={<img src='assets/about-us/daniele_polencic.jpg' alt='Daniele Polencic' />}
-            name='Daniele Polencic'
-            bio='Daniele is a technical consultant and instructor based in London. Daniele is a certified Kubernetes administrator by the Linux Foundation. In the last decade, Daniele trained developers for companies in the e-commerce, finance and public sector.'
-            role='Managing director and instructor'
-          >
-            <GitHub link='https://github.com/danielepolencic' />
-            <Twitter link='https://twitter.com/danielepolencic' />
-            <LinkedIn link='https://www.linkedin.com/in/danielepolencic' />
-          </Profile>
-          <Profile
-            profile={<img src='assets/about-us/miriam_menegatti.jpg' alt='Miriam Menegatti' />}
-            name='Miriam Menegatti'
-            bio='Miriam is a professional based in London specializing in LNG Trading. She is focused on business development and driving strategic growth. Miriam has also extensive experience in contract negotiation, within the commodity sector.'
-            role='Managing director and head of strategy'
-          >
-            <LinkedIn link='https://www.linkedin.com/in/miriam-menegatti-46263915/' />
-          </Profile>
-          <Profile
-            profile={<img src='assets/about-us/bruno_bonanno.jpg' alt='Bruno Bonanno' />}
-            name='Bruno Bonanno'
-            bio='Bruno has worked as a software engineer for 15+. He spent 5 years teaching at UTN BA before moving to the consulting arena and helping companies such as Morgan Stanley, Barclays and Lloyds deliver better and more secure software.'
-            role='Senior software engineer'
-          >
-            <GitHub link='https://github.com/bbonanno' />
-            <LinkedIn link='https://www.linkedin.com/in/bbonanno/' />
-          </Profile>
-          <Profile
-            profile={<img src='assets/about-us/alessandro_moretti.jpg' alt='Alessandro Moretti' />}
-            name='Alessandro Moretti'
-            bio='Alessandro is a digital marketer passionate about emerging technology and blockchain. He has vast expertise in the digital advertising space having worked with companies such as Coca Cola, The Times and Discovery Channel.'
-            role='Head of marketing'
-          >
-            <LinkedIn link='https://www.linkedin.com/in/alemoretti/' />
-          </Profile>
-          <Profile
-            profile={<img src='assets/about-us/mehdi_avdi.jpg' alt='Mehdi Avdi' />}
-            name='Mehdi Avdi'
-            bio='Mehdi is a highly experienced software developer and technical lead, with 12+ years industry experience in software engineering practices. Mehdi has helped built infrastructure for companies such as Pearson, Which? and AGCO.'
-            role='Instructor'
-          >
-            <GitHub link='https://github.com/mavdi' />
-            <LinkedIn link='https://www.linkedin.com/in/mehdiavdi/' />
-          </Profile>
-          <Profile
-            profile={<img src='assets/about-us/chris_nesbitt-smith.jpg' alt='Chris Nesbitt-Smith' />}
-            name='Chris Nesbitt-Smith'
-            bio='Chris, a test-fanatic software engineer, always focused on how to apply that same level of vigour and assurance to infrastructure. Chris has considerable experience delivering complex, scalable software and training to many UK private, public and third sector organisations.'
-            role='Instructor'
-          >
-            <GitHub link='https://github.com/chrisns' />
-            <LinkedIn link='https://www.linkedin.com/in/cnesbittsmith/' />
-          </Profile>
-          <Profile
-            profile={<img src='assets/about-us/valentin_ouvrard.jpg' alt='Valentin Ouvrard' />}
-            name='Valentin Ouvrard'
-            bio='Valentin is a DevOps engineer with a passion for container technology. Having jumped onto Kubernetes at the beginning of 2015, he has more than 2yrs of production experience in public clouds and bare metal environments alike.'
-            role='Kubernetes Specialist'
-          >
-            <GitHub link='https://github.com/valentin2105' />
-            <Twitter link='https://twitter.com/valentin_nc' />
-            <LinkedIn link='https://www.linkedin.com/in/valentin-ouvrard-57823aa7' />
-          </Profile>
-          <Profile
-            profile={<img src='assets/about-us/keith_mifsud.jpg' alt='Keith Mifsud' />}
-            name='Keith Mifsud'
-            bio='Keith has over ten years of professional experience in software development. He built one of the first ever enterprise insurance policy generator software and had worked with clients of the calibre of Renault, Xerox and Hilton Hotels.'
-            role='Senior software developer'
-          >
-            <GitHub link='https://github.com/keithmifsud' />
-            <Twitter link='https://twitter.com/keithmifsud' />
-            <LinkedIn link='https://www.linkedin.com/in/keith-mifsud-369275157' />
-            <World link='https://keith-mifsud.me' />
-          </Profile>
-        </ul>
-      </section>
-
-      <Consultation />
-      <Footer root={website} />
-    </Layout>,
+        <Consultation />
+        <Footer />
+      </Body>
+    </Html>
   )
 }
 
