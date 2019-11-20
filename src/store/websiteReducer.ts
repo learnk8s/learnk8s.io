@@ -19,6 +19,9 @@ export const Action = {
   assignTag(args: Tag) {
     return { type: 'ASSIGN_TAG' as const, ...args }
   },
+  registerRelatedArticle(args: RelatedArticle) {
+    return { type: 'REGISTER_RELATED_ARTICLE' as const, ...args }
+  },
 }
 
 export type Actions = ReturnType<typeof Action[keyof typeof Action]>
@@ -67,6 +70,13 @@ export type Tag = {
   pageId: string
 }
 
+export type RelatedArticle = {
+  title: string
+  description: string
+  url: string
+  blogPostId: string
+}
+
 export interface State {
   pages: Record<string, Page>
   openGraph: Record<string, OpenGraph>
@@ -74,6 +84,7 @@ export interface State {
   blogPosts: Record<string, BlogPost>
   authors: Record<string, Author>
   tags: Record<string, string[]>
+  relatedArticles: Record<string, RelatedArticle>
 }
 
 export function createInitialState(options: {}): State {
@@ -85,6 +96,7 @@ export function createInitialState(options: {}): State {
     blogPosts: {},
     authors: {},
     tags: {},
+    relatedArticles: {},
   }
 }
 
@@ -127,6 +139,15 @@ export const RootReducer: Reducer<State, Actions> = (
           ...state.tags,
           [action.pageId]: [action.id, ...(Array.isArray(state.tags[action.pageId]) ? state.tags[action.pageId] : [])],
         },
+      }
+    }
+    case 'REGISTER_RELATED_ARTICLE': {
+      if (!(action.blogPostId in state.blogPosts)) {
+        throw new Error(`Couldn't find the blog post ${action.blogPostId} for related article ${action.title}`)
+      }
+      return {
+        ...state,
+        relatedArticles: { ...state.relatedArticles, [Object.keys(state.relatedArticles).length + 1]: { ...action } },
       }
     }
     default:
