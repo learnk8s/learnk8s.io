@@ -70,6 +70,7 @@ Landing.Register(store)
 BestPractices.Register(store)
 Careers.Register(store)
 TermsAndConditions.Register(store)
+Consulting.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -143,6 +144,7 @@ export function run(options: Settings) {
     BestPractices.Mount({ store })
     Careers.Mount({ store })
     TermsAndConditions.Mount({ store })
+    Consulting.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -203,9 +205,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Consulting.Details.type: {
-      const $ = Cheerio.of(Consulting.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ContactUs.Details.type: {
