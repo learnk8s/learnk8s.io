@@ -16,6 +16,9 @@ export const Action = {
   registerAuthor(args: Author) {
     return { type: 'REGISTER_AUTHOR' as const, ...args }
   },
+  assignTag(args: Tag) {
+    return { type: 'ASSIGN_TAG' as const, ...args }
+  },
 }
 
 export type Actions = ReturnType<typeof Action[keyof typeof Action]>
@@ -59,12 +62,18 @@ export type OpenGraph = {
   title: string
 }
 
+export type Tag = {
+  id: string
+  pageId: string
+}
+
 export interface State {
   pages: Record<string, Page>
   openGraph: Record<string, OpenGraph>
   landingPages: Record<string, LandingPage>
   blogPosts: Record<string, BlogPost>
   authors: Record<string, Author>
+  tags: Record<string, string[]>
 }
 
 export function createInitialState(options: {}): State {
@@ -75,6 +84,7 @@ export function createInitialState(options: {}): State {
     landingPages: {},
     blogPosts: {},
     authors: {},
+    tags: {},
   }
 }
 
@@ -106,6 +116,18 @@ export const RootReducer: Reducer<State, Actions> = (
     }
     case 'REGISTER_AUTHOR': {
       return { ...state, authors: { ...state.authors, [action.id]: { ...action } } }
+    }
+    case 'ASSIGN_TAG': {
+      if (!(action.pageId in state.pages)) {
+        throw new Error(`Trying to create a tag ${action.id} for the not existent page ${action.pageId}.`)
+      }
+      return {
+        ...state,
+        tags: {
+          ...state.tags,
+          [action.pageId]: [action.id, ...(Array.isArray(state.tags[action.pageId]) ? state.tags[action.pageId] : [])],
+        },
+      }
     }
     default:
       assertUnreachable(action)
