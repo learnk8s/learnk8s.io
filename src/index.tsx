@@ -74,6 +74,7 @@ Consulting.Register(store)
 Homepage.Register(store)
 AboutUs.Register(store)
 Newsletter.Register(store)
+AdvancedKubectl.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -151,6 +152,7 @@ export function run(options: Settings) {
     Homepage.Mount({ store })
     AboutUs.Mount({ store })
     Newsletter.Mount({ store })
+    AdvancedKubectl.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -363,9 +365,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case AdvancedKubectl.Details.type: {
-      const $ = Cheerio.of(AdvancedKubectl.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case TerraformAks.Details.type: {
