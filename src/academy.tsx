@@ -16,6 +16,13 @@ export const Details = {
   openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
 } as const
 
+export const Academy = {
+  id: 'Academy',
+  url: '/academy',
+  title: 'In-depth, hands-on Kubernetes online courses',
+  description: `Learn Kubernetes from the comfort of wherever you are with step-by-step tutorial and guided, hands-on material.`,
+}
+
 const enterprisePackage: MailTo = {
   subject: 'Learnk8s Academy — Enterprise license',
   body: `Hi Learnk8s,\n\nI'd like to discuss buying ___ licenses in bulk for the Learnk8s Academy.\n\nKind regards,\n`,

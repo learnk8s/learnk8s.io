@@ -71,6 +71,9 @@ BestPractices.Register(store)
 Careers.Register(store)
 TermsAndConditions.Register(store)
 Consulting.Register(store)
+Homepage.Register(store)
+AboutUs.Register(store)
+Newsletter.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -145,6 +148,9 @@ export function run(options: Settings) {
     Careers.Mount({ store })
     TermsAndConditions.Mount({ store })
     Consulting.Mount({ store })
+    Homepage.Mount({ store })
+    AboutUs.Mount({ store })
+    Newsletter.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -178,9 +184,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
 
   switch (page.type) {
     case Homepage.Details.type: {
-      const $ = Cheerio.of(Homepage.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case Training.Details.type: {
@@ -227,9 +230,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case AboutUs.Details.type: {
-      const $ = Cheerio.of(AboutUs.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case Redirect.Type: {
@@ -237,9 +237,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Newsletter.Details.type: {
-      const $ = Cheerio.of(Newsletter.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case Blog.Details.type: {
