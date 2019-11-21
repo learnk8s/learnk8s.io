@@ -34,7 +34,7 @@ export const Details = {
 
 export const ChaosEngineering = {
   id: 'chaos-engineering',
-  url: '/blog/chaos-engineering',
+  url: '/blog/kubernetes-chaos-engineering-lessons-learned',
   title: 'Kubernetes Chaos Engineering: Lessons Learned ♦︎ Learnk8s',
   description: `When you deploy an app in Kubernetes, your code ends up running on one or more worker nodes. But what happens when a node breaks and the network proxy crashes?`,
 }
