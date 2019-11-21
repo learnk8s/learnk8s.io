@@ -63,7 +63,7 @@ However, _we might be already working on including some of the above topics._`,
 export const Academy = {
   id: 'Academy',
   url: '/academy',
-  title: 'In-depth, hands-on Kubernetes online courses',
+  title: 'In-depth, hands-on Kubernetes online courses ♦︎ Learnk8s Academy',
   description: `Learn Kubernetes from the comfort of wherever you are with step-by-step tutorial and guided, hands-on material.`,
 }
 

@@ -20,7 +20,7 @@ export const Details = {
 export const AboutUs = {
   id: 'aboutUs',
   url: '/about-us',
-  title: 'Team',
+  title: 'Team ♦︎ Learnk8s',
   description: 'Experienced software consultants, specialising in Kubernetes.',
 }
 

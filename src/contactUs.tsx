@@ -1,5 +1,5 @@
 import React from 'react'
-import { Consultation, } from './layout.v2'
+import { Consultation } from './layout.v2'
 import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
 import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
 import { join } from 'path'
@@ -18,7 +18,7 @@ export const Details = {
 export const ContactUs = {
   id: 'contactUs',
   url: '/contact-us',
-  title: 'Contact us',
+  title: 'Contact us ♦︎ Learnk8s',
   description: 'Feel free to get in touch and let us know how we can help. ',
 }
 
@@ -29,7 +29,7 @@ export function Register(store: Store<State, Actions>) {
       id: 'og-contact-us',
       pageId: ContactUs.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      title: 'Contact us ♦︎ Learnk8s',
+      title: 'Contact us',
       description: 'Feel free to get in touch and let us know how we can help. ',
     }),
   )
