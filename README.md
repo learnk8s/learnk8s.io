@@ -40,6 +40,6 @@ Run:
 npx http-serve _site
 ```
 
-## Preview
+## Dev environment
 
-A preview is created automatically for pull requests with Netlify.
+For each pull request, a development preview is created with Netlify (link is in the `deploy/netlify` task on the pull request page).
