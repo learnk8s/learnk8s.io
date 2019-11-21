@@ -77,6 +77,7 @@ Newsletter.Register(store)
 AdvancedKubectl.Register(store)
 Academy.Register(store)
 ContactUs.Register(store)
+ChaosEngineering.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -157,6 +158,7 @@ export function run(options: Settings) {
     AdvancedKubectl.Mount({ store })
     Academy.Mount({ store })
     ContactUs.Mount({ store })
+    ChaosEngineering.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -257,9 +259,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case ChaosEngineering.Details.type: {
-      const $ = Cheerio.of(ChaosEngineering.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case K8sOnWindows.Details.type: {
