@@ -2,6 +2,90 @@ import { Details, BiteSizedRender } from '../biteSized'
 import * as React from 'react'
 import { RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { getFullUrl } from '../sitemap'
+import { Store } from 'redux'
+import { State, Actions, Action } from '../store'
+import { Authors } from '../aboutUs'
+import { toVFile } from '../files'
+import { join } from 'path'
+
+export const Pages = {
+  nodeSize: {
+    id: 'kubernetes-node-size',
+    url: '/kubernetes-node-size',
+    title: 'Architecting Kubernetes clusters — choosing a worker node size',
+    description:
+      'When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use, and how many of them?". This article looks at the pros and cons of either using many small or few large worker nodes in your cluster.',
+  },
+  secretsGitOps: {
+    id: 'secrets-git-ops',
+    url: '/kubernetes-secrets-in-git',
+    title: 'How to keep your Kubernetes secrets secure in Git',
+    description:
+      'Kubernetes secrets that you load into the cluster must exist somewhere. Do you keep a copy or rely on Kubernetes to be the only source of truth? How do you back them up? What if you keep a copy and they go out of sync?',
+  },
+}
+
+export function Register(store: Store<State, Actions>) {
+  store.dispatch(Action.registerPage(Pages.nodeSize))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-kubernetes-node-size',
+      pageId: Pages.nodeSize.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.nodeSize.title,
+      description: Pages.nodeSize.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-kubernetes-node-size',
+      pageId: Pages.nodeSize.id,
+      authorId: Authors.danielWeibel.id,
+      description: Pages.nodeSize.description,
+      title: Pages.nodeSize.title,
+      publishedDate: '2019-09-04',
+      content: toVFile({ path: join(__dirname, 'smallOrLarge.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.nodeSize.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'kubernetes-node-size-related-0',
+      blogPostId: 'bp-kubernetes-node-size',
+      content: toVFile({ path: join(__dirname, 'smallOrLarge-related.md') }),
+    }),
+  )
+
+  store.dispatch(Action.registerPage(Pages.secretsGitOps))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-secrets-git-ops',
+      pageId: Pages.secretsGitOps.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.secretsGitOps.title,
+      description: Pages.secretsGitOps.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-secrets-git-ops',
+      pageId: Pages.secretsGitOps.id,
+      authorId: Authors.omerLeviHevroni.id,
+      description: Pages.secretsGitOps.description,
+      title: Pages.secretsGitOps.title,
+      publishedDate: '2019-09-25',
+      content: toVFile({ path: join(__dirname, 'secrets.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.secretsGitOps.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'secrets-git-ops-related-0',
+      blogPostId: 'bp-secrets-git-ops',
+      content: toVFile({ path: join(__dirname, 'secrets-related.md') }),
+    }),
+  )
+}
 
 export const SmallOrLargeDetails = identity<Details>({
   type: 'bsk-sept-01' as const,

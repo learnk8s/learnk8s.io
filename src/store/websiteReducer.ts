@@ -1,4 +1,5 @@
 import { Reducer } from 'redux'
+import { VFile, VReference } from '../files'
 
 export const Action = {
   registerPage(args: Page) {
@@ -10,11 +11,20 @@ export const Action = {
   registerOpenGraph(args: OpenGraph) {
     return { type: 'REGISTER_OG' as const, ...args }
   },
+  registerBlogPostV2(args: BlogPostV2) {
+    return { type: 'REGISTER_BLOG_POST.V2' as const, ...args }
+  },
   registerBlogPost(args: BlogPost) {
     return { type: 'REGISTER_BLOG_POST' as const, ...args }
   },
   registerAuthor(args: Author) {
     return { type: 'REGISTER_AUTHOR' as const, ...args }
+  },
+  assignTag(args: Tag) {
+    return { type: 'ASSIGN_TAG' as const, ...args }
+  },
+  registerBlogPostMarkdownBlock(args: BlogPostMarkdownBlock) {
+    return { type: 'REGISTER_RELATED_BLOCK' as const, ...args }
   },
 }
 
@@ -35,6 +45,10 @@ export type BlogPost = {
   description: string
   publishedDate: string
   lastModifiedDate?: string
+}
+
+export type BlogPostV2 = BlogPost & {
+  content: VReference
 }
 
 export type Author = {
@@ -59,12 +73,25 @@ export type OpenGraph = {
   title: string
 }
 
+export type Tag = {
+  id: string
+  pageId: string
+}
+
+export type BlogPostMarkdownBlock = {
+  id: string
+  blogPostId: string
+  content: VReference
+}
+
 export interface State {
   pages: Record<string, Page>
   openGraph: Record<string, OpenGraph>
   landingPages: Record<string, LandingPage>
-  blogPosts: Record<string, BlogPost>
+  blogPosts: Record<string, BlogPost & { content?: VReference }>
   authors: Record<string, Author>
+  tags: Record<string, string[]>
+  relatedBlocks: Record<string, BlogPostMarkdownBlock>
 }
 
 export function createInitialState(options: {}): State {
@@ -75,6 +102,8 @@ export function createInitialState(options: {}): State {
     landingPages: {},
     blogPosts: {},
     authors: {},
+    tags: {},
+    relatedBlocks: {},
   }
 }
 
@@ -98,6 +127,7 @@ export const RootReducer: Reducer<State, Actions> = (
     case 'REGISTER_LANDING': {
       return { ...state, landingPages: { ...state.landingPages, [action.id]: { ...action } } }
     }
+    case 'REGISTER_BLOG_POST.V2':
     case 'REGISTER_BLOG_POST': {
       if (!(action.authorId in state.authors)) {
         throw new Error(`The author ${action.authorId} for the blog post ${action.title} doesn't exist`)
@@ -106,6 +136,27 @@ export const RootReducer: Reducer<State, Actions> = (
     }
     case 'REGISTER_AUTHOR': {
       return { ...state, authors: { ...state.authors, [action.id]: { ...action } } }
+    }
+    case 'ASSIGN_TAG': {
+      if (!(action.pageId in state.pages)) {
+        throw new Error(`Trying to create a tag ${action.id} for the not existent page ${action.pageId}.`)
+      }
+      return {
+        ...state,
+        tags: {
+          ...state.tags,
+          [action.pageId]: [action.id, ...(Array.isArray(state.tags[action.pageId]) ? state.tags[action.pageId] : [])],
+        },
+      }
+    }
+    case 'REGISTER_RELATED_BLOCK': {
+      if (!(action.blogPostId in state.blogPosts)) {
+        throw new Error(`Couldn't find the blog post ${action.blogPostId} for related article ${action.id}`)
+      }
+      return {
+        ...state,
+        relatedBlocks: { ...state.relatedBlocks, [Object.keys(state.relatedBlocks).length + 1]: { ...action } },
+      }
     }
     default:
       assertUnreachable(action)
