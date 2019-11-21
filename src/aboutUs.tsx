@@ -31,6 +31,13 @@ export const Authors = {
     avatar: <img src='assets/authors/daniel_weibel.jpg' alt='Daniel Weibel' />,
     link: 'https://medium.com/@weibeld',
   },
+  omerLeviHevroni: {
+    id: 'omer-levi-hevroni',
+    fullName: 'Omer Levi Hevroni',
+    avatar: <img src='assets/authors/omer_levi_hevroni.jpg' alt='Omer Levi Hevroni' />,
+    link: 'https://twitter.com/omerlh',
+    description: 'DevSecOps engineer at [Soluto Engineering](https://www.solutotlv.com/). OWASP member.',
+  },
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -44,7 +51,7 @@ export function Register(store: Store<State, Actions>) {
       description: 'Experienced software consultants, specialising in Kubernetes.',
     }),
   )
-  store.dispatch(Action.registerAuthor(Authors.danielWeibel))
+  Object.values(Authors).forEach(author => store.dispatch(Action.registerAuthor(author)))
 }
 
 export function Mount({ store }: { store: Store<State, Actions> }) {
