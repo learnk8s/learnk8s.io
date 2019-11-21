@@ -10,7 +10,7 @@ import { ok } from 'assert'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import md5 = require('md5')
 
-import { extname, join } from 'path'
+import { extname, join, resolve, basename } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { minify } from 'terser'
 import postcss from 'postcss'
@@ -33,6 +33,15 @@ export function defaultAssetsPipeline({
 }) {
   const $ = Cheerio.of(renderToStaticMarkup(jsx))
   optimise({ $, siteUrl: siteUrl, isOptimisedBuild })
+
+  $.findAll('a')
+    .get()
+    .filter((it: any) => /\.zip$/i.test(it.properties.href))
+    .forEach((it: any) => {
+      cp(resolve(it.properties.href), `_site/a`)
+      it.properties.href = `/a/${basename(it.properties.href)}`
+    })
+
   writeFileSync(generatePath(url), $.html())
 
   function generatePath(url: string) {

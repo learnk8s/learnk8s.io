@@ -28,7 +28,7 @@ export const Details = {
 export const TermsAndConditions = {
   id: 'termsAndConditions',
   url: '/terms-and-conditions',
-  title: 'Terms and Conditions',
+  title: 'Terms and Conditions ♦︎ Learnk8s',
   description: 'Terms and Conditions that applies to all services offered by Learnk8s',
 }
 

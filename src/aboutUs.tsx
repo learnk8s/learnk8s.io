@@ -20,7 +20,7 @@ export const Details = {
 export const AboutUs = {
   id: 'aboutUs',
   url: '/about-us',
-  title: 'Team',
+  title: 'Team ♦︎ Learnk8s',
   description: 'Experienced software consultants, specialising in Kubernetes.',
 }
 
@@ -30,6 +30,12 @@ export const Authors = {
     fullName: 'Daniel Weibel',
     avatar: <img src='assets/authors/daniel_weibel.jpg' alt='Daniel Weibel' />,
     link: 'https://medium.com/@weibeld',
+  },
+  danielePolencic: {
+    id: 'daniele-polencic',
+    fullName: 'Daniele Polencic',
+    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
+    link: 'https://linkedin.com/in/danielepolencic',
   },
 }
 
@@ -45,6 +51,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(Action.registerAuthor(Authors.danielWeibel))
+  store.dispatch(Action.registerAuthor(Authors.danielePolencic))
 }
 
 export function Mount({ store }: { store: Store<State, Actions> }) {

@@ -37,7 +37,7 @@ const cloudDevelopmentEnquiry: MailTo = {
 export const Consulting = {
   id: 'consulting',
   url: '/consulting',
-  title: 'Consulting',
+  title: 'Consulting ♦︎ Learnk8s',
   description: 'Expertise in software development, strategy and operations to help you innovate at speed and scale.',
 }
 
