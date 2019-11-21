@@ -106,8 +106,6 @@ export function toPath(path: string): string {
   return relative(resolve('.'), path)
 }
 
-export async function read<T = string>(file: VReference<T>): Promise<Readonly<VFile<T>>>
-export async function read<T = string>({ path }: { path: string }): Promise<Readonly<VFile<T>>>
 export async function read<T = string>(file: VReference<T> | { path: string }): Promise<Readonly<VFile<T>>> {
   const contents = await promises.readFile(file.path, 'utf8')
   return toVFile({ path: file.path, contents: contents as any })

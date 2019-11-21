@@ -2,6 +2,7 @@ import { createStore, combineReducers } from 'redux'
 import * as CoursesReducer from './coursesReducer'
 import * as WebsiteReducer from './websiteReducer'
 import * as ConfigReducer from './configReducer'
+import { VReference } from '../files'
 
 export type State = {
   courses: CoursesReducer.State
@@ -74,6 +75,16 @@ export function getAuthors(state: State): WebsiteReducer.Author[] {
   return Object.values(state.website.authors)
 }
 
-export function getBlogPosts(state: State): WebsiteReducer.BlogPost[] {
+export function getBlogPosts(state: State): (WebsiteReducer.BlogPost & { content?: VReference })[] {
   return Object.values(state.website.blogPosts)
+}
+
+export function hasTag(state: State, tagId: string) {
+  return (page: WebsiteReducer.Page) => {
+    return state.website.tags[page.id] && state.website.tags[page.id].includes(tagId)
+  }
+}
+
+export function getBlogPostMarkdownBlocks(state: State): WebsiteReducer.BlogPostMarkdownBlock[] {
+  return Object.values(state.website.relatedBlocks)
 }
