@@ -20,7 +20,7 @@ export const Details = {
 export const AboutUs = {
   id: 'aboutUs',
   url: '/about-us',
-  title: 'Team',
+  title: 'Team ♦︎ Learnk8s',
   description: 'Experienced software consultants, specialising in Kubernetes.',
 }
 
@@ -37,6 +37,12 @@ export const Authors = {
     avatar: <img src='assets/authors/omer_levi_hevroni.jpg' alt='Omer Levi Hevroni' />,
     link: 'https://twitter.com/omerlh',
     description: 'DevSecOps engineer at [Soluto Engineering](https://www.solutotlv.com/). OWASP member.',
+  },
+  danielePolencic: {
+    id: 'daniele-polencic',
+    fullName: 'Daniele Polencic',
+    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
+    link: 'https://linkedin.com/in/danielepolencic',
   },
 }
 

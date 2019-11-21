@@ -17,7 +17,7 @@ export const Details = {
 export const Newsletter = {
   id: 'newsletter',
   url: '/newsletter',
-  title: 'Newsletter',
+  title: 'Newsletter ♦︎ Learnk8s',
   description: 'Keep yourself up to date with the latest news from Learnk8s.',
 }
 
