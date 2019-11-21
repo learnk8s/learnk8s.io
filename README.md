@@ -39,3 +39,7 @@ Run:
 ```bash
 npx http-serve _site
 ```
+
+## Preview
+
+A preview is created automatically for pull requests with Netlify.
