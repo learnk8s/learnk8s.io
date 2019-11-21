@@ -75,6 +75,8 @@ Homepage.Register(store)
 AboutUs.Register(store)
 Newsletter.Register(store)
 AdvancedKubectl.Register(store)
+Academy.Register(store)
+ContactUs.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -153,6 +155,8 @@ export function run(options: Settings) {
     AboutUs.Mount({ store })
     Newsletter.Mount({ store })
     AdvancedKubectl.Mount({ store })
+    Academy.Mount({ store })
+    ContactUs.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -192,9 +196,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Academy.Details.type: {
-      const $ = Cheerio.of(Academy.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ArchitectingAndScaling.Details.type: {
@@ -213,16 +214,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case ContactUs.Details.type: {
-      const $ = Cheerio.of(ContactUs.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      $.findAll('a')
-        .get()
-        .filter((it: any) => /\.zip$/i.test(it.properties.href))
-        .forEach((it: any) => {
-          cp(resolve(it.properties.href), `_site/a`)
-          it.properties.href = `/a/${basename(it.properties.href)}`
-        })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case Careers.Details.type: {
