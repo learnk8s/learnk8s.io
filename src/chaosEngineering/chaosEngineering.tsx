@@ -1,22 +1,11 @@
-import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem, Author } from '../article.v2'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { JsonLd } from 'react-schemaorg'
-import { BlogPosting } from 'schema-dts'
-import { Subscribe } from '../layout.v2'
-import * as Remark from '../remark.v2'
 import { defaultAssetsPipeline } from '../optimise'
-import { getConfig, State, Actions, Action, getPages, getOpenGraph, getBlogPosts, getAuthors } from '../store'
+import { getConfig, State, Actions, Action } from '../store'
 import { Store } from 'redux'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
-import { Head, Html, Body, Navbar, OpenGraph, Footer } from '../layout.v3'
-import { format } from 'date-fns'
-import { toVFile, read } from '../files'
-import { renderToJsx } from '../markdown'
-import vfile = require('vfile')
-import { Page, BlogPost } from '../store/websiteReducer'
+import { toVFile } from '../files'
+import { renderPage } from '../genericBlogPost'
 
 export const Details = {
   type: 'chaosEngineering',
@@ -66,6 +55,13 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'chaos-engineering-related-0',
+      blogPostId: 'bp-chaos-engineering',
+      content: toVFile({ path: join(__dirname, 'chaos-engineering-related.md') }),
+    }),
+  )
 }
 
 export async function Mount({ store }: { store: Store<State, Actions> }) {
@@ -78,109 +74,5 @@ export async function Mount({ store }: { store: Store<State, Actions> }) {
       url: ChaosEngineering.url,
       outputFolder: getConfig(state).outputFolder,
     }),
-  )
-}
-
-function fakeRegisterRelatedPost() {
-  return (
-    <RelatedConentContainer>
-      <RelatedContentItem>
-        <a href='/blog/smaller-docker-images/' className='link navy underline hover-sky'>
-          3 simple tricks for smaller Docker images
-        </a>{' '}
-        and learn how to build and deploy Docker images quicker.
-      </RelatedContentItem>
-      <RelatedContentItem>
-        <a href='/blog/scaling-spring-boot-microservices/' className='link navy underline hover-sky'>
-          Scaling Microservices with Message Queues, Spring Boot and Kubernetes.
-        </a>{' '}
-        Learn how to use the Horizontal Pod Autoscaler to resize your fleet of applications dynamically.
-      </RelatedContentItem>
-    </RelatedConentContainer>
-  )
-}
-
-async function renderPage(pageMeta: Page, state: State) {
-  const page = getPages(state).find(it => it.id === pageMeta.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === pageMeta.id)
-  if (!openGraph) {
-    throw new Error('The page does not have an open graph.')
-  }
-  const blog = getBlogPosts(state).find(it => it.pageId === pageMeta.id)
-  if (!blog) {
-    throw new Error('The page is not a blog post page.')
-  }
-  const author = getAuthors(state).find(it => it.id === blog.authorId)
-  if (!author) {
-    throw new Error('The blog post does not have an author attached')
-  }
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
-  const content = await Promise.resolve(read(blog.content!))
-  return (
-    <Html>
-      <Head title={page.title} description={page.description}>
-        {openGraph ? (
-          <OpenGraph
-            title={openGraph.title}
-            description={openGraph.description}
-            image={openGraph.image}
-            currentAbsoluteUrl={currentAbsoluteUrl}
-          />
-        ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
-        <link rel='stylesheet' href='assets/style.css' />
-        <JsonLd<BlogPosting>
-          item={{
-            '@context': 'https://schema.org',
-            '@type': 'BlogPosting',
-            headline: blog.title,
-            image: `${openGraph.image.props.src}`,
-            author: {
-              '@type': 'Person',
-              name: author.fullName,
-            },
-            publisher: {
-              '@type': 'Organization',
-              name: 'Learnk8s',
-              logo: {
-                '@type': 'ImageObject',
-                url: `assets/learnk8s_logo_square.png`,
-              },
-            },
-            url: currentAbsoluteUrl,
-            datePublished: blog.publishedDate,
-            dateModified: blog.lastModifiedDate || blog.publishedDate,
-            description: blog.description,
-            mainEntityOfPage: {
-              '@type': 'SoftwareSourceCode',
-            },
-          }}
-        />
-      </Head>
-      <Body>
-        <div className='white mb4 mb5-ns'>
-          <Navbar />
-        </div>
-        <div className='tc mb4 db mw4 center'>
-          <Author name={author.fullName} avatar={author.avatar} link={author.link} />
-        </div>
-        <article className='ph3 pt0 pb4 mw7 center'>
-          <h1 className='navy tc f2 f1-ns'>{blog.title}</h1>
-          <p className='f7 black-60 tc ttu'>Published in {format(new Date(blog.publishedDate), 'MMMM yyyy')}</p>
-          {blog.lastModifiedDate ? (
-            <p className='f7 black-60 tc ttu b'>
-              <img src='assets/tick.svg' alt='Tick' className='w1 h1 v-mid' /> Updated in{' '}
-              {format(new Date(blog.lastModifiedDate), 'MMMM yyyy')}
-            </p>
-          ) : null}
-          <img src={openGraph.image.props.src} className='pt2' alt={openGraph.image.props.alt} />
-          <hr className='w3 center b--navy mv4 mb5-ns' />
-          {renderToJsx(content)}
-          {fakeRegisterRelatedPost()}
-          <Subscribe identifier={blog.id} />
-        </article>
-        <Footer />
-      </Body>
-    </Html>
   )
 }
