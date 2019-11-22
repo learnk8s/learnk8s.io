@@ -19,7 +19,6 @@ import { join } from 'path'
 import { Html, Head, OpenGraph, Body, Footer, Navbar } from '../layout.v3'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
-import marked from 'marked'
 import { renderToJsx, toMdast } from '../markdown'
 import { defaultAssetsPipeline } from '../optimise'
 import { Page } from '../store/websiteReducer'
@@ -28,20 +27,7 @@ import { format } from 'date-fns'
 import { selectAll } from 'unist-util-select'
 import * as Mdast from 'mdast'
 import { transform } from '../markdown/utils'
-import { mdast2Jsx } from '../markdown/jsx'
-
-const inlineRenderer = new marked.Renderer()
-
-inlineRenderer.paragraph = text => {
-  return text
-}
-inlineRenderer.link = (href, title, text) => {
-  const isLocal = !/^http/.test(href)
-  const attributes = isLocal ? 'target="_self"' : 'target="_blank" rel="noreferrer"'
-  return !!title
-    ? `<a href="${href}" class="link dib white bg-blue br1 pv2 ph3 b f5 br2 mv3 hover-bg-dark-blue pointer">${text}</a>`
-    : `<a href="${href}" class="link navy underline hover-sky" ${attributes}>${text}</a>`
-}
+import { mdast2Jsx, mdast2JsxInline } from '../markdown/jsx'
 
 export const Pages = {
   nodeSize: {
@@ -226,12 +212,7 @@ async function renderPage(page: Page, state: State) {
               <a href={author.link} className='link navy underline hover-sky' target='_blank' rel='noreferrer'>
                 {author.fullName}
               </a>
-              .{' '}
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: marked(author.description || '', { renderer: inlineRenderer }),
-                }}
-              />
+              . {transform(toMdast(toVFile({ contents: author.description || '' })), mdast2JsxInline())}
             </p>
           </blockquote>
           <p className='lh-copy measure-wide f4'>
