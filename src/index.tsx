@@ -78,6 +78,7 @@ AdvancedKubectl.Register(store)
 Academy.Register(store)
 ContactUs.Register(store)
 ChaosEngineering.Register(store)
+BiteSized201909.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -159,6 +160,7 @@ export function run(options: Settings) {
     Academy.Mount({ store })
     ContactUs.Mount({ store })
     ChaosEngineering.Mount({ store })
+    BiteSized201909.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -325,15 +327,9 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case BiteSized201909.SmallOrLargeDetails.type: {
-      const $ = Cheerio.of(BiteSized201909.SmallOrLargeRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201909.SecretsDetails.type: {
-      const $ = Cheerio.of(BiteSized201909.SecretsRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201910.AutoscalingDetails.type: {

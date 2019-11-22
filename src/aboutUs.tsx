@@ -30,6 +30,7 @@ export const Authors = {
     fullName: 'Daniel Weibel',
     avatar: <img src='assets/authors/daniel_weibel.jpg' alt='Daniel Weibel' />,
     link: 'https://medium.com/@weibeld',
+    description: 'Daniel is a software engineer and instructor at Learnk8s.',
   },
   omerLeviHevroni: {
     id: 'omer-levi-hevroni',
@@ -43,6 +44,7 @@ export const Authors = {
     fullName: 'Daniele Polencic',
     avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
     link: 'https://linkedin.com/in/danielepolencic',
+    description: 'Daniele is an instructor and software engineer at Learnk8s.',
   },
 }
 
