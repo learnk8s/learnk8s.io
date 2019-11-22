@@ -13,6 +13,10 @@ import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { Head, Html, Body, Navbar, OpenGraph, Footer } from '../layout.v3'
 import { format } from 'date-fns'
+import { toVFile, read } from '../files'
+import { renderToJsx } from '../markdown'
+import vfile = require('vfile')
+import { Page, BlogPost } from '../store/websiteReducer'
 
 export const Details = {
   type: 'chaosEngineering',
@@ -51,7 +55,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.registerBlogPostV2({
       id: 'bp-chaos-engineering',
       pageId: ChaosEngineering.id,
       authorId: Authors.danielePolencic.id,
@@ -59,28 +63,50 @@ export function Register(store: Store<State, Actions>) {
       title: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1',
       publishedDate: '2018-05-15',
       lastModifiedDate: '2019-04-15',
+      content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export async function Mount({ store }: { store: Store<State, Actions> }) {
   const state = store.getState()
-  defaultAssetsPipeline({
-    jsx: renderPage(state),
-    isOptimisedBuild: getConfig(state).isProduction,
-    siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-    url: ChaosEngineering.url,
-    outputFolder: getConfig(state).outputFolder,
-  })
+  await Promise.resolve(
+    defaultAssetsPipeline({
+      jsx: await renderPage(ChaosEngineering, state),
+      isOptimisedBuild: getConfig(state).isProduction,
+      siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
+      url: ChaosEngineering.url,
+      outputFolder: getConfig(state).outputFolder,
+    }),
+  )
 }
 
-function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === ChaosEngineering.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === ChaosEngineering.id)
+function fakeRegisterRelatedPost() {
+  return (
+    <RelatedConentContainer>
+      <RelatedContentItem>
+        <a href='/blog/smaller-docker-images/' className='link navy underline hover-sky'>
+          3 simple tricks for smaller Docker images
+        </a>{' '}
+        and learn how to build and deploy Docker images quicker.
+      </RelatedContentItem>
+      <RelatedContentItem>
+        <a href='/blog/scaling-spring-boot-microservices/' className='link navy underline hover-sky'>
+          Scaling Microservices with Message Queues, Spring Boot and Kubernetes.
+        </a>{' '}
+        Learn how to use the Horizontal Pod Autoscaler to resize your fleet of applications dynamically.
+      </RelatedContentItem>
+    </RelatedConentContainer>
+  )
+}
+
+async function renderPage(pageMeta: Page, state: State) {
+  const page = getPages(state).find(it => it.id === pageMeta.id)!
+  const openGraph = getOpenGraph(state).find(it => it.pageId === pageMeta.id)
   if (!openGraph) {
     throw new Error('The page does not have an open graph.')
   }
-  const blog = getBlogPosts(state).find(it => it.pageId === ChaosEngineering.id)
+  const blog = getBlogPosts(state).find(it => it.pageId === pageMeta.id)
   if (!blog) {
     throw new Error('The page is not a blog post page.')
   }
@@ -89,6 +115,7 @@ function renderPage(state: State) {
     throw new Error('The blog post does not have an author attached')
   }
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const content = await Promise.resolve(read(blog.content!))
   return (
     <Html>
       <Head title={page.title} description={page.description}>
@@ -148,22 +175,8 @@ function renderPage(state: State) {
           ) : null}
           <img src={openGraph.image.props.src} className='pt2' alt={openGraph.image.props.alt} />
           <hr className='w3 center b--navy mv4 mb5-ns' />
-          {Remark.render(`${__dirname}/content.md`)}
-
-          <RelatedConentContainer>
-            <RelatedContentItem>
-              <a href='/blog/smaller-docker-images/' className='link navy underline hover-sky'>
-                3 simple tricks for smaller Docker images
-              </a>{' '}
-              and learn how to build and deploy Docker images quicker.
-            </RelatedContentItem>
-            <RelatedContentItem>
-              <a href='/blog/scaling-spring-boot-microservices/' className='link navy underline hover-sky'>
-                Scaling Microservices with Message Queues, Spring Boot and Kubernetes.
-              </a>{' '}
-              Learn how to use the Horizontal Pod Autoscaler to resize your fleet of applications dynamically.
-            </RelatedContentItem>
-          </RelatedConentContainer>
+          {renderToJsx(content)}
+          {fakeRegisterRelatedPost()}
           <Subscribe identifier={blog.id} />
         </article>
         <Footer />
