@@ -22,7 +22,6 @@ import * as Academy from './academy'
 import * as ArchitectingAndScaling from './architecting'
 import * as ZeroToK8s from './zeroToK8s'
 import * as Blog from './blog'
-import * as BrowserConfig from './browserConfig'
 import * as Careers from './careers'
 import * as Consulting from './consulting'
 import * as ContactUs from './contactUs'
@@ -33,7 +32,6 @@ import * as Redirect from './redirect'
 import * as RSS from './rss'
 import * as TermsAndConditions from './termsAndConditions'
 import * as Training from './training.v2'
-import * as WebAppManifest from './webAppManifest'
 
 import * as SmallerImages from './smallerDockerImages/smallerImages'
 import * as DeployLaravel from './deployLaravel/deployLaravel'
@@ -366,28 +364,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case BestPractices.Details.type: {
-      return
-    }
-    case WebAppManifest.Details.type: {
-      const manifest = WebAppManifest.render(root, node, siteUrl)
-      const icons = manifest.icons.map(icon => {
-        return { ...icon, src: isOptimisedBuild ? digest(icon.src) : `/b/${icon.src}` }
-      })
-      writeFileSync(`_site${WebAppManifest.Details.url}`, JSON.stringify({ ...manifest, icons }))
-      return
-    }
-    case BrowserConfig.Details.type: {
-      let content = BrowserConfig.render(root, node, siteUrl)
-      const matches = content.match(/<square150x150logo src="(.*)"\/>/im)
-      if (!(Array.isArray(matches) && matches.length > 1)) {
-        throw new Error('Could not find a valid image to replace in browserconfig.xml')
-      }
-      if (isOptimisedBuild) {
-        content = content.replace(matches[1], `${digest(matches[1])}`)
-      } else {
-        content = content.replace(matches[1], `/b/${matches[1]}`)
-      }
-      writeFileSync(`_site${BrowserConfig.Details.url}`, content)
       return
     }
     case RSS.Details.type: {

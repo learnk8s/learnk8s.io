@@ -4,7 +4,6 @@ import * as Academy from './academy'
 import * as ArchitectingAndScaling from './architecting'
 import * as ZeroToK8s from './zeroToK8s'
 import * as Blog from './blog'
-import * as BrowserConfig from './browserConfig'
 import * as Careers from './careers'
 import * as Consulting from './consulting'
 import * as ContactUs from './contactUs'
@@ -15,7 +14,6 @@ import * as Redirect from './redirect'
 import * as RSS from './rss'
 import * as TermsAndConditions from './termsAndConditions'
 import * as Training from './training.v2'
-import * as WebAppManifest from './webAppManifest'
 
 import * as SmallerImages from './smallerDockerImages/smallerImages'
 import * as DeployLaravel from './deployLaravel/deployLaravel'
@@ -265,14 +263,6 @@ export const Sitemap = createNode({
         url: '/san-francisco',
         city: 'San Francisco',
       }),
-      children: {},
-    }),
-    webAppManifest: createNode({
-      page: WebAppManifest.Details,
-      children: {},
-    }),
-    browserConfig: createNode({
-      page: BrowserConfig.Details,
       children: {},
     }),
     bskHelm: bsk.bskHelm,
