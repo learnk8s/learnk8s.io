@@ -65,7 +65,7 @@ export function Register(store: Store<State, Actions>) {
       description: Pages.nodeSize.description,
       title: Pages.nodeSize.title,
       publishedDate: '2019-09-04',
-      content: toVFile({ path: join(__dirname, 'smallOrLarge.md') }),
+      content: toVFile({ path: join(__dirname, 'nodes-size/smallOrLarge.md') }),
     }),
   )
   store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.nodeSize.id }))
@@ -73,7 +73,7 @@ export function Register(store: Store<State, Actions>) {
     Action.registerBlogPostMarkdownBlock({
       id: 'kubernetes-node-size-related-0',
       blogPostId: 'bp-kubernetes-node-size',
-      content: toVFile({ path: join(__dirname, 'smallOrLarge-related.md') }),
+      content: toVFile({ path: join(__dirname, 'nodes-size/smallOrLarge-related.md') }),
     }),
   )
 
@@ -95,7 +95,7 @@ export function Register(store: Store<State, Actions>) {
       description: Pages.secretsGitOps.description,
       title: Pages.secretsGitOps.title,
       publishedDate: '2019-09-25',
-      content: toVFile({ path: join(__dirname, 'secrets.md') }),
+      content: toVFile({ path: join(__dirname, 'secrets/secrets.md') }),
     }),
   )
   store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.secretsGitOps.id }))
@@ -103,7 +103,7 @@ export function Register(store: Store<State, Actions>) {
     Action.registerBlogPostMarkdownBlock({
       id: 'secrets-git-ops-related-0',
       blogPostId: 'bp-secrets-git-ops',
-      content: toVFile({ path: join(__dirname, 'secrets-related.md') }),
+      content: toVFile({ path: join(__dirname, 'secrets/secrets-related.md') }),
     }),
   )
 }
