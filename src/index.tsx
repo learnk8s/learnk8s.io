@@ -47,6 +47,7 @@ import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
 import * as TerraformAks from './terraformAks/terraformAks'
 import * as ZeroToK8sJs from './02k8sjs/02k8sjs'
+import * as GenericBlogPost from './genericBlogPost'
 
 import * as BiteSized from './biteSized'
 import * as BiteSized201903 from './bsk201903'
@@ -156,11 +157,10 @@ export function run(options: Settings) {
     Homepage.Mount({ store })
     AboutUs.Mount({ store })
     Newsletter.Mount({ store })
-    AdvancedKubectl.Mount({ store })
     Academy.Mount({ store })
     ContactUs.Mount({ store })
-    ChaosEngineering.Mount({ store })
     BiteSized201909.Mount({ store })
+    GenericBlogPost.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({

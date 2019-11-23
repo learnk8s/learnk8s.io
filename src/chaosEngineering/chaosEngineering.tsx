@@ -1,11 +1,9 @@
 import * as React from 'react'
-import { defaultAssetsPipeline } from '../optimise'
-import { getConfig, State, Actions, Action } from '../store'
+import { State, Actions, Action } from '../store'
 import { Store } from 'redux'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
-import { renderPage } from '../genericBlogPost'
 
 export const Details = {
   type: 'chaosEngineering',
@@ -55,24 +53,12 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
+  store.dispatch(Action.assignTag({ id: 'blog-post', pageId: ChaosEngineering.id }))
   store.dispatch(
     Action.registerBlogPostMarkdownBlock({
       id: 'chaos-engineering-related-0',
       blogPostId: 'bp-chaos-engineering',
       content: toVFile({ path: join(__dirname, 'chaos-engineering-related.md') }),
-    }),
-  )
-}
-
-export async function Mount({ store }: { store: Store<State, Actions> }) {
-  const state = store.getState()
-  await Promise.resolve(
-    defaultAssetsPipeline({
-      jsx: await renderPage(ChaosEngineering, state),
-      isOptimisedBuild: getConfig(state).isProduction,
-      siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-      url: ChaosEngineering.url,
-      outputFolder: getConfig(state).outputFolder,
     }),
   )
 }

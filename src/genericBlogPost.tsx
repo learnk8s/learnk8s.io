@@ -1,5 +1,15 @@
 import * as React from 'react'
-import { State, getPages, getOpenGraph, getBlogPosts, getAuthors, getBlogPostMarkdownBlocks } from './store'
+import {
+  getConfig,
+  Actions,
+  State,
+  getPages,
+  getOpenGraph,
+  getBlogPosts,
+  getAuthors,
+  getBlogPostMarkdownBlocks,
+  hasTag,
+} from './store'
 import { Page } from './store/websiteReducer'
 import { Subscribe } from './layout.v2'
 import { Head, Html, Body, Navbar, OpenGraph, Footer } from './layout.v3'
@@ -14,6 +24,24 @@ import { transform } from './markdown/utils'
 import { selectAll } from 'unist-util-select'
 import * as Mdast from 'mdast'
 import { mdast2Jsx } from './markdown/jsx'
+import { defaultAssetsPipeline } from './optimise'
+import { Store } from 'redux'
+
+export async function Mount({ store }: { store: Store<State, Actions> }) {
+  const state = store.getState()
+  const pages = getPages(state).filter(hasTag(state, 'blog-post'))
+  await Promise.all(
+    pages.map(async page => {
+      defaultAssetsPipeline({
+        jsx: await renderPage(page, state),
+        isOptimisedBuild: getConfig(state).isProduction,
+        siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
+        url: page.url,
+        outputFolder: getConfig(state).outputFolder,
+      })
+    }),
+  )
+}
 
 export async function renderPage(pageMeta: Page, state: State) {
   const page = getPages(state).find(it => it.id === pageMeta.id)!

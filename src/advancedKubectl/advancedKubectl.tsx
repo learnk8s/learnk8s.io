@@ -1,15 +1,8 @@
 import * as React from 'react'
-import { RelatedConentContainer, RelatedContentItem, Author } from '../article.v2'
-import { JsonLd } from 'react-schemaorg'
-import { BlogPosting } from 'schema-dts'
-import { Subscribe } from '../layout.v2'
-import * as Remark from '../remark.v2'
 import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getBlogPosts, getAuthors, getConfig } from '../store'
+import { State, Actions, Action, getConfig } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
-import { Html, Head, OpenGraph, Body, Navbar, Footer } from '../layout.v3'
-import { format } from 'date-fns'
 import { defaultAssetsPipeline } from '../optimise'
 import { toVFile } from '../files'
 import { renderPage } from '../genericBlogPost'
@@ -70,24 +63,12 @@ export function Register(store: Store<State, Actions>) {
       lastModifiedDate: '2019-04-15',
     }),
   )
+  store.dispatch(Action.assignTag({ id: 'blog-post', pageId: KubectlProductivity.id }))
   store.dispatch(
     Action.registerBlogPostMarkdownBlock({
       id: 'kubectl-productivity-related-0',
       blogPostId: 'bp-kubectl-productivity',
       content: toVFile({ path: join(__dirname, 'kubectl-productivity-related.md') }),
-    }),
-  )
-}
-
-export async function Mount({ store }: { store: Store<State, Actions> }) {
-  const state = store.getState()
-  await Promise.resolve(
-    defaultAssetsPipeline({
-      jsx: await renderPage(KubectlProductivity, state),
-      isOptimisedBuild: getConfig(state).isProduction,
-      siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-      url: KubectlProductivity.url,
-      outputFolder: getConfig(state).outputFolder,
     }),
   )
 }
