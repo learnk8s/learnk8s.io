@@ -30,60 +30,92 @@ server.listen(PORT, () => {
 replServer.defineCommand('lintmd!', {
   help: 'Lints and fixes Markdown files',
   action: async function(paths) {
-    await LintMd(paths.length === 0 ? ['{src,repositories}/**/*.md'] : paths.split(' '), true)
+    try {
+      await LintMd(paths.length === 0 ? ['{src,repositories}/**/*.md'] : paths.split(' '), true)
+    } catch (error) {
+      console.log(error)
+    }
     this.displayPrompt()
   },
 })
 replServer.defineCommand('lintmd', {
   help: 'Lints Markdown files',
   action: async function(paths) {
-    await LintMd(paths.length === 0 ? ['{src,repositories}/**/*.md'] : paths.split(' '), false)
+    try {
+      await LintMd(paths.length === 0 ? ['{src,repositories}/**/*.md'] : paths.split(' '), false)
+    } catch (error) {
+      console.log(error)
+    }
     this.displayPrompt()
   },
 })
 replServer.defineCommand('lintsvg!', {
   help: 'Lints and fixes SVG files',
   action: async function(paths) {
-    await LintSVG(paths.length === 0 ? ['src/smallerDockerImages/*.svg'] : paths.split(' '), true)
+    try {
+      await LintSVG(paths.length === 0 ? ['src/smallerDockerImages/*.svg'] : paths.split(' '), true)
+    } catch (error) {
+      console.log(error)
+    }
     this.displayPrompt()
   },
 })
 replServer.defineCommand('lintsvg', {
   help: 'Lints SVG files',
   action: async function(paths) {
-    await LintSVG(paths.length === 0 ? ['src/smallerDockerImages/*.svg'] : paths.split(' '), false)
+    try {
+      await LintSVG(paths.length === 0 ? ['src/smallerDockerImages/*.svg'] : paths.split(' '), false)
+    } catch (error) {
+      console.log(error)
+    }
     this.displayPrompt()
   },
 })
 replServer.defineCommand('lintts!', {
   help: 'Lints and fixes Typescript files',
   action: async function(paths) {
-    await Prettier(paths.length === 0 ? ['src/**/*.{ts,tsx}'] : paths.split(' '), true)
+    try {
+      await Prettier(paths.length === 0 ? ['src/**/*.{ts,tsx}'] : paths.split(' '), true)
+    } catch (error) {
+      console.log(error)
+    }
     this.displayPrompt()
   },
 })
 replServer.defineCommand('lintts', {
   help: 'Lints and fixes Typescript files',
   action: async function(paths) {
-    await Prettier(paths.length === 0 ? ['src/**/*.{ts,tsx}'] : paths.split(' '), true)
+    try {
+      await Prettier(paths.length === 0 ? ['src/**/*.{ts,tsx}'] : paths.split(' '), true)
+    } catch (error) {
+      console.log(error)
+    }
     this.displayPrompt()
   },
 })
 replServer.defineCommand('fmt!', {
   help: 'Lints and fixes all files',
-  action: async function(paths) {
-    await LintMd(['{src,repositories}/**/*.md'], true)
-    await LintSVG(['src/smallerDockerImages/*.svg'], true)
-    await Prettier(['src/**/*.{ts,tsx}'], true)
+  action: async function() {
+    try {
+      await LintMd(['{src,repositories}/**/*.md'], true)
+      await LintSVG(['src/smallerDockerImages/*.svg'], true)
+      await Prettier(['src/**/*.{ts,tsx}'], true)
+    } catch (error) {
+      console.log(error)
+    }
     this.displayPrompt()
   },
 })
 replServer.defineCommand('fmt', {
   help: 'Lints all files',
-  action: async function(paths) {
-    await LintMd(['{src,repositories}/**/*.md'], false)
-    await LintSVG(['src/smallerDockerImages/*.svg'], false)
-    await Prettier(['src/**/*.{ts,tsx}'], false)
+  action: async function() {
+    try {
+      await LintMd(['{src,repositories}/**/*.md'], false)
+      await LintSVG(['src/smallerDockerImages/*.svg'], false)
+      await Prettier(['src/**/*.{ts,tsx}'], false)
+    } catch (error) {
+      console.log(error)
+    }
     this.displayPrompt()
   },
 })
