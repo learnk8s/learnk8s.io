@@ -37,7 +37,9 @@ ENVENTBRITE_TOKEN=1 ENVENTBRITE_ORG=1 npm run build
 or, if you're on Windows:
 
 ```powershell
-$Env:ENVENTBRITE_TOKEN=1 $Env:ENVENTBRITE_ORG=1 npm run build
+$Env:ENVENTBRITE_TOKEN=1
+$Env:ENVENTBRITE_ORG=1
+npm run build
 ```
 
 Run:

@@ -55,7 +55,7 @@ import postcss = require('postcss')
 import cssnano = require('cssnano')
 import { minify } from 'terser'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { store } from './store'
+import { store, getConfig } from './store'
 import * as Courses from './courses'
 import * as Training2 from './training.v2'
 import * as BestPractices from './best-practices/best'
@@ -410,6 +410,10 @@ run({
 writeFileSync('_site/sitemap.xml', runSiteMap(Sitemap, 'https://learnk8s.io'))
 copyFileSync('robots.txt', resolve('_site', 'robots.txt'))
 copyFileSync('favicon.ico', resolve('_site', 'favicon.ico'))
+
+if (!getConfig(store.getState()).isProduction) {
+  writeFileSync('_site/state.json', JSON.stringify(store.getState(), null, 2))
+}
 
 function injectGoogleAnalytics({ $, gaId }: { gaId: string; $: Cheerio }): Cheerio {
   $.find('head').append(
