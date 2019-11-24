@@ -409,6 +409,7 @@ run({
 
 writeFileSync('_site/sitemap.xml', runSiteMap(Sitemap, 'https://learnk8s.io'))
 copyFileSync('robots.txt', resolve('_site', 'robots.txt'))
+copyFileSync('favicon.ico', resolve('_site', 'favicon.ico'))
 
 function injectGoogleAnalytics({ $, gaId }: { gaId: string; $: Cheerio }): Cheerio {
   $.find('head').append(

@@ -34,10 +34,16 @@ Build:
 ENVENTBRITE_TOKEN=1 ENVENTBRITE_ORG=1 npm run build
 ```
 
+or, if you're on Windows:
+
+```powershell
+$Env:ENVENTBRITE_TOKEN=1 $Env:ENVENTBRITE_ORG=1 npm run build
+```
+
 Run:
 
 ```bash
-npx http-serve _site
+npm start
 ```
 
 ## Dev environment
