@@ -10,7 +10,7 @@ import { ok } from 'assert'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import md5 = require('md5')
 
-import { extname, join, resolve, basename } from 'path'
+import { extname, join, resolve, basename, dirname } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { minify } from 'terser'
 import postcss from 'postcss'
@@ -47,6 +47,34 @@ export function defaultAssetsPipeline({
   function generatePath(url: string) {
     const path = `${outputFolder}${join('/', url, '/index.html')}`
     mkdir('-p', `${outputFolder}${join('/', url)}`)
+    return path
+  }
+}
+
+export function RSSPipeline({
+  content,
+  url,
+  outputFolder,
+  siteUrl,
+  isOptimisedBuild,
+}: {
+  content: string
+  outputFolder: string
+  url: string
+  siteUrl: string
+  isOptimisedBuild: boolean
+}) {
+  const finalContent = (content.match(/enclosure\surl="([^"]*)"/gim) || [])
+    .filter(onlyUnique)
+    .map(it => it.slice(15).slice(0, -1))
+    .reduce((content, image) => {
+      return content.replace(image, isOptimisedBuild ? `${siteUrl}${digest(image)}` : `/b/${image}`)
+    }, content)
+  writeFileSync(generatePath(url), finalContent)
+
+  function generatePath(url: string) {
+    const path = `${outputFolder}${join('/', url)}`
+    mkdir('-p', `${outputFolder}${join('/', dirname(url))}`)
     return path
   }
 }

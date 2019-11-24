@@ -59,6 +59,7 @@ import { store } from './store'
 import * as Courses from './courses'
 import * as Training2 from './training.v2'
 import * as BestPractices from './best-practices/best'
+import * as Flipboard from './flipboard'
 
 const isOptimisedBuild = !!process.env.IS_BUILD_OPTIMISED
 
@@ -77,6 +78,7 @@ Academy.Register(store)
 ContactUs.Register(store)
 ChaosEngineering.Register(store)
 BiteSized201909.Register(store)
+Flipboard.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -159,6 +161,7 @@ export function run(options: Settings) {
     ContactUs.Mount({ store })
     ChaosEngineering.Mount({ store })
     BiteSized201909.Mount({ store })
+    Flipboard.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
