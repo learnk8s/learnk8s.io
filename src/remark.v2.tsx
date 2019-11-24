@@ -292,15 +292,12 @@ export function render(path: string): JSX.Element {
         listItem: (h: h, node: Mdast.ListItem): Node => {
           return H(
             'li.lh-copy.f4.mv1.measure-wide',
-            node.children.reduce(
-              (acc, it) => {
-                if (it.type === 'paragraph') {
-                  return acc.concat((it.children as Node[]).map(it => one(h, it)))
-                }
-                return acc.concat(one(h, it))
-              },
-              [] as Node[],
-            ),
+            node.children.reduce((acc, it) => {
+              if (it.type === 'paragraph') {
+                return acc.concat((it.children as Node[]).map(it => one(h, it)))
+              }
+              return acc.concat(one(h, it))
+            }, [] as Node[]),
           )
         },
         table: (h: h, node: Mdast.Table): Node => {
@@ -500,13 +497,10 @@ export function extractCodeFences<T extends string>(
   args: string | null | undefined,
   features: T[],
 ): { [a in T]: string | null } & { lang: string | null } {
-  const init = features.reduce(
-    (acc, it) => {
-      acc[it] = null
-      return acc
-    },
-    {} as { [a in T]: string | null },
-  )
+  const init = features.reduce((acc, it) => {
+    acc[it] = null
+    return acc
+  }, {} as { [a in T]: string | null })
   if (!args) {
     return { ...init, lang: null }
   }
@@ -517,19 +511,16 @@ export function extractCodeFences<T extends string>(
   } else {
     lang = head
   }
-  const collected = features.reduce(
-    (acc, it) => {
-      const regex = new RegExp(`^${it}=`, 'gi')
-      const arg = rest.find(it => regex.test(it))
-      if (!arg) {
-        acc[it] = null
-        return acc
-      }
-      acc[it] = arg.replace(regex, '')
+  const collected = features.reduce((acc, it) => {
+    const regex = new RegExp(`^${it}=`, 'gi')
+    const arg = rest.find(it => regex.test(it))
+    if (!arg) {
+      acc[it] = null
       return acc
-    },
-    {} as { [a in T]: string | null },
-  )
+    }
+    acc[it] = arg.replace(regex, '')
+    return acc
+  }, {} as { [a in T]: string | null })
   return { ...collected, lang }
 }
 
@@ -595,7 +586,7 @@ namespace Mdast {
 
   export interface Animation extends Node {
     type: 'animation'
-    children: (Image)[]
+    children: Image[]
   }
 
   export interface Slide extends Node {
@@ -661,23 +652,20 @@ export function groupHighlightedCode(
   if (!linesToHighlight) {
     return [[Group.STANDARD, range(1, linesLength)]]
   }
-  const taggedCode = linesToHighlight.split(',').reduce(
-    (acc, it) => {
-      if (/-/.test(it)) {
-        const [start, end] = it.split('-')
-        return range(parseInt(start, 10), parseInt(end, 10)).reduce(
-          (acc, n) => {
-            acc[n] = it
-            return acc
-          },
-          { ...acc },
-        )
-      } else {
-        return { ...acc, [it]: it }
-      }
-    },
-    {} as { [index: string]: string },
-  )
+  const taggedCode = linesToHighlight.split(',').reduce((acc, it) => {
+    if (/-/.test(it)) {
+      const [start, end] = it.split('-')
+      return range(parseInt(start, 10), parseInt(end, 10)).reduce(
+        (acc, n) => {
+          acc[n] = it
+          return acc
+        },
+        { ...acc },
+      )
+    } else {
+      return { ...acc, [it]: it }
+    }
+  }, {} as { [index: string]: string })
   const { obj: fullyTaggedCode } = range(1, linesLength).reduce(
     (acc, n) => {
       if (!acc.obj[n]) {
@@ -689,17 +677,14 @@ export function groupHighlightedCode(
     },
     { counter: 0, obj: taggedCode },
   )
-  const groupedCodeBlocks = range(1, linesLength).reduce(
-    (acc, n) => {
-      const label = fullyTaggedCode[n]
-      if (!acc[label]) {
-        acc[label] = []
-      }
-      acc[label].push(n)
-      return acc
-    },
-    {} as { [name: string]: number[] },
-  )
+  const groupedCodeBlocks = range(1, linesLength).reduce((acc, n) => {
+    const label = fullyTaggedCode[n]
+    if (!acc[label]) {
+      acc[label] = []
+    }
+    acc[label].push(n)
+    return acc
+  }, {} as { [name: string]: number[] })
   const sorted = Object.keys(groupedCodeBlocks)
     .map(key => {
       return [/^group/.test(key) ? Group.STANDARD : Group.HIGHLIGHT, groupedCodeBlocks[key]] as [Group, number[]]

@@ -1,6 +1,5 @@
 import { getAbsoluteUrl, Sitemap, LinkedNode, getBlogPosts, getBiteSizedSeries } from './sitemap'
-import { Feed } from 'feed'
-import moment = require('moment')
+import { join } from 'path'
 
 export const Details = {
   type: identity<'rss'>('rss'),
@@ -13,27 +12,40 @@ function identity<T>(value: T): T {
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
   const articles = [...getBlogPosts(website), ...getBiteSizedSeries(website)]
-  const feed = new Feed({
-    title: 'Learnk8s',
-    description: 'Learn Kubernetes',
-    id: siteUrl,
-    link: siteUrl,
-    favicon: `${siteUrl}/favicon.ico`,
-    feedLinks: {},
-    copyright: 'Learnk8s Ltd',
-    feed: getAbsoluteUrl(website.children.rss, siteUrl),
-    updated: new Date(),
-  })
-  articles.forEach(it => {
-    feed.addItem({
-      title: it.payload.title,
-      link: getAbsoluteUrl(it, siteUrl),
-      date: moment(it.payload.publishedDate).toDate(),
-      id: getAbsoluteUrl(it, siteUrl),
-      description: it.payload.description,
-      content: it.payload.description,
-      image: `${siteUrl}${it.payload.openGraphImage}`,
-    })
-  })
-  return feed.atom1()
+  const feed = [
+    '<title>Learnk8s</title>',
+    `<link href="${siteUrl}"/>`,
+    `<link rel="self" href="${getAbsoluteUrl(website.children.rss, siteUrl)}"/>`,
+    `<updated>${new Date().toISOString()}</updated>`,
+    `<icon>https://learnk8s.io/favicon.ico</icon>`,
+    `<rights>Learnk8s Ltd</rights>`,
+    `<id>${join(siteUrl, '/')}</id>`,
+    articles
+      .filter((it, i, array) =>
+        onlyUnique(
+          it.payload.type,
+          i,
+          array.map(it => it.payload.type),
+        ),
+      )
+      .map(it => {
+        return [
+          '<entry>',
+          `<title>${it.payload.title}</title>`,
+          `<link href="${getAbsoluteUrl(it, siteUrl)}"/>`,
+          `<id>${getAbsoluteUrl(it, siteUrl)}</id>`,
+          `<updated>${new Date(it.payload.publishedDate).toISOString()}</updated>`,
+          `<published>${new Date(it.payload.publishedDate).toISOString()}</published>`,
+          `<summary><![CDATA[${it.payload.description}]]></summary>`,
+          `<author><name>${it.payload.author.fullName}</name></author>`,
+          '</entry>',
+        ].join('')
+      })
+      .join(''),
+  ].join('')
+  return `<feed xmlns="http://www.w3.org/2005/Atom">${feed}</feed>`
+}
+
+function onlyUnique(value: string, index: number, self: string[]) {
+  return self.indexOf(value) === index
 }

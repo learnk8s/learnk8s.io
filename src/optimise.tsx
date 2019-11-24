@@ -84,7 +84,13 @@ class Cheerio {
   public static of(content: string) {
     const tree = unified()
       .use(raw)
-      .runSync({ type: 'root', children: [{ type: 'doctype', name: 'html' }, { type: 'raw', value: content }] })
+      .runSync({
+        type: 'root',
+        children: [
+          { type: 'doctype', name: 'html' },
+          { type: 'raw', value: content },
+        ],
+      })
     return new Cheerio(tree)
   }
   debug() {

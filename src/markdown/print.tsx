@@ -23,26 +23,23 @@ export async function mdast2Print({ path }: { path: string }): Promise<MdastVisi
   let heading2 = 0
   return {
     root(node, parent, { all, one }) {
-      const compact = node.children.reduce(
-        (acc, it) => {
-          const lastElement: Mdast.Content | null = acc[acc.length - 1]
-          if (
-            lastElement &&
-            lastElement.type === 'paragraph' &&
-            lastElement.children[0].type !== 'image' &&
-            it.type === 'paragraph'
-          ) {
-            if (it.children[0].type === 'image') {
-              return acc.concat(it)
-            }
-            lastElement.children = [...lastElement.children, { type: 'text', value: '\n' }, ...it.children]
-          } else {
+      const compact = node.children.reduce((acc, it) => {
+        const lastElement: Mdast.Content | null = acc[acc.length - 1]
+        if (
+          lastElement &&
+          lastElement.type === 'paragraph' &&
+          lastElement.children[0].type !== 'image' &&
+          it.type === 'paragraph'
+        ) {
+          if (it.children[0].type === 'image') {
             return acc.concat(it)
           }
-          return acc
-        },
-        [] as Mdast.Content[],
-      )
+          lastElement.children = [...lastElement.children, { type: 'text', value: '\n' }, ...it.children]
+        } else {
+          return acc.concat(it)
+        }
+        return acc
+      }, [] as Mdast.Content[])
       return <Fragment>{all({ ...node, children: compact })}</Fragment>
     },
     text(node) {
@@ -131,15 +128,12 @@ export async function mdast2Print({ path }: { path: string }): Promise<MdastVisi
       return (
         <li className='lh-copy f4 mv1 measure-wide'>
           {node.children
-            .reduce(
-              (acc, it) => {
-                if (it.type === 'paragraph') {
-                  return acc.concat(it.children.map(it => one(it)))
-                }
-                return acc.concat(one(it))
-              },
-              [] as JSX.Element[],
-            )
+            .reduce((acc, it) => {
+              if (it.type === 'paragraph') {
+                return acc.concat(it.children.map(it => one(it)))
+              }
+              return acc.concat(one(it))
+            }, [] as JSX.Element[])
             .map((it, i) => ({ ...it, key: i }))}
         </li>
       )
@@ -183,7 +177,10 @@ export async function mdast2Print({ path }: { path: string }): Promise<MdastVisi
       })
       return (
         <Fragment>
-          {makeSlots(codeBlocks.reduce((acc, it) => acc.concat(it), []), 24).map((it, i, array) => {
+          {makeSlots(
+            codeBlocks.reduce((acc, it) => acc.concat(it), []),
+            24,
+          ).map((it, i, array) => {
             return (
               <div className='mv4 mv5-l inseparable'>
                 <header className='bg-light-gray pv1 pl1 br--top br2 cf'>

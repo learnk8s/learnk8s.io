@@ -473,20 +473,14 @@ const content = {
 
 export const assets: {
   [section in keyof typeof content]: { [topic in keyof typeof content[section]['topics']]: JSX.Element }
-} = Object.keys(content).reduce(
-  (acc, key) => {
-    ;(acc as any)[key] = {}
-    ;(acc as any)[key] = Object.keys(content[key as keyof typeof content].topics).reduce(
-      (acc, topic) => {
-        acc[topic] = (content[key as keyof typeof content].topics as any)[topic].image
-        return acc
-      },
-      {} as any,
-    )
+} = Object.keys(content).reduce((acc, key) => {
+  ;(acc as any)[key] = {}
+  ;(acc as any)[key] = Object.keys(content[key as keyof typeof content].topics).reduce((acc, topic) => {
+    acc[topic] = (content[key as keyof typeof content].topics as any)[topic].image
     return acc
-  },
-  {} as any,
-)
+  }, {} as any)
+  return acc
+}, {} as any)
 
 /* WARNING: this mutates content */
 export const material: {
