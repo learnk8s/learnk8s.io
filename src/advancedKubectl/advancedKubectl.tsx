@@ -49,7 +49,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.registerBlogPostV2({
       id: 'bp-kubectl-productivity',
       pageId: KubectlProductivity.id,
       authorId: Authors.danielWeibel.id,
@@ -61,6 +61,7 @@ export function Register(store: Store<State, Actions>) {
       title: 'Boosting your kubectl productivity',
       publishedDate: '2019-03-27',
       lastModifiedDate: '2019-04-15',
+      content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
   store.dispatch(Action.assignTag({ id: 'blog-post', pageId: KubectlProductivity.id }))
