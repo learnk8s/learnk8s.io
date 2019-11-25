@@ -129,15 +129,12 @@ export function mdast2Jsx(): MdastVisitors<JSX.Element> {
       return (
         <li className='lh-copy f4 mv1 measure-wide'>
           {node.children
-            .reduce(
-              (acc, it) => {
-                if (it.type === 'paragraph') {
-                  return acc.concat(it.children.map(it => one(it)))
-                }
-                return acc.concat(one(it))
-              },
-              [] as JSX.Element[],
-            )
+            .reduce((acc, it) => {
+              if (it.type === 'paragraph') {
+                return acc.concat(it.children.map(it => one(it)))
+              }
+              return acc.concat(one(it))
+            }, [] as JSX.Element[])
             .map((it, i) => ({ ...it, key: i }))}
         </li>
       )
@@ -606,23 +603,20 @@ export function groupHighlightedCode(
   if (!linesToHighlight) {
     return [[Group.STANDARD, range(1, linesLength)]]
   }
-  const taggedCode = linesToHighlight.split(',').reduce(
-    (acc, it) => {
-      if (/-/.test(it)) {
-        const [start, end] = it.split('-')
-        return range(parseInt(start, 10), parseInt(end, 10)).reduce(
-          (acc, n) => {
-            acc[n] = it
-            return acc
-          },
-          { ...acc },
-        )
-      } else {
-        return { ...acc, [it]: it }
-      }
-    },
-    {} as { [index: string]: string },
-  )
+  const taggedCode = linesToHighlight.split(',').reduce((acc, it) => {
+    if (/-/.test(it)) {
+      const [start, end] = it.split('-')
+      return range(parseInt(start, 10), parseInt(end, 10)).reduce(
+        (acc, n) => {
+          acc[n] = it
+          return acc
+        },
+        { ...acc },
+      )
+    } else {
+      return { ...acc, [it]: it }
+    }
+  }, {} as { [index: string]: string })
   const { obj: fullyTaggedCode } = range(1, linesLength).reduce(
     (acc, n) => {
       if (!acc.obj[n]) {
@@ -634,17 +628,14 @@ export function groupHighlightedCode(
     },
     { counter: 0, obj: taggedCode },
   )
-  const groupedCodeBlocks = range(1, linesLength).reduce(
-    (acc, n) => {
-      const label = fullyTaggedCode[n]
-      if (!acc[label]) {
-        acc[label] = []
-      }
-      acc[label].push(n)
-      return acc
-    },
-    {} as { [name: string]: number[] },
-  )
+  const groupedCodeBlocks = range(1, linesLength).reduce((acc, n) => {
+    const label = fullyTaggedCode[n]
+    if (!acc[label]) {
+      acc[label] = []
+    }
+    acc[label].push(n)
+    return acc
+  }, {} as { [name: string]: number[] })
   const sorted = Object.keys(groupedCodeBlocks)
     .map(key => {
       return [/^group/.test(key) ? Group.STANDARD : Group.HIGHLIGHT, groupedCodeBlocks[key]] as [Group, number[]]

@@ -88,3 +88,7 @@ export function hasTag(state: State, tagId: string) {
 export function getBlogPostMarkdownBlocks(state: State): WebsiteReducer.BlogPostMarkdownBlock[] {
   return Object.values(state.website.relatedBlocks)
 }
+
+export function getRedirects(state: State): WebsiteReducer.Redirect[] {
+  return Object.values(state.website.redirects)
+}

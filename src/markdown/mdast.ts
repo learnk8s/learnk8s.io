@@ -388,13 +388,10 @@ export function extractCodeFences<T extends string>(
   args: string | null | undefined,
   features: T[],
 ): { [a in T]: string | null } & { lang: string | null } {
-  const init = features.reduce(
-    (acc, it) => {
-      acc[it] = null
-      return acc
-    },
-    {} as { [a in T]: string | null },
-  )
+  const init = features.reduce((acc, it) => {
+    acc[it] = null
+    return acc
+  }, {} as { [a in T]: string | null })
   if (!args) {
     return { ...init, lang: null }
   }
@@ -405,18 +402,15 @@ export function extractCodeFences<T extends string>(
   } else {
     lang = head
   }
-  const collected = features.reduce(
-    (acc, it) => {
-      const regex = new RegExp(`^${it}=`, 'gi')
-      const arg = rest.find(it => regex.test(it))
-      if (!arg) {
-        acc[it] = null
-        return acc
-      }
-      acc[it] = arg.replace(regex, '')
+  const collected = features.reduce((acc, it) => {
+    const regex = new RegExp(`^${it}=`, 'gi')
+    const arg = rest.find(it => regex.test(it))
+    if (!arg) {
+      acc[it] = null
       return acc
-    },
-    {} as { [a in T]: string | null },
-  )
+    }
+    acc[it] = arg.replace(regex, '')
+    return acc
+  }, {} as { [a in T]: string | null })
   return { ...collected, lang }
 }

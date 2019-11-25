@@ -26,6 +26,9 @@ export const Action = {
   registerBlogPostMarkdownBlock(args: BlogPostMarkdownBlock) {
     return { type: 'REGISTER_RELATED_BLOCK' as const, ...args }
   },
+  registerRedirect(args: Redirect) {
+    return { type: 'REGISTER_REDIRECT' as const, ...args }
+  },
 }
 
 export type Actions = ReturnType<typeof Action[keyof typeof Action]>
@@ -35,6 +38,12 @@ export type Page = {
   url: string
   title: string
   description: string
+}
+
+export type Redirect = {
+  id: string
+  fromPageId: string
+  redirectToPageId: string
 }
 
 export type BlogPost = {
@@ -92,6 +101,7 @@ export interface State {
   authors: Record<string, Author>
   tags: Record<string, string[]>
   relatedBlocks: Record<string, BlogPostMarkdownBlock>
+  redirects: Record<string, Redirect>
 }
 
 export function createInitialState(options: {}): State {
@@ -104,6 +114,7 @@ export function createInitialState(options: {}): State {
     authors: {},
     tags: {},
     relatedBlocks: {},
+    redirects: {},
   }
 }
 
@@ -157,6 +168,19 @@ export const RootReducer: Reducer<State, Actions> = (
         ...state,
         relatedBlocks: { ...state.relatedBlocks, [Object.keys(state.relatedBlocks).length + 1]: { ...action } },
       }
+    }
+    case 'REGISTER_REDIRECT': {
+      if (!(action.fromPageId in state.pages)) {
+        throw new Error(
+          `Couldn't create redirect ${action.fromPageId} -> ${action.redirectToPageId}. FROM does not exist`,
+        )
+      }
+      if (!(action.redirectToPageId in state.pages)) {
+        throw new Error(
+          `Couldn't create redirect ${action.fromPageId} -> ${action.redirectToPageId}. TO does not exist`,
+        )
+      }
+      return { ...state, redirects: { ...state.redirects, [action.id]: { ...action } } }
     }
     default:
       assertUnreachable(action)

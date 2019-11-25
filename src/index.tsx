@@ -22,7 +22,6 @@ import * as Academy from './academy'
 import * as ArchitectingAndScaling from './architecting'
 import * as ZeroToK8s from './zeroToK8s'
 import * as Blog from './blog'
-import * as BrowserConfig from './browserConfig'
 import * as Careers from './careers'
 import * as Consulting from './consulting'
 import * as ContactUs from './contactUs'
@@ -33,7 +32,6 @@ import * as Redirect from './redirect'
 import * as RSS from './rss'
 import * as TermsAndConditions from './termsAndConditions'
 import * as Training from './training.v2'
-import * as WebAppManifest from './webAppManifest'
 
 import * as SmallerImages from './smallerDockerImages/smallerImages'
 import * as DeployLaravel from './deployLaravel/deployLaravel'
@@ -58,10 +56,11 @@ import postcss = require('postcss')
 import cssnano = require('cssnano')
 import { minify } from 'terser'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { store } from './store'
+import { store, getConfig } from './store'
 import * as Courses from './courses'
 import * as Training2 from './training.v2'
 import * as BestPractices from './best-practices/best'
+import * as Flipboard from './flipboard'
 
 const isOptimisedBuild = !!process.env.IS_BUILD_OPTIMISED
 
@@ -80,13 +79,20 @@ Academy.Register(store)
 ContactUs.Register(store)
 ChaosEngineering.Register(store)
 BiteSized201909.Register(store)
+Flipboard.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
   public static of(content: string) {
     const tree = unified()
       .use(raw)
-      .runSync({ type: 'root', children: [{ type: 'doctype', name: 'html' }, { type: 'raw', value: content }] })
+      .runSync({
+        type: 'root',
+        children: [
+          { type: 'doctype', name: 'html' },
+          { type: 'raw', value: content },
+        ],
+      })
     return new Cheerio(tree)
   }
   debug() {
@@ -161,6 +167,7 @@ export function run(options: Settings) {
     ContactUs.Mount({ store })
     BiteSized201909.Mount({ store })
     GenericBlogPost.Mount({ store })
+    Flipboard.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -368,28 +375,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     case BestPractices.Details.type: {
       return
     }
-    case WebAppManifest.Details.type: {
-      const manifest = WebAppManifest.render(root, node, siteUrl)
-      const icons = manifest.icons.map(icon => {
-        return { ...icon, src: isOptimisedBuild ? digest(icon.src) : `/b/${icon.src}` }
-      })
-      writeFileSync(`_site${WebAppManifest.Details.url}`, JSON.stringify({ ...manifest, icons }))
-      return
-    }
-    case BrowserConfig.Details.type: {
-      let content = BrowserConfig.render(root, node, siteUrl)
-      const matches = content.match(/<square150x150logo src="(.*)"\/>/im)
-      if (!(Array.isArray(matches) && matches.length > 1)) {
-        throw new Error('Could not find a valid image to replace in browserconfig.xml')
-      }
-      if (isOptimisedBuild) {
-        content = content.replace(matches[1], `${digest(matches[1])}`)
-      } else {
-        content = content.replace(matches[1], `/b/${matches[1]}`)
-      }
-      writeFileSync(`_site${BrowserConfig.Details.url}`, content)
-      return
-    }
     case RSS.Details.type: {
       writeFileSync(`_site${RSS.Details.url}`, RSS.render(root, node, siteUrl))
       return
@@ -424,6 +409,11 @@ run({
 
 writeFileSync('_site/sitemap.xml', runSiteMap(Sitemap, 'https://learnk8s.io'))
 copyFileSync('robots.txt', resolve('_site', 'robots.txt'))
+copyFileSync('favicon.ico', resolve('_site', 'favicon.ico'))
+
+if (!getConfig(store.getState()).isProduction) {
+  writeFileSync('_site/state.json', JSON.stringify(store.getState(), null, 2))
+}
 
 function injectGoogleAnalytics({ $, gaId }: { gaId: string; $: Cheerio }): Cheerio {
   $.find('head').append(
