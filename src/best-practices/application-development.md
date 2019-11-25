@@ -53,7 +53,7 @@ However, the Pod is still registered as an active replica for the current Deploy
 
 If you don't have a Liveness probe, it stays _Running_ but detached from the Service.
 
-In other words, not only the process isn't serving any requests, but also it consumes resources.
+In other words, not only is the process not serving any requests, but it is also consuming resources.
 
 _What should you do?_
 
@@ -73,7 +73,7 @@ When Liveness and Readiness probes are pointing to the same endpoint, the effect
 
 When the app signals that it's not ready or live, the kubelet detaches the container from the Service and delete it **at the same time**.
 
-You might notice dropping connections because the container there isn't enough time to drain the current connections or process the incoming ones.
+You might notice dropping connections because the container does not have enough time to drain the current connections or process the incoming ones.
 
 You can dig deeper in the following [article that discussed graceful shutdown](https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/).
 
@@ -370,6 +370,8 @@ spec:
 
 Those labels are [recommended by the official documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/).
 
+> Please not that you're recommended to tag **all resources**.
+
 ### Resources have business labels defined
 
 You could tag your Pods with:
@@ -410,6 +412,8 @@ You can explore labels and [tagging for resources on the AWS tagging strategy pa
 
 The article isn't specific to Kubernetes but explores some of the most common strategies for tagging resources.
 
+> Please not that you're recommended to tag **all resources**.
+
 ### Resources have security labels defined
 
 You could tag your Pods with:
@@ -446,6 +450,8 @@ spec:
 You can explore label and [tagging for resources on the AWS tagging strategy page](https://aws.amazon.com/answers/account-management/aws-tagging-strategies/).
 
 The article isn't specific to Kubernetes but explores some of the most common strategies for tagging resources.
+
+> Please not that you're recommended to tag **all resources**.
 
 ## Logging
 
