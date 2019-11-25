@@ -81,6 +81,7 @@ ChaosEngineering.Register(store)
 BiteSized201909.Register(store)
 Flipboard.Register(store)
 ZeroToK8sJs.Register(store)
+DeployLaravel.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -263,9 +264,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case DeployLaravel.Details.type: {
-      const $ = Cheerio.of(DeployLaravel.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ChaosEngineering.Details.type: {
