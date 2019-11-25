@@ -1,11 +1,9 @@
-import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { JsonLd } from 'react-schemaorg'
-import { BlogPosting } from 'schema-dts'
-import * as Markdown from '../remark.v2'
-import { Subscribe } from '../layout.v2'
+import { Store } from 'redux'
+import { State, Actions, Action } from '../store'
+import { Authors } from '../aboutUs'
+import { join } from 'path'
+import { toVFile } from '../files'
 
 export const Details = {
   type: '02k8sjs',
@@ -27,95 +25,43 @@ export const Details = {
   },
 } as const
 
-export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(
-    <Article
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.description}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      authorFullName={currentNode.payload.author.fullName}
-      authorAvatar={currentNode.payload.author.avatar}
-      authorLink={currentNode.payload.author.link}
-      publishedDate={currentNode.payload.publishedDate}
-    >
-      <JsonLd<BlogPosting>
-        item={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: currentNode.payload.title,
-          image: `${currentNode.payload.previewImage.props.src}`,
-          author: {
-            '@type': 'Person',
-            name: currentNode.payload.author.fullName,
-          },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Learnk8s',
-            logo: {
-              '@type': 'ImageObject',
-              url: `assets/learnk8s_logo_square.png`,
-            },
-          },
-          url: getAbsoluteUrl(currentNode, siteUrl),
-          datePublished: currentNode.payload.publishedDate,
-          dateModified: currentNode.payload.publishedDate,
-          description: currentNode.payload.description,
-          mainEntityOfPage: {
-            '@type': 'SoftwareSourceCode',
-          },
-        }}
-      />
-      {Markdown.render(`${__dirname}/content.md`)}
-      <p className='lh-copy measure-wide f4'>
-        The last two chapter are available for free (and you can also download the full course as a PDF).
-      </p>
-      <p className='lh-copy measure-wide f4'>Enter your email address to access the last two chapters of the guide:</p>
-      <form action='https://academy.learnk8s.io/access' method='POST' className='pt1 pb4'>
-        <ol className='list pl0'>
-          <li className='mv4'>
-            <label htmlFor='email' className='f5 db tl ttu pb2 fw6 navy'>
-              Your email address
-            </label>
-            <input
-              className='f4 pa3 w-60-l w-100 br3 input-reset ba b--silver bw1'
-              type='email'
-              required={true}
-              name='email'
-              id='email'
-              placeholder='Your email address'
-            />
-          </li>
-          <li>
-            <input type='hidden' name='language' id='nodejs' value='nodejs' />
-          </li>
-        </ol>
-        <button className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv2' type='submit'>
-          Get access ⇢
-        </button>
-      </form>
-      <RelatedConentContainer>
-        <RelatedContentItem>
-          <a href={getFullUrl(website.children.bskAutoscaling)} className='link navy underline hover-sky'>
-            How to autoscale apps on Kubernetes with custom metrics
-          </a>{' '}
-          Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod
-          Autoscaler. In this article, you will learn how to use it.
-        </RelatedContentItem>
-        <RelatedContentItem>
-          <a
-            href={getFullUrl(website.children.blog.children.smallerDockerImage)}
-            className='link navy underline hover-sky'
-          >
-            3 simple tricks for smaller Docker images.
-          </a>{' '}
-          Docker images don't have to be large. Learn how to put your Docker images on a diet!
-        </RelatedContentItem>
-      </RelatedConentContainer>
+export const ZeroToK8sJs = {
+  id: '02k8sjs',
+  url: '/blog/nodejs-kubernetes-guide',
+  title: 'Hands-on guide: developing & deploying Node.js apps in Kubernetes ♦︎ Learnk8s',
+  description: `Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
+}
 
-      <Subscribe identifier='02k8sjs' />
-    </Article>,
+export function Register(store: Store<State, Actions>) {
+  store.dispatch(Action.registerPage(ZeroToK8sJs))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-02k8sjs',
+      pageId: ZeroToK8sJs.id,
+      image: (
+        <img src='src/02k8sjs/jury.jpg' alt='Hands-on guide: developing and deploying Node.js apps in Kubernetes' />
+      ),
+      title: 'Hands-on guide: developing and deploying Node.js apps in Kubernetes',
+      description: ZeroToK8sJs.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-02k8sjs',
+      pageId: ZeroToK8sJs.id,
+      authorId: Authors.danielePolencic.id,
+      description: `Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
+      title: 'Hands-on guide: developing and deploying Node.js apps in Kubernetes',
+      publishedDate: '2019-10-31',
+
+      content: toVFile({ path: join(__dirname, 'content.md') }),
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: '02k8sjs-related-0',
+      blogPostId: 'bp-02k8sjs',
+      content: toVFile({ path: join(__dirname, '02k8sjs-related.md') }),
+    }),
   )
 }

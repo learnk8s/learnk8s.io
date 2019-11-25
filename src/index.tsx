@@ -367,9 +367,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case ZeroToK8sJs.Details.type: {
-      const $ = Cheerio.of(ZeroToK8sJs.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BestPractices.Details.type: {
