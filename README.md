@@ -48,6 +48,10 @@ Run:
 npm start
 ```
 
+The command starts a REPL session.
+
+Type `.help` to reveal the list of commands available.
+
 ## Dev environment
 
 For each pull request, a development preview is created with Netlify (link is in the `deploy/netlify` task on the pull request page).
