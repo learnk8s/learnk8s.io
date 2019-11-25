@@ -80,6 +80,7 @@ ContactUs.Register(store)
 ChaosEngineering.Register(store)
 BiteSized201909.Register(store)
 Flipboard.Register(store)
+ZeroToK8sJs.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}

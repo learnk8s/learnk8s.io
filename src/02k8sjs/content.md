@@ -208,7 +208,8 @@ The command executes the steps outlined in the `Dockerfile`, one by one:
 ```animation
 {
   "description": "Layers in Docker images",
-  "image": "layers.svg"
+  "animation": "layers.svg",
+  "fallback": "layers-fallback.svg"
 }
 ```
 
@@ -223,7 +224,8 @@ You can create many Docker containers from the same Docker image:
 ```animation
 {
   "description": "Relationship between Dockerfiles, images and containers",
-  "image": "dockerfile-image-container.svg"
+  "animation": "dockerfile-image-container.svg",
+  "fallback": "docker-image-container-fallback.svg"
 }
 ```
 
@@ -479,7 +481,8 @@ Containers are the blocks, servers are the boards, and the container orchestrato
 ```animation
 {
   "description": "Kubernetes is the best tetris player",
-  "image": "tetris.svg"
+  "animation": "tetris.svg",
+  "fallback": "tetris-fallback.svg"
 }
 ```
 
@@ -919,7 +922,8 @@ Also, when the Pod is restarted, and a new IP address is assigned, the Service a
 ```animation
 {
   "description": "A load balancer can remove the need of keeping track of IP addresses",
-  "image": "service-come-and-go.svg"
+  "animation": "service-come-and-go.svg",
+  "fallback": "service-come-and-go-fallback.svg"
 }
 ```
 
@@ -1191,7 +1195,8 @@ But when it selects the other Pod, the picture isn't displayed, because the cont
 ```animation
 {
   "description": "Uploading files inside the app makes it stateful",
-  "image": "stateful.svg"
+  "animation": "stateful.svg",
+  "fallback": "stateful-fallback.svg"
 }
 ```
 

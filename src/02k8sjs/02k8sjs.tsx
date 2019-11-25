@@ -27,7 +27,7 @@ export const Details = {
 
 export const ZeroToK8sJs = {
   id: '02k8sjs',
-  url: '/blog/nodejs-kubernetes-guide',
+  url: '/nodejs-kubernetes-guide',
   title: 'Hands-on guide: developing & deploying Node.js apps in Kubernetes ♦︎ Learnk8s',
   description: `Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
 }
@@ -57,6 +57,7 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
+  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ZeroToK8sJs.id }))
   store.dispatch(
     Action.registerBlogPostMarkdownBlock({
       id: '02k8sjs-related-0',

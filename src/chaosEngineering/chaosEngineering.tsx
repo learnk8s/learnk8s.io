@@ -53,6 +53,7 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
+  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ChaosEngineering.id }))
   store.dispatch(
     Action.registerBlogPostMarkdownBlock({
       id: 'chaos-engineering-related-0',
