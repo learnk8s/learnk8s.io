@@ -1,9 +1,7 @@
-import marked from 'marked'
-import { cat } from 'shelljs'
 import { Store } from 'redux'
 import { State, Actions, Action } from './store'
-
-const renderer = new marked.Renderer()
+import { toVFile } from './files'
+import { join } from 'path'
 
 const Venues = {
   JustCoSg: {
@@ -174,7 +172,7 @@ const Courses = {
     id: '3days-eng',
     duration: '3 days',
     title: 'Advanced Kubernetes training',
-    description: marked(cat(`${__dirname}/description_en.md`).toString(), { renderer }),
+    description: toVFile({ path: join(__dirname, 'description_en.md') }),
     language: 'English',
   },
 }

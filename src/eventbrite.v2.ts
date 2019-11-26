@@ -2,6 +2,9 @@ import cheerio from 'cheerio'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import { getVenues, State, getWorkshops } from './store'
 import { AxiosInstance } from 'axios'
+import { read } from './files'
+import { renderToJsx } from './markdown'
+import { renderToStaticMarkup } from 'react-dom/server'
 
 export async function SyncVenues({ state, sdk }: { state: State; sdk: AxiosInstance }): Promise<VenueEventBrite[]> {
   const venues = getVenues(state)
@@ -43,12 +46,13 @@ export async function SyncEvents({
       added.map(async courseId => {
         log(`Creating EventBrite event for ${courseId}`)
         const course = workshops.find(it => it.id === courseId)!
+        const courseDescription = renderToStaticMarkup(renderToJsx(await read(course.description)))
         const event = await upsertEvent(
           {
             duration: course.duration,
             city: course.venue.city,
             code: course.id,
-            description: course.description,
+            description: courseDescription,
             timezone: course.timezone,
             currency: course.price.currency,
             locationName: course.venue.locationName,
@@ -81,8 +85,9 @@ export async function SyncEvents({
           return
         }
         const course = workshops.find(it => it.id === courseId)!
+        const courseDescription = renderToStaticMarkup(renderToJsx(await read(course.description)))
         if (
-          !isSameDescription({ code: course.id, description: course.description }, referenceEvent.details) ||
+          !isSameDescription({ code: course.id, description: courseDescription }, referenceEvent.details) ||
           !isSameDate(course, referenceEvent.details) ||
           !isSameVenue(course.venue, referenceEvent.details, venues)
         ) {
@@ -92,7 +97,7 @@ export async function SyncEvents({
               duration: course.duration,
               city: course.venue.city,
               code: course.id,
-              description: course.description,
+              description: courseDescription,
               timezone: course.timezone,
               currency: course.price.currency,
               locationName: course.venue.locationName,

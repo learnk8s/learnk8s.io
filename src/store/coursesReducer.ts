@@ -1,4 +1,5 @@
 import { Reducer } from 'redux'
+import { VReference } from '../files'
 
 export const Action = {
   registerCourse(args: Course) {
@@ -43,7 +44,7 @@ type Course = {
   duration: string
   title: string
   language: string
-  description: string
+  description: VReference
 }
 
 type CoursePicture = {
