@@ -1,11 +1,9 @@
-import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { JsonLd } from 'react-schemaorg'
-import { BlogPosting } from 'schema-dts'
-import { Subscribe } from '../layout.v2'
-import * as Remark from '../remark.v2'
+import { Store } from 'redux'
+import { State, Actions, Action } from '../store'
+import { Authors } from '../aboutUs'
+import { join } from 'path'
+import { toVFile } from '../files'
 
 export const Details = {
   type: 'scalingSpringBoot',
@@ -29,72 +27,42 @@ export const Details = {
   },
 } as const
 
-export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(
-    <Article
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.description}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      authorFullName={currentNode.payload.author.fullName}
-      authorAvatar={currentNode.payload.author.avatar}
-      authorLink={currentNode.payload.author.link}
-      publishedDate={currentNode.payload.publishedDate}
-      lastUpdated={currentNode.payload.lastModifiedDate}
-    >
-      <JsonLd<BlogPosting>
-        item={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: currentNode.payload.title,
-          image: `${currentNode.payload.previewImage.props.src}`,
-          author: {
-            '@type': 'Person',
-            name: currentNode.payload.author.fullName,
-          },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Learnk8s',
-            logo: {
-              '@type': 'ImageObject',
-              url: `assets/learnk8s_logo_square.png`,
-            },
-          },
-          url: getAbsoluteUrl(currentNode, siteUrl),
-          datePublished: currentNode.payload.publishedDate,
-          dateModified: currentNode.payload.publishedDate,
-          description: currentNode.payload.description,
-          mainEntityOfPage: {
-            '@type': 'SoftwareSourceCode',
-          },
-        }}
-      />
-      {Remark.render(`${__dirname}/content.md`)}
+export const ScalingSpringBoot = {
+  id: 'scaling-spring-boot',
+  url: '/blog/scaling-spring-boot-microservices',
+  title: 'Scaling SpringBoot with Message Queues and Kubernetes ♦︎ Learnk8s',
+    description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
+}
 
-      <RelatedConentContainer>
-        <RelatedContentItem>
-          <a
-            href={getFullUrl(website.children.blog.children.smallerDockerImage)}
-            className='link navy underline hover-sky'
-          >
-            3 simple tricks for smaller Docker images
-          </a>{' '}
-          and learn how to build and deploy Docker images quicker.
-        </RelatedContentItem>
-        <RelatedContentItem>
-          <a
-            href={getFullUrl(website.children.blog.children.chaosEngineering)}
-            className='link navy underline hover-sky'
-          >
-            Kubernetes Chaos Engineering: Lessons Learned — Part 1
-          </a>
-          what happens when things go wrong in Kubernetes? Can Kubernetes recover from failure and self-heal?
-        </RelatedContentItem>
-      </RelatedConentContainer>
-
-      <Subscribe identifier='scaling-spring-boot' />
-    </Article>,
+export function Register(store: Store<State, Actions>) {
+  store.dispatch(Action.registerPage(ScalingSpringBoot))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-scaling-spring-boot',
+      pageId: ScalingSpringBoot.id,
+      image: <img src='src/scalingSpringBoot/autoscaling.png' alt='Containers' />,
+      title: ScalingSpringBoot.title,
+      description: ScalingSpringBoot.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-scaling-spring-boot',
+      pageId: ScalingSpringBoot.id,
+      authorId: Authors.danielePolencic.id,
+    description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
+    title: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
+    publishedDate: '2018-07-11',
+    lastModifiedDate: '2019-11-15',
+      content: toVFile({ path: join(__dirname, 'content.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ScalingSpringBoot.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'scaling-spring-boot-related-0',
+      blogPostId: 'bp-scaling-spring-boot',
+      content: toVFile({ path: join(__dirname, 'scaling-spring-boot-related.md') }),
+    }),
   )
 }
