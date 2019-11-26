@@ -83,6 +83,7 @@ Flipboard.Register(store)
 ZeroToK8sJs.Register(store)
 DeployLaravel.Register(store)
 K8sOnWindows.Register(store)
+ScalingTensorflow.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -292,9 +293,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case ScalingTensorflow.Details.type: {
-      const $ = Cheerio.of(ScalingTensorflow.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ScalingSpringBoot.Details.type: {

@@ -53,6 +53,12 @@ export const Authors = {
     link: 'https://keith-mifsud.me/',
     description: 'Keith has over ten years of professional experience in software development. He built one of the first ever enterprise insurance policy generator software and had worked with clients of the calibre of Renault, Xerox and Hilton Hotels.',
   },
+  salmanIqbal: {
+    id: 'salman-iqbal',
+    fullName: 'Salman Iqbal',
+    avatar: <img src='assets/authors/salman_iqbal.jpg' alt='Salman Iqbal' />,
+    link: 'https://twitter.com/soulmaniqbal',
+  },
 }
 
 export function Register(store: Store<State, Actions>) {
