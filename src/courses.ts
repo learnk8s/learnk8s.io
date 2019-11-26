@@ -150,7 +150,7 @@ const CoursePrice = {
   HongKong: {
     id: 'hk3days',
     price: 14700,
-    currency: 'EUR',
+    currency: 'HKD',
     locale: 'en-HK',
   },
   Italy: {
