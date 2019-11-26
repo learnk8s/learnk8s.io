@@ -1,6 +1,6 @@
 With the explosive momentum of Docker, Kubernetes has become the de-facto standard for orchestrating and managing containerized apps in production.
 
-In this course, you'll take an app, build it into a docker container then use Kubernetes to deploy, scale, and update it.
+In this course, you'll take an app, build it into a container then use Kubernetes to deploy, scale, and update it.
 
 This is course is perfect if you wish to:
 

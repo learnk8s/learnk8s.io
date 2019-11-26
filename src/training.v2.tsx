@@ -158,7 +158,7 @@ function renderPage(state: State) {
                 '@context': 'https://schema.org',
                 name: course.title,
                 courseCode: course.id,
-                description: course.description,
+                description: `In this course, you'll take an app, build it into a container then use Kubernetes to deploy, scale, and update it. You will learn how to build a cluter and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
                 educationalCredentialAwarded: 'Certificate of completetion',
                 provider: {
                   '@type': 'Organization',
@@ -168,7 +168,7 @@ function renderPage(state: State) {
                   {
                     '@type': 'CourseInstance',
                     name: course.title,
-                    description: course.description,
+                    description: `In this course, you'll take an app, build it into a container then use Kubernetes to deploy, scale, and update it. You will learn how to build a cluter and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
                     courseMode: 'full-time',
                     duration: course.duration as any,
                     inLanguage: course.language,
