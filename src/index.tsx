@@ -86,6 +86,7 @@ K8sOnWindows.Register(store)
 ScalingTensorflow.Register(store)
 ScalingSpringBoot.Register(store)
 SmallerImages.Register(store)
+SolarPlants.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -274,9 +275,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case SolarPlants.Details.type: {
-      const $ = Cheerio.of(SolarPlants.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case WhatIsKubernetes.Details.type: {
