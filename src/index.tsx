@@ -82,6 +82,7 @@ BiteSized201909.Register(store)
 Flipboard.Register(store)
 ZeroToK8sJs.Register(store)
 DeployLaravel.Register(store)
+K8sOnWindows.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -270,9 +271,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case K8sOnWindows.Details.type: {
-      const $ = Cheerio.of(K8sOnWindows.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case SolarPlants.Details.type: {
