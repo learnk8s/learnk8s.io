@@ -1,11 +1,9 @@
-import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { Subscribe } from '../layout.v2'
-import { BlogPosting } from 'schema-dts'
-import { JsonLd } from 'react-schemaorg'
-import * as Remark from '../remark.v2'
+import { Store } from 'redux'
+import { State, Actions, Action } from '../store'
+import { Authors } from '../aboutUs'
+import { join } from 'path'
+import { toVFile } from '../files'
 
 export const Details = {
   type: 'smaller_images',
@@ -27,70 +25,42 @@ export const Details = {
   },
 } as const
 
-export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(
-    <Article
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.shortDescription}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      authorFullName={currentNode.payload.author.fullName}
-      authorAvatar={currentNode.payload.author.avatar}
-      authorLink={currentNode.payload.author.link}
-      publishedDate={currentNode.payload.publishedDate}
-      lastUpdated={currentNode.payload.lastModifiedDate}
-    >
-      <JsonLd<BlogPosting>
-        item={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: currentNode.payload.title,
-          image: `${currentNode.payload.previewImage.props.src}`,
-          author: {
-            '@type': 'Person',
-            name: currentNode.payload.author.fullName,
-          },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Learnk8s',
-            logo: {
-              '@type': 'ImageObject',
-              url: `assets/learnk8s_logo_square.png`,
-            },
-          },
-          url: getAbsoluteUrl(currentNode, siteUrl),
-          datePublished: currentNode.payload.publishedDate,
-          dateModified: currentNode.payload.publishedDate,
-          description: currentNode.payload.description,
-          mainEntityOfPage: {
-            '@type': 'SoftwareSourceCode',
-          },
-        }}
-      />
-      {Remark.render(`${__dirname}/content.md`)}
+export const SmallerImages = {
+  id: 'smaller-images',
+  url: '/blog/smaller-docker-images',
+  title: '3 simple tricks for smaller Docker images ♦︎ Learnk8s',
+  description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control?`,
+}
 
-      <RelatedConentContainer>
-        <RelatedContentItem>
-          <a
-            className='link navy underline hover-sky'
-            href={getFullUrl(website.children.blog.children.installingK8sOnWindows)}
-          >
-            {website.children.blog.children.installingK8sOnWindows.payload.title}
-          </a>
-        </RelatedContentItem>
-        <RelatedContentItem>
-          <a
-            className='link navy underline hover-sky'
-            href={getFullUrl(website.children.blog.children.chaosEngineering)}
-          >
-            {website.children.blog.children.chaosEngineering.payload.title}
-          </a>
-        </RelatedContentItem>
-      </RelatedConentContainer>
-
-      <Subscribe identifier='smaller-images-docker' />
-    </Article>,
+export function Register(store: Store<State, Actions>) {
+  store.dispatch(Action.registerPage(SmallerImages))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-smaller-images',
+      pageId: SmallerImages.id,
+      image: <img src='src/smallerDockerImages/smaller_images.png' alt='Docker whale' />,
+      title: SmallerImages.title,
+      description: SmallerImages.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-smaller-images',
+      pageId: SmallerImages.id,
+      authorId: Authors.danielePolencic.id,
+      description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
+      title: '3 simple tricks for smaller Docker images',
+      publishedDate: '2018-02-12',
+      lastModifiedDate: '2019-04-14',
+      content: toVFile({ path: join(__dirname, 'content.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'general-post', pageId: SmallerImages.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'smaller-images-related-0',
+      blogPostId: 'bp-smaller-images',
+      content: toVFile({ path: join(__dirname, 'smaller-images-related.md') }),
+    }),
   )
 }

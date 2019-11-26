@@ -24,7 +24,8 @@ Since Docker 1.10 the `COPY`, `ADD` and `RUN` statements add a new layer to your
 ```animation
 {
   "description": "Single and multiple RUN statements",
-  "image": "layers.svg"
+  "animation": "layers.svg",
+  "fallback": "layers.svg"
 }
 ```
 

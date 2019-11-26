@@ -85,6 +85,7 @@ DeployLaravel.Register(store)
 K8sOnWindows.Register(store)
 ScalingTensorflow.Register(store)
 ScalingSpringBoot.Register(store)
+SmallerImages.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -261,9 +262,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case SmallerImages.Details.type: {
-      const $ = Cheerio.of(SmallerImages.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case DeployLaravel.Details.type: {
