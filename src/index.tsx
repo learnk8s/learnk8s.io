@@ -89,6 +89,7 @@ SmallerImages.Register(store)
 SolarPlants.Register(store)
 SpotInstances.Register(store)
 TerraformAks.Register(store)
+WhatIsKubernetes.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -280,9 +281,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case WhatIsKubernetes.Details.type: {
-      const $ = Cheerio.of(WhatIsKubernetes.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case SpotInstances.Details.type: {
