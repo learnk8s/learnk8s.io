@@ -2,6 +2,203 @@ import { Details, BiteSizedRender } from '../biteSized'
 import * as React from 'react'
 import { RelatedConentContainer, RelatedContentItem } from '../article.v2'
 import { getFullUrl } from '../sitemap'
+import { Store } from 'redux'
+import {
+  State,
+  Actions,
+  Action,
+  getPages,
+  hasTag,
+  getOpenGraph,
+  getBlogPosts,
+  getAuthors,
+  getBlogPostMarkdownBlocks,
+  getConfig,
+} from '../store'
+import { Authors } from '../aboutUs'
+import { toVFile, read } from '../files'
+import { join } from 'path'
+import { Html, Head, OpenGraph, Body, Footer, Navbar } from '../layout.v3'
+import { JsonLd } from 'react-schemaorg'
+import { BlogPosting } from 'schema-dts'
+import { renderToJsx, toMdast } from '../markdown'
+import { defaultAssetsPipeline } from '../optimise'
+import { Page } from '../store/websiteReducer'
+import { Author } from '../article.v2'
+import { format } from 'date-fns'
+import { selectAll } from 'unist-util-select'
+import * as Mdast from 'mdast'
+import { transform } from '../markdown/utils'
+import { mdast2Jsx, mdast2JsxInline } from '../markdown/jsx'
+
+export const Pages = {
+  multipleClusters: {
+    id: 'multiple-kubernetes-clusters',
+    url: '/bite-sized/connecting-multiple-kubernetes-clusters',
+    title: 'How do you connect clusters located in different data centres?',
+    description: `In Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and availability. Should you use a single cluster over a unified network or multiple clusters? Learn what options you have.`,
+  },
+
+  ingressApiGateway: {
+    id: 'ingress-api-gateway',
+    url: '/kubernetes-ingress-api-gateway',
+    title: 'Can you expose your services with an API gateway in Kubernetes?',
+    description: `In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster. You can select an Ingress that is also an API gateway.`,
+  },
+
+  visualiseYaml: {
+    id: 'visualise-yaml',
+    url: '/visualise-dependencies-kubernetes',
+    title: 'How do you visualise dependencies in your Kubernetes YAML files?',
+    description: `When you have a large number of resources in your Kubernetes cluster, you might lose track of all relationships between them. Learn how to visualise your dependencies.`,
+  },
+
+  helm: {
+    id: 'helm-templating',
+    url: '/helm-templating-kubernetes-yaml',
+    title: 'Is Helm used just for templating? ♦︎ Learnk8s',
+    description: `Learn how Helm is used for templating, sharing charts and managing releases.`,
+  },
+}
+
+export function Register(store: Store<State, Actions>) {
+  store.dispatch(Action.registerPage(Pages.multipleClusters))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-multiple-kubernetes-clusters',
+      pageId: Pages.multipleClusters.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.multipleClusters.title,
+      description: Pages.multipleClusters.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-multiple-kubernetes-clusters',
+      pageId: Pages.multipleClusters.id,
+      authorId: Authors.danielePolencic.id,
+      description: Pages.multipleClusters.description,
+      title: 'How do you connect Kubernetes clusters located in different data centres?',
+      publishedDate: '2019-04-04',
+      content: toVFile({ path: join(__dirname, 'connectMultipleClusters/connectMultipleClusters.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.multipleClusters.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'multiple-kubernetes-clusters-related-0',
+      blogPostId: 'bp-multiple-kubernetes-clusters',
+      content: toVFile({ path: join(__dirname, 'connectMultipleClusters/connectMultipleClusters-related.md') }),
+    }),
+  )
+
+  store.dispatch(Action.registerPage(Pages.ingressApiGateway))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-ingress-api-gateway',
+      pageId: Pages.ingressApiGateway.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.ingressApiGateway.title,
+      description: Pages.ingressApiGateway.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-ingress-api-gateway',
+      pageId: Pages.ingressApiGateway.id,
+      authorId: Authors.danielePolencic.id,
+      description: Pages.ingressApiGateway.description,
+      title: 'Can you expose your microservices with an API gateway in Kubernetes?',
+      publishedDate: '2019-04-23',
+      lastModifiedDate: '2019-11-15',
+      content: toVFile({ path: join(__dirname, 'ingressApiGateway/ingressApiGateway.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.ingressApiGateway.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'ingress-api-gateway-related-0',
+      blogPostId: 'bp-ingress-api-gateway',
+      content: toVFile({ path: join(__dirname, 'ingressApiGateway/ingressApiGateway-related.md') }),
+    }),
+  )
+
+  store.dispatch(Action.registerPage(Pages.visualiseYaml))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-visualise-yaml',
+      pageId: Pages.visualiseYaml.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.visualiseYaml.title,
+      description: Pages.visualiseYaml.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-visualise-yaml',
+      pageId: Pages.visualiseYaml.id,
+      authorId: Authors.danielePolencic.id,
+      description: Pages.visualiseYaml.description,
+      title: 'How do you visualise dependencies in your Kubernetes YAML files?',
+      publishedDate: '2019-05-08',
+      content: toVFile({ path: join(__dirname, 'visualiseYaml/visualiseYaml.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.visualiseYaml.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'visualise-yaml-related-0',
+      blogPostId: 'bp-visualise-yaml',
+      content: toVFile({ path: join(__dirname, 'visualiseYaml/visualiseYaml-related.md') }),
+    }),
+  )
+
+  store.dispatch(Action.registerPage(Pages.helm))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-helm-templating',
+      pageId: Pages.helm.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.helm.title,
+      description: Pages.helm.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-helm-templating',
+      pageId: Pages.helm.id,
+      authorId: Authors.danielePolencic.id,
+      description: Pages.helm.description,
+      title: 'Is Helm used just for templating Kubernetes YAML files?',
+      publishedDate: '2019-04-16',
+      content: toVFile({ path: join(__dirname, 'helm/helm.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.helm.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'helm-templating-related-0',
+      blogPostId: 'bp-helm-templating',
+      content: toVFile({ path: join(__dirname, 'helm/helm-related.md') }),
+    }),
+  )
+}
+
+export async function Mount({ store }: { store: Store<State, Actions> }) {
+  const state = store.getState()
+  const pages = getPages(state).filter(hasTag(state, 'bite-sized'))
+  await Promise.all(
+    pages.map(async page => {
+      defaultAssetsPipeline({
+        jsx: await renderPage(page, state),
+        isOptimisedBuild: getConfig(state).isProduction,
+        siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
+        url: page.url,
+        outputFolder: getConfig(state).outputFolder,
+      })
+    }),
+  )
+}
 
 export const MultipleClustersDetails = identity<Details>({
   type: 'bsk-march-01' as const,
