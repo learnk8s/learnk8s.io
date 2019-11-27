@@ -6,6 +6,11 @@ import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
 import * as Markdown from '../remark.v2'
 import { Subscribe } from '../layout.v2'
+import { Store } from 'redux'
+import { State, Actions, Action } from '../store'
+import { Authors } from '../aboutUs'
+import { join } from 'path'
+import { toVFile } from '../files'
 
 export const Details = {
   type: 'terraformAks',
@@ -27,71 +32,43 @@ export const Details = {
   },
 } as const
 
-export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(
-    <Article
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.description}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      authorFullName={currentNode.payload.author.fullName}
-      authorAvatar={currentNode.payload.author.avatar}
-      authorLink={currentNode.payload.author.link}
-      publishedDate={currentNode.payload.publishedDate}
-    >
-      <JsonLd<BlogPosting>
-        item={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: currentNode.payload.title,
-          image: `${currentNode.payload.previewImage.props.src}`,
-          author: {
-            '@type': 'Person',
-            name: currentNode.payload.author.fullName,
-          },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Learnk8s',
-            logo: {
-              '@type': 'ImageObject',
-              url: `assets/learnk8s_logo_square.png`,
-            },
-          },
-          url: getAbsoluteUrl(currentNode, siteUrl),
-          datePublished: currentNode.payload.publishedDate,
-          dateModified: currentNode.payload.publishedDate,
-          description: currentNode.payload.description,
-          mainEntityOfPage: {
-            '@type': 'SoftwareSourceCode',
-          },
-        }}
-      />
-      {Markdown.render(`${__dirname}/content.md`)}
+export const TerraformAks = {
+  id: 'terraform-aks',
+  url: '/blog/get-start-terraform-aks',
+  title: 'Getting started with Terraform and Kubernetes on Azure AKS',
+  description: `Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.`,
+}
 
-      <RelatedConentContainer>
-        <RelatedContentItem>
-          <a
-            href={getFullUrl(website.children.blog.children.installingK8sOnWindows)}
-            className='link navy underline hover-sky'
-          >
-            Getting started with Docker and Kubernetes on Windows 10
-          </a>{' '}
-          where you'll get your hands dirty and install Docker and Kubernetes in your Windows environment.
-        </RelatedContentItem>
-        <RelatedContentItem>
-          <a
-            href={getFullUrl(website.children.blog.children.smallerDockerImage)}
-            className='link navy underline hover-sky'
-          >
-            3 simple tricks for smaller Docker images.
-          </a>{' '}
-          Docker images don't have to be large. Learn how to put your Docker images on a diet!
-        </RelatedContentItem>
-      </RelatedConentContainer>
-
-      <Subscribe identifier='terraform-aks' />
-    </Article>,
+export function Register(store: Store<State, Actions>) {
+  store.dispatch(Action.registerPage(TerraformAks))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-terraform-aks',
+      pageId: TerraformAks.id,
+      image: (
+        <img src='src/terraformAks/terraforming.jpg' alt='Getting started with Terraform and Kubernetes on Azure AKS' />
+      ),
+      title: TerraformAks.title,
+      description: TerraformAks.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-terraform-aks',
+      pageId: TerraformAks.id,
+      authorId: Authors.danielePolencic.id,
+      description: `Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.`,
+      title: 'Getting started with Terraform and Kubernetes on Azure AKS',
+      publishedDate: '2019-08-21',
+      content: toVFile({ path: join(__dirname, 'content.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'general-post', pageId: TerraformAks.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'terraform-aks-related-0',
+      blogPostId: 'bp-terraform-aks',
+      content: toVFile({ path: join(__dirname, 'terraform-aks-related.md') }),
+    }),
   )
 }

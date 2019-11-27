@@ -88,6 +88,7 @@ ScalingSpringBoot.Register(store)
 SmallerImages.Register(store)
 SolarPlants.Register(store)
 SpotInstances.Register(store)
+TerraformAks.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -348,9 +349,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case TerraformAks.Details.type: {
-      const $ = Cheerio.of(TerraformAks.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ZeroToK8sJs.Details.type: {
