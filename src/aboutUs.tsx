@@ -59,6 +59,12 @@ export const Authors = {
     avatar: <img src='assets/authors/salman_iqbal.jpg' alt='Salman Iqbal' />,
     link: 'https://twitter.com/soulmaniqbal',
   },
+  césarTronLozai: {
+    id: 'césar-tron-lozai',
+    fullName: 'César Tron-Lozai',
+    avatar: <img src='assets/authors/césar_tron-lozai.jpg' alt='César Tron-Lozai' />,
+    link: 'https://twitter.com/cesartronlozai',
+  },
 }
 
 export function Register(store: Store<State, Actions>) {

@@ -1,11 +1,9 @@
-import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { JsonLd } from 'react-schemaorg'
-import { BlogPosting } from 'schema-dts'
-import { Subscribe } from '../layout.v2'
-import * as Remark from '../remark.v2'
+import { Store } from 'redux'
+import { State, Actions, Action } from '../store'
+import { Authors } from '../aboutUs'
+import { join } from 'path'
+import { toVFile } from '../files'
 
 export const Details = {
   type: 'spotInstances',
@@ -29,71 +27,41 @@ export const Details = {
   },
 } as const
 
-export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(
-    <Article
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.shortDescription}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      authorFullName={currentNode.payload.author.fullName}
-      authorAvatar={currentNode.payload.author.avatar}
-      authorLink={currentNode.payload.author.link}
-      publishedDate={currentNode.payload.publishedDate}
-    >
-      <JsonLd<BlogPosting>
-        item={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: currentNode.payload.title,
-          image: `${currentNode.payload.previewImage.props.src}`,
-          author: {
-            '@type': 'Person',
-            name: currentNode.payload.author.fullName,
-          },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Learnk8s',
-            logo: {
-              '@type': 'ImageObject',
-              url: `assets/learnk8s_logo_square.png`,
-            },
-          },
-          url: getAbsoluteUrl(currentNode, siteUrl),
-          datePublished: currentNode.payload.publishedDate,
-          dateModified: currentNode.payload.publishedDate,
-          description: currentNode.payload.description,
-          mainEntityOfPage: {
-            '@type': 'SoftwareSourceCode',
-          },
-        }}
-      />
-      {Remark.render(`${__dirname}/content.md`)}
+export const SpotInstances = {
+  id: 'spot-instances',
+  url: '/blog/kubernetes-spot-instances',
+  title: 'Spot instances in Kubernetes ♦︎ Learnk8s',
+  description: `How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
+}
 
-      <RelatedConentContainer>
-        <RelatedContentItem>
-          <a
-            href={getFullUrl(website.children.blog.children.installingK8sOnWindows)}
-            className='link navy underline hover-sky'
-          >
-            Getting started with Docker and Kubernetes on Windows 10
-          </a>{' '}
-          where you'll get your hands dirty and install Docker and Kubernetes in your Windows environment.
-        </RelatedContentItem>
-        <RelatedContentItem>
-          <a
-            href={getFullUrl(website.children.blog.children.scalingSpringBoot)}
-            className='link navy underline hover-sky'
-          >
-            Scaling Microservices with Message Queues, Spring Boot and Kubernetes
-          </a>{' '}
-          Learn how to use the Horizontal Pod Autoscaler to resize your fleet of applications dynamically.
-        </RelatedContentItem>
-      </RelatedConentContainer>
-
-      <Subscribe identifier='spot-instances' />
-    </Article>,
+export function Register(store: Store<State, Actions>) {
+  store.dispatch(Action.registerPage(SpotInstances))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-spot-instances',
+      pageId: SpotInstances.id,
+      image: <img src='src/spotInstances/cheap-cluster.jpg' alt='Serving cheaper servers' />,
+      title: SpotInstances.title,
+      description: SpotInstances.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-spot-instances',
+      pageId: SpotInstances.id,
+      authorId: Authors.césarTronLozai.id,
+      description: `Spot Instances are unused servers that are available for less than the regular price. Therefore, you can significantly save on your infrastructure costs. It does come with a price, though. Your cloud provider can take away your spot instance at any time, and give to another client who has requested it at a standard cost. How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
+      title: 'Embracing failures and cutting infrastructure costs: Spot instances in Kubernetes',
+      publishedDate: '2018-11-06',
+      content: toVFile({ path: join(__dirname, 'content.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'general-post', pageId: SpotInstances.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'spot-instances-related-0',
+      blogPostId: 'bp-spot-instances',
+      content: toVFile({ path: join(__dirname, 'spot-instances-related.md') }),
+    }),
   )
 }

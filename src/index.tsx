@@ -87,6 +87,7 @@ ScalingTensorflow.Register(store)
 ScalingSpringBoot.Register(store)
 SmallerImages.Register(store)
 SolarPlants.Register(store)
+SpotInstances.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -284,9 +285,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case SpotInstances.Details.type: {
-      const $ = Cheerio.of(SpotInstances.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ScalingTensorflow.Details.type: {
