@@ -51,7 +51,8 @@ export const Authors = {
     fullName: 'Keith Mifsud',
     avatar: <img src='assets/authors/keith_mifsud.jpg' alt='Keith Mifsud' />,
     link: 'https://keith-mifsud.me/',
-    description: 'Keith has over ten years of professional experience in software development. He built one of the first ever enterprise insurance policy generator software and had worked with clients of the calibre of Renault, Xerox and Hilton Hotels.',
+    description:
+      'Keith has over ten years of professional experience in software development. He built one of the first ever enterprise insurance policy generator software and had worked with clients of the calibre of Renault, Xerox and Hilton Hotels.',
   },
   salmanIqbal: {
     id: 'salman-iqbal',

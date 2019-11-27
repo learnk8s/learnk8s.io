@@ -31,7 +31,7 @@ export const ScalingSpringBoot = {
   id: 'scaling-spring-boot',
   url: '/blog/scaling-spring-boot-microservices',
   title: 'Scaling SpringBoot with Message Queues and Kubernetes ♦︎ Learnk8s',
-    description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
+  description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -50,10 +50,10 @@ export function Register(store: Store<State, Actions>) {
       id: 'bp-scaling-spring-boot',
       pageId: ScalingSpringBoot.id,
       authorId: Authors.danielePolencic.id,
-    description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
-    title: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
-    publishedDate: '2018-07-11',
-    lastModifiedDate: '2019-11-15',
+      description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
+      title: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
+      publishedDate: '2018-07-11',
+      lastModifiedDate: '2019-11-15',
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )

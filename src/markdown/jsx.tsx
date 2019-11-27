@@ -319,7 +319,7 @@ export function mdast2Jsx(): MdastVisitors<JSX.Element> {
       throw new Error('break not implemented')
     },
     delete(node, parent, { all }) {
-      return <span className="strike">{all(node)}</span>
+      return <span className='strike'>{all(node)}</span>
     },
     link(node, parent, { all }) {
       return parseLink(node)({
