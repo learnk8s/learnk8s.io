@@ -92,6 +92,7 @@ SpotInstances.Register(store)
 TerraformAks.Register(store)
 WhatIsKubernetes.Register(store)
 BiteSized201903.Register(store)
+BiteSized201910.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -298,27 +299,15 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case BiteSized201903.MultipleClustersDetails.type: {
-      // const $ = Cheerio.of(BiteSized201903.MultipleClustersRender(root, node, siteUrl))
-      // optimise({ $, siteUrl })
-      // writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.IngressApiGatewayDetails.type: {
-      // const $ = Cheerio.of(BiteSized201903.IngressApiGatewayRender(root, node, siteUrl))
-      // optimise({ $, siteUrl })
-      // writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.VisualiseYamlDetails.type: {
-      // const $ = Cheerio.of(BiteSized201903.VisualiseYamlRender(root, node, siteUrl))
-      // optimise({ $, siteUrl })
-      // writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.HelmDetails.type: {
-      // const $ = Cheerio.of(BiteSized201903.HelmRender(root, node, siteUrl))
-      // optimise({ $, siteUrl })
-      // writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201909.SmallOrLargeDetails.type: {
@@ -328,15 +317,9 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case BiteSized201910.AutoscalingDetails.type: {
-      const $ = Cheerio.of(BiteSized201910.AutoscalingRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201910.RollbacksDetails.type: {
-      const $ = Cheerio.of(BiteSized201910.RollbacksRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case NotFound.Details.type: {
