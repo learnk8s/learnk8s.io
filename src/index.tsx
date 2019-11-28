@@ -48,6 +48,7 @@ import * as ZeroToK8sJs from './02k8sjs/02k8sjs'
 import * as GenericBlogPost from './genericBlogPost'
 
 import * as BiteSized from './biteSized'
+import * as BiteSizedV2 from './biteSized.v2'
 import * as BiteSized201903 from './bsk201903'
 import * as BiteSized201909 from './bsk201909'
 import * as BiteSized201910 from './bsk201910'
@@ -90,6 +91,7 @@ SolarPlants.Register(store)
 SpotInstances.Register(store)
 TerraformAks.Register(store)
 WhatIsKubernetes.Register(store)
+BiteSized201903.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -175,7 +177,7 @@ export function run(options: Settings) {
     Newsletter.Mount({ store })
     Academy.Mount({ store })
     ContactUs.Mount({ store })
-    BiteSized201909.Mount({ store })
+    BiteSizedV2.Mount({ store })
     GenericBlogPost.Mount({ store })
     Flipboard.Mount({ store })
 
@@ -296,27 +298,27 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case BiteSized201903.MultipleClustersDetails.type: {
-      const $ = Cheerio.of(BiteSized201903.MultipleClustersRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
+      // const $ = Cheerio.of(BiteSized201903.MultipleClustersRender(root, node, siteUrl))
+      // optimise({ $, siteUrl })
+      // writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.IngressApiGatewayDetails.type: {
-      const $ = Cheerio.of(BiteSized201903.IngressApiGatewayRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
+      // const $ = Cheerio.of(BiteSized201903.IngressApiGatewayRender(root, node, siteUrl))
+      // optimise({ $, siteUrl })
+      // writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.VisualiseYamlDetails.type: {
-      const $ = Cheerio.of(BiteSized201903.VisualiseYamlRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
+      // const $ = Cheerio.of(BiteSized201903.VisualiseYamlRender(root, node, siteUrl))
+      // optimise({ $, siteUrl })
+      // writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.HelmDetails.type: {
-      const $ = Cheerio.of(BiteSized201903.HelmRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
+      // const $ = Cheerio.of(BiteSized201903.HelmRender(root, node, siteUrl))
+      // optimise({ $, siteUrl })
+      // writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201909.SmallOrLargeDetails.type: {

@@ -1,35 +1,34 @@
 import * as React from 'react'
+import { Store } from 'redux'
 import {
-  getConfig,
-  Actions,
   State,
+  Actions,
   getPages,
+  hasTag,
   getOpenGraph,
   getBlogPosts,
   getAuthors,
   getBlogPostMarkdownBlocks,
-  hasTag,
+  getConfig,
 } from './store'
-import { Page } from './store/websiteReducer'
-import { Subscribe } from './layout.v2'
-import { Head, Html, Body, Navbar, OpenGraph, Footer } from './layout.v3'
-import { format } from 'date-fns'
+import { toVFile, read } from './files'
 import { join } from 'path'
-import { read } from './files'
+import { Html, Head, OpenGraph, Body, Footer, Navbar, Subscribe } from './layout.v3'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
 import { renderToJsx, toMdast } from './markdown'
+import { defaultAssetsPipeline } from './optimise'
+import { Page } from './store/websiteReducer'
 import { Author } from './article.v2'
-import { transform } from './markdown/utils'
+import { format } from 'date-fns'
 import { selectAll } from 'unist-util-select'
 import * as Mdast from 'mdast'
-import { mdast2Jsx } from './markdown/jsx'
-import { defaultAssetsPipeline } from './optimise'
-import { Store } from 'redux'
+import { transform } from './markdown/utils'
+import { mdast2Jsx, mdast2JsxInline } from './markdown/jsx'
 
 export async function Mount({ store }: { store: Store<State, Actions> }) {
   const state = store.getState()
-  const pages = getPages(state).filter(hasTag(state, 'general-post'))
+  const pages = getPages(state).filter(hasTag(state, 'bite-sized'))
   await Promise.all(
     pages.map(async page => {
       defaultAssetsPipeline({
@@ -43,13 +42,12 @@ export async function Mount({ store }: { store: Store<State, Actions> }) {
   )
 }
 
-export async function renderPage(pageMeta: Page, state: State) {
-  const page = getPages(state).find(it => it.id === pageMeta.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === pageMeta.id)
+async function renderPage(page: Page, state: State) {
+  const openGraph = getOpenGraph(state).find(it => it.pageId === page.id)
   if (!openGraph) {
     throw new Error('The page does not have an open graph.')
   }
-  const blog = getBlogPosts(state).find(it => it.pageId === pageMeta.id)
+  const blog = getBlogPosts(state).find(it => it.pageId === page.id)
   if (!blog) {
     throw new Error('The page is not a blog post page.')
   }
@@ -57,8 +55,8 @@ export async function renderPage(pageMeta: Page, state: State) {
   if (!author) {
     throw new Error('The blog post does not have an author attached')
   }
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   const extraBlocks = getBlogPostMarkdownBlocks(state).filter(it => it.blogPostId === blog.id)
+  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   const [content, ...blocks] = await Promise.all([
     read(blog.content!),
     ...extraBlocks.map(it => it.content).map(it => read(it)),
@@ -122,6 +120,43 @@ export async function renderPage(pageMeta: Page, state: State) {
           ) : null}
           <img src={openGraph.image.props.src} className='pt2' alt={openGraph.image.props.alt} />
           <hr className='w3 center b--navy mv4 mb5-ns' />
+          <p className='lh-copy measure-wide f4'>
+            <strong className='b'>Welcome to Bite-sized Kubernetes learning</strong> — a regular column on the most
+            interesting questions that we see online and during our workshops answered by a Kubernetes expert.
+          </p>
+          <blockquote className='pl3 mh2 bl bw2 b--blue bg-evian pv1 ph4'>
+            <p className='lh-copy measure-wide f4'>
+              Today's answers are curated by{' '}
+              <a href={author.link} className='link navy underline hover-sky' target='_blank' rel='noreferrer'>
+                {author.fullName}
+              </a>
+              . {transform(toMdast(toVFile({ contents: author.description || '' })), mdast2JsxInline())}
+            </p>
+          </blockquote>
+          <p className='lh-copy measure-wide f4'>
+            <em className='i'>
+              If you wish to have your question featured on the next episode,{' '}
+              <a href='mailto:hello@learnk8s.io' className='link navy underline hover-sky' target='_self'>
+                please get in touch via email
+              </a>{' '}
+              or{' '}
+              <a
+                href='https://twitter.com/learnk8s'
+                className='link navy underline hover-sky'
+                target='_blank'
+                rel='noreferrer'
+              >
+                you can tweet us at @learnk8s
+              </a>
+              .
+            </em>
+          </p>
+          <p className='lh-copy measure-wide f4'>
+            Did you miss the previous episodes?{' '}
+            <a href='/bite-sized' className='link navy underline hover-sky'>
+              You can find them here.
+            </a>
+          </p>
           {renderToJsx(content)}
           {blocks.map(it => {
             const mdast = toMdast(it)
