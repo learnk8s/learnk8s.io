@@ -46,7 +46,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-scaling-spring-boot',
       pageId: ScalingSpringBoot.id,
       authorId: Authors.danielePolencic.id,

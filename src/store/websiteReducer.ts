@@ -1,5 +1,5 @@
 import { Reducer } from 'redux'
-import { VFile, VReference } from '../files'
+import { VReference } from '../files'
 
 export const Action = {
   registerPage(args: Page) {
@@ -11,11 +11,8 @@ export const Action = {
   registerOpenGraph(args: OpenGraph) {
     return { type: 'REGISTER_OG' as const, ...args }
   },
-  registerBlogPostV2(args: BlogPostV2) {
-    return { type: 'REGISTER_BLOG_POST.V2' as const, ...args }
-  },
   registerBlogPost(args: BlogPost) {
-    return { type: 'REGISTER_BLOG_POST' as const, ...args }
+    return { type: 'REGISTER_BLOG_POST.V2' as const, ...args }
   },
   registerAuthor(args: Author) {
     return { type: 'REGISTER_AUTHOR' as const, ...args }
@@ -54,9 +51,6 @@ export type BlogPost = {
   description: string
   publishedDate: string
   lastModifiedDate?: string
-}
-
-export type BlogPostV2 = BlogPost & {
   content: VReference
 }
 
@@ -97,7 +91,7 @@ export interface State {
   pages: Record<string, Page>
   openGraph: Record<string, OpenGraph>
   landingPages: Record<string, LandingPage>
-  blogPosts: Record<string, BlogPost & { content?: VReference }>
+  blogPosts: Record<string, BlogPost>
   authors: Record<string, Author>
   tags: Record<string, string[]>
   relatedBlocks: Record<string, BlogPostMarkdownBlock>
@@ -138,8 +132,7 @@ export const RootReducer: Reducer<State, Actions> = (
     case 'REGISTER_LANDING': {
       return { ...state, landingPages: { ...state.landingPages, [action.id]: { ...action } } }
     }
-    case 'REGISTER_BLOG_POST.V2':
-    case 'REGISTER_BLOG_POST': {
+    case 'REGISTER_BLOG_POST.V2': {
       if (!(action.authorId in state.authors)) {
         throw new Error(`The author ${action.authorId} for the blog post ${action.title} doesn't exist`)
       }

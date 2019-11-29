@@ -78,7 +78,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-multiple-kubernetes-clusters',
       pageId: Pages.multipleClusters.id,
       authorId: Authors.danielePolencic.id,
@@ -108,7 +108,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-ingress-api-gateway',
       pageId: Pages.ingressApiGateway.id,
       authorId: Authors.danielePolencic.id,
@@ -139,7 +139,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-visualise-yaml',
       pageId: Pages.visualiseYaml.id,
       authorId: Authors.danielePolencic.id,
@@ -169,7 +169,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-helm-templating',
       pageId: Pages.helm.id,
       authorId: Authors.danielePolencic.id,
@@ -199,7 +199,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-kubernetes-node-size',
       pageId: Pages.nodeSize.id,
       authorId: Authors.danielWeibel.id,
@@ -229,7 +229,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-secrets-git-ops',
       pageId: Pages.secretsGitOps.id,
       authorId: Authors.omerLeviHevroni.id,
@@ -259,7 +259,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-autoscaling-apps-kubernetes',
       pageId: Pages.autoscaling.id,
       authorId: Authors.danielWeibel.id,
@@ -289,7 +289,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-kubernetes-rollbacks',
       pageId: Pages.rollbacks.id,
       authorId: Authors.gergelyRisko.id,

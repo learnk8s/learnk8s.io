@@ -60,7 +60,7 @@ export async function renderPage(pageMeta: Page, state: State) {
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   const extraBlocks = getBlogPostMarkdownBlocks(state).filter(it => it.blogPostId === blog.id)
   const [content, ...blocks] = await Promise.all([
-    read(blog.content!),
+    read(blog.content),
     ...extraBlocks.map(it => it.content).map(it => read(it)),
   ])
   return (

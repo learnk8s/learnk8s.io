@@ -43,7 +43,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-what-is-kubernetes',
       pageId: WhatIsKubernetes.id,
       authorId: Authors.danielePolencic.id,

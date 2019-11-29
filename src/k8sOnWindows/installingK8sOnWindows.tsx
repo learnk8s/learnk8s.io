@@ -48,7 +48,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-k8s-on-windows',
       pageId: K8sOnWindows.id,
       authorId: Authors.keithMifsud.id,
