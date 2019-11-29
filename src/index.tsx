@@ -179,6 +179,7 @@ export function run(options: Settings) {
     GenericBlogPost.Mount({ store })
     Flipboard.Mount({ store })
     Redirect.Mount({ store })
+    RSS.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -338,7 +339,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case RSS.Details.type: {
-      writeFileSync(`_site${RSS.Details.url}`, RSS.render(root, node, siteUrl))
       return
     }
     default:
