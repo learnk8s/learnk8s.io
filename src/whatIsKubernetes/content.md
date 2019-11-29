@@ -1337,7 +1337,8 @@ Docker containers are the blocks; servers are the boards, and Kubernetes is the 
 ```animation
 {
   "description": "Kubernetes is the best tetris player",
-  "image": "tetris.svg"
+  "animation": "tetris.svg",
+  "fallback": "tetris.svg"
 }
 ```
 

@@ -80,6 +80,16 @@ ContactUs.Register(store)
 ChaosEngineering.Register(store)
 BiteSized201909.Register(store)
 Flipboard.Register(store)
+ZeroToK8sJs.Register(store)
+DeployLaravel.Register(store)
+K8sOnWindows.Register(store)
+ScalingTensorflow.Register(store)
+ScalingSpringBoot.Register(store)
+SmallerImages.Register(store)
+SolarPlants.Register(store)
+SpotInstances.Register(store)
+TerraformAks.Register(store)
+WhatIsKubernetes.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -256,54 +266,30 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case SmallerImages.Details.type: {
-      const $ = Cheerio.of(SmallerImages.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case DeployLaravel.Details.type: {
-      const $ = Cheerio.of(DeployLaravel.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ChaosEngineering.Details.type: {
       return
     }
     case K8sOnWindows.Details.type: {
-      const $ = Cheerio.of(K8sOnWindows.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case SolarPlants.Details.type: {
-      const $ = Cheerio.of(SolarPlants.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case WhatIsKubernetes.Details.type: {
-      const $ = Cheerio.of(WhatIsKubernetes.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case SpotInstances.Details.type: {
-      const $ = Cheerio.of(SpotInstances.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ScalingTensorflow.Details.type: {
-      const $ = Cheerio.of(ScalingTensorflow.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ScalingSpringBoot.Details.type: {
-      const $ = Cheerio.of(ScalingSpringBoot.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case Landing.Type: {
@@ -361,15 +347,9 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case TerraformAks.Details.type: {
-      const $ = Cheerio.of(TerraformAks.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ZeroToK8sJs.Details.type: {
-      const $ = Cheerio.of(ZeroToK8sJs.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BestPractices.Details.type: {

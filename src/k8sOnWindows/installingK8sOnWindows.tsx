@@ -1,11 +1,9 @@
-import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl } from '../sitemap'
 import * as React from 'react'
-import { Article, RelatedConentContainer, RelatedContentItem } from '../article.v2'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { JsonLd } from 'react-schemaorg'
-import { BlogPosting } from 'schema-dts'
-import { Subscribe } from '../layout.v2'
-import * as Remark from '../remark.v2'
+import { Store } from 'redux'
+import { State, Actions, Action } from '../store'
+import { Authors } from '../aboutUs'
+import { join } from 'path'
+import { toVFile } from '../files'
 
 export const Details = {
   type: 'k8sOnWindows',
@@ -29,65 +27,44 @@ export const Details = {
   },
 } as const
 
-export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {
-  return renderToStaticMarkup(
-    <Article
-      website={website}
-      seoTitle={currentNode.payload.seoTitle}
-      title={currentNode.payload.title}
-      description={currentNode.payload.shortDescription}
-      openGraphImage={currentNode.payload.openGraphImage}
-      absolutUrl={getAbsoluteUrl(currentNode, siteUrl)}
-      authorFullName={currentNode.payload.author.fullName}
-      authorAvatar={currentNode.payload.author.avatar}
-      authorLink={currentNode.payload.author.link}
-      publishedDate={currentNode.payload.publishedDate}
-      lastUpdated={currentNode.payload.lastModifiedDate}
-    >
-      <JsonLd<BlogPosting>
-        item={{
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: currentNode.payload.title,
-          image: `${currentNode.payload.previewImage.props.src}`,
-          author: {
-            '@type': 'Person',
-            name: currentNode.payload.author.fullName,
-          },
-          publisher: {
-            '@type': 'Organization',
-            name: 'Learnk8s',
-            logo: {
-              '@type': 'ImageObject',
-              url: `assets/learnk8s_logo_square.png`,
-            },
-          },
-          url: getAbsoluteUrl(currentNode, siteUrl),
-          datePublished: currentNode.payload.publishedDate,
-          dateModified: currentNode.payload.lastModifiedDate,
-          description: currentNode.payload.description,
-          mainEntityOfPage: {
-            '@type': 'SoftwareSourceCode',
-          },
-        }}
-      />
-      {Remark.render(`${__dirname}/content.md`)}
+export const K8sOnWindows = {
+  id: 'k8s-on-windows',
+  url: '/blog/installing-docker-and-kubernetes-on-windows',
+  title: 'Getting started with Docker and Kubernetes on Win 10 ♦︎ Learnk8s',
+  description: `In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
+}
 
-      <RelatedConentContainer>
-        <RelatedContentItem>
-          <a href={getFullUrl(website.children.blog.children.terraformAks)} className='link navy underline hover-sky'>
-            Getting started with Terraform and Kubernetes on Azure AKS
-          </a>{' '}
-          — an in-depth tutorial on how to use infrastructure as code to generate Kubernetes cluster on Azure.
-        </RelatedContentItem>
-        <RelatedContentItem>
-          <a href={getFullUrl(website.children.bskApiIngress)} className='link navy underline hover-sky'>
-            Can you expose your microservices with an API gateway in Kubernetes?
-          </a>{' '}
-          In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and
-          Pods inside the cluster. You can select an Ingress that is also an API gateway. Learn how.
-        </RelatedContentItem>
-      </RelatedConentContainer>
-    </Article>,
+export function Register(store: Store<State, Actions>) {
+  store.dispatch(Action.registerPage(K8sOnWindows))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-k8s-on-windows',
+      pageId: K8sOnWindows.id,
+      image: (
+        <img src='src/k8sOnWindows/k8s_on_win.jpg' alt='Getting started with Docker and Kubernetes on Windows 10' />
+      ),
+      title: K8sOnWindows.title,
+      description: K8sOnWindows.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-k8s-on-windows',
+      pageId: K8sOnWindows.id,
+      authorId: Authors.keithMifsud.id,
+      description: `Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
+      title: 'Getting started with Docker and Kubernetes on Windows 10',
+      publishedDate: '2018-06-05',
+      lastModifiedDate: '2019-03-20',
+      content: toVFile({ path: join(__dirname, 'content.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'general-post', pageId: K8sOnWindows.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'k8s-on-windows-related-0',
+      blogPostId: 'bp-k8s-on-windows',
+      content: toVFile({ path: join(__dirname, 'k8s-on-windows-related.md') }),
+    }),
   )
 }

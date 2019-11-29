@@ -98,25 +98,25 @@ You're outsourcing all the hard work of provisioning software to someone else.
 
 Installing Chocolatey is easy. You can find the [full instructions on the official website](https://chocolatey.org/install). But in a nutshell, this what you have to do:
 
-First, start `cmd.exe` as administrator
+First, start PowerShell as administrator
 
 Then execute this long command:
 
-```powershell
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+```powershell|command=1,2-3|title=PowerShell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+iex ((New-Object System.Net.WebClient).
+  DownloadString('https://chocolatey.org/install.ps1'))
 ```
-
-And finally, reload `cmd.exe`.
 
 If the installation was successful, you could now search for applications to install with:
 
-```powershell
+```powershell|command=1|title=PowerShell
 choco search docker
 ```
 
 Since you're there, you could give `choco` a go. You could install [Cmder](http://cmder.net/) — a modern shell for Windows with:
 
-```powershell
+```powershell|command=1|title=PowerShell
 choco install cmder -y
 ```
 
@@ -132,7 +132,7 @@ Looking nice!
 
 You can download Docker for Windows with:
 
-```bash
+```powershell|command=1|title=PowerShell
 choco install docker-desktop -y
 ```
 
@@ -162,7 +162,7 @@ Another common error has to do with the Hyper-V hypervisor not being enabled. If
 
 You should enable Hyper-V. Open a new command prompt as an administrator and type the following:
 
-```bash
+```powershell|command=1|title=PowerShell
 bcdedit /set hypervisorlaunchtype auto
 ```
 
@@ -172,7 +172,7 @@ _But how do you know if Docker is working?_
 
 Open a new command prompt and type:
 
-```bash
+```powershell|command=1|title=PowerShell
 docker ps
 ```
 
@@ -180,9 +180,13 @@ If everything works as expected, you should see an empty list of containers runn
 
 If your Docker daemon isn't running, you're probably banging your head against this error:
 
-> error during connect: Get <http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.37/containers/json>: open //./pipe/docker_engine: The system cannot find the file specified. In the default daemon configuration on Windows, the docker client must be run elevated to connect. This error may also indicate that the docker daemon is not running.
-
-![Docker daemon failed to start](powershell_failed_to_connect.png)
+```powershell|command=1|title=PowerShell
+docker ps
+error during connect: Get http://%2F%2F.%2Fpipe%2Fdocker_engine/v1.37/containers/json:
+open //./pipe/docker_engine: The system cannot find the file specified. In the default
+daemon configuration on Windows, the docker client must be run elevated to connect. This
+error may also indicate that the docker daemon is not running.
+```
 
 The error above is suggesting that your Docker installation is not behaving normally and wasn't able to start.
 
@@ -192,7 +196,7 @@ You should start your Docker daemon before you connect to it.
 
 You can download minikube with:
 
-```bash
+```powershell|command=1|title=PowerShell
 choco install minikube -y
 ```
 
@@ -210,7 +214,7 @@ Click left lower corner Windows icon and start typing "PowerShell" to open it.
 
 Type the following command to list all the adapters:
 
-```powershell
+```powershell|command=1|title=PowerShell
 Get-NetAdapter
 ```
 
@@ -220,7 +224,7 @@ Get-NetAdapter
 
 Once you identified the right adapter, you can create an External Virtual Switch with the following command:
 
-```powershell
+```powershell|command=1|title=PowerShell
 New-VMSwitch –Name "minikube" –AllowManagement $True –NetAdapterName "INSERT_HERE_ADAPTER"
 ```
 
@@ -233,7 +237,7 @@ If you fail to create the network switch, you should see the following error whe
 
 You can test your minikube installation with:
 
-```bash
+```powershell|title=PowerShell|command=1
 minikube start --vm-driver=hyperv --hyperv-virtual-switch=minikube
 ```
 
@@ -241,7 +245,7 @@ minikube start --vm-driver=hyperv --hyperv-virtual-switch=minikube
 
 If for any reason minikube fails to start up, you can debug it with:
 
-```bash
+```powershell|command=1,2|title=PowerShell
 minikube delete
 minikube start --vm-driver=hyperv --hyperv-virtual-switch=minikube --v=7 --alsologtostderr
 ```
@@ -252,7 +256,7 @@ The extra verbose logging should help you get to the issue. In my particular cas
 
 Not very helpful. After enabling verbose logging the issue was more obvious:
 
-```
+```powershell|title=PowerShell
 + Hyper-V\Start-VM minikube
 + ~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : FromStdErr: (:) [Start-VM], VirtualizationException
@@ -263,7 +267,7 @@ I was running out of memory!
 
 It's time to test if you're installation is successful. In the command prompt type:
 
-```bash
+```powershell|command=1|title=PowerShell
 kubectl get nodes
 ```
 
@@ -285,7 +289,7 @@ You may experience the following error, though:
 
 Open a new command prompt as an administrator and type the following:
 
-```bash
+```powershell|command=1|title=PowerShell
 bcdedit /set hypervisorlaunchtype off
 ```
 
@@ -295,7 +299,7 @@ If you wish to use Docker and minikube again, you should enable Hyper-V and rest
 
 Open a new command prompt as an administrator and type the following:
 
-```bash
+```powershell|command=1|title=PowerShell
 bcdedit /set hypervisorlaunchtype auto
 ```
 
@@ -311,19 +315,19 @@ You should use minikube as a remote Docker daemon as well as your local Kubernet
 
 You can download and install minikube with:
 
-```bash
+```powershell|command=1|title=PowerShell
 choco install minikube -y
 ```
 
 At the end of the installation, you can start minikube with:
 
-```bash
+```powershell|command=1|title=PowerShell
 minikube start
 ```
 
 The command will download an ISO for VirtualBox and start the virtual machine. Once started, you should be able to query the Kubernetes cluster with:
 
-```bash
+```powershell|command=1|title=PowerShell
 kubectl get nodes
 ```
 
@@ -331,13 +335,13 @@ And see a single node.
 
 To connect to the remote Docker daemon, you should install the Docker client with:
 
-```bash
+```powershell|command=1|title=PowerShell
 choco install docker -y
 ```
 
 You can connect to the minikube remote Docker daemon with:
 
-```bash
+```powershell|command=1|title=PowerShell
 @FOR /f "tokens=*" %i IN ('minikube docker-env') DO @%i
 ```
 
@@ -345,7 +349,7 @@ You can connect to the minikube remote Docker daemon with:
 
 If the connection was successful, you should be able to list all the running containers with:
 
-```bash
+```powershell|command=1|title=PowerShell
 docker ps
 ```
 
@@ -388,7 +392,7 @@ When you're running containers against a remote Docker daemon, you need to adjus
 
 In Docker for Windows, you can run and bind a container on port 8080 with the following command:
 
-```bash
+```powershell|command=1|title=PowerShell
 docker run -ti -p 8080:80 nginx
 ```
 
@@ -414,7 +418,7 @@ _It's a remote Docker daemon._
 
 You need to visit the machine with the Docker daemon if you wish to see your running container. You can find the IP address with:
 
-```bash
+```powershell|command=1|title=PowerShell
 minikube ip
 ```
 
@@ -426,7 +430,7 @@ You installed Docker, but _how do you know if it works for real?_
 
 In your terminal type:
 
-```bash
+```powershell|command=1|title=PowerShell
 docker run -ti -p 8080:80 wordpress
 ```
 
@@ -452,13 +456,13 @@ It's about time to test your local Kubernetes cluster. In this section, you will
 
 You can deploy your dashboard to Kubernetes with:
 
-```bash
+```powershell|command=1|title=PowerShell
 kubectl run smashing --image=visibilityspots/smashing --port=3030
 ```
 
 Once Kubernetes completes downloading the container, you should see it running:
 
-```bash
+```powershell|command=1|title=PowerShell
 kubectl get pods
 ```
 
@@ -466,13 +470,13 @@ kubectl get pods
 
 You can expose your deployment with:
 
-```bash
+```powershell|command=1|title=PowerShell
 kubectl expose deployment smashing --type=NodePort
 ```
 
 You can open the dashboard in your browser with:
 
-```bash
+```powershell|command=1|title=PowerShell
 minikube service smashing
 ```
 
@@ -484,7 +488,7 @@ Minikube is packed with goodies.
 
 You can visit [the official Kubernetes dashboard](https://github.com/kubernetes/dashboard) with:
 
-```bash
+```powershell|command=1|title=PowerShell
 minikube dashboard
 ```
 

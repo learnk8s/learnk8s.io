@@ -1,11 +1,9 @@
 import * as React from 'react'
 import { Store } from 'redux'
-import { State, Actions, Action, getConfig } from '../store'
+import { State, Actions, Action } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
-import { defaultAssetsPipeline } from '../optimise'
 import { toVFile } from '../files'
-import { renderPage } from '../genericBlogPost'
 
 export const Details = {
   type: 'kubectlProductivity',
@@ -64,7 +62,7 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'blog-post', pageId: KubectlProductivity.id }))
+  store.dispatch(Action.assignTag({ id: 'general-post', pageId: KubectlProductivity.id }))
   store.dispatch(
     Action.registerBlogPostMarkdownBlock({
       id: 'kubectl-productivity-related-0',

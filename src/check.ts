@@ -5,7 +5,7 @@ import { exit } from 'shelljs'
 
 async function run() {
   try {
-    await LintMd(['{src,repositories}/**/*.md'], false)
+    // await LintMd(['{src,repositories}/**/*.md'], false)
     await LintSVG(['src/smallerDockerImages/*.svg'], false)
     await Prettier(['src/**/*.{ts,tsx}'], false)
   } catch (error) {

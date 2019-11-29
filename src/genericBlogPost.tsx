@@ -29,7 +29,7 @@ import { Store } from 'redux'
 
 export async function Mount({ store }: { store: Store<State, Actions> }) {
   const state = store.getState()
-  const pages = getPages(state).filter(hasTag(state, 'blog-post'))
+  const pages = getPages(state).filter(hasTag(state, 'general-post'))
   await Promise.all(
     pages.map(async page => {
       defaultAssetsPipeline({

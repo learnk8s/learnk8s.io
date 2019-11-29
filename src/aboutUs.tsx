@@ -46,6 +46,26 @@ export const Authors = {
     link: 'https://linkedin.com/in/danielepolencic',
     description: 'Daniele is an instructor and software engineer at Learnk8s.',
   },
+  keithMifsud: {
+    id: 'keith-mifsud',
+    fullName: 'Keith Mifsud',
+    avatar: <img src='assets/authors/keith_mifsud.jpg' alt='Keith Mifsud' />,
+    link: 'https://keith-mifsud.me/',
+    description:
+      'Keith has over ten years of professional experience in software development. He built one of the first ever enterprise insurance policy generator software and had worked with clients of the calibre of Renault, Xerox and Hilton Hotels.',
+  },
+  salmanIqbal: {
+    id: 'salman-iqbal',
+    fullName: 'Salman Iqbal',
+    avatar: <img src='assets/authors/salman_iqbal.jpg' alt='Salman Iqbal' />,
+    link: 'https://twitter.com/soulmaniqbal',
+  },
+  césarTronLozai: {
+    id: 'césar-tron-lozai',
+    fullName: 'César Tron-Lozai',
+    avatar: <img src='assets/authors/césar_tron-lozai.jpg' alt='César Tron-Lozai' />,
+    link: 'https://twitter.com/cesartronlozai',
+  },
 }
 
 export function Register(store: Store<State, Actions>) {
