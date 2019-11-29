@@ -46,7 +46,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-02k8sjs',
       pageId: ZeroToK8sJs.id,
       authorId: Authors.danielePolencic.id,

@@ -31,6 +31,13 @@ export const ScalingTensorflow = {
   description: `In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.`,
 }
 
+const InfiniteConf = {
+  id: 'infinite-conf-2018',
+  url: '/infiniteconf2018',
+  title: 'Infinite Conf 2018',
+  description: `Workshop on Tensorflow and Kubernetes held at InfiniteConf 2018`,
+}
+
 export function Register(store: Store<State, Actions>) {
   store.dispatch(Action.registerPage(ScalingTensorflow))
   store.dispatch(
@@ -43,7 +50,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-scaling-tensorflow',
       pageId: ScalingTensorflow.id,
       authorId: Authors.salmanIqbal.id,
@@ -59,6 +66,14 @@ export function Register(store: Store<State, Actions>) {
       id: 'scaling-tensorflow-related-0',
       blogPostId: 'bp-scaling-tensorflow',
       content: toVFile({ path: join(__dirname, 'scaling-tensorflow-related.md') }),
+    }),
+  )
+  store.dispatch(Action.registerPage(InfiniteConf))
+  store.dispatch(
+    Action.registerRedirect({
+      id: 'redirect-infinite-conf',
+      fromPageId: InfiniteConf.id,
+      redirectToPageId: ScalingTensorflow.id,
     }),
   )
 }

@@ -46,7 +46,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-spot-instances',
       pageId: SpotInstances.id,
       authorId: Authors.césarTronLozai.id,

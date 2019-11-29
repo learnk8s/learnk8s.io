@@ -46,7 +46,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPostV2({
+    Action.registerBlogPost({
       id: 'bp-solar-plants',
       pageId: SolarPlants.id,
       authorId: Authors.danielePolencic.id,
