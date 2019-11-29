@@ -335,12 +335,18 @@ function optimiseFavicons({ $ }: { $: Cheerio }): Cheerio {
 
 function rewriteOpenGraphImage({ $ }: { $: Cheerio }): Cheerio {
   const openGraphImage = $.find('[property="og:image"]').get()
+  if (!openGraphImage) {
+    return $
+  }
   ;(openGraphImage.properties as any).content = `/b/${(openGraphImage.properties as any).content}`
   return $
 }
 
 function optimiseOpenGraphImage({ $, siteUrl }: { $: Cheerio; siteUrl: string }): Cheerio {
   const openGraphImage = $.find('[property="og:image"]').get()
+  if (!openGraphImage) {
+    return $
+  }
   ;(openGraphImage.properties as any).content = `${siteUrl}${digest((openGraphImage.properties as any).content)}`
   return $
 }

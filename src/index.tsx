@@ -89,6 +89,7 @@ SpotInstances.Register(store)
 TerraformAks.Register(store)
 WhatIsKubernetes.Register(store)
 BiteSized201903.Register(store)
+RSS.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -177,6 +178,7 @@ export function run(options: Settings) {
     BiteSizedV2.Mount({ store })
     GenericBlogPost.Mount({ store })
     Flipboard.Mount({ store })
+    Redirect.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -246,7 +248,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Redirect.Type: {
-      writeFileSync(generatePath(), `<!DOCTYPE html>${Redirect.render(root, node, siteUrl)}`)
       return
     }
     case Newsletter.Details.type: {

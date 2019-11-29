@@ -30,6 +30,13 @@ export const DeployLaravel = {
   description: `In this article, I'll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
 }
 
+const OldDeployLaravel = {
+  id: 'old-deploy-laravel',
+  url: '/blog/deploying-laravel-to-kubernetes',
+  title: 'Kubernetes: deploy Laravel the easy way ♦︎ Learnk8s',
+  description: `In this article, I'll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
+}
+
 export function Register(store: Store<State, Actions>) {
   store.dispatch(Action.registerPage(DeployLaravel))
   store.dispatch(
@@ -59,6 +66,14 @@ export function Register(store: Store<State, Actions>) {
       id: 'deploy-laravel-related-0',
       blogPostId: 'bp-deploy-laravel',
       content: toVFile({ path: join(__dirname, 'deploy-laravel-related.md') }),
+    }),
+  )
+  store.dispatch(Action.registerPage(OldDeployLaravel))
+  store.dispatch(
+    Action.registerRedirect({
+      id: 'redirect-laravel',
+      fromPageId: OldDeployLaravel.id,
+      redirectToPageId: DeployLaravel.id,
     }),
   )
 }

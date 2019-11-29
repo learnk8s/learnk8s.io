@@ -1,5 +1,7 @@
 import { getAbsoluteUrl, Sitemap, LinkedNode, getBlogPosts, getBiteSizedSeries } from './sitemap'
 import { join } from 'path'
+import { Store } from 'redux'
+import { State, Actions, Action } from './store'
 
 export const Details = {
   type: identity<'rss'>('rss'),
@@ -8,6 +10,32 @@ export const Details = {
 
 function identity<T>(value: T): T {
   return value
+}
+
+export const RSS = {
+  id: 'rss',
+  url: '/rss.xml',
+  title: 'RSS Feed',
+  description: `RSS Feed`,
+}
+
+const OldRSS = {
+  id: 'old-rss',
+  url: '/rss',
+  title: 'RSS Feed',
+  description: `RSS Feed`,
+}
+
+export function Register(store: Store<State, Actions>) {
+  store.dispatch(Action.registerPage(RSS))
+  store.dispatch(Action.registerPage(OldRSS))
+  store.dispatch(
+    Action.registerRedirect({
+      id: 'redirect-rss',
+      fromPageId: OldRSS.id,
+      redirectToPageId: RSS.id,
+    }),
+  )
 }
 
 export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>, siteUrl: string): string {

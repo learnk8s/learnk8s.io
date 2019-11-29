@@ -75,7 +75,7 @@ export function getAuthors(state: State): WebsiteReducer.Author[] {
   return Object.values(state.website.authors)
 }
 
-export function getBlogPosts(state: State): (WebsiteReducer.BlogPost)[] {
+export function getBlogPosts(state: State): WebsiteReducer.BlogPost[] {
   return Object.values(state.website.blogPosts)
 }
 
