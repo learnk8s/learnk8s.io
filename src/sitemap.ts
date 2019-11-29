@@ -30,9 +30,7 @@ import * as ZeroToK8sJs from './02k8sjs/02k8sjs'
 import * as BestPractices from './best-practices/best'
 
 import * as BiteSized from './biteSized'
-import * as BiteSized201903 from './bsk201903'
-import * as BiteSized201909 from './bsk201909'
-import * as BiteSized201910 from './bsk201910'
+import * as BiteSized201903 from './bite-sized-articles'
 
 import moment from 'moment-timezone'
 
@@ -134,19 +132,19 @@ const bsk = {
     children: {},
   }),
   bskSmallOrLarge: createNode({
-    page: BiteSized201909.SmallOrLargeDetails,
+    page: BiteSized201903.SmallOrLargeDetails,
     children: {},
   }),
   bskSecrets: createNode({
-    page: BiteSized201909.SecretsDetails,
+    page: BiteSized201903.SecretsDetails,
     children: {},
   }),
   bskAutoscaling: createNode({
-    page: BiteSized201910.AutoscalingDetails,
+    page: BiteSized201903.AutoscalingDetails,
     children: {},
   }),
   bskRollbacks: createNode({
-    page: BiteSized201910.RollbacksDetails,
+    page: BiteSized201903.RollbacksDetails,
     children: {},
   }),
 }

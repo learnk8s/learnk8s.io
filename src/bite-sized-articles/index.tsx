@@ -34,6 +34,36 @@ export const Pages = {
     title: 'Is Helm used just for templating? ♦︎ Learnk8s',
     description: `Learn how Helm is used for templating, sharing charts and managing releases.`,
   },
+
+  nodeSize: {
+    id: 'kubernetes-node-size',
+    url: '/kubernetes-node-size',
+    title: 'Architecting Kubernetes clusters — choosing a worker node size',
+    description:
+      'When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use, and how many of them?". This article looks at the pros and cons of either using many small or few large worker nodes in your cluster.',
+  },
+
+  secretsGitOps: {
+    id: 'secrets-git-ops',
+    url: '/kubernetes-secrets-in-git',
+    title: 'How to keep your Kubernetes secrets secure in Git',
+    description:
+      'Kubernetes secrets that you load into the cluster must exist somewhere. Do you keep a copy or rely on Kubernetes to be the only source of truth? How do you back them up? What if you keep a copy and they go out of sync?',
+  },
+
+  autoscaling: {
+    id: 'autoscaling-apps-kubernetes',
+    url: '/autoscaling-apps-kubernetes',
+    title: 'How to autoscale apps on Kubernetes with custom metrics',
+    description: `Deploying an app to production with a static configuration is not optimal. Traffic patterns can change quickly and the app should be able to adapt to them. Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
+  },
+
+  rollbacks: {
+    id: 'kubernetes-rollbacks',
+    url: '/kubernetes-rollbacks',
+    title: 'How do you rollback deployments in Kubernetes?',
+    description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.`,
+  },
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -157,6 +187,126 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'helm/helm-related.md') }),
     }),
   )
+
+  store.dispatch(Action.registerPage(Pages.nodeSize))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-kubernetes-node-size',
+      pageId: Pages.nodeSize.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.nodeSize.title,
+      description: Pages.nodeSize.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-kubernetes-node-size',
+      pageId: Pages.nodeSize.id,
+      authorId: Authors.danielWeibel.id,
+      description: Pages.nodeSize.description,
+      title: Pages.nodeSize.title,
+      publishedDate: '2019-09-04',
+      content: toVFile({ path: join(__dirname, 'nodes-size/smallOrLarge.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.nodeSize.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'kubernetes-node-size-related-0',
+      blogPostId: 'bp-kubernetes-node-size',
+      content: toVFile({ path: join(__dirname, 'nodes-size/smallOrLarge-related.md') }),
+    }),
+  )
+
+  store.dispatch(Action.registerPage(Pages.secretsGitOps))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-secrets-git-ops',
+      pageId: Pages.secretsGitOps.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.secretsGitOps.title,
+      description: Pages.secretsGitOps.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-secrets-git-ops',
+      pageId: Pages.secretsGitOps.id,
+      authorId: Authors.omerLeviHevroni.id,
+      description: Pages.secretsGitOps.description,
+      title: Pages.secretsGitOps.title,
+      publishedDate: '2019-09-25',
+      content: toVFile({ path: join(__dirname, 'secrets/secrets.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.secretsGitOps.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'secrets-git-ops-related-0',
+      blogPostId: 'bp-secrets-git-ops',
+      content: toVFile({ path: join(__dirname, 'secrets/secrets-related.md') }),
+    }),
+  )
+
+  store.dispatch(Action.registerPage(Pages.autoscaling))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-autoscaling-apps-kubernetes',
+      pageId: Pages.autoscaling.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.autoscaling.title,
+      description: Pages.autoscaling.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-autoscaling-apps-kubernetes',
+      pageId: Pages.autoscaling.id,
+      authorId: Authors.danielWeibel.id,
+      description: Pages.autoscaling.description,
+      title: 'How to autoscale apps on Kubernetes with custom metrics',
+      publishedDate: '2019-10-03',
+      content: toVFile({ path: join(__dirname, 'autoscaling/autoscaling.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.autoscaling.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'autoscaling-apps-kubernetes-related-0',
+      blogPostId: 'bp-autoscaling-apps-kubernetes',
+      content: toVFile({ path: join(__dirname, 'autoscaling/autoscaling-related.md') }),
+    }),
+  )
+
+  store.dispatch(Action.registerPage(Pages.rollbacks))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-kubernetes-rollbacks',
+      pageId: Pages.rollbacks.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.rollbacks.title,
+      description: Pages.rollbacks.description,
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPostV2({
+      id: 'bp-kubernetes-rollbacks',
+      pageId: Pages.rollbacks.id,
+      authorId: Authors.gergelyRisko.id,
+      description: Pages.rollbacks.description,
+      title: 'How do you rollback deployments in Kubernetes?',
+      publishedDate: '2019-10-17',
+      content: toVFile({ path: join(__dirname, 'rollbacks/rollbacks.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.rollbacks.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'kubernetes-rollbacks-related-0',
+      blogPostId: 'bp-kubernetes-rollbacks',
+      content: toVFile({ path: join(__dirname, 'rollbacks/rollbacks-related.md') }),
+    }),
+  )
 }
 
 export const MultipleClustersDetails = identity<Details>({
@@ -225,6 +375,74 @@ export const HelmDetails = identity<Details>({
     avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
     link: 'https://twitter.com/danielepolencic',
     shortDescription: 'Daniele is an instructor and software engineer at [Learnk8s](https://learnk8s.io).',
+  },
+})
+
+export const SmallOrLargeDetails = identity<Details>({
+  type: 'bsk-sept-01' as const,
+  url: '/kubernetes-node-size',
+  seoTitle: 'Architecting Kubernetes clusters — choosing a worker node size',
+  title: 'Architecting Kubernetes clusters — choosing a worker node size',
+  description: `When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use, and how many of them?". This article looks at the pros and cons of either using many small or few large worker nodes in your cluster.`,
+  openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  publishedDate: '2019-09-04',
+  previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  author: {
+    fullName: 'Daniel Weibel',
+    avatar: <img src='assets/authors/daniel_weibel.jpg' alt='Daniel Weibel' />,
+    link: 'https://medium.com/@weibeld',
+    shortDescription: 'Daniel is a software engineer and instructor at Learnk8s.',
+  },
+})
+
+export const SecretsDetails = identity<Details>({
+  type: 'bsk-september-02' as const,
+  url: '/kubernetes-secrets-in-git',
+  seoTitle: 'How to keep your Kubernetes secrets secure in Git',
+  title: 'How to keep your Kubernetes secrets secure in Git',
+  description: `Kubernetes secrets that you load into the cluster must exist somewhere. Do you keep a copy or rely on Kubernetes to be the only source of truth? How do you back them up? What if you keep a copy and they go out of sync?`,
+  openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  publishedDate: '2019-09-25',
+  previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  author: {
+    fullName: 'Omer Levi Hevroni',
+    avatar: <img src='assets/authors/omer_levi_hevroni.jpg' alt='Omer Levi Hevroni' />,
+    link: 'https://twitter.com/omerlh',
+    shortDescription: 'DevSecOps engineer at [Soluto Engineering](https://www.solutotlv.com/). OWASP member.',
+  },
+})
+
+export const AutoscalingDetails = identity<Details>({
+  type: 'bsk-oct-01' as const,
+  url: '/autoscaling-apps-kubernetes',
+  seoTitle: 'How to autoscale apps on Kubernetes with custom metrics',
+  title: 'How to autoscale apps on Kubernetes with custom metrics',
+  description: `Deploying an app to production with a static configuration is not optimal. Traffic patterns can change quickly and the app should be able to adapt to them. Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
+  openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  publishedDate: '2019-10-03',
+  previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  author: {
+    fullName: 'Daniel Weibel',
+    avatar: <img src='assets/authors/daniel_weibel.jpg' alt='Daniel Weibel' />,
+    link: 'https://medium.com/@weibeld',
+    shortDescription: 'Daniel is a software engineer and instructor at Learnk8s.',
+  },
+})
+
+export const RollbacksDetails = identity<Details>({
+  type: 'bsk-october-01' as const,
+  url: '/kubernetes-rollbacks',
+  seoTitle: 'How do you rollback deployments in Kubernetes?',
+  title: 'How do you rollback deployments in Kubernetes?',
+  description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.`,
+  openGraphImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  publishedDate: '2019-10-17',
+  previewImage: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+  author: {
+    fullName: 'Gergely Risko',
+    avatar: <img src='assets/authors/gergely-risko.jpg' alt='Gergely Risko' />,
+    link: 'https://github.com/errge',
+    shortDescription: 'Gergely is an instructor at Learnk8s.',
   },
 })
 

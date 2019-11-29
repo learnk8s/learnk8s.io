@@ -49,9 +49,7 @@ import * as GenericBlogPost from './genericBlogPost'
 
 import * as BiteSized from './biteSized'
 import * as BiteSizedV2 from './biteSized.v2'
-import * as BiteSized201903 from './bsk201903'
-import * as BiteSized201909 from './bsk201909'
-import * as BiteSized201910 from './bsk201910'
+import * as BiteSized201903 from './bite-sized-articles'
 import md5 = require('md5')
 import postcss = require('postcss')
 import cssnano = require('cssnano')
@@ -79,7 +77,6 @@ AdvancedKubectl.Register(store)
 Academy.Register(store)
 ContactUs.Register(store)
 ChaosEngineering.Register(store)
-BiteSized201909.Register(store)
 Flipboard.Register(store)
 ZeroToK8sJs.Register(store)
 DeployLaravel.Register(store)
@@ -92,7 +89,6 @@ SpotInstances.Register(store)
 TerraformAks.Register(store)
 WhatIsKubernetes.Register(store)
 BiteSized201903.Register(store)
-BiteSized201910.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -310,16 +306,16 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
     case BiteSized201903.HelmDetails.type: {
       return
     }
-    case BiteSized201909.SmallOrLargeDetails.type: {
+    case BiteSized201903.SmallOrLargeDetails.type: {
       return
     }
-    case BiteSized201909.SecretsDetails.type: {
+    case BiteSized201903.SecretsDetails.type: {
       return
     }
-    case BiteSized201910.AutoscalingDetails.type: {
+    case BiteSized201903.AutoscalingDetails.type: {
       return
     }
-    case BiteSized201910.RollbacksDetails.type: {
+    case BiteSized201903.RollbacksDetails.type: {
       return
     }
     case NotFound.Details.type: {
