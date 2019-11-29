@@ -66,6 +66,13 @@ export const Authors = {
     avatar: <img src='assets/authors/césar_tron-lozai.jpg' alt='César Tron-Lozai' />,
     link: 'https://twitter.com/cesartronlozai',
   },
+  gergelyRisko: {
+    id: 'gergely-risko',
+    fullName: 'Gergely Risko',
+    avatar: <img src='assets/authors/gergely-risko.jpg' alt='Gergely Risko' />,
+    link: 'https://github.com/errge',
+    description: 'Gergely is an instructor at Learnk8s.',
+  },
 }
 
 export function Register(store: Store<State, Actions>) {

@@ -31,7 +31,7 @@ _This article treats the **Horizontal Pod Autoscaler**._
 
 ## What is the Horizontal Pod Autoscaler?
 
-The [Horizontal Pod Autoscaler](myapp_requests_per_second) is a built-in Kubernetes feature that allows to _horizontally_ scale applications based on one or more monitored metrics.
+The [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) is a built-in Kubernetes feature that allows to _horizontally_ scale applications based on one or more monitored metrics.
 
 > Horizontal scaling means increasing and decreasing the number of replicas. Vertical scaling means increasing and decreasing the compute resources of a single replica.
 

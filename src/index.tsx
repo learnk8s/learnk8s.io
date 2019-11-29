@@ -48,9 +48,8 @@ import * as ZeroToK8sJs from './02k8sjs/02k8sjs'
 import * as GenericBlogPost from './genericBlogPost'
 
 import * as BiteSized from './biteSized'
-import * as BiteSized201903 from './bsk201903'
-import * as BiteSized201909 from './bsk201909'
-import * as BiteSized201910 from './bsk201910'
+import * as BiteSizedV2 from './biteSized.v2'
+import * as BiteSized201903 from './bite-sized-articles'
 import md5 = require('md5')
 import postcss = require('postcss')
 import cssnano = require('cssnano')
@@ -78,7 +77,6 @@ AdvancedKubectl.Register(store)
 Academy.Register(store)
 ContactUs.Register(store)
 ChaosEngineering.Register(store)
-BiteSized201909.Register(store)
 Flipboard.Register(store)
 ZeroToK8sJs.Register(store)
 DeployLaravel.Register(store)
@@ -90,6 +88,7 @@ SolarPlants.Register(store)
 SpotInstances.Register(store)
 TerraformAks.Register(store)
 WhatIsKubernetes.Register(store)
+BiteSized201903.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -175,7 +174,7 @@ export function run(options: Settings) {
     Newsletter.Mount({ store })
     Academy.Mount({ store })
     ContactUs.Mount({ store })
-    BiteSized201909.Mount({ store })
+    BiteSizedV2.Mount({ store })
     GenericBlogPost.Mount({ store })
     Flipboard.Mount({ store })
 
@@ -296,45 +295,27 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case BiteSized201903.MultipleClustersDetails.type: {
-      const $ = Cheerio.of(BiteSized201903.MultipleClustersRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.IngressApiGatewayDetails.type: {
-      const $ = Cheerio.of(BiteSized201903.IngressApiGatewayRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.VisualiseYamlDetails.type: {
-      const $ = Cheerio.of(BiteSized201903.VisualiseYamlRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized201903.HelmDetails.type: {
-      const $ = Cheerio.of(BiteSized201903.HelmRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
-    case BiteSized201909.SmallOrLargeDetails.type: {
+    case BiteSized201903.SmallOrLargeDetails.type: {
       return
     }
-    case BiteSized201909.SecretsDetails.type: {
+    case BiteSized201903.SecretsDetails.type: {
       return
     }
-    case BiteSized201910.AutoscalingDetails.type: {
-      const $ = Cheerio.of(BiteSized201910.AutoscalingRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
+    case BiteSized201903.AutoscalingDetails.type: {
       return
     }
-    case BiteSized201910.RollbacksDetails.type: {
-      const $ = Cheerio.of(BiteSized201910.RollbacksRender(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
+    case BiteSized201903.RollbacksDetails.type: {
       return
     }
     case NotFound.Details.type: {
