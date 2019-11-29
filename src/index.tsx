@@ -92,6 +92,7 @@ BiteSized201903.Register(store)
 RSS.Register(store)
 NotFound.Register(store)
 Register(store)
+Blog.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -183,6 +184,7 @@ export function run(options: Settings) {
     Redirect.Mount({ store })
     RSS.Mount({ store })
     NotFound.Mount({ store })
+    Blog.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -258,9 +260,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case Blog.Details.type: {
-      const $ = Cheerio.of(Blog.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case BiteSized.Details.type: {
