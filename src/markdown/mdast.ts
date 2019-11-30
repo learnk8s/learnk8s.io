@@ -173,6 +173,9 @@ function mdast2mdast(vfile: VFile | VMemory | VReference): MdastVisitors<Mdast.L
         relative: () => node,
         inline: () => node,
         file: () => {
+          if (node.url.startsWith('mailto:')) {
+            return node
+          }
           const [fileName, anchor] = node.url.split('#') as [string, string | null]
           return { ...node, url: `${join(vfile.dirname || '', fileName)}${!!anchor ? `#${anchor}` : ''}` }
         },
@@ -269,8 +272,8 @@ function mdast2string(vfile: VFile | VMemory | VReference): MdastVisitors<string
           .join('\n')
       }
     },
-    listItem() {
-      throw new Error('listItem not implemented')
+    listItem(node) {
+      throw new Error(`listItem not implemented in ${vfile.path} line ${node.position?.start.line}`)
     },
     inlineCode(node) {
       return `\`${node.value}\``
@@ -296,8 +299,8 @@ function mdast2string(vfile: VFile | VMemory | VReference): MdastVisitors<string
     html(node) {
       return node.value
     },
-    thematicBreak() {
-      throw new Error('thematicBreak not implemented')
+    thematicBreak(node) {
+      throw new Error(`thematicBreak not implemented in ${vfile.path} line ${node.position?.start.line}`)
     },
     strong(node, parent, { all }) {
       return `**${all(node).join('')}**`
@@ -306,10 +309,10 @@ function mdast2string(vfile: VFile | VMemory | VReference): MdastVisitors<string
       return `_${all(node).join('')}_`
     },
     break() {
-      throw new Error('break not implemented')
+      throw new Error('break not implemented in ${vfile.path} line ${node.position?.start.line}')
     },
-    delete() {
-      throw new Error('delete not implemented')
+    delete(node, parent, { all }) {
+      return `~~${all(node).join('')}~~`
     },
     link(node, parent, { all }) {
       const url = parseLink(node)({
@@ -317,6 +320,9 @@ function mdast2string(vfile: VFile | VMemory | VReference): MdastVisitors<string
         relative: () => node.url,
         inline: () => node.url,
         file: () => {
+          if (node.url.startsWith('mailto:')) {
+            return node.url
+          }
           const [fileName, anchor] = node.url.split('#') as [string, string | null]
           return `${relative(vfile.dirname || '', fileName)}${!!anchor ? `#${anchor}` : ''}`
         },
@@ -328,25 +334,25 @@ function mdast2string(vfile: VFile | VMemory | VReference): MdastVisitors<string
         : `[${content}](${url}${node.title ? ` "${node.title}"` : ''})`
     },
     linkReference(node) {
-      throw new Error('linkReference not implemented')
+      throw new Error(`linkReference not implemented in ${vfile.path} line ${node.position?.start.line}`)
     },
-    imageReference() {
-      throw new Error('imageReference not implemented')
+    imageReference(node) {
+      throw new Error(`imageReference not implemented in ${vfile.path} line ${node.position?.start.line}`)
     },
-    definition() {
-      throw new Error('definition not implemented')
+    definition(node) {
+      throw new Error(`definition not implemented in ${vfile.path} line ${node.position?.start.line}`)
     },
     image(node) {
       return `![${node.alt}](${relative(vfile.dirname || '', node.url)}${node.title ? ` "${node.title}"` : ''})`
     },
-    footnote() {
-      throw new Error('footnote not implemented')
+    footnote(node) {
+      throw new Error(`footnote not implemented in ${vfile.path} line ${node.position?.start.line}`)
     },
-    footnoteReference() {
-      throw new Error('footnoteReference not implemented')
+    footnoteReference(node) {
+      throw new Error(`footnoteReference not implemented in ${vfile.path} line ${node.position?.start.line}`)
     },
-    footnoteDefinition() {
-      throw new Error('footnoteDefinition not implemented')
+    footnoteDefinition(node) {
+      throw new Error(`footnoteDefinition not implemented in ${vfile.path} line ${node.position?.start.line}`)
     },
     table(node, parent, { all }) {
       const rows = node.children.map(it => all(it))
@@ -362,8 +368,8 @@ function mdast2string(vfile: VFile | VMemory | VReference): MdastVisitors<string
     tableCell(node, parent, { all }) {
       return all(node).join('')
     },
-    tableRow() {
-      throw new Error('tableRow not implemented')
+    tableRow(node) {
+      throw new Error(`tableRow not implemented in ${vfile.path} line ${node.position?.start.line}`)
     },
     animation(node) {
       const animation = node.children[0]

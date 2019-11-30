@@ -89,13 +89,6 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.multipleClusters.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
-      id: 'multiple-kubernetes-clusters-related-0',
-      blogPostId: 'bp-multiple-kubernetes-clusters',
-      content: toVFile({ path: join(__dirname, 'connectMultipleClusters/connectMultipleClusters-related.md') }),
-    }),
-  )
 
   store.dispatch(Action.registerPage(Pages.ingressApiGateway))
   store.dispatch(
@@ -150,13 +143,6 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.visualiseYaml.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
-      id: 'visualise-yaml-related-0',
-      blogPostId: 'bp-visualise-yaml',
-      content: toVFile({ path: join(__dirname, 'visualiseYaml/visualiseYaml-related.md') }),
-    }),
-  )
 
   store.dispatch(Action.registerPage(Pages.helm))
   store.dispatch(

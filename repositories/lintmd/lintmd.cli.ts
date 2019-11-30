@@ -35,14 +35,15 @@ export async function LintMd(paths: string[], writeInPlace = false) {
       selectAll<Mdast.Link>('link', mdast).forEach(link => {
         parseLink(link)({
           absolute: () => {},
-          relative: () => {
-            fail(`${vfile.path}:${link.position!.start.line} relative links are not allowed. Remove ${link.url}`)
-          },
+          relative: () => {},
           inline: () => {
             const hasAnchor = headings.map(it => toId(toString(it))).includes(link.url.slice(1))
             ok(hasAnchor, `${vfile.path}:${link.position!.start.line} checking anchor existence for ${link.url}`)
           },
           file: async () => {
+            if (link.url.startsWith('mailto:')) {
+              return
+            }
             const [linkedFile, anchor] = link.url.split('#') as [string, string | null]
             const subslingVfile = toVFile({ path: linkedFile })
             ok(

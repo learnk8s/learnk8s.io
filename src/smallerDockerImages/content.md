@@ -415,7 +415,8 @@ You can attach to the running container with:
 
 ```terminal|command=1|title=bash
 docker exec -ti 9d8e97e307d7 bash
-OCI runtime exec failed: exec failed: container_linux.go:296: starting container process caused "exec: \"bash\": executable file not found in $PATH": unknown
+OCI runtime exec failed: exec failed: container_linux.go:296: starting container process caused
+"exec: \"bash\": executable file not found in $PATH": unknown
 ```
 
 With no luck. But perhaps the container has a `sh`ell?
