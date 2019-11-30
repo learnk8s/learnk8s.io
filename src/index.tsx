@@ -90,6 +90,7 @@ TerraformAks.Register(store)
 WhatIsKubernetes.Register(store)
 BiteSized201903.Register(store)
 RSS.Register(store)
+NotFound.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -180,6 +181,7 @@ export function run(options: Settings) {
     Flipboard.Mount({ store })
     Redirect.Mount({ store })
     RSS.Mount({ store })
+    NotFound.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -321,9 +323,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case NotFound.Details.type: {
-      const $ = Cheerio.of(NotFound.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(`_site/404.html`, $.html())
       return
     }
     case AdvancedKubectl.Details.type: {
