@@ -1,11 +1,11 @@
 import React from 'react'
 import { writeFileSync, readFileSync, existsSync, copyFileSync } from 'fs'
 
-import { resolve, extname, basename, join } from 'path'
+import { resolve, extname, join } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { SyncEvents } from './eventbrite.v2'
 import { ok } from 'assert'
-import { Sitemap, LinkedNode, getFullUrl, runSiteMap } from './sitemap'
+import { Sitemap, LinkedNode, getFullUrl, runSiteMap, Register } from './sitemap'
 import unified from 'unified'
 const raw = require('rehype-raw')
 import { Node } from 'unist'
@@ -91,6 +91,7 @@ WhatIsKubernetes.Register(store)
 BiteSized201903.Register(store)
 RSS.Register(store)
 NotFound.Register(store)
+Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}

@@ -29,6 +29,7 @@ const OldRSS = {
 export function Register(store: Store<State, Actions>) {
   store.dispatch(Action.registerPage(RSS))
   store.dispatch(Action.registerPage(OldRSS))
+  store.dispatch(Action.assignTag({ id: 'no-sitemap', pageId: RSS.id }))
   store.dispatch(
     Action.registerRedirect({
       id: 'redirect-rss',
