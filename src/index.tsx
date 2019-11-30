@@ -1,11 +1,11 @@
 import React from 'react'
 import { writeFileSync, readFileSync, existsSync, copyFileSync } from 'fs'
 
-import { resolve, extname, basename, join } from 'path'
+import { resolve, extname, join } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { SyncEvents } from './eventbrite.v2'
 import { ok } from 'assert'
-import { Sitemap, LinkedNode, getFullUrl, runSiteMap } from './sitemap'
+import { Sitemap, LinkedNode, getFullUrl, runSiteMap, Register } from './sitemap'
 import unified from 'unified'
 const raw = require('rehype-raw')
 import { Node } from 'unist'
@@ -90,6 +90,8 @@ TerraformAks.Register(store)
 WhatIsKubernetes.Register(store)
 BiteSized201903.Register(store)
 RSS.Register(store)
+NotFound.Register(store)
+Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -179,6 +181,8 @@ export function run(options: Settings) {
     GenericBlogPost.Mount({ store })
     Flipboard.Mount({ store })
     Redirect.Mount({ store })
+    RSS.Mount({ store })
+    NotFound.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -320,9 +324,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case NotFound.Details.type: {
-      const $ = Cheerio.of(NotFound.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(`_site/404.html`, $.html())
       return
     }
     case AdvancedKubectl.Details.type: {
@@ -338,7 +339,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case RSS.Details.type: {
-      writeFileSync(`_site${RSS.Details.url}`, RSS.render(root, node, siteUrl))
       return
     }
     default:

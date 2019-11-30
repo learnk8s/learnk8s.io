@@ -45,8 +45,8 @@ export function defaultAssetsPipeline({
   writeFileSync(generatePath(url), $.html())
 
   function generatePath(url: string) {
-    const path = `${outputFolder}${join('/', url, '/index.html')}`
-    mkdir('-p', `${outputFolder}${join('/', url)}`)
+    const path = `${outputFolder}${join('/', `${url === '/' ? 'index' : url}.html`)}`
+    mkdir('-p', dirname(path))
     return path
   }
 }
