@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react'
-import { getFullUrl, Sitemap } from './sitemap'
 import { transform } from './markdown/utils'
 import { toMdast } from './markdown'
 import { toVFile } from './files'
-import { mdast2JsxInline } from './markdown/jsx'
+import { mdast2Jsx } from './markdown/jsx'
 
 export const OpenGraph: React.StatelessComponent<{
   currentAbsoluteUrl: string
@@ -395,9 +394,7 @@ export const FAQs: React.StatelessComponent<{ faqs: FAQ[] }> = ({ faqs }) => {
           return (
             <li key={index}>
               <h4 className='navy f4 f3-l mb2'>{it.title}</h4>
-              <p className='lh-copy black-70'>
-                {transform(toMdast(toVFile({ contents: it.content })), mdast2JsxInline())}
-              </p>
+              <p className='lh-copy black-70'>{transform(toMdast(toVFile({ contents: it.content })), mdast2Jsx())}</p>
             </li>
           )
         })}
