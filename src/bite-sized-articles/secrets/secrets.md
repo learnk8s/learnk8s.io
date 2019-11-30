@@ -184,7 +184,7 @@ The new file contains a Custom Resourced Definition (CRD):
       }
     },
     "encryptedData": {
-      "foo": "AgArmb9SihSb9MJtFZr/ajQk8ocLWYomgAQzD4rsGTbXUSmSYEj0L+Du9t8u7nSy2o6SqFszpXSQf21Z05CPcvpfapLTjlJn+150+CZma/8DsljQT0mkr8xJSrMX1sj7XIl4T5KuMDzJpYtmGJ5LF9EJkP2ViEhlVQP8EeusCkcvQ5OPXamsHI1EhsoePyk8uCMnebJ41Pl+HZV+8ZWyDZG5QzwBLq9HfMD0EuKyfZdXgUEDb4CFbTk6HbabaQYR8zCF1+HTuwMVc+Fgij7+D+nWlenf20LPYHZB+jMD0i/Z15VD5pN4mqYNdGsya9NMmbOgrEJqXFEdMMcVceI23+odRUqqK4KzwAacnWJGHFxkLdfRxtif6RYLTpsYw8YpCu12pnsvAj/J8By8vLXZaro0lrVCv5P9YI0ATT2jURfCNia3I0W58D6cFJLm5LpENYvnU6Z8h8jEWZfqnGt3+lv/5YV5UAkUQlvkhRGdHBR2LhEkR9iNffcBbq2Xicb3tn+T24Ml78+ugsMg5oGmWlfAgV53EIEG5GoneDrBP6xONS11lx9hoVCJPjNVUN71n3xO5YPkVv1IykV4FTdckY8/tj+zSIsLzYjOXwB+YJQHgFZOVec0vkMX2eLnSepoOwrm6bNB/y36rc4m3HQ/dHa7NohU1Vb5K3aTrYbt3a+Ean08HgtmBNWPl+LPw7HmrPhVsPQ="
+      "foo": "<encrypted data here>"
     }
   }
 }

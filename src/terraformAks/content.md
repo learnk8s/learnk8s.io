@@ -137,9 +137,14 @@ Creating an Azure load balancer in ARM looks like this:
 
 ```terminal|command=1-3|title=powershell
 New-AzResourceGroupDeployment -Name TestRG -Location uswest `
-    -TemplateFile 'https://raw.githubusercontent.com/azure/azure-quickstart-templates/master/201-2-vms-loadbalancer-lbrules/azuredeploy.json' `
-    -TemplateParameterFile 'https://raw.githubusercontent.com/azure/azure-quickstart-templates/master/201-2-vms-loadbalancer-lbrules/azuredeploy.parameters.json'
+    -TemplateFile 'azuredeploy.json' `
+    -TemplateParameterFile 'azuredeploy.parameters.json'
 ```
+
+You can obtain the:
+
+- `azuredeploy.json` from [here](https://raw.githubusercontent.com/azure/azure-quickstart-templates/master/201-2-vms-loadbalancer-lbrules/azuredeploy.json)
+- `azuredeploy.parameters.json` from [here](https://raw.githubusercontent.com/azure/azure-quickstart-templates/master/201-2-vms-loadbalancer-lbrules/azuredeploy.parameters.json)
 
 Notice how you had to specify the parameter file to customise some of the values.
 

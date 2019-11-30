@@ -240,7 +240,7 @@ But if Shipper was mostly focussed at minimising the impact of rolling out deplo
 
 It doesn't feature any advanced mechanism to roll out deployments in an incremental fashion.
 
-If you wish to dive more into the multi-cluster-scheduler, you should check out [the official repository page](multi-cluster-scheduler).
+If you wish to dive more into the multi-cluster-scheduler, you should check out [the official repository page](https://github.com/admiraltyio/multicluster-scheduler).
 
 If you prefer to read about the multi-cluster-scheduler in action, Admiralty has an [interesting use case applied to Argo](https://admiralty.io/blog/running-argo-workflows-across-multiple-kubernetes-clusters/) — the open source Kubernetes native workflows, events, CI and CD.
 

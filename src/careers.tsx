@@ -1,7 +1,4 @@
 import React from 'react'
-import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Layout } from './layout.v2'
-import { renderToStaticMarkup } from 'react-dom/server'
 import { Navbar, Footer, Consultation, Html, Head, Body, OpenGraph } from './layout.v3'
 import { Store } from 'redux'
 import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'

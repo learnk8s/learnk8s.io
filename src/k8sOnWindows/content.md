@@ -237,7 +237,7 @@ If you fail to create the network switch, you should see the following error whe
 
 You can test your minikube installation with:
 
-```powershell|title=PowerShell|command=1
+```powershell|command=1|title=PowerShell
 minikube start --vm-driver=hyperv --hyperv-virtual-switch=minikube
 ```
 

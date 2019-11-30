@@ -53,11 +53,11 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 - (b) Have You bought digital content for download or streaming? if so, You have 14 days after the date of Order Confirmation, or, if earlier, until You start downloading or streaming. If we delivered the digital content to You immediately, and You agreed to this when ordering, You will not have a right to change Your mind.
 
 - (c) Have You bought goods? if so You have 14 days after the day You (or someone You nominate) receives the goods, unless:
-
+  
   - I. Your goods are split into several deliveries over different days. In this case You have until 14 days after the day You (or someone You nominate) receives the last delivery to change Your mind about the goods.
   - II. Your goods are for regular delivery over a set period. In this case You have until 14 days after the day You (or someone You nominate) receives the first delivery of the goods.
 
-    6.5 When You don't have the right to change Your mind. You do not have a right to change Your mind in respect of:
+.6.5 When You don't have the right to change Your mind. You do not have a right to change Your mind in respect of:
 
 - (a) digital products after You have started to download or stream these;
 
@@ -67,7 +67,7 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 
 - (d) any products which become mixed inseparably with other items after their delivery.
 
-  6.6 We will process any refund due to You as soon as possible and refund You on the credit card or debit card (if any) used by You to pay.
+.6.6 We will process any refund due to You as soon as possible and refund You on the credit card or debit card (if any) used by You to pay.
 
 # 7. If you are a business customer
 
@@ -96,9 +96,9 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 - (a) we have, without limiting our other rights or remedies, the right to cancel or suspend performance of the Services until You remedy the Customer Default, and to rely on the Customer Default to relieve us from the performance of any of our obligations to the extent the Customer Default prevents or delays our performance of any of our obligations; and
 - (b) we will not be liable for any costs or losses sustained or incurred by You arising directly or indirectly from our failure or delay to perform any of our obligations as set out in this clause 8.6.
 
-  8.7 We are not responsible for delays outside our control. If our supply of the Services is delayed by an event outside our control then we will contact you as soon as possible to let you know and we will take steps to minimise the effect of the delay. Provided we do this we will not be liable for delays caused by the event, but if there is a risk of substantial delay you may contact us to end the contract and receive a refund for any products you have paid for but not received.
+.8.7 We are not responsible for delays outside our control. If our supply of the Services is delayed by an event outside our control then we will contact you as soon as possible to let you know and we will take steps to minimise the effect of the delay. Provided we do this we will not be liable for delays caused by the event, but if there is a risk of substantial delay you may contact us to end the contract and receive a refund for any products you have paid for but not received.
 
-  8.8 Your cancellation of orders: Subject to our specific terms for Conferences, Courses, Facilities Hire, Vouchers and Community Sponsorship in sections 15, 16, 17, 18 and 19, any order cancellations by You before Order Confirmation must be made by email or phone at [hello@learnk8s.io](mailto:hello@learnk8s.io).
+.8.8 Your cancellation of orders: Subject to our specific terms for Conferences, Courses, Facilities Hire, Vouchers and Community Sponsorship in sections 15, 16, 17, 18 and 19, any order cancellations by You before Order Confirmation must be made by email or phone at [hello@learnk8s.io](mailto:hello@learnk8s.io).
 
 # 9. Price of services
 
@@ -148,7 +148,7 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 
 - (e) defective products under the Consumer Protection Act 1987.
 
-  12.3 Subject to clause 12.2, we will under no circumstances whatever be liable to You, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, arising under or in connection with the Contract for:
+.12.3 Subject to clause 12.2, we will under no circumstances whatever be liable to You, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, arising under or in connection with the Contract for:
 
 - (a) any loss of profits, sales, business, or revenue;
 
@@ -162,9 +162,9 @@ To contact us, please email [hello@learnk8s.io](mailto:hello@learnk8s.io).
 
 - (f) any indirect or consequential loss.
 
-  12.4 Subject to clause 12.2, our total liability to You in respect of all losses arising under or in connection with the Contract, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, shall in no circumstances exceed 100% of the price of the Services.
+.12.4 Subject to clause 12.2, our total liability to You in respect of all losses arising under or in connection with the Contract, whether in contract, tort (including negligence), breach of statutory duty, or otherwise, shall in no circumstances exceed 100% of the price of the Services.
 
-  12.5 Except as expressly stated in these Terms, we do not give any representation, warranties or undertakings in relation to the Services. Any representation, condition or warranty which might be implied or incorporated into these Terms by statute, common law or otherwise is excluded to the fullest extent permitted by law. In particular, we will not be responsible for ensuring that the Services are suitable for Your purposes.
+.12.5 Except as expressly stated in these Terms, we do not give any representation, warranties or undertakings in relation to the Services. Any representation, condition or warranty which might be implied or incorporated into these Terms by statute, common law or otherwise is excluded to the fullest extent permitted by law. In particular, we will not be responsible for ensuring that the Services are suitable for Your purposes.
 
 # 13. Other important terms
 
@@ -189,7 +189,7 @@ These specific terms apply in addition to sections 1 to 13 above of these Terms 
 - (a) 14 days after our invoice date; or
 - (b) the day before the Course start date. Prices quoted for Course on our Site are exclusive of VAT or other applicable taxes (such as sales taxes), which will be added at the current rate upon invoicing or payment. Where a delegate is attending a Course in the UK, regardless of the delegate's country of origin, the point of supply for VAT purposes is the location of the Course, which in that case is the UK.
 
-  14.3 Substitutions and Cancellations by the Delegate: In addition to any rights we may have in respect of cancellations under clauses 6, 8.5, 8.6 or 8.8, once booked and confirmed, Courses can be cancelled or rescheduled by
+.14.3 Substitutions and Cancellations by the Delegate: In addition to any rights we may have in respect of cancellations under clauses 6, 8.5, 8.6 or 8.8, once booked and confirmed, Courses can be cancelled or rescheduled by
 
 You subject to the following charges:
 

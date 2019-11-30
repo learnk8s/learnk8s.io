@@ -1,9 +1,9 @@
 import React from 'react'
 import { LinkedNode, getFullUrl, Sitemap, getAbsoluteUrl, getBlogPosts } from './sitemap'
-import { Consultation, Footer, Layout } from './layout.v2'
+import { Layout } from './layout.v2'
 import moment = require('moment')
 import { renderToStaticMarkup } from 'react-dom/server'
-import { Navbar } from './layout.v3'
+import { Navbar, Consultation, Footer } from './layout.v3'
 
 export const Details = {
   type: 'blog',
@@ -53,7 +53,7 @@ export function render(website: Sitemap, currentNode: LinkedNode<typeof Details>
       </section>
 
       <Consultation />
-      <Footer root={website} />
+      <Footer />
     </Layout>,
   )
 }

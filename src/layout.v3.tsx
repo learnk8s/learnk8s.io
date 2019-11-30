@@ -1,12 +1,8 @@
 import React, { Fragment } from 'react'
-import { getFullUrl, Sitemap } from './sitemap'
-import marked from 'marked'
-
-export interface PageDetails {
-  title: string
-  description: string
-  openGraphImage: string
-}
+import { transform } from './markdown/utils'
+import { toMdast } from './markdown'
+import { toVFile } from './files'
+import { mdast2Jsx } from './markdown/jsx'
 
 export const OpenGraph: React.StatelessComponent<{
   currentAbsoluteUrl: string
@@ -345,26 +341,6 @@ export const Interlude: React.StatelessComponent<{}> = ({}) => {
   )
 }
 
-const inlineRenderer = new marked.Renderer()
-
-inlineRenderer.paragraph = text => {
-  return text
-}
-inlineRenderer.link = (href: string, title: string, text: string) => {
-  return `<a href="${href}" className="link underline navy">${text}</a>`
-}
-inlineRenderer.list = (body: string, ordered: boolean) => {
-  const element = ordered ? 'ol' : 'ul'
-  return `<${element}>${body}</${element}>`
-}
-inlineRenderer.listitem = (text: string) => {
-  return `<li class="lh-copy black-70">${text}</li>`
-}
-
-export const InlineMarkdown: React.StatelessComponent<{ content: string }> = ({ content }) => {
-  return <span dangerouslySetInnerHTML={{ __html: marked(content, { renderer: inlineRenderer }) }} />
-}
-
 export const Testimonal: React.StatelessComponent<{ quote: string; author: string }> = ({ quote, author }) => {
   return (
     <section className='trapezoidr-1 white lh-copy'>
@@ -418,9 +394,7 @@ export const FAQs: React.StatelessComponent<{ faqs: FAQ[] }> = ({ faqs }) => {
           return (
             <li key={index}>
               <h4 className='navy f4 f3-l mb2'>{it.title}</h4>
-              <p className='lh-copy black-70'>
-                <InlineMarkdown content={it.content} />
-              </p>
+              <p className='lh-copy black-70'>{transform(toMdast(toVFile({ contents: it.content })), mdast2Jsx())}</p>
             </li>
           )
         })}
@@ -483,58 +457,6 @@ export const Hero: React.StatelessComponent<{ image: JSX.Element; imageClass: st
         </div>
       </div>
     </section>
-  )
-}
-
-export const PromoAcademy: React.StatelessComponent<{ sitemap: Sitemap }> = ({ sitemap }) => {
-  return (
-    <div>
-      <div className='ph4 ph5-l pv4 bg-evian br2 mt5'>
-        <h2 className='f2 pt0 pb2 mt2 navy'>Become an expert at deploying and scaling applications in Kubernetes</h2>
-        <p className='lh-copy measure-wide f4'>
-          Learn how to tame Kubernetes and deploy applications at scale with an hands-on, self-paced course designed for
-          visual learners.
-        </p>
-        <p className='lh-copy measure-wide f4'>
-          The Learnk8s Academy is an excellent resource if you wish to learn how to:
-        </p>
-        <ul className='list ph3'>
-          <ListItem>
-            <span className='b'>Master Kubernetes networking</span> and handle the busiest traffic websites without
-            breaking a sweat
-          </ListItem>
-          <ListItem>
-            <span className='b'>Scale your jobs to thousands of servers</span> and reduce the waiting time from days to
-            minutes
-          </ListItem>
-          <ListItem>
-            Design reliable clusters and enjoy peace of mind knowing that{' '}
-            <span className='b'>your apps are highly available in a multi-cloud setup</span>
-          </ListItem>
-          <ListItem>
-            <span className='b'>Optimise server density with containers</span> and Kubernetes and save a ton of cash on
-            your cloud bill by using only the resources you need
-          </ListItem>
-          <ListItem>
-            Supercharge your delivery pipeline and <span className='b'>deploy application around the clock</span>
-          </ListItem>
-        </ul>
-        <div className='pt2 pb4'>
-          <a
-            href={getFullUrl(sitemap.children.academy)}
-            className='link dib white bg-blue br1 pa3 b f5 shadow-3 mv3 mr3'
-          >
-            Learn more →
-          </a>
-        </div>
-      </div>
-      <p className='lh-copy f5 mt4'>
-        P.S. Don't miss the next experiment, insight, or <span className='b'>discount</span>:{' '}
-        <a href={getFullUrl(sitemap.children.newsletter)} className='link navy underline hover-sky'>
-          subscribe to the mailing list!
-        </a>
-      </p>
-    </div>
   )
 }
 
@@ -618,6 +540,21 @@ export const Subscribe: React.StatelessComponent<{ identifier: string }> = ({ id
         <input type='hidden' name='mc_signupsource' value='hosted' />
       </form>
       <p className='f6 black-60 mt4 mb0'>We'll never share your email address and you can opt out at any time.</p>
+    </div>
+  )
+}
+
+export const Author: React.StatelessComponent<{ name: string; link: string; avatar: JSX.Element }> = ({
+  name,
+  link,
+  avatar,
+}) => {
+  return (
+    <div>
+      <a href={link} title={name} className='link'>
+        <img src={avatar.props.src} alt={avatar.props.alt} className='br-100 w3 dib' />
+        <span className='black-50 f6 db'>{name}</span>
+      </a>
     </div>
   )
 }
