@@ -5,7 +5,6 @@ import {
   Footer,
   ListItem,
   Interlude,
-  InlineMarkdown,
   SpecialListItem,
   Testimonal,
   mailto,
@@ -31,6 +30,10 @@ import { State, Actions, Action, getPages, getOpenGraph, getWorkshops, getConfig
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
+import { transform } from './markdown/utils'
+import { toMdast } from './markdown'
+import { toVFile } from './files'
+import { mdast2JsxInline } from './markdown/jsx'
 
 export const Details = {
   type: 'training',
@@ -765,4 +768,8 @@ function CreateToggle() {
     }
     Toggle(element)
   })
+}
+
+const InlineMarkdown: React.StatelessComponent<{ content: string }> = ({ content }) => {
+  return transform(toMdast(toVFile({ contents: content })), mdast2JsxInline())
 }

@@ -1,10 +1,15 @@
 import React from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Layout, ListItem, FAQ, InlineMarkdown } from './layout.v2'
+import { Layout } from './layout.v2'
+import { ListItem, FAQ } from './layout.v3'
 import { Course, Boolean } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { ListItemQuestion, Feedback } from './architecting'
+import { transform } from './markdown/utils'
+import { toMdast } from './markdown'
+import { toVFile } from './files'
+import { mdast2JsxInline } from './markdown/jsx'
 
 export const Details = {
   type: 'zero-to-k8s',
@@ -411,7 +416,7 @@ const FAQs: React.StatelessComponent<{ faqs: FAQ[] }> = ({ faqs }) => {
             <li key={index}>
               <h4 className='navy f4 f3-l mb2'>{it.title}</h4>
               <p className='lh-copy black-70 measure-wide'>
-                <InlineMarkdown content={it.content} />
+                {transform(toMdast(toVFile({ contents: it.content })), mdast2JsxInline())}
               </p>
             </li>
           )

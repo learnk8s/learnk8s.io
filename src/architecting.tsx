@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react'
 import { LinkedNode, Sitemap, getAbsoluteUrl } from './sitemap'
-import { Footer, Layout, MailTo, mailto, FAQs, FAQ, Hero } from './layout.v2'
+import { Layout } from './layout.v2'
 import { material, assets as materialAssets } from './material'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { Navbar } from './layout.v3'
+import { Navbar, Hero, Footer, MailTo, mailto, FAQs, FAQ } from './layout.v3'
 
 export const Details = {
   type: 'academy-architecting-and-scaling',
@@ -760,7 +760,7 @@ setTimeout(ldinsp, 0);
 
       <FAQs faqs={faqs} />
 
-      <Footer root={website} />
+      <Footer />
       <script
         dangerouslySetInnerHTML={{
           __html: `

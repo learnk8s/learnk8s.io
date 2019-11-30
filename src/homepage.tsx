@@ -1,7 +1,5 @@
 import React from 'react'
-import { getFullUrl } from './sitemap'
-import { Consultation, ListItem, Interlude, Hero } from './layout.v2'
-import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
+import { Navbar, Html, Head, OpenGraph, Body, Footer, ListItem, Interlude, Consultation, Hero } from './layout.v3'
 import { Store } from 'redux'
 import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
 import { defaultAssetsPipeline } from './optimise'

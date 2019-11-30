@@ -1,6 +1,5 @@
 import React from 'react'
-import { Consultation } from './layout.v2'
-import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
+import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
 import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
 import { join } from 'path'
 import { Store } from 'redux'

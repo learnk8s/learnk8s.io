@@ -1,7 +1,18 @@
 import React from 'react'
-import { Consultation, ListItem, Interlude, mailto, MailTo } from './layout.v2'
 import { PrimaryButton } from './homepage'
-import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
+import {
+  Navbar,
+  Html,
+  Head,
+  OpenGraph,
+  Body,
+  Footer,
+  ListItem,
+  Interlude,
+  Consultation,
+  mailto,
+  MailTo,
+} from './layout.v3'
 import { join } from 'path'
 import { getOpenGraph, getPages, getConfig, State, Actions, Action } from './store'
 import { defaultAssetsPipeline } from './optimise'
