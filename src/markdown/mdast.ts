@@ -379,7 +379,7 @@ function mdast2string(vfile: VFile | VMemory | VReference): MdastVisitors<string
       )}\n${fences}`
     },
     include(node) {
-      return node.value
+      return `${fences}include\n${node.value}\n${fences}`
     },
   }
 }
