@@ -80,7 +80,7 @@ It's equally good news if you can't run Hyper-V since you can use VirtualBox.
 
 That's a lot of choices and trade-offs, so here's a summary of what was discussed:
 
-![Installing Docker and Kubernetes on Windows](diagram.png)
+![Installing Docker and Kubernetes on Windows](diagram.svg)
 
 ## Prerequisites
 
@@ -114,17 +114,7 @@ If the installation was successful, you could now search for applications to ins
 choco search docker
 ```
 
-Since you're there, you could give `choco` a go. You could install [Cmder](http://cmder.net/) — a modern shell for Windows with:
-
-```powershell|command=1|title=PowerShell
-choco install cmder -y
-```
-
-Chocolatey installed the binary in `C:\tools`. If you wish to continue the tutorial using Cmder, you should start the binary as an administrator.
-
-![Cmder — a portable console emulator for Windows](cmder.png)
-
-Looking nice!
+Chocolatey installs the binary in `C:\tools` by default.
 
 ## 1. Installing Docker and Kubernetes on Windows 10 Pro
 
@@ -136,18 +126,23 @@ You can download Docker for Windows with:
 choco install docker-desktop -y
 ```
 
-Restart your laptop. Docker will ask you if you wish to enable Hyper-V.
+You should restart your laptop after you install Docker.
+
+Docker will ask you if you wish to enable Hyper-V.
 
 ![Enabling Hyper-V with Docker](enable_hyper_v.png)
 
 Yes, you do!
 
-You should be aware that Docker requires VT-X/AMD-v virtual hardware extension to be enabled before you can run any container. Depending on your computer, you may need to reboot and enable it in your BIOS.
+You should be aware that Docker requires VT-X/AMD-v virtual hardware extension to be enabled before you can run any container.
 
-> You can check if VT-X/AMD-v is enabled by running `systeminfo` from the
-> command prompt.
+Depending on your computer, you may need to reboot and enable it in your BIOS.
 
-If you're unsure VT-X/AMD-v was enabled, don't worry. If you don't have it, Docker will greet you with the following error message:
+> You can check if VT-X/AMD-v is enabled by running `systeminfo` from the command prompt.
+
+If you're unsure VT-X/AMD-v was enabled, don't worry.
+
+If you don't have it, Docker will greet you with the following error message:
 
 > Hardware assisted virtualization and data execution protection must be enabled in the BIOS.
 
@@ -200,54 +195,17 @@ You can download minikube with:
 choco install minikube -y
 ```
 
-Before you start the cluster, you should create an external network switch.
-
-First, you need to identify what network adapters you have on your computer.
-
-You should ignore the virtual interface and focus on real, live, physical network adapters such as _Ethernet_ or _WiFi_.
-
-Picking a real adapter will let you share the internet connection with the virtual switch.
-
-To inspect your current network adapters, you can use the `Get-NetAdapter` cmdlet in Powershell.
-
-Click left lower corner Windows icon and start typing "PowerShell" to open it.
-
-Type the following command to list all the adapters:
-
-```powershell|command=1|title=PowerShell
-Get-NetAdapter
-```
-
-![Get-NetAdapter on PowerShell](netadapter.png)
-
-> If you're finding it hard to select an adapter, try picking one that has **Up** in the _Status_ column.
-
-Once you identified the right adapter, you can create an External Virtual Switch with the following command:
-
-```powershell|command=1|title=PowerShell
-New-VMSwitch –Name "minikube" –AllowManagement $True –NetAdapterName "INSERT_HERE_ADAPTER"
-```
-
-Don't forget to insert the adapter that you selected earlier.
-
-If you fail to create the network switch, you should see the following error when you start minikube:
-
-> E0427 09:06:16.000298 3252 start.go:159] Error starting host: Error creating host: Error executing step: Running precreate checks.
-> no External vswitch found. A valid vswitch must be available for this command to run. Check <https://docs.docker.com/machine/drivers/hyper-v/>.
-
 You can test your minikube installation with:
 
 ```powershell|command=1|title=PowerShell
-minikube start --vm-driver=hyperv --hyperv-virtual-switch=minikube
+minikube start --vm-driver=hyperv
 ```
-
-> Please note that `--vm-driver=hyperv --hyperv-virtual-switch=minikube` is necessary only for the first start. If you wish to change the driver or the memory you have to `minikube destroy` and recreate the VM with the new settings.
 
 If for any reason minikube fails to start up, you can debug it with:
 
 ```powershell|command=1,2|title=PowerShell
 minikube delete
-minikube start --vm-driver=hyperv --hyperv-virtual-switch=minikube --v=7 --alsologtostderr
+minikube start --vm-driver=hyperv --v=7 --alsologtostderr
 ```
 
 The extra verbose logging should help you get to the issue. In my particular case, minikube used to fail with:
@@ -325,7 +283,9 @@ At the end of the installation, you can start minikube with:
 minikube start
 ```
 
-The command will download an ISO for VirtualBox and start the virtual machine. Once started, you should be able to query the Kubernetes cluster with:
+The command will download an ISO for VirtualBox and start the virtual machine.
+
+Once started, you should be able to query the Kubernetes cluster with:
 
 ```powershell|command=1|title=PowerShell
 kubectl get nodes
@@ -336,7 +296,7 @@ And see a single node.
 To connect to the remote Docker daemon, you should install the Docker client with:
 
 ```powershell|command=1|title=PowerShell
-choco install docker -y
+choco install docker-cli -y
 ```
 
 You can connect to the minikube remote Docker daemon with:
@@ -382,7 +342,7 @@ Perhaps you want to build containers on a remote machine.
 
 Perhaps you can't run Hyper-V on your machine, and your Docker daemon is installed in a virtual machine in VirtualBox.
 
-Precisely the case if you're running minikube.
+_Precisely the case if you're running minikube._
 
 Your Docker CLI is connected remotely to a Docker daemon located inside the minikube virtual machine.
 
@@ -436,7 +396,7 @@ docker run -ti -p 8080:80 wordpress
 
 Once Docker has completed downloading all the package, you should visit <http://localhost:8080/>.
 
-> Please note that, if you're running minikube as your remote Docker daemon, you should use `http://minikube_ip:8080` as your URL.
+> Please note that, if you're running minikube as your remote Docker daemon, you should use `http://<minikube_ip>:8080` as your URL.
 
 You should be able to see the Wordpress installation Wizard.
 
@@ -457,7 +417,7 @@ It's about time to test your local Kubernetes cluster. In this section, you will
 You can deploy your dashboard to Kubernetes with:
 
 ```powershell|command=1|title=PowerShell
-kubectl run smashing --image=visibilityspots/smashing --port=3030
+kubectl run smashing --image=visibilityspots/smashing --port=3030 --restart=Never
 ```
 
 Once Kubernetes completes downloading the container, you should see it running:
@@ -504,4 +464,4 @@ Now you know all the options when it comes to installing Docker and Kubernetes o
 
 If you stumbled on an error not described in the article, feel free to get in touch on Twitter [@learnk8s](https://twitter.com/learnk8s) or [Slack](https://learnk8s-slack-invite.herokuapp.com/).
 
-And since you have a fully working environment, you should check out the tutorial on [how to deploy Laravel applications to Kubernetes](/kubernetes-deploy-laravel-the-easy-way).
+And since you have a fully working environment, you should check out the tutorial on how to deploy applications to Kubernetes [with PHP using laravel](/kubernetes-deploy-laravel-the-easy-way) or with [Node.js](/nodejs-kubernetes-guide).

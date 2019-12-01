@@ -16,7 +16,7 @@ export const Details = {
     <img src='src/k8sOnWindows/k8s_on_win.jpg' alt='Getting started with Docker and Kubernetes on Windows 10' />
   ),
   publishedDate: '2018-06-05',
-  lastModifiedDate: '2019-03-20',
+  lastModifiedDate: '2019-12-01',
   previewImage: (
     <img src='src/k8sOnWindows/k8s_on_win.jpg' alt='Getting started with Docker and Kubernetes on Windows 10' />
   ),
@@ -55,7 +55,7 @@ export function Register(store: Store<State, Actions>) {
       description: `Getting started with Docker and Kubernetes on Windows can be daunting when you don't know where to begin. In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
       title: 'Getting started with Docker and Kubernetes on Windows 10',
       publishedDate: '2018-06-05',
-      lastModifiedDate: '2019-03-20',
+      lastModifiedDate: '2019-12-01',
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
