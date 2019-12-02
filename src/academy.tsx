@@ -680,7 +680,7 @@ setTimeout(ldinsp, 0);
           </div>
         </Section>
 
-        <section className='pv4 bg-evian'>
+        <section className='pv4 bg-evian' id='start'>
           <p className='center f1-l f2 navy b tc ph3 measure-narrow'>Learn how to deploy at Google scale</p>
           <p className='lh-copy f4-l black-70 measure center tc ph3 mb5'>
             Join the Learnk8s Academy and learn how to deploy and manage applications with Kubernetes.
@@ -740,16 +740,25 @@ setTimeout(ldinsp, 0);
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>20%</p>
                   <div>
                     <p className='f3 navy tc mv4 bs'>
-                      <span className='db' id='architecting-full'>
+                      <span className='db strike gray' id='architecting-full'>
                         {(597).toLocaleString('US', {
                           style: 'currency',
                           currency: 'USD',
                         })}
                       </span>
+                      <span className='db b pt2' id='architecting-full-discount'>
+                        {(597).toLocaleString('US', {
+                          style: 'currency',
+                          currency: 'USD',
+                        })}
+                      </span>
+                      <span className='f7 gray light-red ttu'>
+                        Offer ends in <span className='ends-in'>23:59:59</span>
+                      </span>
                     </p>
                     <div className='tc'>
                       <a
-                        href='https://academy.learnk8s.io/architecting-full'
+                        href='https://academy.learnk8s.io/architecting-full?coupon=CYBER50'
                         className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                         target='_self'
                         ref='noreferrer'
@@ -791,16 +800,25 @@ setTimeout(ldinsp, 0);
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>&nbsp;</p>
                   <div>
                     <p className='f3 navy tc mv4 bs'>
-                      <span className='db' id='architecting-expert'>
+                      <span className='db strike gray' id='architecting-expert'>
                         {(397).toLocaleString('US', {
                           style: 'currency',
                           currency: 'USD',
                         })}
                       </span>
+                      <span className='db b pt2' id='architecting-expert-discount'>
+                        {(397 / 2).toLocaleString('US', {
+                          style: 'currency',
+                          currency: 'USD',
+                        })}
+                      </span>
+                      <span className='f7 gray light-red ttu'>
+                        Offer ends in <span className='ends-in'>23:59:59</span>
+                      </span>
                     </p>
                     <div className='tc'>
                       <a
-                        href='https://academy.learnk8s.io/architecting-expert'
+                        href='https://academy.learnk8s.io/architecting-expert?coupon=CYBER50'
                         className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                         target='_self'
                         ref='noreferrer'
@@ -834,16 +852,25 @@ setTimeout(ldinsp, 0);
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>&nbsp;</p>
                   <div>
                     <p className='f3 navy tc mv4 bs'>
-                      <span className='db' id='architecting-bundle'>
+                      <span className='db strike gray' id='architecting-bundle'>
                         {(121).toLocaleString('US', {
                           style: 'currency',
                           currency: 'USD',
                         })}
                       </span>
+                      <span className='db b pt2' id='architecting-bundle-discount'>
+                        {(121 / 2).toLocaleString('US', {
+                          style: 'currency',
+                          currency: 'USD',
+                        })}
+                      </span>
+                      <span className='f7 gray light-red ttu'>
+                        Offer ends in <span className='ends-in'>23:59:59</span>
+                      </span>
                     </p>
                     <div className='tc'>
                       <a
-                        href='https://academy.learnk8s.io/architecting-bundle'
+                        href='https://academy.learnk8s.io/architecting-bundle?coupon=CYBER50'
                         className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                         target='_self'
                         ref='noreferrer'
@@ -1016,7 +1043,7 @@ request.onload = function() {
         var discount = document.querySelector('#' + key + '-discount')
         if (!!discount) {
           var price = resp[key]
-          discount.innerHTML = Math.ceil(price.gross * 0.7).toLocaleString(price.country, {
+          discount.innerHTML = Math.ceil(price.gross * 0.5).toLocaleString(price.country, {
             style: 'currency',
             currency: price.currency,
           })
@@ -1032,6 +1059,31 @@ request.onerror = function() {};
 
 request.send();
       `,
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+var endsIn = [].slice.call(document.querySelectorAll('.ends-in'))
+var countDownDate = new Date('2019-12-05').getTime()
+setInterval(function () {
+  var now = new Date().getTime()
+  var distance = countDownDate - now
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+  for (let i = 0, len = endsIn.length; i < len; i++) {
+    if (distance < 0) {
+      endsIn[i].innerHTML = '00:00:00'
+    } else {
+      endsIn[i].innerHTML = pad(hours) + ":" + pad(minutes) + ":" + pad(seconds)
+    }
+  }
+  function pad(n) {
+    return ('' + n).length === 1 ? '0' + n : n
+  }
+}, 1000)
+            `,
           }}
         />
         <script
