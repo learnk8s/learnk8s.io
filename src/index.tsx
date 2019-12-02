@@ -95,6 +95,7 @@ Register(store)
 Blog.Register(store)
 ArchitectingAndScaling.Register(store)
 ZeroToK8s.Register(store)
+BiteSized.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -189,6 +190,7 @@ export function run(options: Settings) {
     Blog.Mount({ store })
     ArchitectingAndScaling.Mount({ store })
     ZeroToK8s.Mount({ store })
+    BiteSized.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -261,9 +263,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case BiteSized.Details.type: {
-      const $ = Cheerio.of(BiteSized.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case SmallerImages.Details.type: {
