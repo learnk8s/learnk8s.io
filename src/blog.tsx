@@ -1,7 +1,6 @@
 import React from 'react'
 import moment = require('moment')
-import { Consultation } from './layout.v2'
-import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
+import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
 import { join } from 'path'
 import { getOpenGraph, getPages, getConfig, State, Actions, Action, getBlogPosts, hasTag } from './store'
 import { defaultAssetsPipeline } from './optimise'
