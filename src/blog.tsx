@@ -83,7 +83,7 @@ function renderPage(state: State) {
           <ul className='list pl0'>
             {blogPosts.map(post => {
               let postPage = pages.find(it => it.id === post.pageId)!
-              let url = postPage ? postPage.url : "#"
+              let url = postPage ? postPage.url : '#'
               return (
                 <li className='pv3'>
                   <h2 className='mb0'>
