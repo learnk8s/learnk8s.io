@@ -49,11 +49,11 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Blog.id)!
+  const pages = getPages(state)
+  const page = pages.find(it => it.id === Blog.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Blog.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   const blogPosts = getBlogPosts(state).sort(comparePublishedDate)
-  const allPages = state.website.pages
   return (
     <Html>
       <Head title={page.title} description={page.description}>
@@ -81,16 +81,18 @@ function renderPage(state: State) {
 
         <section className='ph3 measure-wide pv4 center'>
           <ul className='list pl0'>
-            {blogPosts.map(it => {
+            {blogPosts.map(post => {
+              let postPage = pages.find(it => it.id === post.pageId)!
+              let url = postPage ? postPage.url : "#"
               return (
                 <li className='pv3'>
                   <h2 className='mb0'>
-                    <a href={allPages[it.pageId].url} className='link navy'>
-                      {it.title}
+                    <a href={url} className='link navy'>
+                      {post.title}
                     </a>
                   </h2>
-                  <p className='black-40 mt1'>{moment(it.publishedDate).format('MMMM Do YYYY')}</p>
-                  <p className='lh-copy black-70'>{it.description}</p>
+                  <p className='black-40 mt1'>{moment(post.publishedDate).format('MMMM Do YYYY')}</p>
+                  <p className='lh-copy black-70'>{post.description}</p>
                 </li>
               )
             })}
