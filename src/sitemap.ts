@@ -65,48 +65,8 @@ export function createNode<T extends {}, U extends { [name: string]: LinkedNode<
 }
 
 const blogPosts = {
-  installingK8sOnWindows: createNode({
-    page: K8sOnWindows.Details,
-    children: {},
-  }),
-  chaosEngineering: createNode({
-    page: ChaosEngineering.Details,
-    children: {},
-  }),
-  deployLaravel: createNode({
-    page: DeployLaravel.Details,
-    children: {},
-  }),
-  solarPlants: createNode({
-    page: SolarPlants.Details,
-    children: {},
-  }),
-  spotInstances: createNode({
-    page: SpotInstances.Details,
-    children: {},
-  }),
   scalingTensorflow: createNode({
     page: ScalingTensorflow.Details,
-    children: {},
-  }),
-  scalingSpringBoot: createNode({
-    page: ScalingSpringBoot.Details,
-    children: {},
-  }),
-  smallerDockerImage: createNode({
-    page: SmallerImages.Details,
-    children: {},
-  }),
-  whatIsKubernetes: createNode({
-    page: WhatIsKubernetes.Details,
-    children: {},
-  }),
-  advancedKubectl: createNode({
-    page: AdvancedKubectl.Details,
-    children: {},
-  }),
-  terraformAks: createNode({
-    page: TerraformAks.Details,
     children: {},
   }),
 }
@@ -123,163 +83,11 @@ const bsk = {
     page: BiteSized201903.MultipleClustersDetails,
     children: {},
   }),
-  bskIngressApi: createNode({
-    page: BiteSized201903.IngressApiGatewayDetails,
-    children: {},
-  }),
-  bskHelm: createNode({
-    page: BiteSized201903.HelmDetails,
-    children: {},
-  }),
-  bskVisualiseYaml: createNode({
-    page: BiteSized201903.VisualiseYamlDetails,
-    children: {},
-  }),
-  bskSmallOrLarge: createNode({
-    page: BiteSized201903.SmallOrLargeDetails,
-    children: {},
-  }),
-  bskSecrets: createNode({
-    page: BiteSized201903.SecretsDetails,
-    children: {},
-  }),
-  bskAutoscaling: createNode({
-    page: BiteSized201903.AutoscalingDetails,
-    children: {},
-  }),
-  bskRollbacks: createNode({
-    page: BiteSized201903.RollbacksDetails,
-    children: {},
-  }),
 }
-
-const rss = createNode({
-  page: RSS.Details,
-  children: {},
-})
 
 export const Sitemap = createNode({
   page: Homepage.Details,
-  children: {
-    training: createNode({
-      page: Training.Details,
-      children: {},
-    }),
-    academy: createNode({
-      page: Academy.Details,
-      children: {},
-    }),
-    architectingAndScaling: createNode({
-      page: ArchitectingAndScaling.Details,
-      children: {},
-    }),
-    zeroToK8s: createNode({
-      page: ZeroToK8s.Details,
-      children: {},
-    }),
-    blog: createNode({
-      page: Blog.Details,
-      children: {
-        ...blogPosts,
-        deployLaravelOld: createNode({
-          page: Redirect.Details({
-            url: '/deploying-laravel-to-kubernetes',
-            redirectTo: blogPosts.deployLaravel,
-          }),
-          children: {},
-        }),
-      },
-    }),
-    biteSizedKubernetes: createNode({
-      page: BiteSized.Details,
-      children: {
-        bskMultiCluster: bsk.bskMultiCluster,
-      },
-    }),
-    contactUs: createNode({
-      page: ContactUs.Details,
-      children: {},
-    }),
-    termsAndConditions: createNode({
-      page: TermsAndConditions.Details,
-      children: {},
-    }),
-    newsletter: createNode({
-      page: Newsletter.Details,
-      children: {},
-    }),
-    consulting: createNode({
-      page: Consulting.Details,
-      children: {},
-    }),
-    aboutUs: createNode({
-      page: AboutUs.Details,
-      children: {},
-    }),
-    careers: createNode({
-      page: Careers.Details,
-      children: {},
-    }),
-    infiniteConf2018: createNode({
-      page: Redirect.Details({
-        url: '/infiniteconf2018',
-        redirectTo: blogPosts.scalingTensorflow,
-      }),
-      children: {},
-    }),
-    oldRss: createNode({
-      page: Redirect.Details({
-        url: '/rss',
-        redirectTo: rss,
-      }),
-      children: {},
-    }),
-    rss,
-    notFound: createNode({
-      page: NotFound.Details,
-      children: {},
-    }),
-    london: createNode({
-      page: Landing.Details({
-        url: '/london',
-        city: 'London',
-      }),
-      children: {},
-    }),
-    toronto: createNode({
-      page: Landing.Details({
-        url: '/toronto',
-        city: 'Toronto',
-      }),
-      children: {},
-    }),
-    singapore: createNode({
-      page: Landing.Details({
-        url: '/singapore',
-        city: 'Singapore',
-      }),
-      children: {},
-    }),
-    sanFrancisco: createNode({
-      page: Landing.Details({
-        url: '/san-francisco',
-        city: 'San Francisco',
-      }),
-      children: {},
-    }),
-    bskHelm: bsk.bskHelm,
-    bskApiIngress: bsk.bskIngressApi,
-    bskVisualiseYaml: bsk.bskVisualiseYaml,
-    bskSmallOrLarge: bsk.bskSmallOrLarge,
-    bskSecrets: bsk.bskSecrets,
-    bskAutoscaling: bsk.bskAutoscaling,
-    bskRollbacks: bsk.bskRollbacks,
-    zro2k8sjs: newBlog.zro2k8sjs,
-    bestPractices: createNode({
-      page: BestPractices.Details,
-      children: {},
-    }),
-  },
+  children: {},
 })
 
 export type Sitemap = typeof Sitemap
@@ -304,37 +112,6 @@ export function getFullUrl(currentPage: LinkedNode<any>): string {
 
 export function getAbsoluteUrl(currentPage: LinkedNode<any>, siteUrl: string): string {
   return `${siteUrl}${getFullUrl(currentPage)}`
-}
-
-export function getBlogPosts(website: Sitemap): typeof blogPosts[keyof typeof blogPosts][] {
-  return [
-    ...Object.values(website.children.blog.children)
-      .filter(it => it.payload.type !== Redirect.Type)
-      .slice(0),
-    ...getBiteSizedSeries(website),
-    ...Object.values(newBlog),
-  ].sort((a: any, b: any) => {
-    return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
-  }) as any
-}
-
-export function getBiteSizedSeries(website: Sitemap): typeof bsk[keyof typeof bsk][] {
-  return [
-    ...Object.values(website.children.biteSizedKubernetes.children),
-    website.children.bskHelm,
-    website.children.bskApiIngress,
-    website.children.bskVisualiseYaml,
-    website.children.bskSmallOrLarge,
-    website.children.bskSecrets,
-    website.children.bskAutoscaling,
-    website.children.bskRollbacks,
-  ]
-    .filter(it => it.payload.type !== Redirect.Type)
-    .slice(0)
-
-    .sort((a: any, b: any) => {
-      return moment(a.payload.publishedDate).isBefore(b.payload.publishedDate) ? 1 : -1
-    }) as any
 }
 
 function render(node: LinkedNode<any, object>, siteUrl: string): string {

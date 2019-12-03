@@ -1,7 +1,4 @@
-import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl, getBiteSizedSeries } from './sitemap'
 import * as React from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { Layout } from './layout.v2'
 import marked from 'marked'
 import moment = require('moment')
 import { Navbar, Footer, Consultation, Html, Head, Body, OpenGraph } from './layout.v3'
