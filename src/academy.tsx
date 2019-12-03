@@ -740,20 +740,11 @@ setTimeout(ldinsp, 0);
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>20%</p>
                   <div>
                     <p className='f3 navy tc mv4 bs'>
-                      <span className='db strike gray' id='architecting-full'>
+                      <span className='db' id='architecting-full'>
                         {(597).toLocaleString('US', {
                           style: 'currency',
                           currency: 'USD',
                         })}
-                      </span>
-                      <span className='db b pt2' id='architecting-full-discount'>
-                        {(597).toLocaleString('US', {
-                          style: 'currency',
-                          currency: 'USD',
-                        })}
-                      </span>
-                      <span className='f7 gray light-red ttu'>
-                        Offer ends in <span className='ends-in'>23:59:59</span>
                       </span>
                     </p>
                     <div className='tc'>
@@ -800,20 +791,11 @@ setTimeout(ldinsp, 0);
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>&nbsp;</p>
                   <div>
                     <p className='f3 navy tc mv4 bs'>
-                      <span className='db strike gray' id='architecting-expert'>
+                      <span className='db' id='architecting-expert'>
                         {(397).toLocaleString('US', {
                           style: 'currency',
                           currency: 'USD',
                         })}
-                      </span>
-                      <span className='db b pt2' id='architecting-expert-discount'>
-                        {(397 / 2).toLocaleString('US', {
-                          style: 'currency',
-                          currency: 'USD',
-                        })}
-                      </span>
-                      <span className='f7 gray light-red ttu'>
-                        Offer ends in <span className='ends-in'>23:59:59</span>
                       </span>
                     </p>
                     <div className='tc'>
@@ -852,20 +834,11 @@ setTimeout(ldinsp, 0);
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>&nbsp;</p>
                   <div>
                     <p className='f3 navy tc mv4 bs'>
-                      <span className='db strike gray' id='architecting-bundle'>
+                      <span className='db' id='architecting-bundle'>
                         {(121).toLocaleString('US', {
                           style: 'currency',
                           currency: 'USD',
                         })}
-                      </span>
-                      <span className='db b pt2' id='architecting-bundle-discount'>
-                        {(121 / 2).toLocaleString('US', {
-                          style: 'currency',
-                          currency: 'USD',
-                        })}
-                      </span>
-                      <span className='f7 gray light-red ttu'>
-                        Offer ends in <span className='ends-in'>23:59:59</span>
                       </span>
                     </p>
                     <div className='tc'>
