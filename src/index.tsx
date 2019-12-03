@@ -93,6 +93,9 @@ RSS.Register(store)
 NotFound.Register(store)
 Register(store)
 Blog.Register(store)
+ArchitectingAndScaling.Register(store)
+ZeroToK8s.Register(store)
+BiteSized.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}
@@ -185,6 +188,9 @@ export function run(options: Settings) {
     RSS.Mount({ store })
     NotFound.Mount({ store })
     Blog.Mount({ store })
+    ArchitectingAndScaling.Mount({ store })
+    ZeroToK8s.Mount({ store })
+    BiteSized.Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -227,15 +233,9 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case ArchitectingAndScaling.Details.type: {
-      const $ = Cheerio.of(ArchitectingAndScaling.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case ZeroToK8s.Details.type: {
-      const $ = Cheerio.of(ZeroToK8s.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case Consulting.Details.type: {
@@ -263,9 +263,6 @@ function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
       return
     }
     case BiteSized.Details.type: {
-      const $ = Cheerio.of(BiteSized.render(root, node, siteUrl))
-      optimise({ $, siteUrl })
-      writeFileSync(generatePath(), $.html())
       return
     }
     case SmallerImages.Details.type: {
