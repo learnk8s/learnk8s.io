@@ -1,3 +1,7 @@
+**TL;DR:** here's a diagram to help you debug your deployments in Kubernetes.
+
+![Flow chart to debug deployments in Kubernetes](diagram.png)
+
 When you wish to deploy an application in Kubernetes, you usually define three components:
 
 - a Deployment â€” which is a recipe for creating copies of your application called Pods
@@ -6,7 +10,25 @@ When you wish to deploy an application in Kubernetes, you usually define three c
 
 Here's a quick visual recap.
 
-[TODO]()
+```slideshow
+{
+  "description": "Kubernetes core concepts: Ingress, Service, Pod and Deployment.",
+  "slides": [
+    {
+      "image": "core-concepts-1.svg",
+      "description": "In Kubernetes your applications are exposed through two layers of load balancers: internal and external."
+    },
+    {
+      "image": "core-concepts-2.svg",
+      "description": "The internal load balancer is called Service, whereas the external one is called Ingress."
+    },
+    {
+      "image": "core-concepts-3.svg",
+      "description": "Pods are not deployed directly. Instead, the Deployment creates the Pods and whatches over them."
+    }
+  ]
+}
+```
 
 Assuming you wish to deploy a simple _Hello World_ application, the YAML for such application should look similar to this:
 
@@ -83,9 +105,35 @@ You should remember three things:
 1. The Service `targetPort` should match the `containerPort` of the container inside the Pod
 1. The Service `port` can be any number. Multiple Service can use the same port because they have different IP addresses assigned.
 
-The following diagram summarises the three points:
+The following diagram summarises the how to connect the ports:
 
-[TODO]()
+```slideshow
+{
+  "description": "Connecting a Service and a Pod",
+  "slides": [
+    {
+      "image": "ports-1.svg",
+      "description": "Consider the following Pod exposed by a Service."
+    },
+    {
+      "image": "ports-2.svg",
+      "description": "When you create a Pod, you should define the port `containerPort` for each container in your Pods."
+    },
+    {
+      "image": "ports-3.svg",
+      "description": "When you create a Service, you can define a `port` and a `targetPort`. _But which one should you connect to the container?_"
+    },
+    {
+      "image": "ports-4.svg",
+      "description": "`targetPort` and `containerPort` should always match."
+    },
+    {
+      "image": "ports-5.svg",
+      "description": "If your container exposes port 3000, then the `targetPort` should match that number."
+    }
+  ]
+}
+```
 
 If you look at the YAML, the labels and `ports`/`targetPort` should match:
 
@@ -178,6 +226,32 @@ Two things should match in the Ingress and Service:
 1. The `servicePort` in the Ingress and the `port` in the Service should match
 1. The name of the Service should match the field `serviceName` in the Ingress
 
+The following diagram summarises the how to connect the ports:
+
+```slideshow
+{
+  "description": "Connecting an Ingress and a Service",
+  "slides": [
+    {
+      "image": "ports-6.svg",
+      "description": "You already know that the Service expose a `port`."
+    },
+    {
+      "image": "ports-7.svg",
+      "description": "The Ingress has a field called `servicePort`."
+    },
+    {
+      "image": "ports-8.svg",
+      "description": "The Service `port` and the Ingress `servicePort` should always match."
+    },
+    {
+      "image": "ports-9.svg",
+      "description": "If you decide to assign port 80 to the service, you should change `servicePort` to 80 too."
+    }
+  ]
+}
+```
+
 In practice, you should look at these lines:
 
 ```yaml|highlight=4,7,21,22|title=hello-world.yaml
@@ -252,8 +326,6 @@ Here's a quick recap on what ports and labels should match:
 1. The `servicePort` in the Ingress and the `port` in the Service should match
 1. The name of the Service should match the field `serviceName` in the Ingress
 
-[TODO]()
-
 Knowing how to structure your YAML definition is only part of the story.
 
 _What happens when something goes wrong?_
@@ -270,7 +342,25 @@ Since there're three components in every deployment, you should debug all of the
 1. Focus on getting the Service to route traffic to the Pods and then
 1. Check that the Ingress is correctly configured
 
-[TODO]()
+```slideshow
+{
+  "description": "Troubleshooting Kubernetes deployments",
+  "slides": [
+    {
+      "image": "layers-1.svg",
+      "description": "You should start troubleshooting your deployments from the bottom. First, check that the Pod is _Ready_ and _Running_."
+    },
+    {
+      "image": "layers-2.svg",
+      "description": "If the Pods is _Ready_, you should investigate if the Service can distribute traffic to the Pods."
+    },
+    {
+      "image": "layers-3.svg",
+      "description": "Finally, you should examine the connection between the Service and the Ingress."
+    }
+  ]
+}
+```
 
 ## 1. Troubleshooting Pods
 
@@ -434,7 +524,7 @@ An endpoint is a pair of `<ip address:port>`, and there should be at least one â
 
 If the endpoints section is empty, there are two explanations:
 
-1. you don't have any Pod running with the correct label
+1. you don't have any Pod running with the correct label (check the namespace)
 1. the label doesn't exist
 
 If you see a list of endpoints, but still can't route the traffic, then the `targetPort` in your service is the likely culprit.
