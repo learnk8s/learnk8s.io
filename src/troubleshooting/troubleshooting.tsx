@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const Troubleshooting = {
   id: 'troubleshooting-deployments',
   url: '/troubleshooting-deployments',
-  title: 'Troubleshooting deployments',
+  title: 'A visual guide on troubleshooting Kubernetes deployments',
   description: ``,
 }
 
@@ -18,7 +18,7 @@ export function Register(store: Store<State, Actions>) {
     Action.registerOpenGraph({
       id: 'og-troubleshooting-deployments',
       pageId: Troubleshooting.id,
-      image: <img src='src/whatIsKubernetes/why-kube.png' alt='Kubernetes bucks' />,
+      image: <img src='src/troubleshooting/flowchart.png' alt='Troubleshooting Kubernetes deployments' />,
       title: Troubleshooting.title,
       description: Troubleshooting.description,
     }),
@@ -28,9 +28,9 @@ export function Register(store: Store<State, Actions>) {
       id: 'bp-troubleshooting-deployments',
       pageId: Troubleshooting.id,
       authorId: Authors.danielePolencic.id,
-      title: 'Troubleshooting deployments',
+      title: Troubleshooting.title,
       description: ``,
-      publishedDate: '2019-12-04',
+      publishedDate: '2019-12-05',
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )

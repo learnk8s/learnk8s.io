@@ -506,7 +506,7 @@ When the Readiness probe is failing, you the Pods isn't attached to the Service,
 
 A failing Readiness probe is an application-specific error, so you should inspect the _Events_ section in `kubectl describe` to identify the error.
 
-## Troubleshooting Services
+## 2. Troubleshooting Services
 
 If you're Pods are _Running_ and _Ready_, but you're still unable to receive a response from your app, you should check if the Service is configured correctly.
 
@@ -543,7 +543,7 @@ Where:
 - `3000` is the port that you wish to open on your computer
 - `8080` is the port exposed by the Service
 
-## Troubleshooting Ingress
+## 3. Troubleshooting Ingress
 
 If you've reached this section, then:
 
@@ -620,9 +620,9 @@ Popular options include Nginx, HAProxy, Traefik, etc.
 
 You should consult the documentation of your Ingress controller to find a troubleshooting guide.
 
-Since [Nginx-Ingress](https://github.com/kubernetes/ingress-nginx) is the most popular Ingress controller, we included a few tips for it in the next section.
+Since [Ingress Nginx](https://github.com/kubernetes/ingress-nginx) is the most popular Ingress controller, we included a few tips for it in the next section.
 
-### Debugging Nginx
+### Debugging Ingress Nginx
 
 The Ingress-nginx project has an [official plugin for Kubectl](https://kubernetes.github.io/ingress-nginx/kubectl-plugin/).
 
