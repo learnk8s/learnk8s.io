@@ -79,13 +79,13 @@ spec:
       path: /
 ```
 
-The definition is quite long, and it's easy to overlook how the components related to each other.
+The definition is quite long, and it's easy to overlook how the components relate to each other.
 
 For example:
 
-- when should you use port 80 or port 8080?
-- should you create a new port for every Service so that they don't clash?
-- do label names matter? Should it be the same everywhere?
+- When should you use port 80 and when port 8080?
+- Should you create a new port for every Service so that they don't clash?
+- Do label names matter? Should it be the same everywhere?
 
 Before focusing on the debugging, let's recap how the three components link to each other.
 
@@ -95,9 +95,9 @@ Let's start with Deployment and Service.
 
 The surprising news is that Service and Deployment aren't connected at all.
 
-Instead, the Service points the Pods directly and skips the Deployment all together.
+Instead, the Service points to the Pods directly and skips the Deployment altogether.
 
-So what you should pay attention to is how the Pods and the Service related to each other.
+So what you should pay attention to is how the Pods and the Service are related to each other.
 
 You should remember three things:
 
@@ -187,10 +187,10 @@ You can check if the Pods have the right label with the following command:
 kubectl get pods --show-labels
 ```
 
-Or, if you have several labels:
+Or if you have Pods belonging to several applications:
 
 ```terminal|command=1|title=bash
-kubectl get pods --selector name=app
+kubectl get pods --selector name=app --show-labels
 ```
 
 Where `name=app` is the label `name: app`.
@@ -223,8 +223,8 @@ The Ingress retrieves the right Service by name and port exposed.
 
 Two things should match in the Ingress and Service:
 
-1. The `servicePort` in the Ingress and the `port` in the Service should match
-1. The name of the Service should match the field `serviceName` in the Ingress
+1. The `servicePort` of the Ingress should match the `port` of the Service
+1. The `serviceName` of the Ingress should match the `name` of the Service
 
 The following diagram summarises the how to connect the ports:
 
@@ -312,7 +312,7 @@ Finally, connect to the Pod:
 kubectl port-forward nginx-ingress-controller-6fc5bcc 3000:80 --namespace kube-system
 ```
 
-At this point, every time you visit port 3000 on your computer, the request is forwarded to port 80 on the Pod.
+At this point, every time you visit port 3000 on your computer, the request is forwarded to port 80 on the Ingress controller Pod.
 
 If you visit <http://localhost:3000>, you should find the app serving a web page.
 
@@ -322,8 +322,8 @@ Here's a quick recap on what ports and labels should match:
 
 1. The Service selector should match the label of the Pod
 1. The Service `targetPort` should match the `containerPort` of the container inside the Pod
-1. The Service port can be any number. Multiple Service can use the same port because they have different IP addresses assigned.
-1. The `servicePort` in the Ingress and the `port` in the Service should match
+1. The Service port can be any number. Multiple Services can use the same port because they have different IP addresses assigned.
+1. The `servicePort` of the Ingress should match the `port` in the Service
 1. The name of the Service should match the field `serviceName` in the Ingress
 
 Knowing how to structure your YAML definition is only part of the story.
@@ -366,7 +366,7 @@ Since there're three components in every deployment, you should debug all of the
 
 Most of the time, the issue is in the Pod itself.
 
-You should make sure that your Pods are running and _Ready_.
+You should make sure that your Pods are _Running_ and _Ready_.
 
 _How do you check that?_
 
@@ -378,16 +378,16 @@ app2                    0/1   Error             0         47h
 app3-76f9fcd46b-xbv4k   1/1   Running           1         47h
 ```
 
-In the above session, the first two Pods aren't _Running_ and _Ready_.
+In the above session, the last Pod is _Running_ and _Ready_ — however, the first two Pods are neither _Running_ nor _Ready_.
 
 _How do you investigate on what went wrong?_
 
 There are four useful commands to troubleshoot Pods:
 
-1. `kubectl logs <pod name>` is helpful to retrieve the logs of the container
-1. `kubectl describe pod <pod name>` is helpful to retrieve a list of events associated with the Pod
-1. `kubectl get pod <pod name>` is helpful to extract the YAML file stored in Kubernetes
-1. `kubectl exec -ti <pod name> bash` is helpful to run an interactive session within the container
+1. `kubectl logs <pod name>` is helpful to retrieve the logs of the containers of the Pod
+1. `kubectl describe pod <pod name>` is useful to retrieve a list of events associated with the Pod
+1. `kubectl get pod <pod name>` is useful to extract the YAML definition of the Pod as stored in Kubernetes
+1. `kubectl exec -ti <pod name> bash` is useful to run an interactive command within one of the containers of the Pod
 
 _Which one should you use?_
 
@@ -427,19 +427,19 @@ The following is a list of the most common error and how you can fix them.
 
 ### ImagePullBackOff
 
-The error appears when Kubernetes isn't able to retrieve the container for the Pods.
+This error appears when Kubernetes isn't able to retrieve the image for one of the containers of the Pod.
 
 There are three common culprits:
 
-1. The name of the image is invalid such as you misspelt the name
-1. The tag for that container doesn't exist
+1. The image name is invalid — as an example, you misspelt the name, or the image does not exist
+1. You specified a non-existing tag for the image
 1. The image that you're trying to retrieve belongs to a private registry, and Kubernetes doesn't have credentials to access it
 
-In the first two cases, the issue can be solved by changing the name of the image (and tag).
+The first two cases can be solved by correcting the image name and tag.
 
-For the latter, you should add the credentials to your private registry in a Secret and reference it in your Pods.
+For the last, you should add the credentials to your private registry in a Secret and reference it in your Pods.
 
-[The official documentation as an example about how you could to that.](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+[The official documentation has an example about how you could to that.](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 ### CrashLoopBackOff
 
@@ -461,7 +461,20 @@ kubectl logs <pod-name> --previous
 
 Which prints the error messages from the previous container.
 
-### Pods in a pending state
+### RunContainerError
+
+The error appears when the container is unable to start.
+
+That's even before the application inside the container starts.
+
+The issue is usually due to misconfiguration such as:
+
+- mounting a not-existent volume such as ConfigMap or Secrets
+- mounting a read-only volume as read-write
+
+You should use `kubectl describe pod <pod-name>` to collect and analyse the error.
+
+### Pods in a _Pending_ state
 
 When you create a Pod, the Pod stays in the _Pending_ state.
 
@@ -479,26 +492,13 @@ Your best option is to inspect the _Events_ section in the `kubectl describe` co
 kubectl describe pod <pod name>
 ```
 
-For error that are created as a result of ResourceQuotas, you can inspect the logs of the cluster with:
+For errors that are created as a result of ResourceQuotas, you can inspect the logs of the cluster with:
 
 ```terminal|command=1|title=bash
 kubectl get events --sort-by=.metadata.creationTimestamp
 ```
 
-### RunContainerError
-
-The error appears when the container is unable to start.
-
-That's even before the application inside the container starts.
-
-The issue is usually due to misconfiguration such as:
-
-- mounting a not existant volume such as ConfigMap or Secrets
-- mounting a read-only volume as read-write
-
-You should use `kubectl describe` to collect and analyse the error.
-
-## Not Ready Pods
+### Pods in a not _Ready_ state
 
 If a Pod is _Running_ but not _Ready_ it means that the Readiness probe is failing.
 
@@ -508,7 +508,7 @@ A failing Readiness probe is an application-specific error, so you should inspec
 
 ## Troubleshooting Services
 
-If you're Pods are _Running_ and _Ready_, but you're still unable to receive a response for your app, you should check if the Service is configured correctly.
+If you're Pods are _Running_ and _Ready_, but you're still unable to receive a response from your app, you should check if the Service is configured correctly.
 
 Services are designed to route the traffic to Pods based on their labels.
 
@@ -522,12 +522,12 @@ kubectl describe service <service-name> | grep Endpoints
 
 An endpoint is a pair of `<ip address:port>`, and there should be at least one — when the Service targets (at least) a Pod.
 
-If the endpoints section is empty, there are two explanations:
+If the "Endpoints" section is empty, there are two explanations:
 
-1. you don't have any Pod running with the correct label (check the namespace)
-1. the label doesn't exist
+1. you don't have any Pod running with the correct label (hint: you should check if you are in the right namespace)
+1. You have a typo in the `selector` labels of the Service
 
-If you see a list of endpoints, but still can't route the traffic, then the `targetPort` in your service is the likely culprit.
+If you see a list of endpoints, but still can't access your application, then the `targetPort` in your service is the likely culprit.
 
 _How do you test the Service?_
 
@@ -545,16 +545,16 @@ Where:
 
 ## Troubleshooting Ingress
 
-If you've reached this section:
+If you've reached this section, then:
 
 - the Pods are _Running_ and _Ready_
 - the Service distributes the traffic to the Pod
 
-But you still can't see a response from your cluster.
+But you still can't see a response from your app.
 
-At this point, the Ingress is likely misconfigured.
+It means that most likely, the Ingress is misconfigured.
 
-Since the Ingress is a component that doesn't come by default in the cluster, there are different debugging techniques depending on the type of Ingress.
+Since the Ingress controller is a third-party component in the cluster, there are different debugging techniques depending on the type of Ingress controller.
 
 But before diving into Ingress specific tools, there's something straightforward that you could check.
 
@@ -565,12 +565,12 @@ You should check that those are correctly configured.
 You can inspect that the Ingress is correctly configured with:
 
 ```terminal|command=1|title=bash
-kubectl describe ingress <ingres-name>
+kubectl describe ingress <ingress-name>
 ```
 
 If the _Backend_ column is empty, then there must be an error in the configuration.
 
-If you can see the endpoints in the _Backend_ column, but still can't route the traffic, the issue is likely to be:
+If you can see the endpoints in the _Backend_ column, but still can't access the application, the issue is likely to be:
 
 - how you exposed your Ingress to the public internet
 - how you exposed your cluster to the public internet
@@ -609,18 +609,18 @@ At this point, every time you visit port 3000 on your computer, the request is f
 
 _Does it works now?_
 
-- Yes, it worked! The issue is in the infrastructure. You should investigate how the traffic is routed to your cluster.
-- No, it doesn't work. The issue is in the Ingress controller. You should debug the Ingress
+- If it works, the issue is in the infrastructure. You should investigate how the traffic is routed to your cluster.
+- If it doesn't work, the problem is in the Ingress controller. You should debug the Ingress.
 
 If you still can't get the Ingress controller to work, you should start debugging it.
 
-Please notice that the Ingress controller comes in a different version.
+There are many different versions of Ingress controllers.
 
 Popular options include Nginx, HAProxy, Traefik, etc.
 
-You should consult the official documentation for the project to find a troubleshooting guide specific to your Ingress controller.
+You should consult the documentation of your Ingress controller to find a troubleshooting guide.
 
-Since [Nginx-Ingress](https://github.com/kubernetes/ingress-nginx) is the most popular Ingress, we included a few tips below.
+Since [Nginx-Ingress](https://github.com/kubernetes/ingress-nginx) is the most popular Ingress controller, we included a few tips for it in the next section.
 
 ### Debugging Nginx
 
