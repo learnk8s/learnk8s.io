@@ -14,47 +14,47 @@ Assuming you wish to deploy a simple _Hello World_ application, the YAML for suc
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: app
- labels:
- track: canary
+  name: app
+  labels:
+    track: canary
 spec:
- selector:
- matchLabels:
- name: app
- template:
- metadata:
- labels:
- name: app
- spec:
- containers:
- - name: app
- image: learnk8s/app:1.0.0
- ports:
- - containerPort: 8080
+  selector:
+    matchLabels:
+      name: app
+  template:
+    metadata:
+      labels:
+        name: app
+    spec:
+      containers:
+      - name: app
+        image: learnk8s/app:1.0.0
+        ports:
+        - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
- name: app
+  name: app
 spec:
- ports:
- - port: 80
- targetPort: 8080
- selector:
- name: app
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    name: app
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
- name: app
+  name: app
 spec:
- rules:
- - http:
- paths:
- - backend:
- serviceName: app
- servicePort: 80
- path: /
+  rules:
+  - http:
+    paths:
+    - backend:
+        serviceName: app
+        servicePort: 80
+      path: /
 ```
 
 The definition is quite long, and it's easy to overlook how the components related to each other.
@@ -93,34 +93,34 @@ If you look at the YAML, the labels and `ports`/`targetPort` should match:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: app
- labels:
- track: canary
+  name: app
+  labels:
+    track: canary
 spec:
- selector:
- matchLabels:
- name: app
- template:
- metadata:
- labels:
- name: app
- spec:
- containers:
- - name: app
- image: learnk8s/app:1.0.0
- ports:
- - containerPort: 8080
+  selector:
+    matchLabels:
+      name: app
+  template:
+    metadata:
+      labels:
+        name: app
+    spec:
+      containers:
+      - name: app
+        image: learnk8s/app:1.0.0
+        ports:
+        - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
- name: app
+  name: app
 spec:
- ports:
- - port: 80
- targetPort: 8080
- selector:
- name: app
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    name: app
 ```
 
 _What about the `track: canary` label at the top of the Deployment?_
@@ -180,30 +180,30 @@ Two things should match in the Ingress and Service:
 
 In practice, you should look at these lines:
 
-```yaml|highlight=4,7,20,21|title=hello-world.yaml
+```yaml|highlight=4,7,21,22|title=hello-world.yaml
 apiVersion: v1
 kind: Service
 metadata:
- name: app
+  name: app
 spec:
- ports:
- - port: 80
- targetPort: 8080
- selector:
- name: app
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    name: app
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
- name: app
+  name: app
 spec:
- rules:
- - http:
- paths:
- - backend:
- serviceName: app
- servicePort: 80
- path: /
+  rules:
+  - http:
+    paths:
+    - backend:
+        serviceName: app
+        servicePort: 80
+      path: /
 ```
 
 _How do you test that the Ingress works?_
@@ -214,14 +214,14 @@ First, retrieve the Pod name for the Ingress controller with:
 
 ```terminal|command=1|title=bash
 kubectl get pods --all-namespaces
-NAMESPACE NAME READY STATUS
-kube-system coredns-5644d7b6d9-jn7cq 1/1 Running
-kube-system etcd-minikube 1/1 Running
-kube-system kube-apiserver-minikube 1/1 Running
-kube-system kube-controller-manager-minikube 1/1 Running
-kube-system kube-proxy-zvf2h 1/1 Running
-kube-system kube-scheduler-minikube 1/1 Running
-kube-system nginx-ingress-controller-6fc5bcc 1/1 Running
+NAMESPACE   NAME                              READY STATUS
+kube-system coredns-5644d7b6d9-jn7cq          1/1   Running
+kube-system etcd-minikube                     1/1   Running
+kube-system kube-apiserver-minikube           1/1   Running
+kube-system kube-controller-manager-minikube  1/1   Running
+kube-system kube-proxy-zvf2h                  1/1   Running
+kube-system kube-scheduler-minikube           1/1   Running
+kube-system nginx-ingress-controller-6fc5bcc  1/1   Running
 ```
 
 Identify the Ingress Pod (which might be in a different Namespace) and describe it to retrieve the port:
@@ -282,10 +282,10 @@ _How do you check that?_
 
 ```terminal|command=1|title=bash
 kubectl get pods
-NAME READY STATUS RESTARTS AGE
-app1 0/1 ImagePullBackOff 0 47h
-app2 0/1 Error 0 47h
-app3-76f9fcd46b-xbv4k 1/1 Running 1 47h
+NAME                    READY STATUS            RESTARTS  AGE
+app1                    0/1   ImagePullBackOff  0         47h
+app2                    0/1   Error             0         47h
+app3-76f9fcd46b-xbv4k   1/1   Running           1         47h
 ```
 
 In the above session, the first two Pods aren't _Running_ and _Ready_.
@@ -491,14 +491,14 @@ First, retrieve the Pod for your Ingress controller (which could be located in a
 
 ```terminal|command=1|title=bash
 kubectl get pods --all-namespaces
-NAMESPACE NAME READY STATUS
-kube-system coredns-5644d7b6d9-jn7cq 1/1 Running
-kube-system etcd-minikube 1/1 Running
-kube-system kube-apiserver-minikube 1/1 Running
-kube-system kube-controller-manager-minikube 1/1 Running
-kube-system kube-proxy-zvf2h 1/1 Running
-kube-system kube-scheduler-minikube 1/1 Running
-kube-system nginx-ingress-controller-6fc5bcc 1/1 Running
+NAMESPACE   NAME                              READY STATUS
+kube-system coredns-5644d7b6d9-jn7cq          1/1   Running
+kube-system etcd-minikube                     1/1   Running
+kube-system kube-apiserver-minikube           1/1   Running
+kube-system kube-controller-manager-minikube  1/1   Running
+kube-system kube-proxy-zvf2h                  1/1   Running
+kube-system kube-scheduler-minikube           1/1   Running
+kube-system nginx-ingress-controller-6fc5bcc  1/1   Running
 ```
 
 Describe it to retrieve the port:
