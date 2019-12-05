@@ -35,11 +35,4 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(Action.assignTag({ id: 'general-post', pageId: Troubleshooting.id }))
-  // store.dispatch(
-  //   Action.registerBlogPostMarkdownBlock({
-  //     id: 'troubleshooting-deployments-related-0',
-  //     blogPostId: 'bp-troubleshooting-deployments',
-  //     content: toVFile({ path: join(__dirname, 'troubleshooting-deployments-related.md') }),
-  //   }),
-  // )
 }
