@@ -36,10 +36,11 @@ export function defaultAssetsPipeline({
 
   $.findAll('a')
     .get()
-    .filter((it: any) => /\.zip$/i.test(it.properties.href))
+    .filter((it: any) => /\.(zip|pdf)$/i.test(it.properties.href) && !it.properties.href.startsWith('http'))
     .forEach((it: any) => {
       cp(resolve(it.properties.href), `_site/a`)
       it.properties.href = `/a/${basename(it.properties.href)}`
+      it.properties['target'] = '_blank'
     })
 
   writeFileSync(generatePath(url), $.html())

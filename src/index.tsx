@@ -45,6 +45,7 @@ import * as WhatIsKubernetes from './whatIsKubernetes/whatIsK8s'
 import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
 import * as TerraformAks from './terraformAks/terraformAks'
 import * as ZeroToK8sJs from './02k8sjs/02k8sjs'
+import * as Troubleshooting from './troubleshooting/troubleshooting'
 import * as GenericBlogPost from './genericBlogPost'
 
 import * as BiteSized from './biteSized'
@@ -96,6 +97,7 @@ Blog.Register(store)
 ArchitectingAndScaling.Register(store)
 ZeroToK8s.Register(store)
 BiteSized.Register(store)
+Troubleshooting.Register(store)
 
 class Cheerio {
   constructor(private tree: Node) {}

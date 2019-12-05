@@ -68,6 +68,9 @@ function renderPage(state: State) {
     `<rights>Learnk8s Ltd</rights>`,
     `<id>${state.config.protocol}://${join(state.config.hostname, '/')}</id>`,
     blogPosts
+      .sort((a, b) => {
+        return new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf()
+      })
       .map(blogPost => {
         const page = pages.find(it => it.id === blogPost.pageId)!
         const author = getAuthors(state).find(it => it.id === blogPost.authorId)

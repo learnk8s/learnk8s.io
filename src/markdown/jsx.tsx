@@ -364,8 +364,8 @@ export function mdast2Jsx(): MdastVisitors<JSX.Element> {
       console.log(node, parent)
       throw new Error('linkReference not implemented')
     },
-    imageReference() {
-      throw new Error('imageReference not implemented')
+    imageReference(node) {
+      throw new Error(`imageReference not implemented ${node.position?.start.line}`)
     },
     definition() {
       throw new Error('definition not implemented')
