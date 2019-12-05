@@ -41,6 +41,9 @@ function renderPage(state: State) {
     `<description>Learn8s blog</description>`,
     `<language>en</language>`,
     blogPosts
+      .sort((a, b) => {
+        return new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf()
+      })
       .map(blogPost => {
         const page = pages.find(it => it.id === blogPost.pageId)!
         const author = getAuthors(state).find(it => it.id === blogPost.authorId)
