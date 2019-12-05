@@ -74,6 +74,7 @@ export async function renderPage(pageMeta: Page, state: State) {
         ) : null}
         <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
         <link rel='stylesheet' href='assets/style.css' />
+        <link rel='canonical' href={currentAbsoluteUrl} />
         <JsonLd<BlogPosting>
           item={{
             '@context': 'https://schema.org',
