@@ -181,7 +181,7 @@ In other words, you can safely remove it or assign it a different value.
 
 _And what about the `matchLabels` selector_?
 
-[TODO]()
+**It always has to match the Pod labels** and it's used by the Deployment to track the Pods.
 
 _Assuming that you made the correct change, how do you test it?_
 
