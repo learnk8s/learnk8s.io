@@ -36,20 +36,20 @@ Assuming you wish to deploy a simple _Hello World_ application, the YAML for suc
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: my-deployment
   labels:
     track: canary
 spec:
   selector:
     matchLabels:
-      name: app
+      any-name: my-app
   template:
     metadata:
       labels:
-        name: app
+        any-name: my-app
     spec:
       containers:
-      - name: app
+      - name: cont1
         image: learnk8s/app:1.0.0
         ports:
         - containerPort: 8080
@@ -57,7 +57,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app
+  name: my-service
 spec:
   ports:
   - port: 80
@@ -68,7 +68,7 @@ spec:
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: app
+  name: my-ingress
 spec:
   rules:
   - http:
@@ -101,9 +101,9 @@ So what you should pay attention to is how the Pods and the Service are related 
 
 You should remember three things:
 
-1. The Service selector should match the label of the Pod
+1. The Service selector should match at least one label of the Pod
 1. The Service `targetPort` should match the `containerPort` of the container inside the Pod
-1. The Service `port` can be any number. Multiple Service can use the same port because they have different IP addresses assigned.
+1. The Service `port` can be any number. Multiple Services can use the same port because they have different IP addresses assigned.
 
 The following diagram summarises the how to connect the ports:
 
@@ -141,20 +141,20 @@ If you look at the YAML, the labels and `ports`/`targetPort` should match:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: my-deployment
   labels:
     track: canary
 spec:
   selector:
     matchLabels:
-      name: app
+      any-name: my-app
   template:
     metadata:
       labels:
-        name: app
+        any-name: my-app
     spec:
       containers:
-      - name: app
+      - name: cont1
         image: learnk8s/app:1.0.0
         ports:
         - containerPort: 8080
@@ -162,20 +162,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app
+  name: my-service
 spec:
   ports:
   - port: 80
     targetPort: 8080
   selector:
-    name: app
+    any-name: my-app
 ```
 
 _What about the `track: canary` label at the top of the Deployment?_
 
 _Should that match too?_
 
-That labels belong to the deployment, and it's not used by the Service's selector to route traffic.
+That label belong to the deployment, and it's not used by the Service's selector to route traffic.
 
 In other words, you can safely remove it or assign it a different value.
 
@@ -194,12 +194,14 @@ kubectl get pods --show-labels
 Or if you have Pods belonging to several applications:
 
 ```terminal|command=1|title=bash
-kubectl get pods --selector name=app --show-labels
+kubectl get pods --selector any-name=my-app --show-labels
 ```
 
-Where `name=app` is the label `name: app`.
+Where `any-name=my-app` is the label `any-name: my-app`.
 
-However, checking the label isn't enough.
+_Still having issues?_
+
+You can also connect to the Pod!
 
 You can use the `port-forward` command in kubectl to connect to the Service and test the connection.
 
@@ -209,7 +211,7 @@ kubectl port-forward service/<service name> 3000:80
 
 Where:
 
-- `service/<service name>` is the name of the service — in the current YAML is "app"
+- `service/<service name>` is the name of the service — in the current YAML is "my-service"
 - 3000 is the port that you wish to open on your computer
 - 80 is the port exposed by the Service in the `port` field
 
@@ -230,7 +232,7 @@ Two things should match in the Ingress and Service:
 1. The `servicePort` of the Ingress should match the `port` of the Service
 1. The `serviceName` of the Ingress should match the `name` of the Service
 
-The following diagram summarises the how to connect the ports:
+The following diagram summarises how to connect the ports:
 
 ```slideshow
 {
@@ -262,24 +264,24 @@ In practice, you should look at these lines:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app
+  name: my-service
 spec:
   ports:
   - port: 80
     targetPort: 8080
   selector:
-    name: app
+    any-name: my-app
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: app
+  name: my-ingress
 spec:
   rules:
   - http:
     paths:
     - backend:
-        serviceName: app
+        serviceName: my-service
         servicePort: 80
       path: /
 ```
@@ -305,9 +307,10 @@ kube-system nginx-ingress-controller-6fc5bcc  1/1   Running
 Identify the Ingress Pod (which might be in a different Namespace) and describe it to retrieve the port:
 
 ```terminal|command=1|title=bash
-kubectl describe pod nginx-ingress-controller-6fc5bcc
+kubectl describe pod nginx-ingress-controller-6fc5bcc \
  --namespace kube-system \
  | grep Ports
+Ports:         80/TCP, 443/TCP, 18080/TCP
 ```
 
 Finally, connect to the Pod:
@@ -340,9 +343,9 @@ Perhaps the Pod doesn't start, or it's crashing.
 
 It's essential to have a well defined mental model of how Kubernetes works before diving into debugging a broken deployment.
 
-Since there're three components in every deployment, you should debug all of them in order, starting from the bottom.
+Since there are three components in every deployment, you should debug all of them in order, starting from the bottom.
 
-1. You should make sure that your Pods are running then
+1. You should make sure that your Pods are running, then
 1. Focus on getting the Service to route traffic to the Pods and then
 1. Check that the Ingress is correctly configured
 
@@ -506,17 +509,17 @@ kubectl get events --sort-by=.metadata.creationTimestamp
 
 If a Pod is _Running_ but not _Ready_ it means that the Readiness probe is failing.
 
-When the Readiness probe is failing, you the Pods isn't attached to the Service, and no traffic is forwarded to that instance.
+When the Readiness probe is failing, the Pod isn't attached to the Service, and no traffic is forwarded to that instance.
 
 A failing Readiness probe is an application-specific error, so you should inspect the _Events_ section in `kubectl describe` to identify the error.
 
 ## 2. Troubleshooting Services
 
-If you're Pods are _Running_ and _Ready_, but you're still unable to receive a response from your app, you should check if the Service is configured correctly.
+If your Pods are _Running_ and _Ready_, but you're still unable to receive a response from your app, you should check if the Service is configured correctly.
 
 Services are designed to route the traffic to Pods based on their labels.
 
-So the first thing that you should check is how many Pods are target by the Service.
+So the first thing that you should check is how many Pods are targeted by the Service.
 
 You can do so by checking the Endpoints in the Service:
 
@@ -535,7 +538,7 @@ If you see a list of endpoints, but still can't access your application, then th
 
 _How do you test the Service?_
 
-Regardless of the type of Service, you can use `kubectl-forward` to connect to it:
+Regardless of the type of Service, you can use `kubectl port-forward` to connect to it:
 
 ```terminal|command=1|title=bash
 kubectl port-forward service/<service-name> 3000:80
@@ -545,7 +548,7 @@ Where:
 
 - `<service-name>` is the name of the Service
 - `3000` is the port that you wish to open on your computer
-- `8080` is the port exposed by the Service
+- `80` is the port exposed by the Service
 
 ## 3. Troubleshooting Ingress
 
@@ -558,7 +561,7 @@ But you still can't see a response from your app.
 
 It means that most likely, the Ingress is misconfigured.
 
-Since the Ingress controller is a third-party component in the cluster, there are different debugging techniques depending on the type of Ingress controller.
+Since the Ingress controller being used is a third-party component in the cluster, there are different debugging techniques depending on the type of Ingress controller.
 
 But before diving into Ingress specific tools, there's something straightforward that you could check.
 
