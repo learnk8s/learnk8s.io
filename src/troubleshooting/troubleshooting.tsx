@@ -9,7 +9,7 @@ export const Troubleshooting = {
   id: 'troubleshooting-deployments',
   url: '/troubleshooting-deployments',
   title: 'A visual guide on troubleshooting Kubernetes deployments',
-  description: ``,
+  description: `Troubleshooting in Kubernetes can be a daunting task. In this article you will learn how to diagnose issues in Pods, Services and Ingress.`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -29,7 +29,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: Troubleshooting.id,
       authorId: Authors.danielePolencic.id,
       title: Troubleshooting.title,
-      description: ``,
+      description: `Troubleshooting in Kubernetes can be a daunting task if you don't know where to start. Why is the Pod pending? And why is it Running but can't receive any traffic? In this article you will learn how to diagnose problems in Pods, Services and Ingress.`,
       publishedDate: '2019-12-05',
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),

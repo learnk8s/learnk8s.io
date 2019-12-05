@@ -646,3 +646,16 @@ The three commands that you should try are:
 - `kubectl ingress-nginx logs`, to check the logs
 
 > Please notice that you might need to specify the correct namespace for your Ingress controller with `--namespace <name>`.
+
+## Summary
+
+Troubleshooting in Kubernetes can be a daunting task if you don't know where to start.
+
+You should always remember to approach the problem bottom-up: start with the Pods and move up the stack with Service and Ingress.
+
+The same debugging techniques that you learnt in this article can be applied to other objects such as:
+
+- failing Jobs and CronJobs
+- StatefulSets and DaemonSets
+
+Many thanks to [Gergely Risko](https://github.com/errge), [Daniel Weibel](https://medium.com/@weibeld) and [Charles Christyraj](https://www.linkedin.com/in/charles-christyraj-0bab8a36/) for offering some invaluable suggestions.
