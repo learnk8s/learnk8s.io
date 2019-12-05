@@ -1,12 +1,12 @@
-**TL;DR:** here's a diagram to help you debug your deployments in Kubernetes.
+**TL;DR:** here's a diagram to help you debug your deployments in Kubernetes (and you can [download it in the PDF version here](troubleshooting-kubernetes.pdf)).
 
 ![Flow chart to debug deployments in Kubernetes](diagram.png)
 
 When you wish to deploy an application in Kubernetes, you usually define three components:
 
-- a Deployment — which is a recipe for creating copies of your application called Pods
-- a Service — an internal load balancer that routes the traffic to Pods
-- an Ingress — a description of how the traffic should flow from outside the cluster to your Service.
+- a **Deployment** — which is a recipe for creating copies of your application called Pods
+- a **Service** — an internal load balancer that routes the traffic to Pods
+- an **Ingress** — a description of how the traffic should flow from outside the cluster to your Service.
 
 Here's a quick visual recap.
 
@@ -178,6 +178,10 @@ _Should that match too?_
 That labels belong to the deployment, and it's not used by the Service's selector to route traffic.
 
 In other words, you can safely remove it or assign it a different value.
+
+_And what about the `matchLabels` selector_?
+
+[TODO]()
 
 _Assuming that you made the correct change, how do you test it?_
 
