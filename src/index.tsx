@@ -167,7 +167,6 @@ class CheerioSelectionAll {
 
 export function run(options: Settings) {
   return function mount() {
-
     Landing.Mount({ store })
     Training2.Mount({ store })
     BestPractices.Mount({ store })
@@ -205,10 +204,7 @@ export function run(options: Settings) {
       console.log('Skipping Eventbrite publishing')
     }
   }
-
-
 }
-
 
 interface Settings {
   siteUrl: string
