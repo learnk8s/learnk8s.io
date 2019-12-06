@@ -6,7 +6,7 @@ import { Store } from 'redux'
 import { State, Actions, Action, getConfig, getPages, getOpenGraph, getBlogPosts, hasTag } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
-import { BlogPost } from './store/websiteReducer'
+import { BlogPost, Page } from './store/websiteReducer'
 import { VReference } from './files'
 
 const inlineRenderer = new marked.Renderer()
@@ -123,8 +123,8 @@ function renderPage(state: State) {
         <section className='ph3 measure-wide pv4 center'>
           <ul className='list pl0'>
             {blogPosts.map(post => {
-              let postPage = pages.find(it => it.id === post.pageId)!
-              let url = postPage ? postPage.url : '#'
+              let postPage: Page = pages.find(it => it.id === post.pageId)!
+              let url: string = postPage ? postPage.url : '#'
               return (
                 <li className='pv3'>
                   <h2 className='mb0'>

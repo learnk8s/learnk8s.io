@@ -1,7 +1,6 @@
 const backstop = require('backstopjs')
 import { ok } from 'assert'
-import { Sitemap, LinkedNode, getFullUrl } from './src/sitemap';
-import * as Redirect from './src/redirect'
+import { store, getRedirects, getPages } from './src/store'
 const commander = require('commander')
 
 commander
@@ -14,26 +13,24 @@ commander
 ok(commander.hostname, 'Please provide a hostname such as --hostname http://localhost:3000')
 ok(commander.approve || commander.test, 'Please provide either --approve or --test')
 
-function render(node: LinkedNode<any, object>, siteUrl: string): string {
-  if (node.payload.type === Redirect.Type) {
-    return ''
-  }
-  return `${siteUrl}${getFullUrl(node)}`
-}
-
-function renderTree(node: LinkedNode<any, object>, siteUrl: string): string[] {
-  return [
-    render(node, siteUrl),
-    ...Object.values(node.children).reduce((acc, it) => acc.concat(renderTree(it as any, siteUrl)), [] as string[]),
-  ]
+function renderPage(siteUrl: string): string[] {
+  // TODO: get all pages URL
+  const state = store.getState()
+  const redirects = getRedirects(state)
+  return getPages(state)
+    .filter(it => {
+      return !!redirects.find(redirect => {
+        redirect.id === it.id
+      })
+    })
+    .map(it => `${siteUrl}${it.url}`)
 }
 
 function toId(raw: string): string {
   return raw.toLowerCase().replace(/[^\w]+/g, '-')
 }
 
-const command = commander.test ? 'test' :
-  commander.approve ? 'approve' : ''
+const command = commander.test ? 'test' : commander.approve ? 'approve' : ''
 
 backstop(command, {
   config: {
@@ -50,26 +47,28 @@ backstop(command, {
         height: 768,
       },
     ],
-    scenarios: renderTree(Sitemap, commander.hostname).filter(it => !!it).map(it => {
-      return {
-        label: toId((new URL(it)).pathname),
-        url: it,
-        referenceUrl: '',
-        readyEvent: '',
-        readySelector: '',
-        delay: 0,
-        hideSelectors: [],
-        removeSelectors: [],
-        hoverSelector: '',
-        clickSelector: '',
-        postInteractionWait: 0,
-        selectors: [],
-        selectorExpansion: true,
-        expect: 0,
-        misMatchThreshold: 0.01,
-        requireSameDimensions: true,
-      }
-    }),
+    scenarios: renderPage(commander.hostname)
+      .filter(it => !!it)
+      .map(it => {
+        return {
+          label: toId(new URL(it).pathname),
+          url: it,
+          referenceUrl: '',
+          readyEvent: '',
+          readySelector: '',
+          delay: 0,
+          hideSelectors: [],
+          removeSelectors: [],
+          hoverSelector: '',
+          clickSelector: '',
+          postInteractionWait: 0,
+          selectors: [],
+          selectorExpansion: true,
+          expect: 0,
+          misMatchThreshold: 0.01,
+          requireSameDimensions: true,
+        }
+      }),
     paths: {
       bitmaps_reference: 'backstop_data/bitmaps_reference',
       bitmaps_test: 'backstop_data/bitmaps_test',

@@ -5,7 +5,7 @@ import { join } from 'path'
 import { getOpenGraph, getPages, getConfig, State, Actions, Action, getBlogPosts, hasTag } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
-import { BlogPost } from './store/websiteReducer'
+import { BlogPost, Page } from './store/websiteReducer'
 import { VReference } from './files'
 
 export const Details = {
@@ -82,8 +82,8 @@ function renderPage(state: State) {
         <section className='ph3 measure-wide pv4 center'>
           <ul className='list pl0'>
             {blogPosts.map(post => {
-              let postPage = pages.find(it => it.id === post.pageId)!
-              let url = postPage ? postPage.url : '#'
+              let postPage: Page = pages.find(it => it.id === post.pageId)!
+              let url: string = postPage ? postPage.url : '#'
               return (
                 <li className='pv3'>
                   <h2 className='mb0'>

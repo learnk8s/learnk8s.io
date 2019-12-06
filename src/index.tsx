@@ -5,7 +5,7 @@ import { resolve, extname, join } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { SyncEvents } from './eventbrite.v2'
 import { ok } from 'assert'
-import { Sitemap, LinkedNode, Register, Mount } from './sitemap'
+import { Register, Mount } from './sitemap'
 import unified from 'unified'
 const raw = require('rehype-raw')
 import { Node } from 'unist'
@@ -167,8 +167,7 @@ class CheerioSelectionAll {
 }
 
 export function run(options: Settings) {
-  return function mount(root: Sitemap) {
-    renderTree(root, root)
+  return function mount() {
 
     Landing.Mount({ store })
     Training2.Mount({ store })
@@ -208,13 +207,9 @@ export function run(options: Settings) {
     }
   }
 
-  function renderTree(node: LinkedNode<any>, root: Sitemap) {
-    render(node, root, options)
-    Object.values(node.children).forEach(it => renderTree(it as any, root))
-  }
+
 }
 
-function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {}
 
 interface Settings {
   siteUrl: string
@@ -237,9 +232,8 @@ run({
   eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
   eventBriteOrg: process.env.ENVENTBRITE_ORG as string,
   canPublishEvents: process.env.PUBLISH_EVENTS === 'yes',
-})(Sitemap)
+})()
 
-// writeFileSync('_site/sitemap.xml', runSiteMap(Sitemap, 'https://learnk8s.io'))
 copyFileSync('robots.txt', resolve('_site', 'robots.txt'))
 copyFileSync('favicon.ico', resolve('_site', 'favicon.ico'))
 
