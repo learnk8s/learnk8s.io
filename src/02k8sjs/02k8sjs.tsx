@@ -5,26 +5,6 @@ import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
 
-export const Details = {
-  type: '02k8sjs',
-  url: '/nodejs-kubernetes-guide',
-  seoTitle: 'Hands-on guide: developing & deploying Node.js apps in Kubernetes',
-  title: 'Hands-on guide: developing and deploying Node.js apps in Kubernetes',
-  description: `Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
-  openGraphImage: (
-    <img src='src/02k8sjs/jury.jpg' alt='Hands-on guide: developing and deploying Node.js apps in Kubernetes' />
-  ),
-  publishedDate: '2019-10-31',
-  previewImage: (
-    <img src='src/02k8sjs/jury.jpg' alt='Hands-on guide: developing and deploying Node.js apps in Kubernetes' />
-  ),
-  author: {
-    fullName: 'Daniele Polencic',
-    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
-    link: 'https://linkedin.com/in/danielepolencic',
-  },
-} as const
-
 export const ZeroToK8sJs = {
   id: '02k8sjs',
   url: '/nodejs-kubernetes-guide',

@@ -5,25 +5,6 @@ import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
 
-export const Details = {
-  type: 'whatIsK8s',
-  url: '/what-is-kubernetes',
-  seoTitle: 'What is Kubernetes? ♦︎ Learnk8s',
-  title: 'What is Kubernetes? Optimise your hosting costs and efficiency',
-  shortDescription: `The industry has experienced a shift towards developing smaller applications. But how does that impact the infrastructure? Don't end up paying the extra price in your cloud bill; learn how you can fix it with Kubernetes.`,
-  description: `In the last few years, the industry has experienced a shift towards developing smaller and more focused applications. Smaller services are excellent from a product and development perspective: they are quicker to deploy, easier to iterate on and can handle failure gracefully. But how does that cultural shift impact the infrastructure? The current practices don't fit the paradigm well, and you might end up paying the extra price in your cloud bill at the end of the month.`,
-  openGraphImage: <img src='src/whatIsKubernetes/why-kube.png' alt='Kubernetes bucks' />,
-  publishedDate: '2018-09-04',
-  previewImage: (
-    <img src='src/whatIsKubernetes/why-kube.png' alt='What is Kubernetes? Optimise your hosting costs and efficiency' />
-  ),
-  author: {
-    fullName: 'Daniele Polencic',
-    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
-    link: 'https://linkedin.com/in/danielepolencic',
-  },
-} as const
-
 export const WhatIsKubernetes = {
   id: 'what-is-kubernetes',
   url: '/blog/what-is-kubernetes',

@@ -5,15 +5,6 @@ import { join } from 'path'
 import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 
-export const Details = {
-  type: 'contactUs',
-  url: '/contact-us',
-  seoTitle: 'Contact us ♦︎ Learnk8s',
-  title: 'Contact us',
-  description: 'Feel free to get in touch and let us know how we can help. ',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-} as const
-
 export const ContactUs = {
   id: 'contactUs',
   url: '/contact-us',

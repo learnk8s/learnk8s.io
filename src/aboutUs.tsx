@@ -5,15 +5,6 @@ import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './sto
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 
-export const Details = {
-  type: 'aboutUs',
-  url: '/about-us',
-  seoTitle: 'Team ♦︎ Learnk8s',
-  title: 'Team',
-  description: 'Experienced software consultants, specialising in Kubernetes.',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-}
-
 export const AboutUs = {
   id: 'aboutUs',
   url: '/about-us',

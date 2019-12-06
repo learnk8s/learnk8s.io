@@ -22,38 +22,6 @@ inlineRenderer.link = (href, title, text) => {
     : `<a href="${href}" class="link navy underline hover-sky" ${attributes}>${text}</a>`
 }
 
-export interface Details {
-  type: string
-  url: string
-  seoTitle: string
-  title: string
-  description: string
-  openGraphImage: JSX.Element
-  publishedDate: string
-  lastModifiedDate?: string
-  previewImage: JSX.Element
-  author: {
-    fullName: string
-    avatar: JSX.Element
-    link: string
-    shortDescription: string
-  }
-}
-
-function identity<T>(value: T): T {
-  return value
-}
-
-export const Details = {
-  type: identity<'biteSizedSeries'>('biteSizedSeries'),
-  url: '/bite-sized',
-  seoTitle: 'Bite-sized Kubernetes learning ♦︎ Learnk8s',
-  title: 'Bite-sized Kubernetes learning',
-  description:
-    'A regular column on the most interesting questions that we see online and during our workshops answered by a Kubernetes expert',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-}
-
 export const BiteSized = {
   id: '/bite-sized',
   url: '/bite-sized',

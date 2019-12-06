@@ -5,15 +5,6 @@ import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 
-export const Details = {
-  type: 'newsletter',
-  url: '/newsletter',
-  seoTitle: 'Newsletter ♦︎ Learnk8s',
-  title: 'Newsletter',
-  description: 'Keep yourself up to date with the latest news from Learnk8s.',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-} as const
-
 export const Newsletter = {
   id: 'newsletter',
   url: '/newsletter',

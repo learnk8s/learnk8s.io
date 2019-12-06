@@ -5,15 +5,6 @@ import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './sto
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 
-export const Details = {
-  type: 'notFound' as const,
-  url: '/404',
-  seoTitle: 'Oops! Not found',
-  title: 'Not Found',
-  description: 'We are sorry but he page you tried to visit does not exist',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-}
-
 export const NotFound404 = {
   id: 'not-found-404',
   url: '/404',

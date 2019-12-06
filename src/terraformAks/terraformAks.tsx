@@ -5,26 +5,6 @@ import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
 
-export const Details = {
-  type: 'terraformAks',
-  url: '/get-start-terraform-aks',
-  seoTitle: 'Getting started with Terraform and Kubernetes on Azure AKS',
-  title: 'Getting started with Terraform and Kubernetes on Azure AKS',
-  description: `Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.`,
-  openGraphImage: (
-    <img src='src/terraformAks/terraforming.jpg' alt='Getting started with Terraform and Kubernetes on Azure AKS' />
-  ),
-  publishedDate: '2019-08-21',
-  previewImage: (
-    <img src='src/terraformAks/terraforming.jpg' alt='Getting started with Terraform and Kubernetes on Azure AKS' />
-  ),
-  author: {
-    fullName: 'Daniele Polencic',
-    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
-    link: 'https://linkedin.com/in/danielepolencic',
-  },
-} as const
-
 export const TerraformAks = {
   id: 'terraform-aks',
   url: '/blog/get-start-terraform-aks',

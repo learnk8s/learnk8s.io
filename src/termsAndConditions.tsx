@@ -13,15 +13,6 @@ renderer.heading = (text: string) => {
   return `<h3>${text}</h3>`
 }
 
-export const Details = {
-  type: 'termsAndConditions',
-  url: '/terms-and-conditions',
-  seoTitle: 'Terms and Conditions ♦︎ Learnk8s',
-  title: 'Terms and Conditions',
-  description: 'Terms and Conditions that applies to all services offered by Learnk8s',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-} as const
-
 export const TermsAndConditions = {
   id: 'termsAndConditions',
   url: '/terms-and-conditions',

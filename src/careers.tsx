@@ -5,15 +5,6 @@ import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './sto
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 
-export const Details = {
-  type: 'careers',
-  url: '/careers',
-  seoTitle: 'Team ♦︎ Learnk8s',
-  title: 'Careers',
-  description: 'Join Learnk8s and help others learn Docker and Kubernetes.',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-} as const
-
 export const Career = {
   id: 'careers',
   url: '/careers',

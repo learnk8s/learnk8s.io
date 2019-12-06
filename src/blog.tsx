@@ -8,15 +8,6 @@ import { Store } from 'redux'
 import { BlogPost, Page } from './store/websiteReducer'
 import { VReference } from './files'
 
-export const Details = {
-  type: 'blog',
-  url: '/blog',
-  seoTitle: 'Blog ♦︎ Learnk8s',
-  title: 'Blog',
-  description: 'The fastest way to become an expert in deploying applications at scale with Kubernetes.',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-} as const
-
 export const Blog = {
   id: 'blog',
   url: '/blog',

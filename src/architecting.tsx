@@ -8,15 +8,6 @@ import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 
-export const Details = {
-  type: 'academy-architecting-and-scaling',
-  url: '/architecting-scaling-apps-kubernetes',
-  seoTitle: 'Architecting and scaling apps on Kubernetes ♦︎ Learnk8s Academy',
-  title: 'Architecting and scaling apps on Kubernetes',
-  description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-} as const
-
 const enterprisePackage: MailTo = {
   subject: 'Learnk8s Academy — Enterprise license',
   body: `Hi Learnk8s,\n\nI'd like to discuss buying ___ licenses in bulk for the Learnk8s Academy.\n\nKind regards,\n`,
