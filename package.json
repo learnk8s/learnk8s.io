@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "learnk8s.io static website",
   "scripts": {
-    "visual:test": "ts-node --files test.ts --test",
+    "visual:test": "ts-node --files test.ts --test --hostname http://localhost:4000",
     "visual:approve": "ts-node --files test.ts --approve",
     "build": "ts-node --files src/index.tsx",
     "svgo": "ts-node src/svgo.ts",
