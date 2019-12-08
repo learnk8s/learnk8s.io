@@ -1,14 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 600" id="hello">
-  <g fill="none" fill-rule="evenodd">
-    <g transform="translate(64 65)">
-      <path fill="#FF003C" d="M632,465.678665 C632,468.61781 630.021154,471 627.579156,471 L4.42084395,471 C1.97884644,471 0,468.61781 0,465.678665 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 L627,0 C629.761424,-5.07265313e-16 632,2.23857625 632,5 L632,465.678665 Z"/>
-      <text fill="#FFF" font-family="-apple-system, BlinkMacSystemFont, 'avenir next', avenir, 'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial, sans-serif" font-size="34" font-weight="bold">
-        <tspan x="136.512" y="245.842">Hello world! via 7shq5</tspan>
-      </text>
-      <path fill="#CCC" d="M5,0 L627,0 C629.761424,-5.07265313e-16 632,2.23857625 632,5 L632,23 L0,23 L0,5 C-3.38176876e-16,2.23857625 2.23857625,5.07265313e-16 5,0 Z"/>
-      <path fill="#E74C3C" d="M17,12.5 C17,14.9855596 14.9855596,17 12.5,17 C10.0144404,17 8,14.9855596 8,12.5 C8,10.0144404 10.0144404,8 12.5,8 C14.9855596,8 17,10.0144404 17,12.5"/>
-      <path fill="#F1C40F" d="M33,12.5 C33,14.9855596 30.9855596,17 28.5,17 C26.0144404,17 24,14.9855596 24,12.5 C24,10.0144404 26.0144404,8 28.5,8 C30.9855596,8 33,10.0144404 33,12.5"/>
-      <path fill="#2ECC71" d="M48,12.5 C48,14.9855596 45.9855596,17 43.5,17 C41.0144404,17 39,14.9855596 39,12.5 C39,10.0144404 41.0144404,8 43.5,8 C45.9855596,8 48,10.0144404 48,12.5"/>
-    </g>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 600"><style>.sans-serif{font-family:-apple-system,BlinkMacSystemFont,'avenir next', avenir,'helvetica neue',helvetica,ubuntu,roboto,noto,'segoe ui',arial,sans-serif}</style><g transform="translate(64 65)" fill="none" fill-rule="evenodd"><path fill="#FF003C" d="M632 465.679c0 2.939-1.979 5.321-4.42 5.321H4.42C1.98 471 0 468.618 0 465.679V5a5 5 0 0 1 5-5h622a5 5 0 0 1 5 5v460.679z"></path><text fill="#FFF" font-size="34" font-weight="bold" class="sans-serif"><tspan x="136.512" y="245.842">Hello world! via 7shq5</tspan></text><path fill="#CCC" d="M5 0h622a5 5 0 0 1 5 5v18H0V5a5 5 0 0 1 5-5z"></path><path fill="#E74C3C" d="M17 12.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0"></path><path fill="#F1C40F" d="M33 12.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0"></path><path fill="#2ECC71" d="M48 12.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0"></path></g></svg>
