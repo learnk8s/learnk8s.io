@@ -117,7 +117,10 @@ async function renderPage(page: Page, state: State) {
               {format(new Date(blog.lastModifiedDate), 'MMMM yyyy')}
             </p>
           ) : null}
-          <img src={openGraph.image.props.src} className='pt2' alt={openGraph.image.props.alt} />
+          <hr className='pv2 bn' />
+          <div className='aspect-ratio aspect-ratio--6x4'>
+            <img src={openGraph.image.props.src} className='aspect-ratio--object' alt={openGraph.image.props.alt} />
+          </div>
           <hr className='w3 center b--navy mv4 mb5-ns' />
           <p className='lh-copy measure-wide f4'>
             <strong className='b'>Welcome to Bite-sized Kubernetes learning</strong> — a regular column on the most

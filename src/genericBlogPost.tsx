@@ -119,7 +119,10 @@ export async function renderPage(pageMeta: Page, state: State) {
               {format(new Date(blog.lastModifiedDate), 'MMMM yyyy')}
             </p>
           ) : null}
-          <img src={openGraph.image.props.src} className='pt2' alt={openGraph.image.props.alt} />
+          <hr className='pv2 bn' />
+          <div className='aspect-ratio aspect-ratio--6x4'>
+            <img src={openGraph.image.props.src} className='aspect-ratio--object' alt={openGraph.image.props.alt} />
+          </div>
           <hr className='w3 center b--navy mv4 mb5-ns' />
           {renderToJsx(content)}
           {blocks.map(it => {
