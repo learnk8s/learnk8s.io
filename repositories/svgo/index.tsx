@@ -97,6 +97,13 @@ export async function optimise(svgContent: string, skipIds = [] as string[]): Pr
     }
   })
 
+  $.findAll('use').forEach((element: any) => {
+    const xLinkHref = element.properties.xLinkHref
+    if (xLinkHref && xLinkHref.startsWith('#')) {
+      skipIds.push(xLinkHref.slice(1))
+    }
+  })
+
   $.findAll('[id]').forEach((element: any) => {
     const id = element.properties.id
     if (skipIds.some(it => id.startsWith(it))) {
