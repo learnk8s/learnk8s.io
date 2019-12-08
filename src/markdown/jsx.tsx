@@ -20,6 +20,7 @@ export function renderToJsx(vfile: VFile | VFile<Mdast.Root>): JSX.Element {
 }
 
 export function mdast2Jsx(): MdastVisitors<JSX.Element> {
+  let slideCounter = 0
   return {
     root(node, parent, { all }) {
       return <Fragment>{all(node)}</Fragment>
@@ -28,54 +29,80 @@ export function mdast2Jsx(): MdastVisitors<JSX.Element> {
       return <Fragment>{node.value}</Fragment>
     },
     slideshow(node, parent, { all }) {
-      const slides = selectAll<Mdast.Slide>('slide', node).map(Slide)
+      slideCounter += 1
+      const slides = selectAll<Mdast.Slide>('slide', node).map(Slide(slideCounter.toString()))
       return (
-        <div className='slideshow-js overflow-hidden'>
-          <ul className='pl0 list slider-js'>{slides}</ul>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: `.pagination-icon {
-              stroke: currentColor;
-              stroke-linecap: round;
-              stroke-linejoin: round;
-              stroke-width: .125rem;
-              display: inline-block;
-              width: 0.4rem;
-            }`,
-            }}
-          />
-          <script dangerouslySetInnerHTML={{ __html: `(${Slideshow.toString()})()` }} />
+        <div className='relative overflow-hidden'>
+          <ul className='pl0 list'>{slides}</ul>
         </div>
       )
 
-      function Slide(slide: Mdast.Slide, index: number, slides: Mdast.Slide[]) {
-        const img = select<Mdast.Image>('slide image', slide) as Mdast.Image
-        const paragraphs = selectAll<Exclude<ArrayType<Mdast.Slideshow['children']>, Mdast.Slide>>(
-          'slide > :not(image)',
-          slide,
-        )
-        ok(img, `Missing image in slide ${node.position ? node.position.start.line : ''}`)
-        return (
-          <li key={index} className='mv3'>
-            <img src={img.url} alt={toString(slide)} />
-            <div className='bt b-solid bw2 b--black-70 relative mt0'>
-              <div className='bg-black-10 br1 pa1 dib mt2 absolute bottom-1 left-0'>
-                <span className='b black-60'>{index + 1}</span>
-                <span className='f7 black-50'>/{slides.length}</span>
-              </div>
-            </div>
-            <div className='navigation-js flex items-start justify-between bg-evian ph2'>
-              <div className='f5 lh-copy black-90 w-60 center'>{paragraphs.map(Paragraph)}</div>
-            </div>
-          </li>
-        )
-
-        function Paragraph(paragraph: Mdast.Paragraph, index: number) {
+      function Slide(id: string) {
+        const Previous: React.StatelessComponent<{ id: string }> = ({ id }) => {
           return (
-            <p key={index} className='lh-copy measure-wide f5'>
-              {all(paragraph)}
-            </p>
+            <label className='db f6 b black-50 pv3 pointer w-20 ttu' htmlFor={id}>
+              <svg viewBox='0 0 10 16' xmlns='http://www.w3.org/2000/svg' className='pagination-icon mr2'>
+                <polyline fill='none' vectorEffect='non-scaling-stroke' points='8,2 2,8 8,14'></polyline>
+              </svg>{' '}
+              Previous
+            </label>
           )
+        }
+        const Next: React.StatelessComponent<{ id: string }> = ({ id }) => {
+          return (
+            <label className='db f6 b black-50 pv3 pointer w-20 tr ttu' htmlFor={id}>
+              Next{' '}
+              <svg viewBox='0 0 10 16' xmlns='http://www.w3.org/2000/svg' className='pagination-icon ml2'>
+                <polyline fill='none' vectorEffect='non-scaling-stroke' points='2,2 8,8 2,14'></polyline>
+              </svg>
+            </label>
+          )
+        }
+
+        return (slide: Mdast.Slide, index: number, slides: Mdast.Slide[]) => {
+          const img = select<Mdast.Image>('slide image', slide) as Mdast.Image
+          const paragraphs = selectAll<Exclude<ArrayType<Mdast.Slideshow['children']>, Mdast.Slide>>(
+            'slide > :not(image)',
+            slide,
+          )
+          ok(img, `Missing image in slide ${node.position ? node.position.start.line : ''}`)
+          return (
+            <li className='mv3'>
+              <input
+                type='radio'
+                name={`carousel-${id}`}
+                id={`carousel-${id}-${index}`}
+                defaultChecked={index === 0}
+                className='o-0 absolute bottom-0 left-0'
+              />
+              <div className='dn checked-reveal'>
+                <img src={img.url} alt={toString(slide)} />
+                <div className='bt b-solid bw2 b--black-70 relative mt0'>
+                  <div className='bg-black-10 br1 pa1 dib mt2 absolute bottom-1 left-0'>
+                    <span className='b black-60'>{index + 1}</span>
+                    <span className='f7 black-50'>/{slides.length}</span>
+                  </div>
+                </div>
+                <div className='flex items-start justify-between bg-evian ph2'>
+                  {index === 0 ? <div className='w-20'></div> : <Previous id={`carousel-${id}-${index - 1}`} />}
+                  <div className='f5 lh-copy black-90 w-60 center'>{paragraphs.map(Paragraph)}</div>
+                  {index === slides.length - 1 ? (
+                    <div className='w-20'></div>
+                  ) : (
+                    <Next id={`carousel-${id}-${index + 1}`} />
+                  )}
+                </div>
+              </div>
+            </li>
+          )
+
+          function Paragraph(paragraph: Mdast.Paragraph, index: number) {
+            return (
+              <p key={index} className='lh-copy measure-wide f5'>
+                {all(paragraph)}
+              </p>
+            )
+          }
         }
       }
     },
@@ -644,55 +671,6 @@ export function groupHighlightedCode(
       return a[1][0] - b[1][0]
     })
   return sorted
-}
-
-function Slideshow() {
-  function setupSlideshow(root: HTMLElement) {
-    const width = root.offsetWidth
-    const slides = [].slice.call(root.querySelectorAll('li')) as HTMLElement[]
-    const slider = root.querySelector<HTMLElement>('.slider-js')
-    if (!slider) {
-      return console.log(`I couldn't find the slider`)
-    }
-    if (([].slice.call(slider.classList) as string[]).indexOf('ok') > 0) {
-      return
-    }
-    slider.style.width = `${width * slides.length}px`
-    slider.classList.add('flex', 'ok')
-    slides.forEach(slide => (slide.style.width = `${width}px`))
-
-    function createEmptyNav() {
-      const emptyNav = document.createElement('div')
-      emptyNav.classList.add('w-20')
-      emptyNav.innerHTML = '&nbsp;'
-      return emptyNav
-    }
-
-    slides.forEach((slide, index, items) => {
-      const leftNav = document.createElement('div')
-      leftNav.classList.add('f6', 'b', 'black-50', 'pv3', 'pointer', 'w-20')
-      leftNav.innerHTML = `<svg viewBox='0 0 10 16' xmlns='http://www.w3.org/2000/svg' class='pagination-icon mr2'>
-  <polyline fill='none' vectorEffect='non-scaling-stroke' points='8,2 2,8 8,14'></polyline>
-</svg>
-<span class='ttu'>Previous</span>`
-      leftNav.onclick = () => (root.scrollLeft -= width)
-      const rightNav = document.createElement('div')
-      rightNav.classList.add('f6', 'b', 'black-50', 'pv3', 'pointer', 'w-20', 'tr')
-      rightNav.innerHTML = `<span class='ttu'>Next</span>
-<svg viewBox='0 0 10 16' xmlns='http://www.w3.org/2000/svg' class='pagination-icon ml2'>
-  <polyline fill='none' vectorEffect='non-scaling-stroke' points='2,2 8,8 2,14'></polyline>
-</svg>`
-      rightNav.onclick = () => (root.scrollLeft += width)
-      const navigation = slide.querySelector('.navigation-js')
-      if (!navigation) {
-        return console.log(`I couldn't find the navigation`)
-      }
-      navigation.prepend(index === 0 ? createEmptyNav() : leftNav)
-      navigation.append(index === items.length - 1 ? createEmptyNav() : rightNav)
-    })
-  }
-
-  document.querySelectorAll<HTMLElement>('.slideshow-js').forEach(setupSlideshow)
 }
 
 function ResetAnimation() {

@@ -531,3 +531,17 @@
   border-bottom-left-radius: 0% 52%;
   background: linear-gradient(180deg, hsl(206.79999999999995, 57.2%, 57.8%) 18%, hsl(206, 56%, 50%) 72%);
 }
+
+/* slides */
+input[type='radio']:checked ~ .checked-reveal {
+  display: block;
+}
+
+.pagination-icon {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 0.125rem;
+  display: inline-block;
+  width: 0.4rem;
+}
