@@ -231,6 +231,9 @@ function optimiseJs({ $ }: { $: Cheerio }): Cheerio {
     .map(it => readFileSync((it.properties as any).src, 'utf8'))
   const js: string = [...includeScripts, ...inlineScripts.map(it => toString(it))].filter(onlyUnique).join('\n;')
   scriptTags.remove()
+  if (js === '') {
+    return $
+  }
   const digestJs = md5(js)
   const minifiedJs = minify(js)
   if (minifiedJs.error) {
