@@ -35,17 +35,6 @@ import { subDays } from 'date-fns'
 
 export const Type = 'landing' as const
 
-export function Details({ url, city }: { url: string; city: string }) {
-  return {
-    type: Type,
-    url,
-    seoTitle: `Kubernetes training in ${city} ♦︎ Learnk8s`,
-    title: `Kubernetes training in ${city}`,
-    description: `Become an expert in deploying application as scale with Kubernetes in ${city}.`,
-    openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-  }
-}
-
 export const Pages = {
   landingLondon: {
     id: 'landingLondon',

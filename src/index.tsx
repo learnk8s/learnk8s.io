@@ -5,7 +5,7 @@ import { resolve, extname, join } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { SyncEvents } from './eventbrite.v2'
 import { ok } from 'assert'
-import { Sitemap, LinkedNode, getFullUrl, runSiteMap, Register } from './sitemap'
+import { Register, Mount } from './sitemap'
 import unified from 'unified'
 const raw = require('rehype-raw')
 import { Node } from 'unist'
@@ -31,7 +31,6 @@ import * as Newsletter from './newsletter'
 import * as Redirect from './redirect'
 import * as RSS from './rss'
 import * as TermsAndConditions from './termsAndConditions'
-import * as Training from './training.v2'
 
 import * as SmallerImages from './smallerDockerImages/smallerImages'
 import * as DeployLaravel from './deployLaravel/deployLaravel'
@@ -169,9 +168,7 @@ class CheerioSelectionAll {
 }
 
 export function run(options: Settings) {
-  return function mount(root: Sitemap) {
-    renderTree(root, root)
-
+  return function mount() {
     Landing.Mount({ store })
     Training2.Mount({ store })
     BestPractices.Mount({ store })
@@ -193,6 +190,7 @@ export function run(options: Settings) {
     ArchitectingAndScaling.Mount({ store })
     ZeroToK8s.Mount({ store })
     BiteSized.Mount({ store })
+    Mount({ store })
 
     if (!!options.canPublishEvents && !!options.eventBriteToken && !!options.eventBriteOrg) {
       SyncEvents({
@@ -207,140 +205,6 @@ export function run(options: Settings) {
     } else {
       console.log('Skipping Eventbrite publishing')
     }
-  }
-
-  function renderTree(node: LinkedNode<any>, root: Sitemap) {
-    render(node, root, options)
-    Object.values(node.children).forEach(it => renderTree(it as any, root))
-  }
-}
-
-function render(node: LinkedNode<any>, root: Sitemap, { siteUrl }: Settings) {
-  const page = node.payload
-  const fullUrl = getFullUrl(node)
-  function generatePath() {
-    const path = `_site${join('/', fullUrl, 'index.html')}`
-    mkdir('-p', `_site${join('/', fullUrl)}`)
-    return path
-  }
-
-  switch (page.type) {
-    case Homepage.Details.type: {
-      return
-    }
-    case Training.Details.type: {
-      return
-    }
-    case Academy.Details.type: {
-      return
-    }
-    case ArchitectingAndScaling.Details.type: {
-      return
-    }
-    case ZeroToK8s.Details.type: {
-      return
-    }
-    case Consulting.Details.type: {
-      return
-    }
-    case ContactUs.Details.type: {
-      return
-    }
-    case Careers.Details.type: {
-      return
-    }
-    case TermsAndConditions.Details.type: {
-      return
-    }
-    case AboutUs.Details.type: {
-      return
-    }
-    case Redirect.Type: {
-      return
-    }
-    case Newsletter.Details.type: {
-      return
-    }
-    case Blog.Details.type: {
-      return
-    }
-    case BiteSized.Details.type: {
-      return
-    }
-    case SmallerImages.Details.type: {
-      return
-    }
-    case DeployLaravel.Details.type: {
-      return
-    }
-    case ChaosEngineering.Details.type: {
-      return
-    }
-    case K8sOnWindows.Details.type: {
-      return
-    }
-    case SolarPlants.Details.type: {
-      return
-    }
-    case WhatIsKubernetes.Details.type: {
-      return
-    }
-    case SpotInstances.Details.type: {
-      return
-    }
-    case ScalingTensorflow.Details.type: {
-      return
-    }
-    case ScalingSpringBoot.Details.type: {
-      return
-    }
-    case Landing.Type: {
-      return
-    }
-    case BiteSized201903.MultipleClustersDetails.type: {
-      return
-    }
-    case BiteSized201903.IngressApiGatewayDetails.type: {
-      return
-    }
-    case BiteSized201903.VisualiseYamlDetails.type: {
-      return
-    }
-    case BiteSized201903.HelmDetails.type: {
-      return
-    }
-    case BiteSized201903.SmallOrLargeDetails.type: {
-      return
-    }
-    case BiteSized201903.SecretsDetails.type: {
-      return
-    }
-    case BiteSized201903.AutoscalingDetails.type: {
-      return
-    }
-    case BiteSized201903.RollbacksDetails.type: {
-      return
-    }
-    case NotFound.Details.type: {
-      return
-    }
-    case AdvancedKubectl.Details.type: {
-      return
-    }
-    case TerraformAks.Details.type: {
-      return
-    }
-    case ZeroToK8sJs.Details.type: {
-      return
-    }
-    case BestPractices.Details.type: {
-      return
-    }
-    case RSS.Details.type: {
-      return
-    }
-    default:
-      throw new Error('Did not expect to get here')
   }
 }
 
@@ -365,9 +229,8 @@ run({
   eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
   eventBriteOrg: process.env.ENVENTBRITE_ORG as string,
   canPublishEvents: process.env.PUBLISH_EVENTS === 'yes',
-})(Sitemap)
+})()
 
-writeFileSync('_site/sitemap.xml', runSiteMap(Sitemap, 'https://learnk8s.io'))
 copyFileSync('robots.txt', resolve('_site', 'robots.txt'))
 copyFileSync('favicon.ico', resolve('_site', 'favicon.ico'))
 

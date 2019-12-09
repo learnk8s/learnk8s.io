@@ -1,7 +1,4 @@
-import { Sitemap, LinkedNode, getAbsoluteUrl, getFullUrl, getBiteSizedSeries } from './sitemap'
 import * as React from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { Layout } from './layout.v2'
 import marked from 'marked'
 import moment = require('moment')
 import { Navbar, Footer, Consultation, Html, Head, Body, OpenGraph } from './layout.v3'
@@ -9,7 +6,7 @@ import { Store } from 'redux'
 import { State, Actions, Action, getConfig, getPages, getOpenGraph, getBlogPosts, hasTag } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
-import { BlogPost } from './store/websiteReducer'
+import { BlogPost, Page } from './store/websiteReducer'
 import { VReference } from './files'
 
 const inlineRenderer = new marked.Renderer()
@@ -23,38 +20,6 @@ inlineRenderer.link = (href, title, text) => {
   return !!title
     ? `<a href="${href}" class="link dib white bg-blue br1 pv2 ph3 b f5 br2 mv3 hover-bg-dark-blue pointer">${text}</a>`
     : `<a href="${href}" class="link navy underline hover-sky" ${attributes}>${text}</a>`
-}
-
-export interface Details {
-  type: string
-  url: string
-  seoTitle: string
-  title: string
-  description: string
-  openGraphImage: JSX.Element
-  publishedDate: string
-  lastModifiedDate?: string
-  previewImage: JSX.Element
-  author: {
-    fullName: string
-    avatar: JSX.Element
-    link: string
-    shortDescription: string
-  }
-}
-
-function identity<T>(value: T): T {
-  return value
-}
-
-export const Details = {
-  type: identity<'biteSizedSeries'>('biteSizedSeries'),
-  url: '/bite-sized',
-  seoTitle: 'Bite-sized Kubernetes learning ♦︎ Learnk8s',
-  title: 'Bite-sized Kubernetes learning',
-  description:
-    'A regular column on the most interesting questions that we see online and during our workshops answered by a Kubernetes expert',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
 }
 
 export const BiteSized = {
@@ -127,8 +92,8 @@ function renderPage(state: State) {
         <section className='ph3 measure-wide pv4 center'>
           <ul className='list pl0'>
             {blogPosts.map(post => {
-              let postPage = pages.find(it => it.id === post.pageId)!
-              let url = postPage ? postPage.url : '#'
+              const postPage = pages.find(it => it.id === post.pageId)!
+              const url = postPage ? postPage.url : '#'
               return (
                 <li className='pv3'>
                   <h2 className='mb0'>

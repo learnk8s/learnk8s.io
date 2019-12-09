@@ -18,15 +18,6 @@ import { getOpenGraph, getPages, getConfig, State, Actions, Action } from './sto
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
 
-export const Details = {
-  type: 'consulting',
-  url: '/consulting',
-  seoTitle: 'Consulting ♦︎ Learnk8s',
-  title: 'Consulting',
-  description: 'Expertise in software development, strategy and operations to help you innovate at speed and scale.',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-} as const
-
 const continuousDeliveryEnquiry: MailTo = {
   subject: 'Learnk8s Consulting',
   body: `Hi Learnk8s,\n\nWe'd like to discuss an opporunity to accelerate our delivery pipeline.\n\nBest regards,\n`,

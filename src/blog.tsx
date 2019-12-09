@@ -5,17 +5,8 @@ import { join } from 'path'
 import { getOpenGraph, getPages, getConfig, State, Actions, Action, getBlogPosts, hasTag } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
-import { BlogPost } from './store/websiteReducer'
+import { BlogPost, Page } from './store/websiteReducer'
 import { VReference } from './files'
-
-export const Details = {
-  type: 'blog',
-  url: '/blog',
-  seoTitle: 'Blog ♦︎ Learnk8s',
-  title: 'Blog',
-  description: 'The fastest way to become an expert in deploying applications at scale with Kubernetes.',
-  openGraphImage: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-} as const
 
 export const Blog = {
   id: 'blog',
@@ -82,8 +73,8 @@ function renderPage(state: State) {
         <section className='ph3 measure-wide pv4 center'>
           <ul className='list pl0'>
             {blogPosts.map(post => {
-              let postPage = pages.find(it => it.id === post.pageId)!
-              let url = postPage ? postPage.url : '#'
+              const postPage = pages.find(it => it.id === post.pageId)!
+              const url = postPage ? postPage.url : '#'
               return (
                 <li className='pv3'>
                   <h2 className='mb0'>

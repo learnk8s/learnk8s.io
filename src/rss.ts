@@ -3,15 +3,6 @@ import { Store } from 'redux'
 import { State, Actions, Action, getConfig, getPages, getBlogPosts, getAuthors, getOpenGraph } from './store'
 import { RSSPipeline } from './optimise'
 
-export const Details = {
-  type: identity<'rss'>('rss'),
-  url: '/rss.xml',
-}
-
-function identity<T>(value: T): T {
-  return value
-}
-
 export const RSS = {
   id: 'rss',
   url: '/rss.xml',

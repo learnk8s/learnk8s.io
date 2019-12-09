@@ -5,26 +5,6 @@ import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
 
-export const Details = {
-  type: 'smaller_images',
-  url: '/smaller-docker-images',
-  seoTitle: '3 simple tricks for smaller Docker images ♦︎ Learnk8s',
-  title: '3 simple tricks for smaller Docker images',
-  shortDescription: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control?`,
-  description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
-  openGraphImage: <img src='src/smallerDockerImages/smaller_images.png' alt='Docker whale' />,
-  publishedDate: '2018-02-12',
-  lastModifiedDate: '2019-04-14',
-  previewImage: (
-    <img src='src/smallerDockerImages/smaller_images.png' alt='3 simple tricks for smaller Docker images' />
-  ),
-  author: {
-    fullName: 'Daniele Polencic',
-    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
-    link: 'https://linkedin.com/in/danielepolencic',
-  },
-} as const
-
 export const SmallerImages = {
   id: 'smaller-images',
   url: '/blog/smaller-docker-images',

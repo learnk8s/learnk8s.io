@@ -5,28 +5,6 @@ import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
 
-export const Details = {
-  type: 'scalingSpringBoot',
-  url: '/scaling-spring-boot-microservices',
-  seoTitle: 'Scaling SpringBoot with Message Queues and Kubernetes ♦︎ Learnk8s',
-  title: 'Scaling Microservices with Message Queues, Spring Boot and Kubernetes',
-  description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
-  openGraphImage: <img src='src/scalingSpringBoot/autoscaling.png' alt='Containers' />,
-  publishedDate: '2018-07-11',
-  lastModifiedDate: '2019-11-15',
-  previewImage: (
-    <img
-      src='src/scalingSpringBoot/autoscaling.png'
-      alt='Scaling Microservices with Message Queues, Spring Boot and Kubernetes'
-    />
-  ),
-  author: {
-    fullName: 'Daniele Polencic',
-    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
-    link: 'https://linkedin.com/in/danielepolencic',
-  },
-} as const
-
 export const ScalingSpringBoot = {
   id: 'scaling-spring-boot',
   url: '/blog/scaling-spring-boot-microservices',

@@ -13,15 +13,6 @@ import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './sto
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 
-export const Details = {
-  type: 'zero-to-k8s',
-  url: '/start-kubernetes-nodejs',
-  seoTitle: 'Deploying Node.js, Express and MongoDB with Kubernetes',
-  title: 'The modern course on deploying Node.js, Express and MongoDB with Docker and Kubernetes',
-  description: `Zero to Kubernetes is a step-by-step course on how to design, develop and deploy Node.js applications on Kubernetes.`,
-  openGraphImage: <img src='assets/02k8s/opengraph.jpg' alt='Learnk8s preview' />,
-} as const
-
 const faqs: FAQ[] = [
   {
     title: `Is it really free?`,
