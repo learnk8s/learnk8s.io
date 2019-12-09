@@ -91,8 +91,8 @@ function renderPage(state: State) {
         <section className='ph3 measure-wide pv4 center'>
           <ul className='list pl0'>
             {blogPosts.map(post => {
-              let postPage: Page = pages.find(it => it.id === post.pageId)!
-              let url: string = postPage ? postPage.url : '#'
+              const postPage = pages.find(it => it.id === post.pageId)!
+              const url = postPage ? postPage.url : '#'
               return (
                 <li className='pv3'>
                   <h2 className='mb0'>
