@@ -157,6 +157,7 @@ function optimise({ $, siteUrl, isOptimisedBuild }: { $: Cheerio; siteUrl: strin
     isOptimisedBuild ? optimiseJs({ $ }) : rewriteJs({ $ })
     isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
     isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
+    optimiseLazy({ $ })
   } catch (error) {
     console.log(error)
   }
@@ -357,4 +358,14 @@ function optimiseOpenGraphImage({ $, siteUrl }: { $: Cheerio; siteUrl: string })
 
 function onlyUnique(value: string, index: number, self: string[]) {
   return self.indexOf(value) === index
+}
+
+function optimiseLazy({ $ }: { $: Cheerio }): Cheerio {
+  $.findAll('.lazy-article img').forEach((image, index) => {
+    if (index === 0) {
+      return
+    }
+    ;(image.properties as any).loading = 'lazy'
+  })
+  return $
 }
