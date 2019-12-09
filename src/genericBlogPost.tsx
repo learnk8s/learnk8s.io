@@ -110,7 +110,7 @@ export async function renderPage(pageMeta: Page, state: State) {
         <div className='tc mb4 db mw4 center'>
           <Author name={author.fullName} avatar={author.avatar} link={author.link} />
         </div>
-        <article className='ph3 pt0 pb4 mw7 center'>
+        <article className='lazy-article ph3 pt0 pb4 mw7 center'>
           <h1 className='navy tc f2 f1-ns'>{blog.title}</h1>
           <p className='f7 black-60 tc ttu'>Published in {format(new Date(blog.publishedDate), 'MMMM yyyy')}</p>
           {blog.lastModifiedDate ? (
