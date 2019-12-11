@@ -11,7 +11,7 @@ import {
   hasTag,
 } from './store'
 import { Page } from './store/websiteReducer'
-import { Head, Html, Body, Navbar, OpenGraph, Footer, Author, Subscribe } from './layout.v3'
+import { Head, Html, Body, Navbar, OpenGraph, Footer, Author, Subscribe, WhatIsLearnk8s } from './layout.v3'
 import { format } from 'date-fns'
 import { join } from 'path'
 import { read } from './files'
@@ -130,8 +130,8 @@ export async function renderPage(pageMeta: Page, state: State) {
             bumpHeadings(mdast.children, 1)
             return transform({ type: 'root' as const, children: mdast.children }, mdast2Jsx())
           })}
-          <Subscribe identifier={blog.id} />
         </article>
+        <WhatIsLearnk8s />
         <Footer />
       </Body>
     </Html>
