@@ -81,7 +81,7 @@ function renderPage(state: State) {
                       {post.title}
                     </a>
                   </h2>
-                  <p className='black-40 mt1'>{format(new Date(post.publishedDate), 'MMMM Do yyyy')}</p>
+                  <p className='black-40 mt1'>{format(new Date(post.publishedDate), 'MMMM do yyyy')}</p>
                   <p className='lh-copy black-70'>{post.description}</p>
                 </li>
               )
