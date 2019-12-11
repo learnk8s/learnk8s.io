@@ -300,6 +300,8 @@ External traffic is quite a broad label that includes things such as:
 
 In other words, API gateways are designed to protect your apps from the outside world.
 
+![API gateways focus on handling external traffic](api-gateway.svg)
+
 **Service meshes, instead, are mostly used to observe and secure applications within your infrastructure.**
 
 Typical uses of service meshes include:
@@ -314,6 +316,8 @@ Since service meshes are deployed alongside your apps, they benefit from:
 - unlikely to be targeted for misuses and by bad actors
 
 In other words, **a service mesh's primary purpose is to manage internal service-to-service communication**, while **an API Gateway is primarily meant for external client-to-service communication.**
+
+![Service meshes focus on internal service-to-service communitcation](service-mesh.svg)
 
 | API gateway                                   | Service mesh                                       |
 | --------------------------------------------- | -------------------------------------------------- |
