@@ -36,17 +36,17 @@ import * as ZeroToK8sJs from './02k8sjs/02k8sjs'
 import * as Troubleshooting from './troubleshooting/troubleshooting'
 import * as GenericBlogPost from './genericBlogPost'
 
-import * as BiteSized from './biteSized'
-import * as BiteSizedV2 from './biteSized.v2'
-import * as BiteSized201903 from './bite-sized-articles'
+import * as BiteSizedListing from './biteSized'
+import * as BiteSizedRenderer from './biteSized.v2'
+import * as BiteSizedArticles from './bite-sized-articles'
 import { store, getConfig } from './store'
 import * as Courses from './courses'
-import * as Training2 from './training.v2'
+import * as Training from './training.v2'
 import * as BestPractices from './best-practices/best'
 import * as Flipboard from './flipboard'
 
 Courses.Register(store)
-Training2.Register(store)
+Training.Register(store)
 Landing.Register(store)
 BestPractices.Register(store)
 Careers.Register(store)
@@ -70,18 +70,18 @@ SolarPlants.Register(store)
 SpotInstances.Register(store)
 TerraformAks.Register(store)
 WhatIsKubernetes.Register(store)
-BiteSized201903.Register(store)
+BiteSizedArticles.Register(store)
 RSS.Register(store)
 NotFound.Register(store)
 Sitemap.Register(store)
 Blog.Register(store)
 ArchitectingAndScaling.Register(store)
 ZeroToK8s.Register(store)
-BiteSized.Register(store)
+BiteSizedListing.Register(store)
 Troubleshooting.Register(store)
 
 Landing.Mount({ store })
-Training2.Mount({ store })
+Training.Mount({ store })
 BestPractices.Mount({ store })
 Careers.Mount({ store })
 TermsAndConditions.Mount({ store })
@@ -91,7 +91,7 @@ AboutUs.Mount({ store })
 Newsletter.Mount({ store })
 Academy.Mount({ store })
 ContactUs.Mount({ store })
-BiteSizedV2.Mount({ store })
+BiteSizedRenderer.Mount({ store })
 GenericBlogPost.Mount({ store })
 Flipboard.Mount({ store })
 Redirect.Mount({ store })
@@ -100,7 +100,7 @@ NotFound.Mount({ store })
 Blog.Mount({ store })
 ArchitectingAndScaling.Mount({ store })
 ZeroToK8s.Mount({ store })
-BiteSized.Mount({ store })
+BiteSizedListing.Mount({ store })
 Sitemap.Mount({ store })
 
 const config = getConfig(store.getState())
