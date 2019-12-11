@@ -1,14 +1,14 @@
 import SVGO from 'svgo'
-import { selectAll, select, matches }from'hast-util-select'
+import { selectAll, select, matches } from 'hast-util-select'
 import remove from 'unist-util-remove'
 import inspect from 'unist-util-inspect'
 import toString from 'hast-util-to-string'
 import { Node } from 'unist'
-import { renderToStaticMarkup } from 'react-dom/server'
 import hastParser from 'hast-util-raw'
 import toHtml from 'hast-util-to-html'
 import * as React from 'react'
 import * as Hast from 'hast'
+import { jsxToHast } from '../../src/jsx-utils/jsxToHast'
 
 const svgo = new SVGO({
   plugins: [
@@ -169,14 +169,18 @@ class CheerioSelectionOne {
   append(node: JSX.Element): Cheerio {
     const element: Node | null = select(this.selector, this.tree)
     if (!!element && Array.isArray(element.children)) {
-      ;(element.children as Node[]).push({ type: 'raw', value: renderToStaticMarkup(node) })
+      const nodeOrNodes = jsxToHast(node)
+      const nodes = Array.isArray(nodeOrNodes) ? nodeOrNodes : [nodeOrNodes]
+      nodes.forEach(it => (element.children as Node[]).push(it))
     }
     return new Cheerio(this.tree)
   }
   prepend(node: JSX.Element): Cheerio {
     const element: Node | null = select(this.selector, this.tree)
     if (!!element && Array.isArray(element.children)) {
-      ;(element.children as Node[]).unshift({ type: 'raw', value: renderToStaticMarkup(node) })
+      const nodeOrNodes = jsxToHast(node)
+      const nodes = Array.isArray(nodeOrNodes) ? nodeOrNodes : [nodeOrNodes]
+      nodes.forEach(it => (element.children as Node[]).unshift(it))
     }
     return new Cheerio(this.tree)
   }

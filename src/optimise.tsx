@@ -4,7 +4,6 @@ import inspect from 'unist-util-inspect'
 import { selectAll, select, matches } from 'hast-util-select'
 import remove from 'unist-util-remove'
 import toHtml from 'hast-util-to-html'
-import { renderToStaticMarkup } from 'react-dom/server'
 import { ok } from 'assert'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import md5 from 'md5'
@@ -17,6 +16,7 @@ import postcss from 'postcss'
 import cssnano from 'cssnano'
 import toString from 'hast-util-to-string'
 import React from 'react'
+import { jsxToString, jsxToHast } from './jsx-utils/jsxToHast'
 
 export function defaultAssetsPipeline({
   jsx,
@@ -31,7 +31,7 @@ export function defaultAssetsPipeline({
   outputFolder: string
   url: string
 }) {
-  const $ = Cheerio.of(renderToStaticMarkup(jsx))
+  const $ = Cheerio.of(jsxToString(jsx))
   optimise({ $, siteUrl: siteUrl, isOptimisedBuild })
 
   $.findAll('a')
@@ -111,14 +111,18 @@ class CheerioSelectionOne {
   append(node: JSX.Element): Cheerio {
     const element: Node | null = select(this.selector, this.tree)
     if (!!element && Array.isArray(element.children)) {
-      ;(element.children as Node[]).push({ type: 'raw', value: renderToStaticMarkup(node) })
+      const nodeOrNodes = jsxToHast(node)
+      const nodes = Array.isArray(nodeOrNodes) ? nodeOrNodes : [nodeOrNodes]
+      nodes.forEach(it => (element.children as Node[]).push(it))
     }
     return new Cheerio(this.tree)
   }
   prepend(node: JSX.Element): Cheerio {
     const element: Node | null = select(this.selector, this.tree)
     if (!!element && Array.isArray(element.children)) {
-      ;(element.children as Node[]).unshift({ type: 'raw', value: renderToStaticMarkup(node) })
+      const nodeOrNodes = jsxToHast(node)
+      const nodes = Array.isArray(nodeOrNodes) ? nodeOrNodes : [nodeOrNodes]
+      nodes.forEach(it => (element.children as Node[]).unshift(it))
     }
     return new Cheerio(this.tree)
   }
