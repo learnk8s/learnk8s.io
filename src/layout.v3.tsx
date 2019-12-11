@@ -62,8 +62,8 @@ export const Body: React.StatelessComponent<{}> = ({ children }) => {
 export const Navbar: React.StatelessComponent<{}> = ({}) => {
   return (
     <nav id='main-menu' className='nav bg-sky flex items-center justify-between ph3 pv2'>
-      <a href='/' className='logo db w-40 mw4 ml3-l'>
-        <img src='assets/logo.svg' alt='Learnk8s' />
+      <a href='/' className='logo db w-40 mw4 ml3-l' title='Learnk8s logo'>
+        <Learnk8sLogo />
       </a>
       <div className='mw6 relative'>
         <a href='#main-menu' className='db h2 dn-l' title='Open menu'>
