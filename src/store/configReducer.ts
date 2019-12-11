@@ -8,6 +8,7 @@ export interface State {
   googleAnalytics: string
   outputFolder: string
   canPublishEvents: boolean
+  eventBriteToken: string
 }
 
 export function createInitialState(options: {
