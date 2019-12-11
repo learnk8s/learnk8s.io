@@ -130,6 +130,7 @@ export async function renderPage(pageMeta: Page, state: State) {
             bumpHeadings(mdast.children, 1)
             return transform({ type: 'root' as const, children: mdast.children }, mdast2Jsx())
           })}
+          <Subscribe identifier={blog.id}></Subscribe>
         </article>
         <WhatIsLearnk8s />
         <Footer />
