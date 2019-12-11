@@ -3,7 +3,7 @@ import { material, assets as materialAssets } from './material'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
-import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo, FAQs, FAQ, Consultation, Hero } from './layout.v3'
+import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo, FAQs, FAQ, Hero } from './layout.v3'
 import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
@@ -78,57 +78,6 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
     outputFolder: getConfig(state).outputFolder,
   })
 }
-
-const table = [
-  [
-    <div className='overflow-hidden'>
-      <div className='w5'>
-        <div className='h4'>&nbsp;</div>
-        <div className='padding-hack-75'>&nbsp;</div>
-      </div>
-    </div>,
-    <Fragment>
-      <div className='header h4 flex items-center'>
-        <div>
-          <h2 className='f3 f2-l tc navy mt0 mb1'>The expert package</h2>
-          <p className='f5 f4-l lh-copy measure tc center black-80 ma0'>
-            Everything you need to architect, develop and deploy applications at scale.
-          </p>
-        </div>
-      </div>
-      <div className='padding-hack-75'>
-        <img src='assets/academy/expert-package.svg' alt='The full package' />
-      </div>
-    </Fragment>,
-    <Fragment>
-      <div className='header h4 flex items-center'>
-        <div>
-          <h2 className='f3 f2-l tc navy mt0 mb1'>The expert package</h2>
-          <p className='f5 f4-l lh-copy measure tc center black-80 ma0'>
-            Everything you need to architect, develop and deploy applications at scale.
-          </p>
-        </div>
-      </div>
-      <div className='padding-hack-75'>
-        <img src='assets/academy/expert-package.svg' alt='The full package' />
-      </div>
-    </Fragment>,
-    <Fragment>
-      <div className='header h4 flex items-center'>
-        <div>
-          <h2 className='f3 f2-l tc navy mt0 mb1'>The expert package</h2>
-          <p className='f5 f4-l lh-copy measure tc center black-80 ma0'>
-            Everything you need to architect, develop and deploy applications at scale.
-          </p>
-        </div>
-      </div>
-      <div className='padding-hack-75'>
-        <img src='assets/academy/expert-package.svg' alt='The full package' />
-      </div>
-    </Fragment>,
-  ],
-  [<p>Courses</p>, <p>6</p>, <p>6</p>, <p>4</p>],
-]
 
 function renderPage(state: State) {
   const page = getPages(state).find(it => it.id === Architecting.id)!

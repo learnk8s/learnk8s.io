@@ -1,10 +1,7 @@
 import React from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
 import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getRedirects, getPages } from './store'
+import { State, Actions, getConfig, getRedirects, getPages } from './store'
 import { defaultAssetsPipeline } from './optimise'
-
-export const Type = 'redirect' as const
 
 export function Mount({ store }: { store: Store<State, Actions> }) {
   const state = store.getState()

@@ -4,7 +4,7 @@ import marked from 'marked'
 import { cat } from 'shelljs'
 import { ok } from 'assert'
 import { existsSync } from 'fs'
-const commander = require('commander')
+import commander from 'commander'
 
 commander
   .version('1.0.0')

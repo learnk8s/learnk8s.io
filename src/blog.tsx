@@ -1,12 +1,11 @@
 import React from 'react'
-import moment = require('moment')
 import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
 import { join } from 'path'
 import { getOpenGraph, getPages, getConfig, State, Actions, Action, getBlogPosts, hasTag } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
-import { BlogPost, Page } from './store/websiteReducer'
-import { VReference } from './files'
+import { BlogPost } from './store/websiteReducer'
+import { format } from 'date-fns'
 
 export const Blog = {
   id: 'blog',
@@ -82,7 +81,7 @@ function renderPage(state: State) {
                       {post.title}
                     </a>
                   </h2>
-                  <p className='black-40 mt1'>{moment(post.publishedDate).format('MMMM Do YYYY')}</p>
+                  <p className='black-40 mt1'>{format(new Date(post.publishedDate), 'MMMM Do yyyy')}</p>
                   <p className='lh-copy black-70'>{post.description}</p>
                 </li>
               )
@@ -97,9 +96,6 @@ function renderPage(state: State) {
   )
 }
 
-function comparePublishedDate(
-  postA: BlogPost & { content?: VReference<string> | undefined },
-  postB: BlogPost & { content?: VReference<string> | undefined },
-) {
+function comparePublishedDate(postA: BlogPost, postB: BlogPost) {
   return postA.publishedDate < postB.publishedDate ? 1 : postA.publishedDate > postB.publishedDate ? -1 : 0
 }

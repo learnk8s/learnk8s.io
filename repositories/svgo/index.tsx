@@ -1,14 +1,14 @@
 import SVGO from 'svgo'
-import unified from 'unified'
-const raw = require('rehype-raw')
-const { selectAll, select, matches } = require('hast-util-select')
-const remove = require('unist-util-remove')
-const inspect = require('unist-util-inspect')
-const toString = require('hast-util-to-string')
+import { selectAll, select, matches }from'hast-util-select'
+import remove from 'unist-util-remove'
+import inspect from 'unist-util-inspect'
+import toString from 'hast-util-to-string'
 import { Node } from 'unist'
 import { renderToStaticMarkup } from 'react-dom/server'
-const stringify = require('rehype-stringify')
+import hastParser from 'hast-util-raw'
+import toHtml from 'hast-util-to-html'
 import * as React from 'react'
+import * as Hast from 'hast'
 
 const svgo = new SVGO({
   plugins: [
@@ -145,11 +145,9 @@ export async function optimise(svgContent: string, skipIds = [] as string[]): Pr
 }
 
 class Cheerio {
-  constructor(private tree: Node) {}
+  constructor(private tree: Hast.Root) {}
   public static of(content: string) {
-    const tree = unified()
-      .use(raw)
-      .runSync({ type: 'root', children: [{ type: 'raw', value: content }] })
+    const tree = hastParser({ type: 'root', children: [{ type: 'raw', value: content }] })
     return new Cheerio(tree)
   }
   debug() {
@@ -162,17 +160,12 @@ class Cheerio {
     return new CheerioSelectionAll(this.tree, selector)
   }
   html() {
-    const tree = unified()
-      .use(raw)
-      .runSync(this.tree)
-    return unified()
-      .use(stringify)
-      .stringify(tree)
+    return toHtml(hastParser(this.tree), { space: 'svg' })
   }
 }
 
 class CheerioSelectionOne {
-  constructor(private tree: Node, private selector: string) {}
+  constructor(private tree: Hast.Root, private selector: string) {}
   append(node: JSX.Element): Cheerio {
     const element: Node | null = select(this.selector, this.tree)
     if (!!element && Array.isArray(element.children)) {
@@ -187,13 +180,13 @@ class CheerioSelectionOne {
     }
     return new Cheerio(this.tree)
   }
-  get(): Node {
+  get(): Node | null {
     return select(this.selector, this.tree)
   }
 }
 
 class CheerioSelectionAll {
-  constructor(private tree: Node, private selector: string) {}
+  constructor(private tree: Hast.Root, private selector: string) {}
   remove(): Cheerio {
     remove(this.tree, { cascade: true }, (node: Node) => matches(this.selector, node))
     return new Cheerio(this.tree)

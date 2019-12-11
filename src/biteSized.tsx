@@ -1,26 +1,11 @@
 import * as React from 'react'
-import marked from 'marked'
-import moment = require('moment')
 import { Navbar, Footer, Consultation, Html, Head, Body, OpenGraph } from './layout.v3'
 import { Store } from 'redux'
 import { State, Actions, Action, getConfig, getPages, getOpenGraph, getBlogPosts, hasTag } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
-import { BlogPost, Page } from './store/websiteReducer'
-import { VReference } from './files'
-
-const inlineRenderer = new marked.Renderer()
-
-inlineRenderer.paragraph = text => {
-  return text
-}
-inlineRenderer.link = (href, title, text) => {
-  const isLocal = !/^http/.test(href)
-  const attributes = isLocal ? 'target="_self"' : 'target="_blank" rel="noreferrer"'
-  return !!title
-    ? `<a href="${href}" class="link dib white bg-blue br1 pv2 ph3 b f5 br2 mv3 hover-bg-dark-blue pointer">${text}</a>`
-    : `<a href="${href}" class="link navy underline hover-sky" ${attributes}>${text}</a>`
-}
+import { BlogPost } from './store/websiteReducer'
+import { format } from 'date-fns'
 
 export const BiteSized = {
   id: '/bite-sized',
@@ -101,7 +86,7 @@ function renderPage(state: State) {
                       {post.title}
                     </a>
                   </h2>
-                  <p className='black-40 mt1'>{moment(post.publishedDate).format('MMMM Do YYYY')}</p>
+                  <p className='black-40 mt1'>{format(new Date(post.publishedDate), 'MMMM Do yyyy')}</p>
                   <p className='lh-copy black-70'>{post.description}</p>
                 </li>
               )
@@ -116,9 +101,6 @@ function renderPage(state: State) {
   )
 }
 
-function comparePublishedDate(
-  postA: BlogPost & { content?: VReference<string> | undefined },
-  postB: BlogPost & { content?: VReference<string> | undefined },
-) {
+function comparePublishedDate(postA: BlogPost, postB: BlogPost) {
   return postA.publishedDate < postB.publishedDate ? 1 : postA.publishedDate > postB.publishedDate ? -1 : 0
 }
