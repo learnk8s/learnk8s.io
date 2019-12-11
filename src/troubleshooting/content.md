@@ -175,7 +175,7 @@ _What about the `track: canary` label at the top of the Deployment?_
 
 _Should that match too?_
 
-That label belong to the deployment, and it's not used by the Service's selector to route traffic.
+That label belongs to the deployment, and it's not used by the Service's selector to route traffic.
 
 In other words, you can safely remove it or assign it a different value.
 
