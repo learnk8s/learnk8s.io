@@ -44,7 +44,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
   })
 }
 
-function renderPage(state: State) {
+export function renderPage(state: State) {
   const page = getPages(state).find(it => it.id === TermsAndConditions.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === TermsAndConditions.id)
   const courses = getWorkshops(state)

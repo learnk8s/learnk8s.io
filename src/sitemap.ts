@@ -25,7 +25,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
   })
 }
 
-function renderPage(state: State) {
+export function renderPage(state: State) {
   const redirects = getRedirects(state).map(it => it.fromPageId)
   const pages = getPages(state).filter(it => !redirects.includes(it.id))
   const page = pages.find(it => it.id === SitemapXML.id)

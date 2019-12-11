@@ -36,7 +36,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
   })
 }
 
-function renderPage(state: State) {
+export function renderPage(state: State) {
   const page = getPages(state).find(it => it.id === ContactUs.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === ContactUs.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`

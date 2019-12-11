@@ -80,7 +80,7 @@ export function RSSPipeline({
   }
 }
 
-class Cheerio {
+export class Cheerio {
   constructor(private tree: Node) {}
   public static of(content: string) {
     const tree = unified()

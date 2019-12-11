@@ -9,6 +9,7 @@
     "svgo": "ts-node src/svgo.ts",
     "fmt": "ts-node --files src/check.ts",
     "test": "cross-env tsc --noEmit && ts-node --files node_modules/tape/bin/tape \"src/**/test.ts\" \"src/**/*.test.ts\" \"src/**/*.integration.ts\" \"src/**/integration.ts\"",
+    "test:page": "ts-node --files src/checkPageDetail.ts",
     "start": "ts-node --files src/start.ts"
   },
   "author": "Learnk8s",

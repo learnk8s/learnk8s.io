@@ -41,7 +41,7 @@ export async function Mount({ store }: { store: Store<State, Actions> }) {
   )
 }
 
-async function renderPage(page: Page, state: State) {
+export async function renderPage(page: Page, state: State) {
   const openGraph = getOpenGraph(state).find(it => it.pageId === page.id)
   if (!openGraph) {
     throw new Error('The page does not have an open graph.')

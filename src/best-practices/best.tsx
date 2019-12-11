@@ -106,7 +106,7 @@ type Section = {
   }[]
 }
 
-function renderPage(state: State, sections: Section[]) {
+export function renderPage(state: State, sections: Section[]) {
   const page = getPages(state).find(it => it.id === BestPractices.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === BestPractices.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`

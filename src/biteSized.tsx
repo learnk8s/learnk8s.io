@@ -55,7 +55,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
   })
 }
 
-function renderPage(state: State) {
+export function renderPage(state: State) {
   const pages = getPages(state)
   const page = pages.find(it => it.id === BiteSized.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === BiteSized.id)

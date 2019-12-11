@@ -130,7 +130,7 @@ const table = [
   [<p>Courses</p>, <p>6</p>, <p>6</p>, <p>4</p>],
 ]
 
-function renderPage(state: State) {
+export function renderPage(state: State) {
   const page = getPages(state).find(it => it.id === Architecting.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Architecting.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
