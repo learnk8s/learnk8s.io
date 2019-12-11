@@ -15,29 +15,29 @@ In simple terms, **the Ingress works as a reverse proxy** or a load balancer: al
 
 ![Ingress as a load balancer](ingress.svg)
 
-While the most popular ingress is the [ingress-nginx project](https://github.com/kubernetes/ingress-nginx), there're several other options when it comes to selecting and using an Ingress.
+While the most popular ingress is the [ingress-nginx project](https://github.com/kubernetes/ingress-nginx), there are several other options when it comes to selecting and using an Ingress.
 
 You can choose from Ingress controllers that:
 
-- handle HTTP traffic such as [Contour](https://github.com/heptio/contour) and [Treafik Ingress](https://docs.traefik.io/user-guide/kubernetes/)
+- handle HTTP traffic such as [Contour](https://github.com/heptio/contour) or [Treafik Ingress](https://docs.traefik.io/user-guide/kubernetes/)
 - support UDP and TCP traffic such as [Citrix Ingress](https://github.com/citrix/citrix-k8s-ingress-controller)
 - support Websockets such as [HAProxy Ingress](https://github.com/jcmoraisjr/haproxy-ingress)
 
-There are also other hybrid Ingress controllers can integrate with existing cloud providers such as [Zalando's Skipper Ingress](https://opensource.zalando.com/skipper/).
+There are also other hybrid Ingress controllers can that integrate with existing cloud providers such as [Zalando's Skipper Ingress](https://opensource.zalando.com/skipper/).
 
-When it comes to API gateways in Kubernetes, you have a few popular choices to select from.
+When it comes to API gateways in Kubernetes, there are a few popular choices to select from.
 
 ## Option #1 — The king of API Gateways: Kong
 
-If you're building an API, you might be interested in what the [Kong Ingress](https://konghq.com/blog/kong-kubernetes-ingress-controller/) has to offer.
+If you are building an API, you might be interested in what [Kong Ingress](https://konghq.com/blog/kong-kubernetes-ingress-controller/) has to offer.
 
 **Kong is an API gateway built on top of Nginx.**
 
 Kong is focused on API management and offers features such as authentication, rate limiting, retries, circuit breakers and more.
 
-What's interesting about Kong is that comes packaged as a Kubernetes Ingress.
+What's interesting about Kong is that it comes packaged as a Kubernetes Ingress.
 
-So you could use in your cluster as a gateway between your users and your backends.
+So it could be used in your cluster as a gateway between your users and your backend services.
 
 You can expose your API to external traffic with the standard Ingress object:
 
@@ -105,13 +105,13 @@ _But Kong isn't the only choice._
 
 [Ambassador is another Kubernetes Ingress](https://www.getambassador.io/) built on top of Envoy that offers a robust API Gateway.
 
-The Ambassador Ingress is a modern take on Kubernetes Ingress controllers, which offers robust protocol support as well as rate-limiting, an authentication API, and observability integrations.
+The Ambassador Ingress is a modern take on Kubernetes Ingress controllers, which offers robust protocol support as well as rate-limiting, an authentication API and observability integrations.
 
 The main difference between Ambassador and Kong is that Ambassador is built for Kubernetes and integrates nicely with it.
 
 > Kong was open-sourced in 2015 when the Kubernetes ingress controllers weren't so advanced.
 
-But even if Ambassador is designed with Kubernetes in mind, it doesn't leverage the familiar Kubernetes Ingress.
+Even if Ambassador is designed with Kubernetes in mind, it doesn't leverage the familiar Kubernetes Ingress.
 
 Instead, services are exposed to the outside world using annotations:
 
@@ -197,11 +197,11 @@ You can extend Ambassador with [custom filters for routing](https://www.getambas
 
 Ambassador is not the only Envoy-powered ingress which can be used as API Gateway.
 
-[Gloo is a Kubernetes Ingress](https://gloo.solo.io/) that is also an API gateway capable of providing rate limiting, circuit breaking, retries, caching, external authentication and authorisation, transformation, service-mesh integration, and security.
+[Gloo is a Kubernetes Ingress](https://gloo.solo.io/) that is also an API gateway. It is capable of providing rate limiting, circuit breaking, retries, caching, external authentication and authorisation, transformation, service-mesh integration and security.
 
-**The selling point for Glue is that it's capable of auto-discover API endpoints for your application and automatically understand arguments and parameters.**
+**The selling point for Gloo is that it is capable of auto-discovering API endpoints for your application and automatically understands arguments and parameters.**
 
-I understand it's hard to believe (and their documentation doesn't help in that sense), so here's an example.
+It might hard to believe (and sometimes their documentation doesn't help either), so here's an example.
 
 Imagine you have a REST API for an address book.
 
@@ -313,7 +313,7 @@ Typical uses of service meshes include:
 Since service meshes are deployed alongside your apps, they benefit from:
 
 - low latency and high bandwidth
-- unlikely to be targeted for misuses and by bad actors
+- unlikely to be targeted for misuse by bad actors
 
 In other words, **a service mesh's primary purpose is to manage internal service-to-service communication**, while **an API Gateway is primarily meant for external client-to-service communication.**
 
@@ -321,18 +321,18 @@ In other words, **a service mesh's primary purpose is to manage internal service
 
 | API gateway                                   | Service mesh                                       |
 | --------------------------------------------- | -------------------------------------------------- |
-| Exposes internal services to external clients | Manages and control the traffic inside the network |
+| Exposes internal services to external clients | Manages and controls the traffic inside the network |
 | Maps external traffic to internal resources   | Focuses on brokering internal resources            |
 
-_But that doesn't stop from using Istio as an API gateway._
+_But that doesn't mean that you can't use [Istio](https://istio.io/) as an API gateway._
 
-What it might stop you, though, is the fact that Istio's priority isn't to handle external traffic.
+What might stop you, though, is the fact that Istio's priority isn't to handle external traffic.
 
 Let's have a look at an example.
 
 It's common practice to secure your API calls behind an API gateway with JWT or OAuth authentication.
 
-Istio offers JWT, but you have to [inject some custom code in Lua to make it work with OAuth](https://gist.github.com/oahayder/1d8fc8b19660fac1aebce59ea6d171ad#file-envoyfilter-yaml).
+Istio offers JWT, but you have to [inject custom code in Lua to make it work with OAuth](https://gist.github.com/oahayder/1d8fc8b19660fac1aebce59ea6d171ad#file-envoyfilter-yaml).
 
 On the other hand, [Kong offers a plugin for that](https://docs.konghq.com/hub/kong-inc/oauth2/) as this is a common request.
 
@@ -346,9 +346,9 @@ Yes, you can, and there's something else that you should know.
 
 ## A general note on API gateways and service meshes
 
-Depending on what you're trying to achieve, service meshes and API gateways could overlap in functionality significantly.
+Depending on what you are trying to achieve, service meshes and API gateways could overlap significantly in functionality.
 
-And they might overlap even more in the future since every major API gateway vendor is expanding into service meshes.
+They might overlap even more in the future since every major API gateway vendor is expanding into service meshes.
 
 - Kong announced [Kuma](https://kuma.io/) a service mesh that can integrate with [Kong](https://konghq.com/blog/kong-kubernetes-ingress-controller/) or [Istio](https://istio.io/)
 - Solo.io announced a service mesh that integrates with [Gloo](https://github.com/solo-io/gloo) called [SuperGloo](https://github.com/solo-io/supergloo)
@@ -360,7 +360,7 @@ And it would not be surprising to see more service meshes deciding to launch an 
 
 _If you had to pick an API gateway for Kubernetes, which one should you use?_
 
-- **If you want a battle-tested API gateway, Kong is still your best option.** It might not be shiniest, but the documentation is, and there're plenty of resources online. It also has the most production mileage than any other gateway.
+- **If you want a battle-tested API gateway, Kong is still your best option.** It might not be shiniest but the documentation is excellent with plenty of resources online. It also has the most production mileage than any other gateway.
 - **If you need a flexible API gateway** that can play nicely with new and old infrastructure, you should have a look at **Gloo**. The ability to auto-discover APIs and transform requests is compelling.
 - **If you want the simplicity of setting all the networking in your Services, you should consider Ambassador**. It has excellent tutorials and documentation to get started. Be aware of the YAML indentation as a free string.
 
@@ -368,7 +368,7 @@ _If you had to pick an API gateway or a service mesh, which one should you use?_
 
 **Starting with an API gateway is still the best choice** to secure your internal apps from external clients.
 
-As the number of apps grows in size, you could explore how to leverage a service mesh to observe, monitor and secure the traffic between them.
+As the number of apps grow in size, you could explore how to leverage a service mesh to observe, monitor and secure the traffic between them.
 
 ## More options
 
