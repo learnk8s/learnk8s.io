@@ -201,7 +201,7 @@ Ambassador is not the only Envoy-powered ingress which can be used as API Gatewa
 
 **The selling point for Gloo is that it is capable of auto-discovering API endpoints for your application and automatically understands arguments and parameters.**
 
-It might hard to believe (and sometimes their documentation doesn't help either), so here's an example.
+It might be hard to believe (and sometimes their documentation doesn't help either), so here's an example.
 
 Imagine you have a REST API for an address book.
 
