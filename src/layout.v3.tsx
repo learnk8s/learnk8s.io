@@ -542,6 +542,43 @@ export const Subscribe: React.StatelessComponent<{ identifier: string }> = ({ id
   )
 }
 
+export const WhatIsLearnk8s: React.StatelessComponent<{}> = ({}) => {
+  return (
+    <div className=''>
+      <div className='mv4 mv5-l mw8 center'>
+        <ul className='list pl0 flex flex-wrap'>
+          <li className='w-50 f5 bg-evian br2 ph4'>
+            <p className='pb3 f2 b navy mb2 b mt4'>What's Learnk8s?</p>
+            <p className='lh-copy f4 measure-narrow pt0 mt0'>
+              In-depth Kubernetes training that is practical and easy to understand
+            </p>
+          </li>
+          {[
+            [
+              'Instructor-led workshops',
+              'Deep dive into containers and Kubernetes and become an expert in deploying applications at scale.',
+            ],
+            [
+              'Online courses',
+              'Learn Kubernetes online with hands-on, self-paced courses. No need to leave the comfort of your home.',
+            ],
+            ['Corporate training', 'Training your team in Kubernetes with a customised learning path.'],
+          ].map(([title, description]) => {
+            return (
+              <li className='w-50-ns f5 ph4 pv2'>
+                <a className='link dib f3 navy b bb bw1 pb3 mb3 pt3 hover-sky' href='/training'>
+                  ⎈ {title} <span className='f5 v-mid dib pb1 pl1'>❯</span>
+                </a>
+                <p className='lh-copy f4 measure-narrow pt0 mt0'>{description}</p>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
 export const Author: React.StatelessComponent<{ name: string; link: string; avatar: JSX.Element }> = ({
   name,
   link,

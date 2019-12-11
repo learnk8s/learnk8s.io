@@ -13,7 +13,7 @@ import {
 } from './store'
 import { toVFile, read } from './files'
 import { join } from 'path'
-import { Html, Head, OpenGraph, Body, Footer, Navbar, Subscribe, Author } from './layout.v3'
+import { Html, Head, OpenGraph, Body, Footer, Navbar, Subscribe, Author, WhatIsLearnk8s } from './layout.v3'
 import { JsonLd } from 'react-schemaorg'
 import { BlogPosting } from 'schema-dts'
 import { renderToJsx, toMdast } from './markdown'
@@ -165,8 +165,8 @@ async function renderPage(page: Page, state: State) {
             bumpHeadings(mdast.children, 1)
             return transform({ type: 'root' as const, children: mdast.children }, mdast2Jsx())
           })}
-          <Subscribe identifier={blog.id} />
         </article>
+        <WhatIsLearnk8s />
         <Footer />
       </Body>
     </Html>
