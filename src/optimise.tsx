@@ -1,21 +1,21 @@
-import unified from 'unified'
-const raw = require('rehype-raw')
+import hastParser from 'hast-util-raw'
 import { Node } from 'unist'
-const inspect = require('unist-util-inspect')
-const { selectAll, select, matches } = require('hast-util-select')
-const remove = require('unist-util-remove')
-const stringify = require('rehype-stringify')
+import inspect from 'unist-util-inspect'
+import { selectAll, select, matches } from 'hast-util-select'
+import remove from 'unist-util-remove'
+import toHtml from 'hast-util-to-html'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { ok } from 'assert'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
-import md5 = require('md5')
+import md5 from 'md5'
+import * as Hast from 'hast'
 
 import { extname, join, resolve, basename, dirname } from 'path'
 import { mkdir, cp } from 'shelljs'
 import { minify } from 'terser'
 import postcss from 'postcss'
 import cssnano from 'cssnano'
-const toString = require('hast-util-to-string')
+import toString from 'hast-util-to-string'
 import React from 'react'
 
 export function defaultAssetsPipeline({
@@ -81,17 +81,15 @@ export function RSSPipeline({
 }
 
 class Cheerio {
-  constructor(private tree: Node) {}
+  constructor(private tree: Hast.Root) {}
   public static of(content: string) {
-    const tree = unified()
-      .use(raw)
-      .runSync({
-        type: 'root',
-        children: [
-          { type: 'doctype', name: 'html' },
-          { type: 'raw', value: content },
-        ],
-      })
+    const tree = hastParser({
+      type: 'root',
+      children: [
+        { type: 'doctype', name: 'html' },
+        { type: 'raw', value: content },
+      ],
+    })
     return new Cheerio(tree)
   }
   debug() {
@@ -104,17 +102,12 @@ class Cheerio {
     return new CheerioSelectionAll(this.tree, selector)
   }
   html() {
-    const tree = unified()
-      .use(raw)
-      .runSync(this.tree)
-    return unified()
-      .use(stringify)
-      .stringify(tree)
+    return toHtml(this.tree, { allowDangerousHTML: true })
   }
 }
 
 class CheerioSelectionOne {
-  constructor(private tree: Node, private selector: string) {}
+  constructor(private tree: Hast.Root, private selector: string) {}
   append(node: JSX.Element): Cheerio {
     const element: Node | null = select(this.selector, this.tree)
     if (!!element && Array.isArray(element.children)) {
@@ -129,13 +122,13 @@ class CheerioSelectionOne {
     }
     return new Cheerio(this.tree)
   }
-  get(): Node {
+  get(): Node | null {
     return select(this.selector, this.tree)
   }
 }
 
 class CheerioSelectionAll {
-  constructor(private tree: Node, private selector: string) {}
+  constructor(private tree: Hast.Root, private selector: string) {}
   remove(): Cheerio {
     remove(this.tree, { cascade: true }, (node: Node) => matches(this.selector, node))
     return new Cheerio(this.tree)

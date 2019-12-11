@@ -2,7 +2,6 @@ import { createStore, combineReducers } from 'redux'
 import * as CoursesReducer from './coursesReducer'
 import * as WebsiteReducer from './websiteReducer'
 import * as ConfigReducer from './configReducer'
-import { VReference } from '../files'
 
 export type State = {
   courses: CoursesReducer.State

@@ -33,8 +33,6 @@ import { join } from 'path'
 import { defaultAssetsPipeline } from './optimise'
 import { subDays } from 'date-fns'
 
-export const Type = 'landing' as const
-
 export const Pages = {
   landingLondon: {
     id: 'landingLondon',
