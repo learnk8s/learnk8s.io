@@ -107,7 +107,7 @@ export function Register(store: Store<State, Actions>) {
       description: Pages.ingressApiGateway.description,
       title: 'Can you expose your microservices with an API gateway in Kubernetes?',
       publishedDate: '2019-04-23',
-      lastModifiedDate: '2019-11-15',
+      lastModifiedDate: '2019-12-11',
       content: toVFile({ path: join(__dirname, 'ingressApiGateway/ingressApiGateway.md') }),
     }),
   )
