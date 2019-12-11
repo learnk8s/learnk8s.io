@@ -131,7 +131,7 @@ export const Footer: React.StatelessComponent<{}> = ({}) => {
           <ul className='list pl0'>
             {[
               ['Training', '/training'],
-              ['Online courses', '/Academy'],
+              ['Online courses', '/academy'],
               ['Consulting', '/consulting'],
             ].map(([title, url]) => {
               return (
@@ -463,7 +463,7 @@ export const Subscribe: React.StatelessComponent<{ identifier: string }> = ({ id
     <div className='mv4 mv5-l'>
       <p className='f2 navy b mt0 measure-narrow'>Don't miss the next article!</p>
       <p className='f4 measure black-80 mv4 lh-copy'>
-        Be the first to be notifed when a new article or Kubernetes experiment is published.
+        Be the first to be notified when a new article or Kubernetes experiment is published.
       </p>
       <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST'>
         <input type='hidden' name='u' value='2f82ec7d5caaa9ced71141211' />
@@ -521,7 +521,7 @@ export const Subscribe: React.StatelessComponent<{ identifier: string }> = ({ id
         <input type='hidden' name='mc_signupsource' value='hosted' />
       </form>
       <p className='f6 black-60 mt4 mb0 underline'>
-        *We'll never share your email address and you can opt out at any time.
+        *We'll never share your email address, and you can opt-out at any time.
       </p>
     </div>
   )
@@ -540,13 +540,16 @@ export const WhatIsLearnk8s: React.StatelessComponent<{}> = ({}) => {
         {[
           [
             'Instructor-led workshops',
-            'Deep dive into containers and Kubernetes and become an expert in deploying applications at scale.',
+            'Deep dive into containers and Kubernetes with the help of our instructors and become an expert in deploying applications at scale.',
           ],
           [
             'Online courses',
             'Learn Kubernetes online with hands-on, self-paced courses. No need to leave the comfort of your home.',
           ],
-          ['Corporate training', 'Training your team in Kubernetes with a customised learning path.'],
+          [
+            'Corporate training',
+            'Train your team in containers and Kubernetes with a customised learning path — remotely or on-site.',
+          ],
         ].map(([title, description]) => {
           return (
             <li className='w-50-ns f5 ph4 pv2'>
