@@ -151,3 +151,18 @@ test('it should convert defaultValue', assert => {
   })
   assert.end()
 })
+
+test('it should convert a class object', assert => {
+  class A extends React.Component<{}> {
+    render() {
+      return <div>1</div>
+    }
+  }
+  assert.deepEqual(jsxToHast(<A />), {
+    type: 'element',
+    tagName: 'div',
+    children: [{ type: 'text', value: '1' }],
+    properties: {},
+  })
+  assert.end()
+})

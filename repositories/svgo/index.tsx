@@ -160,7 +160,7 @@ class Cheerio {
     return new CheerioSelectionAll(this.tree, selector)
   }
   html() {
-    return toHtml(hastParser(this.tree), { space: 'svg' })
+    return toHtml(hastParser(this.tree), { space: 'svg', allowDangerousHTML: true })
   }
 }
 

@@ -5,7 +5,7 @@ import toHtml from 'hast-util-to-html'
 
 export function jsxToString(jsx: JSX.Element | string | number | Array<JSX.Element | string | number>): string {
   const hast = jsxToHast(jsx)
-  return toHtml({ type: 'root', children: Array.isArray(hast) ? hast : [hast] })
+  return toHtml({ type: 'root', children: Array.isArray(hast) ? hast : [hast] }, { allowDangerousHTML: true })
 }
 
 export function jsxToHast(
@@ -83,12 +83,14 @@ export function jsxToHast(
       .filter((it: any) => !isNull(it)) as any
   }
   if (isStatelessComponent(jsx)) {
-    return jsxToHast(((jsx as any).type as any).call(null, { ...(jsx as any).props }))
+    try {
+      return jsxToHast(((jsx as any).type as any).call(null, { ...(jsx as any).props }))
+    } catch {
+      // Component class
+      return jsxToHast(new ((jsx as any).type as any)((jsx as any).props).render())
+    }
   }
-  if (isComponentClass(jsx)) {
-    throw new Error('Not impletemented')
-  }
-  throw new Error('Invalid element')
+  throw 'Invalid element'
 }
 
 function isString(value: unknown): value is string {
