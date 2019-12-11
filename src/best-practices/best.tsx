@@ -1,6 +1,5 @@
 import React from 'react'
 import { Html, Head, OpenGraph, Body, Navbar } from '../layout.v3'
-import { renderToStaticMarkup } from 'react-dom/server'
 import { Store } from 'redux'
 import { State, Actions, Action, getPages, getOpenGraph, getConfig } from '../store'
 import { join } from 'path'
@@ -14,6 +13,7 @@ import { Node } from 'unist'
 import toString from 'mdast-util-to-string'
 import { mdast2JsxInline, mdast2Jsx } from '../markdown/jsx'
 import { transform } from '../markdown/utils'
+import { jsxToString } from '../jsx-utils/jsxToHast'
 
 export const BestPractices = {
   id: 'kubernetes-best-practices-production',
@@ -239,7 +239,7 @@ function renderPage(state: State, sections: Section[]) {
         <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(${TrackProgress.toString()})('${renderToStaticMarkup(<ProgressWidget />)}')`,
+            __html: `(${TrackProgress.toString()})('${jsxToString(<ProgressWidget />)}')`,
           }}
         />
       </Body>
