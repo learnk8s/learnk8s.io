@@ -319,10 +319,10 @@ In other words, **a service mesh's primary purpose is to manage internal service
 
 ![Service meshes focus on internal service-to-service communitcation](service-mesh.svg)
 
-| API gateway                                   | Service mesh                                       |
-| --------------------------------------------- | -------------------------------------------------- |
+| API gateway                                   | Service mesh                                        |
+| --------------------------------------------- | --------------------------------------------------- |
 | Exposes internal services to external clients | Manages and controls the traffic inside the network |
-| Maps external traffic to internal resources   | Focuses on brokering internal resources            |
+| Maps external traffic to internal resources   | Focuses on brokering internal resources             |
 
 _But that doesn't mean that you can't use [Istio](https://istio.io/) as an API gateway._
 
