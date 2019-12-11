@@ -541,19 +541,22 @@ export const WhatIsLearnk8s: React.StatelessComponent<{}> = ({}) => {
           [
             'Instructor-led workshops',
             'Deep dive into containers and Kubernetes with the help of our instructors and become an expert in deploying applications at scale.',
+            '/training',
           ],
           [
             'Online courses',
             'Learn Kubernetes online with hands-on, self-paced courses. No need to leave the comfort of your home.',
+            '/academy',
           ],
           [
             'Corporate training',
             'Train your team in containers and Kubernetes with a customised learning path — remotely or on-site.',
+            '/training',
           ],
-        ].map(([title, description]) => {
+        ].map(([title, description, url]) => {
           return (
             <li className='w-50-ns f5 ph4 pv2'>
-              <a className='link dib f3 navy b bb bw1 pb3 mb3 pt3 hover-sky' href='/training'>
+              <a className='link dib f3 navy b bb bw1 pb3 mb3 pt3 hover-sky' href={url}>
                 ⎈ {title} <span className='f5 v-mid dib pb1 pl1'>❯</span>
               </a>
               <p className='lh-copy f4 measure-narrow pt0 mt0'>{description}</p>
