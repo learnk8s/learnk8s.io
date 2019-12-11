@@ -23,7 +23,7 @@ You can choose from Ingress controllers that:
 - support UDP and TCP traffic such as [Citrix Ingress](https://github.com/citrix/citrix-k8s-ingress-controller)
 - support Websockets such as [HAProxy Ingress](https://github.com/jcmoraisjr/haproxy-ingress)
 
-There are also other hybrid Ingress controllers can that integrate with existing cloud providers such as [Zalando's Skipper Ingress](https://opensource.zalando.com/skipper/).
+There are also other hybrid Ingress controllers that can integrate with existing cloud providers such as [Zalando's Skipper Ingress](https://opensource.zalando.com/skipper/).
 
 When it comes to API gateways in Kubernetes, there are a few popular choices to select from.
 
