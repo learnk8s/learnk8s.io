@@ -32,7 +32,6 @@ function checkOpenGraph(store: Store<State, Actions>) {
     try {
       ok(og.title !== '', `Page: ${og.id}, open graph title is not defined.`)
       ok(og.description !== '', `Page: ${og.id}, open graph description is not defined.`)
-
     } catch (e) {
       console.error(e.message)
     }
@@ -47,7 +46,6 @@ function checkBlogPost(store: Store<State, Actions>) {
       ok(bp.title !== '', `Page: ${bp.id}, blog post title is not defined.`)
       ok(bp.description !== '', `Page: ${bp.id}, blog post description is not defined.`)
       ok(bp.publishedDate !== '', `Page: ${bp.id}, blog post published date is not defined.`)
-      
     } catch (e) {
       console.error(e.message)
     }
