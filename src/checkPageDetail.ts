@@ -16,8 +16,10 @@ function checkTitleDescription(store: Store<State, Actions>) {
     try {
       ok(page.title !== '', `Page: ${page.id}, title is not defined.`)
       ok(page.title.length <= 65, `Page: ${page.id}, title is too long.`)
+      ok(page.title.length >= 15, `Page: ${page.id}, title is too short.`)
       ok(page.description !== '', `Page: ${page.id}, description is not defined.`)
       ok(page.description.length <= 170, `Page: ${page.id}, description is too long.`)
+      ok(page.description.length >= 50, `Page: ${page.id}, description is too short.`)
     } catch (e) {
       console.error(e.message)
     }
