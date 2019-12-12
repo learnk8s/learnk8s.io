@@ -44,6 +44,7 @@ import * as Courses from './courses'
 import * as Training from './training.v2'
 import * as BestPractices from './best-practices/best'
 import * as Flipboard from './flipboard'
+import { checkPageDetail } from './checkPageDetail'
 
 Courses.Register(store)
 Training.Register(store)
@@ -102,6 +103,8 @@ ArchitectingAndScaling.Mount({ store })
 ZeroToK8s.Mount({ store })
 BiteSizedListing.Mount({ store })
 Sitemap.Mount({ store })
+
+checkPageDetail(store)
 
 const config = getConfig(store.getState())
 

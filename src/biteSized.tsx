@@ -8,7 +8,7 @@ import { BlogPost } from './store/websiteReducer'
 import { format } from 'date-fns'
 
 export const BiteSized = {
-  id: '/bite-sized',
+  id: 'bite-sized',
   url: '/bite-sized',
   title: 'Bite-sized Kubernetes learning ♦︎ Learnk8s',
   description:
