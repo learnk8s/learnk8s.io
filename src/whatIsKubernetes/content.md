@@ -532,10 +532,10 @@ When you create a 1GB of memory and 1 vCPU droplet on Digital Ocean, you end up 
     <polygon id="overhead-animejs-mem-bar" fill="#D8D8D8" fill-rule="nonzero" points="308.806 451 592 451 592 513 246 513"/>
     <polygon id="overhead-animejs-cpu-bar" fill="#D8D8D8" fill-rule="nonzero" points="246 168 308 168 308 452.018 246 514"/>
     <text id="overhead-animejs-usable" fill="#4A4A4A" font-size="31.68" font-weight="bold" class="sans-serif">
-      <tspan x="403.556" y="299">Usable</tspan> <tspan x="340.188" y="335">CPU & memory</tspan>
+      <tspan x="403.556" y="299">Usable</tspan> <tspan x="340.188" y="335">CPU &#x26; memory</tspan>
     </text>
     <text id="overhead-animejs-total" fill="#4A4A4A" font-size="31.68" font-weight="bold" class="sans-serif">
-      <tspan x="381.663" y="319">Total</tspan> <tspan x="304.188" y="355">CPU & memory</tspan>
+      <tspan x="381.663" y="319">Total</tspan> <tspan x="304.188" y="355">CPU &#x26; memory</tspan>
     </text>
   </g>
 </svg>

@@ -6,6 +6,10 @@ import { ok } from 'assert'
 import markdownTable from 'markdown-table'
 import { transform, MdastVisitors, parseLink, Helpers } from './utils'
 import { VFile, toVFile, VMemory, VReference } from '../files'
+import hastParser from 'hast-util-raw'
+import * as HastSelect from 'hast-util-select'
+import * as Hast from 'hast'
+import toHtml from 'hast-util-to-html'
 
 export function toMdast(vfile: VFile | VMemory): Mdast.Root {
   const tree = parseToMdast(vfile)
@@ -123,9 +127,13 @@ function mdast2mdast(vfile: VFile | VMemory | VReference): MdastVisitors<Mdast.L
           }
         }
         case 'include': {
+          const hast = hastParser({ type: 'root', children: [{ type: 'raw', value: node.value }] })
+          HastSelect.selectAll<Hast.Element>('script[src]', hast).forEach(
+            it => (it.properties.src = `${vfile.dirname}/${it.properties.src}`),
+          )
           return {
             type: 'include',
-            value: node.value,
+            value: toHtml(hast, { allowDangerousHTML: true }),
           }
         }
         default: {
@@ -385,7 +393,16 @@ function mdast2string(vfile: VFile | VMemory | VReference): MdastVisitors<string
       )}\n${fences}`
     },
     include(node) {
-      return `${fences}include\n${node.value}\n${fences}`
+      const hast = hastParser({ type: 'root', children: [{ type: 'raw', value: node.value }] })
+      HastSelect.selectAll<Hast.Element>('script[src]', hast).forEach(
+        it => (it.properties.src = relative(vfile.dirname || '', it.properties.src as string)),
+      )
+      return `${fences}include\n${toHtml(hast, {
+        allowDangerousHTML: true,
+        closeEmptyElements: true,
+        collapseEmptyAttributes: true,
+        tightSelfClosing: true,
+      })}\n${fences}`
     },
   }
 }

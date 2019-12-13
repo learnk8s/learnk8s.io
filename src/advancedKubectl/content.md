@@ -650,23 +650,23 @@ You might wonder how you could possibly remember 800 aliases? Actually, you don'
     <li class="mh2 relative">
       <p class="absolute top--2 left-0 ttu gray f6 mv0">base</p>
       <ul class="list pl0 flex flex-column">
-        <li><span class="alias-k sky">k</span>ubectl<br /><br /><br /><br /><br /><br /><br /><br /></li>
+        <li><span class="alias-k sky">k</span>ubectl<br><br><br><br><br><br><br><br></li>
       </ul>
     </li>
     <li class="mh2 relative">
       <p class="absolute top--2 left-0 ttu gray f6 mv0">System</p>
       <ul class="list pl0 flex flex-column">
-        <li>-n kube-<span class="alias-sys sky no-wrap">sys</span>tem<br /><br /><br /><br /><br /><br /><br /><br /></li>
+        <li>-n kube-<span class="alias-sys sky no-wrap">sys</span>tem<br><br><br><br><br><br><br><br></li>
       </ul>
-    <li class="mh2 relative">
+    </li><li class="mh2 relative">
       <p class="absolute top--2 left-0 ttu gray f6 mv0">Operation</p>
       <ul class="list pl0 flex flex-column">
         <li><span class="alias-g sky">g</span>et</li>
         <li><span class="alias-d sky">d</span>escribe</li>
-        <li><span class="alias-rm sky">rm</span>&nbsp;(delete)</li>
+        <li><span class="alias-rm sky">rm</span> (delete)</li>
         <li><span class="sky">lo</span>gs -f</li>
         <li><span class="sky">ex</span>ec -it</li>
-        <li><span class="sky">a</span>pply -f<br /><br /><br /></li>
+        <li><span class="sky">a</span>pply -f<br><br><br></li>
       </ul>
     </li>
     <li class="mh2 relative">
@@ -677,22 +677,22 @@ You might wonder how you could possibly remember 800 aliases? Actually, you don'
         <li><span class="sky">sec</span>ret</li>
         <li><span class="sky">ing</span>ress</li>
         <li><span class="sky">no</span>de</li>
-        <li><span class="alias-svc sky">svc</span>&nbsp;(service)</li>
-        <li><span class="sky">ns</span>&nbsp;(namespace)</li>
-        <li><span class="alias-cm sky">cm</span>&nbsp;(configmap)</li>
+        <li><span class="alias-svc sky">svc</span> (service)</li>
+        <li><span class="sky">ns</span> (namespace)</li>
+        <li><span class="alias-cm sky">cm</span> (configmap)</li>
       </ul>
     </li>
     <li class="mh2 relative">
       <p class="absolute top--2 left-0 ttu gray f6 mv0">Options</p>
       <ul class="list pl0 flex flex-column">
-        <li><span class="alias-oyaml sky">oyaml</span>:&nbsp;-o yaml</li>
-        <li><span class="alias-ojson sky">ojson</span>:&nbsp;-o json</li>
-        <li><span class="alias-owide sky">owide</span>:&nbsp;-o wide</li>
-        <li><span class="alias-all sky no-wrap">all</span>:&nbsp;--all-namespaces</li>
-        <li><span class="alias-w sky">w</span>:&nbsp;--watch</li>
-        <li><span class="alias-sl sky">sl</span>:&nbsp;--show-labels</li>
-        <li><span class="sky">f</span>:&nbsp;-f</li>
-        <li><span class="sky">l</span>:&nbsp;-l</li>
+        <li><span class="alias-oyaml sky">oyaml</span>: -o yaml</li>
+        <li><span class="alias-ojson sky">ojson</span>: -o json</li>
+        <li><span class="alias-owide sky">owide</span>: -o wide</li>
+        <li><span class="alias-all sky no-wrap">all</span>: --all-namespaces</li>
+        <li><span class="alias-w sky">w</span>: --watch</li>
+        <li><span class="alias-sl sky">sl</span>: --show-labels</li>
+        <li><span class="sky">f</span>: -f</li>
+        <li><span class="sky">l</span>: -l</li>
       </ul>
     </li>
   </ul>
@@ -750,7 +750,7 @@ For example, you could use `k proxy` for running `kubectl proxy`:
 ```include
 <ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
 <li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
-<li class="relative hide-child pv2 gray">&nbsp;proxy</li>
+<li class="relative hide-child pv2 gray"> proxy</li>
 </ul>
 ```
 
@@ -760,7 +760,7 @@ Or you could use `kg roles` for running `kubectl get roles` (there doesn't curre
 <ul class="list pl0 pr5 flex justify-center f-headline b pointer mv4">
 <li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="hover-sky relative hide-child pv2">g <span class="child absolute bottom--2 left-0 f2">get</span></li>
-<li class="relative hide-child pv2 gray">&nbsp;roles</li>
+<li class="relative hide-child pv2 gray"> roles</li>
 </ul>
 ```
 
@@ -771,7 +771,7 @@ To get a specific Pod, you could use `kgpo my-pod` for running `kubectl get pod 
 <li class="hover-sky relative hide-child pv2">k <span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="hover-sky relative hide-child pv2">g <span class="child absolute bottom--2 left-0 f2">get</span></li>
 <li class="hover-sky relative hide-child pv2">po <span class="child absolute bottom--2 left-0 f2">pods</span></li>
-<li class="relative hide-child pv2 gray">&nbsp;my-pod</li>
+<li class="relative hide-child pv2 gray"> my-pod</li>
 </ul>
 ```
 
@@ -783,7 +783,7 @@ Note that some aliases even _require_ a further argument on the command-line. Fo
 <li class="hover-sky relative hide-child pv2">g<span class="child absolute bottom--2 left-0 f2">get</span></li>
 <li class="hover-sky relative hide-child pv2">po<span class="child absolute bottom--2 left-0 f2">pods</span></li>
 <li class="hover-sky relative hide-child pv2">l<span class="child absolute bottom--2 left-0 f2 no-wrap">-l</span></li>
-<li class="relative hide-child pv2 gray">&nbsp;app=ui</li>
+<li class="relative hide-child pv2 gray"> app=ui</li>
 </ul>
 ```
 
