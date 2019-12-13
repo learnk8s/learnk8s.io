@@ -6,7 +6,6 @@
     "visual:test": "ts-node --files test.ts --test",
     "visual:approve": "ts-node --files test.ts --approve",
     "build": "ts-node --files src/index.tsx",
-    "svgo": "ts-node src/svgo.ts",
     "fmt": "ts-node --files src/check.ts",
     "test": "cross-env tsc --noEmit && ts-node --files node_modules/tape/bin/tape \"src/**/test.ts\" \"src/**/*.test.ts\" \"src/**/*.integration.ts\" \"src/**/integration.ts\"",
     "start": "ts-node --files src/start.ts"
@@ -29,6 +28,7 @@
     "@types/svgo": "^1.0.1",
     "@types/tape": "^4.2.33",
     "@types/terser": "^3.12.0",
+    "@types/unist": "^2.0.3",
     "axios": "^0.19.0",
     "cheerio": "^1.0.0-rc.2",
     "cross-env": "^6.0.3",
@@ -62,7 +62,6 @@
     "terser": "^3.17.0",
     "ts-node": "^8.0.2",
     "typescript": "^3.7.2",
-    "unified": "^7.1.0",
     "unist-util-inspect": "^4.1.4",
     "unist-util-map": "^1.0.4",
     "unist-util-parents": "^1.0.2",
