@@ -119,7 +119,7 @@ async function renderPage(page: Page, state: State) {
           ) : null}
           <hr className='pv2 bn' />
           <div className='aspect-ratio aspect-ratio--6x4'>
-            <img src={openGraph.image.props.src} className='aspect-ratio--object' alt={openGraph.image.props.alt} />
+            <img src={'assets/bsk.svg'} className='aspect-ratio--object' alt={blog.title} />
           </div>
           <hr className='w3 center b--navy mv4 mb5-ns' />
           <p className='lh-copy measure-wide f4'>
