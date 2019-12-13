@@ -80,7 +80,7 @@ export function RSSPipeline({
   }
 }
 
-export class Cheerio {
+class Cheerio {
   constructor(private tree: Hast.Root) {}
   public static of(content: string) {
     const tree = hastParser({

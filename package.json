@@ -6,7 +6,6 @@
     "visual:test": "ts-node --files test.ts --test",
     "visual:approve": "ts-node --files test.ts --approve",
     "build": "ts-node --files src/index.tsx",
-    "svgo": "ts-node src/svgo.ts",
     "fmt": "ts-node --files src/check.ts",
     "test": "cross-env tsc --noEmit && ts-node --files node_modules/tape/bin/tape \"src/**/test.ts\" \"src/**/*.test.ts\" \"src/**/*.integration.ts\" \"src/**/integration.ts\"",
     "start": "ts-node --files src/start.ts"
