@@ -14,6 +14,9 @@ export const Action = {
   registerBlogPost(args: BlogPost) {
     return { type: 'REGISTER_BLOG_POST.V2' as const, ...args }
   },
+  registerPreviewPicture(args: PreviewPicture) {
+    return { type: 'REGISTER_PREVIEW_PICTURE' as const, ...args }
+  },
   registerAuthor(args: Author) {
     return { type: 'REGISTER_AUTHOR' as const, ...args }
   },
@@ -52,6 +55,12 @@ export type BlogPost = {
   publishedDate: string
   lastModifiedDate?: string
   content: VReference
+}
+
+export type PreviewPicture = {
+  id: string
+  pageId: string
+  image: JSX.Element
 }
 
 export type Author = {
@@ -96,6 +105,7 @@ export interface State {
   tags: Record<string, string[]>
   relatedBlocks: Record<string, BlogPostMarkdownBlock>
   redirects: Record<string, Redirect>
+  previewPictures: Record<string, PreviewPicture>
 }
 
 export function createInitialState(options: {}): State {
@@ -109,6 +119,7 @@ export function createInitialState(options: {}): State {
     tags: {},
     relatedBlocks: {},
     redirects: {},
+    previewPictures: {},
   }
 }
 
@@ -174,6 +185,12 @@ export const RootReducer: Reducer<State, Actions> = (
         )
       }
       return { ...state, redirects: { ...state.redirects, [action.id]: { ...action } } }
+    }
+    case 'REGISTER_PREVIEW_PICTURE': {
+      if (!(action.pageId in state.pages)) {
+        throw `Invalid pageId ${action.pageId} for picture ${action.id}`
+      }
+      return { ...state, previewPictures: { ...state.previewPictures, [action.id]: { ...action } } }
     }
     default:
       assertUnreachable(action)

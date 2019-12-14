@@ -91,3 +91,7 @@ export function getBlogPostMarkdownBlocks(state: State): WebsiteReducer.BlogPost
 export function getRedirects(state: State): WebsiteReducer.Redirect[] {
   return Object.values(state.website.redirects)
 }
+
+export function getPreviewPictures(state: State): WebsiteReducer.PreviewPicture[] {
+  return Object.values(state.website.previewPictures)
+}
