@@ -48,4 +48,11 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'kubectl-productivity-related.md') }),
     }),
   )
+  store.dispatch(
+    Action.registerPreviewPicture({
+      id: 'kubectl-productivity-picture',
+      pageId: KubectlProductivity.id,
+      image: <img src='src/advancedKubectl/magic.svg' alt={KubectlProductivity.title} />,
+    }),
+  )
 }

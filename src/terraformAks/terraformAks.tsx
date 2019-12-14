@@ -44,4 +44,11 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'terraform-aks-related.md') }),
     }),
   )
+  store.dispatch(
+    Action.registerPreviewPicture({
+      id: 'terraform-aks-picture',
+      pageId: TerraformAks.id,
+      image: <img src='src/terraformAks/terraforming.svg' alt={TerraformAks.title} />,
+    }),
+  )
 }

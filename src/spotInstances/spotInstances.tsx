@@ -42,4 +42,11 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'spot-instances-related.md') }),
     }),
   )
+  store.dispatch(
+    Action.registerPreviewPicture({
+      id: 'spot-instances-picture',
+      pageId: SpotInstances.id,
+      image: <img src='src/spotInstances/cheap-cluster.svg' alt={SpotInstances.title} />,
+    }),
+  )
 }

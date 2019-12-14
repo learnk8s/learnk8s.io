@@ -57,4 +57,11 @@ export function Register(store: Store<State, Actions>) {
       redirectToPageId: ScalingTensorflow.id,
     }),
   )
+  store.dispatch(
+    Action.registerPreviewPicture({
+      id: 'scaling-tensorflow-picture',
+      pageId: ScalingTensorflow.id,
+      image: <img src='src/scalingKubeflow/kubeflow.svg' alt={ScalingTensorflow.title} />,
+    }),
+  )
 }

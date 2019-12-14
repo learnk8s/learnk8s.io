@@ -35,4 +35,11 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(Action.assignTag({ id: 'general-post', pageId: Troubleshooting.id }))
+  store.dispatch(
+    Action.registerPreviewPicture({
+      id: 'troubleshooting-picture',
+      pageId: Troubleshooting.id,
+      image: <img src='src/troubleshooting/flowchart.svg' alt={Troubleshooting.title} />,
+    }),
+  )
 }

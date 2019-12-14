@@ -43,4 +43,11 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'chaos-engineering-related.md') }),
     }),
   )
+  store.dispatch(
+    Action.registerPreviewPicture({
+      id: 'chaos-enginnering-picture',
+      pageId: ChaosEngineering.id,
+      image: <img src='src/chaosEngineering/chaos-engineering-kubernetes.svg' alt={ChaosEngineering.title} />,
+    }),
+  )
 }

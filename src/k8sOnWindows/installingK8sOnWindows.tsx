@@ -45,4 +45,11 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'k8s-on-windows-related.md') }),
     }),
   )
+  store.dispatch(
+    Action.registerPreviewPicture({
+      id: 'k8s-on-windows-picture',
+      pageId: K8sOnWindows.id,
+      image: <img src='src/k8sOnWindows/k8s_on_win.svg' alt={K8sOnWindows.title} />,
+    }),
+  )
 }
