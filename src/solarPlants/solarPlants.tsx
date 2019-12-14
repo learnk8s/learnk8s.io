@@ -42,4 +42,11 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'solar-plants-related.md') }),
     }),
   )
+  store.dispatch(
+    Action.registerPreviewPicture({
+      id: 'solar-plants-picture',
+      pageId: SolarPlants.id,
+      image: <img src='src/solarPlants/solar_panel.svg' alt={SolarPlants.title} />,
+    }),
+  )
 }
