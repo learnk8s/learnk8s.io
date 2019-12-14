@@ -9,6 +9,7 @@ import {
   getAuthors,
   getBlogPostMarkdownBlocks,
   hasTag,
+  getPreviewPictures,
 } from './store'
 import { Page } from './store/websiteReducer'
 import { Head, Html, Body, Navbar, OpenGraph, Footer, Author, Subscribe, WhatIsLearnk8s } from './layout.v3'
@@ -55,6 +56,7 @@ export async function renderPage(pageMeta: Page, state: State) {
   if (!author) {
     throw new Error('The blog post does not have an author attached')
   }
+  const previewPicture = getPreviewPictures(state).find(it => it.id === pageMeta.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   const extraBlocks = getBlogPostMarkdownBlocks(state).filter(it => it.blogPostId === blog.id)
   const [content, ...blocks] = await Promise.all([
@@ -121,7 +123,17 @@ export async function renderPage(pageMeta: Page, state: State) {
           ) : null}
           <hr className='pv2 bn' />
           <div className='aspect-ratio aspect-ratio--6x4'>
-            <img src={openGraph.image.props.src} className='aspect-ratio--object' alt={openGraph.image.props.alt} />
+            {previewPicture ? (
+              {
+                ...previewPicture.image,
+                props: {
+                  ...previewPicture.image.props,
+                  className: (previewPicture.image.props.className || '').concat('aspect-ratio--object'),
+                },
+              }
+            ) : (
+              <img src='assets/bsk.svg' className='aspect-ratio--object' alt={blog.title} />
+            )}
           </div>
           <hr className='w3 center b--navy mv4 mb5-ns' />
           {renderToJsx(content)}
