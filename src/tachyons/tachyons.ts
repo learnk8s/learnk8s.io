@@ -1,7 +1,4 @@
 const cssom = require('cssom')
-const { createGenerator, createParser } = require('scalpel')
-const generator = createGenerator()
-const parser = createParser()
 const CSSwhat = require('css-what')
 
 const mediaQueries = [
@@ -10,118 +7,122 @@ const mediaQueries = [
   { from: 60, name: 'l' },
 ]
 
-const css = [
+const mediaQueriesless = [
+  aspectRatios(),
+  backgroundSize(),
+  backgroundPosition(),
+  outlines(),
+  borders(),
+  borderRadius([0, 0.125, 0.25, 0.5, 1]),
+  borderStyle(),
+  borderWidths([0, 0.125, 0.25, 0.5, 1, 2]),
+  boxShadow(),
+  code(),
+  coordinates([0, 1, 2, -1, -2]),
+  clears(),
+  display(),
+  flexbox(),
+  floats(),
+  fontStyle(),
+  fontWeight([100, 200, 300, 400, 500, 600, 700, 800, 900]),
+  heights([1, 2, 4, 8, 16]),
+  letterSpacing([0.1, -0.05, 0.25]),
+  utilities(),
+  lineHeight([1, 1.25, 1.5]),
+  maxWidths([1, 2, 4, 8, 16, 32, 48, 64, 96]),
+  widths([1, 2, 4, 8, 16]),
+  overflow(),
+  position(),
+  rotations([45, 90, 135, 180, 225, 270, 315]),
+  spacing([0.25, 0.5, 1, 2, 4, 8, 16]),
+  textDecoration(),
+  textAlign(),
+  textTransform(),
+  typography([6, 5, 3, 2.25, 1.5, 1.25, 1, 0.875, 0.75]),
+  measure([30, 34, 20]),
+  visibility(),
+  whiteSpace(),
+  verticalAlign(),
+  skip(wordBreak()),
+]
+
+export const tachyons = [
+  normalize(),
+  boxSizing(),
+  colour({
+    black: '#000',
+    'near-black': '#111',
+    'dark-gray': '#333',
+    'mid-gray': '#555',
+    gray: '#777',
+    silver: '#999',
+    'light-silver': '#aaa',
+    'moon-gray': '#ccc',
+    'light-gray': '#eee',
+    'near-white': '#f4f4f4',
+    white: '#fff',
+    'black-90': 'rgba(0,0,0,.9)',
+    'black-80': 'rgba(0,0,0,.8)',
+    'black-70': 'rgba(0,0,0,.7)',
+    'black-60': 'rgba(0,0,0,.6)',
+    'black-50': 'rgba(0,0,0,.5)',
+    'black-40': 'rgba(0,0,0,.4)',
+    'black-30': 'rgba(0,0,0,.3)',
+    'black-20': 'rgba(0,0,0,.2)',
+    'black-10': 'rgba(0,0,0,.1)',
+    'black-05': 'rgba(0,0,0,.05)',
+    'black-025': 'rgba(0,0,0,.025)',
+    'black-0125': 'rgba(0,0,0,.0125)',
+    'white-90': 'rgba(255,255,255,.9)',
+    'white-80': 'rgba(255,255,255,.8)',
+    'white-70': 'rgba(255,255,255,.7)',
+    'white-60': 'rgba(255,255,255,.6)',
+    'white-50': 'rgba(255,255,255,.5)',
+    'white-40': 'rgba(255,255,255,.4)',
+    'white-30': 'rgba(255,255,255,.3)',
+    'white-20': 'rgba(255,255,255,.2)',
+    'white-10': 'rgba(255,255,255,.1)',
+    'white-05': 'rgba(255,255,255,.05)',
+    'white-025': 'rgba(255,255,255,.025)',
+    'white-0125': 'rgba(255,255,255,.0125)',
+    'dark-red': '#e7040f',
+    red: '#ff4136',
+    'light-red': '#ff725c',
+    orange: '#ff6300',
+    gold: '#ffb700',
+    yellow: '#ffd700',
+    'light-yellow': '#fbf1a9',
+    purple: '#5e2ca5',
+    'light-purple': '#a463f2',
+    'dark-pink': '#d5008f',
+    'hot-pink': '#ff41b4',
+    pink: '#ff80cc',
+    'light-pink': '#ffa3d7',
+    'dark-green': '#137752',
+    green: '#19a974',
+    'light-green': '#9eebcf',
+    navy: '#001b44',
+    'dark-blue': '#00449e',
+    blue: '#357edd',
+    'light-blue': '#96ccff',
+    'lightest-blue': '#cdecff',
+    'washed-blue': '#f6fffe',
+    'washed-green': '#e8fdf5',
+    'washed-yellow': '#fffceb',
+    'washed-red': '#ffdfdf',
+  }),
+  ...mediaQueriesless,
+  opacity([1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.025, 0]),
   fontFamily(),
+  forms(),
   hover(),
   images(),
   links(),
   lists(),
-  normalize(),
-  utilities(),
+  tables(),
   zScale([0, 1, 2, 3, 4, 5]),
-  mediaQueryfy(mediaQueries)(
-    [
-      aspectRatios(),
-      backgroundPosition(),
-      backgroundSize(),
-      borderStyle(),
-      borderRadius([0, 0.125, 0.25, 0.5, 1]),
-      borderWidths([0, 0.125, 0.25, 0.5, 1, 2]),
-      borders(),
-      boxShadow(),
-      boxSizing(),
-      clears(),
-      code(),
-      colour({
-        black: '#000',
-        'near-black': '#111',
-        'dark-gray': '#333',
-        'mid-gray': '#555',
-        gray: '#777',
-        silver: '#999',
-        'light-silver': '#aaa',
-        'moon-gray': '#ccc',
-        'light-gray': '#eee',
-        'near-white': '#f4f4f4',
-        white: '#fff',
-        'black-90': 'rgba(0,0,0,.9)',
-        'black-80': 'rgba(0,0,0,.8)',
-        'black-70': 'rgba(0,0,0,.7)',
-        'black-60': 'rgba(0,0,0,.6)',
-        'black-50': 'rgba(0,0,0,.5)',
-        'black-40': 'rgba(0,0,0,.4)',
-        'black-30': 'rgba(0,0,0,.3)',
-        'black-20': 'rgba(0,0,0,.2)',
-        'black-10': 'rgba(0,0,0,.1)',
-        'black-05': 'rgba(0,0,0,.05)',
-        'black-025': 'rgba(0,0,0,.025)',
-        'black-0125': 'rgba(0,0,0,.0125)',
-        'white-90': 'rgba(255,255,255,.9)',
-        'white-80': 'rgba(255,255,255,.8)',
-        'white-70': 'rgba(255,255,255,.7)',
-        'white-60': 'rgba(255,255,255,.6)',
-        'white-50': 'rgba(255,255,255,.5)',
-        'white-40': 'rgba(255,255,255,.4)',
-        'white-30': 'rgba(255,255,255,.3)',
-        'white-20': 'rgba(255,255,255,.2)',
-        'white-10': 'rgba(255,255,255,.1)',
-        'white-05': 'rgba(255,255,255,.05)',
-        'white-025': 'rgba(255,255,255,.025)',
-        'white-0125': 'rgba(255,255,255,.0125)',
-        'dark-red': '#e7040f',
-        red: '#ff4136',
-        'light-red': '#ff725c',
-        orange: '#ff6300',
-        gold: '#ffb700',
-        yellow: '#ffd700',
-        'light-yellow': '#fbf1a9',
-        purple: '#5e2ca5',
-        'light-purple': '#a463f2',
-        'dark-pink': '#d5008f',
-        'hot-pink': '#ff41b4',
-        pink: '#ff80cc',
-        'light-pink': '#ffa3d7',
-        'dark-green': '#137752',
-        green: '#19a974',
-        'light-green': '#9eebcf',
-        navy: '#001b44',
-        'dark-blue': '#00449e',
-        blue: '#357edd',
-        'light-blue': '#96ccff',
-        'lightest-blue': '#cdecff',
-        'washed-blue': '#f6fffe',
-        'washed-green': '#e8fdf5',
-        'washed-yellow': '#fffceb',
-        'washed-red': '#ffdfdf',
-      }),
-      coordinates([0, 1, 2, -1, -2]),
-      display(),
-      fontStyle(),
-      fontWeight([100, 200, 300, 400, 500, 600, 700, 800, 900]),
-      heights([1, 2, 4, 8, 16]),
-      letterSpacing([0.1, -0.5, 0.25]),
-      lineHeight([1, 1.25, 1.5]),
-      maxWidths([1, 2, 4, 8, 16, 32, 48, 64, 96]),
-      measure([30, 34, 20]),
-      opacity([1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.025, 0]),
-      overflow(),
-      position(),
-      rotations([45, 90, 135, 180, 225, 270, 315]),
-      spacing([0.25, 0.5, 1, 2, 4, 8, 16]),
-      textAlign(),
-      textDecoration(),
-      textTransform(),
-      typography([6, 5, 3, 2.25, 1.5, 1.25, 1, 0.875, 0.75]),
-      verticalAlign(),
-      visibility(),
-      whiteSpace(),
-      widths([1, 2, 4, 8, 16]),
-      wordBreak(),
-    ].join('\n'),
-  ),
+  mediaQueryfy(mediaQueries)(mediaQueriesless.join('\n')),
 ].join('\n')
-
-console.log(css)
 
 function normalize(): string {
   return `/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
@@ -280,15 +281,15 @@ function aspectRatios(): string {
 }
 .aspect-ratio--16x9 { padding-bottom: 56.25%; }
 .aspect-ratio--9x16 { padding-bottom: 177.77%; }
-.aspect-ratio--4x3 {  padding-bottom: 75%; }
-.aspect-ratio--3x4 {  padding-bottom: 133.33%; }
-.aspect-ratio--6x4 {  padding-bottom: 66.6%; }
-.aspect-ratio--4x6 {  padding-bottom: 150%; }
-.aspect-ratio--8x5 {  padding-bottom: 62.5%; }
-.aspect-ratio--5x8 {  padding-bottom: 160%; }
-.aspect-ratio--7x5 {  padding-bottom: 71.42%; }
-.aspect-ratio--5x7 {  padding-bottom: 140%; }
-.aspect-ratio--1x1 {  padding-bottom: 100%; }
+.aspect-ratio--4x3 { padding-bottom: 75%; }
+.aspect-ratio--3x4 { padding-bottom: 133.33%; }
+.aspect-ratio--6x4 { padding-bottom: 66.6%; }
+.aspect-ratio--4x6 { padding-bottom: 150%; }
+.aspect-ratio--8x5 { padding-bottom: 62.5%; }
+.aspect-ratio--5x8 { padding-bottom: 160%; }
+.aspect-ratio--7x5 { padding-bottom: 71.42%; }
+.aspect-ratio--5x7 { padding-bottom: 140%; }
+.aspect-ratio--1x1 { padding-bottom: 100%; }
 .aspect-ratio--object {
     position: absolute;
     top: 0;
@@ -337,18 +338,20 @@ function borderStyle(): string {
 }
 
 function borders(): string {
-  return `.b--dotted { border-style: dotted; }
-.b--dashed { border-style: dashed; }
-.b--solid { border-style: solid; }
-.b--none { border-style: none; }`
+  return `.ba { border-style: solid; border-width: 1px; }
+.bt { border-top-style: solid; border-top-width: 1px; }
+.br { border-right-style: solid; border-right-width: 1px; }
+.bb { border-bottom-style: solid; border-bottom-width: 1px; }
+.bl { border-left-style: solid; border-left-width: 1px; }
+.bn { border-style: none; border-width: 0; }`
 }
 
 function boxShadow(): string {
-  return `.shadow-1 { box-shadow: 0px 0px 4px 2px rgba( 0, 0, 0, 0.2 ); }
-.shadow-2 { box-shadow: 0px 0px 8px 2px rgba( 0, 0, 0, 0.2 ); }
+  return `.shadow-1 { box-shadow: 0 0 4px 2px rgba( 0, 0, 0, 0.2 ); }
+.shadow-2 { box-shadow: 0 0 8px 2px rgba( 0, 0, 0, 0.2 ); }
 .shadow-3 { box-shadow: 2px 2px 4px 2px rgba( 0, 0, 0, 0.2 ); }
-.shadow-4 { box-shadow: 2px 2px 8px 0px rgba( 0, 0, 0, 0.2 ); }
-.shadow-5 { box-shadow: 4px 4px 8px 0px rgba( 0, 0, 0, 0.2 ); }`
+.shadow-4 { box-shadow: 2px 2px 8px 0 rgba( 0, 0, 0, 0.2 ); }
+.shadow-5 { box-shadow: 4px 4px 8px 0 rgba( 0, 0, 0, 0.2 ); }`
 }
 
 function boxSizing(): string {
@@ -410,7 +413,7 @@ function code(): string {
   return `.pre {
   overflow-x: auto;
   overflow-y: hidden;
-  overflow:   scroll;
+  overflow: scroll;
 }`
 }
 
@@ -419,10 +422,10 @@ function coordinates(scale: number[]): string {
     scale
       .map(it => {
         return [
-          `.top-${it} { top: ${toEm(it)}; }`,
-          `.right-${it} { right: ${toEm(it)}; }`,
-          `.bottom-${it} { bottom: ${toEm(it)}; }`,
-          `.left-${it} { left: ${toEm(it)}; }`,
+          `.top-${it} { top: ${toRem(it)}; }`,
+          `.right-${it} { right: ${toRem(it)}; }`,
+          `.bottom-${it} { bottom: ${toRem(it)}; }`,
+          `.left-${it} { left: ${toRem(it)}; }`,
         ].join('\n')
       })
       .join('\n'),
@@ -623,7 +626,7 @@ function fontWeight(scale: number[]): string {
   ].join('\n')
 }
 
-function form(): string {
+function forms(): string {
   return `.input-reset {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -660,8 +663,8 @@ function hover(): string {
   opacity: 0;
   transition: opacity .15s ease-in;
 }
-.hide-child:hover  .child,
-.hide-child:focus  .child,
+.hide-child:hover .child,
+.hide-child:focus .child,
 .hide-child:active .child {
   opacity: 1;
   transition: opacity .15s ease-in;
@@ -706,7 +709,7 @@ function hover(): string {
 }
 .shadow-hover::after {
   content: '';
-  box-shadow: 0px 0px 16px 2px rgba( 0, 0, 0, .2 );
+  box-shadow: 0 0 16px 2px rgba( 0, 0, 0, .2 );
   border-radius: inherit;
   opacity: 0;
   position: absolute;
@@ -733,9 +736,9 @@ function images(): string {
 }
 
 function letterSpacing([normal, tight, mega]: [number, number, number]): string {
-  return `.tracked  { letter-spacing: ${normal}; }
-.tracked-tight { letter-spacing: ${tight}; }
-.tracked-mega  { letter-spacing:  ${mega}; }`
+  return `.tracked { letter-spacing: ${normal}em; }
+.tracked-tight { letter-spacing: ${tight}em; }
+.tracked-mega { letter-spacing: ${mega}em; }`
 }
 
 function links(): string {
@@ -825,7 +828,7 @@ function utilities(): string {
   margin-left: auto;
 }
 .mr-auto { margin-right: auto; }
-.ml-auto { margin-left:  auto; }`
+.ml-auto { margin-left: auto; }`
 }
 
 function verticalAlign(): string {
@@ -868,8 +871,50 @@ function zScale(scale: number[]) {
   ].join('\n')
 }
 
+function tables(): string {
+  return `.collapse {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.striped--light-silver:nth-child(odd) {
+  background-color: var(--light-silver);
+}
+
+.striped--moon-gray:nth-child(odd) {
+  background-color: var(--moon-gray);
+}
+
+.striped--light-gray:nth-child(odd) {
+  background-color: var(--light-gray);
+}
+
+.striped--near-white:nth-child(odd) {
+  background-color: var(--near-white);
+}
+
+.stripe-light:nth-child(odd) {
+  background-color: var(--white-10);
+}
+
+.stripe-dark:nth-child(odd) {
+  background-color: var(--black-10);
+}`
+}
+
 function typography(scale: number[]): string {
-  return scale.map((it, step) => `.f${step + 1} { font-size: ${it}rem; }`).join('\n')
+  return [
+    ...scale.map((it, step) => `.ff${step + 1} { font-size: ${it}rem; }`),
+    `.f-6, .f-headline { font-size: 6rem; }
+.f-5,.f-subheadline { font-size: 5rem; }
+.f1 { font-size: 3rem; }
+.f2 { font-size: 2.25rem; }
+.f3 { font-size: 1.5rem; }
+.f4 { font-size: 1.25rem; }
+.f5 { font-size: 1rem; }
+.f6 { font-size: .875rem; }
+.f7 { font-size: .75rem; }`,
+  ].join('\n')
 }
 
 function mediaQueryfy(mediaQueries: { from?: number; to?: number; name: string }[]) {
@@ -898,39 +943,43 @@ function spacing(scale: number[]): string {
   const directions = {
     all: {
       name: 'a',
-      fn: (prop: string, value: number) => `${prop}: ${toEm(value)}`,
+      fn: (prop: string, value: number) => `${prop}: ${toRem(value)}`,
     },
     left: {
       name: 'l',
-      fn: (prop: string, value: number) => `${prop}-left: ${toEm(value)}`,
+      fn: (prop: string, value: number) => `${prop}-left: ${toRem(value)}`,
     },
-    right: { name: 'r', fn: (prop: string, value: number) => `${prop}-right: ${toEm(value)}` },
+    right: { name: 'r', fn: (prop: string, value: number) => `${prop}-right: ${toRem(value)}` },
     top: {
       name: 't',
-      fn: (prop: string, value: number) => `${prop}-top: ${toEm(value)}`,
+      fn: (prop: string, value: number) => `${prop}-top: ${toRem(value)}`,
     },
-    bottom: { name: 'b', fn: (prop: string, value: number) => `${prop}-bottom: ${toEm(value)}` },
+    bottom: { name: 'b', fn: (prop: string, value: number) => `${prop}-bottom: ${toRem(value)}` },
     vert: {
       name: 'v',
-      fn: (prop: string, value: number) => `${prop}-top: ${toEm(value)}; ${prop}-bottom: ${toEm(value)}`,
+      fn: (prop: string, value: number) => `${prop}-top: ${toRem(value)}; ${prop}-bottom: ${toRem(value)}`,
     },
     horiz: {
       name: 'h',
-      fn: (prop: string, value: number) => `${prop}-left: ${toEm(value)}; ${prop}-right: ${toEm(value)}`,
+      fn: (prop: string, value: number) => `${prop}-left: ${toRem(value)}; ${prop}-right: ${toRem(value)}`,
     },
   } as const
   return [0]
     .concat(scale)
     .map((spacing, step) => {
-      return Object.values(directions)
-        .map(it => {
-          return [
-            `.p${it.name}${step} { ${it.fn('padding', step)}; }`,
-            `.m${it.name}${step} { ${it.fn('margin', step)}; }`,
-            `.n${it.name}${step} { ${it.fn('margin', -step)}; }`,
-          ].join('\n')
-        })
-        .join('\n')
+      return [
+        ...Object.values(directions).map(it => {
+          return [`.p${it.name}${step} { ${it.fn('padding', spacing)}; }`].join('\n')
+        }),
+        ...Object.values(directions).map(it => {
+          return [`.m${it.name}${step} { ${it.fn('margin', spacing)}; }`].join('\n')
+        }),
+        ...Object.values(directions)
+          .filter(it => ['a', 'l', 'r', 'b', 't'].includes(it.name))
+          .map(it => {
+            return [`.n${it.name}${step} { ${it.fn('margin', -spacing)}; }`].join('\n')
+          }),
+      ].join('\n')
     })
     .join('\n')
 }
@@ -968,7 +1017,7 @@ function colour(colours: Record<string, string>): string {
 
 function borderWidths(scale: number[]): string {
   return [
-    scale.map((it, step) => `.bw${step} { border-width: ${it}rem; }`).join('\n'),
+    scale.map((it, step) => `.bw${step} { border-width: ${toRem(it)}; }`).join('\n'),
     `.bt-0 { border-top-width: 0; }`,
     `.br-0 { border-right-width: 0; }`,
     `.bb-0 { border-bottom-width: 0; }`,
@@ -978,7 +1027,7 @@ function borderWidths(scale: number[]): string {
 
 function borderRadius(scale: number[]): string {
   return [
-    scale.map((it, step) => `.br${step} { border-radius: ${it}rem; }`).join('\n'),
+    scale.map((it, step) => `.br${step} { border-radius: ${toRem(it)}; }`).join('\n'),
     '.br-100 { border-radius: 100%; }',
     '.br-pill { border-radius: 9999px; }',
     `.br--bottom { border-top-left-radius: 0; border-top-right-radius: 0; }`,
@@ -990,7 +1039,7 @@ function borderRadius(scale: number[]): string {
 
 function widths(scale: number[]): string {
   return [
-    scale.map((it, step) => `.w${step} { width: ${it}rem; }`).join('\n'),
+    scale.map((it, step) => `.w${step + 1} { width: ${it}rem; }`).join('\n'),
     '.w-10 { width: 10%; }',
     '.w-20 { width: 20%; }',
     '.w-25 { width: 25%; }',
@@ -1013,7 +1062,7 @@ function widths(scale: number[]): string {
 
 function heights(scale: number[]): string {
   return [
-    scale.map((it, step) => `.h${step} { height: ${it}rem; }`).join('\n'),
+    scale.map((it, step) => `.h${step + 1} { height: ${it}rem; }`).join('\n'),
     '.h-25 { height: 25%; }',
     '.h-50 { height: 50%; }',
     '.h-75 { height: 75%; }',
@@ -1031,16 +1080,32 @@ function heights(scale: number[]): string {
 
 function maxWidths(scale: number[]): string {
   return [
-    scale.map((it, step) => `.mw${step} { max-width: ${it}rem; }`).join('\n'),
+    scale.map((it, step) => `.mw${step + 1} { max-width: ${it}rem; }`).join('\n'),
     '.mw-none { max-width: none; }',
     '.mw-100 { max-width: 100%; }',
   ].join('\n')
 }
 
 function opacity(scale: number[]): string {
-  return scale.map((it, step) => `.o-${step} { opacity: ${it}; }`).join('\n')
+  return scale
+    .map(it => {
+      if (it === 1) {
+        return `.o-100 { opacity: 1; }`
+      }
+      if (it === 0) {
+        return `.o-0 { opacity: 0; }`
+      }
+      const [, decimal] = `${it}`.split('.')
+      const num = it.toFixed(Math.max(2, decimal.length))
+      return `.o-${`${num}`.slice(2)} { opacity: ${it}; }`
+    })
+    .join('\n')
 }
 
-function toEm(value: number) {
-  return value === 0 ? '0' : `${value}em`
+function toRem(value: number) {
+  return value === 0 ? '0' : `${value}rem`
+}
+
+function skip(value: string) {
+  return ''
 }
