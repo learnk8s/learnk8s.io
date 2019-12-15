@@ -24,15 +24,15 @@ import { ScalingTensorflow } from './src/scalingKubeflow/scalingTensorflow'
 import { K8sOnWindows } from './src/k8sOnWindows/installingK8sOnWindows'
 import { DeployLaravel } from './src/deployLaravel/deployLaravel'
 import { Career } from './src/careers'
-import {Pages as Landing}  from './src/landing'
+import { Pages as Landing } from './src/landing'
 import { HomePage } from './src/homepage'
 import { KubectlProductivity } from './src/advancedKubectl/advancedKubectl'
-import { RSS as Flipboard} from './src/flipboard'
-import { Pages as BiteSizedPosts} from './src/bite-sized-articles'
+import { RSS as Flipboard } from './src/flipboard'
+import { Pages as BiteSizedPosts } from './src/bite-sized-articles'
 import { NotFound404 } from './src/404'
 import { Architecting } from './src/architecting'
 import { BiteSized } from './src/biteSized'
-const commander = require('commander')
+import commander from 'commander'
 
 commander
   .version('1.0.0')
