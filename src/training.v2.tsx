@@ -94,7 +94,7 @@ const customRequest: MailTo = {
 export const Training = {
   id: 'training',
   url: '/training',
-  title: 'Kubernetes Training Courses ♦︎ Learnk8s',
+  title: 'Kubernetes Training Courses ⎈ Learnk8s',
   description:
     'Join an instructor-led, hands-on course and become an expert in deploying and scaling applications with containers and Kubernetes.',
 }

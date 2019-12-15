@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const K8sOnWindows = {
   id: 'k8s-on-windows',
   url: '/blog/installing-docker-and-kubernetes-on-windows',
-  title: 'Getting started with Docker and Kubernetes on Win 10 ♦︎ Learnk8s',
+  title: 'Getting started with Docker and Kubernetes on Win 10 ⎈ Learnk8s',
   description: `In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
 }
 

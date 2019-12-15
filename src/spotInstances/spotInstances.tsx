@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const SpotInstances = {
   id: 'spot-instances',
   url: '/blog/kubernetes-spot-instances',
-  title: 'Spot instances in Kubernetes ♦︎ Learnk8s',
+  title: 'Spot instances in Kubernetes ⎈ Learnk8s',
   description: `How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
 }
 

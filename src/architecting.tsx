@@ -51,7 +51,7 @@ const faqs: FAQ[] = [
 export const Architecting = {
   id: 'academy-architecting-and-scaling',
   url: '/architecting-scaling-apps-kubernetes',
-  title: 'Architecting and scaling apps on Kubernetes ♦︎ Learnk8s Academy',
+  title: 'Architecting and scaling apps on Kubernetes ⎈ Learnk8s Academy',
   description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
 }
 
@@ -62,7 +62,7 @@ export function Register(store: Store<State, Actions>) {
       id: 'og-academy-architecting-and-scaling',
       pageId: Architecting.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      title: 'Architecting and scaling apps on Kubernetes ♦︎ Learnk8s Academy',
+      title: 'Architecting and scaling apps on Kubernetes ⎈ Learnk8s Academy',
       description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
     }),
   )

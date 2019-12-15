@@ -10,7 +10,7 @@ import { format } from 'date-fns'
 export const BiteSized = {
   id: 'bite-sized',
   url: '/bite-sized',
-  title: 'Bite-sized Kubernetes learning ♦︎ Learnk8s',
+  title: 'Bite-sized Kubernetes learning ⎈ Learnk8s',
   description:
     'A regular column on the most interesting questions that we see online and during our workshops answered by a Kubernetes expert',
 }
@@ -22,7 +22,7 @@ export function Register(store: Store<State, Actions>) {
       id: 'og-bite-sized',
       pageId: BiteSized.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      title: 'Bite-sized Kubernetes learning ♦︎ Learnk8s',
+      title: 'Bite-sized Kubernetes learning ⎈ Learnk8s',
       description:
         'A regular column on the most interesting questions that we see online and during our workshops answered by a Kubernetes expert',
     }),

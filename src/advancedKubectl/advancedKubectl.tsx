@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const KubectlProductivity = {
   id: 'kubectl-productivity',
   url: '/blog/kubectl-productivity',
-  title: 'Boosting your kubectl productivity ♦︎ Learnk8s',
+  title: 'Boosting your kubectl productivity ⎈ Learnk8s',
   description: 'Learn the tips and tricks that make your usage of kubectl more efficient and effective.',
 }
 

@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const SolarPlants = {
   id: 'solar-plants',
   url: '/blog/kubernetes-on-solar-plants',
-  title: 'Internet of Things on solar plants with Kubernetes ♦︎ Learnk8s',
+  title: 'Internet of Things on solar plants with Kubernetes ⎈ Learnk8s',
   description: `When you have thousands of solar panels and embedded computers how do you orchestrate software updates, monitor uptime and secure communications? Enter Kubernetes.`,
 }
 

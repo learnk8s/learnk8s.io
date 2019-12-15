@@ -8,7 +8,7 @@ import { join } from 'path'
 export const AboutUs = {
   id: 'aboutUs',
   url: '/about-us',
-  title: 'Team ♦︎ Learnk8s',
+  title: 'Team ⎈ Learnk8s',
   description: 'Experienced software consultants, specialising in Kubernetes.',
 }
 

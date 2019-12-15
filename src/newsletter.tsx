@@ -8,7 +8,7 @@ import { join } from 'path'
 export const Newsletter = {
   id: 'newsletter',
   url: '/newsletter',
-  title: 'Newsletter ♦︎ Learnk8s',
+  title: 'Newsletter ⎈ Learnk8s',
   description: 'Keep yourself up to date with the latest news from Learnk8s.',
 }
 

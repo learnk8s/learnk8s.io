@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const WhatIsKubernetes = {
   id: 'what-is-kubernetes',
   url: '/blog/what-is-kubernetes',
-  title: 'What is Kubernetes? ♦︎ Learnk8s',
+  title: 'What is Kubernetes? ⎈ Learnk8s',
   description: `Learn why Kubernetes emrged as the de-facto container orchestrator.s`,
 }
 

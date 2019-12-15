@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const ScalingTensorflow = {
   id: 'scaling-tensorflow',
   url: '/blog/scaling-machine-learning-with-kubeflow-tensorflow',
-  title: 'Scaling Jupyter notebooks with Kubernetes, Tensorflow ♦︎ Learnk8s',
+  title: 'Scaling Jupyter notebooks with Kubernetes, Tensorflow ⎈ Learnk8s',
   description: `In this article, you will explore how you can leverage Kubernetes, Tensorflow and Kubeflow to scale your models without having to worry about scaling the infrastructure.`,
 }
 

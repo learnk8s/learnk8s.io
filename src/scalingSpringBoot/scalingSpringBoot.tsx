@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const ScalingSpringBoot = {
   id: 'scaling-spring-boot',
   url: '/blog/scaling-spring-boot-microservices',
-  title: 'Scaling SpringBoot with Message Queues and Kubernetes ♦︎ Learnk8s',
+  title: 'Scaling SpringBoot with Message Queues and Kubernetes ⎈ Learnk8s',
   description: `Learn how to scale SpringBoot apps in Kubernetes using the autoscaler and a message broker such as Kafka, RabbitMQ or ActiveMQ.`,
 }
 

@@ -8,14 +8,14 @@ import { toVFile } from '../files'
 export const DeployLaravel = {
   id: 'deploy-laravel',
   url: '/blog/kubernetes-deploy-laravel-the-easy-way',
-  title: 'Kubernetes: deploy Laravel the easy way ♦︎ Learnk8s',
+  title: 'Kubernetes: deploy Laravel the easy way ⎈ Learnk8s',
   description: `In this article, I'll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
 }
 
 const OldDeployLaravel = {
   id: 'old-deploy-laravel',
   url: '/blog/deploying-laravel-to-kubernetes',
-  title: 'Kubernetes: deploy Laravel the easy way ♦︎ Learnk8s',
+  title: 'Kubernetes: deploy Laravel the easy way ⎈ Learnk8s',
   description: `In this article, I'll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
 }
 

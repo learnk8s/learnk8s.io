@@ -16,7 +16,7 @@ renderer.heading = (text: string) => {
 export const TermsAndConditions = {
   id: 'termsAndConditions',
   url: '/terms-and-conditions',
-  title: 'Terms and Conditions ♦︎ Learnk8s',
+  title: 'Terms and Conditions ⎈ Learnk8s',
   description: 'Terms and Conditions that applies to all services offered by Learnk8s',
 }
 

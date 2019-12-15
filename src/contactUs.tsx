@@ -8,7 +8,7 @@ import { defaultAssetsPipeline } from './optimise'
 export const ContactUs = {
   id: 'contactUs',
   url: '/contact-us',
-  title: 'Contact us ♦︎ Learnk8s',
+  title: 'Contact us ⎈ Learnk8s',
   description: 'Feel free to get in touch and let us know how we can help. ',
 }
 

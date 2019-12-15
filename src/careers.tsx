@@ -8,7 +8,7 @@ import { join } from 'path'
 export const Career = {
   id: 'careers',
   url: '/careers',
-  title: 'Careers ♦︎ Learnk8s',
+  title: 'Careers ⎈ Learnk8s',
   description: 'Join Learnk8s and help others learn Docker and Kubernetes.',
 }
 

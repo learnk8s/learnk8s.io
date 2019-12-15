@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const SmallerImages = {
   id: 'smaller-images',
   url: '/blog/smaller-docker-images',
-  title: '3 simple tricks for smaller Docker images ♦︎ Learnk8s',
+  title: '3 simple tricks for smaller Docker images ⎈ Learnk8s',
   description: `Learn how to make your container images smaller in size for a quicker transfer time and deployment.`,
 }
 

@@ -10,7 +10,7 @@ import { format } from 'date-fns'
 export const Blog = {
   id: 'blog',
   url: '/blog',
-  title: 'Blog ♦︎ Learnk8s',
+  title: 'Blog ⎈ Learnk8s',
   description: 'The fastest way to become an expert in deploying applications at scale with Kubernetes.',
 }
 

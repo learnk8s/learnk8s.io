@@ -30,7 +30,7 @@ export const Pages = {
   helm: {
     id: 'helm-templating',
     url: '/helm-templating-kubernetes-yaml',
-    title: 'Is Helm used just for templating? ♦︎ Learnk8s',
+    title: 'Is Helm used just for templating? ⎈ Learnk8s',
     description: `Learn how Helm is used for templating, sharing charts and managing releases.`,
   },
 
