@@ -13,16 +13,18 @@ function checkTitleDescription(store: Store<State, Actions>) {
   const state = store.getState()
   const pages = getCommonPages(state)
   pages.forEach(page => {
-    try {
-      ok(page.title !== '', `Page: ${page.id}, title is not defined.`)
-      ok(page.title.length <= 65, `Page: ${page.id}, title is too long.`)
-      ok(page.title.length >= 15, `Page: ${page.id}, title is too short.`)
-      ok(page.description !== '', `Page: ${page.id}, description is not defined.`)
-      ok(page.description.length <= 170, `Page: ${page.id}, description is too long.`)
-      ok(page.description.length >= 50, `Page: ${page.id}, description is too short.`)
-    } catch (e) {
-      console.error(e.message)
-    }
+    ok(page.title !== '', `Page: ${page.id}, title is not defined.`)
+    ok(page.title.length <= 65, `Page: ${page.id}, title is too long (${page.title.length} expected 65 or less).`)
+    ok(page.title.length >= 15, `Page: ${page.id}, title is too short (${page.title.length} expected 15 or more).`)
+    ok(page.description !== '', `Page: ${page.id}, description is not defined.`)
+    ok(
+      page.description.length <= 170,
+      `Page: ${page.id}, description is too long (${page.description.length} expected 170 or less).`,
+    )
+    ok(
+      page.description.length >= 50,
+      `Page: ${page.id}, description is too short (${page.description.length} exptected 50 or more).`,
+    )
   })
 }
 
@@ -31,12 +33,8 @@ function checkOpenGraph(store: Store<State, Actions>) {
   const commonPageIds = getCommonPages(state).map(it => it.id)
   const openGraphs = getOpenGraph(state).filter(it => commonPageIds.includes(it.pageId))
   openGraphs.forEach(og => {
-    try {
-      ok(og.title !== '', `Page: ${og.id}, open graph title is not defined.`)
-      ok(og.description !== '', `Page: ${og.id}, open graph description is not defined.`)
-    } catch (e) {
-      console.error(e.message)
-    }
+    ok(og.title !== '', `Page: ${og.id}, open graph title is not defined.`)
+    ok(og.description !== '', `Page: ${og.id}, open graph description is not defined.`)
   })
 }
 
@@ -44,13 +42,9 @@ function checkBlogPost(store: Store<State, Actions>) {
   const state = store.getState()
   const blogPosts = getBlogPosts(state)
   blogPosts.forEach(bp => {
-    try {
-      ok(bp.title !== '', `Page: ${bp.id}, blog post title is not defined.`)
-      ok(bp.description !== '', `Page: ${bp.id}, blog post description is not defined.`)
-      ok(bp.publishedDate !== '', `Page: ${bp.id}, blog post published date is not defined.`)
-    } catch (e) {
-      console.error(e.message)
-    }
+    ok(bp.title !== '', `Page: ${bp.id}, blog post title is not defined.`)
+    ok(bp.description !== '', `Page: ${bp.id}, blog post description is not defined.`)
+    ok(bp.publishedDate !== '', `Page: ${bp.id}, blog post published date is not defined.`)
   })
 }
 

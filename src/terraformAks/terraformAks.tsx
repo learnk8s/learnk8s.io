@@ -9,7 +9,7 @@ export const TerraformAks = {
   id: 'terraform-aks',
   url: '/blog/get-start-terraform-aks',
   title: 'Getting started with Terraform and Kubernetes on Azure AKS',
-  description: `Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.`,
+  description: `Learn how you can use Terraform to create Kubernetes cluster in Azure.`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -22,7 +22,7 @@ export function Register(store: Store<State, Actions>) {
         <img src='src/terraformAks/terraforming.jpg' alt='Getting started with Terraform and Kubernetes on Azure AKS' />
       ),
       title: TerraformAks.title,
-      description: TerraformAks.description,
+      description: `Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.`,
     }),
   )
   store.dispatch(

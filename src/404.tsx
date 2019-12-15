@@ -9,7 +9,7 @@ export const NotFound404 = {
   id: 'not-found-404',
   url: '/404',
   title: 'Oops! Not found',
-  description: `The page you that tried to visit does not exist.`,
+  description: `The page you that tried to visit does not exist. If you think this is mistake, please get in touch.`,
 }
 
 export function Register(store: Store<State, Actions>) {

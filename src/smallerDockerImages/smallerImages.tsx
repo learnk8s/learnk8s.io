@@ -9,7 +9,7 @@ export const SmallerImages = {
   id: 'smaller-images',
   url: '/blog/smaller-docker-images',
   title: '3 simple tricks for smaller Docker images ♦︎ Learnk8s',
-  description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control?`,
+  description: `Learn how to make your container images smaller in size for a quicker transfer time and deployment.`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -20,7 +20,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: SmallerImages.id,
       image: <img src='src/smallerDockerImages/smaller_images.png' alt='Docker whale' />,
       title: SmallerImages.title,
-      description: SmallerImages.description,
+      description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
     }),
   )
   store.dispatch(

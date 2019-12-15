@@ -9,7 +9,7 @@ export const WhatIsKubernetes = {
   id: 'what-is-kubernetes',
   url: '/blog/what-is-kubernetes',
   title: 'What is Kubernetes? ♦︎ Learnk8s',
-  description: `The industry has experienced a shift towards developing smaller applications. But how does that impact the infrastructure? Don't end up paying the extra price in your cloud bill; learn how you can fix it with Kubernetes.`,
+  description: `Learn why Kubernetes emrged as the de-facto container orchestrator.s`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -20,7 +20,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: WhatIsKubernetes.id,
       image: <img src='src/whatIsKubernetes/why-kube.png' alt='Kubernetes bucks' />,
       title: WhatIsKubernetes.title,
-      description: WhatIsKubernetes.description,
+      description: `The industry has experienced a shift towards developing smaller applications. But how does that impact the infrastructure? Don't end up paying the extra price in your cloud bill; learn how you can fix it with Kubernetes.`,
     }),
   )
   store.dispatch(

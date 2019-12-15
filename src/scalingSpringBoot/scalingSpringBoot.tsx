@@ -9,7 +9,7 @@ export const ScalingSpringBoot = {
   id: 'scaling-spring-boot',
   url: '/blog/scaling-spring-boot-microservices',
   title: 'Scaling SpringBoot with Message Queues and Kubernetes ♦︎ Learnk8s',
-  description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
+  description: `Learn how to scale SpringBoot apps in Kubernetes using the autoscaler and a message broker such as Kafka, RabbitMQ or ActiveMQ.`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -20,7 +20,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: ScalingSpringBoot.id,
       image: <img src='src/scalingSpringBoot/autoscaling.png' alt='Containers' />,
       title: ScalingSpringBoot.title,
-      description: ScalingSpringBoot.description,
+      description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
     }),
   )
   store.dispatch(

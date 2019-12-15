@@ -10,14 +10,14 @@ export const Pages = {
     id: 'multiple-kubernetes-clusters',
     url: '/bite-sized/connecting-multiple-kubernetes-clusters',
     title: 'How do you connect clusters located in different data centres?',
-    description: `In Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and availability. Should you use a single cluster over a unified network or multiple clusters? Learn what options you have.`,
+    description: `In Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and availability. Learn what options you have.`,
   },
 
   ingressApiGateway: {
     id: 'ingress-api-gateway',
     url: '/kubernetes-ingress-api-gateway',
     title: 'Can you expose your services with an API gateway in Kubernetes?',
-    description: `In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster. You can select an Ingress that is also an API gateway.`,
+    description: `A Kubernetes Ingress routes the external traffic to your services and Pods inside the cluster. You could have an Ingress that is also an API gateway.`,
   },
 
   visualiseYaml: {
@@ -39,7 +39,7 @@ export const Pages = {
     url: '/kubernetes-node-size',
     title: 'Architecting Kubernetes clusters — choosing a worker node size',
     description:
-      'When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use, and how many of them?". This article looks at the pros and cons of either using many small or few large worker nodes in your cluster.',
+      'What type of worker nodes should I use for my Kubernetes cluster? And how many of them?. This article looks at the pros and cons of either.',
   },
 
   secretsGitOps: {
@@ -47,21 +47,21 @@ export const Pages = {
     url: '/kubernetes-secrets-in-git',
     title: 'How to keep your Kubernetes secrets secure in Git',
     description:
-      'Kubernetes secrets that you load into the cluster must exist somewhere. Do you keep a copy or rely on Kubernetes to be the only source of truth? How do you back them up? What if you keep a copy and they go out of sync?',
+      'Kubernetes secrets that you load into the cluster must exist somewhere. Is Kubernetes to be the only source of truth or do you keep a copy? Learn how to secure secrets.',
   },
 
   autoscaling: {
     id: 'autoscaling-apps-kubernetes',
     url: '/autoscaling-apps-kubernetes',
     title: 'How to autoscale apps on Kubernetes with custom metrics',
-    description: `Deploying an app to production with a static configuration is not optimal. Traffic patterns can change quickly and the app should be able to adapt to them. Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
+    description: `Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
   },
 
   rollbacks: {
     id: 'kubernetes-rollbacks',
     url: '/kubernetes-rollbacks',
     title: 'How do you rollback deployments in Kubernetes?',
-    description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.`,
+    description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes.`,
   },
 }
 
@@ -73,7 +73,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: Pages.multipleClusters.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
       title: Pages.multipleClusters.title,
-      description: Pages.multipleClusters.description,
+      description: `In Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and availability. Should you use a single cluster over a unified network or multiple clusters? Learn what options you have.`,
     }),
   )
   store.dispatch(
@@ -81,7 +81,7 @@ export function Register(store: Store<State, Actions>) {
       id: 'bp-multiple-kubernetes-clusters',
       pageId: Pages.multipleClusters.id,
       authorId: Authors.danielePolencic.id,
-      description: Pages.multipleClusters.description,
+      description: `In Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and availability. Should you use a single cluster over a unified network or multiple clusters? Learn what options you have.`,
       title: 'How do you connect Kubernetes clusters located in different data centres?',
       publishedDate: '2019-04-04',
       content: toVFile({ path: join(__dirname, 'connectMultipleClusters/connectMultipleClusters.md') }),
@@ -96,7 +96,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: Pages.ingressApiGateway.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
       title: Pages.ingressApiGateway.title,
-      description: Pages.ingressApiGateway.description,
+      description: `In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster. You can select an Ingress that is also an API gateway.`,
     }),
   )
   store.dispatch(
@@ -104,7 +104,7 @@ export function Register(store: Store<State, Actions>) {
       id: 'bp-ingress-api-gateway',
       pageId: Pages.ingressApiGateway.id,
       authorId: Authors.danielePolencic.id,
-      description: Pages.ingressApiGateway.description,
+      description: `In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster. You can select an Ingress that is also an API gateway.`,
       title: 'Can you expose your microservices with an API gateway in Kubernetes?',
       publishedDate: '2019-04-23',
       lastModifiedDate: '2019-12-11',
@@ -180,7 +180,8 @@ export function Register(store: Store<State, Actions>) {
       pageId: Pages.nodeSize.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
       title: Pages.nodeSize.title,
-      description: Pages.nodeSize.description,
+      description:
+        'When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use, and how many of them?". This article looks at the pros and cons of either using many small or few large worker nodes in your cluster.',
     }),
   )
   store.dispatch(
@@ -188,7 +189,8 @@ export function Register(store: Store<State, Actions>) {
       id: 'bp-kubernetes-node-size',
       pageId: Pages.nodeSize.id,
       authorId: Authors.danielWeibel.id,
-      description: Pages.nodeSize.description,
+      description:
+        'When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use, and how many of them?". This article looks at the pros and cons of either using many small or few large worker nodes in your cluster.',
       title: Pages.nodeSize.title,
       publishedDate: '2019-09-04',
       content: toVFile({ path: join(__dirname, 'nodes-size/smallOrLarge.md') }),
@@ -210,7 +212,8 @@ export function Register(store: Store<State, Actions>) {
       pageId: Pages.secretsGitOps.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
       title: Pages.secretsGitOps.title,
-      description: Pages.secretsGitOps.description,
+      description:
+        'Kubernetes secrets that you load into the cluster must exist somewhere. Do you keep a copy or rely on Kubernetes to be the only source of truth? How do you back them up? What if you keep a copy and they go out of sync?',
     }),
   )
   store.dispatch(
@@ -218,7 +221,8 @@ export function Register(store: Store<State, Actions>) {
       id: 'bp-secrets-git-ops',
       pageId: Pages.secretsGitOps.id,
       authorId: Authors.omerLeviHevroni.id,
-      description: Pages.secretsGitOps.description,
+      description:
+        'Kubernetes secrets that you load into the cluster must exist somewhere. Do you keep a copy or rely on Kubernetes to be the only source of truth? How do you back them up? What if you keep a copy and they go out of sync?',
       title: Pages.secretsGitOps.title,
       publishedDate: '2019-09-25',
       content: toVFile({ path: join(__dirname, 'secrets/secrets.md') }),
@@ -240,7 +244,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: Pages.autoscaling.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
       title: Pages.autoscaling.title,
-      description: Pages.autoscaling.description,
+      description: `Deploying an app to production with a static configuration is not optimal. Traffic patterns can change quickly and the app should be able to adapt to them. Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
     }),
   )
   store.dispatch(
@@ -248,7 +252,7 @@ export function Register(store: Store<State, Actions>) {
       id: 'bp-autoscaling-apps-kubernetes',
       pageId: Pages.autoscaling.id,
       authorId: Authors.danielWeibel.id,
-      description: Pages.autoscaling.description,
+      description: `Deploying an app to production with a static configuration is not optimal. Traffic patterns can change quickly and the app should be able to adapt to them. Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
       title: 'How to autoscale apps on Kubernetes with custom metrics',
       publishedDate: '2019-10-03',
       content: toVFile({ path: join(__dirname, 'autoscaling/autoscaling.md') }),
@@ -270,7 +274,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: Pages.rollbacks.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
       title: Pages.rollbacks.title,
-      description: Pages.rollbacks.description,
+      description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.`,
     }),
   )
   store.dispatch(
@@ -278,7 +282,7 @@ export function Register(store: Store<State, Actions>) {
       id: 'bp-kubernetes-rollbacks',
       pageId: Pages.rollbacks.id,
       authorId: Authors.gergelyRisko.id,
-      description: Pages.rollbacks.description,
+      description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.`,
       title: 'How do you rollback deployments in Kubernetes?',
       publishedDate: '2019-10-17',
       content: toVFile({ path: join(__dirname, 'rollbacks/rollbacks.md') }),

@@ -8,8 +8,8 @@ import { toVFile } from '../files'
 export const ZeroToK8sJs = {
   id: '02k8sjs',
   url: '/nodejs-kubernetes-guide',
-  title: 'Hands-on guide: developing & deploying Node.js apps in Kubernetes ♦︎ Learnk8s',
-  description: `Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
+  title: 'Hands-on guide: developing & deploying Node.js apps in Kubernetes',
+  description: `Learn how to design and architect Node.js apps that leverage Kubernetes and scale to millions of requests.`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -22,7 +22,7 @@ export function Register(store: Store<State, Actions>) {
         <img src='src/02k8sjs/jury.jpg' alt='Hands-on guide: developing and deploying Node.js apps in Kubernetes' />
       ),
       title: 'Hands-on guide: developing and deploying Node.js apps in Kubernetes',
-      description: ZeroToK8sJs.description,
+      description: `Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
     }),
   )
   store.dispatch(

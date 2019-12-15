@@ -96,7 +96,7 @@ export const Training = {
   url: '/training',
   title: 'Kubernetes Training Courses ♦︎ Learnk8s',
   description:
-    'Join an instructor-led, hands-on course on how to quickly deploy applications in Kubernetes — without having to wade through mountains of documentation — and learn how to orchestrate and manage containers at scale.',
+    'Join an instructor-led, hands-on course and become an expert in deploying and scaling applications with containers and Kubernetes.',
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -106,8 +106,7 @@ export function Register(store: Store<State, Actions>) {
       id: 'og-training',
       pageId: Training.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      description:
-        'Join an instructor-led, hands-on course on how to quickly deploy applications in Kubernetes — without having to wade through mountains of documentation — and learn how to orchestrate and manage containers at scale.',
+      description: Training.description,
       title: 'Kubernetes Training Courses',
     }),
   )
