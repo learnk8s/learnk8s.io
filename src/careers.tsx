@@ -66,7 +66,7 @@ function renderPage(state: State) {
           </section>
         </div>
 
-        <section className='bg-black-02 black-70 relative z-999 w-90-m w-70-l center pa3 pa4-ns mb3 mb5-ns lh-copy'>
+        <section className='bg-black-025 black-70 relative z-999 w-90-m w-70-l center pa3 pa4-ns mb3 mb5-ns lh-copy'>
           <h2 className='navy'>Freelance Kubernetes engineer - REMOTE</h2>
           <p>learnk8s is looking for a talented engineer on a freelance basis to help:</p>
           <ul className=''>
