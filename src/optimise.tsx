@@ -17,7 +17,7 @@ import cssnano from 'cssnano'
 import toString from 'hast-util-to-string'
 import React from 'react'
 import { jsxToString, jsxToHast } from './jsx-utils/jsxToHast'
-
+import srcset from 'srcset'
 export function defaultAssetsPipeline({
   jsx,
   isOptimisedBuild,
@@ -260,6 +260,10 @@ function rewriteImages({ $ }: { $: Cheerio }): Cheerio {
   $.findAll('img').forEach(image => {
     const url: string = (image.properties as any).src
     ;(image.properties as any).src = `/b/${url}`
+    const srcSets: string[] | undefined = (image.properties as any).srcSet
+    if (srcSets) {
+      ;(image.properties as any).srcSet = srcSets.map(it => `/b/${it}`)
+    }
   })
   $.findAll('object').forEach(image => {
     const url: string = (image.properties as any).data
@@ -287,6 +291,22 @@ function optimiseImages({ $, siteUrl }: { $: Cheerio; siteUrl: string }): Cheeri
   $.findAll('img').forEach(image => {
     const url: string = (image.properties as any).src
     ;(image.properties as any).src = digest(url)
+    const srcSets: string[] | undefined = (image.properties as any).srcSet
+    if (srcSets) {
+      ;(image.properties as any).srcSet = srcSets
+        .map(it => srcset.parse(it))
+        .map(it => {
+          return it.map(sset => {
+            return {
+              ...sset,
+              url: digest(sset.url),
+            }
+          })
+        })
+        .reduce((digestedSrcSets: string[], it) => {
+          return [...digestedSrcSets, srcset.stringify(it)]
+        }, [])
+    }
   })
   $.findAll('object').forEach(image => {
     const url: string = (image.properties as any).data

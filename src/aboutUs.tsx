@@ -16,28 +16,64 @@ export const Authors = {
   danielWeibel: {
     id: 'daniel-weibel',
     fullName: 'Daniel Weibel',
-    avatar: <img src='assets/authors/daniel_weibel.jpg' alt='Daniel Weibel' />,
+    avatar: (
+      <img
+        src='assets/authors/daniel_weibel/daniel_weibel-64x64.jpg'
+        srcSet='
+    assets/authors/daniel_weibel/daniel_weibel-64x64.jpg 1x,
+    assets/authors/daniel_weibel/daniel_weibel-128x128.jpg 2x      
+    '
+        alt='Daniel Weibel'
+      />
+    ),
     link: 'https://medium.com/@weibeld',
     description: 'Daniel is a software engineer and instructor at Learnk8s.',
   },
   omerLeviHevroni: {
     id: 'omer-levi-hevroni',
     fullName: 'Omer Levi Hevroni',
-    avatar: <img src='assets/authors/omer_levi_hevroni.jpg' alt='Omer Levi Hevroni' />,
+    avatar: (
+      <img
+        src='assets/authors/omer_levi_hevroni/omer_levi_hevroni-64x64.jpg'
+        srcSet='
+    assets/authors/omer_levi_hevroni/omer_levi_hevroni-64x64.jpg 1x,
+    assets/authors/omer_levi_hevroni/omer_levi_hevroni-128x128.jpg 2x      
+    '
+        alt='Omer Levi Hevroni'
+      />
+    ),
     link: 'https://twitter.com/omerlh',
     description: 'DevSecOps engineer at [Soluto Engineering](https://www.solutotlv.com/). OWASP member.',
   },
   danielePolencic: {
     id: 'daniele-polencic',
     fullName: 'Daniele Polencic',
-    avatar: <img src='assets/authors/daniele_polencic.jpg' alt='Daniele Polencic' />,
+    avatar: (
+      <img
+        src='assets/authors/daniele_polencic/daniele_polencic-64x64.jpg'
+        srcSet='
+    assets/authors/daniele_polencic/daniele_polencic-64x64.jpg 1x,
+    assets/authors/daniele_polencic/daniele_polencic-128x128.jpg 2x      
+    '
+        alt='Daniele Polencic'
+      />
+    ),
     link: 'https://linkedin.com/in/danielepolencic',
     description: 'Daniele is an instructor and software engineer at Learnk8s.',
   },
   keithMifsud: {
     id: 'keith-mifsud',
     fullName: 'Keith Mifsud',
-    avatar: <img src='assets/authors/keith_mifsud.jpg' alt='Keith Mifsud' />,
+    avatar: (
+      <img
+        src='assets/authors/keith_mifsud/keith_mifsud-64x64.jpg'
+        srcSet='
+    assets/authors/keith_mifsud/keith_mifsud-64x64.jpg 1x,
+    assets/authors/keith_mifsud/keith_mifsud-128x128.jpg 2x      
+    '
+        alt='Keith Mifsud'
+      />
+    ),
     link: 'https://keith-mifsud.me/',
     description:
       'Keith has over ten years of professional experience in software development. He built one of the first ever enterprise insurance policy generator software and had worked with clients of the calibre of Renault, Xerox and Hilton Hotels.',
@@ -45,19 +81,46 @@ export const Authors = {
   salmanIqbal: {
     id: 'salman-iqbal',
     fullName: 'Salman Iqbal',
-    avatar: <img src='assets/authors/salman_iqbal.jpg' alt='Salman Iqbal' />,
+    avatar: (
+      <img
+        src='assets/authors/salman_iqbal/salman_iqbal-64x64.jpg'
+        srcSet='
+    assets/authors/salman_iqbal/salman_iqbal-64x64.jpg 1x,
+    assets/authors/salman_iqbal/salman_iqbal-128x128.jpg 2x      
+    '
+        alt='Salman Iqbal'
+      />
+    ),
     link: 'https://twitter.com/soulmaniqbal',
   },
   césarTronLozai: {
     id: 'césar-tron-lozai',
     fullName: 'César Tron-Lozai',
-    avatar: <img src='assets/authors/césar_tron-lozai.jpg' alt='César Tron-Lozai' />,
+    avatar: (
+      <img
+        src='assets/authors/césar_tron-lozai/césar_tron-lozai-64x64.jpg'
+        srcSet='
+    assets/authors/césar_tron-lozai/césar_tron-lozai-64x64.jpg 1x,
+    assets/authors/césar_tron-lozai/césar_tron-lozai-128x128.jpg 2x      
+    '
+        alt='César Tron-Lozai'
+      />
+    ),
     link: 'https://twitter.com/cesartronlozai',
   },
   gergelyRisko: {
     id: 'gergely-risko',
     fullName: 'Gergely Risko',
-    avatar: <img src='assets/authors/gergely-risko.jpg' alt='Gergely Risko' />,
+    avatar: (
+      <img
+        src='assets/authors/gergely-risko/gergely-risko-64x64.jpg'
+        srcSet='
+    assets/authors/gergely-risko/gergely-risko-64x64.jpg 1x,
+    assets/authors/gergely-risko/gergely-risko-128x128.jpg 2x      
+    '
+        alt='Gergely Risko'
+      />
+    ),
     link: 'https://github.com/errge',
     description: 'Gergely is an instructor at Learnk8s.',
   },

@@ -576,7 +576,16 @@ export const Author: React.StatelessComponent<{ name: string; link: string; avat
   return (
     <div>
       <a href={link} title={name} className='link'>
-        <img src={avatar.props.src} alt={avatar.props.alt} className='br-100 w3 dib' />
+        <div className='center w3 mb1'>
+          <div className=' aspect-ratio aspect-ratio--1x1'>
+            <img
+              src={avatar.props.src}
+              srcSet={avatar.props.srcSet}
+              alt={avatar.props.alt}
+              className='br-100 w3 dib aspect-ratio--object'
+            />
+          </div>
+        </div>
         <span className='black-50 f6 db'>{name}</span>
       </a>
     </div>
