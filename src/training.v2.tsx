@@ -34,6 +34,7 @@ import { transform } from './markdown/utils'
 import { toMdast } from './markdown'
 import { toVFile } from './files'
 import { mdast2JsxInline } from './markdown/jsx'
+import { tachyons } from './tachyons/tachyons'
 
 export const faqs: FAQ[] = [
   {
@@ -139,7 +140,7 @@ function renderPage(state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         {courses.map((course, index) => {
           return (

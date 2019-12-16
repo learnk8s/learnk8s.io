@@ -12,6 +12,7 @@ import { Store } from 'redux'
 import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
+import { tachyons } from './tachyons/tachyons'
 
 const faqs: FAQ[] = [
   {
@@ -78,7 +79,7 @@ function renderPage(state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         <JsonLd<Course>
           item={{

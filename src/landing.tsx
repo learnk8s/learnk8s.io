@@ -32,6 +32,7 @@ import {
 import { join } from 'path'
 import { defaultAssetsPipeline } from './optimise'
 import { subDays } from 'date-fns'
+import { tachyons } from './tachyons/tachyons'
 
 export const Pages = {
   landingLondon: {
@@ -133,7 +134,7 @@ export function renderPage(state: State, pageId: string): JSX.Element {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         {courses.map((course, index) => {
           return (

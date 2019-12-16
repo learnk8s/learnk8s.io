@@ -17,6 +17,7 @@ import { join } from 'path'
 import { getOpenGraph, getPages, getConfig, State, Actions, Action } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
+import { tachyons } from './tachyons/tachyons'
 
 const continuousDeliveryEnquiry: MailTo = {
   subject: 'Learnk8s Consulting',
@@ -83,7 +84,7 @@ function renderPage(state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
       </Head>
       <Body>

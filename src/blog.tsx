@@ -6,6 +6,7 @@ import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
 import { BlogPost } from './store/websiteReducer'
 import { format } from 'date-fns'
+import { tachyons } from './tachyons/tachyons'
 
 export const Blog = {
   id: 'blog',
@@ -55,7 +56,7 @@ function renderPage(state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
       </Head>
       <Body>

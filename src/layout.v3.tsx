@@ -531,7 +531,7 @@ export const WhatIsLearnk8s: React.StatelessComponent<{}> = ({}) => {
   return (
     <div className='mb4 mb5-l mw8 center'>
       <ul className='list pl0 flex flex-wrap'>
-        <li className='w-50 f5 bg-evian br2 ph4'>
+        <li className='w-50-ns f5 bg-evian br2 ph4'>
           <p className='pb3 f2 b navy mb2 b mt4'>What's Learnk8s?</p>
           <p className='lh-copy f4 measure-narrow pt0 mt0'>
             In-depth Kubernetes training that is practical and easy to understand
