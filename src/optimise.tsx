@@ -17,6 +17,7 @@ import cssnano from 'cssnano'
 import toString from 'hast-util-to-string'
 import React from 'react'
 import { jsxToString, jsxToHast } from './jsx-utils/jsxToHast'
+import { it } from 'date-fns/locale'
 
 export function defaultAssetsPipeline({
   jsx,
@@ -260,6 +261,10 @@ function rewriteImages({ $ }: { $: Cheerio }): Cheerio {
   $.findAll('img').forEach(image => {
     const url: string = (image.properties as any).src
     ;(image.properties as any).src = `/b/${url}`
+    const srcSet: string[] | undefined = (image.properties as any).srcSet
+    if (srcSet) {
+      ;(image.properties as any).srcSet = srcSet.map(it => `/b/${it}`)
+    }
   })
   $.findAll('object').forEach(image => {
     const url: string = (image.properties as any).data
