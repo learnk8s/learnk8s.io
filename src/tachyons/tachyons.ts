@@ -30,7 +30,7 @@ const mediaQueriesless = [
   utilities(),
   lineHeight([1, 1.25, 1.5]),
   maxWidths([1, 2, 4, 8, 16, 32, 48, 64, 96]),
-  widths([1, 2, 4, 8, 16]),
+  widths([1, 2, 4, 8, 16, 32, 48]),
   overflow(),
   position(),
   rotations([45, 90, 135, 180, 225, 270, 315]),
@@ -101,7 +101,6 @@ export const tachyons = [
     'dark-green': '#137752',
     green: '#19a974',
     'light-green': '#9eebcf',
-    navy: '#001b44',
     'dark-blue': '#00449e',
     blue: '#357edd',
     'light-blue': '#96ccff',
@@ -110,6 +109,9 @@ export const tachyons = [
     'washed-green': '#e8fdf5',
     'washed-yellow': '#fffceb',
     'washed-red': '#ffdfdf',
+    navy: '#001b44',
+    sky: '#569ad1',
+    evian: '#f7f9fc',
   }),
   ...mediaQueriesless,
   opacity([1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.025, 0]),
@@ -121,6 +123,10 @@ export const tachyons = [
   lists(),
   tables(),
   zScale([0, 1, 2, 3, 4, 5]),
+  codeHighlightingCommon(),
+  codeHighlighting(),
+  powershellHighlighting(),
+  bashHighlighting(),
   mediaQueryfy(mediaQueries)(mediaQueriesless.join('\n')),
 ].join('\n')
 
@@ -1100,6 +1106,373 @@ function opacity(scale: number[]): string {
       return `.o-${`${num}`.slice(2)} { opacity: ${it}; }`
     })
     .join('\n')
+}
+
+function codeHighlightingCommon(): string {
+  return `[class^="code-"] {
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+[class^="code-"] .namespace {
+  opacity: 0.7
+}
+
+[class^="code-"] .token.important,
+[class^="code-"] .token.bold {
+  font-weight: bold;
+}
+
+[class^="code-"] .token.italic {
+  font-style: italic;
+}
+
+[class^="code-"] .token.entity {
+  cursor: help;
+}
+
+[class^="code-"] .highlight,
+[class^="code-"] .standard,
+[class^="code-"] .command,
+[class^="code-"] .output, {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: block;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+[class^="code-"] .code .prompt.active:after {
+  content: ' _';
+}
+[class^="code-"] .code .prompt.empty:after {
+  content: '_';
+}
+
+[class^="code-"] .code .prompt.active:after,
+[class^="code-"] .code .prompt.empty:after,
+[class^="code-"] .blinking-cursor {
+  -webkit-animation: 1s blinking step-end infinite;
+  -moz-animation: 1s blinking step-end infinite;
+  -ms-animation: 1s blinking step-end infinite;
+  -o-animation: 1s blinking step-end infinite;
+  animation: 1s blinking step-end infinite;
+}
+
+@keyframes blinking {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
+
+@-moz-keyframes blinking {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
+
+@-webkit-keyframes blinking {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
+
+@-ms-keyframes blinking {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}
+
+@-o-keyframes blinking {
+  from,
+  to {
+    color: transparent;
+  }
+  50% {
+    color: white;
+  }
+}`
+}
+
+function codeHighlighting(): string {
+  return `.code-light-theme {
+  color: #657b83;
+  background-color: #fdf6e3;
+}
+
+.code-light-theme::-moz-selection, .code-light-theme ::-moz-selection,
+.code-light-theme::-moz-selection, .code-light-theme ::-moz-selection {
+  background: #073642;
+}
+
+.code-light-theme::selection, .code-light-theme ::selection,
+.code-light-theme::selection, .code-light-theme ::selection {
+  background: #073642;
+}
+
+.code-light-theme .token.comment,
+.code-light-theme .token.prolog,
+.code-light-theme .token.doctype,
+.code-light-theme .token.cdata {
+  color: #93a1a1;
+}
+
+.code-light-theme .token.punctuation {
+  color: #586e75;
+}
+
+.code-light-theme .token.property,
+.code-light-theme .token.tag,
+.code-light-theme .token.boolean,
+.code-light-theme .token.number,
+.code-light-theme .token.constant,
+.code-light-theme .token.symbol,
+.code-light-theme .token.deleted {
+  color: #268bd2;
+}
+
+.code-light-theme .token.selector,
+.code-light-theme .token.attr-name,
+.code-light-theme .token.string,
+.code-light-theme .token.char,
+.code-light-theme .token.builtin,
+.code-light-theme .token.url,
+.code-light-theme .token.inserted {
+  color: #2aa198;
+}
+
+.code-light-theme .token.entity {
+  color: #657b83;
+  background: #eee8d5;
+}
+
+.code-light-theme .token.atrule,
+.code-light-theme .token.attr-value,
+.code-light-theme .token.keyword {
+  color: #859900;
+}
+
+.code-light-theme .token.function,
+.code-light-theme .token.class-name {
+  color: #b58900;
+}
+
+.code-light-theme .token.regex,
+.code-light-theme .token.important,
+.code-light-theme .token.variable {
+  color: #cb4b16;
+}
+
+.code-light-theme .highlight {
+  background: #ffe6c3;
+}`
+}
+
+function bashHighlighting(): string {
+  return `.code-dark-theme {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+
+.code-dark-theme .token.comment,
+.code-dark-theme .token.prolog,
+.code-dark-theme .token.doctype,
+.code-dark-theme .token.cdata {
+  color: slategray;
+}
+
+.code-dark-theme .token.punctuation {
+  color: #f8f8f2;
+}
+
+.code-dark-theme .token.property,
+.code-dark-theme .token.tag,
+.code-dark-theme .token.constant,
+.code-dark-theme .token.symbol,
+.code-dark-theme .token.deleted {
+  color: #f92672;
+}
+
+.code-dark-theme .token.boolean,
+.code-dark-theme .token.number {
+  color: #ae81ff;
+}
+
+.code-dark-theme .token.selector,
+.code-dark-theme .token.attr-name,
+.code-dark-theme .token.string,
+.code-dark-theme .token.char,
+.code-dark-theme .token.builtin,
+.code-dark-theme .token.inserted {
+  color: #a6e22e;
+}
+
+.code-dark-theme .token.operator,
+.code-dark-theme .token.entity,
+.code-dark-theme .token.url,
+.code-dark-theme .language-css .token.string,
+.code-dark-theme .style .token.string,
+.code-dark-theme .token.variable {
+  color: #f8f8f2;
+}
+
+.code-dark-theme .token.atrule,
+.code-dark-theme .token.attr-value,
+.code-dark-theme .token.function,
+.code-dark-theme .token.class-name {
+  color: #e6db74;
+}
+
+.code-dark-theme .token.keyword {
+  color: #66d9ef;
+}
+
+.code-dark-theme .token.regex,
+.code-dark-theme .token.important {
+  color: #fd971f;
+}
+
+.code-dark-theme .code .prompt {
+  text-indent: 1em;
+  position: relative;
+}
+
+.code-dark-theme .code .prompt:before {
+  position: absolute;
+  top: 0;
+  left: 1em;
+  content: '$';
+}`
+}
+
+function powershellHighlighting(): string {
+  return `.code-powershell {
+  background: #012456;
+  color: #f8f8f2;
+}
+
+.code-powershell::-moz-selection, .code-powershell ::-moz-selection,
+.code-powershell::-moz-selection, .code-powershell ::-moz-selection {
+  background:#2f7289;
+}
+
+.code-powershell::selection, .code-powershell ::selection,
+.code-powershell::selection, .code-powershell ::selection {
+  background:#2f7289;
+}
+
+.code-powershell .token.comment,
+.code-powershell .token.prolog,
+.code-powershell .token.doctype,
+.code-powershell .token.cdata {
+  color: #6272a4;
+}
+
+.code-powershell .token.punctuation {
+  color: #f8f8f2;
+}
+
+.code-powershell .token.property,
+.code-powershell .token.tag,
+.code-powershell .token.constant,
+.code-powershell .token.symbol,
+.code-powershell .token.deleted {
+  color: #ff79c6;
+}
+
+.code-powershell .token.boolean,
+.code-powershell .token.number {
+  color: #bd93f9;
+}
+
+.code-powershell .token.selector,
+.code-powershell .token.attr-name,
+.code-powershell .token.string,
+.code-powershell .token.char,
+.code-powershell .token.builtin,
+.code-powershell .token.inserted {
+  color: #50fa7b;
+}
+
+.code-powershell .token.operator,
+.code-powershell .token.entity,
+.code-powershell .token.url,
+.code-powershell .language-css .token.string,
+.code-powershell .style .token.string,
+.code-powershell .token.variable {
+  color: #f8f8f2;
+}
+
+.code-powershell .token.atrule,
+.code-powershell .token.attr-value,
+.code-powershell .token.function,
+.code-powershell .token.class-name {
+  color: #f1fa8c;
+}
+
+.code-powershell .token.keyword {
+  color: #8be9fd;
+}
+
+.code-powershell .token.regex,
+.code-powershell .token.important {
+  color: #ffb86c;
+}
+
+.code-powershell .highlight {
+  background: #ffe6c3
+}
+
+.code-powershell .highlight,
+.code-powershell .standard {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: block;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.code-powershell .command,
+.code-powershell .output {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: block;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.code-powershell .code .prompt {
+  text-indent: 2em;
+  position: relative;
+}
+
+.code-powershell .code .prompt:before {
+  position: absolute;
+  top: 0;
+  left: 0em;
+  content: 'PS>';
+}`
 }
 
 function toRem(value: number) {
