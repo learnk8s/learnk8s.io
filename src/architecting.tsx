@@ -7,6 +7,7 @@ import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo, FAQs, FAQ,
 import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
+import { tachyons } from './tachyons/tachyons'
 
 const enterprisePackage: MailTo = {
   subject: 'Learnk8s Academy — Enterprise license',
@@ -94,7 +95,7 @@ function renderPage(state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         <script
           type='text/javascript'

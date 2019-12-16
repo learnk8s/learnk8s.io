@@ -25,6 +25,7 @@ import { selectAll } from 'unist-util-select'
 import * as Mdast from 'mdast'
 import { transform } from './markdown/utils'
 import { mdast2Jsx, mdast2JsxInline } from './markdown/jsx'
+import { tachyons } from './tachyons/tachyons'
 
 export async function Mount({ store }: { store: Store<State, Actions> }) {
   const state = store.getState()
@@ -73,7 +74,7 @@ async function renderPage(page: Page, state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         <JsonLd<BlogPosting>
           item={{

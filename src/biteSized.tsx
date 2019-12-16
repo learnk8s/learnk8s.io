@@ -6,6 +6,7 @@ import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { BlogPost } from './store/websiteReducer'
 import { format } from 'date-fns'
+import { tachyons } from './tachyons/tachyons'
 
 export const BiteSized = {
   id: 'bite-sized',
@@ -59,7 +60,7 @@ function renderPage(state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         <link rel='canonical' href={currentAbsoluteUrl} />
       </Head>

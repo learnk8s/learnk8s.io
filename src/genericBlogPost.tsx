@@ -25,6 +25,7 @@ import * as Mdast from 'mdast'
 import { mdast2Jsx } from './markdown/jsx'
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
+import { tachyons } from './tachyons/tachyons'
 
 export async function Mount({ store }: { store: Store<State, Actions> }) {
   const state = store.getState()
@@ -74,7 +75,7 @@ export async function renderPage(pageMeta: Page, state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         <link rel='canonical' href={currentAbsoluteUrl} />
         <JsonLd<BlogPosting>

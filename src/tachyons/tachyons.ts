@@ -113,13 +113,13 @@ export const tachyons = [
     sky: '#569ad1',
     evian: '#f7f9fc',
   }),
+  links(),
   ...mediaQueriesless,
   opacity([1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.025, 0]),
   fontFamily(),
   forms(),
   hover(),
   images(),
-  links(),
   lists(),
   tables(),
   zScale([0, 1, 2, 3, 4, 5]),
@@ -806,7 +806,7 @@ function rotations(scale: number[]): string {
 }
 
 function textAlign(): string {
-  return `.tl  { text-align: left; }
+  return `.tl { text-align: left; }
 .tr { text-align: right; }
 .tc { text-align: center; }
 .tj { text-align: justify; }`
@@ -1010,12 +1010,13 @@ function measure([normal, wide, narrow]: [number, number, number]): string {
 }
 
 function colour(colours: Record<string, string>): string {
-  return Object.keys({ ...colours, transparent: 'transparent', inherit: 'inherit' })
+  const expandedColours: Record<string, string> = { ...colours, transparent: 'transparent', inherit: 'inherit' }
+  return Object.keys(expandedColours)
     .map(name => {
       return [
-        `.${name}, .hover-${name}:focus, .hover-${name}:hover { color: ${colours[name]}; }`,
-        `.bg-${name}, .hover-bg-${name}:focus, .hover-bg-${name}:hover { background-color: ${colours[name]}; }`,
-        `.b--${name} { border-color: ${colours[name]}; }`,
+        `.${name}, .hover-${name}:focus, .hover-${name}:hover { color: ${expandedColours[name]}; }`,
+        `.bg-${name}, .hover-bg-${name}:focus, .hover-bg-${name}:hover { background-color: ${expandedColours[name]}; }`,
+        `.b--${name} { border-color: ${expandedColours[name]}; }`,
       ].join('\n')
     })
     .join('\n')
