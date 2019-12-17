@@ -1,13 +1,12 @@
 import Prism from 'prismjs'
 import React, { Fragment } from 'react'
 import { selectAll, select } from 'unist-util-select'
-import { join } from 'path'
 import toString from 'mdast-util-to-string'
 import * as Mdast from 'mdast'
 import { ok } from 'assert'
 import { toMdast } from './mdast'
 import { ArrayType, parseLink, transform, MdastVisitors } from './utils'
-import { VFile, toPath } from '../files'
+import { VFile } from '../files'
 import parents from 'unist-util-parents'
 
 require('prismjs/components/')()
@@ -216,7 +215,6 @@ export function mdast2Jsx(): MdastVisitors<JSX.Element> {
           <pre className='code-light-theme relative pv4 overflow-auto mv0 br2 br--bottom'>
             <code className='code lh-copy'>{codeBlocks}</code>
           </pre>
-          <link rel='stylesheet' href={toPath(join(__dirname, 'prism-solarizedlight.css'))} />
         </div>
       )
     },
@@ -271,7 +269,6 @@ export function mdast2Jsx(): MdastVisitors<JSX.Element> {
           <pre className='code-dark-theme relative pv4 overflow-auto mv0 br2 br--bottom'>
             <code className='code lh-copy'>{codeBlocks}</code>
           </pre>
-          <link rel='stylesheet' href={toPath(join(__dirname, 'prism-okaidia.css'))} />
         </div>
       )
     },
@@ -326,7 +323,6 @@ export function mdast2Jsx(): MdastVisitors<JSX.Element> {
           <pre className='code-powershell relative pv4 overflow-auto mv0 br2 br--bottom'>
             <code className='code lh-copy'>{codeBlocks}</code>
           </pre>
-          <link rel='stylesheet' href={toPath(join(__dirname, 'prism-lakedark.css'))} />
         </div>
       )
     },
