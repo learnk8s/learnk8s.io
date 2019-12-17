@@ -149,12 +149,12 @@ class CheerioSelectionAll {
 function optimise({ $, siteUrl, isOptimisedBuild }: { $: Cheerio; siteUrl: string; isOptimisedBuild: boolean }) {
   try {
     isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-    isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
     isOptimisedBuild ? optimiseCss({ $ }) : rewriteCss({ $ })
     isOptimisedBuild ? optimiseJs({ $ }) : rewriteJs({ $ })
     isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
     isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
     optimiseLazy({ $ })
+    isOptimisedBuild ? injectGoogleAnalytics({ $, gaId: 'GTM-5WCKPRL' }) : null
   } catch (error) {
     console.log(error)
   }
