@@ -2,7 +2,7 @@ import { Store } from 'redux'
 import { Actions, State, getPages, getRedirects, getOpenGraph, getBlogPosts, store } from './store'
 import { ok } from 'assert'
 import { Cheerio } from './optimise'
-import { Page } from './store/websiteReducer'
+import * as Hast from 'hast'
 
 function getCommonPages(state: State) {
   const redirectPageIds = getRedirects(state).map(it => it.fromPageId)
@@ -56,19 +56,15 @@ export function checkPageDetail(store: Store<State, Actions>) {
   checkBlogPost(store)
 }
 
-export const checkCanonical = (() => {
-  let pages: Page[] = []
-  return ($: Cheerio) => {
-    if (pages.length === 0) {
-      const state = store.getState()
-      pages = getCommonPages(state).filter(it => it.id !== 'not-found-404')
-    }
-    const canonicalNode = $.find('link[rel="canonical"]').get() as any
-    const title = ($.find('title').get() as any)?.children.pop().value
-    const page = pages.filter(it => it.title === title).pop()
-    if (page) {
-      ok(canonicalNode !== null, `Page: ${page.id}, canonical is not defined.`)
-      ok(canonicalNode.properties.href !== '', `Page: ${page.id}, canonical is not defined.`)
-    }
+export const checkCanonical = ($: Cheerio) => {
+  const state = store.getState()
+  const pages = getCommonPages(state).filter(it => it.id !== 'not-found-404')
+  const canonicalNode = $.find('link[rel="canonical"]').get() as Hast.Element
+  const titleNode = $.find('title').get() as Hast.Element
+  const [title] = titleNode.children
+  const [page] = pages.filter(it => it.title === (title.value as string))
+  if (page) {
+    ok(canonicalNode !== null, `Page: ${page.id}, canonical is not defined.`)
+    ok((canonicalNode.properties.href as string) !== '', `Page: ${page.id}, canonical is not defined.`)
   }
-})()
+}
