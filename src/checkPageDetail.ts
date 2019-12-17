@@ -1,6 +1,8 @@
 import { Store } from 'redux'
-import { Actions, State, getPages, getRedirects, getOpenGraph, getBlogPosts } from './store'
+import { Actions, State, getPages, getRedirects, getOpenGraph, getBlogPosts, store } from './store'
 import { ok } from 'assert'
+import { Cheerio } from './optimise'
+import { Page } from './store/websiteReducer'
 
 function getCommonPages(state: State) {
   const redirectPageIds = getRedirects(state).map(it => it.fromPageId)
@@ -53,3 +55,24 @@ export function checkPageDetail(store: Store<State, Actions>) {
   checkOpenGraph(store)
   checkBlogPost(store)
 }
+
+export const checkCanonical = (() => {
+  let pages: Page[] = []
+  return ($: Cheerio) => {
+    if (pages.length === 0) {
+      const state = store.getState()
+      pages = getCommonPages(state).filter(it => it.id !== 'not-found-404')
+    }
+    const canonicalNode = $.find('link[rel="canonical"]').get() as any
+    const title = ($.find('title').get() as any)?.children.pop().value
+    const page = pages.filter(it => it.title === title).pop()
+    if (page) {
+      try {
+        ok(canonicalNode === null, `Page: ${page.id}, canonical is not defined.`)
+        ok(canonicalNode.properties.href === '', `Page: ${page.id}, canonical is not defined.`)
+      } catch (err) {
+        console.error(page.id)
+      }
+    }
+  }
+})()
