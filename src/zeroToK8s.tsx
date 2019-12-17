@@ -110,44 +110,6 @@ function renderPage(state: State) {
             The modern course on deploying Node.js, Express and MongoDB with Docker and Kubernetes
           </h1>
           <p className='lh-copy f4-l black-70'>The traditional way of deploying Node.js apps:</p>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: `
-          .numbered {
-            counter-reset: my-awesome-counter;
-          }
-          .numbered li {
-            counter-increment: my-awesome-counter;
-          }
-          .numbered li::before {
-            content: counter(my-awesome-counter);
-            background: #662974;
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            display: inline-block;
-            line-height: 2rem;
-            color: white;
-            text-align: center;
-            margin-right: 0.5rem;
-            font-weight: bold;
-            float: left;
-          }
-          .feedback {
-            column-count: 1;
-          }
-          @media screen and (min-width: 30em) and (max-width:60em) {
-            .feedback {
-              column-count: 2;
-            }
-          }
-          @media screen and (min-width: 60em) {
-            .feedback {
-              column-count: 3;
-            }
-          }`,
-            }}
-          />
           <ul className='list numbered black-70 pl0 pt2'>
             <li className='f4-l lh-copy mv3 cf'>
               <p className='pl4 ml2 b lh-copy measure mb1 mt0'>

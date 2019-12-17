@@ -22,7 +22,7 @@ export const Authors = {
         src='assets/authors/daniel_weibel/daniel_weibel-64x64.jpg'
         srcSet='
     assets/authors/daniel_weibel/daniel_weibel-64x64.jpg 1x,
-    assets/authors/daniel_weibel/daniel_weibel-128x128.jpg 2x      
+    assets/authors/daniel_weibel/daniel_weibel-128x128.jpg 2x
     '
         alt='Daniel Weibel'
       />
@@ -38,7 +38,7 @@ export const Authors = {
         src='assets/authors/omer_levi_hevroni/omer_levi_hevroni-64x64.jpg'
         srcSet='
     assets/authors/omer_levi_hevroni/omer_levi_hevroni-64x64.jpg 1x,
-    assets/authors/omer_levi_hevroni/omer_levi_hevroni-128x128.jpg 2x      
+    assets/authors/omer_levi_hevroni/omer_levi_hevroni-128x128.jpg 2x
     '
         alt='Omer Levi Hevroni'
       />
@@ -54,7 +54,7 @@ export const Authors = {
         src='assets/authors/daniele_polencic/daniele_polencic-64x64.jpg'
         srcSet='
     assets/authors/daniele_polencic/daniele_polencic-64x64.jpg 1x,
-    assets/authors/daniele_polencic/daniele_polencic-128x128.jpg 2x      
+    assets/authors/daniele_polencic/daniele_polencic-128x128.jpg 2x
     '
         alt='Daniele Polencic'
       />
@@ -70,7 +70,7 @@ export const Authors = {
         src='assets/authors/keith_mifsud/keith_mifsud-64x64.jpg'
         srcSet='
     assets/authors/keith_mifsud/keith_mifsud-64x64.jpg 1x,
-    assets/authors/keith_mifsud/keith_mifsud-128x128.jpg 2x      
+    assets/authors/keith_mifsud/keith_mifsud-128x128.jpg 2x
     '
         alt='Keith Mifsud'
       />
@@ -87,7 +87,7 @@ export const Authors = {
         src='assets/authors/salman_iqbal/salman_iqbal-64x64.jpg'
         srcSet='
     assets/authors/salman_iqbal/salman_iqbal-64x64.jpg 1x,
-    assets/authors/salman_iqbal/salman_iqbal-128x128.jpg 2x      
+    assets/authors/salman_iqbal/salman_iqbal-128x128.jpg 2x
     '
         alt='Salman Iqbal'
       />
@@ -102,7 +102,7 @@ export const Authors = {
         src='assets/authors/césar_tron-lozai/césar_tron-lozai-64x64.jpg'
         srcSet='
     assets/authors/césar_tron-lozai/césar_tron-lozai-64x64.jpg 1x,
-    assets/authors/césar_tron-lozai/césar_tron-lozai-128x128.jpg 2x      
+    assets/authors/césar_tron-lozai/césar_tron-lozai-128x128.jpg 2x
     '
         alt='César Tron-Lozai'
       />
@@ -117,7 +117,7 @@ export const Authors = {
         src='assets/authors/gergely-risko/gergely-risko-64x64.jpg'
         srcSet='
     assets/authors/gergely-risko/gergely-risko-64x64.jpg 1x,
-    assets/authors/gergely-risko/gergely-risko-128x128.jpg 2x      
+    assets/authors/gergely-risko/gergely-risko-128x128.jpg 2x
     '
         alt='Gergely Risko'
       />
@@ -279,8 +279,8 @@ export const Profile: React.StatelessComponent<{ profile: JSX.Element; name: str
 }) => {
   return (
     <li className='mw5 ma4' id={`${name.replace(/\s/gi, '_').toLowerCase()}`}>
-      <div className='relative padding-hack-100'>
-        <img src={profile.props.src} alt={profile.props.alt} className='db shadow-1 absolute top-0 left-0' />
+      <div className='aspect-ratio aspect-ratio--1x1'>
+        <img src={profile.props.src} alt={profile.props.alt} className='aspect-ratio--object' />
       </div>
       <h2 className='f4 navy mb1'>{name}</h2>
       <p className='black-70 mt0'>{role}</p>

@@ -123,44 +123,6 @@ setTimeout(ldinsp, 0);
             },
           }}
         />
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-          .numbered {
-            counter-reset: my-awesome-counter;
-          }
-          .numbered li {
-            counter-increment: my-awesome-counter;
-          }
-          .numbered li::before {
-            content: counter(my-awesome-counter);
-            background: #662974;
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            display: inline-block;
-            line-height: 2rem;
-            color: white;
-            text-align: center;
-            margin-right: 0.5rem;
-            font-weight: bold;
-            float: left;
-          }
-          .feedback {
-            column-count: 1;
-          }
-          @media screen and (min-width: 30em) and (max-width:60em) {
-            .feedback {
-              column-count: 2;
-            }
-          }
-          @media screen and (min-width: 60em) {
-            .feedback {
-              column-count: 4;
-            }
-          }`,
-          }}
-        />
       </Head>
       <Body>
         <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
@@ -489,7 +451,7 @@ setTimeout(ldinsp, 0);
                 <div className='overflow-hidden'>
                   <div className='w5'>
                     <div className='h2 mb3'>&nbsp;</div>
-                    <div className='padding-hack-75'>&nbsp;</div>
+                    <div className='aspect-ratio aspect-ratio--4x3'>&nbsp;</div>
                   </div>
                 </div>
                 <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center b pl2'>Courses</p>
@@ -508,8 +470,12 @@ setTimeout(ldinsp, 0);
                   <div className='header h2 mb3'>
                     <h2 className='f3 tc navy mt0'>Professional</h2>
                   </div>
-                  <div className='padding-hack-75'>
-                    <img src='assets/academy/full-package.svg' alt='The full package' />
+                  <div className='aspect-ratio aspect-ratio--4x3'>
+                    <img
+                      src='assets/academy/full-package.svg'
+                      alt='The full package'
+                      className='aspect-ratio--object'
+                    />
                   </div>
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>6</p>
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
@@ -557,8 +523,12 @@ setTimeout(ldinsp, 0);
                   <div className='header h2 mb3'>
                     <h2 className='f3 tc navy mt0'>Expert</h2>
                   </div>
-                  <div className='padding-hack-75'>
-                    <img src='assets/academy/expert-package.svg' alt='The expert package' />
+                  <div className='aspect-ratio aspect-ratio--4x3'>
+                    <img
+                      src='assets/academy/expert-package.svg'
+                      alt='The expert package'
+                      className='aspect-ratio--object'
+                    />
                   </div>
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>6</p>
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
@@ -604,8 +574,12 @@ setTimeout(ldinsp, 0);
                   <div className='header h2 mb3'>
                     <h2 className='f3 tc navy mt0'>Beginner</h2>
                   </div>
-                  <div className='padding-hack-75'>
-                    <img src='assets/academy/ebooks-bundle.png' alt='The eBooks bundle' />
+                  <div className='aspect-ratio aspect-ratio--4x3'>
+                    <img
+                      src='assets/academy/ebooks-bundle.png'
+                      alt='The eBooks bundle'
+                      className='aspect-ratio--object'
+                    />
                   </div>
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>4</p>
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
@@ -841,8 +815,8 @@ export const Module: React.StatelessComponent<{
           {preview.map(it => {
             return (
               <div className='w-80 w-50-l center'>
-                <div className='padding-hack-75 relative'>
-                  <img src={it.props.src} alt={it.props.alt} className='absolute top-0 right-0' />
+                <div className='aspect-ratio aspect-ratio--4x3'>
+                  <img src={it.props.src} alt={it.props.alt} className='aspect-ratio--object' />
                 </div>
               </div>
             )

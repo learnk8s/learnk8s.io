@@ -199,7 +199,7 @@ function renderPage(state: State) {
 
           <Hero image={<img src='assets/training/training.svg' alt='Training' />} imageClass='i-training'>
             <h1 className='f1 f-subheadline-l'>
-              Kubernetes <span className='no-wrap'>instructor-led</span> training
+              Kubernetes <span className='nowrap'>instructor-led</span> training
             </h1>
             <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>
               Learn how to deploy and scale applications with Kubernetes.
@@ -696,12 +696,12 @@ export const DashboardModule: React.StatelessComponent<{
         <p className='f3 navy b bb b--black-20 pb3'>{title}</p>
         <div className=''>
           <div className='w-80 center'>
-            <div className='padding-hack-75 relative'>
+            <div className='aspect-ratio aspect-ratio--4x3'>
               {React.createElement('img', {
                 src: preview.props.src,
                 alt: preview.props.alt,
                 loading: 'lazy',
-                className: 'absolute top-0 right-0',
+                className: 'aspect-ratio--object',
               })}
             </div>
           </div>

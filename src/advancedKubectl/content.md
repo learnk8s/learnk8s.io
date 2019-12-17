@@ -656,7 +656,7 @@ You might wonder how you could possibly remember 800 aliases? Actually, you don'
     <li class="mh2 relative">
       <p class="absolute top--2 left-0 ttu gray f6 mv0">System</p>
       <ul class="list pl0 flex flex-column">
-        <li>-n kube-<span class="alias-sys sky no-wrap">sys</span>tem<br><br><br><br><br><br><br><br></li>
+        <li>-n kube-<span class="alias-sys sky nowrap">sys</span>tem<br><br><br><br><br><br><br><br></li>
       </ul>
     </li><li class="mh2 relative">
       <p class="absolute top--2 left-0 ttu gray f6 mv0">Operation</p>
@@ -688,7 +688,7 @@ You might wonder how you could possibly remember 800 aliases? Actually, you don'
         <li><span class="alias-oyaml sky">oyaml</span>: -o yaml</li>
         <li><span class="alias-ojson sky">ojson</span>: -o json</li>
         <li><span class="alias-owide sky">owide</span>: -o wide</li>
-        <li><span class="alias-all sky no-wrap">all</span>: --all-namespaces</li>
+        <li><span class="alias-all sky nowrap">all</span>: --all-namespaces</li>
         <li><span class="alias-w sky">w</span>: --watch</li>
         <li><span class="alias-sl sky">sl</span>: --show-labels</li>
         <li><span class="sky">f</span>: -f</li>
@@ -736,8 +736,8 @@ For example, the alias `kgpooyamlall` stands for the command `kubectl get pods -
 <li class="hover-sky relative hide-child pv2">k<span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="hover-sky relative hide-child pv2">g<span class="child absolute bottom--2 left-0 f2">get</span></li>
 <li class="hover-sky relative hide-child pv2">po<span class="child absolute bottom--2 left-0 f2">pods</span></li>
-<li class="hover-sky relative hide-child pv2">oyaml<span class="child absolute bottom--2 left-0 f2" no-wrap>-o yaml</span></li>
-<li class="hover-sky relative hide-child pv2">all<span class="child absolute bottom--2 left-0 f2 no-wrap">--all-namespaces</span></li>
+<li class="hover-sky relative hide-child pv2">oyaml<span class="child absolute bottom--2 left-0 f2" nowrap>-o yaml</span></li>
+<li class="hover-sky relative hide-child pv2">all<span class="child absolute bottom--2 left-0 f2 nowrap">--all-namespaces</span></li>
 </ul>
 ```
 
@@ -782,7 +782,7 @@ Note that some aliases even _require_ a further argument on the command-line. Fo
 <li class="hover-sky relative hide-child pv2">k<span class="child absolute bottom--2 left-0 f2">kubectl</span></li>
 <li class="hover-sky relative hide-child pv2">g<span class="child absolute bottom--2 left-0 f2">get</span></li>
 <li class="hover-sky relative hide-child pv2">po<span class="child absolute bottom--2 left-0 f2">pods</span></li>
-<li class="hover-sky relative hide-child pv2">l<span class="child absolute bottom--2 left-0 f2 no-wrap">-l</span></li>
+<li class="hover-sky relative hide-child pv2">l<span class="child absolute bottom--2 left-0 f2 nowrap">-l</span></li>
 <li class="relative hide-child pv2 gray"> app=ui</li>
 </ul>
 ```
