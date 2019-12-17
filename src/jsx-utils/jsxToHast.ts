@@ -1,5 +1,5 @@
 import * as Hast from 'hast'
-import { FunctionComponent, ComponentClass } from 'react'
+import { FunctionComponent, ComponentClass, CSSProperties } from 'react'
 import * as ReactIs from 'react-is'
 import toHtml from 'hast-util-to-html'
 
@@ -60,6 +60,10 @@ export function jsxToHast(
         }
         if (key === 'defaultValue') {
           acc['value'] = restProps.defaultValue
+          return acc
+        }
+        if (key === 'style') {
+          acc[key] = stringifyStyle(restProps.style as CSSProperties)
           return acc
         }
         acc[hypenToCamelCase(key)] = restProps[key]
@@ -127,4 +131,10 @@ function isComponentClass(component: unknown): component is ComponentClass {
 
 function hypenToCamelCase(string: string) {
   return string.replace(/-([a-z])/g, g => g[1].toUpperCase())
+}
+
+function stringifyStyle(props: CSSProperties) {
+  return Object.keys(props)
+    .reduce((acc, it) => acc.concat(`${it}: ${props[it as keyof CSSProperties]}`), [] as string[])
+    .join('; ')
 }
