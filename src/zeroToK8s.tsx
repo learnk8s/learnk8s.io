@@ -81,6 +81,7 @@ function renderPage(state: State) {
         ) : null}
         <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
+        <link rel='canonical' href={currentAbsoluteUrl} />
         <JsonLd<Course>
           item={{
             '@type': 'Course',

@@ -67,12 +67,8 @@ export const checkCanonical = (() => {
     const title = ($.find('title').get() as any)?.children.pop().value
     const page = pages.filter(it => it.title === title).pop()
     if (page) {
-      try {
-        ok(canonicalNode === null, `Page: ${page.id}, canonical is not defined.`)
-        ok(canonicalNode.properties.href === '', `Page: ${page.id}, canonical is not defined.`)
-      } catch (err) {
-        console.error(page.id)
-      }
+      ok(canonicalNode !== null, `Page: ${page.id}, canonical is not defined.`)
+      ok(canonicalNode.properties.href !== '', `Page: ${page.id}, canonical is not defined.`)
     }
   }
 })()

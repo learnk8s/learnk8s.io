@@ -59,6 +59,7 @@ function renderPage(state: State) {
         ) : null}
         <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
+        <link rel='canonical' href={currentAbsoluteUrl} />
       </Head>
       <Body>
         <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>

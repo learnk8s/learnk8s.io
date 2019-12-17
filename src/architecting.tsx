@@ -97,6 +97,7 @@ function renderPage(state: State) {
         ) : null}
         <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
+        <link rel='canonical' href={currentAbsoluteUrl} />
         <script
           type='text/javascript'
           dangerouslySetInnerHTML={{
