@@ -1140,7 +1140,7 @@ function codeHighlightingCommon(): string {
 [class^="code-"] .highlight,
 [class^="code-"] .standard,
 [class^="code-"] .command,
-[class^="code-"] .output, {
+[class^="code-"] .output {
   padding-left: 2rem;
   padding-right: 2rem;
   display: block;
