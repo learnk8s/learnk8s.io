@@ -4,6 +4,7 @@ import { Store } from 'redux'
 import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
+import { tachyons } from './tachyons/tachyons'
 
 export const Career = {
   id: 'careers',
@@ -51,7 +52,7 @@ function renderPage(state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
       </Head>
       <Body>
@@ -66,7 +67,7 @@ function renderPage(state: State) {
           </section>
         </div>
 
-        <section className='bg-black-02 black-70 relative z-999 w-90-m w-70-l center pa3 pa4-ns mb3 mb5-ns lh-copy'>
+        <section className='bg-black-025 black-70 relative z-999 w-90-m w-70-l center pa3 pa4-ns mb3 mb5-ns lh-copy'>
           <h2 className='navy'>Freelance Kubernetes engineer - REMOTE</h2>
           <p>learnk8s is looking for a talented engineer on a freelance basis to help:</p>
           <ul className=''>

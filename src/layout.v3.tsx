@@ -408,7 +408,7 @@ export const PackageLeft: React.StatelessComponent<{ heading: string; subheading
 }) => {
   return (
     <li className='fl-ns w-50-ns'>
-      <div className={`mv3 mh3 ml4-ns mr2-ns bg-black-02`}>
+      <div className={`mv3 mh3 ml4-ns mr2-ns bg-black-025`}>
         <div className='header ph3 pt1 bb b--light-gray'>
           <h2 className='navy tc mb1'>{heading}</h2>
           <h3 className='normal black-70 tc mt0'>{subheading}</h3>
@@ -531,7 +531,7 @@ export const WhatIsLearnk8s: React.StatelessComponent<{}> = ({}) => {
   return (
     <div className='mb4 mb5-l mw8 center'>
       <ul className='list pl0 flex flex-wrap'>
-        <li className='w-50 f5 bg-evian br2 ph4'>
+        <li className='w-50-ns f5 bg-evian br2 ph4'>
           <p className='pb3 f2 b navy mb2 b mt4'>What's Learnk8s?</p>
           <p className='lh-copy f4 measure-narrow pt0 mt0'>
             In-depth Kubernetes training that is practical and easy to understand

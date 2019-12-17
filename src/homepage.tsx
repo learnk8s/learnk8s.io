@@ -7,6 +7,7 @@ import { join } from 'path'
 import { Training } from './training.v2'
 import { Consulting } from './consulting'
 import { Academy } from './academy'
+import { tachyons } from './tachyons/tachyons'
 
 export const HomePage = {
   id: 'homepage',
@@ -56,7 +57,7 @@ function renderPage(state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
       </Head>
       <Body>

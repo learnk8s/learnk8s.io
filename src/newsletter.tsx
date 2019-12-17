@@ -4,6 +4,7 @@ import { Action, State, Actions, getConfig, getPages, getOpenGraph } from './sto
 import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
+import { tachyons } from './tachyons/tachyons'
 
 export const Newsletter = {
   id: 'newsletter',
@@ -51,7 +52,7 @@ function renderPage(state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
       </Head>
       <Body>

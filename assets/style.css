@@ -21,10 +21,6 @@
   background-color: var(--evian);
 }
 
-.bg-black-02 {
-  background-color: rgba(0, 0, 0, 0.02);
-}
-
 .hover-sky:hover,
 .hover-sky:focus {
   color: var(--sky);

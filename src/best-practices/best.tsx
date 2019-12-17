@@ -14,6 +14,7 @@ import toString from 'mdast-util-to-string'
 import { mdast2JsxInline, mdast2Jsx } from '../markdown/jsx'
 import { transform } from '../markdown/utils'
 import { jsxToString } from '../jsx-utils/jsxToHast'
+import { tachyons } from '../tachyons/tachyons'
 
 export const BestPractices = {
   id: 'kubernetes-best-practices-production',
@@ -121,7 +122,7 @@ function renderPage(state: State, sections: Section[]) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
       </Head>
       <Body>

@@ -10,6 +10,7 @@ import {
   getAuthors,
   getBlogPostMarkdownBlocks,
   getConfig,
+  getPreviewPictures,
 } from './store'
 import { toVFile, read } from './files'
 import { join } from 'path'
@@ -24,6 +25,7 @@ import { selectAll } from 'unist-util-select'
 import * as Mdast from 'mdast'
 import { transform } from './markdown/utils'
 import { mdast2Jsx, mdast2JsxInline } from './markdown/jsx'
+import { tachyons } from './tachyons/tachyons'
 
 export async function Mount({ store }: { store: Store<State, Actions> }) {
   const state = store.getState()
@@ -54,6 +56,7 @@ async function renderPage(page: Page, state: State) {
   if (!author) {
     throw new Error('The blog post does not have an author attached')
   }
+  const previewPicture = getPreviewPictures(state).find(it => it.pageId === page.id)
   const extraBlocks = getBlogPostMarkdownBlocks(state).filter(it => it.blogPostId === blog.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   const [content, ...blocks] = await Promise.all([
@@ -71,7 +74,7 @@ async function renderPage(page: Page, state: State) {
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
-        <link rel='stylesheet' href='node_modules/tachyons/css/tachyons.css' />
+        <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         <JsonLd<BlogPosting>
           item={{
@@ -113,13 +116,22 @@ async function renderPage(page: Page, state: State) {
           <p className='f7 black-60 tc ttu'>Published in {format(new Date(blog.publishedDate), 'MMMM yyyy')}</p>
           {blog.lastModifiedDate ? (
             <p className='f7 black-60 tc ttu b'>
-              <img src='assets/tick.svg' alt='Tick' className='w1 h1 v-mid' /> Updated in{' '}
-              {format(new Date(blog.lastModifiedDate), 'MMMM yyyy')}
+              <Tick className='w1 h1 v-mid' /> Updated in {format(new Date(blog.lastModifiedDate), 'MMMM yyyy')}
             </p>
           ) : null}
           <hr className='pv2 bn' />
           <div className='aspect-ratio aspect-ratio--6x4'>
-            <img src={'assets/bsk.svg'} className='aspect-ratio--object' alt={blog.title} />
+            {previewPicture ? (
+              {
+                ...previewPicture.image,
+                props: {
+                  ...previewPicture.image.props,
+                  className: (previewPicture.image.props.className || '').concat('aspect-ratio--object'),
+                },
+              }
+            ) : (
+              <img src='assets/bsk.svg' className='aspect-ratio--object' alt={blog.title} />
+            )}
           </div>
           <hr className='w3 center b--navy mv4 mb5-ns' />
           <p className='lh-copy measure-wide f4'>
@@ -178,4 +190,15 @@ function bumpHeadings(children: Mdast.Content[], amount: number): void {
   selectAll<Mdast.Heading>('heading', { type: 'root', children }).forEach(heading => {
     heading.depth = heading.depth + amount
   })
+}
+
+const Tick: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
+  return (
+    <svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg' className={className || ''}>
+      <g fill='#3BDBB8' fill-rule='evenodd'>
+        <circle fill-opacity='.2' cx='15' cy='15' r='15' />
+        <path d='M22.61 12.116c0 .235-.094.47-.263.64l-8.099 8.098a.913.913 0 0 1-1.28 0l-4.69-4.69a.913.913 0 0 1 0-1.28l1.28-1.28a.913.913 0 0 1 1.281 0l2.77 2.777 6.177-6.186a.913.913 0 0 1 1.28 0l1.28 1.28c.17.17.265.405.265.64z' />
+      </g>
+    </svg>
+  )
 }

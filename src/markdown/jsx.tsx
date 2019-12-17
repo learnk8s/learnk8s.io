@@ -323,7 +323,7 @@ export function mdast2Jsx(): MdastVisitors<JSX.Element> {
               <p className='code f6 mv0 black-60 w-100 tc absolute top-0 left-0 h1 pv2'>{node.title}</p>
             ) : null}
           </header>
-          <pre className='powershell relative pv4 overflow-auto mv0 br2 br--bottom'>
+          <pre className='code-powershell relative pv4 overflow-auto mv0 br2 br--bottom'>
             <code className='code lh-copy'>{codeBlocks}</code>
           </pre>
           <link rel='stylesheet' href={toPath(join(__dirname, 'prism-lakedark.css'))} />
