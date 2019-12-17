@@ -166,3 +166,13 @@ test('it should convert a class object', assert => {
   })
   assert.end()
 })
+
+test('it should convert inline style', assert => {
+  assert.deepEqual(jsxToHast(<div style={{ color: 'red', border: '3px' }}>test</div>), {
+    type: 'element',
+    tagName: 'div',
+    properties: { style: 'color: red; border: 3px' },
+    children: [{ type: 'text', value: 'test' }],
+  })
+  assert.end()
+})
