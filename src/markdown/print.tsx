@@ -208,7 +208,6 @@ export async function mdast2Print({ path }: { path: string }): Promise<MdastVisi
                 <pre className='code-light-theme pv3 overflow-auto mv0 br2 br--bottom'>
                   <code className='code lh-copy'>{it}</code>
                 </pre>
-                <style dangerouslySetInnerHTML={{ __html: prismSolarizedCss.contents }} />
               </div>
             )
           })}
@@ -266,7 +265,6 @@ export async function mdast2Print({ path }: { path: string }): Promise<MdastVisi
           <pre className='code-dark-theme pv4 overflow-auto mv0 br2 br--bottom'>
             <code className='code lh-copy'>{codeBlocks}</code>
           </pre>
-          <style dangerouslySetInnerHTML={{ __html: prismOkaidiadCss.contents }} />
         </div>
       )
     },
@@ -321,7 +319,6 @@ export async function mdast2Print({ path }: { path: string }): Promise<MdastVisi
           <pre className='powershell pv4 overflow-auto mv0 br2 br--bottom'>
             <code className='code lh-copy'>{codeBlocks}</code>
           </pre>
-          <style dangerouslySetInnerHTML={{ __html: prismLakeDarkCss.contents }} />
         </div>
       )
     },

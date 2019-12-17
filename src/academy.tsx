@@ -140,8 +140,8 @@ setTimeout(ldinsp, 0);
               Kubernetes with the Learnk8s' hands-on, <span className='b'>online courses.</span>
             </p>
             <div className='mw6 center'>
-              <div className='padding-hack-75'>
-                <img src='assets/academy/full-package.svg' alt='The expert package' />
+              <div className='aspect-ratio aspect-ratio--4x3'>
+                <img src='assets/academy/full-package.svg' alt='The expert package' className='aspect-ratio--object' />
               </div>
             </div>
           </div>
@@ -683,8 +683,8 @@ setTimeout(ldinsp, 0);
               <div className='pl3'>
                 <div className='overflow-hidden'>
                   <div className='w5'>
-                    <div className='h2 mb3'>&nbsp;</div>
-                    <div className='padding-hack-75'>&nbsp;</div>
+                    <div className='h2 mb3'></div>
+                    <div className='padding-hack-aspect-ratio aspect-ratio--4x3'></div>
                   </div>
                 </div>
                 <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center b pl2'>Courses</p>
@@ -703,11 +703,12 @@ setTimeout(ldinsp, 0);
                   <div className='header h2 mb3'>
                     <h2 className='f3 tc navy mt0'>Professional</h2>
                   </div>
-                  <div className='padding-hack-75'>
+                  <div className='aspect-ratio aspect-ratio--4x3'>
                     {React.createElement('img', {
                       src: 'assets/academy/full-package.svg',
                       alt: 'The full package',
                       loading: 'lazy',
+                      className: 'aspect-ratio--object',
                     })}
                   </div>
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>6</p>
@@ -756,11 +757,12 @@ setTimeout(ldinsp, 0);
                   <div className='header h2 mb3'>
                     <h2 className='f3 tc navy mt0'>Expert</h2>
                   </div>
-                  <div className='padding-hack-75'>
+                  <div className='aspect-ratio aspect-ratio--4x3'>
                     {React.createElement('img', {
                       src: 'assets/academy/expert-package.svg',
                       alt: 'The expert package',
                       loading: 'lazy',
+                      className: 'aspect-ratio--object',
                     })}
                   </div>
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>6</p>
@@ -807,11 +809,12 @@ setTimeout(ldinsp, 0);
                   <div className='header h2 mb3'>
                     <h2 className='f3 tc navy mt0'>Beginner</h2>
                   </div>
-                  <div className='padding-hack-75'>
+                  <div className='aspect-ratio aspect-ratio--4x3'>
                     {React.createElement('img', {
                       src: 'assets/academy/ebooks-bundle.png',
                       alt: 'The ebooks bundle',
                       loading: 'lazy',
+                      className: 'aspect-ratio--object',
                     })}
                   </div>
                   <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>4</p>
@@ -1109,12 +1112,12 @@ const Module: React.StatelessComponent<{
           {preview.map(it => {
             return (
               <div className='w-80 w-50-l center'>
-                <div className='padding-hack-75 relative'>
+                <div className='aspect-ratio aspect-ratio--4x3'>
                   {React.createElement('img', {
                     src: it.props.src,
                     alt: it.props.alt,
                     loading: 'lazy',
-                    className: 'absolute top-0 right-0',
+                    className: 'aspect-ratio--object',
                   })}
                 </div>
               </div>

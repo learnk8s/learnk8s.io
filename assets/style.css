@@ -1,39 +1,3 @@
-:root {
-  --navy: #001b44;
-  --sky: #569ad1;
-  --evian: #f7f9fc;
-  --illustration_ratio: 0.1;
-}
-
-.sky {
-  color: var(--sky);
-}
-
-.bg-sky {
-  background-color: var(--sky);
-}
-
-.b--sky {
-  border-color: var(--sky);
-}
-
-.bg-evian {
-  background-color: var(--evian);
-}
-
-.hover-sky:hover,
-.hover-sky:focus {
-  color: var(--sky);
-}
-
-.w6 {
-  width: 32em;
-}
-
-.w7 {
-  width: 48em;
-}
-
 .trapezoid-1,
 .trapezoid-2,
 .trapezoidr-1 {
@@ -288,20 +252,6 @@
   display: block;
 }
 
-.padding-hack-75 {
-  height: 0;
-  padding-bottom: 75%;
-}
-
-.padding-hack-100 {
-  height: 0;
-  padding-bottom: 100%;
-}
-
-.no-wrap {
-  white-space: nowrap;
-}
-
 .translate-100-100 {
   transform: translate(100%, 100%);
 }
@@ -514,14 +464,6 @@
 }
 /* </best practices> */
 
-.flex-shrink-0 {
-  flex-shrink: 0;
-}
-
-.sticky {
-  position: sticky;
-}
-
 .new-hero {
   border-bottom-right-radius: 80% 36%;
   border-bottom-left-radius: 0% 52%;
@@ -540,4 +482,37 @@ input[type='radio']:checked ~ .checked-reveal {
   stroke-width: 0.125rem;
   display: inline-block;
   width: 0.4rem;
+}
+
+.numbered {
+  counter-reset: my-awesome-counter;
+}
+.numbered li {
+  counter-increment: my-awesome-counter;
+}
+.numbered li::before {
+  content: counter(my-awesome-counter);
+  background: #662974;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  line-height: 2rem;
+  color: white;
+  text-align: center;
+  margin-right: 0.5rem;
+  font-weight: bold;
+  float: left;
+}
+.feedback {
+  column-count: 1;
+}
+@media screen and (min-width: 30em) and (max-width: 60em) {
+  .feedback {
+    column-count: 2;
+  }
+}
+@media screen and (min-width: 60em) {
+  .feedback {
+    column-count: 4;
+  }
 }

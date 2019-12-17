@@ -193,7 +193,7 @@ export function renderPage(state: State, pageId: string): JSX.Element {
 
           <Hero image={<img src='assets/training/training.svg' alt='Training' />} imageClass='i-training'>
             <h1 className='f1 f-subheadline-l'>
-              Kubernetes <span className='no-wrap'>instructor-led</span> training course in {landingPageLocation.city}
+              Kubernetes <span className='nowrap'>instructor-led</span> training course in {landingPageLocation.city}
             </h1>
             <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>
               Become an expert in deploing and scaling applications with Kubernetes.

@@ -102,12 +102,20 @@ function renderPage(state: State) {
               </a>
             </div>
 
-            <div className='dn db-l mt4 tr'>
-              <div className='padding-hack-100 relative'>
-                <img src='assets/consulting/kcsp.png' alt='Kubernetes Certified Service Provider' />
+            <div className='dn db-l mt4 tr w-100 mw5'>
+              <div className='aspect-ratio aspect-ratio--1x1'>
+                <img
+                  src='assets/consulting/kcsp.png'
+                  alt='Kubernetes Certified Service Provider'
+                  className='aspect-ratio--object'
+                />
               </div>
-              <div className='padding-hack-100 relative'>
-                <img src='assets/consulting/cka.png' alt='Certified Kubernetes administrator' />
+              <div className='aspect-ratio aspect-ratio--1x1'>
+                <img
+                  src='assets/consulting/cka.png'
+                  alt='Certified Kubernetes administrator'
+                  className='aspect-ratio--object'
+                />
               </div>
             </div>
           </section>
