@@ -10,8 +10,8 @@ const mediaQueries = [
 const mediaQueriesless = [
   aspectRatios(),
   backgroundSize(),
-  backgroundPosition(),
-  outlines(),
+  skip(backgroundPosition()),
+  skip(outlines()),
   borders(),
   borderRadius([0, 0.125, 0.25, 0.5, 1]),
   borderStyle(),
@@ -537,85 +537,11 @@ function fontFamily(): string {
 }
 
 .serif {
-  font-family: georgia,
-                times,
-                serif;
+  font-family: georgia, times, serif;
 }
 
-.system-sans-serif {
-  font-family: sans-serif;
-}
-
-.system-serif {
-  font-family: serif;
-}
-
-
-/* Monospaced Typefaces (for code) */
-
-/* From http://cssfontstack.com */
 code, .code {
-  font-family: Consolas,
-                monaco,
-                monospace;
-}
-
-.courier {
-  font-family: 'Courier Next',
-                courier,
-                monospace;
-}
-
-
-/* Sans-Serif Typefaces */
-
-.helvetica {
-  font-family: 'helvetica neue', helvetica,
-                sans-serif;
-}
-
-.avenir {
-  font-family: 'avenir next', avenir,
-                sans-serif;
-}
-
-
-/* Serif Typefaces */
-
-.athelas {
-  font-family: athelas,
-                georgia,
-                serif;
-}
-
-.georgia {
-  font-family: georgia,
-                serif;
-}
-
-.times {
-  font-family: times,
-                serif;
-}
-
-.bodoni {
-  font-family: "Bodoni MT",
-                serif;
-}
-
-.calisto {
-  font-family: "Calisto MT",
-                serif;
-}
-
-.garamond {
-  font-family: garamond,
-                serif;
-}
-
-.baskerville {
-  font-family: baskerville,
-                serif;
+  font-family: Consolas, monaco, monospace;
 }`
 }
 
