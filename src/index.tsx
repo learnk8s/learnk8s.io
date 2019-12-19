@@ -30,7 +30,7 @@ import * as Training from './training.v2'
 import * as BestPractices from './best-practices/best'
 import * as Flipboard from './flipboard'
 import { checkPageDetail } from './checkPageDetail'
-import { register } from './Register'
+import { register } from './register'
 
 register(store)
 
