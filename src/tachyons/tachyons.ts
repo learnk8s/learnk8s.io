@@ -1,5 +1,5 @@
 import cssom from 'cssom'
-import CSSwhat from 'css-what'
+import * as CSSwhat from 'css-what'
 
 const mediaQueries = [
   { from: 30, name: 'ns' },
