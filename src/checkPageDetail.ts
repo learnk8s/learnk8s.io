@@ -55,16 +55,3 @@ export function checkPageDetail(store: Store<State, Actions>) {
   checkOpenGraph(store)
   checkBlogPost(store)
 }
-
-export const checkCanonical = ($: Cheerio) => {
-  const state = store.getState()
-  const pages = getCommonPages(state).filter(it => it.id !== 'not-found-404')
-  const canonicalNode = $.find('link[rel="canonical"]').get() as Hast.Element
-  const titleNode = $.find('title').get() as Hast.Element
-  const [title] = titleNode.children
-  const [page] = pages.filter(it => it.title === (title.value as string))
-  if (page) {
-    ok(canonicalNode !== null, `Page: ${page.id}, canonical is not defined.`)
-    ok((canonicalNode.properties.href as string) !== '', `Page: ${page.id}, canonical is not defined.`)
-  }
-}

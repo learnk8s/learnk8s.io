@@ -18,7 +18,6 @@ import toString from 'hast-util-to-string'
 import React from 'react'
 import { jsxToString, jsxToHast } from './jsx-utils/jsxToHast'
 import srcset from 'srcset'
-import { checkCanonical } from './checkPageDetail'
 export function defaultAssetsPipeline({
   jsx,
   isOptimisedBuild,
@@ -33,7 +32,6 @@ export function defaultAssetsPipeline({
   url: string
 }) {
   const $ = Cheerio.of(jsxToString(jsx))
-  checkCanonical($)
   optimise({ $, siteUrl: siteUrl, isOptimisedBuild })
 
   $.findAll('a')
