@@ -142,6 +142,7 @@ function renderPage(state: State) {
         ) : null}
         <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
+        <link rel='canonical' href={currentAbsoluteUrl} />
         {courses.map((course, index) => {
           return (
             <JsonLd<Course>

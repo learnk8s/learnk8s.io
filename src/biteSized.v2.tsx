@@ -76,6 +76,7 @@ async function renderPage(page: Page, state: State) {
         ) : null}
         <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
+        <link rel='canonical' href={currentAbsoluteUrl} />
         <JsonLd<BlogPosting>
           item={{
             '@context': 'https://schema.org',
