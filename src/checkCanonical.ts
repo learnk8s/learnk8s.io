@@ -1,7 +1,7 @@
 import { ok } from 'assert'
 import { store, getPages, getRedirects } from './store'
 import commander from 'commander'
-import { register } from './Register'
+import { register } from './register'
 import * as Hast from 'hast'
 import { Cheerio } from './optimise'
 const request = require('request')

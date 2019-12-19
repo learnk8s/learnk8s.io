@@ -2,7 +2,7 @@ const backstop = require('backstopjs')
 import { ok } from 'assert'
 import { store, getPages } from './src/store'
 import commander from 'commander'
-import { register } from './src/Register'
+import { register } from './src/register'
 
 commander
   .version('1.0.0')
