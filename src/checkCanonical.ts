@@ -4,7 +4,7 @@ import commander from 'commander'
 import { register } from './register'
 import * as Hast from 'hast'
 import { Cheerio } from './optimise'
-const request = require('request')
+import Axios from 'axios'
 
 commander
   .version('1.0.0')
@@ -23,12 +23,16 @@ const pages = getPages(state)
   .map(it => `${commander.hostname}${it.url}`)
 
 pages.forEach(it => {
-  request(it, (error: any, response: any, body: string) => {
-    if (!error && response && response.statusCode === 200) {
-      const $ = Cheerio.of(body)
-      const canonicalNode = $.find('link[rel="canonical"]').get() as Hast.Element
-      ok(canonicalNode !== null, `Page: ${it}, canonical is not defined.`)
-      ok((canonicalNode.properties.href as string) !== '', `Page: ${it}, canonical is not defined.`)
-    }
-  })
+  Axios.get(it)
+    .then(response => {
+      if (response.status === 200) {
+        const $ = Cheerio.of(response.data)
+        const canonicalNode = $.find('link[rel="canonical"]').get() as Hast.Element
+        ok(canonicalNode !== null, `Page: ${it}, canonical is not defined.`)
+        ok((canonicalNode.properties.href as string) !== '', `Page: ${it}, canonical is not defined.`)
+      }
+    })
+    .catch(error => {
+      console.error(error.message)
+    })
 })
