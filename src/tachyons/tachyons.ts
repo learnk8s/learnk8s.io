@@ -1,5 +1,5 @@
-const cssom = require('cssom')
-const CSSwhat = require('css-what')
+import cssom from 'cssom'
+import CSSwhat from 'css-what'
 
 const mediaQueries = [
   { from: 30, name: 'ns' },
