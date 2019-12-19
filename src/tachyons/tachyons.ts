@@ -854,7 +854,7 @@ function mediaQueryfy(mediaQueries: { from?: number; to?: number; name: string }
     return mediaQueries
       .map(it => {
         const css = cssom.parse(input)
-        css.cssRules.forEach((selector: any) => {
+        ;[].slice.call(css.cssRules).forEach((selector: any) => {
           const cssSelector = CSSwhat.parse(selector.selectorText)
           cssSelector.forEach((tokens: any[]) => {
             tokens.forEach((element: any) =>
