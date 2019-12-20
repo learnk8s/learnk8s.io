@@ -1,5 +1,5 @@
-const cssom = require('cssom')
-const CSSwhat = require('css-what')
+import cssom from 'cssom'
+import * as CSSwhat from 'css-what'
 
 const mediaQueries = [
   { from: 30, name: 'ns' },
@@ -854,11 +854,15 @@ function mediaQueryfy(mediaQueries: { from?: number; to?: number; name: string }
     return mediaQueries
       .map(it => {
         const css = cssom.parse(input)
-        css.cssRules.forEach((selector: any) => {
+        css.cssRules.forEach(selector => {
           const cssSelector = CSSwhat.parse(selector.selectorText)
-          cssSelector.forEach((tokens: any[]) => {
-            tokens.forEach((element: any) =>
-              element.name === 'class' ? (element.value = `${element.value}-${it.name}`) : null,
+          cssSelector.forEach(tokens => {
+            tokens.forEach(element =>
+              'name' in element && element.name === 'class'
+                ? 'value' in element && element.value
+                  ? (element.value = `${element.value}-${it.name}`)
+                  : null
+                : null,
             )
           })
           return (selector.selectorText = CSSwhat.stringify(cssSelector))
