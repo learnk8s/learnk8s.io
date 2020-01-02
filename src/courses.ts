@@ -191,42 +191,6 @@ export function Register(store: Store<State, Actions>) {
   Object.values(CoursePrice).forEach(price => store.dispatch(Action.registerCoursePrice(price)))
   store.dispatch(
     Action.registerWorkshop({
-      id: 'LK8S|SINGAPORE|20191127',
-      startAt: '2019-11-27T10:00:00',
-      endsAt: '2019-11-29T17:00:00',
-      timezone: 'Asia/Singapore',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Singapore.id,
-      venueId: Venues.JustCoSg.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|LONDON|20191202',
-      startAt: '2019-12-02T09:30:00',
-      endsAt: '2019-12-04T05:00:00',
-      timezone: 'Europe/London',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.GreatBritain.id,
-      venueId: Venues.LondonCitizenM.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|SYDNEY|20191216',
-      startAt: '2019-12-16T09:30:00',
-      endsAt: '2019-12-18T05:00:00',
-      timezone: 'Australia/Sydney',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Sydney.id,
-      venueId: Venues.GenericSydney.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
       id: 'LK8S|LONDON|20200122',
       startAt: '2020-02-17T09:30:00',
       endsAt: '2020-02-19T05:00:00',
@@ -252,8 +216,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SANFRANCISCO|20200203',
-      startAt: '2020-02-03T09:30:00',
-      endsAt: '2020-02-05T05:00:00',
+      startAt: '2020-02-10T09:30:00',
+      endsAt: '2020-02-12T05:00:00',
       timezone: 'America/Los_Angeles',
       courseId: Courses.threeDays.id,
       priceId: CoursePrice.UnitedStates.id,
