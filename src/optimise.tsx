@@ -18,7 +18,7 @@ import toString from 'hast-util-to-string'
 import React from 'react'
 import { jsxToString, jsxToHast } from './jsx-utils/jsxToHast'
 import srcset from 'srcset'
-export function defaultAssetsPipeline({
+export async function defaultAssetsPipeline({
   jsx,
   isOptimisedBuild,
   siteUrl,
@@ -32,7 +32,7 @@ export function defaultAssetsPipeline({
   url: string
 }) {
   const $ = Cheerio.of(jsxToString(jsx))
-  optimise({ $, siteUrl: siteUrl, isOptimisedBuild })
+  await optimise({ $, siteUrl: siteUrl, isOptimisedBuild })
 
   $.findAll('a')
     .get()
@@ -146,10 +146,10 @@ class CheerioSelectionAll {
   }
 }
 
-function optimise({ $, siteUrl, isOptimisedBuild }: { $: Cheerio; siteUrl: string; isOptimisedBuild: boolean }) {
+async function optimise({ $, siteUrl, isOptimisedBuild }: { $: Cheerio; siteUrl: string; isOptimisedBuild: boolean }) {
   try {
     isOptimisedBuild ? optimiseImages({ $, siteUrl }) : rewriteImages({ $ })
-    isOptimisedBuild ? optimiseCss({ $ }) : rewriteCss({ $ })
+    isOptimisedBuild ? await optimiseCss({ $ }) : rewriteCss({ $ })
     isOptimisedBuild ? optimiseJs({ $ }) : rewriteJs({ $ })
     isOptimisedBuild ? optimiseFavicons({ $ }) : rewriteFavicons({ $ })
     isOptimisedBuild ? optimiseOpenGraphImage({ $, siteUrl }) : rewriteOpenGraphImage({ $ })
@@ -188,7 +188,7 @@ function injectGoogleAnalytics({ $, gaId }: { gaId: string; $: Cheerio }): Cheer
   return $
 }
 
-function optimiseCss({ $ }: { $: Cheerio }): Cheerio {
+async function optimiseCss({ $ }: { $: Cheerio }): Promise<Cheerio> {
   const styleTags = $.findAll('style')
   const linkTags = $.findAll('link[rel="stylesheet"]')
   const css: string = [
@@ -200,15 +200,8 @@ function optimiseCss({ $ }: { $: Cheerio }): Cheerio {
   styleTags.remove()
   linkTags.remove()
   const digestCss = md5(css)
-  postcss([cssnano])
-    .process(css, { from: 'src/style.css', to: `_site/a/${digestCss}.css` })
-    .then(result => {
-      writeFileSync(`_site/a/${digestCss}.css`, result)
-      if (result.map) {
-        writeFileSync(`_site/a/${digestCss}.css.map`, result.map)
-      }
-    })
-  $.find('head').append(<link rel='stylesheet' href={`/a/${digestCss}.css`} />)
+  const result = await postcss([cssnano]).process(css, { from: 'src/style.css', to: `_site/a/${digestCss}.css` })
+  $.find('head').append(<style dangerouslySetInnerHTML={{ __html: result.content }}></style>)
   return $
 }
 
