@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react'
-import { material, assets as materialAssets } from './material'
+import React from 'react'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
-import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo, FAQs, FAQ, Hero } from './layout.v3'
+import { material, assets as materialAssets } from './material'
+import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo, FAQs, FAQ } from './layout.v3'
 import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
@@ -18,30 +18,19 @@ const enterprisePackage: MailTo = {
 const faqs: FAQ[] = [
   {
     title: `Can I see a preview of the videos?`,
-    content: `This is not a video course. This is a learn-by-doing course. There's no shortcut in learning Kubernetes. You have to put the effort in and practice.`,
-  },
-  {
-    title: `Kubernetes is a vast subject, what topics I won't find in this course?`,
-    content: `You won't find:
-
-- The Cilium CNI plugin, but you'll learn about the CNI and how to customise it
-- How to set up CI/CD with Kubernetes
-- Advanced allocations
-- Securing your cluster
-- Multi-cloud and multi-data centres deployments
-- Architecture and networking`,
+    content: `This is not a video course. It is a learn-by-doing course. There's no shortcut in learning Kubernetes. You have to put the effort in and practice.`,
   },
   {
     title: 'Do you offer a student discount?',
-    content: `Absolutely! [Fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSc8dT07y92OHVH4JjkXAoDvB34nR0i-G2CpwkRfiwph77xTDQ/viewform) with some proof that you are a student and we'll send you a discount code. This applies to anyone in any schooling, including evening classes and coding bootcamps!`,
+    content: `Absolutely! Drops an email at [hello@learnk8s.io](mailto:hello@learnk8s.io) with some proof that you are a student and we'll send you a discount code. This applies to anyone in any schooling, including evening classes and coding bootcamps!`,
   },
   {
     title: `What if I'm not thrilled?`,
-    content: `We want to make sure you get real value out of this, so we only want your money if you are happy with the product! If you aren't satisfied, within 30 days send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt and, we will refund you.`,
+    content: `We want to make sure you get real value out of this, so we only want your money if you are happy with the product! If you aren't satisfied, within 30 days, send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt and, we will refund you.`,
   },
   {
     title: `What are the prerequisites to join the Learnk8s Academy?`,
-    content: `You should be familiar with Bash/Powershell, git, curl and SSH. You should be familiar with web servers such as Apache or Nginx. Also, it helps if you used Vagrant and Virtual Box, in the past, but it's only a nice-to-have.`,
+    content: `You should be familiar with Bash/Powershell, git, grep, curl and SSH. You should be familiar with web servers such as Apache or Nginx. Also, it helps if you used Vagrant and Virtual Box, in the past, but it's only a nice-to-have.`,
   },
   {
     title: 'I have another question!',
@@ -110,6 +99,8 @@ setTimeout(ldinsp, 0);
 })();`,
           }}
         />
+      </Head>
+      <Body>
         <JsonLd<Course>
           item={{
             '@type': 'Course',
@@ -117,187 +108,61 @@ setTimeout(ldinsp, 0);
             name: 'Architecting and scaling apps on Kubernetes',
             courseCode: 'K8SARCH',
             description: 'Self-paced Kubernetes online course: become an expert in deploying applications at scale.',
-            educationalCredentialAwarded: 'CKAD (optional)',
+            educationalCredentialAwarded: 'Learnk8s Certificate of completion',
             provider: {
               '@type': 'Organization',
               name: 'Learnk8s',
             },
           }}
         />
-      </Head>
-      <Body>
-        <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
-          <Navbar />
 
-          <Hero image={<img src='assets/academy/academy.svg' alt='Learn Kubernetes online' />} imageClass='i-academy'>
-            <h1 className='f1 mt1-l pt5-l f-subheadline-l lh-solid'>Architecting and scaling apps on Kubernetes</h1>
-            <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>
-              A hands-on course on mastering containers and Kubernetes and the tools you'll need to build real, working
-              applications at scale.
-            </h2>
-          </Hero>
-        </div>
+        <Navbar />
 
-        <section className='ph3 ph4-ns flex items-center justify-center relative z3'>
-          <div className='w-50-l dn db-l tc'>
-            <div className='dib'>
-              <div className='i-rocks relative'>
-                <img
-                  src='assets/academy/rocks.svg'
-                  alt='You may feel stranded while learning Kubernetes'
-                  className='absolute top-0 right-0'
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className='w-50-l center pt3'>
-            <h2 className='f3 navy f2-l measure-narrow'>
-              What is <span className='i'>even</span> the point of Kubernetes?
-            </h2>
-            <div className='measure-wide'>
-              <p className='lh-copy f4-l black-70'>
-                You keep hearing people talking about Kubernetes as if it were the holy grail of tech.
-              </p>
-              <p className='lh-copy f4-l black-70'>
-                But every time you read the docs, you struggle to understand why you should spend time on it.
-              </p>
-              <p className='lh-copy f4-l black-70 b'>It' so complex.</p>
-              <p className='lh-copy f4-l black-70'>
-                How can it even compete with{' '}
-                <span className='code f6 bg-light-gray pa1 br2'>SSH → docker-compose up</span>?
-              </p>
-              <p className='lh-copy f4-l black-70 i'>That's only two commands!</p>
-              <p className='lh-copy f4-l black-70'>
-                But maybe you're convinced that <span className='b'>Kubernetes can handle Google kind of load</span> and
-                you should learn it.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className='ph3 ph4-ns flex items-center justify-center relative'>
-          <div className='w-40-l center pt3'>
-            <h2 className='f3 navy f2-l measure-narrow'>According to the experts</h2>
-            <div className='measure-wide'>
-              <p className='lh-copy f4-l black-70'>To work effectively within Kubernetes, you should understand:</p>
-              <ul>
-                <li className='lh-copy black-70 f4-l'>1. Docker (images, containers, volumes, layers, etc.)</li>
-                <li className='lh-copy black-70 f4-l'>
-                  2. Kubernetes fundamentals (pods, ingress, stateful sets, persistent volumes, etc.)
-                </li>
-                <li className='lh-copy black-70 f4-l'>3. Helm (for templating resources)</li>
-                <li className='lh-copy black-70 f4-l'>4. Ansible, Puppet and Chef to configure your nodes</li>
-                <li className='lh-copy black-70 f4-l'>5. Let's not forget your CI stack (Jenkins, Travis, etc.)</li>
-                <li className='lh-copy black-70 f4-l'>…</li>
-                <li className='lh-copy black-70 f4-l'>57. What is best CNI</li>
-                <li className='lh-copy black-70 f4-l'>58. How kubectl works</li>
-              </ul>
-              <p className='lh-copy f4-l black-70'>
-                Before you can deploy your <span className='i'>"Hello World"</span> app.
-              </p>
-              <p className='lh-copy f4-l black-70 b'>
-                It's getting to the point that no one person can be an expert in all of it, but what should you focus
-                on?
-              </p>
-            </div>
-          </div>
-
-          <div className='w-50-l dn db-l tc'>
-            <div className='dib'>
-              <div className='i-onfire relative'>
-                <img
-                  src='assets/academy/onfire.svg'
-                  alt={`In Kubernetes everything feels like it's on fire`}
-                  className='absolute top-0 right-0'
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className='ph3 ph4-ns flex items-center justify-center relative'>
-          <div className='w-50-l dn db-l tc'>
-            <div className='dib'>
-              <div className='i-nope relative'>
-                <img src='assets/academy/nope.svg' alt='Kubernetes is hard' className='absolute top-0 right-0' />
-              </div>
-            </div>
-          </div>
-
-          <div className='w-40-l center pt3'>
-            <h2 className='f3 navy f2-l measure-narrow'>Also, why is everyone so obsessed with building clusters?</h2>
-            <div className='measure-wide'>
-              <p className='lh-copy f4-l black-70'>
-                It seems that every Kubernetes tutorial out there is focussed on building a cluster from scratch — a
-                slight variation from Kubernetes The Hard Way.
-              </p>
-              <p className='lh-copy f4-l black-70 b'>
-                But what's the point of building a cluster from scratch if you don't know how to take advantage of it?
-              </p>
-              <p className='lh-copy f4-l black-70'>
-                How can you set the control manager flags if you don't know how the apps respond to that? (I'm looking
-                at you <span className='code f6 bg-light-gray pa1 br2'>--pod-eviction-timeout</span>)
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className='mv5 mv6-ns ph3'>
-          <h2 className='f3 f2-l navy measure-narrow center tc'>
-            Learn how to develop apps that scale to millions of users
-          </h2>
-          <div className='mw7 center'>
-            <p className='lh-copy f4-l black-70'>
-              In this course, you will learn how to design, develop and deploy applications in Kubernetes.
+        <Section>
+          <div className='mt4 measure f3-l f4 center'>
+            <h2 className='f1-l f2 navy'>A Kubernetes course built by engineers for engineers</h2>
+            <p className='measure f3-l f4 lh-copy center'>
+              The course, where you can learn how to design, develop and deploy applications in Kubernetes.
             </p>
-            <p className='lh-copy f4-l black-70'>And you will learn how to:</p>
-            <ul className='list numbered black-70 pl3 pt2'>
-              <li className='f4-l lh-copy mv2 cf'>
-                <p className='pl4 ml2 lh-copy measure mt0'>package apps in containers</p>
-              </li>
-              <li className='f4-l lh-copy mv2 cf'>
-                <p className='pl4 ml2 lh-copy measure mt0'>deploy apps on a Kubernetes cluster</p>
-              </li>
-              <li className='f4-l lh-copy mv2 cf'>
-                <p className='pl4 ml2 lh-copy measure mt0'>
-                  release apps to production using rolling updates, canary deployment, or blue-green deployments
-                </p>
-              </li>
-              <li className='f4-l lh-copy mv2 cf'>
-                <p className='pl4 ml2 lh-copy measure mt0'>
-                  expose your services using load balancers and ingress controllers
-                </p>
-              </li>
-              <li className='f4-l lh-copy mv2 cf'>
-                <p className='pl4 ml2 lh-copy measure mt0'>manage databases and stateful applications</p>
-              </li>
-              <li className='f4-l lh-copy mv2 cf'>
-                <p className='pl4 ml2 lh-copy measure mt0'>leverage database clustering using operators</p>
-              </li>
-              <li className='f4-l lh-copy mv2 cf'>
-                <p className='pl4 ml2 lh-copy measure mt0'>
-                  not repeat yourself using a templating engine for Kubernetes resources
-                </p>
-              </li>
+            <p className='measure f3-l f4 lh-copy center'>A course that:</p>
+            <ul className='list ph2'>
+              <ListItem>Prioritises hands-on material and challenges</ListItem>
+              <ListItem>Covers practical, day-to-day scenario rather than abstract use cases</ListItem>
+              <ListItem>
+                Goes in-depth enough to be useful, but without becoming a boring list of flags that you can tweak
+              </ListItem>
+              <ListItem>Get you up to speed quickly</ListItem>
+              <ListItem>Gives you the skills to be confident in deploying and managing production-grade apps</ListItem>
+            </ul>
+            <p className='measure f3-l f4 lh-copy center'>This course is not:</p>
+            <ul className='list ph2'>
+              <ListItemX>
+                <span className='b'>A "watch the videos, and you become an expert" course.</span> There are no videos,
+                and there are no experts in Kubernetes who learnt that way
+              </ListItemX>
+              <ListItemX>
+                <span className='b'>Only about building clusters.</span> Clusters should be configured to support the
+                apps deploying on it, not the other way around.
+              </ListItemX>
             </ul>
           </div>
-        </section>
+        </Section>
 
-        <section className='bg-evian pt4'>
+        <section className='bg-evian pv4'>
           <p className='f3 f2-l navy b tc'>What's inside</p>
-          <ul className='flex flex-wrap pl0 mw7 center ph3'>
-            <ListItem className='w-50'>Content-based, hands-on tutorials</ListItem>
-            <ListItem className='w-50'>6 courses with ebooks</ListItem>
-            <ListItem className='w-50'>
-              Concise lectures with plenty of diagrams <span className='i'>(great if you are a visual learner)</span>
+          <ul className='flex-l flex-wrap-l pl0 mw8 center ph3'>
+            <ListItem className='w-50-l'>Content-based, hands-on labs</ListItem>
+            <ListItem className='w-50-l'>3 courses with ebooks</ListItem>
+            <ListItem className='w-50-l'>
+              Concise lectures with plenty of diagrams{' '}
+              <span className='i underline'>(great if you are a visual learner)</span>
             </ListItem>
-            <ListItem className='w-50'>Interactive challenges for beginners and experts</ListItem>
+            <ListItem className='w-50-l'>Interactive challenges for beginners and experts</ListItem>
           </ul>
 
-          <div className='ma3 ma5-l pa3 mt0-l'>
+          <div className='mv3 mv5-l mt0-l mw8 center'>
             <Module
-              preview={[materialAssets.docker.docker, materialAssets.docker.containersVMs]}
+              preview={material.docker.cover}
               title={`1. ${material.docker.name}`}
               description={material.docker.description}
             >
@@ -315,10 +180,7 @@ setTimeout(ldinsp, 0);
             </Module>
 
             <Module
-              preview={[
-                materialAssets.kubernetesFundamentals.apiInfrastructure,
-                materialAssets.kubernetesFundamentals.tetrisPlayer,
-              ]}
+              preview={material.kubernetesFundamentals.cover}
               title={`2. ${material.kubernetesFundamentals.name}`}
               description={material.kubernetesFundamentals.description}
             >
@@ -336,10 +198,7 @@ setTimeout(ldinsp, 0);
             </Module>
 
             <Module
-              preview={[
-                materialAssets.deploymentStrategies.livenessProbe,
-                materialAssets.deploymentStrategies.rollingUpdates,
-              ]}
+              preview={material.deploymentStrategies.cover}
               title={`3. ${material.deploymentStrategies.name}`}
               description={material.deploymentStrategies.description}
             >
@@ -356,368 +215,176 @@ setTimeout(ldinsp, 0);
               </ul>
             </Module>
 
-            <Module
-              preview={[
-                materialAssets.managingState.clusteredDatabase,
-                materialAssets.managingState.distributedStorage,
-              ]}
-              title={`4. ${material.managingState.name}`}
-              description={material.managingState.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn how to persist data in Kubernetes. The module covers the following topics:
-              </p>
-              <ul>
-                {Object.values(material.managingState.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </Module>
-
-            <Module
-              preview={[materialAssets.templating.helmArchitecture, materialAssets.templating.reusableTemplates]}
-              title={`5. ${material.templating.name}`}
-              description={material.templating.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn how to template resources for different environments. The module covers the following
-                topics:
-              </p>
-              <ul>
-                {Object.values(material.templating.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </Module>
-
-            <Module
-              preview={[materialAssets.autoscaling.intro, materialAssets.autoscaling.registry]}
-              title={`6. ${material.autoscaling.name}`}
-              description={material.autoscaling.description}
-              className='ribbon-module'
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn how to autoscale your applications based on CPU, memory and application-specific custom
-                metrics. The module covers the following topics:
-              </p>
-              <ul>
-                {Object.values(material.autoscaling.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </Module>
             <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
           </div>
         </section>
 
-        <section className='mv5 mv6-ns ph3'>
-          <h2 className='f3 f2-l navy measure-wide center tc'>The Learnk8s Academy Guarantee: Our promise to you</h2>
+        <Section>
+          <div className='mt4 measure f3-l f4 center'>
+            <h2 className='f1-l f2 navy'>You will enjoy the courses, according to our students</h2>
+            <p className='measure f3-l f4 lh-copy center'>Here is the feedback from our students.</p>
+            <ul className='list pl0'>
+              <li className='mv5'>
+                {React.createElement('img', {
+                  src: 'assets/academy/testimonial1.png',
+                  alt: 'Testimonial',
+                  loading: 'lazy',
+                  className: 'shadow-4',
+                })}
+                <p className='f5 lh-copy bt pv2 ph4 bw1 b--light-gray bg-evian'>
+                  That's the response from Shawn when Daniele reached him out and offered to help on the material.
+                </p>
+              </li>
+              <li className='mv5'>
+                <img src='assets/academy/testimonial2.png' alt='Testimonial' className='shadow-4' />
+                <p className='f5 lh-copy bt pv2 ph4 bw1 b--light-gray bg-evian'>
+                  We keep the Academy always up to date with the latest changes and Rudolf noticed that immediately.
+                </p>
+              </li>
+              <li className='mv5'>
+                {React.createElement('img', {
+                  src: 'assets/academy/testimonial3.png',
+                  alt: 'Testimonial',
+                  loading: 'lazy',
+                  className: 'shadow-4',
+                })}
+                <p className='f5 lh-copy bt pv2 ph4 bw1 b--light-gray bg-evian'>
+                  Karl was looking for an in-depth course to learn Kubernetes inside-out and kept us updated with his
+                  progress.
+                </p>
+                <div className='flex-l'>
+                  <div className='w-50-l'>
+                    {React.createElement('img', {
+                      src: 'assets/academy/testimonial3b.png',
+                      alt: 'Testimonial',
+                      loading: 'lazy',
+                      className: 'shadow-4',
+                    })}
+                  </div>
+                  <div className='w-50-l'>
+                    {React.createElement('img', {
+                      src: 'assets/academy/testimonial3c.png',
+                      alt: 'Testimonial',
+                      loading: 'lazy',
+                      className: 'shadow-4',
+                    })}
+                  </div>
+                </div>
+                <p className='f5 lh-copy bt pv2 ph4 bw1 b--light-gray bg-evian'>
+                  Karl was impressed by the quality of the content and enjoy practising with the hands-on labs and
+                  challenges.
+                </p>
+              </li>
+              <li className='mv5'>
+                {React.createElement('img', {
+                  src: 'assets/academy/testimonial4.png',
+                  alt: 'Testimonial',
+                  loading: 'lazy',
+                  className: 'shadow-4',
+                })}
+                <p className='f5 lh-copy bt pv2 ph4 bw1 b--light-gray bg-evian'>
+                  The Learnk8s Academy courses are excellent if you're a beginner and wish to get started with
+                  containers and Kubernetes.
+                </p>
+              </li>
+            </ul>
+          </div>
+        </Section>
+
+        <section className='pv4 bg-evian' id='start'>
+          <p className='center f1-l f2 navy b tc ph3 measure-narrow'>Get instant access to the courses</p>
+          <p className='lh-copy f4-l black-70 measure center tc ph3 mb5'>Choose the package that works best for you.</p>
+
+          <div className='flex justify-center'>
+            <div className='bg-white br4 mh3 ph3 pb3'>
+              <h2 className='lh-copy f2 navy tc'>Complete series</h2>
+              <p className='f2 navy tc mv4 bs'>
+                <span className='db' id='pricing-one'>
+                  {(187).toLocaleString('US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })}
+                </span>
+              </p>
+              <ul className='list ph2'>
+                <ListItem>All in-depth 3 courses</ListItem>
+                <ListItem>Ebooks for offline reading</ListItem>
+                <ListItem>Hands-on guided labs</ListItem>
+                <ListItem>Practice with real challenges</ListItem>
+                <ListItem>One time fee, lifetime updates</ListItem>
+              </ul>
+              <p className='tc mt4'>
+                <a
+                  href='https://academy.learnk8s.io/architecting-bundle'
+                  className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                  target='_self'
+                  ref='noreferrer'
+                >
+                  Buy now →
+                </a>
+              </p>
+            </div>
+
+            <div className='bg-white br4 mh3 ph3 pb3'>
+              <h2 className='lh-copy f2 navy tc'>
+                Complete series<sup>++</sup>
+              </h2>
+              <p className='f2 navy tc mv4 bs'>
+                <span className='db' id='pricing-one'>
+                  {(347).toLocaleString('US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })}
+                </span>
+              </p>
+              <ul className='list ph2'>
+                <ListItem>All in-depth 3 courses</ListItem>
+                <ListItem>Ebooks for offline reading</ListItem>
+                <ListItem>Hands-on guided labs</ListItem>
+                <ListItem>Practice with real challenges</ListItem>
+                <ListItem>One time fee, lifetime updates</ListItem>
+                <ListItem>
+                  <span className='b'>1-on-1 coaching session</span>
+                </ListItem>
+              </ul>
+              <p className='tc mt4'>
+                <a
+                  href='https://academy.learnk8s.io/architecting-bundle'
+                  className='no-underline dib ba b--sky sky br1 pv3 ph4 b f4 br2'
+                  target='_self'
+                  ref='noreferrer'
+                >
+                  Buy now →
+                </a>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <Section className='bg-evian'>
+          <div className='f3 measure center tc'>
+            <h2 className='f1-l f2 navy navy'>The Learnk8s Academy Guarantee: Our promise to you</h2>
+          </div>
           <div className='mw7 center'>
-            <p className='lh-copy f4-l black-70 b mb1 mt5-l mt4'>
+            <p className='lh-copy f3-l f4 black-70 b mb1 mt5-l mt4'>
               We care more about our students' success than taking their money.
             </p>
-            <p className='lh-copy f4-l black-70 mt1'>
+            <p className='lh-copy f3-l f4 black-70 mt1'>
               If you follow the lectures and practise the material and still DO NOT feel like you are making progress 30
               days after you begin doing the work, we will try to work with you to identify what's missing. And if that
               doesn't work, we'll give you a full refund.
             </p>
-            <p className='lh-copy f4-l black-70 b mb1 mt5-l mt4'>
+            <p className='lh-copy f3-l f4 black-70 b mb1 mt5-l mt4'>
               We're honest to the end about the level of effort, skills, and other ingredients required.
             </p>
-            <p className='lh-copy f4-l black-70 mt1'>
-              This is not a <span className='i'>"master Kubernetes in 3 hours"</span> or{' '}
-              <span className='i'>watch someone else deploying containers in Kubernetes</span> video course. Completing
-              the Learnk8s Academy's modules takes time and effort… <span className='b'>but it does work.</span> The
-              learning curve is steep; then, the plateau of usefulness is very long and smooth. It's a great feeling
-              operating Kubernetes after you've mastered it.
+            <p className='lh-copy f3-l f4 black-70 mt1'>
+              This is not a <span className='i'>watch someone else deploying containers in Kubernetes</span> video
+              course. Completing the Learnk8s Academy's modules takes time and effort…{' '}
+              <span className='b'>but it does work.</span> The learning curve is steep; then, the plateau of usefulness
+              is very long and smooth. It's a great feeling operating Kubernetes after you've mastered it.
             </p>
           </div>
-        </section>
-
-        <section className='pv4 bg-evian'>
-          <p className='center f3 f2-l navy b tc ph3 measure-narrow'>Start your Kubernetes journey now</p>
-          <p className='lh-copy f4-l black-70 measure center tc ph3 mb5'>
-            Join the Learnk8s Academy and learn how to deploy and manage applications at scale with Kubernetes.
-          </p>
-
-          <section className='flex mw8 center more-content mb5'>
-            <div className='left w-30 mw5'>
-              <div className='pl3'>
-                <div className='overflow-hidden'>
-                  <div className='w5'>
-                    <div className='h2 mb3'>&nbsp;</div>
-                    <div className='aspect-ratio aspect-ratio--4x3'>&nbsp;</div>
-                  </div>
-                </div>
-                <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center b pl2'>Courses</p>
-                <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center bg-white pl2 b'>Ebooks</p>
-                <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center b pl2'>Online material</p>
-                <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center bg-white pl2 b'>Online challenges</p>
-                <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center b pl2'>Certificate of completion</p>
-                <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center bg-white pl2 b'>Lifetime updates</p>
-                <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center b pl2'>CKAD tips and tricks</p>
-                <p className='f6 f5-l black-60 lh-copy h3 ma0 flex items-center bg-white pl2 b'>Discounted CKAD</p>
-              </div>
-            </div>
-            <div className='right mw7 overflow-auto'>
-              <div className='flex w7'>
-                <div className='w5'>
-                  <div className='header h2 mb3'>
-                    <h2 className='f3 tc navy mt0'>Professional</h2>
-                  </div>
-                  <div className='aspect-ratio aspect-ratio--4x3'>
-                    <img
-                      src='assets/academy/full-package.svg'
-                      alt='The full package'
-                      className='aspect-ratio--object'
-                    />
-                  </div>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>6</p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>20%</p>
-                  <div>
-                    <p className='f3 navy tc mv4 bs'>
-                      <span className='db' id='architecting-full'>
-                        {(597).toLocaleString('US', {
-                          style: 'currency',
-                          currency: 'USD',
-                        })}
-                      </span>
-                    </p>
-                    <div className='tc'>
-                      <a
-                        href='https://academy.learnk8s.io/architecting-full'
-                        className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
-                        target='_self'
-                        ref='noreferrer'
-                      >
-                        Buy now →
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div className='w5'>
-                  <div className='header h2 mb3'>
-                    <h2 className='f3 tc navy mt0'>Expert</h2>
-                  </div>
-                  <div className='aspect-ratio aspect-ratio--4x3'>
-                    <img
-                      src='assets/academy/expert-package.svg'
-                      alt='The expert package'
-                      className='aspect-ratio--object'
-                    />
-                  </div>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>6</p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>&nbsp;</p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>&nbsp;</p>
-                  <div>
-                    <p className='f3 navy tc mv4 bs'>
-                      <span className='db' id='architecting-expert'>
-                        {(397).toLocaleString('US', {
-                          style: 'currency',
-                          currency: 'USD',
-                        })}
-                      </span>
-                    </p>
-                    <div className='tc'>
-                      <a
-                        href='https://academy.learnk8s.io/architecting-expert'
-                        className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
-                        target='_self'
-                        ref='noreferrer'
-                      >
-                        Buy now →
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div className='w5'>
-                  <div className='header h2 mb3'>
-                    <h2 className='f3 tc navy mt0'>Beginner</h2>
-                  </div>
-                  <div className='aspect-ratio aspect-ratio--4x3'>
-                    <img
-                      src='assets/academy/ebooks-bundle.png'
-                      alt='The eBooks bundle'
-                      className='aspect-ratio--object'
-                    />
-                  </div>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center b'>4</p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>
-                    <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-                  </p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>&nbsp;</p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>&nbsp;</p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>&nbsp;</p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white'>&nbsp;</p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center'>&nbsp;</p>
-                  <p className='black-80 lh-copy h3 ma0 flex items-center justify-center bg-white b'>&nbsp;</p>
-                  <div>
-                    <p className='f3 navy tc mv4 bs'>
-                      <span className='db' id='architecting-bundle'>
-                        {(121).toLocaleString('US', {
-                          style: 'currency',
-                          currency: 'USD',
-                        })}
-                      </span>
-                    </p>
-                    <div className='tc'>
-                      <a
-                        href='https://academy.learnk8s.io/architecting-bundle'
-                        className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
-                        target='_self'
-                        ref='noreferrer'
-                      >
-                        Buy now →
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <div className='tc pv4'>
-            <a href={mailto(enterprisePackage)} className='f7 black-70 no-underline'>
-              Learnk8s offers competitive corporate prices.{' '}
-              <span className='underline'>Get in touch to learn more.</span>
-            </a>
-          </div>
-        </section>
-
-        <section className='mt5 mb4'>
-          <p className='f3 f2-l navy b tc'>Learnk8s trains over 300+ engineers per year in Kubernetes</p>
-          <p className='lh-copy f4-l black-70 measure center tc ph3 pb4'>
-            The systems, techniques, and processes you'll learn in the Learnk8s Academy have been developed over 2+
-            years during our hands-on, instructor-led workshops.
-          </p>
-          <div className='feedback tc'>
-            <Feedback
-              className='mw5 dib mv3'
-              author='Mauricio Salatino'
-              role='Activiti Cloud Team Lead'
-              description='The course is totally worth the money and time, if you have a team that is getting started with Kubernetes and want to validate the approach that you are taking as well as to level up your knowledge on K8s, this is the way to go.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Marcello Teodori'
-              role='Architect'
-              description='This is the course you have to do to put all the pieces in the right place and challenge yourself to really master your knowledge of Kubernetes. Wish I had done it long ago.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Yawwani Gunawardaba'
-              role='Data Scientist'
-              description='Good course with practical labs.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Sandeep Sarthavalli Ramesh'
-              role='Software developer'
-              description='A good course to get started with Kubernetes with enough confidence to deploy, debug and progress in the world of k8s.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='David Heward'
-              role='Senior DevOps Engineer'
-              description='A really enjoyable 3-day workshop on Kubernetes. I cemented my understanding of Kubernetes and can now start implementing and furthering my knowledge with real examples and workflows. Next stop, production experience.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Chris Cooney'
-              role='Senior Software Engineer'
-              description={`We previously had a couple of people talking about Kubernetes in the pub. Now half the office are raving about it. I don't think reading documentation alone would have done that for us, it needed some people to come in and show us what is possible, validate the ideas we've already had and give us guidance on where to go next. Now everyone has a clear, shared vision and a mission. All that's left is to take the first few steps.`}
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Luke Anderson'
-              role='Senior IT Engineer'
-              description='It is an excellent course covering a wide range of Kubernetes concepts, that will give you more than enough knowledge to go back to experiment and be productive with Kubernetes.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Mark Gardiner'
-              role='Infrastructure Developer'
-              description='This is very intensive course, particularly if you are new to cloud computing or networking concepts.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Przemek Anuszek'
-              role='Cloud architect'
-              description='The training is very well prepared and also very well performed.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Eda Meadows'
-              role='Polyglott Developer'
-              description='Clear, good explanations with good use of diagrams.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Sara Aspery'
-              role='Software Engineer'
-              description='Be prepared to learn a lot and enjoy the hands-on sessions.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Ryan Dawson'
-              role='Software Developer'
-              description='Learnk8s know this stuff, have put a lot of thought into the course and will put a lot of thought into your questions too!'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Grant Hammond'
-              role='Senior Linux Engineer'
-              description='Essential knowledge. I mostly enjoyed finding out how the components were doing their thing under the hood and how traffic is/was actually being shunted around.'
-            />
-            <Feedback
-              className='mw5 dib mv3'
-              author='Antonio Troina'
-              role='Senior Software Developer'
-              description='Great experience. Going back to the office with a much better understanding of the topic. Useful exercises, great Q&A session with clarification.'
-            />
-          </div>
-        </section>
+        </Section>
 
         <FAQs faqs={faqs} />
 
@@ -746,7 +413,7 @@ request.onload = function() {
         var discount = document.querySelector('#' + key + '-discount')
         if (!!discount) {
           var price = resp[key]
-          discount.innerHTML = Math.ceil(price.gross * 0.7).toLocaleString(price.country, {
+          discount.innerHTML = Math.ceil(price.gross * 0.5).toLocaleString(price.country, {
             style: 'currency',
             currency: price.currency,
           })
@@ -764,6 +431,37 @@ request.send();
       `,
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+var endsIn = [].slice.call(document.querySelectorAll('.ends-in'))
+var countDownDate = new Date('2019-12-05').getTime()
+setInterval(function () {
+  var now = new Date().getTime()
+  var distance = countDownDate - now
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+  for (let i = 0, len = endsIn.length; i < len; i++) {
+    if (distance < 0) {
+      endsIn[i].innerHTML = '00:00:00'
+    } else {
+      endsIn[i].innerHTML = pad(hours) + ":" + pad(minutes) + ":" + pad(seconds)
+    }
+  }
+  function pad(n) {
+    return ('' + n).length === 1 ? '0' + n : n
+  }
+}, 1000)
+            `,
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({c: 'c062c959-f796-45f5-a451-e24c09b4df27', f: true }); done = true; } }; })();`,
+          }}
+          data-cfasync='false'
+        />
       </Body>
     </Html>
   )
@@ -780,15 +478,15 @@ export const Item: React.StatelessComponent<{ tick: JSX.Element }> = ({ children
   )
 }
 
-export const Module: React.StatelessComponent<{
+const Module: React.StatelessComponent<{
   title: string
   description: string
-  preview: JSX.Element[]
+  preview: JSX.Element
   className?: string
 }> = ({ children, title, description, preview, className }) => {
   const id = title.toLowerCase().replace(/[^\w]+/g, '-')
   return (
-    <div className={`mh3 ${className}`}>
+    <div className={`mh3 ${className || ''}`}>
       <div className='module pt3 pb4 ph4 shadow-2 mv4 bg-white flex items-start'>
         <div className='w-50-ns'>
           <p className='f3 navy b bb b--black-20 pb3'>{title}</p>
@@ -812,16 +510,15 @@ export const Module: React.StatelessComponent<{
             <div className={`details details-${id}`}>{children}</div>
           </div>
         </div>
-        <div className='w-50 flex-ns flex-wrap items-start pt3 dn'>
-          {preview.map(it => {
-            return (
-              <div className='w-80 w-50-l center'>
-                <div className='aspect-ratio aspect-ratio--4x3'>
-                  <img src={it.props.src} alt={it.props.alt} className='aspect-ratio--object' />
-                </div>
-              </div>
-            )
-          })}
+        <div className='w-50 pa4'>
+          <div className='aspect-ratio aspect-ratio--7x5 shadow-4'>
+            {React.createElement('img', {
+              src: preview.props.src,
+              alt: preview.props.alt,
+              loading: 'lazy',
+              className: 'aspect-ratio--object',
+            })}
+          </div>
         </div>
       </div>
     </div>
@@ -843,6 +540,81 @@ export const Feedback: React.StatelessComponent<{
       </p>
     </div>
   )
+}
+
+export const ListItemQuestion: React.StatelessComponent<{}> = ({ children }) => {
+  return (
+    <li className='mv3 flex justify-center'>
+      <div className='v-top tc'>
+        <img src='assets/question.svg' alt='Question' className='w2 h2' />
+      </div>
+      <div className='v-top pl3 w-90'>
+        <p className='mv0 f4-l lh-copy black-70'>{children}</p>
+      </div>
+    </li>
+  )
+}
+
+const ListItem: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
+  return (
+    <li className={`mv2 flex justify-center ${className || ''}`}>
+      <div className='v-top tc'>
+        <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+      </div>
+      <div className='v-top pl3 w-90'>
+        <p className='mv0 f3-l f4 lh-copy black-80'>{children}</p>
+      </div>
+    </li>
+  )
+}
+
+const ListItemX: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
+  return (
+    <li className={`mv2 flex justify-center ${className || ''}`}>
+      <div className='v-top tc'>
+        <img src='assets/x.svg' alt='Tick' className='w2 h2' />
+      </div>
+      <div className='v-top pl3 w-90'>
+        <p className='mv0 f3-l f4 lh-copy black-80'>{children}</p>
+      </div>
+    </li>
+  )
+}
+
+const Quiz: React.StatelessComponent<{
+  className?: string
+  correctAnswer: 'yes' | 'no'
+  id: string
+  labelYes: string
+  labelNo: string
+}> = ({ id, children, className, correctAnswer, labelYes, labelNo }) => {
+  return (
+    <div className={`yesno ${correctAnswer === 'yes' ? 'first-right' : 'second-right'} ${className || ''}`}>
+      <input type='radio' name={id} id={`yes-${id}`} className='dn yes' />
+      <input type='radio' name={id} id={`no-${id}`} className='dn no' />
+      <ol className='ph5-l ph2 list'>
+        <li className='yes mv2 pa2 br2'>
+          <label htmlFor={`yes-${id}`} className='h2 flex items-center'>
+            <span className='radio ba w2 h2 br-100 bw1 v-mid dib' />
+            <span className='pl3 f3-l f4'>{labelYes}</span>
+          </label>
+        </li>
+        <li className='no mv2 pa2 br2'>
+          <label htmlFor={`no-${id}`} className='h2 flex items-center'>
+            <span className='radio ba w2 h2 br-100 bw1 v-mid dib' />
+
+            <span className='pl3 f3-l f4'>{labelNo}</span>
+          </label>
+        </li>
+      </ol>
+      <p className='pt3 f5-l f6 ttu lh-copy b'>Answer:</p>
+      <div className='answer'>{children}</div>
+    </div>
+  )
+}
+
+const Section: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
+  return <section className={`pv4 black-80 ph3 ${className || ''}`}>{children}</section>
 }
 
 function CreateToggle() {
@@ -877,60 +649,4 @@ function CreateToggle() {
     })
   })
   ;[].slice.call(document.querySelectorAll('[data-toggle-collapsed]')).forEach(Toggle)
-}
-
-export const ListItemQuestion: React.StatelessComponent<{}> = ({ children }) => {
-  return (
-    <li className='mv3 flex justify-center'>
-      <div className='v-top tc'>
-        <img src='assets/question.svg' alt='Question' className='w2 h2' />
-      </div>
-      <div className='v-top pl3 w-90'>
-        <p className='mv0 f4-l lh-copy black-70'>{children}</p>
-      </div>
-    </li>
-  )
-}
-
-const ComingSoon: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
-  return (
-    <React.Fragment>
-      <p className='lh-solid navy b ttu tc f4 mb1 mt5'>Coming soon</p>
-      <p className='lh-copy black-70 tc f6 mt2'>
-        Release date: 19<span className='f7 v-top'>th</span> of September 2019
-      </p>
-      <div className='measure center bg-evian ph4 pt2 pb4 b--blue bl bw2'>
-        <p className='lh-copy black-70'>
-          Subscribers to the Learnk8s newsletter will receive a discount ahead of the announcement.
-        </p>
-        <a href='https://learnk8s.io/newsletter' target='_blank' rel='noreferrer' className='navy underline'>
-          Subscribe now →
-        </a>
-      </div>
-    </React.Fragment>
-  )
-}
-
-const MiniComingSoon: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
-  return (
-    <React.Fragment>
-      <p className='lh-solid navy b ttu f4 mb1 mt5'>Coming soon</p>
-      <p className='lh-copy black-70 f6 mt2'>
-        Release date: 19<span className='f7 v-top'>th</span> of September 2019
-      </p>
-    </React.Fragment>
-  )
-}
-
-const ListItem: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
-  return (
-    <li className={`mv2 flex justify-center ${className || ''}`}>
-      <div className='v-top tc'>
-        <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-      </div>
-      <div className='v-top pl3 w-90'>
-        <p className='mv0 f4-l lh-copy black-80'>{children}</p>
-      </div>
-    </li>
-  )
 }
