@@ -204,8 +204,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|TORONTO|20200129',
-      startAt: '2020-01-29T09:30:00',
-      endsAt: '2020-01-31T05:00:00',
+      startAt: '2020-02-10T09:30:00',
+      endsAt: '2020-02-12T05:00:00',
       timezone: 'America/Toronto',
       courseId: Courses.threeDays.id,
       priceId: CoursePrice.Canada.id,
@@ -216,8 +216,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SANFRANCISCO|20200203',
-      startAt: '2020-02-10T09:30:00',
-      endsAt: '2020-02-12T05:00:00',
+      startAt: '2020-02-17T09:30:00',
+      endsAt: '2020-02-19T05:00:00',
       timezone: 'America/Los_Angeles',
       courseId: Courses.threeDays.id,
       priceId: CoursePrice.UnitedStates.id,
