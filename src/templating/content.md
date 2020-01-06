@@ -79,6 +79,23 @@ If you have only a handful variables that you wish to change, you might want to 
 
 > The CLI `yq` is similar to another more popular tool called `jq` that focuses on JSON instead of YAML.
 
+You can install `yq` on macOS with:
+
+```terminal|command=1|title=bash
+brew install yq
+```
+
+On Linux with:
+
+```terminal|command=1-2|title=bash
+sudo add-apt-repository ppa:rmescandon/yq
+sudo apt-get install yq
+```
+
+> In case you don't have the `add-apt-repository` command installed, you can install it with `apt-get install software-properties-common`.
+
+If you're on Windows, you can [download the executable from Github](https://github.com/mikefarah/yq/releases).
+
 ## Templating with yq
 
 `yq` takes a YAML file as input and can:
@@ -109,7 +126,7 @@ spec:
 You could read the value for the environment variable `ENV` with:
 
 ```terminal|command=1|title=bash
-yq r pod.yaml spec.containers[0].env[0].value
+yq r pod.yaml 'spec.containers[0].env[0].value'
 production
 ```
 
@@ -213,6 +230,8 @@ spec:
       - containerPort: 80
 ```
 
+> Please note that `yq` sorts the YAML fields in the output alphabetically, so the order of fields in your output could be different from above listing.
+
 In other words, the two YAML files are merged into one.
 
 While the example shows a convenient strategy to compose complex YAML from basic files, it also shows some of the limitations of `yq`:
@@ -269,10 +288,10 @@ resources:
   - pod.yaml
 ```
 
-You can execute the kustomize to render the YAML template:
+You can then execute the kustomize command by passing it the directory where your `kustomization.yaml` file resides as an argument:
 
 ```terminal|command=1|title=bash
-kubectl kustomize prod
+kubectl kustomize .
 apiVersion: v1
 kind: Pod
 metadata:
@@ -321,7 +340,7 @@ patchesStrategicMerge:
 If you rerun the command, the output should be a Pod with two containers:
 
 ```terminal|command=1|title=bash
-kubectl kustomize prod
+kubectl kustomize .
 apiVersion: v1
 kind: Pod
 metadata:
@@ -339,7 +358,7 @@ spec:
     name: test-container
 ```
 
-The patch functionality works in a similar way of `yq`, but setup for kustomize is more verbose.
+The patch functionality works in a similar way as `yq merge`, but setup for kustomize is more verbose.
 
 _Should you stop using kustomize in favour or `yq`?_
 
@@ -364,9 +383,9 @@ patchesStrategicMerge:
   - pod-patch-env.yaml
 ```
 
-The new configuration extends the base configuration `prod`, so there's no need to reapply all patches.
+The new configuration extends the base configuration in the `prod` directory, so there's no need to recreate all patches in the `dev` directory.
 
-Instead, you can create a single YAML file that changes the environment variable:
+Instead, you can create a single patch in the `dev` directory that changes the value of the environment variable:
 
 ```yaml|title=pod-patch-env.yaml
 apiVersion: v1
@@ -384,7 +403,7 @@ spec:
 If you run kustomize this time, the output will be different:
 
 ```terminal|command=1|title=bash
-kubectl kustomize dev
+kubectl kustomize .
 apiVersion: v1
 kind: Pod
 metadata:
@@ -421,7 +440,7 @@ You have to write YAML files to change even a single value — unlike `yq`.
 
 _Is there an alternative to Kustomize and `yq` that is flexible and structured?_
 
-## Writing YAML with code
+## Generating resource manifests with code
 
 You could generate YAML programatically with code.
 
@@ -431,7 +450,7 @@ Kubernetes has several official libraries where you can create objects such as D
 
 > Please note that since Kubernetes uses an OpenAPI, you can autogenerate a library for your favourite language — if there isn't one already.
 
-As an example, let's have a look at how you can use Javascript to create a Pod and programatically change it.
+As an example, let's have a look at how you can use JavaScript to generate a Kubernetes Pod definition.
 
 ```js|title=pod.js
 const { Pod, Container } = require('kubernetes-models/v1')
@@ -481,7 +500,7 @@ node pod.js
 }
 ```
 
-The output is a Pod, but it's in JSON and not YAML.
+The output is a Pod definition in JSON.
 
 That shouldn't be a problem because:
 
@@ -492,7 +511,7 @@ _What if you want to change the environment variable?_
 
 Since this is just code, you can use native constructs:
 
-```js|title=pod.js
+```js|highlight=12|title=pod.js
 const { Pod, Container } = require('kubernetes-models/v1')
 
 const pod = new Pod({
@@ -540,7 +559,13 @@ ENV=dev node pod.js
 }
 ```
 
-You could also skip `kubectl` all together and submit the JSON to your cluster.
+You could save the above output in a file named `pod.json` and then create the Pod in the cluster with `kubectl`:
+
+```terminal|command=1|title=bash
+kubectl apply -f pod.json
+```
+
+You could also skip `kubectl` all together and submit the JSON to your cluster directly.
 
 Using the official Javascript library, you could have the following code:
 
