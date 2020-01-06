@@ -1,10 +1,9 @@
-import React from 'react'
-import { Mjml, MjmlHead, MjmlTitle, MjmlPreview, MjmlBody, MjmlSection, render } from 'mjml-react'
 import marked from 'marked'
 import { cat } from 'shelljs'
 import { ok } from 'assert'
 import { existsSync } from 'fs'
 import commander from 'commander'
+import mjml2html from 'mjml'
 
 commander
   .version('1.0.0')
@@ -37,31 +36,16 @@ renderer.link = (href: string, title: string, text: string) => {
     : `<a href="${href}">${text}</a>`
 }
 
-export const NewsletterLayout: React.StatelessComponent<{ title: string; preview?: string; content: string }> = ({
-  title,
-  preview,
-  content,
-}) => {
-  return (
-    <Mjml>
-      <MjmlHead>
-        <MjmlTitle>{title}</MjmlTitle>
-        {!!preview ? <MjmlPreview>{preview}</MjmlPreview> : null}
-      </MjmlHead>
-      <MjmlBody width={600}>
-        <MjmlSection>
-          <Md content={content} />
-        </MjmlSection>
-      </MjmlBody>
-    </Mjml>
-  )
-}
+const newsletter = (title: string, content: string, preview?: string) => `<mjml>
+<mj-head>
+  <mj-title>${title}</mj-title>
+  ${!!preview ? `<mj-preview>${preview}</mj-preview>` : ''}
+</mj-head>
+<mj-body width="600px">
+  <mj-section>
+    <mj-column>${marked(content, { renderer })}</mj-column>
+  </mj-section>
+</mj-body>
+<mjml>`
 
-export const Md: React.StatelessComponent<{ content: string }> = ({ content }) => {
-  return React.createElement('mj-column', { dangerouslySetInnerHTML: { __html: `${marked(content, { renderer })}` } })
-}
-
-const newsletter = (
-  <NewsletterLayout title={commander.title} preview={commander.preview} content={cat(commander.md).toString()} />
-)
-console.log(render(newsletter).html)
+console.log(mjml2html(newsletter(commander.title, cat(commander.md).toString(), commander.preview)).html)
