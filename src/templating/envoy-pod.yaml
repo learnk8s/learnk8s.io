@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: envoy-pod
+spec:
+  containers:
+  - name: proxy-container
+    image: envoyproxy/envoy:v1.12.2
+    ports:
+      - containerPort: 80

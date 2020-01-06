@@ -30,10 +30,11 @@ import * as AdvancedKubectl from './advancedKubectl/advancedKubectl'
 import * as TerraformAks from './terraformAks/terraformAks'
 import * as ZeroToK8sJs from './02k8sjs/02k8sjs'
 import * as Troubleshooting from './troubleshooting/troubleshooting'
+import * as Templating from './templating/templating'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedArticles from './bite-sized-articles'
-import { store, State, Actions } from './store'
+import { State, Actions } from './store'
 import * as Courses from './courses'
 import * as Training from './training.v2'
 import * as BestPractices from './best-practices/best'
@@ -78,4 +79,5 @@ export function register(store: Store<State, Actions>) {
   AdvancedInPractice.Register(store)
   MicroservicesAtScale.Register(store)
   ExploringKubernetes.Register(store)
+  Templating.Register(store)
 }
