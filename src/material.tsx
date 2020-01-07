@@ -2,6 +2,7 @@ import * as React from 'react'
 
 const content = {
   docker: {
+    id: 'LK8S-CONTAINERS',
     name: 'Linux containers and Kubernetes',
     description: `Kubernetes doesn't know how to deploy apps written in languages such as Java, Node.js, or .NET. Instead, it only understands and uses Linux containers. But how do these Linux containers work? Are those strictly necessary to master Kubernetes? In this course, you will familiarise yourself with containers and Docker.`,
     cover: <img src='assets/material/cover_containers.svg' alt='Linux containers and Kubernetes' />,
@@ -53,6 +54,7 @@ const content = {
     },
   },
   kubernetesFundamentals: {
+    id: 'LK8S-FUNDAMENTALS',
     name: 'Kubernetes fundamentals',
     description:
       'In this course, you will learn how to build, deploy and scale your application in a Kubernetes cluster. You will also learn how to declare and schedule resources to the cluster and understand how to expose architect apps that are designed to be horizontally scalable.',
@@ -109,6 +111,7 @@ const content = {
     },
   },
   deploymentStrategies: {
+    id: 'LK8S-ADVANCED-DEPLOYMENTS',
     name: 'Deployment strategies',
     description: `Every time you deploy new features in production, you shouldn't stop your app, change the version and start it again. With zero-downtime deployments, no one notices any glitch while you're upgrading your apps. How does that work in Kubernetes? In this course, you will learn how Services work in Kubernetes and how you can roll out changes with zero downtime using Rolling updates, Canary Deployments or Blue-green deployments.`,
     cover: <img src='assets/material/cover_deployment-strategies.svg' alt='Advanced deployment strategies' />,
@@ -148,6 +151,7 @@ const content = {
     },
   },
   architecture: {
+    id: 'LK8S-ARCHITECTURE',
     name: 'Kubernetes Architecture',
     description: `Can Kubernetes recover from failures? In this course, you will learn the Kubernetes core components by building a cluster from scratch using kubeadm. But the best way to learn something is by breaking it. So you will also break the cluster one node at the time and observe what happens.`,
     cover: <img src='assets/material/cover_architecture.svg' alt='Architecture' />,
@@ -215,6 +219,7 @@ const content = {
     },
   },
   networking: {
+    id: 'LK8S-NETWORKING',
     name: 'Networking in Kubernetes',
     description: `How do you route external traffic to your applications in the cluster? How can two apps in the cluster talk to each other? How is Kubernetes assigning IP addresses to Pods and Services? In this course, you will explore how the traffic is routed in the cluster.`,
     cover: <img src='assets/material/cover_networking.svg' alt='Networking' />,
@@ -266,6 +271,7 @@ const content = {
     },
   },
   managingState: {
+    id: 'LK8S-MANAGING-STATE',
     name: 'Managing state in Kubernetes',
     description: `How does Kubernetes store state? Can you host databases in your cluster? Can you extract configurations and share them with different deployments? How do you make sure that your storage layer is replicated and persisted even if a node becomes unavailable? In this course, you will learn how to deploy a database with durable persistence.`,
     cover: <img src='assets/material/cover_managing-state.svg' alt='Managing state' />,
@@ -317,6 +323,7 @@ const content = {
     },
   },
   templating: {
+    id: 'LK8S-TEMPLATING',
     name: 'Templating Kubernetes resources',
     description: `Resources in Kubernetes are described as YAML files. If you wish to have the same resources for different environments such as development, preproduction and production, you may be tempted to copy the files three times. Or you could use a templating engine. In this course, you will learn how to do precisely that with Helm.`,
     cover: <img src='assets/material/cover_templating.svg' alt='Templating resources' />,
@@ -360,6 +367,7 @@ const content = {
     },
   },
   advancedNetworking: {
+    id: 'LK8S-ADVANCED-NETWORKING',
     name: 'Advanced networking',
     description:
       "Dive into the specifics of network interfaces, IP addresses and network topologies in this course about advanced Kubernetes networking. Learn how to build your Kubernetes network and how the Container Network Interface (CNI) works. And while you're at it why not making your very own Container Network Interface (CNI)?",
@@ -376,6 +384,7 @@ const content = {
     },
   },
   security: {
+    id: 'LK8S-SECURITY',
     name: 'Security',
     description:
       'Wear your black hat and try to break the cluster. Study mitigation and countermeasure to secure your cluster against malicious attacks.',
@@ -387,6 +396,7 @@ const content = {
     },
   },
   autoscaling: {
+    id: 'LK8S-AUTOSCALING',
     name: 'Autoscaling',
     description: `After deploying your app to production, the received traffic may change in unpredictable ways. How do you keep your app responsive at all times? You can adapt the number of replicas. But is it feasible to do this manually, or are there better ways? In this course, you will learn how to autoscale an application based on an application-specific custom metric.`,
     cover: <img src='assets/material/cover_autoscaling.svg' alt='autoscaling' />,
@@ -417,6 +427,7 @@ const content = {
     },
   },
   advancedScheduling: {
+    id: 'LK8S-ADVANCED-SCHEDULING',
     name: 'Advanced scheduling',
     description:
       'Master advanced placements of workloads in your infrastructure. Learn how to schedule machine learning deployments to nodes with GPU or how you can segregate workloads for regions (useful if you need to comply with policies and regulations).',
@@ -428,6 +439,7 @@ const content = {
     },
   },
   multiCloud: {
+    id: 'LK8S-MULTICLOUD',
     name: 'Multi-cloud, multi-data centre deployments',
     description: `Learn how to design clusters that span multiple cloud providers for resilience, disaster recovery or just saving money.`,
     topics: {
@@ -438,6 +450,7 @@ const content = {
     },
   },
   serviceMeshes: {
+    id: 'LK8S-SERVICE-MESHES',
     name: 'Service meshes',
     description: `When you have dozens, hundreds or even thousands of applications interacting in your cluster, it's hard to tell what is going on. What if you could inspect the traffic without affecting routine operations? What if you could upgrade the network and encrypt communications? In this course, you will explore what a Service Mesh is and how you can build your own.`,
     cover: <img src='assets/material/cover_service-meshes.svg' alt='Service meshes' />,
@@ -449,6 +462,7 @@ const content = {
     },
   },
   extensions: {
+    id: 'LK8S-EXTENDING',
     name: 'Extending and customising Kubernetes',
     description: ``,
     topics: {
@@ -459,6 +473,7 @@ const content = {
     },
   },
   managedServices: {
+    id: 'LK8S-MANAGED',
     name: 'EKS, AKS, GKE',
     description: 'Discover the nitty-gritty details of how AKS, EKS and GKE work and their strength and limitations.',
     topics: {
@@ -469,6 +484,7 @@ const content = {
     },
   },
   pipelines: {
+    id: 'LK8S-CICD',
     name: 'CI/CD pipelines',
     description:
       'Learn how to design CI/CD pipelines that leverage containers and Kubernetes. Ship software quicker, more reliably and cheaply.',
@@ -480,6 +496,7 @@ const content = {
     },
   },
   ckad: {
+    id: 'LK8S-CKAD',
     name: 'CKAD exam preparation',
     description:
       'This course is designed to help you prepare and pass the Certified Kubernetes Application Developer (CKAD) exam. It has practical challenges as well as tips and tricks on how to be efficient with your time during the exam.',
@@ -502,6 +519,7 @@ export const assets: {
 /* WARNING: this mutates content */
 export const material: {
   [section in keyof typeof content]: {
+    id: string
     name: string
     description: string
     cover: JSX.Element
