@@ -101,26 +101,38 @@ setTimeout(ldinsp, 0);
         />
       </Head>
       <Body>
-        <JsonLd<Course>
-          item={{
-            '@type': 'Course',
-            '@context': 'https://schema.org',
-            name: 'Architecting and scaling apps on Kubernetes',
-            courseCode: 'K8SARCH',
-            description: 'Self-paced Kubernetes online course: become an expert in deploying applications at scale.',
-            educationalCredentialAwarded: 'Learnk8s Certificate of completion',
-            provider: {
-              '@type': 'Organization',
-              name: 'Learnk8s',
-            },
-          }}
-        />
+        {[material.docker, material.kubernetesFundamentals, material.deploymentStrategies].map(it => {
+          return (
+            <JsonLd<Course>
+              item={{
+                '@type': 'Course',
+                '@context': 'https://schema.org',
+                name: it.name,
+                courseCode: it.id,
+                description: it.description,
+                educationalCredentialAwarded: 'Learnk8s Certificate of completion',
+                provider: {
+                  '@type': 'Organization',
+                  name: 'Learnk8s',
+                },
+              }}
+            />
+          )
+        })}
 
         <Navbar />
 
         <Section>
           <div className='mt4 measure f3-l f4 center'>
             <h2 className='f1-l f2 navy'>A Kubernetes course built by engineers for engineers</h2>
+            <ThreeItemsBig
+              className='mv5'
+              images={[
+                material.docker.cover,
+                material.kubernetesFundamentals.cover,
+                material.deploymentStrategies.cover,
+              ]}
+            ></ThreeItemsBig>
             <p className='measure f3-l f4 lh-copy center'>
               The course, where you can learn how to design, develop and deploy applications in Kubernetes.
             </p>
@@ -137,8 +149,8 @@ setTimeout(ldinsp, 0);
             <p className='measure f3-l f4 lh-copy center'>This course is not:</p>
             <ul className='list ph2'>
               <ListItemX>
-                <span className='b'>A "watch the videos, and you become an expert" course.</span> There are no videos,
-                and there are no experts in Kubernetes who learnt that way
+                <span className='b'>A "watch someone else do the work and become an expert" course.</span> There are no
+                Kubernetes experts who learnt that way
               </ListItemX>
               <ListItemX>
                 <span className='b'>Only about building clusters.</span> Clusters should be configured to support the
@@ -148,8 +160,8 @@ setTimeout(ldinsp, 0);
           </div>
         </Section>
 
-        <section className='bg-evian pv4'>
-          <p className='f3 f2-l navy b tc'>What's inside</p>
+        <Section className='bg-evian'>
+          <p className='f2 f1-l navy b tc'>What's inside</p>
           <ul className='flex-l flex-wrap-l pl0 mw8 center ph3'>
             <ListItem className='w-50-l'>Content-based, hands-on labs</ListItem>
             <ListItem className='w-50-l'>3 courses with ebooks</ListItem>
@@ -217,7 +229,41 @@ setTimeout(ldinsp, 0);
 
             <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
           </div>
-        </section>
+        </Section>
+
+        <Section>
+          <p className='f2 f1-l navy b tc mb3'>What is it? A video course?</p>
+          <p className='lh-copy f4-l black-70 measure center tc ph3 mb5'>
+            It's written content, guided labs, hands-on tutorials
+          </p>
+
+          <div className='mw7 center ph3 pb4'>
+            <div className='aspect-ratio aspect-ratio--4x3'>
+              {React.createElement('img', {
+                src: 'assets/academy/preview-web.gif',
+                alt: 'Learnk8s Academy preview',
+                loading: 'lazy',
+                className: 'aspect-ratio--object shadow-4',
+              })}
+            </div>
+          </div>
+        </Section>
+
+        <Section className='bg-evian'>
+          <p className='f2 f1-l navy b tc mb3'>What is it? An ebook?</p>
+          <p className='lh-copy f4-l black-70 measure center tc ph3 mb5'>You can read the content as an ebook</p>
+
+          <div className='mw7 center ph3 pb4'>
+            <div className='mt3 aspect-ratio aspect-ratio--4x3'>
+              {React.createElement('img', {
+                src: 'assets/academy/preview-ebook.gif',
+                alt: 'Learnk8s Academy preview',
+                loading: 'lazy',
+                className: 'aspect-ratio--object shadow-4',
+              })}
+            </div>
+          </div>
+        </Section>
 
         <Section>
           <div className='mt4 measure f3-l f4 center'>
@@ -295,12 +341,27 @@ setTimeout(ldinsp, 0);
           <p className='center f1-l f2 navy b tc ph3 measure-narrow'>Get instant access to the courses</p>
           <p className='lh-copy f4-l black-70 measure center tc ph3 mb5'>Choose the package that works best for you.</p>
 
-          <div className='flex justify-center'>
+          <div className='flex-l justify-center items-start'>
             <div className='bg-white br4 mh3 ph3 pb3'>
               <h2 className='lh-copy f2 navy tc'>Complete series</h2>
+              <ThreeItems
+                images={[
+                  material.docker.cover,
+                  material.kubernetesFundamentals.cover,
+                  material.deploymentStrategies.cover,
+                ]}
+              ></ThreeItems>
+              <p className='f3 strike lh-solid mt3 mb4 gray tc'>
+                <span className='db' id='pricing-standard'>
+                  {(127).toLocaleString('US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })}
+                </span>
+              </p>
               <p className='f2 navy tc mv4 bs'>
-                <span className='db' id='pricing-one'>
-                  {(187).toLocaleString('US', {
+                <span className='db' id='pricing-discount'>
+                  {(89).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
                   })}
@@ -329,9 +390,17 @@ setTimeout(ldinsp, 0);
               <h2 className='lh-copy f2 navy tc'>
                 Complete series<sup>++</sup>
               </h2>
+              <ThreeItems
+                images={[
+                  material.docker.cover,
+                  material.kubernetesFundamentals.cover,
+                  material.deploymentStrategies.cover,
+                ]}
+              ></ThreeItems>
+              <p className='f3 lh-solid mt3 mb4 tc navy b'>+ live webinars</p>
               <p className='f2 navy tc mv4 bs'>
-                <span className='db' id='pricing-one'>
-                  {(347).toLocaleString('US', {
+                <span className='db' id='pricing-discount'>
+                  {(397).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
                   })}
@@ -344,7 +413,7 @@ setTimeout(ldinsp, 0);
                 <ListItem>Practice with real challenges</ListItem>
                 <ListItem>One time fee, lifetime updates</ListItem>
                 <ListItem>
-                  <span className='b'>1-on-1 coaching session</span>
+                  <span className='b'>Unlimited live webinars</span>
                 </ListItem>
               </ul>
               <p className='tc mt4'>
@@ -359,9 +428,143 @@ setTimeout(ldinsp, 0);
               </p>
             </div>
           </div>
+
+          <p className='lh-copy f4-l black-30 measure center tc ph3 mv5 ttu b'>Individual packages</p>
+
+          <ul className='pl0 list'>
+            <li className='mw7 center mv3'>
+              <div className='bg-white br4 mh3 ph4 pb4 pt1'>
+                <h2 className='lh-solid f2 navy tc'>{material.docker.name}</h2>
+                <div className='flex-ns'>
+                  <div className='w-40-ns pb3 pb0-ns'>
+                    <div className='aspect-ratio aspect-ratio--7x5'>
+                      {React.createElement('img', {
+                        src: material.docker.cover.props.src,
+                        alt: material.docker.cover.props.alt,
+                        loading: 'lazy',
+                        className: 'aspect-ratio--object br2 br--top shadow-4',
+                      })}
+                    </div>
+                  </div>
+                  <div className='w-60-ns'>
+                    <ul className='list pl3'>
+                      <ListItem>Ebooks for offline reading</ListItem>
+                      <ListItem>Hands-on guided labs</ListItem>
+                      <ListItem>Practice with real challenges</ListItem>
+                      <ListItem>One time fee, lifetime updates</ListItem>
+                    </ul>
+                  </div>
+                </div>
+                <p className='f2 navy tc mv4 bs'>
+                  <span className='db' id='pricing-discount'>
+                    {(39).toLocaleString('US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </span>
+                </p>
+                <p className='tc mt4'>
+                  <a
+                    href='https://academy.learnk8s.io/architecting-bundle'
+                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                    target='_self'
+                    ref='noreferrer'
+                  >
+                    Buy now →
+                  </a>
+                </p>
+              </div>
+            </li>
+            <li className='mw7 center mv3'>
+              <div className='bg-white br4 mh3 ph4 pb4 pt1'>
+                <h2 className='lh-solid f2 navy tc'>{material.kubernetesFundamentals.name}</h2>
+                <div className='flex-ns'>
+                  <div className='w-40-ns pb3 pb0-ns'>
+                    <div className='aspect-ratio aspect-ratio--7x5'>
+                      {React.createElement('img', {
+                        src: material.kubernetesFundamentals.cover.props.src,
+                        alt: material.kubernetesFundamentals.cover.props.alt,
+                        loading: 'lazy',
+                        className: 'aspect-ratio--object br2 br--top shadow-4',
+                      })}
+                    </div>
+                  </div>
+                  <div className='w-60-ns'>
+                    <ul className='list pl3'>
+                      <ListItem>Ebooks for offline reading</ListItem>
+                      <ListItem>Hands-on guided labs</ListItem>
+                      <ListItem>Practice with real challenges</ListItem>
+                      <ListItem>One time fee, lifetime updates</ListItem>
+                    </ul>
+                  </div>
+                </div>
+                <p className='f2 navy tc mv4 bs'>
+                  <span className='db' id='pricing-discount'>
+                    {(49).toLocaleString('US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </span>
+                </p>
+                <p className='tc mt4'>
+                  <a
+                    href='https://academy.learnk8s.io/architecting-bundle'
+                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                    target='_self'
+                    ref='noreferrer'
+                  >
+                    Buy now →
+                  </a>
+                </p>
+              </div>
+            </li>
+            <li className='mw7 center mv3'>
+              <div className='bg-white br4 mh3 ph4 pb4 pt1'>
+                <h2 className='lh-solid f2 navy tc'>{material.deploymentStrategies.name}</h2>
+                <div className='flex-ns'>
+                  <div className='w-40-ns pb3 pb0-ns'>
+                    <div className='aspect-ratio aspect-ratio--7x5'>
+                      {React.createElement('img', {
+                        src: material.deploymentStrategies.cover.props.src,
+                        alt: material.deploymentStrategies.cover.props.alt,
+                        loading: 'lazy',
+                        className: 'aspect-ratio--object br2 br--top shadow-4',
+                      })}
+                    </div>
+                  </div>
+                  <div className='w-60-ns'>
+                    <ul className='list pl3'>
+                      <ListItem>Ebooks for offline reading</ListItem>
+                      <ListItem>Hands-on guided labs</ListItem>
+                      <ListItem>Practice with real challenges</ListItem>
+                      <ListItem>One time fee, lifetime updates</ListItem>
+                    </ul>
+                  </div>
+                </div>
+                <p className='f2 navy tc mv4 bs'>
+                  <span className='db' id='pricing-discount'>
+                    {(49).toLocaleString('US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    })}
+                  </span>
+                </p>
+                <p className='tc mt4'>
+                  <a
+                    href='https://academy.learnk8s.io/architecting-bundle'
+                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                    target='_self'
+                    ref='noreferrer'
+                  >
+                    Buy now →
+                  </a>
+                </p>
+              </div>
+            </li>
+          </ul>
         </section>
 
-        <Section className='bg-evian'>
+        <Section className=''>
           <div className='f3 measure center tc'>
             <h2 className='f1-l f2 navy navy'>The Learnk8s Academy Guarantee: Our promise to you</h2>
           </div>
@@ -386,7 +589,9 @@ setTimeout(ldinsp, 0);
           </div>
         </Section>
 
-        <FAQs faqs={faqs} />
+        <Section className='bg-evian'>
+          <FAQs faqs={faqs} />
+        </Section>
 
         <Footer />
         <script
@@ -467,6 +672,83 @@ setInterval(function () {
   )
 }
 
+const ThreeItems: React.StatelessComponent<{ images: [JSX.Element, JSX.Element, JSX.Element]; className?: string }> = ({
+  children,
+  images,
+  className,
+}) => {
+  return (
+    <div className={`${className || ''} w4 relative center`}>
+      <div className='aspect-ratio aspect-ratio--7x5 relative z-2'>
+        {React.createElement('img', {
+          src: images[0].props.src,
+          alt: images[0].props.alt,
+          loading: 'lazy',
+          className: 'aspect-ratio--object br2 br--top shadow-4',
+        })}
+      </div>
+      <div className='w-100 absolute top-0 right-0 mr5 z-1'>
+        <div className='aspect-ratio aspect-ratio--7x5'>
+          {React.createElement('img', {
+            src: images[1].props.src,
+            alt: images[1].props.alt,
+            loading: 'lazy',
+            className: 'aspect-ratio--object br2 br--top shadow-4',
+          })}
+        </div>
+      </div>
+      <div className='w-100 absolute top-0 left-0 ml5 z-3'>
+        <div className='aspect-ratio aspect-ratio--7x5'>
+          {React.createElement('img', {
+            src: images[2].props.src,
+            alt: images[2].props.alt,
+            loading: 'lazy',
+            className: 'aspect-ratio--object br2 br--top shadow-4',
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ThreeItemsBig: React.StatelessComponent<{
+  images: [JSX.Element, JSX.Element, JSX.Element]
+  className?: string
+}> = ({ children, images, className }) => {
+  return (
+    <div className={`${className || ''} w4 w5-ns relative center`}>
+      <div className='aspect-ratio aspect-ratio--7x5 relative z-2'>
+        {React.createElement('img', {
+          src: images[0].props.src,
+          alt: images[0].props.alt,
+          loading: 'lazy',
+          className: 'aspect-ratio--object br2 br--top shadow-4',
+        })}
+      </div>
+      <div className='w-100 absolute top-0 right-1 mr5 right-0-l mr6-l z-1'>
+        <div className='aspect-ratio aspect-ratio--7x5'>
+          {React.createElement('img', {
+            src: images[1].props.src,
+            alt: images[1].props.alt,
+            loading: 'lazy',
+            className: 'aspect-ratio--object br2 br--top shadow-4',
+          })}
+        </div>
+      </div>
+      <div className='w-100 absolute top-0 left-1 ml5 left-0-l ml6-l z-3'>
+        <div className='aspect-ratio aspect-ratio--7x5'>
+          {React.createElement('img', {
+            src: images[2].props.src,
+            alt: images[2].props.alt,
+            loading: 'lazy',
+            className: 'aspect-ratio--object br2 br--top shadow-4',
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export const Item: React.StatelessComponent<{ tick: JSX.Element }> = ({ children, tick }) => {
   return (
     <li className='mv3 flex justify-center'>
@@ -510,7 +792,7 @@ const Module: React.StatelessComponent<{
             <div className={`details details-${id}`}>{children}</div>
           </div>
         </div>
-        <div className='w-50 pa4'>
+        <div className='dn w-50 pa4 db-ns'>
           <div className='aspect-ratio aspect-ratio--7x5 shadow-4'>
             {React.createElement('img', {
               src: preview.props.src,

@@ -108,6 +108,7 @@ function renderPage(state: State) {
               img={material.docker.cover}
               className='w-third'
               difficulty='Beginner'
+              defaultUSPrice={39}
             >
               <p className='lh-copy masure f5'>{material.docker.description}</p>
               <a href='/architecting-scaling-apps-kubernetes' className='link no-underline underline-hover navy'>
@@ -119,6 +120,7 @@ function renderPage(state: State) {
               img={material.kubernetesFundamentals.cover}
               className='w-third'
               difficulty='Intermediate'
+              defaultUSPrice={49}
             >
               <p className='lh-copy masure f5'>{material.kubernetesFundamentals.description}</p>
               <a href='/architecting-scaling-apps-kubernetes' className='link no-underline underline-hover navy'>
@@ -130,6 +132,7 @@ function renderPage(state: State) {
               img={material.deploymentStrategies.cover}
               className='w-third'
               difficulty='Intermediate'
+              defaultUSPrice={49}
             >
               <p className='lh-copy masure f5'>{material.deploymentStrategies.description}</p>
               <a href='/architecting-scaling-apps-kubernetes' className='link no-underline underline-hover navy'>
@@ -137,6 +140,49 @@ function renderPage(state: State) {
               </a>
             </CourseBlock>
           </ul>
+          <div className='bg-evian mw7 center tc pa3 br4'>
+            <p className='lh-copy f4 tc b'>Buy all three module and save 30%</p>
+            <div className='w5 relative center'>
+              <div className='aspect-ratio aspect-ratio--7x5 relative z-2'>
+                {React.createElement('img', {
+                  src: material.kubernetesFundamentals.cover.props.src,
+                  alt: material.kubernetesFundamentals.cover.props.alt,
+                  loading: 'lazy',
+                  className: 'aspect-ratio--object br2 br--top shadow-1',
+                })}
+              </div>
+              <div className='w-100 absolute top-0 right-0 mr6 z-1'>
+                <div className='aspect-ratio aspect-ratio--7x5'>
+                  {React.createElement('img', {
+                    src: material.docker.cover.props.src,
+                    alt: material.docker.cover.props.alt,
+                    loading: 'lazy',
+                    className: 'aspect-ratio--object br2 br--top shadow-1',
+                  })}
+                </div>
+              </div>
+              <div className='w-100 absolute top-0 left-0 ml6 z-3'>
+                <div className='aspect-ratio aspect-ratio--7x5'>
+                  {React.createElement('img', {
+                    src: material.deploymentStrategies.cover.props.src,
+                    alt: material.deploymentStrategies.cover.props.alt,
+                    loading: 'lazy',
+                    className: 'aspect-ratio--object br2 br--top shadow-1',
+                  })}
+                </div>
+              </div>
+            </div>
+            <p className='f3 strike b lh-solid mv3 gray'>$127</p>
+            <p className='f2 lh-solid mv2'>$89</p>
+            <a
+              href='/architecting-scaling-apps-kubernetes'
+              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
+              target='_self'
+              ref='noreferrer'
+            >
+              Buy now →
+            </a>
+          </div>
         </section>
 
         <section className='mw8 center pv4'>
@@ -165,6 +211,7 @@ function renderPage(state: State) {
               img={material.architecture.cover}
               className='w-third'
               difficulty='Intermediate'
+              defaultUSPrice={49}
             >
               <p className='lh-copy masure f5'>{material.architecture.description}</p>
               <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
@@ -176,6 +223,7 @@ function renderPage(state: State) {
               img={material.networking.cover}
               className='w-third'
               difficulty='Advanced'
+              defaultUSPrice={59}
             >
               <p className='lh-copy masure f5'>{material.networking.description}</p>
               <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
@@ -187,6 +235,7 @@ function renderPage(state: State) {
               img={material.advancedNetworking.cover}
               className='w-third'
               difficulty='Advanced'
+              defaultUSPrice={59}
             >
               <p className='lh-copy masure f5'>{material.advancedNetworking.description}</p>
               <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
@@ -222,6 +271,7 @@ function renderPage(state: State) {
               img={material.templating.cover}
               className='w-third'
               difficulty='Intermediate'
+              defaultUSPrice={49}
             >
               <p className='lh-copy masure f5'>{material.templating.description}</p>
               <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
@@ -233,6 +283,7 @@ function renderPage(state: State) {
               img={material.autoscaling.cover}
               className='w-third'
               difficulty='Advanced'
+              defaultUSPrice={59}
             >
               <p className='lh-copy masure f5'>{material.autoscaling.description}</p>
               <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
@@ -244,6 +295,7 @@ function renderPage(state: State) {
               img={material.serviceMeshes.cover}
               className='w-third'
               difficulty='Advanced'
+              defaultUSPrice={59}
             >
               <p className='lh-copy masure f5'>{material.serviceMeshes.description}</p>
               <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
@@ -279,13 +331,20 @@ function renderPage(state: State) {
               img={material.managingState.cover}
               className='w-third'
               difficulty='Advanced'
+              defaultUSPrice={59}
             >
               <p className='lh-copy masure f5'>{material.managingState.description}</p>
               <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
                 Learn more &#8594;
               </a>
             </CourseBlock>
-            <CourseBlock title={material.ckad.name} img={material.ckad.cover} className='w-third' difficulty='Advanced'>
+            <CourseBlock
+              title={material.ckad.name}
+              img={material.ckad.cover}
+              className='w-third'
+              difficulty='Advanced'
+              defaultUSPrice={49}
+            >
               <p className='lh-copy masure f5'>{material.ckad.description}</p>
               <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
                 Learn more &#8594;
@@ -389,21 +448,31 @@ const CourseBlock: React.StatelessComponent<{
   img: JSX.Element
   title: string
   difficulty: string
-}> = ({ children, className, img, title, difficulty }) => {
+  defaultUSPrice: number
+}> = ({ children, className, img, title, difficulty, defaultUSPrice }) => {
   return (
     <li className={`${className || ''}`}>
       <div className='br2 br--top shadow-4 ma3'>
-        <div className='aspect-ratio aspect-ratio--7x5'>
+        <div className='aspect-ratio aspect-ratio--7x5 relative'>
           {React.createElement('img', {
             src: img.props.src,
             alt: img.props.alt,
             loading: 'lazy',
-            className: 'aspect-ratio--object br2 br--top',
+            className: 'aspect-ratio--object br2 br--top z-1',
           })}
+          <div className='z-2 absolute bottom-1 right-1 bg-navy b f6 ph2 pv1 br4 white ttu'>
+            Price:{' '}
+            <span>
+              {defaultUSPrice.toLocaleString('US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </span>
+          </div>
         </div>
         <div className='ph3 pb4'>
           <ul className='list pl0 flex pt3'>
-            <li className='bg-near-white navy br4 f7 ph3 pv2 ttu b'>Difficulty: {difficulty.toLowerCase()}</li>
+            <li className='bg-near-white navy f7 ph2 pv1 ttu b br1'>Difficulty: {difficulty.toLowerCase()}</li>
           </ul>
           <h3 className='f3 lh-solid mt3'>{title}</h3>
           {children}
