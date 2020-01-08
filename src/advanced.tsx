@@ -38,22 +38,22 @@ const faqs: FAQ[] = [
   },
 ]
 
-export const Architecting = {
-  id: 'academy-architecting-and-scaling',
-  url: '/architecting-scaling-apps-kubernetes',
-  title: 'Architecting and scaling apps on Kubernetes ⎈ Learnk8s Academy',
-  description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
+export const Advanced = {
+  id: 'academy-advanced-in-practice',
+  url: '/advanced-kubernetes-in-practice',
+  title: 'Advanced Kubernetes in practice ⎈ Learnk8s Academy',
+  description: `A hands-on, online course that dives into the details of Kubernetes architecture and networking.`,
 }
 
 export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Architecting))
+  store.dispatch(Action.registerPage(Advanced))
   store.dispatch(
     Action.registerOpenGraph({
-      id: 'og-academy-architecting-and-scaling',
-      pageId: Architecting.id,
+      id: 'og-academy-advanced-in-practice',
+      pageId: Advanced.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      title: 'Architecting and scaling apps on Kubernetes ⎈ Learnk8s Academy',
-      description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
+      title: 'Advanced Kubernetes in practice ⎈ Learnk8s Academy',
+      description: `A hands-on, online course that dives into the details of Kubernetes architecture and networking.`,
     }),
   )
 }
@@ -64,14 +64,14 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
     jsx: renderPage(state),
     isOptimisedBuild: getConfig(state).isProduction,
     siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-    url: Architecting.url,
+    url: Advanced.url,
     outputFolder: getConfig(state).outputFolder,
   })
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Architecting.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Architecting.id)
+  const page = getPages(state).find(it => it.id === Advanced.id)!
+  const openGraph = getOpenGraph(state).find(it => it.pageId === Advanced.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   return (
     <Html>
@@ -101,7 +101,7 @@ setTimeout(ldinsp, 0);
         />
       </Head>
       <Body>
-        {[material.docker, material.kubernetesFundamentals, material.deploymentStrategies].map(it => {
+        {[material.architecture, material.networking, material.advancedNetworking].map(it => {
           return (
             <JsonLd<Course>
               item={{
@@ -127,16 +127,12 @@ setTimeout(ldinsp, 0);
             <h2 className='f1-l f2 navy'>A Kubernetes course built by engineers for engineers</h2>
             <ThreeItemsBig
               className='mv5'
-              images={[
-                material.docker.cover,
-                material.kubernetesFundamentals.cover,
-                material.deploymentStrategies.cover,
-              ]}
+              images={[material.architecture.cover, material.networking.cover, material.advancedNetworking.cover]}
             ></ThreeItemsBig>
             <p className='measure f3-l f4 lh-copy center'>
-              The course, where you can learn how to design, develop and deploy applications in Kubernetes.
+              A hands-on, online course that dives into the details of Kubernetes architecture and networking
             </p>
-            <p className='measure f3-l f4 lh-copy center'>A course that:</p>
+            <p className='measure f3-l f4 lh-copy center'>This course:</p>
             <ul className='list ph2'>
               <ListItem>Prioritises hands-on material and challenges</ListItem>
               <ListItem>Covers practical, day-to-day scenario rather than abstract use cases</ListItem>
@@ -174,52 +170,51 @@ setTimeout(ldinsp, 0);
 
           <div className='mv3 mv5-l mt0-l mw8 center'>
             <Module
-              preview={material.docker.cover}
-              title={`1. ${material.docker.name}`}
-              description={material.docker.description}
+              preview={material.architecture.cover}
+              title={`1. ${material.architecture.name}`}
+              description={material.architecture.description}
             >
               <p className='lh-copy measure-wide'>
-                You will learn how to package and run applications in Docker containers. The module covers the following
+                You will learn how build (and brake) your cluster. The module covers the following topics:
+              </p>
+              <ul>
+                {Object.values(material.architecture.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </Module>
+
+            <Module
+              preview={material.networking.cover}
+              title={`2. ${material.networking.name}`}
+              description={material.networking.description}
+            >
+              <p className='lh-copy measure-wide'>
+                You will learn the basics as well as some advance topics about networking in Kubernetes. The module
+                covers the following topics:
+              </p>
+              <ul>
+                {Object.values(material.networking.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </Module>
+
+            <Module
+              preview={material.advancedNetworking.cover}
+              title={`3. ${material.advancedNetworking.name}`}
+              description={material.advancedNetworking.description}
+            >
+              <p className='lh-copy measure-wide'>
+                You will learn how to build your own Container Network Interface (CNI). The module covers the following
                 topics:
               </p>
               <ul>
-                {Object.values(material.docker.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </Module>
-
-            <Module
-              preview={material.kubernetesFundamentals.cover}
-              title={`2. ${material.kubernetesFundamentals.name}`}
-              description={material.kubernetesFundamentals.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the
-                following topics:
-              </p>
-              <ul>
-                {Object.values(material.kubernetesFundamentals.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </Module>
-
-            <Module
-              preview={material.deploymentStrategies.cover}
-              title={`3. ${material.deploymentStrategies.name}`}
-              description={material.deploymentStrategies.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn different techniques to deploy your applications with zero downtime. The module covers
-                the following topics:
-              </p>
-              <ul>
-                {Object.values(material.deploymentStrategies.topics).map((it, index) => (
+                {Object.values(material.advancedNetworking.topics).map((it, index) => (
                   <li key={index} className='lh-copy mv1'>
                     {it}
                   </li>
@@ -345,23 +340,19 @@ setTimeout(ldinsp, 0);
             <div className='bg-white br4 mh3 ph3 pb3 mw6'>
               <h2 className='lh-copy f2 navy tc'>Complete series</h2>
               <ThreeItems
-                images={[
-                  material.docker.cover,
-                  material.kubernetesFundamentals.cover,
-                  material.deploymentStrategies.cover,
-                ]}
+                images={[material.architecture.cover, material.networking.cover, material.advancedNetworking.cover]}
               ></ThreeItems>
               <p className='f3 strike lh-solid mt3 mb4 gray tc'>
-                <span className='db' id='bundle-architecting-full'>
-                  {(127).toLocaleString('US', {
+                <span className='db' id='bundle-advanced-kubernetes-full'>
+                  {(167).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
                   })}
                 </span>
               </p>
               <p className='f2 navy tc mv4 bs'>
-                <span className='db' id='bundle-architecting'>
-                  {(89).toLocaleString('US', {
+                <span className='db' id='bundle-advanced-kubernetes'>
+                  {(119).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
                   })}
@@ -381,7 +372,7 @@ setTimeout(ldinsp, 0);
               </ul>
               <p className='tc mt4'>
                 <a
-                  href='https://academy.learnk8s.io/bundle-architecting'
+                  href='https://academy.learnk8s.io/bundle-advanced-kubernetes'
                   className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                   target='_self'
                   ref='noreferrer'
@@ -439,13 +430,13 @@ setTimeout(ldinsp, 0);
           <ul className='pl0 list'>
             <li className='mw7 center mv3'>
               <div className='bg-white br4 mh3 ph4 pb4 pt1'>
-                <h2 className='lh-solid f2 navy tc'>{material.docker.name}</h2>
+                <h2 className='lh-solid f2 navy tc'>{material.architecture.name}</h2>
                 <div className='flex-ns'>
                   <div className='w-40-ns pb3 pb0-ns'>
                     <div className='aspect-ratio aspect-ratio--7x5'>
                       {React.createElement('img', {
-                        src: material.docker.cover.props.src,
-                        alt: material.docker.cover.props.alt,
+                        src: material.architecture.cover.props.src,
+                        alt: material.architecture.cover.props.alt,
                         loading: 'lazy',
                         className: 'aspect-ratio--object br2 br--top shadow-4',
                       })}
@@ -461,8 +452,8 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='single-containers'>
-                    {(39).toLocaleString('US', {
+                  <span className='db' id='single-architecture'>
+                    {(49).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
                     })}
@@ -470,7 +461,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/single-containers'
+                    href='https://academy.learnk8s.io/single-architecture'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'
@@ -482,13 +473,13 @@ setTimeout(ldinsp, 0);
             </li>
             <li className='mw7 center mv3'>
               <div className='bg-white br4 mh3 ph4 pb4 pt1'>
-                <h2 className='lh-solid f2 navy tc'>{material.kubernetesFundamentals.name}</h2>
+                <h2 className='lh-solid f2 navy tc'>{material.networking.name}</h2>
                 <div className='flex-ns'>
                   <div className='w-40-ns pb3 pb0-ns'>
                     <div className='aspect-ratio aspect-ratio--7x5'>
                       {React.createElement('img', {
-                        src: material.kubernetesFundamentals.cover.props.src,
-                        alt: material.kubernetesFundamentals.cover.props.alt,
+                        src: material.networking.cover.props.src,
+                        alt: material.networking.cover.props.alt,
                         loading: 'lazy',
                         className: 'aspect-ratio--object br2 br--top shadow-4',
                       })}
@@ -504,8 +495,8 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='single-fundamentals'>
-                    {(49).toLocaleString('US', {
+                  <span className='db' id='single-networking'>
+                    {(59).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
                     })}
@@ -513,7 +504,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/single-fundamentals'
+                    href='https://academy.learnk8s.io/single-networking'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'
@@ -525,13 +516,13 @@ setTimeout(ldinsp, 0);
             </li>
             <li className='mw7 center mv3'>
               <div className='bg-white br4 mh3 ph4 pb4 pt1'>
-                <h2 className='lh-solid f2 navy tc'>{material.deploymentStrategies.name}</h2>
+                <h2 className='lh-solid f2 navy tc'>{material.advancedNetworking.name}</h2>
                 <div className='flex-ns'>
                   <div className='w-40-ns pb3 pb0-ns'>
                     <div className='aspect-ratio aspect-ratio--7x5'>
                       {React.createElement('img', {
-                        src: material.deploymentStrategies.cover.props.src,
-                        alt: material.deploymentStrategies.cover.props.alt,
+                        src: material.advancedNetworking.cover.props.src,
+                        alt: material.advancedNetworking.cover.props.alt,
                         loading: 'lazy',
                         className: 'aspect-ratio--object br2 br--top shadow-4',
                       })}
@@ -547,8 +538,8 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='single-deployment-strategies'>
-                    {(49).toLocaleString('US', {
+                  <span className='db' id='single-advanced-networking'>
+                    {(59).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
                     })}
@@ -556,7 +547,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/single-deployment-strategies'
+                    href='https://academy.learnk8s.io/single-advanced-networking'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'

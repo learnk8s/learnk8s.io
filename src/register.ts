@@ -2,6 +2,9 @@ import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
 import * as Academy from './academy'
 import * as ArchitectingAndScaling from './architecting'
+import * as AdvancedInPractice from './advanced'
+import * as MicroservicesAtScale from './microservices'
+import * as ExploringKubernetes from './exploring'
 import * as ZeroToK8s from './zeroToK8s'
 import * as Blog from './blog'
 import * as Careers from './careers'
@@ -72,4 +75,7 @@ export function register(store: Store<State, Actions>) {
   ZeroToK8s.Register(store)
   BiteSizedListing.Register(store)
   Troubleshooting.Register(store)
+  AdvancedInPractice.Register(store)
+  MicroservicesAtScale.Register(store)
+  ExploringKubernetes.Register(store)
 }

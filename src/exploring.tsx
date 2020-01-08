@@ -38,22 +38,22 @@ const faqs: FAQ[] = [
   },
 ]
 
-export const Architecting = {
-  id: 'academy-architecting-and-scaling',
-  url: '/architecting-scaling-apps-kubernetes',
-  title: 'Architecting and scaling apps on Kubernetes ⎈ Learnk8s Academy',
-  description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
+export const Exploring = {
+  id: 'academy-exploring-kubernetes',
+  url: '/exploring-kubernetes',
+  title: 'Exploring Kubernetes ⎈ Learnk8s Academy',
+  description: `A hands-on, online course on mastering Kubernetes, managing state and passing the CKAD exam.`,
 }
 
 export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Architecting))
+  store.dispatch(Action.registerPage(Exploring))
   store.dispatch(
     Action.registerOpenGraph({
-      id: 'og-academy-architecting-and-scaling',
-      pageId: Architecting.id,
+      id: 'og-academy-exploring-kubernetes',
+      pageId: Exploring.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      title: 'Architecting and scaling apps on Kubernetes ⎈ Learnk8s Academy',
-      description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
+      title: 'Exploring Kubernetes ⎈ Learnk8s Academy',
+      description: `A hands-on, online course on mastering Kubernetes, managing state and passing the CKAD exam.`,
     }),
   )
 }
@@ -64,14 +64,14 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
     jsx: renderPage(state),
     isOptimisedBuild: getConfig(state).isProduction,
     siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-    url: Architecting.url,
+    url: Exploring.url,
     outputFolder: getConfig(state).outputFolder,
   })
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Architecting.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Architecting.id)
+  const page = getPages(state).find(it => it.id === Exploring.id)!
+  const openGraph = getOpenGraph(state).find(it => it.pageId === Exploring.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   return (
     <Html>
@@ -101,7 +101,7 @@ setTimeout(ldinsp, 0);
         />
       </Head>
       <Body>
-        {[material.docker, material.kubernetesFundamentals, material.deploymentStrategies].map(it => {
+        {[material.managingState, material.ckad].map(it => {
           return (
             <JsonLd<Course>
               item={{
@@ -125,14 +125,7 @@ setTimeout(ldinsp, 0);
         <Section>
           <div className='mt4 measure f3-l f4 center'>
             <h2 className='f1-l f2 navy'>A Kubernetes course built by engineers for engineers</h2>
-            <ThreeItemsBig
-              className='mv5'
-              images={[
-                material.docker.cover,
-                material.kubernetesFundamentals.cover,
-                material.deploymentStrategies.cover,
-              ]}
-            ></ThreeItemsBig>
+            <TwoItemsBig className='mv5' images={[material.managingState.cover, material.ckad.cover]}></TwoItemsBig>
             <p className='measure f3-l f4 lh-copy center'>
               The course, where you can learn how to design, develop and deploy applications in Kubernetes.
             </p>
@@ -174,16 +167,16 @@ setTimeout(ldinsp, 0);
 
           <div className='mv3 mv5-l mt0-l mw8 center'>
             <Module
-              preview={material.docker.cover}
-              title={`1. ${material.docker.name}`}
-              description={material.docker.description}
+              preview={material.managingState.cover}
+              title={`1. ${material.managingState.name}`}
+              description={material.managingState.description}
             >
               <p className='lh-copy measure-wide'>
                 You will learn how to package and run applications in Docker containers. The module covers the following
                 topics:
               </p>
               <ul>
-                {Object.values(material.docker.topics).map((it, index) => (
+                {Object.values(material.managingState.topics).map((it, index) => (
                   <li key={index} className='lh-copy mv1'>
                     {it}
                   </li>
@@ -192,34 +185,16 @@ setTimeout(ldinsp, 0);
             </Module>
 
             <Module
-              preview={material.kubernetesFundamentals.cover}
-              title={`2. ${material.kubernetesFundamentals.name}`}
-              description={material.kubernetesFundamentals.description}
+              preview={material.ckad.cover}
+              title={`2. ${material.ckad.name}`}
+              description={material.ckad.description}
             >
               <p className='lh-copy measure-wide'>
                 You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the
                 following topics:
               </p>
               <ul>
-                {Object.values(material.kubernetesFundamentals.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </Module>
-
-            <Module
-              preview={material.deploymentStrategies.cover}
-              title={`3. ${material.deploymentStrategies.name}`}
-              description={material.deploymentStrategies.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn different techniques to deploy your applications with zero downtime. The module covers
-                the following topics:
-              </p>
-              <ul>
-                {Object.values(material.deploymentStrategies.topics).map((it, index) => (
+                {Object.values(material.ckad.topics).map((it, index) => (
                   <li key={index} className='lh-copy mv1'>
                     {it}
                   </li>
@@ -344,31 +319,25 @@ setTimeout(ldinsp, 0);
           <div className='flex-l justify-center items-start'>
             <div className='bg-white br4 mh3 ph3 pb3 mw6'>
               <h2 className='lh-copy f2 navy tc'>Complete series</h2>
-              <ThreeItems
-                images={[
-                  material.docker.cover,
-                  material.kubernetesFundamentals.cover,
-                  material.deploymentStrategies.cover,
-                ]}
-              ></ThreeItems>
+              <TwoItems images={[material.managingState.cover, material.ckad.cover]}></TwoItems>
               <p className='f3 strike lh-solid mt3 mb4 gray tc'>
-                <span className='db' id='bundle-architecting-full'>
-                  {(127).toLocaleString('US', {
+                <span className='db' id='bundle-exploring-kubernetes-full'>
+                  {(108).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
                   })}
                 </span>
               </p>
               <p className='f2 navy tc mv4 bs'>
-                <span className='db' id='bundle-architecting'>
-                  {(89).toLocaleString('US', {
+                <span className='db' id='bundle-exploring-kubernetes'>
+                  {(79).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
                   })}
                 </span>
               </p>
               <ul className='list ph2'>
-                <ListItem>Access to 3 courses</ListItem>
+                <ListItem>Access to 2 courses</ListItem>
                 <ListItem>Ebooks for offline reading</ListItem>
                 <ListItem>Hands-on guided labs</ListItem>
                 <ListItem>Practice with real challenges</ListItem>
@@ -381,7 +350,7 @@ setTimeout(ldinsp, 0);
               </ul>
               <p className='tc mt4'>
                 <a
-                  href='https://academy.learnk8s.io/bundle-architecting'
+                  href='https://academy.learnk8s.io/bundle-exploring-kubernetes'
                   className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                   target='_self'
                   ref='noreferrer'
@@ -439,13 +408,13 @@ setTimeout(ldinsp, 0);
           <ul className='pl0 list'>
             <li className='mw7 center mv3'>
               <div className='bg-white br4 mh3 ph4 pb4 pt1'>
-                <h2 className='lh-solid f2 navy tc'>{material.docker.name}</h2>
+                <h2 className='lh-solid f2 navy tc'>{material.managingState.name}</h2>
                 <div className='flex-ns'>
                   <div className='w-40-ns pb3 pb0-ns'>
                     <div className='aspect-ratio aspect-ratio--7x5'>
                       {React.createElement('img', {
-                        src: material.docker.cover.props.src,
-                        alt: material.docker.cover.props.alt,
+                        src: material.managingState.cover.props.src,
+                        alt: material.managingState.cover.props.alt,
                         loading: 'lazy',
                         className: 'aspect-ratio--object br2 br--top shadow-4',
                       })}
@@ -461,8 +430,8 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='single-containers'>
-                    {(39).toLocaleString('US', {
+                  <span className='db' id='single-managing-state'>
+                    {(59).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
                     })}
@@ -470,7 +439,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/single-containers'
+                    href='https://academy.learnk8s.io/single-managing-state'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'
@@ -482,13 +451,13 @@ setTimeout(ldinsp, 0);
             </li>
             <li className='mw7 center mv3'>
               <div className='bg-white br4 mh3 ph4 pb4 pt1'>
-                <h2 className='lh-solid f2 navy tc'>{material.kubernetesFundamentals.name}</h2>
+                <h2 className='lh-solid f2 navy tc'>{material.ckad.name}</h2>
                 <div className='flex-ns'>
                   <div className='w-40-ns pb3 pb0-ns'>
                     <div className='aspect-ratio aspect-ratio--7x5'>
                       {React.createElement('img', {
-                        src: material.kubernetesFundamentals.cover.props.src,
-                        alt: material.kubernetesFundamentals.cover.props.alt,
+                        src: material.ckad.cover.props.src,
+                        alt: material.ckad.cover.props.alt,
                         loading: 'lazy',
                         className: 'aspect-ratio--object br2 br--top shadow-4',
                       })}
@@ -504,7 +473,7 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='single-fundamentals'>
+                  <span className='db' id='single-ckad'>
                     {(49).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
@@ -513,50 +482,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/single-fundamentals'
-                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
-                    target='_self'
-                    ref='noreferrer'
-                  >
-                    Buy now →
-                  </a>
-                </p>
-              </div>
-            </li>
-            <li className='mw7 center mv3'>
-              <div className='bg-white br4 mh3 ph4 pb4 pt1'>
-                <h2 className='lh-solid f2 navy tc'>{material.deploymentStrategies.name}</h2>
-                <div className='flex-ns'>
-                  <div className='w-40-ns pb3 pb0-ns'>
-                    <div className='aspect-ratio aspect-ratio--7x5'>
-                      {React.createElement('img', {
-                        src: material.deploymentStrategies.cover.props.src,
-                        alt: material.deploymentStrategies.cover.props.alt,
-                        loading: 'lazy',
-                        className: 'aspect-ratio--object br2 br--top shadow-4',
-                      })}
-                    </div>
-                  </div>
-                  <div className='w-60-ns'>
-                    <ul className='list pl3'>
-                      <ListItem>Ebooks for offline reading</ListItem>
-                      <ListItem>Hands-on guided labs</ListItem>
-                      <ListItem>Practice with real challenges</ListItem>
-                      <ListItem>One time fee, lifetime updates</ListItem>
-                    </ul>
-                  </div>
-                </div>
-                <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='single-deployment-strategies'>
-                    {(49).toLocaleString('US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
-                  </span>
-                </p>
-                <p className='tc mt4'>
-                  <a
-                    href='https://academy.learnk8s.io/single-deployment-strategies'
+                    href='https://academy.learnk8s.io/single-ckad'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'
@@ -657,7 +583,7 @@ request.send();
   )
 }
 
-const ThreeItems: React.StatelessComponent<{ images: [JSX.Element, JSX.Element, JSX.Element]; className?: string }> = ({
+const TwoItems: React.StatelessComponent<{ images: [JSX.Element, JSX.Element]; className?: string }> = ({
   children,
   images,
   className,
@@ -682,22 +608,12 @@ const ThreeItems: React.StatelessComponent<{ images: [JSX.Element, JSX.Element, 
           })}
         </div>
       </div>
-      <div className='w-100 absolute top-0 left-0 ml5 z-3'>
-        <div className='aspect-ratio aspect-ratio--7x5'>
-          {React.createElement('img', {
-            src: images[2].props.src,
-            alt: images[2].props.alt,
-            loading: 'lazy',
-            className: 'aspect-ratio--object br2 br--top shadow-4',
-          })}
-        </div>
-      </div>
     </div>
   )
 }
 
-const ThreeItemsBig: React.StatelessComponent<{
-  images: [JSX.Element, JSX.Element, JSX.Element]
+const TwoItemsBig: React.StatelessComponent<{
+  images: [JSX.Element, JSX.Element]
   className?: string
 }> = ({ children, images, className }) => {
   return (
@@ -715,16 +631,6 @@ const ThreeItemsBig: React.StatelessComponent<{
           {React.createElement('img', {
             src: images[1].props.src,
             alt: images[1].props.alt,
-            loading: 'lazy',
-            className: 'aspect-ratio--object br2 br--top shadow-4',
-          })}
-        </div>
-      </div>
-      <div className='w-100 absolute top-0 left-1 ml5 left-0-l ml6-l z-3'>
-        <div className='aspect-ratio aspect-ratio--7x5'>
-          {React.createElement('img', {
-            src: images[2].props.src,
-            alt: images[2].props.alt,
             loading: 'lazy',
             className: 'aspect-ratio--object br2 br--top shadow-4',
           })}

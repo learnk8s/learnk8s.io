@@ -9,6 +9,9 @@ import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
 import * as Academy from './academy'
 import * as ArchitectingAndScaling from './architecting'
+import * as AdvancedInPractice from './advanced'
+import * as MicroservicesAtScale from './microservices'
+import * as ExploringKubernetes from './exploring'
 import * as ZeroToK8s from './zeroToK8s'
 import * as Blog from './blog'
 import * as Careers from './careers'
@@ -56,6 +59,9 @@ ArchitectingAndScaling.Mount({ store })
 ZeroToK8s.Mount({ store })
 BiteSizedListing.Mount({ store })
 Sitemap.Mount({ store })
+AdvancedInPractice.Mount({ store })
+MicroservicesAtScale.Mount({ store })
+ExploringKubernetes.Mount({ store })
 
 checkPageDetail(store)
 

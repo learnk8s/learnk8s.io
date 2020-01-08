@@ -455,9 +455,26 @@ const content = {
     description: `When you have dozens, hundreds or even thousands of applications interacting in your cluster, it's hard to tell what is going on. What if you could inspect the traffic without affecting routine operations? What if you could upgrade the network and encrypt communications? In this course, you will explore what a Service Mesh is and how you can build your own.`,
     cover: <img src='assets/material/cover_service-meshes.svg' alt='Service meshes' />,
     topics: {
-      istio: {
-        title: 'Istio',
-        image: <img src='assets/material/istio.svg' alt='Istio' />,
+      why: {
+        title: 'Why service meshes?',
+      },
+      envoy: {
+        title: 'Envoy',
+      },
+      circuitBreaker: {
+        title: 'Circuit breaker, rate limiting and filters',
+      },
+      discovery: {
+        title: 'Envoy discovery service',
+      },
+      k8s: {
+        title: 'Envoy and Kubernetes integration',
+      },
+      lb: {
+        title: 'Load balancing with Envoy',
+      },
+      mesh: {
+        title: 'Building a basic service mesh',
       },
     },
   },
@@ -501,7 +518,32 @@ const content = {
     description:
       'This course is designed to help you prepare and pass the Certified Kubernetes Application Developer (CKAD) exam. It has practical challenges as well as tips and tricks on how to be efficient with your time during the exam.',
     cover: <img src='assets/material/cover_ckad.svg' alt='CKAD exam preparation' />,
-    topics: {},
+    topics: {
+      intro: {
+        title: 'Introduction to the CKAD exam',
+      },
+      tipsAndTricks: {
+        title: 'Tips and tricks',
+      },
+      core: {
+        title: 'Core concepts',
+      },
+      podDesign: {
+        title: 'Pod design',
+      },
+      configuration: {
+        title: 'Configuration',
+      },
+      observability: {
+        title: 'Observability',
+      },
+      networking: {
+        title: 'Services and networking',
+      },
+      state: {
+        title: 'State persistence',
+      },
+    },
   },
 }
 
