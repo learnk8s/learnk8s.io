@@ -7,7 +7,6 @@ import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
-import { PrimaryButton } from './homepage'
 import { material } from './material'
 
 export const Academy = {
@@ -109,6 +108,7 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Beginner'
               defaultUSPrice={39}
+              priceId='single-containers'
             >
               <p className='lh-copy masure f5'>{material.docker.description}</p>
               <a href='/architecting-scaling-apps-kubernetes' className='link no-underline underline-hover navy'>
@@ -121,6 +121,7 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Intermediate'
               defaultUSPrice={49}
+              priceId='single-fundamentals'
             >
               <p className='lh-copy masure f5'>{material.kubernetesFundamentals.description}</p>
               <a href='/architecting-scaling-apps-kubernetes' className='link no-underline underline-hover navy'>
@@ -133,6 +134,7 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Intermediate'
               defaultUSPrice={49}
+              priceId='single-deployment-strategies'
             >
               <p className='lh-copy masure f5'>{material.deploymentStrategies.description}</p>
               <a href='/architecting-scaling-apps-kubernetes' className='link no-underline underline-hover navy'>
@@ -140,49 +142,6 @@ function renderPage(state: State) {
               </a>
             </CourseBlock>
           </ul>
-          <div className='bg-evian mw7 center tc pa3 br4'>
-            <p className='lh-copy f4 tc b'>Buy all three module and save 30%</p>
-            <div className='w5 relative center'>
-              <div className='aspect-ratio aspect-ratio--7x5 relative z-2'>
-                {React.createElement('img', {
-                  src: material.kubernetesFundamentals.cover.props.src,
-                  alt: material.kubernetesFundamentals.cover.props.alt,
-                  loading: 'lazy',
-                  className: 'aspect-ratio--object br2 br--top shadow-1',
-                })}
-              </div>
-              <div className='w-100 absolute top-0 right-0 mr6 z-1'>
-                <div className='aspect-ratio aspect-ratio--7x5'>
-                  {React.createElement('img', {
-                    src: material.docker.cover.props.src,
-                    alt: material.docker.cover.props.alt,
-                    loading: 'lazy',
-                    className: 'aspect-ratio--object br2 br--top shadow-1',
-                  })}
-                </div>
-              </div>
-              <div className='w-100 absolute top-0 left-0 ml6 z-3'>
-                <div className='aspect-ratio aspect-ratio--7x5'>
-                  {React.createElement('img', {
-                    src: material.deploymentStrategies.cover.props.src,
-                    alt: material.deploymentStrategies.cover.props.alt,
-                    loading: 'lazy',
-                    className: 'aspect-ratio--object br2 br--top shadow-1',
-                  })}
-                </div>
-              </div>
-            </div>
-            <p className='f3 strike b lh-solid mv3 gray'>$127</p>
-            <p className='f2 lh-solid mv2'>$89</p>
-            <a
-              href='/architecting-scaling-apps-kubernetes'
-              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
-              target='_self'
-              ref='noreferrer'
-            >
-              Buy now →
-            </a>
-          </div>
         </section>
 
         <section className='mw8 center pv4'>
@@ -197,7 +156,7 @@ function renderPage(state: State) {
               <span className='b underline'>dig deeper into Kubernetes internal components</span>.
             </p>
             <a
-              href='/architecting-scaling-apps-kubernetes'
+              href='/advanced-kubernetes-in-practice'
               className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
               target='_self'
               ref='noreferrer'
@@ -212,9 +171,10 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Intermediate'
               defaultUSPrice={49}
+              priceId='single-architecture'
             >
               <p className='lh-copy masure f5'>{material.architecture.description}</p>
-              <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
+              <a href='/advanced-kubernetes-in-practice' className='link no-underline underline-hover navy'>
                 Learn more &#8594;
               </a>
             </CourseBlock>
@@ -224,9 +184,10 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Advanced'
               defaultUSPrice={59}
+              priceId='single-networking'
             >
               <p className='lh-copy masure f5'>{material.networking.description}</p>
-              <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
+              <a href='/advanced-kubernetes-in-practice' className='link no-underline underline-hover navy'>
                 Learn more &#8594;
               </a>
             </CourseBlock>
@@ -236,9 +197,10 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Advanced'
               defaultUSPrice={59}
+              priceId='single-advanced-networking'
             >
               <p className='lh-copy masure f5'>{material.advancedNetworking.description}</p>
-              <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
+              <a href='/advanced-kubernetes-in-practice' className='link no-underline underline-hover navy'>
                 Learn more &#8594;
               </a>
             </CourseBlock>
@@ -257,7 +219,7 @@ function renderPage(state: State) {
               <span className='b underline'>design your services with scalability and flexibility</span> in mind.
             </p>
             <a
-              href='/architecting-scaling-apps-kubernetes'
+              href='/microservices-at-scale'
               className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
               target='_self'
               ref='noreferrer'
@@ -272,9 +234,10 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Intermediate'
               defaultUSPrice={49}
+              priceId='single-templating'
             >
               <p className='lh-copy masure f5'>{material.templating.description}</p>
-              <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
+              <a href='/microservices-at-scale' className='link no-underline underline-hover navy'>
                 Learn more &#8594;
               </a>
             </CourseBlock>
@@ -284,9 +247,10 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Advanced'
               defaultUSPrice={59}
+              priceId='single-autoscaling'
             >
               <p className='lh-copy masure f5'>{material.autoscaling.description}</p>
-              <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
+              <a href='/microservices-at-scale' className='link no-underline underline-hover navy'>
                 Learn more &#8594;
               </a>
             </CourseBlock>
@@ -296,9 +260,10 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Advanced'
               defaultUSPrice={59}
+              priceId='single-service-meshes'
             >
               <p className='lh-copy masure f5'>{material.serviceMeshes.description}</p>
-              <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
+              <a href='/microservices-at-scale' className='link no-underline underline-hover navy'>
                 Learn more &#8594;
               </a>
             </CourseBlock>
@@ -317,7 +282,7 @@ function renderPage(state: State) {
               <span className='b underline'>advanced topics necessary to operate a production-ready cluster</span>.
             </p>
             <a
-              href='/architecting-scaling-apps-kubernetes'
+              href='/exploring-kubernetes'
               className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
               target='_self'
               ref='noreferrer'
@@ -332,9 +297,10 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Advanced'
               defaultUSPrice={59}
+              priceId='single-managing-state'
             >
               <p className='lh-copy masure f5'>{material.managingState.description}</p>
-              <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
+              <a href='/exploring-kubernetes' className='link no-underline underline-hover navy'>
                 Learn more &#8594;
               </a>
             </CourseBlock>
@@ -344,9 +310,10 @@ function renderPage(state: State) {
               className='w-third'
               difficulty='Advanced'
               defaultUSPrice={49}
+              priceId='single-ckad'
             >
               <p className='lh-copy masure f5'>{material.ckad.description}</p>
-              <a href='/nodejs-kubernetes-guide' className='link no-underline underline-hover navy'>
+              <a href='/exploring-kubernetes' className='link no-underline underline-hover navy'>
                 Learn more &#8594;
               </a>
             </CourseBlock>
@@ -375,14 +342,6 @@ request.onload = function() {
             currency: price.currency,
           })
         }
-        var discount = document.querySelector('#' + key + '-discount')
-        if (!!discount) {
-          var price = resp[key]
-          discount.innerHTML = Math.ceil(price.gross * 0.5).toLocaleString(price.country, {
-            style: 'currency',
-            currency: price.currency,
-          })
-        }
       }
     } catch(error) {
       console.log(error)
@@ -394,31 +353,6 @@ request.onerror = function() {};
 
 request.send();
       `,
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-var endsIn = [].slice.call(document.querySelectorAll('.ends-in'))
-var countDownDate = new Date('2019-12-05').getTime()
-setInterval(function () {
-  var now = new Date().getTime()
-  var distance = countDownDate - now
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-  var seconds = Math.floor((distance % (1000 * 60)) / 1000)
-  for (let i = 0, len = endsIn.length; i < len; i++) {
-    if (distance < 0) {
-      endsIn[i].innerHTML = '00:00:00'
-    } else {
-      endsIn[i].innerHTML = pad(hours) + ":" + pad(minutes) + ":" + pad(seconds)
-    }
-  }
-  function pad(n) {
-    return ('' + n).length === 1 ? '0' + n : n
-  }
-}, 1000)
-            `,
           }}
         />
         <script
@@ -449,7 +383,8 @@ const CourseBlock: React.StatelessComponent<{
   title: string
   difficulty: string
   defaultUSPrice: number
-}> = ({ children, className, img, title, difficulty, defaultUSPrice }) => {
+  priceId: string
+}> = ({ children, className, img, title, difficulty, defaultUSPrice, priceId }) => {
   return (
     <li className={`${className || ''}`}>
       <div className='br2 br--top shadow-4 ma3'>
@@ -462,7 +397,7 @@ const CourseBlock: React.StatelessComponent<{
           })}
           <div className='z-2 absolute bottom-1 right-1 bg-navy b f6 ph2 pv1 br4 white ttu'>
             Price:{' '}
-            <span>
+            <span id={priceId}>
               {defaultUSPrice.toLocaleString('US', {
                 style: 'currency',
                 currency: 'USD',

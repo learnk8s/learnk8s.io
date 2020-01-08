@@ -39,21 +39,21 @@ const faqs: FAQ[] = [
 ]
 
 export const Architecting = {
-  id: 'academy-architecting-and-scaling',
-  url: '/architecting-scaling-apps-kubernetes',
-  title: 'Architecting and scaling apps on Kubernetes ⎈ Learnk8s Academy',
-  description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
+  id: 'academy-microservices-at-scale',
+  url: '/microservices-at-scale',
+  title: 'Microservices at scale with Kubernetes ⎈ Learnk8s Academy',
+  description: `A hands-on, online course on mastering Kubernetes and the tools you'll need to build microservice applications at scale.`,
 }
 
 export function Register(store: Store<State, Actions>) {
   store.dispatch(Action.registerPage(Architecting))
   store.dispatch(
     Action.registerOpenGraph({
-      id: 'og-academy-architecting-and-scaling',
+      id: 'og-academy-microservices-at-scale',
       pageId: Architecting.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      title: 'Architecting and scaling apps on Kubernetes ⎈ Learnk8s Academy',
-      description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
+      title: 'Microservices at scale with Kubernetes ⎈ Learnk8s Academy',
+      description: `A hands-on, online course on mastering Kubernetes and the tools you'll need to build microservice applications at scale.`,
     }),
   )
 }
@@ -101,7 +101,7 @@ setTimeout(ldinsp, 0);
         />
       </Head>
       <Body>
-        {[material.docker, material.kubernetesFundamentals, material.deploymentStrategies].map(it => {
+        {[material.templating, material.autoscaling, material.serviceMeshes].map(it => {
           return (
             <JsonLd<Course>
               item={{
@@ -127,14 +127,11 @@ setTimeout(ldinsp, 0);
             <h2 className='f1-l f2 navy'>A Kubernetes course built by engineers for engineers</h2>
             <ThreeItemsBig
               className='mv5'
-              images={[
-                material.docker.cover,
-                material.kubernetesFundamentals.cover,
-                material.deploymentStrategies.cover,
-              ]}
+              images={[material.templating.cover, material.autoscaling.cover, material.serviceMeshes.cover]}
             ></ThreeItemsBig>
             <p className='measure f3-l f4 lh-copy center'>
-              The course, where you can learn how to design, develop and deploy applications in Kubernetes.
+              The course, where you can learn how to design, develop and deploy microservice architectures in
+              Kubernetes.
             </p>
             <p className='measure f3-l f4 lh-copy center'>A course that:</p>
             <ul className='list ph2'>
@@ -174,16 +171,34 @@ setTimeout(ldinsp, 0);
 
           <div className='mv3 mv5-l mt0-l mw8 center'>
             <Module
-              preview={material.docker.cover}
-              title={`1. ${material.docker.name}`}
-              description={material.docker.description}
+              preview={material.templating.cover}
+              title={`1. ${material.templating.name}`}
+              description={material.templating.description}
             >
               <p className='lh-copy measure-wide'>
-                You will learn how to package and run applications in Docker containers. The module covers the following
+                You will learn how to deploy applications to several environments such as dev, staging, prod without
+                repeating yourself. The module covers the following topics:
+              </p>
+              <ul>
+                {Object.values(material.templating.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </Module>
+
+            <Module
+              preview={material.autoscaling.cover}
+              title={`2. ${material.autoscaling.name}`}
+              description={material.autoscaling.description}
+            >
+              <p className='lh-copy measure-wide'>
+                You will learn how to autoscale applications based on custom metrics. The module covers the following
                 topics:
               </p>
               <ul>
-                {Object.values(material.docker.topics).map((it, index) => (
+                {Object.values(material.autoscaling.topics).map((it, index) => (
                   <li key={index} className='lh-copy mv1'>
                     {it}
                   </li>
@@ -192,34 +207,16 @@ setTimeout(ldinsp, 0);
             </Module>
 
             <Module
-              preview={material.kubernetesFundamentals.cover}
-              title={`2. ${material.kubernetesFundamentals.name}`}
-              description={material.kubernetesFundamentals.description}
+              preview={material.serviceMeshes.cover}
+              title={`3. ${material.serviceMeshes.name}`}
+              description={material.serviceMeshes.description}
             >
               <p className='lh-copy measure-wide'>
-                You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the
-                following topics:
+                You will learn how to use Envoy and build your very own service mesh. The module covers the following
+                topics:
               </p>
               <ul>
-                {Object.values(material.kubernetesFundamentals.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </Module>
-
-            <Module
-              preview={material.deploymentStrategies.cover}
-              title={`3. ${material.deploymentStrategies.name}`}
-              description={material.deploymentStrategies.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn different techniques to deploy your applications with zero downtime. The module covers
-                the following topics:
-              </p>
-              <ul>
-                {Object.values(material.deploymentStrategies.topics).map((it, index) => (
+                {Object.values(material.serviceMeshes.topics).map((it, index) => (
                   <li key={index} className='lh-copy mv1'>
                     {it}
                   </li>
@@ -345,14 +342,10 @@ setTimeout(ldinsp, 0);
             <div className='bg-white br4 mh3 ph3 pb3 mw6'>
               <h2 className='lh-copy f2 navy tc'>Complete series</h2>
               <ThreeItems
-                images={[
-                  material.docker.cover,
-                  material.kubernetesFundamentals.cover,
-                  material.deploymentStrategies.cover,
-                ]}
+                images={[material.templating.cover, material.autoscaling.cover, material.serviceMeshes.cover]}
               ></ThreeItems>
               <p className='f3 strike lh-solid mt3 mb4 gray tc'>
-                <span className='db' id='bundle-architecting-full'>
+                <span className='db' id='bundle-microservices-full'>
                   {(127).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
@@ -360,7 +353,7 @@ setTimeout(ldinsp, 0);
                 </span>
               </p>
               <p className='f2 navy tc mv4 bs'>
-                <span className='db' id='bundle-architecting'>
+                <span className='db' id='bundle-microservices'>
                   {(89).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
@@ -381,7 +374,7 @@ setTimeout(ldinsp, 0);
               </ul>
               <p className='tc mt4'>
                 <a
-                  href='https://academy.learnk8s.io/bundle-architecting'
+                  href='https://academy.learnk8s.io/bundle-microservices'
                   className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                   target='_self'
                   ref='noreferrer'
@@ -439,13 +432,13 @@ setTimeout(ldinsp, 0);
           <ul className='pl0 list'>
             <li className='mw7 center mv3'>
               <div className='bg-white br4 mh3 ph4 pb4 pt1'>
-                <h2 className='lh-solid f2 navy tc'>{material.docker.name}</h2>
+                <h2 className='lh-solid f2 navy tc'>{material.templating.name}</h2>
                 <div className='flex-ns'>
                   <div className='w-40-ns pb3 pb0-ns'>
                     <div className='aspect-ratio aspect-ratio--7x5'>
                       {React.createElement('img', {
-                        src: material.docker.cover.props.src,
-                        alt: material.docker.cover.props.alt,
+                        src: material.templating.cover.props.src,
+                        alt: material.templating.cover.props.alt,
                         loading: 'lazy',
                         className: 'aspect-ratio--object br2 br--top shadow-4',
                       })}
@@ -461,8 +454,8 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='single-containers'>
-                    {(39).toLocaleString('US', {
+                  <span className='db' id='single-templating'>
+                    {(49).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
                     })}
@@ -470,7 +463,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/single-containers'
+                    href='https://academy.learnk8s.io/single-templating'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'
@@ -482,13 +475,13 @@ setTimeout(ldinsp, 0);
             </li>
             <li className='mw7 center mv3'>
               <div className='bg-white br4 mh3 ph4 pb4 pt1'>
-                <h2 className='lh-solid f2 navy tc'>{material.kubernetesFundamentals.name}</h2>
+                <h2 className='lh-solid f2 navy tc'>{material.autoscaling.name}</h2>
                 <div className='flex-ns'>
                   <div className='w-40-ns pb3 pb0-ns'>
                     <div className='aspect-ratio aspect-ratio--7x5'>
                       {React.createElement('img', {
-                        src: material.kubernetesFundamentals.cover.props.src,
-                        alt: material.kubernetesFundamentals.cover.props.alt,
+                        src: material.autoscaling.cover.props.src,
+                        alt: material.autoscaling.cover.props.alt,
                         loading: 'lazy',
                         className: 'aspect-ratio--object br2 br--top shadow-4',
                       })}
@@ -504,7 +497,7 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='single-fundamentals'>
+                  <span className='db' id='single-autoscaling'>
                     {(49).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
@@ -513,7 +506,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/single-fundamentals'
+                    href='https://academy.learnk8s.io/single-autoscaling'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'
@@ -525,13 +518,13 @@ setTimeout(ldinsp, 0);
             </li>
             <li className='mw7 center mv3'>
               <div className='bg-white br4 mh3 ph4 pb4 pt1'>
-                <h2 className='lh-solid f2 navy tc'>{material.deploymentStrategies.name}</h2>
+                <h2 className='lh-solid f2 navy tc'>{material.serviceMeshes.name}</h2>
                 <div className='flex-ns'>
                   <div className='w-40-ns pb3 pb0-ns'>
                     <div className='aspect-ratio aspect-ratio--7x5'>
                       {React.createElement('img', {
-                        src: material.deploymentStrategies.cover.props.src,
-                        alt: material.deploymentStrategies.cover.props.alt,
+                        src: material.serviceMeshes.cover.props.src,
+                        alt: material.serviceMeshes.cover.props.alt,
                         loading: 'lazy',
                         className: 'aspect-ratio--object br2 br--top shadow-4',
                       })}
@@ -547,7 +540,7 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='single-deployment-strategies'>
+                  <span className='db' id='single-service-meshes'>
                     {(49).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
@@ -556,7 +549,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/single-deployment-strategies'
+                    href='https://academy.learnk8s.io/single-service-meshes'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'
