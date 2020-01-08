@@ -2,7 +2,7 @@ import React from 'react'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
-import { material, assets as materialAssets } from './material'
+import { material } from './material'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo, FAQs, FAQ } from './layout.v3'
 import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
@@ -10,9 +10,9 @@ import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
 
 const enterprisePackage: MailTo = {
-  subject: 'Learnk8s Academy — Enterprise license',
-  body: `Hi Learnk8s,\n\nI'd like to discuss buying ___ licenses in bulk for the Learnk8s Academy.\n\nKind regards,\n`,
-  email: 'hello@learnk8s.io',
+  subject: 'Learnk8s Academy — Enterprise licences',
+  body: `Hi Learnk8s,\n\nI'd like to discuss buying ___ licences in bulk for the Learnk8s Academy.\n\nKind regards,\n`,
+  email: 'sales@learnk8s.io',
 }
 
 const faqs: FAQ[] = [
@@ -251,7 +251,7 @@ setTimeout(ldinsp, 0);
 
         <Section className='bg-evian'>
           <p className='f2 f1-l navy b tc mb3'>What is it? An ebook?</p>
-          <p className='lh-copy f4-l black-70 measure center tc ph3 mb5'>You can read the content as an ebook</p>
+          <p className='lh-copy f4-l black-70 measure center tc ph3 mb5'>You can read the content like an ebook</p>
 
           <div className='mw7 center ph3 pb4'>
             <div className='mt3 aspect-ratio aspect-ratio--4x3'>
@@ -342,7 +342,7 @@ setTimeout(ldinsp, 0);
           <p className='lh-copy f4-l black-70 measure center tc ph3 mb5'>Choose the package that works best for you.</p>
 
           <div className='flex-l justify-center items-start'>
-            <div className='bg-white br4 mh3 ph3 pb3'>
+            <div className='bg-white br4 mh3 ph3 pb3 mw6'>
               <h2 className='lh-copy f2 navy tc'>Complete series</h2>
               <ThreeItems
                 images={[
@@ -352,7 +352,7 @@ setTimeout(ldinsp, 0);
                 ]}
               ></ThreeItems>
               <p className='f3 strike lh-solid mt3 mb4 gray tc'>
-                <span className='db' id='pricing-standard'>
+                <span className='db' id='bundle-architecting-full'>
                   {(127).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
@@ -360,7 +360,7 @@ setTimeout(ldinsp, 0);
                 </span>
               </p>
               <p className='f2 navy tc mv4 bs'>
-                <span className='db' id='pricing-discount'>
+                <span className='db' id='bundle-architecting'>
                   {(89).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
@@ -368,15 +368,20 @@ setTimeout(ldinsp, 0);
                 </span>
               </p>
               <ul className='list ph2'>
-                <ListItem>All in-depth 3 courses</ListItem>
+                <ListItem>Access to all 11 courses</ListItem>
                 <ListItem>Ebooks for offline reading</ListItem>
                 <ListItem>Hands-on guided labs</ListItem>
                 <ListItem>Practice with real challenges</ListItem>
-                <ListItem>One time fee, lifetime updates</ListItem>
+                <ListItem>
+                  <span className='b'>One time fee, lifetime updates</span>
+                </ListItem>
+                <ListItem>
+                  <span className='b'>Upgrade to unlimited access any time</span>
+                </ListItem>
               </ul>
               <p className='tc mt4'>
                 <a
-                  href='https://academy.learnk8s.io/architecting-bundle'
+                  href='https://academy.learnk8s.io/bundle-architecting'
                   className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                   target='_self'
                   ref='noreferrer'
@@ -386,39 +391,39 @@ setTimeout(ldinsp, 0);
               </p>
             </div>
 
-            <div className='bg-white br4 mh3 ph3 pb3'>
-              <h2 className='lh-copy f2 navy tc'>
-                Complete series<sup>++</sup>
-              </h2>
-              <ThreeItems
-                images={[
-                  material.docker.cover,
-                  material.kubernetesFundamentals.cover,
-                  material.deploymentStrategies.cover,
-                ]}
-              ></ThreeItems>
-              <p className='f3 lh-solid mt3 mb4 tc navy b'>+ live webinars</p>
+            <div className='bg-white br4 mh3 ph3 pb3 mw6'>
+              <h2 className='lh-copy f2 navy tc mb0'>Full access</h2>
+              <div className='ph3'>
+                <div className='aspect-ratio aspect-ratio--7x5'>
+                  {React.createElement('img', {
+                    src: 'assets/academy/all.png',
+                    alt: 'All Learnk8s courses',
+                    loading: 'lazy',
+                    className: 'aspect-ratio--object',
+                  })}
+                </div>
+              </div>
+              <p className='f3 lh-solid mt3 mb4 tc navy b'>Unlimited access to all courses</p>
               <p className='f2 navy tc mv4 bs'>
-                <span className='db' id='pricing-discount'>
-                  {(397).toLocaleString('US', {
+                <span className='db' id='all'>
+                  {(499).toLocaleString('US', {
                     style: 'currency',
                     currency: 'USD',
                   })}
                 </span>
               </p>
               <ul className='list ph2'>
-                <ListItem>All in-depth 3 courses</ListItem>
+                <ListItem>All in-depth 11 courses</ListItem>
                 <ListItem>Ebooks for offline reading</ListItem>
                 <ListItem>Hands-on guided labs</ListItem>
                 <ListItem>Practice with real challenges</ListItem>
-                <ListItem>One time fee, lifetime updates</ListItem>
                 <ListItem>
-                  <span className='b'>Unlimited live webinars</span>
+                  <span className='b'>One time fee, lifetime updates</span>
                 </ListItem>
               </ul>
               <p className='tc mt4'>
                 <a
-                  href='https://academy.learnk8s.io/architecting-bundle'
+                  href='https://academy.learnk8s.io/all'
                   className='no-underline dib ba b--sky sky br1 pv3 ph4 b f4 br2'
                   target='_self'
                   ref='noreferrer'
@@ -456,7 +461,7 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='pricing-discount'>
+                  <span className='db' id='single-containers'>
                     {(39).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
@@ -465,7 +470,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/architecting-bundle'
+                    href='https://academy.learnk8s.io/single-containers'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'
@@ -499,7 +504,7 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='pricing-discount'>
+                  <span className='db' id='single-fundamentals'>
                     {(49).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
@@ -508,7 +513,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/architecting-bundle'
+                    href='https://academy.learnk8s.io/single-fundamentals'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'
@@ -542,7 +547,7 @@ setTimeout(ldinsp, 0);
                   </div>
                 </div>
                 <p className='f2 navy tc mv4 bs'>
-                  <span className='db' id='pricing-discount'>
+                  <span className='db' id='single-deployment-strategies'>
                     {(49).toLocaleString('US', {
                       style: 'currency',
                       currency: 'USD',
@@ -551,7 +556,7 @@ setTimeout(ldinsp, 0);
                 </p>
                 <p className='tc mt4'>
                   <a
-                    href='https://academy.learnk8s.io/architecting-bundle'
+                    href='https://academy.learnk8s.io/single-deployment-strategies'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     ref='noreferrer'
@@ -562,6 +567,17 @@ setTimeout(ldinsp, 0);
               </div>
             </li>
           </ul>
+
+          <div>
+            <p className='f1-l f2 navy b tc mb2 pt4-ns pt2'>Looking to train your team?</p>
+            <p className='lh-copy f4 black-70 measure center tc'>
+              Learnk8s offers corporate rates for enterprise customers. Get in touch at{' '}
+              <a className='link underline' href={mailto(enterprisePackage)}>
+                sales@learnk8s.io
+              </a>{' '}
+              to discuss.
+            </p>
+          </div>
         </section>
 
         <Section className=''>
@@ -615,50 +631,19 @@ request.onload = function() {
             currency: price.currency,
           })
         }
-        var discount = document.querySelector('#' + key + '-discount')
-        if (!!discount) {
-          var price = resp[key]
-          discount.innerHTML = Math.ceil(price.gross * 0.5).toLocaleString(price.country, {
-            style: 'currency',
-            currency: price.currency,
-          })
-        }
       }
     } catch(error) {
       console.log(error)
     }
-  } else {}
+  } else {
+    console.log(this)
+  }
 };
 
 request.onerror = function() {};
 
 request.send();
       `,
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-var endsIn = [].slice.call(document.querySelectorAll('.ends-in'))
-var countDownDate = new Date('2019-12-05').getTime()
-setInterval(function () {
-  var now = new Date().getTime()
-  var distance = countDownDate - now
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-  var seconds = Math.floor((distance % (1000 * 60)) / 1000)
-  for (let i = 0, len = endsIn.length; i < len; i++) {
-    if (distance < 0) {
-      endsIn[i].innerHTML = '00:00:00'
-    } else {
-      endsIn[i].innerHTML = pad(hours) + ":" + pad(minutes) + ":" + pad(seconds)
-    }
-  }
-  function pad(n) {
-    return ('' + n).length === 1 ? '0' + n : n
-  }
-}, 1000)
-            `,
           }}
         />
         <script
