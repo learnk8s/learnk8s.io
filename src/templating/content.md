@@ -1,6 +1,6 @@
 **TL;DR:** You should use tools such as [`yq`](https://mikefarah.github.io/yq/) and [kustomize](https://kustomize.io/) to template YAML resources instead of relying on tools that interpolate strings such as [Helm](https://helm.sh/).
 
-If you're working on large scale projects, you should consider using **real code** — you can find [hands-on examples on how to programatically generate Kubernetes resources in Java, Go, Javascript, C# and Python in this repository](https://github.com/learnk8s/templating-kubernetes).
+If you're working on large scale projects, you should consider using **real code** — you can find [hands-on examples on how to programmatically generate Kubernetes resources in Java, Go, Javascript, C# and Python in this repository](https://github.com/learnk8s/templating-kubernetes).
 
 ## Contents:
 
@@ -21,7 +21,7 @@ As an example, when an app runs in the staging environment, it should connect to
 
 However, in production, it should connect to the production database.
 
-In Kubernetes, you can use an environment variables to inject the correct database URL.
+In Kubernetes, you can use an environment variable to inject the correct database URL.
 
 The following Pod is an example:
 
@@ -92,7 +92,7 @@ _What if you want to change a value that isn't a placeholder?_
 
 _What if you have too many placeholders, what does the `sed` command look like?_
 
-If you have only a handful variables that you wish to change, you might want to install [`yq`](https://mikefarah.github.io/yq/) — a command line tool designed to transform YAML.
+If you have only a handful variables that you wish to change, you might want to install [`yq`](https://mikefarah.github.io/yq/) — a command-line tool designed to transform YAML.
 
 > `yq` is similar to another more popular tool called [`jq`](https://stedolan.github.io/jq/) that focuses on JSON instead of YAML.
 
@@ -249,27 +249,27 @@ spec:
       - containerPort: 80
 ```
 
-> Please note that `yq` sorts the YAML fields in the output alphabetically, so the order of fields in your output could be different from above listing.
+> Please note that `yq` sorts the YAML fields in the output alphabetically, so the order of fields in your output could be different from the above listing.
 
 In other words, the two YAML files are merged into one.
 
-While the example shows a convenient strategy to compose complex YAML from basic files, it also shows some of the limitations of `yq`:
+While the example shows a useful strategy to compose complex YAML from basic files, it also shows some of the limitations of `yq`:
 
 1. The two YAML files are merged at the top level. There's no way you add a chunk of YAML file under `.spec.containers[]`, as an example.
 1. The order of the files matters. If you invert the order, `yq` keeps `envoy-pod` for the Pod's name in `metadata.name`.
-1. You have to tell `yq` explicity [when to append and overwrite values](https://mikefarah.github.io/yq/merge). Since those are flags apply to the whole document, it's hard to get the granularity right.
+1. You have to tell `yq` explicitly [when to append and overwrite values](https://mikefarah.github.io/yq/merge). Since those are flags that apply to the whole document, it's hard to get the granularity right.
 
 However, if you plan to use `yq` for small projects, you can probably go quite far with it.
 
-There's another tool similar to `yq`, but focused specifically on Kubernetes YAML resources: [kustomize](https://kustomize.io/).
+There's another tool similar to `yq`, but explicitly focused on Kubernetes YAML resources: [kustomize](https://kustomize.io/).
 
 While `yq` understands and transforms YAML, kustomize can understand and transform Kubernetes YAML.
 
-That's a subtle but important difference so you will explore that next.
+That's a subtle but essential difference so you will explore that next.
 
 ## Templating with Kustomize
 
-Kustomize is a command line tool that can create and transform YAML files — just like `yq`.
+Kustomize is a command-line tool that can create and transform YAML files — just like `yq`.
 
 However, instead of using only the command line, kustomize uses a file called `kustomization.yaml` to decide how to template the YAML.
 
@@ -383,7 +383,7 @@ spec:
     name: test-container
 ```
 
-The kustomize patch functionality works in a similar way as `yq merge`, but the setup for kustomize is more verbose.
+The kustomize patch functionality works similarly as `yq merge`, but the setup for kustomize is more tedious.
 
 Also, kutomize merges the two YAML only when `metadata.name` is the same in both files.
 
@@ -486,7 +486,7 @@ _Is there an alternative to Kustomize and `yq` that is flexible and structured?_
 
 ## Generating resource manifests with code
 
-You could generate YAML programatically with code.
+You could generate YAML programmatically with code.
 
 And you don't even need to start from scratch.
 
@@ -623,7 +623,7 @@ kubectl apply -f pod.json
 
 **It works!**
 
-You could also skip `kubectl` all together and submit the JSON to your cluster directly.
+You could also skip `kubectl` altogether and submit the JSON to your cluster directly.
 
 Using the official Javascript library, you could have the following code:
 
@@ -662,8 +662,8 @@ Writing resource definition for objects such as Deployments, Services, StatefulS
 
 1. You don't need to come up with a way to replace values.
 1. You don't need to learn YAML.
-1. You can leverage functions, string concatenations are many other features that are already available as part of the language.
-1. If your language of choice supports types, you can use intellisense to create resources.
+1. You can leverage functions, string concatenations and many other features that are already available as part of the language.
+1. If your language of choice supports types, you can use IntelliSense to create resources.
 
 However, it's not as common despite the advantages.
 
@@ -671,7 +671,7 @@ You can find the [above example translated in Java, Go, Python, C# in this repos
 
 ## Why not Helm?
 
-[Helm is a packager manager, release manager and a templating engine.](https://learnk8s.io/helm-templating-kubernetes-yaml)
+[Helm is a package manager, release manager and a templating engine.](https://learnk8s.io/helm-templating-kubernetes-yaml)
 
 So you could use Helm to template the same Pod.
 
@@ -689,7 +689,7 @@ spec:
       value: {{ .Values.environment_name }}
 ```
 
-The template cannot live in isolation and should be placed in a directory that has a specific structure — [an Helm chart](https://helm.sh/docs/topics/charts/).
+The template cannot live in isolation and should be placed in a directory that has a specific structure — [a Helm chart](https://helm.sh/docs/topics/charts/).
 
 ```terminal|command=1|title=bash
 tree
@@ -700,7 +700,7 @@ tree
 └── values.yaml
 ```
 
-The `values.yaml` file contains all the fields that are customisable:
+The `values.yaml` file contains all the customisable fields:
 
 ```yaml|title=values.yaml
 environment_name: production
@@ -729,7 +729,7 @@ In the example above, you can't customise the name of the container or the name 
 
 If you want to do so, you should introduce more variables such as `{{ .Values.image_name }}` and `{{ .Values.pod_name }}` and add them to the `values.yaml`.
 
-The bottom line is, unless it's wrapped into `{{ }}`, you cannot change any value.
+The bottom line is unless it's wrapped into `{{ }}`, you cannot change any value.
 
 Also, Helm doesn't _really_ understand YAML.
 
@@ -737,17 +737,17 @@ Helm uses the [Go templating engine](https://golang.org/pkg/text/template/) whic
 
 Hence, you could generate invalid YAML with Helm.
 
-Helm is usually a popular choice because you can share and discover [charts — collection of Kubernetes resources](https://helm.sh/docs/topics/charts/).
+Helm is usually a popular choice because you can share and discover [charts — a collection of Kubernetes resources](https://helm.sh/docs/topics/charts/).
 
 But, when it comes to templating, it's a poor choice.
 
 ## Other configuration tools
 
-There are many other tools that are designed to augment or replace YAML in Kubernetes.
+Many other tools are designed to augment or replace YAML in Kubernetes.
 
 The following list has some of the more interesting approaches:
 
-1. [Cue is a configuration language](https://cuelang.org/) that doesn't limit itself to Kubernetes. Instead it can generate configuration for APIs, database schemas, etc.
+1. [Cue is a configuration language](https://cuelang.org/) that doesn't limit itself to Kubernetes. Instead, it can generate the configuration for APIs, database schemas, etc.
 1. [jk](https://github.com/jkcfg/jk) is a data templating tool designed to help writing structured configuration files.
 1. [jsonnet](https://jsonnet.org/) is a data templating language similar to Cue.
 1. [Dhall](https://github.com/dhall-lang/dhall-lang) is a programmable configuration language.
@@ -755,27 +755,27 @@ The following list has some of the more interesting approaches:
 
 The bottom line is that all of the above tools require you to learn one more language (or DSL) to handle configuration.
 
-_If you have to introduce a new language, why not introducing a **real** language that perhaps you already use?_
+_If you have to introduce a new language, why not using a **real** language that perhaps you already use?_
 
 ## Summary
 
 When you manage multiple environments and multiple teams, it's natural to look for strategies to parametrise your deployments.
 
-And templating your Kubernetes definitions, it's the next logical choise to avoid repeating yourself and standardise your practices.
+And templating your Kubernetes definitions, it's the next logical choice to avoid repeating yourself and standardise your practices.
 
 There're several options to template YAML some of them treat it as a string.
 
-You should avoid tools that don't understand YAML because they requires to pay extra care on things such as identation, escaping, etc.
+You should avoid tools that don't understand YAML because they require extra care on things such as indentation, escaping, etc.
 
-Instead you should look for tools that can mangle YAML such as [`yq`](https://mikefarah.github.io/yq/) or [kustomize](https://kustomize.io/).
+Instead, you should look for tools that can mangle YAML such as [`yq`](https://mikefarah.github.io/yq/) or [kustomize](https://kustomize.io/).
 
 The other option at your disposal is to use your programming language of choice to create the objects and then serialise them into YAML or JSON.
 
-You can find the [a few example on how to create Kubernetes YAML in Java, Go, Python, C# in this repository](https://github.com/learnk8s/templating-kubernetes).
+You can find the [a few examples on how to create Kubernetes YAML in Java, Go, Python, C# in this repository](https://github.com/learnk8s/templating-kubernetes).
 
 That's all!
 
-A special thanks goes to:
+A special thanks go to:
 
 - [Daniel Weibel](https://medium.com/@weibeld) who offered excellent feedback on this article and contributed with the Go and Python translation for the example.
 - [Salman Iqbal](https://twitter.com/soulmaniqbal) who translated the snippets into C#.

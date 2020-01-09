@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const Templating = {
   id: 'templating-yaml-options',
   url: '/templating-kubernetes-yaml',
-  title: 'Templating YAML in Kubernetes',
+  title: 'Templating Kubernetes YAML with yq, kustomize and real code',
   description: `Templating YAML in Kubernetes Templating YAML in Kubernetes Templating YAML in Kubernetes`,
 }
 
