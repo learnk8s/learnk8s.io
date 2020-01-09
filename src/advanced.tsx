@@ -175,7 +175,7 @@ setTimeout(ldinsp, 0);
               description={material.architecture.description}
             >
               <p className='lh-copy measure-wide'>
-                You will learn how build (and brake) your cluster. The module covers the following topics:
+                You will learn how build (and break) your cluster. The module covers the following topics:
               </p>
               <ul>
                 {Object.values(material.architecture.topics).map((it, index) => (

@@ -149,7 +149,7 @@ function renderPage(state: State) {
             <h2 className='f2 measure-narrow lh-solid navy'>2. Advanced Kubernetes in practice</h2>
             <p className='measure f4 lh-copy black-80'>
               If you <span className='i'>really</span> want to learn Kubernetes, you should{' '}
-              <span className='underline'>build and brake your own cluster</span>.
+              <span className='underline'>build and break your own cluster</span>.
             </p>
             <p className='measure f4 lh-copy black-80'>
               This collection of courses are designed to{' '}
