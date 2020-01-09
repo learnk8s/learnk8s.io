@@ -15,9 +15,7 @@ If you're working on large scale projects, you should consider using **real code
 
 ## Introduction: managing YAML files
 
-When you have multiple Kubernetes clusters, it's common to have resources that can be applied to all environments but with a small modification.
-
-As an example, when an app runs in the staging environment, it should connect to the staging database.
+When you have multiple Kubernetes clusters, it's common to have resources that can be applied to all environments but with small modifications. As an example, when an app runs in the staging environment, it should connect to the staging database.
 
 However, in production, it should connect to the production database.
 
@@ -39,7 +37,7 @@ spec:
       value: postgres://db_url:5432
 ```
 
-However, since the value `postgres://db_url:5432` is hardcoded in the YAML definition, there's no easy way to deploy the same Pod in multiple environments such as dev, staging and production.
+Since the value `postgres://db_url:5432` is hardcoded in the YAML definition, there's no easy way to deploy the same Pod in multiple environments such as dev, staging and production.
 
 You could create a Pod YAML definition for each of the environment you plan to deploy.
 
@@ -53,7 +51,7 @@ kube/
 
 _Unfortunately, having several copies of the same file with minor modifications has its challenges._
 
-**If you update the name of the image or the version, you have to amend all the remaining files.**
+**If you update the name of the image or the version, you have to amend all of the remaining files.**
 
 ## Using templates with search and replace
 
@@ -61,7 +59,7 @@ A better strategy is to have a placeholder and replace it with the real value be
 
 _Search and replace._
 
-If you're familiar with `bash`, you can implement the search and replace with few lines of `sed`.
+If you're familiar with `bash`, you can implement search and replace with few lines of `sed`.
 
 Your Pod should contain a placeholder like this:
 
@@ -180,7 +178,7 @@ If you prefer to edit the YAML in place, you should add the `-i` flag.
 
 The difference between `yq` and `sed` is that the former understands the YAML format and can navigate and mangle the structured markup.
 
-On the other hands, `sed` is treating files as strings and it doesn't mind if the file isn't a valid YAML.
+On the other hand, `sed` treats files as strings and it doesn't mind if the file isn't a valid YAML.
 
 Since `yq` understands YAML, let's explore a few more complex scenarios.
 
@@ -255,7 +253,7 @@ In other words, the two YAML files are merged into one.
 
 While the example shows a useful strategy to compose complex YAML from basic files, it also shows some of the limitations of `yq`:
 
-1. The two YAML files are merged at the top level. There's no way you add a chunk of YAML file under `.spec.containers[]`, as an example.
+1. The two YAML files are merged at the top level. For instance, you cannot add a chunk of YAML file under `.spec.containers[]`.
 1. The order of the files matters. If you invert the order, `yq` keeps `envoy-pod` for the Pod's name in `metadata.name`.
 1. You have to tell `yq` explicitly [when to append and overwrite values](https://mikefarah.github.io/yq/merge). Since those are flags that apply to the whole document, it's hard to get the granularity right.
 
