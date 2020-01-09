@@ -18,7 +18,7 @@ export function Register(store: Store<State, Actions>) {
     Action.registerOpenGraph({
       id: 'og-templating-yaml-options',
       pageId: Templating.id,
-      image: <img src='src/troubleshooting/flowchart.png' alt='Troubleshooting Kubernetes deployments' />,
+      image: <img src='src/templating/templating.png' alt='Troubleshooting Kubernetes deployments' />,
       title: Templating.title,
       description: Templating.description,
     }),
@@ -34,12 +34,12 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Templating.id }))
+  store.dispatch(Action.assignTag({ id: 'general-post', pageId: Templating.id }))
   store.dispatch(
     Action.registerPreviewPicture({
       id: 'templating-yaml-options-picture',
       pageId: Templating.id,
-      image: <img src='src/troubleshooting/flowchart.svg' alt={Templating.title} />,
+      image: <img src='src/templating/templating.svg' alt={Templating.title} />,
     }),
   )
 }
