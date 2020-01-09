@@ -757,7 +757,7 @@ _If you have to introduce a new language, why not using a **real** language that
 
 ## Summary
 
-When you manage multiple environments and multiple teams, it's natural to look for strategies to parametrise your deployments.
+When you manage multiple environments and multiple teams, it's natural to look for strategies to parameterise your deployments.
 
 And templating your Kubernetes definitions, it's the next logical choice to avoid repeating yourself and standardise your practices.
 
@@ -771,7 +771,7 @@ The other option at your disposal is to use your programming language of choice 
 
 You can find the [a few examples on how to create Kubernetes YAML in Java, Go, Python, C# in this repository](https://github.com/learnk8s/templating-kubernetes).
 
-That's all!
+## That's all folks!
 
 A special thanks go to:
 
