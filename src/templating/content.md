@@ -383,7 +383,7 @@ spec:
 
 The kustomize patch functionality works similarly as `yq merge`, but the setup for kustomize is more tedious.
 
-Also, kutomize merges the two YAML only when `metadata.name` is the same in both files.
+Also, kustomize merges the two YAML only when `metadata.name` is the same in both files.
 
 _It's safer, but is it enough to justify using kustomize in favour or `yq`?_
 
