@@ -7,9 +7,9 @@ import { toVFile } from '../files'
 
 export const Templating = {
   id: 'templating-yaml-options',
-  url: '/templating-kubernetes-yaml',
-  title: 'Templating Kubernetes YAML with yq, kustomize and real code',
-  description: `Templating YAML in Kubernetes Templating YAML in Kubernetes Templating YAML in Kubernetes`,
+  url: '/templating-yaml-with-code',
+  title: 'Templating YAML in Kubernetes with real code',
+  description: `Learn how you can parametrise resource definitions with yq, kustomize and real code.`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -20,7 +20,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: Templating.id,
       image: <img src='src/templating/templating.png' alt='Troubleshooting Kubernetes deployments' />,
       title: Templating.title,
-      description: Templating.description,
+      description: `Learn how you can leverage tools such as yq and kustomize to template your Kubernetes YAML file. Learn how to write your own tool to generate YAML programatically with a real programming language such as Java, Node.js, Go, Python or C#.`,
     }),
   )
   store.dispatch(
@@ -29,8 +29,8 @@ export function Register(store: Store<State, Actions>) {
       pageId: Templating.id,
       authorId: Authors.danielePolencic.id,
       title: Templating.title,
-      description: `Templating YAML in Kubernetes`,
-      publishedDate: '2020-01-08',
+      description: `Learn how you can leverage tools such as yq and kustomize to template your Kubernetes YAML file. Learn how to write your own tool to generate YAML programatically with a real programming language such as Java, Node.js, Go, Python or C#.`,
+      publishedDate: '2020-01-09',
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
