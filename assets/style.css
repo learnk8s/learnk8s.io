@@ -362,7 +362,7 @@
 @media screen and (max-width: 60em) {
   #main-menu .reveal {
     display: none;
-    background-color: var(--navy);
+    background-color: #001b44;
   }
 
   #main-menu:target .reveal {
