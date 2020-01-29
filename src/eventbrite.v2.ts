@@ -128,7 +128,9 @@ export async function SyncEvents({
 }
 
 async function getEventsFromEventBrite(organisationId: string, sdk: AxiosInstance) {
-  const res = await sdk.get<ResponseEvents>(`/organizations/${organisationId}/events?expand=ticket_classes,venue`)
+  const res = await sdk.get<ResponseEvents>(
+    `/organizations/${organisationId}/events?expand=ticket_classes,venue&status=live&page_size=50`,
+  )
   const events = res.data.events.map(it => {
     const $ = cheerio.load(it.description.html || '', { decodeEntities: false })
     return {

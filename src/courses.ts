@@ -478,7 +478,7 @@ export function Register(store: Store<State, Actions>) {
     Action.registerWorkshop({
       id: 'LK8S|SEATTLE|20200629',
       startAt: '2020-06-29T09:30:00',
-      endsAt: '2020-06-29T05:00:00',
+      endsAt: '2020-07-01T05:00:00',
       timezone: 'America/Los_Angeles',
       courseId: Courses.threeDays.id,
       priceId: CoursePrice.UnitedStates.id,
