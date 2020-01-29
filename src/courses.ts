@@ -27,11 +27,25 @@ const Venues = {
     country: 'Australia',
     countryCode: 'AU',
   },
+  GenericMelbourne: {
+    id: 'genericmel',
+    locationName: 'Melbourne',
+    city: 'Melbourne',
+    country: 'Australia',
+    countryCode: 'AU',
+  },
   GenericSanFrancisco: {
     id: 'genericsf',
     locationName: 'San Francisco',
     city: 'San Francisco',
     country: 'California',
+    countryCode: 'US',
+  },
+  GenericSeattle: {
+    id: 'genericseattle',
+    locationName: 'Seattle',
+    city: 'Seattle',
+    country: 'Washington',
     countryCode: 'US',
   },
   GenericToronto: {
@@ -66,6 +80,13 @@ const Venues = {
     id: 'genericbe',
     locationName: 'Berlin',
     city: 'Berlin',
+    country: 'Germany',
+    countryCode: 'DE',
+  },
+  GenericMunich: {
+    id: 'genericmu',
+    locationName: 'Munich',
+    city: 'Munich',
     country: 'Germany',
     countryCode: 'DE',
   },
@@ -105,7 +126,7 @@ const CoursePrice = {
     currency: 'GBP',
     locale: 'en-GB',
   },
-  Sydney: {
+  Australia: {
     id: 'syd3days',
     price: 2550,
     currency: 'AUD',
@@ -280,7 +301,7 @@ export function Register(store: Store<State, Actions>) {
       endsAt: '2020-03-06T05:00:00',
       timezone: 'Australia/Sydney',
       courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Sydney.id,
+      priceId: CoursePrice.Australia.id,
       venueId: Venues.GenericSydney.id,
       pictureId: NewPictures.one.id,
     }),
@@ -300,8 +321,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|LONDON|20200311',
-      startAt: '2020-03-11T09:30:00',
-      endsAt: '2020-03-13T05:00:00',
+      startAt: '2020-04-27T09:30:00',
+      endsAt: '2020-04-29T05:00:00',
       timezone: 'Europe/London',
       courseId: Courses.threeDays.id,
       priceId: CoursePrice.GreatBritain.id,
@@ -342,6 +363,126 @@ export function Register(store: Store<State, Actions>) {
       courseId: Courses.threeDays.id,
       priceId: CoursePrice.UnitedArabEmirates.id,
       venueId: Venues.GenericDubai.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|LONDON|20200629',
+      startAt: '2020-06-29T09:30:00',
+      endsAt: '2020-07-01T05:00:00',
+      timezone: 'Europe/London',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.GreatBritain.id,
+      venueId: Venues.LondonCitizenM.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|SANFRANCISCO|20200622',
+      startAt: '2020-06-22T09:30:00',
+      endsAt: '2020-06-24T05:00:00',
+      timezone: 'America/Los_Angeles',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.UnitedStates.id,
+      venueId: Venues.GenericSanFrancisco.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|MELBOURNE|20200615',
+      startAt: '2020-06-15T09:30:00',
+      endsAt: '2020-06-17T05:00:00',
+      timezone: 'Australia/Sydney',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Australia.id,
+      venueId: Venues.GenericMelbourne.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|HONGKONG|20200610',
+      startAt: '2020-06-10T09:30:00',
+      endsAt: '2020-06-12T05:00:00',
+      timezone: 'Asia/Hong_Kong',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.HongKong.id,
+      venueId: Venues.GenericHongKong.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|MUNICH|20200608',
+      startAt: '2020-06-08T09:30:00',
+      endsAt: '2020-06-10T05:00:00',
+      timezone: 'Europe/Berlin',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Germany.id,
+      venueId: Venues.GenericMunich.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|DUBAI|20200609',
+      startAt: '2020-06-09T09:30:00',
+      endsAt: '2020-06-11T05:00:00',
+      timezone: 'Asia/Dubai',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.UnitedArabEmirates.id,
+      venueId: Venues.GenericDubai.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|SINGAPORE|20200601',
+      startAt: '2020-06-01T10:00:00',
+      endsAt: '2020-06-03T17:00:00',
+      timezone: 'Asia/Singapore',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Singapore.id,
+      venueId: Venues.JustCoSg.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|ZURICH|20200601',
+      startAt: '2020-06-01T09:30:00',
+      endsAt: '2020-06-03T05:00:00',
+      timezone: 'Europe/Zurich',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Switzerland.id,
+      venueId: Venues.GenericZurich.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|TORONTO|20200615',
+      startAt: '2020-06-15T09:30:00',
+      endsAt: '2020-06-17T05:00:00',
+      timezone: 'America/Toronto',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Canada.id,
+      venueId: Venues.GenericToronto.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
+      id: 'LK8S|SEATTLE|20200629',
+      startAt: '2020-06-29T09:30:00',
+      endsAt: '2020-06-29T05:00:00',
+      timezone: 'America/Los_Angeles',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.UnitedStates.id,
+      venueId: Venues.GenericToronto.id,
       pictureId: NewPictures.one.id,
     }),
   )

@@ -529,8 +529,8 @@ function renderPage(state: State) {
         <section id='start' className='w-60-ns ph3 center pt3 pb3 pb5-l'>
           <h2 className='navy f4 f3-l'>Upcoming events</h2>
           <input className='dn' id='all' type='radio' name='country' />
-          <input className='dn' defaultChecked id='america' type='radio' name='country' />
-          <input className='dn' id='europe' type='radio' name='country' />
+          <input className='dn' id='america' type='radio' name='country' />
+          <input className='dn' defaultChecked id='europe' type='radio' name='country' />
           <input className='dn' id='asia' type='radio' name='country' />
           <input className='dn' id='australia' type='radio' name='country' />
           <ul className='legend list pl0 flex'>
