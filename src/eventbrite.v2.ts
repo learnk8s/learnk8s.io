@@ -242,7 +242,6 @@ function addVenue(
   if (venue.city) address.city = venue.city
   if (venue.postcode) address.postal_code = venue.postcode
   if (venue.address) address.address_1 = venue.address
-  console.log(address)
   return sdk
     .post(`/organizations/${organisationId}/venues/`, {
       venue: {
