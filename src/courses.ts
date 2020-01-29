@@ -482,7 +482,7 @@ export function Register(store: Store<State, Actions>) {
       timezone: 'America/Los_Angeles',
       courseId: Courses.threeDays.id,
       priceId: CoursePrice.UnitedStates.id,
-      venueId: Venues.GenericToronto.id,
+      venueId: Venues.GenericSeattle.id,
       pictureId: NewPictures.one.id,
     }),
   )
