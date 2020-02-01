@@ -18,7 +18,9 @@ export function Register(store: Store<State, Actions>) {
     Action.registerOpenGraph({
       id: 'og-persistent-connections',
       pageId: PersistentConnections.id,
-      image: <img src='src/persistent-connections/persistent-connections.png' alt='Troubleshooting Kubernetes deployments' />,
+      image: (
+        <img src='src/persistent-connections/persistent-connections.png' alt='Troubleshooting Kubernetes deployments' />
+      ),
       title: PersistentConnections.title,
       description: `Learn how you can leverage tools such as yq and kustomize to template your Kubernetes YAML file. Learn how to write your own tool to generate YAML programatically with a real programming language such as Java, Node.js, Go, Python or C#.`,
     }),
