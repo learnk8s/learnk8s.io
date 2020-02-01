@@ -6,9 +6,53 @@ Each app is deployed as a Pod, and an IP address is assigned to it.
 
 Services, on the other hand, are similar to load balancers, and they are designed to distribute the traffic to a set of Pods.
 
+```slideshow
+{
+  "description": "Deployment and Service in Kubernetes",
+  "slides": [
+    {
+      "image": "assets/basics-1.svg",
+      "description": "In this diagram you have three instances of a single app and a load balancer."
+    },
+    {
+      "image": "assets/basics-2.svg",
+      "description": "The load balancer is called Service and has an IP address. Any incoming request is distributed to one of the Pods."
+    },
+    {
+      "image": "assets/basics-3.svg",
+      "description": "The Deployment defines a recipe to create more instances of the same Pod. You almost never deploy Pod individually."
+    },
+    {
+      "image": "assets/basics-4.svg",
+      "description": "Pods have IP address assigned to them."
+    }
+  ]
+}
+```
+
 It's often useful to think about Services as a collection of IP address.
 
 Every time you make a request to a Service, one of the IP addresses from that list is selected and used as the destination.
+
+```slideshow
+{
+  "description": "Service and Endpoints",
+  "slides": [
+    {
+      "image": "assets/service-1.svg",
+      "description": "Imagine issuing a request such as `curl 10.96.45.152` to the Service."
+    },
+    {
+      "image": "assets/service-2.svg",
+      "description": "The Service picks one of the three Pods as the destination."
+    },
+    {
+      "image": "assets/service-3.svg",
+      "description": "The traffic is forwarded to that instance."
+    }
+  ]
+}
+```
 
 If you have two apps such as a front-end and a backend, you can use a Deployment and a Service for each and deploy them in the cluster.
 
@@ -19,6 +63,30 @@ It could be one, tens or hundreds.
 The front-end app isn't aware of the individual IP addresses of the backend app either.
 
 When it wants to make a request, that request is sent to the backend Service which has an IP address that doesn't change.
+
+```slideshow
+{
+  "description": "Client-server communication in the cluster",
+  "slides": [
+    {
+      "image": "assets/frontend-backend-1.svg",
+      "description": "The red Pod issues a request to an internal (light brown) component. Instead of choosing one of the Pod as the destination, the red Pod issues the request to the Service."
+    },
+    {
+      "image": "assets/frontend-backend-2.svg",
+      "description": "The Service selects one of the ready Pods as the destination."
+    },
+    {
+      "image": "assets/frontend-backend-3.svg",
+      "description": "The traffic flows from the red Pod to the light brown Pod."
+    },
+    {
+      "image": "assets/frontend-backend-4.svg",
+      "description": "Notice how the red Pod doesn't know how many Pods are hidden behind the Service."
+    }
+  ]
+}
+```
 
 _But what's the load balancing strategy for the Service?_
 
@@ -46,6 +114,46 @@ The rules are meant to say: "if you see this Service IP address, instead rewrite
 
 The Service IP address is used only as a placeholder — that's why there is no process listening on the IP address or port.
 
+```slideshow
+{
+  "description": "ClusterIP Service",
+  "slides": [
+    {
+      "image": "assets/iptables-1.svg",
+      "description": "Consider a cluster with three Nodes. Each Node has a Pod deployed."
+    },
+    {
+      "image": "assets/iptables-2.svg",
+      "description": "The light brown Pods are part of a Service. Services don't exist, so the diagram has the component grayed out."
+    },
+    {
+      "image": "assets/iptables-3.svg",
+      "description": "The red Pod wants to issue a request to the Service and eventually reach one of the light brown Pods."
+    },
+    {
+      "image": "assets/iptables-4.svg",
+      "description": "But Service don't exist. There's no process listening on the Service IP address. _How does it work?_"
+    },
+    {
+      "image": "assets/iptables-5.svg",
+      "description": "Before the request is dispatched from the Node, it is intercepted by iptables rules."
+    },
+    {
+      "image": "assets/iptables-6.svg",
+      "description": "The iptables rules know that the Service doesn't exist and proceed to replace the IP address of the Service with one of the IP addresses of the Pods beloning to that Service."
+    },
+    {
+      "image": "assets/iptables-7.svg",
+      "description": "The request has a real IP address as the destination and it can proceed normally."
+    },
+    {
+      "image": "assets/iptables-8.svg",
+      "description": "Depening on your particular network implementation, the request finally reaches the Pod."
+    }
+  ]
+}
+```
+
 _Does iptables use round-robin?_
 
 No, iptables is primarily used for firewalls, and it is not designed to do load balancing.
@@ -62,160 +170,7 @@ If you have three Pods, iptables writes these rules:
 
 Since this is a probability, there's no guarantee that Pod 2 is selected after Pod 1 as the destination.
 
-The behaviour is closer to be random than round-robin.
-
-Let's explore that in more detail.
-
-## Inspecting Services in minikube
-
-Let's deploy a simple front-end and backend app in minikube.
-
-> You can consult [the official documentation on how to install minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/). If you're on Windows, it isn't as straightforward. But we wrote [a detailed guide on your options](/blog/installing-docker-and-kubernetes-on-windows).
-
-You can start minikube with:
-
-```terminal|command=1|title=bash
-minikube start
-```
-
-> Please notice that you can find all the [YAML files and code for this article in this repository]().
-
-The definition for the front-end is the following:
-
-```yaml|title=front-end.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: front-end
-spec:
-  selector:
-    matchLabels:
-      name: front-end
-  template:
-    metadata:
-      labels:
-        name: front-end
-    spec:
-      containers:
-      - name: container1
-        image: learnk8s/hello:1.0.0
-        ports:
-          - containerPort: 3000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: front-end
-spec:
-  ports:
-  - nodePort: 32000
-    port: 80
-    targetPort: 3000
-  selector:
-    name: front-end
-  type: NodePort
-```
-
-and for the backend is the following:
-
-```yaml|title=backend.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: backend
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      name: backend
-  template:
-    metadata:
-      labels:
-        name: backend
-    spec:
-      containers:
-      - name: container1
-        image: learnk8s/hello:1.0.0
-        ports:
-          - containerPort: 3000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend
-spec:
-  ports:
-  - port: 80
-    targetPort: 3000
-  selector:
-    name: backend
-```
-
-You can submit the two definitions with:
-
-```terminal|command=1|title=bash
-kubectl apply -f front-end.yaml -f backend.yaml
-```
-
-If the deployment is successful, you should a response:
-
-```terminal|command=1|title=bash
-curl $(minikube service front-end --url)
-{"host": "app-9b68c75cd-8s27d"}
-```
-
-You should verify that a Service doesn't "exist".
-
-_Is there a process listening on the IP address and port of the `backend` Service?_
-
-You can list the Service with:
-
-```terminal|command=1|title=bash
-kubectl get service
-NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)
-front-end    NodePort    10.96.45.152   <none>        80:32000/TCP
-backend      ClusterIP   10.96.45.153   <none>        80/TCP
-kubernetes   ClusterIP   10.96.0.1      <none>        443/TCP
-```
-
-Let's see if there's a process listening on `10.96.45.153:80`.
-
-You can ssh into minikube with:
-
-```terminal|command=1|title=bash
-minikube ssh
-```
-
-From within minikube list the network connections:
-
-```terminal|command=1|title=bash
-netstat -ntlp
-```
-
-There isn't!
-
-Instead, the IP address is used by iptables rules.
-
-Let's inspect the rules with:
-
-```terminal|command=1|title=bash
-sudo iptables-save
-```
-
-You should notice a long chain of rules.
-
-If you pay attention (or filter with `grep`) for the IP address of the Service, you should find something similar to this:
-
-```terminal|title=bash
-TODO
-```
-
-A few things worth noting:
-
-- iptables use the [statistic module](http://ipset.netfilter.org/iptables-extensions.man.html#lbCD) with `random` mode. So the load balancing algorithm is random.
-- the probability isn't split 33%-33%-33% to the three Pods. Instead ...TODO...
-
-You can imagine that if you scale the Deployment to four replicas, kube-proxy will update the rules to reflect the new Pods.
+> Iptables use the [statistic module](http://ipset.netfilter.org/iptables-extensions.man.html#lbCD) with `random` mode. So the load balancing algorithm is random.
 
 Now that you're familiar with how Services work let's have a look at more exciting scenarios.
 
@@ -225,9 +180,11 @@ With every request started from the front-end to the backend, a new HTTP connect
 
 If you front-end makes 100 requests per second to the backend, 100 different HTTP connections are opened and closed in that second.
 
-You can improve the latency and save resources if you open a single connection and reuse it for any subsequent requests.
+You can improve the latency and save resources if you open a connection and reuse it for any subsequent requests.
 
 The HTTP protocol has a featured called HTTP keep-alive, or HTTP connection reuse that uses a single TCP connection to send and receive multiple HTTP requests and responses.
+
+![Opening and closing connections VS HTTP connection reuse](assets/persistent-1.svg)
 
 It doesn't work out of the box; your server and client should be configured to use it.
 
@@ -256,30 +213,6 @@ But instead of closing the HTTP connection, it is kept open for subsequent reque
 
 _What happens when the front-end issues more requests?_
 
-Let's find out.
-
-The front-end application that you previously deployed in minikube has a different endpoint `/persistent`.
-
-When you use that endpoint, the front-end uses the HTTP keep-alive feature to connect to the backend.
-
-You can make a request with:
-
-```terminal|command=1|title=bash
-curl $(minikube service --url)
-{"host": "app-9b68c75cd-8s27d"}
-```
-
-_If you try to issue more requests what happens?_
-
-```terminal|command=1,3,5|title=bash
-curl $(minikube service --url)
-{"host": "app-9b68c75cd-8s27d"}
-curl $(minikube service --url)
-{"host": "app-9b68c75cd-8s27d"}
-curl $(minikube service --url)
-{"host": "app-9b68c75cd-8s27d"}
-```
-
 They are sent to the same Pod.
 
 _Isn't iptables supposed to distribute the traffic?_
@@ -292,9 +225,37 @@ One of the three Pods was selected as the destination.
 
 Since all subsequent requests are channelled through the same connection, iptables isn't invoked anymore.
 
+```slideshow
+{
+  "description": "Persistent connections with Kubernetes Services",
+  "slides": [
+    {
+      "image": "assets/persistent-iptables-1.svg",
+      "description": "The red Pod issues a request to the Service."
+    },
+    {
+      "image": "assets/persistent-iptables-2.svg",
+      "description": "You already know what happens next. Services don't exist, but iptables rules intercept the requests."
+    },
+    {
+      "image": "assets/persistent-iptables-3.svg",
+      "description": "One of the Pods that belong the Service is selected as the destination."
+    },
+    {
+      "image": "assets/persistent-iptables-4.svg",
+      "description": "Finally the request reaches the Pod. At this point, a persistent connection between the two Pods is established."
+    },
+    {
+      "image": "assets/persistent-iptables-5.svg",
+      "description": "Any subsequet request from the red Pod reuses the existing open connection."
+    }
+  ]
+}
+```
+
 So you achieved better latency and throughput, but you lost the ability to scale your backend.
 
-Even if you have three backend Pods that can receive requests, only one is actively used.
+Even if you have two backend Pods that can receive requests, only one is actively used.
 
 _Is it fixable?_
 
@@ -314,6 +275,30 @@ The client-side code that executes the load balancing should follow the followin
 1. for each of them, open a connection and keep it open
 1. when you need to make a request, pick one of the open connections
 1. on a regular interval refresh the list of endpoints and remove or add new connections
+
+```slideshow
+{
+  "description": "Client side load balancing",
+  "slides": [
+    {
+      "image": "assets/client-lb-1.svg",
+      "description": "Instead of having the red Pod issuing a request to your Service, you could load balance the request client-side."
+    },
+    {
+      "image": "assets/client-lb-2.svg",
+      "description": "Your could write some code that asks what Pods are part of the Service."
+    },
+    {
+      "image": "assets/client-lb-3.svg",
+      "description": "Once you have that list, you could store it locally and use it to connect to the Pods."
+    },
+    {
+      "image": "assets/client-lb-4.svg",
+      "description": "You are in charge of the load balancing algorithm."
+    }
+  ]
+}
+```
 
 _Does this problem apply only to keep-alive?_
 
@@ -349,8 +334,6 @@ for (var [index, endpoint] of endpoints) {
 
 // Make queries to the clustered MySQL database
 ```
-
-## Websockets, gRPC, RSockets, HTTP/2 and more persistent connections
 
 As you can imagine, several other protocols open a single connection at the time and reuse it.
 
@@ -410,7 +393,7 @@ If you have an existing fleet of applications, this might sound like an impossib
 
 But there's an alternative.
 
-## One more sidecar
+## Service meshes to the rescue
 
 You probably already noticed that the client-side load balancing strategy is quite standard.
 
@@ -427,24 +410,56 @@ As soon as it wishes to make a request, it should:
 
 The steps above are valid for WebSockets connections as well as gRPC and AMQP.
 
-You could extract that logic in a separate component and share it with all apps.
+You could extract that logic in a separate library and share it with all apps.
 
-A popular tool in this space is Envoy — a programmable proxy.
+Instead of writing a library from scratch, a popular option in this case is to use a Service mesh such as Istio or Linkerd.
 
-Envoy can be programmed to dynamically reconfigure the load balancing algorithm and add and remove destination IP addresses as they are updated in the Service.
+Service meshes agument your app with an extra process that:
 
-So instead of writing a library, you can simply deploy Envoy as a companion process to your app.
+- automatically discovers IP addresses Services
+- inspects connections such as WebSockets and gRPC
+- load-balances requests using the right protocol
 
-When the app makes a request, you could have Envoy intercepting the requests and load balancing it.
+Service meshes can help you to manage the traffic inside your cluster, but they aren't exactly lightweight.
 
-Not having to write client-side load balancing code for all apps, frameworks and languages is a great win.
+Other options include using library such as Netflix Ribbon, a programmable proxy such as Envoy or just ignore it.
 
-But you still need to configure every app to use Envoy.
+_What happens if you ignore it?_
 
-If you wish to skip even that, you can use a service meshes such as Istio or Linkerd.
+You can ignore the load balancing and still don't notice any change.
 
-Service meshes use a programmable proxy to:
+There are a couple of scenarios that you should consider.
 
-- automatically discover Services
-- inspect connections such as WebSockets and gRPC
-- load-balance requests using the right protocol
+If you have more client than servers, there should be limited issues.
+
+Imagine you have five clients opening persistent connections to two servers.
+
+Even if there's no load balancing, it's likely that both servers have utilisation.
+
+![More clients than servers](assets/many-clients-fewer-servers.svg)
+
+They connection might not be distrubuted evenly (perhaps 4 ended up connecting to the same server), but overall there's a good chance that both servers handle connection.
+
+What's more problematic is the opposite scenario.
+
+If you have a few clients and more servers, you might have some underutilised resources and a potential bottleneck.
+
+Imagine having 2 clients and five servers.
+
+At best, two persistent connections to two servers are opened.
+
+The remaining servers are not used at all.
+
+![More servers than clients](assets/fewer-servers-many-clients.svg)
+
+If the two servers can't handle the traffic generated by the clients, horizontal scaling won't help.
+
+## Summary
+
+Kubernetes Services are designed to cover most common uses for web applications.
+
+However, as soon as you start dealing with persistent connection such as database or gRPC service they fall apart.
+
+Kubernetes doesn't offer any built-in mechanism to load balance long-lived connections.
+
+Instead, you should code your application so that it can retrieve and load balance upstreams client-side.

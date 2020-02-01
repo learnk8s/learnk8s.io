@@ -140,7 +140,7 @@ export async function optimise(svgContent: string, skipIds = [] as string[]): Pr
   const styleTags = $.findAll('style')
   const style = styleTags
     .get()
-    .map(it => toString(it))
+    .map((it: any) => it.children[0].value)
     .filter(onlyUnique)
     .join('')
   styleTags.remove()
