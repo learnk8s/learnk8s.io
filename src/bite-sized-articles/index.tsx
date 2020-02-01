@@ -42,6 +42,14 @@ export const Pages = {
       'What type of worker nodes should I use for my Kubernetes cluster? And how many of them?. This article looks at the pros and cons of either.',
   },
 
+  clusterSize: {
+    id: 'kubernetes-cluster-size',
+    url: '/kubernetes-cluster-size',
+    title: 'Architecting Kubernetes clusters — choosing a cluster size',
+    description:
+      'Should you use one big cluster or many small clusters for your applications?. This article looks at the pros and cons of both options.',
+  },
+
   secretsGitOps: {
     id: 'secrets-git-ops',
     url: '/kubernetes-secrets-in-git',
@@ -202,6 +210,38 @@ export function Register(store: Store<State, Actions>) {
       id: 'kubernetes-node-size-related-0',
       blogPostId: 'bp-kubernetes-node-size',
       content: toVFile({ path: join(__dirname, 'nodes-size/smallOrLarge-related.md') }),
+    }),
+  )
+
+  store.dispatch(Action.registerPage(Pages.clusterSize))
+  store.dispatch(
+    Action.registerOpenGraph({
+      id: 'og-kubernetes-cluster-size',
+      pageId: Pages.clusterSize.id,
+      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      title: Pages.clusterSize.title,
+      description:
+        'If you use Kubernetes as your application platform, one of the fundamental questions is whether you should use one big cluster for all your applications, or multiple smaller clusters for individual applications. This article looks at the pros and cons of both approaches.',
+    }),
+  )
+  store.dispatch(
+    Action.registerBlogPost({
+      id: 'bp-kubernetes-cluster-size',
+      pageId: Pages.clusterSize.id,
+      authorId: Authors.danielWeibel.id,
+      description:
+        'If you use Kubernetes as your application platform, one of the fundamental questions is whether you should use one big cluster for all your applications, or multiple smaller clusters for individual applications. This article looks at the pros and cons of both approaches.',
+      title: Pages.clusterSize.title,
+      publishedDate: '2020-02-05',
+      content: toVFile({ path: join(__dirname, 'cluster-size/clusterSize.md') }),
+    }),
+  )
+  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.clusterSize.id }))
+  store.dispatch(
+    Action.registerBlogPostMarkdownBlock({
+      id: 'kubernetes-cluster-size-related-0',
+      blogPostId: 'bp-kubernetes-cluster-size',
+      content: toVFile({ path: join(__dirname, 'cluster-size/clusterSize-related.md') }),
     }),
   )
 
