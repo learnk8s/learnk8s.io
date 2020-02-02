@@ -108,8 +108,6 @@ _Let's see what particular pros and cons this approach has._
 
 ### 👎 Different environments on the same cluster
 
-
-
 ## One cluster per environment
 
 In this approach, you have a separate cluster for each environment that you use for your apps:
@@ -136,4 +134,3 @@ For example, if an application requires a GPU worker node, you need to have such
 
 - <https://thenewstack.io/the-optimal-kubernetes-cluster-size-lets-look-at-the-data/>: more people prefer smaller clusters because they're easier to set up and manage. This is especially true if multi-tenancy is required.
 - [Kubernetes Best Practices](http://shop.oreilly.com/product/0636920273219.do): one development cluster used by all developers
-
