@@ -284,7 +284,7 @@ In these cases, you only pay for the worker nodes — thus, 10 clusters with 1 w
 
 _However, in the general case, you can expect a larger number of smaller clusters to be more expensive than a single large cluster._
 
-### 👎 Costly administration 
+### 👎 Costly administration
 
 Administrating many Kubernetes clusters is more work than administrating a single Kubernetes cluster.
 
@@ -468,13 +468,13 @@ This also means that you can't optimise your clusters for any of the apps — yo
 
 _In general, the fact that multiple apps are running on the same cluster, may have negative impacts on security and efficiency of these apps._
 
-**This concludes our discussion of the most important Kubernetes cluster strategies.**
+**This concludes our discussion of the different Kubernetes cluster strategies.**
 
 _Let's wrap up._
 
 ## Conclusion
 
-In this article, you have investigated the pros and cons of the most important Kubernetes cluster strategies, including:
+In this article, you have examined the pros and cons of the most important Kubernetes cluster strategies, including:
 
 1. [**One large general-purpose cluster**](#1-one-large-general-purpose-cluster)
 1. [**Many small single-purpose clusters**](#2-many-small-single-purpose-clusters)
