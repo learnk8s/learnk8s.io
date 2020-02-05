@@ -101,7 +101,7 @@ function renderPage(state: State) {
       </Head>
       <Body>
         <div className='mw8 center pl3'>
-          <a href='/' className='db pt4 w4' target='_self' ref='noreferrer'>
+          <a href='/' className='db pt4 w4' target='_self' rel='noreferrer'>
             <img src='assets/logo_color.svg' alt='Learnk8s logo' />
           </a>
         </div>

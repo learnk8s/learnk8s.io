@@ -353,7 +353,7 @@ setTimeout(ldinsp, 0);
                   href='https://academy.learnk8s.io/bundle-exploring-kubernetes'
                   className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                   target='_self'
-                  ref='noreferrer'
+                  rel='noreferrer'
                 >
                   Buy now →
                 </a>
@@ -395,7 +395,7 @@ setTimeout(ldinsp, 0);
                   href='https://academy.learnk8s.io/all'
                   className='no-underline dib ba b--sky sky br1 pv3 ph4 b f4 br2'
                   target='_self'
-                  ref='noreferrer'
+                  rel='noreferrer'
                 >
                   Buy now →
                 </a>
@@ -442,7 +442,7 @@ setTimeout(ldinsp, 0);
                     href='https://academy.learnk8s.io/single-managing-state'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
-                    ref='noreferrer'
+                    rel='noreferrer'
                   >
                     Buy now →
                   </a>
@@ -485,7 +485,7 @@ setTimeout(ldinsp, 0);
                     href='https://academy.learnk8s.io/single-ckad'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
-                    ref='noreferrer'
+                    rel='noreferrer'
                   >
                     Buy now →
                   </a>
