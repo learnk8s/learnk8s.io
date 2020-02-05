@@ -1,3 +1,5 @@
+> **TL;DR:** Kubernetes doesn't load balance long-lived connections, and some Pods might receive more requests than others. If you're using HTTP/2, gRPC, RSockets, AMQP or any other long-lived connection such as a database connection, you might want to consider client-side load balancing.
+
 Kubernetes offers two convenient abstractions to deploy apps: Services and Deployments.
 
 Deployments describe a recipe for what kind and how many copies of your app should run at any given time.
@@ -94,7 +96,7 @@ _Is it round-robin, right?_
 
 Sort of.
 
-## Load balancing in a Service
+## Load balancing in Kubernetes Services
 
 Kubernetes Services don't exist.
 
@@ -174,13 +176,13 @@ Since this is a probability, there's no guarantee that Pod 2 is selected after P
 
 Now that you're familiar with how Services work let's have a look at more exciting scenarios.
 
-## Keeping it alive
+## Long-lived don't scale out of the box in Kubernetes
 
-With every request started from the front-end to the backend, a new HTTP connection is opened and closed.
+With every HTTP request started from the front-end to the backend, a new TCP connection is opened and closed.
 
-If you front-end makes 100 requests per second to the backend, 100 different HTTP connections are opened and closed in that second.
+If you front-end makes 100 HTTP requests per second to the backend, 100 different TCP connections are opened and closed in that second.
 
-You can improve the latency and save resources if you open a connection and reuse it for any subsequent requests.
+You can improve the latency and save resources if you open a TCP connection and reuse it for any subsequent HTTP requests.
 
 The HTTP protocol has a featured called HTTP keep-alive, or HTTP connection reuse that uses a single TCP connection to send and receive multiple HTTP requests and responses.
 
@@ -203,13 +205,13 @@ Let's imagine that front-end and backend support keep-alive.
 
 You have a single instance of the front-end and three replicas for the backend.
 
-The front-end makes the first request to the backend and opens the connection.
+The front-end makes the first request to the backend and opens the TCP connection.
 
 The request reaches the Service, and one of the Pod is selected as the destination.
 
 The backend Pod replies and the front-end receives the response.
 
-But instead of closing the HTTP connection, it is kept open for subsequent requests.
+But instead of closing the TCP connection, it is kept open for subsequent HTTP requests.
 
 _What happens when the front-end issues more requests?_
 
@@ -219,11 +221,11 @@ _Isn't iptables supposed to distribute the traffic?_
 
 It is.
 
-There is a single connection open, and iptables rule were invocated the first time.
+There is a single TCP connection open, and iptables rule were invocated the first time.
 
 One of the three Pods was selected as the destination.
 
-Since all subsequent requests are channelled through the same connection, iptables isn't invoked anymore.
+Since all subsequent requests are channelled through the same TCP connection, [iptables isn't invoked anymore.](https://scalingo.com/blog/iptables#load-balancing)
 
 ```slideshow
 {
@@ -255,7 +257,7 @@ Since all subsequent requests are channelled through the same connection, iptabl
 
 So you achieved better latency and throughput, but you lost the ability to scale your backend.
 
-Even if you have two backend Pods that can receive requests, only one is actively used.
+Even if you have two backend Pods that can receive requests from the frontend Pod, only one is actively used.
 
 _Is it fixable?_
 
@@ -300,15 +302,15 @@ The client-side code that executes the load balancing should follow the followin
 }
 ```
 
-_Does this problem apply only to keep-alive?_
+_Does this problem apply only to HTTP keep-alive?_
 
-## Database persistent connections
+## Client-side load balancing
 
-HTTP isn't the only protocol designed to open a long-lived connection.
+HTTP isn't the only protocol that can benefit from long-lived TCP connections.
 
 If your app uses a database, the connection isn't opened and closed every time you wish to retrieve a record or a document.
 
-Instead, the connection is established once and kept open.
+Instead, the TCP connection is established once and kept open.
 
 If your database is deployed in Kubernetes using a Service, you might experience the same issues as the previous example.
 
@@ -335,7 +337,7 @@ for (var [index, endpoint] of endpoints) {
 // Make queries to the clustered MySQL database
 ```
 
-As you can imagine, several other protocols open a single connection at the time and reuse it.
+As you can imagine, several other protocols work over long-lived TCP connections.
 
 Here you can read a few examples:
 
@@ -355,15 +357,15 @@ Kube-proxy and iptables are designed to cover the most popular use cases of depl
 
 But they are mostly there for convenience.
 
-If you're using a web service that exposes a REST API, then you're in luck — you can use any Kubernetes Service.
+If you're using a web service that exposes a REST API, then you're in luck — this use case usually doesn't reuse TCP connections, and you can use any Kubernetes Service.
 
-But as soon as you start using any persistent connections, you should look into how you can evenly distribute the load.
+But as soon as you start using persistent TCP connections, you should look into how you can evenly distribute the load to your backends.
 
 Kubernetes doesn't cover that specific use case out of the box.
 
 However, there's something that could help.
 
-## Services in Kubernetes
+## Load balancing long-lived connections in Kubernetes
 
 Kubernetes has four different kinds of Services:
 
@@ -374,7 +376,7 @@ Kubernetes has four different kinds of Services:
 
 The first three Services have a virtual IP address that is used by kube-proxy to create iptables rules.
 
-But the basic block of all the Services is the Headless Service.
+But the fundament of all the Services is the Headless Service.
 
 The headless Service doesn't have an IP address assigned and is only a mechanism to collect a list of Pod IP addresses and ports (also called endpoints).
 
@@ -458,8 +460,10 @@ If the two servers can't handle the traffic generated by the clients, horizontal
 
 Kubernetes Services are designed to cover most common uses for web applications.
 
-However, as soon as you start dealing with persistent connections such as a database or gRPC service, they fall apart.
+However, as soon as you start working with application protocols that use persistent TCP connections, such as databases, gRPC, or WebSockets, they fall apart.
 
-Kubernetes doesn't offer any built-in mechanism to load balance long-lived connections.
+Kubernetes doesn't offer any built-in mechanism to load balance long-lived TCP connections.
 
 Instead, you should code your application so that it can retrieve and load balance upstreams client-side.
+
+Many thanks to [Daniel Weibel](https://medium.com/@weibeld), [Gergely Risko](https://github.com/errge) and [Salman Iqbal](https://twitter.com/soulmaniqbal) for offering some invaluable suggestions.
