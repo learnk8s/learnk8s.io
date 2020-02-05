@@ -6,7 +6,9 @@ Deployments describe a recipe for what kind and how many copies of your app shou
 
 Each app is deployed as a Pod, and an IP address is assigned to it.
 
-Services, on the other hand, are similar to load balancers, and they are designed to distribute the traffic to a set of Pods.
+Services, on the other hand, are similar to load balancers.
+
+They are designed to distribute the traffic to a set of Pods.
 
 ```slideshow
 {
@@ -32,7 +34,7 @@ Services, on the other hand, are similar to load balancers, and they are designe
 }
 ```
 
-It's often useful to think about Services as a collection of IP address.
+It is often useful to think about Services as a collection of IP address.
 
 Every time you make a request to a Service, one of the IP addresses from that list is selected and used as the destination.
 
@@ -58,9 +60,9 @@ Every time you make a request to a Service, one of the IP addresses from that li
 
 If you have two apps such as a front-end and a backend, you can use a Deployment and a Service for each and deploy them in the cluster.
 
-Notice how, when the front-end app makes a request, it doesn't need to know how many Pods are connected to the backend Service.
+When the front-end app makes a request, it doesn't need to know how many Pods are connected to the backend Service.
 
-It could be one, tens or hundreds.
+It could be one Pod, tens or hundreds.
 
 The front-end app isn't aware of the individual IP addresses of the backend app either.
 
@@ -72,7 +74,7 @@ When it wants to make a request, that request is sent to the backend Service whi
   "slides": [
     {
       "image": "assets/frontend-backend-1.svg",
-      "description": "The red Pod issues a request to an internal (light brown) component. Instead of choosing one of the Pod as the destination, the red Pod issues the request to the Service."
+      "description": "The red Pod issues a request to an internal (beige) component. Instead of choosing one of the Pod as the destination, the red Pod issues the request to the Service."
     },
     {
       "image": "assets/frontend-backend-2.svg",
@@ -92,7 +94,7 @@ When it wants to make a request, that request is sent to the backend Service whi
 
 _But what's the load balancing strategy for the Service?_
 
-_Is it round-robin, right?_
+_It is round-robin, right?_
 
 Sort of.
 
@@ -126,11 +128,11 @@ The Service IP address is used only as a placeholder — that's why there is no 
     },
     {
       "image": "assets/iptables-2.svg",
-      "description": "The light brown Pods are part of a Service. Services don't exist, so the diagram has the component grayed out."
+      "description": "The beige Pods are part of a Service. Services don't exist, so the diagram has the component grayed out."
     },
     {
       "image": "assets/iptables-3.svg",
-      "description": "The red Pod wants to issue a request to the Service and eventually reach one of the light brown Pods."
+      "description": "The red Pod wants to issue a request to the Service and eventually reaches one of the beige Pods."
     },
     {
       "image": "assets/iptables-4.svg",
@@ -164,7 +166,7 @@ However, you could [craft a smart set of rules that could make iptables behave l
 
 And this is precisely what happens in Kubernetes.
 
-If you have three Pods, iptables writes these rules:
+If you have three Pods, iptables writes the following rules:
 
 1. select Pod 1 as the destination with a probability of 0.33
 1. select Pod 2 as the destination with a probability of 0.33
@@ -180,17 +182,17 @@ Now that you're familiar with how Services work let's have a look at more exciti
 
 With every HTTP request started from the front-end to the backend, a new TCP connection is opened and closed.
 
-If you front-end makes 100 HTTP requests per second to the backend, 100 different TCP connections are opened and closed in that second.
+If the front-end makes 100 HTTP requests per second to the backend, 100 different TCP connections are opened and closed in that second.
 
 You can improve the latency and save resources if you open a TCP connection and reuse it for any subsequent HTTP requests.
 
-The HTTP protocol has a featured called HTTP keep-alive, or HTTP connection reuse that uses a single TCP connection to send and receive multiple HTTP requests and responses.
+The HTTP protocol has a feature called HTTP keep-alive, or HTTP connection reuse that uses a single TCP connection to send and receive multiple HTTP requests and responses.
 
 ![Opening and closing connections VS HTTP connection reuse](assets/persistent-1.svg)
 
 It doesn't work out of the box; your server and client should be configured to use it.
 
-But the change is straightforward, and it's available in most languages and frameworks.
+The change itself is straightforward, and it's available in most languages and frameworks.
 
 Here a few examples on how to implement keep-alive in different languages:
 
@@ -255,7 +257,7 @@ Since all subsequent requests are channelled through the same TCP connection, [i
 }
 ```
 
-So you achieved better latency and throughput, but you lost the ability to scale your backend.
+So you have now achieved better latency and throughput, but you lost the ability to scale your backend.
 
 Even if you have two backend Pods that can receive requests from the frontend Pod, only one is actively used.
 
@@ -271,7 +273,7 @@ As a first try, you could open a persistent connection to every Pod and round-ro
 
 Or you could [implement more sophisticated load balancing algorithms](https://blog.twitter.com/engineering/en_us/topics/infrastructure/2019/daperture-load-balancer.html).
 
-The client-side code that executes the load balancing should follow the following logic:
+The client-side code that executes the load balancing should follow the logic below:
 
 1. retrieve a list of endpoints from the Service
 1. for each of them, open a connection and keep it open
@@ -288,7 +290,7 @@ The client-side code that executes the load balancing should follow the followin
     },
     {
       "image": "assets/client-lb-2.svg",
-      "description": "Your could write some code that asks what Pods are part of the Service."
+      "description": "You could write some code that asks what Pods are part of the Service."
     },
     {
       "image": "assets/client-lb-3.svg",
@@ -347,9 +349,11 @@ Here you can read a few examples:
 - RSockets
 - AMQP
 
-You might recognise most of the protocol above.
+You might recognise most of the protocols above.
 
-_So if those protocols are so popular, why isn't there a standard answer to do load balancing rather than moving the logic into the client?_
+_So if these protocols are so popular, why isn't there a standard answer to load balancing?_
+
+_Why does the logic have to be moved into the client?_
 
 _Is there a native solution in Kubernetes?_
 
@@ -376,9 +380,9 @@ Kubernetes has four different kinds of Services:
 
 The first three Services have a virtual IP address that is used by kube-proxy to create iptables rules.
 
-But the fundament of all the Services is the Headless Service.
+But the fundament building block of all kinds of the Services is the Headless Service.
 
-The headless Service doesn't have an IP address assigned and is only a mechanism to collect a list of Pod IP addresses and ports (also called endpoints).
+The headless Service doesn't have an assigned IP address and is only a mechanism to collect a list of Pod IP addresses and ports (also called endpoints).
 
 Every other Service is built on top of the Headless Service.
 
@@ -432,7 +436,7 @@ You can ignore the load balancing and still don't notice any change.
 
 There are a couple of scenarios that you should consider.
 
-If you have more client than servers, there should be limited issues.
+If you have more clients than servers, there should be limited issues.
 
 Imagine you have five clients opening persistent connections to two servers.
 
@@ -444,7 +448,7 @@ The connections might not be distributed evenly (perhaps four ended up connectin
 
 What's more problematic is the opposite scenario.
 
-If you have a few clients and more servers, you might have some underutilised resources and a potential bottleneck.
+If you have fewer clients and more servers, you might have some underutilised resources and a potential bottleneck.
 
 Imagine having two clients and five servers.
 
