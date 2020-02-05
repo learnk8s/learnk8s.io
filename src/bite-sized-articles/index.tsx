@@ -47,7 +47,7 @@ export const Pages = {
     url: '/kubernetes-cluster-size',
     title: 'Architecting Kubernetes clusters — choosing a cluster size',
     description:
-      'Should you use one big cluster or many small clusters for your applications?. This article looks at the pros and cons of both options.',
+      'Should you use one big cluster or many small clusters for running your applications?. This article looks at the pros and cons of the different options you have.',
   },
 
   secretsGitOps: {
@@ -221,7 +221,7 @@ export function Register(store: Store<State, Actions>) {
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
       title: Pages.clusterSize.title,
       description:
-        'If you use Kubernetes as your application platform, one of the fundamental questions is whether you should use one big cluster for all your applications, or multiple smaller clusters for individual applications. This article looks at the pros and cons of both approaches.',
+        'If you use Kubernetes as your application platform, one of the fundamental questions is: should use one big cluster for all your applications, or multiple smaller clusters for individual workloads? This article investigates the pros and cons of the different options you have.',
     }),
   )
   store.dispatch(
@@ -230,7 +230,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: Pages.clusterSize.id,
       authorId: Authors.danielWeibel.id,
       description:
-        'If you use Kubernetes as your application platform, one of the fundamental questions is whether you should use one big cluster for all your applications, or multiple smaller clusters for individual applications. This article looks at the pros and cons of both approaches.',
+        'If you use Kubernetes as your application platform, one of the fundamental questions is: should use one big cluster for all your applications, or multiple smaller clusters for individual workloads? This article investigates the pros and cons of the different options you have.',
       title: Pages.clusterSize.title,
       publishedDate: '2020-02-05',
       content: toVFile({ path: join(__dirname, 'cluster-size/clusterSize.md') }),
