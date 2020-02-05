@@ -7,9 +7,9 @@ import { toVFile } from '../files'
 
 export const PersistentConnections = {
   id: 'persistent-connections',
-  url: '/kubernetes-websockets-load-balancing',
-  title: 'Load balancing persistent connections in Kubernetes',
-  description: `Learn how you can parametrise resource definitions with yq, kustomize and real code.`,
+  url: '/kubernetes-long-lived-connections',
+  title: 'Load balancing and scaling long-lived connections in Kubernetes',
+  description: `Kubernetes doesn't load balance long-lived connections and some Pods might receive more requests than others. Learn how to fix that.`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -22,7 +22,7 @@ export function Register(store: Store<State, Actions>) {
         <img src='src/persistent-connections/persistent-connections.png' alt='Troubleshooting Kubernetes deployments' />
       ),
       title: PersistentConnections.title,
-      description: `Learn how you can leverage tools such as yq and kustomize to template your Kubernetes YAML file. Learn how to write your own tool to generate YAML programatically with a real programming language such as Java, Node.js, Go, Python or C#.`,
+      description: `Kubernetes doesn't load balance long-lived connections, and some Pods might receive more requests than others. If you're using HTTP/2, gRPC, RSockets, AMQP or any other long-lived connection such as a database connection, you might want to consider client-side load balancing.`,
     }),
   )
   store.dispatch(
@@ -31,8 +31,8 @@ export function Register(store: Store<State, Actions>) {
       pageId: PersistentConnections.id,
       authorId: Authors.danielePolencic.id,
       title: PersistentConnections.title,
-      description: `Learn how you can leverage tools such as yq and kustomize to template your Kubernetes YAML file. Learn how to write your own tool to generate YAML programatically with a real programming language such as Java, Node.js, Go, Python or C#.`,
-      publishedDate: '2020-01-31',
+      description: `Kubernetes doesn't load balance long-lived connections, and some Pods might receive more requests than others. If you're using HTTP/2, gRPC, RSockets, AMQP or any other long-lived connection such as a database connection, you might want to consider client-side load balancing.`,
+      publishedDate: '2020-02-05',
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
