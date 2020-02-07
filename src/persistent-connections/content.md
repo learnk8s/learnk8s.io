@@ -166,19 +166,23 @@ However, you could [craft a smart set of rules that could make iptables behave l
 
 And this is precisely what happens in Kubernetes.
 
-If you have three Pods, iptables writes the following rules:
+If you have three Pods, kube-proxy writes the following rules:
 
-1. select Pod 1 as the destination with a probability of 0.33
-1. select Pod 2 as the destination with a probability of 0.33
-1. select Pod 3 as the destination with a probability of 0.33
+1. select Pod 1 as the destination with a likelihood of 33%. Otherwise, move to the next rule
+1. choose Pod 2 as the destination with a probability of 50%. Otherwise, move to the following rule
+1. select Pod 3 as the destination (no probability)
 
-Since this is a probability, there's no guarantee that Pod 2 is selected after Pod 1 as the destination.
+The compound probability is that Pod 1, Pod 2 and Pod 3 have all have a one-third chance (33%) to be selected.
+
+![iptables rules for three Pods](assets/iptables.svg)
+
+Also, there's no guarantee that Pod 2 is selected after Pod 1 as the destination.
 
 > Iptables use the [statistic module](http://ipset.netfilter.org/iptables-extensions.man.html#lbCD) with `random` mode. So the load balancing algorithm is random.
 
 Now that you're familiar with how Services work let's have a look at more exciting scenarios.
 
-## Long-lived don't scale out of the box in Kubernetes
+## Long-lived connections don't scale out of the box in Kubernetes
 
 With every HTTP request started from the front-end to the backend, a new TCP connection is opened and closed.
 
@@ -471,3 +475,5 @@ Kubernetes doesn't offer any built-in mechanism to load balance long-lived TCP c
 Instead, you should code your application so that it can retrieve and load balance upstreams client-side.
 
 Many thanks to [Daniel Weibel](https://medium.com/@weibeld), [Gergely Risko](https://github.com/errge) and [Salman Iqbal](https://twitter.com/soulmaniqbal) for offering some invaluable suggestions.
+
+And to [Chris Hanson](https://twitter.com/CloudNativChris) who suggested to include the detailed explanation (and flow chart) on how iptables rules work in practice.
