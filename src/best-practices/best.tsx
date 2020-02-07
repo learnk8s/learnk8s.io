@@ -1,5 +1,5 @@
 import React from 'react'
-import { Html, Head, OpenGraph, Body, Navbar } from '../layout.v3'
+import { Html, Head, OpenGraph, Body, Navbar, Footer, WhatIsLearnk8s } from '../layout.v3'
 import { Store } from 'redux'
 import { State, Actions, Action, getPages, getOpenGraph, getConfig } from '../store'
 import { join } from 'path'
@@ -165,7 +165,7 @@ function renderPage(state: State, sections: Section[]) {
           <p className='f4-l f5 lh-copy b measure'>Check things off to keep track as you go.</p>
         </div>
 
-        <div className='flex-l mt5-l mt4 center justify-center-l'>
+        <div className='flex-l mv5-l mv4 center justify-center-l'>
           <div className='left mw5-l w-third-l ph3 ph4-m pn-l relative'>
             <div className='sticky top-0 left-0 js-left pt3'>
               <section>
@@ -238,6 +238,11 @@ function renderPage(state: State, sections: Section[]) {
             })}
           </div>
         </div>
+
+        <WhatIsLearnk8s className='pt4' />
+
+        <Footer />
+
         <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
         <script
           dangerouslySetInnerHTML={{

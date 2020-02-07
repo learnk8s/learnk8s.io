@@ -527,9 +527,9 @@ export const Subscribe: React.StatelessComponent<{ identifier: string }> = ({ id
   )
 }
 
-export const WhatIsLearnk8s: React.StatelessComponent<{}> = ({}) => {
+export const WhatIsLearnk8s: React.StatelessComponent<{ className?: string }> = ({ className }) => {
   return (
-    <div className='mb4 mb5-l mw8 center'>
+    <div className={`mb4 mb5-l mw8 center ${className || ''}`}>
       <ul className='list pl0 flex flex-wrap'>
         <li className='w-50-ns f5 bg-evian br2 ph4'>
           <p className='pb3 f2 b navy mb2 b mt4'>What's Learnk8s?</p>
