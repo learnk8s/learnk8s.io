@@ -384,7 +384,7 @@ Kubernetes has four different kinds of Services:
 
 The first three Services have a virtual IP address that is used by kube-proxy to create iptables rules.
 
-But the fundament building block of all kinds of the Services is the Headless Service.
+But the fundamental building block of all kinds of the Services is the Headless Service.
 
 The headless Service doesn't have an assigned IP address and is only a mechanism to collect a list of Pod IP addresses and ports (also called endpoints).
 
