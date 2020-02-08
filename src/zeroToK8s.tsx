@@ -432,7 +432,7 @@ export const Form: React.StatelessComponent<{}> = ({ children }) => {
       <form action='https://academy.learnk8s.io/login' method='POST' className='relative'>
         <ol className='list pl0'>
           <li>
-            <label htmlFor='name' className='db tl ttu pb2 fw6'>
+            <label htmlFor='name' className='db tl ttu pb2 b'>
               Your first name
             </label>
             <input
@@ -444,7 +444,7 @@ export const Form: React.StatelessComponent<{}> = ({ children }) => {
             />
           </li>
           <li className='mt4'>
-            <label htmlFor='email' className='db tl ttu pb2 fw6'>
+            <label htmlFor='email' className='db tl ttu pb2 b'>
               Your email address
             </label>
             <input

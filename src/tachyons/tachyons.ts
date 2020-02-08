@@ -2,9 +2,9 @@ import cssom from 'cssom'
 import * as CSSwhat from 'css-what'
 
 const mediaQueries = [
-  { from: 30, name: 'ns' },
-  { from: 30, to: 60, name: 'm' },
-  { from: 60, name: 'l' },
+  { from: 32, name: 'ns' },
+  { from: 32, to: 64, name: 'm' },
+  { from: 64, name: 'l' },
 ]
 
 const mediaQueriesless = [
@@ -552,7 +552,7 @@ function fontStyle(): string {
 
 function fontWeight(scale: number[]): string {
   return [
-    scale.map((it, index) => `.fw${index + 1} { font-weight: ${it}; }`).join('\n'),
+    // scale.map((it, index) => `.fw${index + 1} { font-weight: ${it}; }`).join('\n'),
     `.normal { font-weight: normal; }`,
     `.b { font-weight: bold; }`,
   ].join('\n')
