@@ -39,7 +39,7 @@ const mediaQueriesless = [
   textAlign(),
   textTransform(),
   typography([6, 5, 3, 2.25, 1.5, 1.25, 1, 0.875, 0.75]),
-  measure([30, 34, 20]),
+  measure([30, 34, 20]), // 66 chars, 80 chars, 45 chars
   visibility(),
   whiteSpace(),
   verticalAlign(),
