@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1032px" height="446px" viewBox="0 0 1032 446" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>table</title>
+    <desc>Created with Sketch.</desc>
+    <g id="table" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <text id="SMALL-SINGLE-USE-CLU" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="29" y="385">SMALL SINGLE-USE</tspan>
+            <tspan x="29" y="407">CLUSTERS</tspan>
+        </text>
+        <text id="CLUSTER-PER-APPLICAT" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="29" y="297">CLUSTER PER</tspan>
+            <tspan x="29" y="319">APPLICATION</tspan>
+        </text>
+        <text id="CLUSTER-PER-ENVIRONM" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="29" y="209">CLUSTER PER</tspan>
+            <tspan x="29" y="231">ENVIRONMENT</tspan>
+        </text>
+        <text id="LARGE-SHARED-CLUSTER" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="29" y="127">LARGE SHARED</tspan>
+            <tspan x="29" y="149">CLUSTER</tspan>
+        </text>
+        <text id="COST-EFFICIENCY" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="237.26264" y="54">COST-EFFICIENCY</tspan>
+        </text>
+        <text id="RESILIENCE" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="666.005497" y="54">RESILIENCE</tspan>
+        </text>
+        <text id="SECURITY" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="875.406057" y="54">SECURITY</tspan>
+        </text>
+        <text id="EASE-OF-MANAGEMENT" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="479.353164" y="43">EASE OF</tspan>
+            <tspan x="453.518192" y="65">MANAGEMENT</tspan>
+        </text>
+        <line x1="11.5" y1="347.5" x2="1015.45469" y2="347.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="11.5" y1="260.5" x2="1015.45469" y2="260.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="11.5" y1="172.5" x2="1016.45469" y2="172.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="217" y1="10" x2="217.5" y2="435.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="11.5" y1="84.5" x2="1020.45469" y2="84.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="418" y1="9" x2="418" y2="435" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="619" y1="9" x2="619" y2="435" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="820" y1="9" x2="820" y2="435" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="1021" y1="9" x2="1021" y2="435" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="11.0453074" y1="436" x2="1020.45469" y2="435.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <rect id="Rectangle" fill="#3ADA16" x="239" y="107" width="150" height="41"></rect>
+        <rect id="Rectangle" fill="#F88A1C" x="239" y="282" width="38" height="41"></rect>
+        <rect id="Rectangle" fill="#F8E919" x="239" y="195" width="75" height="41"></rect>
+        <rect id="Rectangle" fill="#FF1717" x="239" y="372" width="19" height="41"></rect>
+        <rect id="Rectangle" fill="#3ADA16" x="440" y="107" width="150" height="41"></rect>
+        <rect id="Rectangle" fill="#F88A1C" x="440" y="282" width="38" height="41"></rect>
+        <rect id="Rectangle" fill="#F8E919" x="440" y="195" width="75" height="41"></rect>
+        <rect id="Rectangle" fill="#FF1717" x="440" y="372" width="19" height="41"></rect>
+        <rect id="Rectangle" fill="#3ADA16" transform="translate(720.000000, 392.500000) scale(1, -1) translate(-720.000000, -392.500000) " x="645" y="372" width="150" height="41"></rect>
+        <rect id="Rectangle" fill="#F88A1C" transform="translate(664.000000, 217.500000) scale(1, -1) translate(-664.000000, -217.500000) " x="645" y="197" width="38" height="41"></rect>
+        <rect id="Rectangle" fill="#F8E919" transform="translate(682.500000, 304.500000) scale(1, -1) translate(-682.500000, -304.500000) " x="645" y="284" width="75" height="41"></rect>
+        <rect id="Rectangle" fill="#FF1717" transform="translate(654.500000, 127.500000) scale(1, -1) translate(-654.500000, -127.500000) " x="645" y="107" width="19" height="41"></rect>
+        <rect id="Rectangle" fill="#3ADA16" transform="translate(917.000000, 392.500000) scale(1, -1) translate(-917.000000, -392.500000) " x="842" y="372" width="150" height="41"></rect>
+        <rect id="Rectangle" fill="#F88A1C" transform="translate(861.000000, 217.500000) scale(1, -1) translate(-861.000000, -217.500000) " x="842" y="197" width="38" height="41"></rect>
+        <rect id="Rectangle" fill="#F8E919" transform="translate(879.500000, 304.500000) scale(1, -1) translate(-879.500000, -304.500000) " x="842" y="284" width="75" height="41"></rect>
+        <rect id="Rectangle" fill="#FF1717" transform="translate(851.500000, 127.500000) scale(1, -1) translate(-851.500000, -127.500000) " x="842" y="107" width="19" height="41"></rect>
+    </g>
+</svg>
