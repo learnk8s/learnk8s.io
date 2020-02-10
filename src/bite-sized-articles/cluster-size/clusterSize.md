@@ -45,7 +45,7 @@ Note that the first two approaches are the two extremes on the scale, and the ot
 
 _Let's get started!_
 
-## 1. Large shared cluster
+## 1. One large shared cluster
 
 The first approach is to have a single shared cluster that you use for everything:
 
@@ -166,7 +166,7 @@ The reason is that larger clusters put a higher strain on the Kubernetes control
 
 **Now, let's look at the other extreme — many small single-use clusters.**
 
-## 2. Small single-use clusters
+## 2. Many small single-use clusters
 
 With this approach, you use a separate Kubernetes cluster for every deployment unit:
 
