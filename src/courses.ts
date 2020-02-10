@@ -273,8 +273,8 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SINGAPORE|20200217',
-      startAt: '2020-02-17T10:00:00',
-      endsAt: '2020-02-19T17:00:00',
+      startAt: '2020-03-16T10:00:00',
+      endsAt: '2020-03-18T17:00:00',
       timezone: 'Asia/Singapore',
       courseId: Courses.threeDays.id,
       priceId: CoursePrice.Singapore.id,
