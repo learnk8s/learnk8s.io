@@ -341,4 +341,4 @@ For example, you might think about a development cluster as well as a production
 
 This is a combination of several of the aspects that have been discussed in this article — and you can combine the pros and cons accordingly.
 
-By knowing the above example scenarios, you can combine the pros and cons for your specific approach accordingly.
+By knowing the above example scenarios, you can combine the pros and cons for your specific scenario accordingly.
