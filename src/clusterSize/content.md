@@ -1,4 +1,4 @@
-**TL;DR:** you can run a given set of workloads either on few large clusters (with many workloads in each cluster), or on many clusters (with few workloads in each cluster).
+**TL;DR:** you can run a given set of workloads either on few large clusters (with many workloads in each cluster) or on many clusters (with few workloads in each cluster).
 
 Here's a table that summarises the pros and cons of various approaches:
 
@@ -220,7 +220,7 @@ _Let's look at some further cluster scenarios._
 
 ## 3. Cluster per application
 
-With this approach, you have a separate cluster for all the instanfes of a specific application:
+With this approach, you have a separate cluster for all the instances of a specific application:
 
 ![One cluster per app](assets/cluster-per-app.svg)
 
@@ -258,7 +258,7 @@ _Here are the pros and cons of this approach are._
 
 ### 👍 Isolation of the _prod_ environment
 
-In general, this approach isolates all the environments from each other — but in practice this especially matters for the _prod_ environment.
+In general, this approach isolates all the environments from each other — but, in practice, this especially matters for the _prod_ environment.
 
 The production versions of your app are now not affected by whatever happens in any of the other clusters and application environments.
 
@@ -296,7 +296,7 @@ If an app has special requirements, then these requirements must be satisfied in
 
 For example, if an app requires a GPU, then every cluster must have at least one GPU worker node — even if it is used only by a single app.
 
-This may lead to higher costs and an inefficient resource usage.
+This may lead to higher costs and inefficient resource usage.
 
 ## Conclusion
 
@@ -317,4 +317,4 @@ However, the choice is not limited to the above examples — it can be any combi
 
 For example, you might think about having two clusters for each team: a development cluster (used for the _dev_ and _test_ environments) and a production cluster (used for the _prod_ environment).
 
-By analysing the above example scenarios, you can combine the pros and cons accordingly.
+By knowing the above example scenarios, you can combine the pros and cons for your specific approach accordingly.
