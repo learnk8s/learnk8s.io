@@ -1,3 +1,9 @@
+**TL;DR:** you can run a given set of workloads either on few large clusters (with many workloads in each cluster), or on many clusters (with few workloads in each cluster).
+
+Here's a table that summarises the pros and cons of various approaches:
+
+![Comparison table](assets/table.svg)
+
 **If you use Kubernetes as the operational platform for your applications, you are confronted with some fundamental questions about the way you use clusters:**
 
 - _How many clusters should you have?_
@@ -20,9 +26,9 @@ In the above example, there are 3 applications and 3 environments, which results
 
 Each application instance is a self-contained deployment unit that can be operated and independently from the others.
 
-> An **application instance** may consist of multiple **components**, such as the frontend, backend, database, etc. (in a microservices application, it consists of all the microservices that make up the application). This article assumes that an application instance is always deployed as a **unit**, that is, all the components of an application instance are deployed to the **same** Kubernetes cluster.
+> Note that an **application instance** may consist of multiple **components**, such as the frontend, backend, database, etc. In a microservices application, an application instance would consist of all the microservices.
 
-As a Kubernetes user, this immediately raises some questions:
+As a Kubernetes user, this raises some questions:
 
 - _Should you run all application instances on a single cluster?_
 - _Or should you have a separate cluster for each application instance?_
@@ -30,14 +36,14 @@ As a Kubernetes user, this immediately raises some questions:
 
 All of these are valid approaches — Kubernetes is a flexible system and it doesn't dictate you how to use it!
 
-This article explores the pros and cons of different approaches on the scale from _"few large shared clusters"_ to _"many small dedicated clusters"_ — in particular, these are:
+Here are some of the options you have:
 
 - [**One large shared cluster**](#1-one-large-shared-cluster)
 - [**Many small single-use clusters**](#2-many-small-single-use-clusters)
 - [**Cluster per application**](#3-cluster-per-application)
 - [**Cluster per environment**](#4-cluster-per-environment)
 
-Note that the first two approaches are the two extremes on the scale, and the other two are in between — this is shown in the following:
+The first two approaches are the extremes on the scale from _few large_ to _many small_ clusters, as shown below:
 
 ![Scale of cluster sizes](assets/dimensions.svg)
 
@@ -47,13 +53,11 @@ _Let's get started!_
 
 ## 1. One large shared cluster
 
-The first approach is to have a single shared cluster that you use for everything:
+The first option is to run all your workloads in the same cluster:
 
 ![One large cluster](assets/cluster-for-all.svg)
 
-In this case, you deploy all your workloads to the same cluster — in particular, this also applies to all your application instances, as shown above.
-
-With this approach, the Kubernetes cluster is used like general-purpose **infrastructure platform** — whatever you need to run, you deploy it to your existing Kubernetes cluster.
+With this approach, the cluster is used like general-purpose **infrastructure platform** — whatever you need to run, you deploy it to your existing Kubernetes cluster.
 
 > Kubernetes provides [namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) to logically separate portions of a cluster from each other, and in the above case, you could use a separate namespace for each application instance.
 
@@ -79,13 +83,11 @@ Some managed Kubernetes services provide the Kubernetes control plane for free, 
 
 However, there are also managed Kubernetes services that charge a fixed amount for running a Kubernetes cluster, such as [Amazon Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/).
 
-In general, it's safe to say that running few (large) clusters is cheaper than running many (small) clusters.
-
 ### 👍 Efficient administration
 
 Administrating a single cluster is easier than administrating many clusters.
 
-Administration may include tasks like:
+This may include tasks like:
 
 - _Upgrading the Kubernetes version_
 - _Setting up a CI/CD pipeline_
@@ -95,9 +97,9 @@ Administration may include tasks like:
 
 _And many more..._
 
-If you have only a single cluster, you need to do all of these tasks only once.
+If you have only a single cluster, you need to do all of this only once.
 
-If you have many clusters, then you need to apply these tasks multiple times in a consistent way — which probably requires you to develop automated processes and tools.
+If you have many clusters, then you need to apply everything multiple times, which probably requires you to develop some automated processes and tools for being able to do this consistently.
 
 **Let's look at the cons.**
 
@@ -136,7 +138,7 @@ It's important to keep in mind that Kubernetes is designed for _sharing_, and no
 
 Given the many shared resources in a Kubernetes cluster, there are many ways that different apps can "step on each other's toes".
 
-For example, an app may monopolise a certain shared resource, such as the CPU, and thus starve other apps that are running on the same node.
+For example, an app may monopolise a certain shared resource, such as the CPU or memory, and thus starve other apps running on the same node.
 
 Kubernetes provides various ways to control this behaviour, such as [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/), [ResourceQuotas](https://kubernetes.io/docs/concepts/policy/resource-quotas/), and [LimitRanges](https://kubernetes.io/docs/concepts/policy/limit-range/) — however, again, it's not trivial to tweak these tools in exactly the right way, and they cannot prevent every unwanted side effect either.
 
@@ -147,8 +149,6 @@ If you have only a single cluster, then many people in your organisation must ha
 _The more people have access to a system, the higher the risk that they break something._
 
 Within the cluster, you can control who can do what with [**role-based access control (RBAC)**](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) — however, this still can't prevent that users break something within their area of authorisation.
-
-And if something breaks, the consequences can be serious, because the cluster is a single point of failure!
 
 ### 👎 Clusters can't grow infinitely large
 
@@ -164,7 +164,7 @@ The reason is that larger clusters put a higher strain on the Kubernetes control
 
 > This issue is also discussed in a related article of this blog named [**Architecting Kubernetes clusters — choosing a worker node size**](https://learnk8s.io/kubernetes-node-size).
 
-**Now, let's look at the other extreme — many small single-use clusters.**
+**Now, let's look at the opposite approach — many small clusters.**
 
 ## 2. Many small single-use clusters
 
@@ -172,41 +172,35 @@ With this approach, you use a separate Kubernetes cluster for every deployment u
 
 ![Many small clusters](assets/cluster-per-app-and-env.svg)
 
-For this article, a deployment unit is an application instance — which may consist of multiple components, such as frontend, backend, database, etc.
+For this article, a deployment unit is an application instance — such as the _dev_ version of a single app.
 
-The rationale behind this approach is: _whenever you have to deploy something, create a new Kubernetes cluster for it._
-
-With this strategy, Kubernetes is used a bit like a specialised **application runtime** for individual application instances.
+With this strategy, Kubernetes is used like a specialised **application runtime** for individual application instances.
 
 _Let's see what the pros and cons of this approach are._
 
 ### 👍 Reduced blast radius
 
-If one of the many cluster breaks, the damage is limited to a single deployment unit.
-
-This is the counterpart of the _"Single point of failure"_ disadvantage of a large shared cluster.
+If a cluster breaks, the damage is limited to only the workloads that run on this cluster — all the other workloads are unaffected.
 
 ### 👍 Isolation
 
-Different clusters do _not_ need to share any of their hardware, network, operating system, or other services — clusters can be completely physically separated from each other.
+The workloads running in the individual clusters don't share any resources, such as CPU, memory, the operating system, network, or other services.
 
-This also means that the workloads running in different clusters can be completely physically separated from each other — there are no shared resources.
-
-This provides strong isolation between workloads that have nothing to do with each other — which may be very beneficial from a security point of view.
+This provides strong isolation between unrelated applications, which may be a big plus for the security of these applications.
 
 ### 👍 Few users
 
-If every cluster runs only a small set of workload, then fewer people need to have access to this cluster — this should reduce the likelihood that someone breaks something.
+If every cluster runs only a small set of workload, then fewer people need to have access to this cluster.
 
-**These were the pros — let's check out the cons.**
+_The fewer people have access to a cluster, the lower the risk that something breaks._
+
+**Let's look at the cons.**
 
 ### 👎 Inefficient resource usage
 
-As already mentioned, each Kubernetes cluster requires a set of resources for its management, such as the master nodes, load balancers, logging, and monitoring services.
+As already mentioned, each Kubernetes cluster requires a set of management resources, such as the master nodes, control plane components, monitoring and logging solutions.
 
-In general, you need a copy of these resources for every cluster.
-
-For example, if you have 10 clusters, you need 30 master nodes (even if each cluster has only 1 worker node) — compare this with the 3 master nodes that you need for a shared cluster with 10 worker nodes.
+If you have many small clusters, you have to sacrifice a higher percentage of the total resources for these management functions.
 
 ### 👎 Expensive
 
@@ -216,45 +210,41 @@ For example, if you have to run 30 master nodes instead of 3 for the same comput
 
 ### 👎 Complex administration
 
-Administrating many Kubernetes clusters is more work than administrating a single Kubernetes cluster.
+Administrating many Kubernetes clusters is more complex than administrating a single Kubernetes cluster.
 
-Administration tasks such as installing admission controllers, setting up a CI/CD pipeline, or configuring authentication cannot just be executed in a simple ad-hoc manner, but now must be coordinated and managed across the clusters.
+For example, you need to set up authentication and authorisation for each cluster — if you want to upgrade the Kubernetes version, you need to do this many times too.
 
-You probably need to develop automated processes and tools to be able to do this efficiently.
+You probably need to develop some automated processes for being able to do this efficiently.
 
-**So far, we covered the most extreme cases — one cluster for everything and a separate cluster for each deployment unit.**
-
-_However, there are also some interesting intermediate cases._
+_Let's look at some further cluster scenarios._
 
 ## 3. Cluster per application
 
-With this approach, you have a separate cluster for all the versions of a specific application:
+With this approach, you have a separate cluster for all the instanfes of a specific application:
 
 ![One cluster per app](assets/cluster-per-app.svg)
 
-You can see a cluster per **team** as a special case of this — usually, an app is developed by a single dedicated team (but a team may develop multiple apps).
+You can see this as a generalisation of a **cluster per team**, since usually a team develops one or more apps.
 
-Note that the pros and cons of the above approaches also apply in the moderated form to this approach, because it is on the same scale between the other two approaches.
-
-_However, there are also some characteristics that are specific to this approach, which are explained below._
+_Let's look at the particular pros and cons of this approach._
 
 ### 👍 Cluster can be customised for an app
 
-If an app has specific requirements, then this requirement can be installed in the corresponding cluster without affecting any other clusters and apps.
+If an app has specific requirements, then these requirements can be installed in its cluster without affecting any of the other clusters.
 
 Such requirements may include GPU worker nodes, a certain CNI plugin, a service mesh, or any other service.
 
 Every cluster can be equipped with exactly the configuration that the corresponding app needs — not more and not less.
 
-**There's also a con.**
-
 ### 👎 Different environments in the same cluster
 
-Different instances of the same app run in the same cluster — this is especially relevant for the _prod_ instance.
+A disadvantage of this approach is that application instances from different environments run in the same cluster.
 
-Imagine that a new development version of the app has an error and bogs down the cluster — this probably breaks the production version of your app too!
+For example, the _prod_ version of an app runs in the same cluster as the _dev_ version — which also means that the developers work in the same cluster that the production version of the app runs.
 
-**Let's turn to the last approach.**
+So, if a developer or a buggy _dev_ version creates some damage in the cluster, the _prod_ version is potentially affected too — which is a big disadvantage.
+
+_There's one more approach._
 
 ## 4. Cluster per environment
 
@@ -262,77 +252,69 @@ With this approach, you have a separate cluster for each environment:
 
 ![One cluster per environment](assets/cluster-per-env.svg)
 
-If you use a _dev_, _test_, and _prod_ environment for your apps, you would have a _dev_, _test_, and _prod_ cluster.
+For example, you can have a _dev_, _test_, and _prod_ cluster where you run all the application instances of a specific environment.
 
-Each cluster contains the corresponding instance of all the apps.
-
-_Let's see what the pros and cons of this approach are._
+_Here are the pros and cons of this approach are._
 
 ### 👍 Isolation of the _prod_ environment
 
-In general, this approach isolates all the environments from each other, but, in practice, this especially matters for the _prod_ environment.
+In general, this approach isolates all the environments from each other — but in practice this especially matters for the _prod_ environment.
 
-If all the production instances of the apps run in their own cluster, then they're not affected by any mishappenings in the other clusters (for example, a new development version of an app creating havoc in the _dev_ cluster).
+The production versions of your app are now not affected by whatever happens in any of the other clusters and application environments.
 
-This may be a huge advantage for the reliability and availability of your apps.
+So, if some misconfiguration creates havoc in your _dev_ cluster, the _prod_ versions of your apps keep running as if nothing had happened!
 
 ### 👍 Cluster can be customised for an environment
 
-You can optimise each cluster for its specific task, for example:
+You can optimise each cluster for its environment — for example, you can:
 
-- Install development and debugging tools and services in the _dev_ cluster
+- Install development and debugging tools in the _dev_ cluster
 - Install testing frameworks and tools in the _test_ cluster
 - Use more powerful hardware and network connections for the _prod_ cluster
 
-This may overall improve the efficiency of both the development and operation of your apps.
+This may improve the efficiency of both the development and operation of your apps.
 
 ### 👍 Lock down access to _prod_ cluster
 
-If all the production versions of your apps are in a separate cluster, you can make access to this cluster very restrictive.
+Nobody really needs to do work on the _prod_ cluster, so you can make access to it very restrictive.
 
-In fact, no humans at all really need access to the _prod_ cluster — all the deployments could be done by a CI/CD tool.
+You can go as far as not granting access to the _prod_ cluster to any humans at all — the deployments to this cluster can be made through an automated CI/CD tool.
 
-This decreases the risk of human error in the _prod_ cluster to a minimum!
-
-**Let's turn to the cons.**
+This should greatly decrease the risk of human error in the _prod_ cluster, which is where it matters most!
 
 ### 👎 Lack of isolation between apps
 
-The main disadvantage of this approach is the missing isolation between apps since instances of multiple apps share the same cluster.
+The main disadvantage of this approach is the missing hardware and resource isolation between apps.
 
-This may be a security issue as already explained above.
+Unrelated apps share cluster resources, such as the operating system kernel, CPU, memory, and several other services.
+
+As already mentioned, this may be a security issue.
 
 ### 👎 App requirements are not localised
 
-If an app has a special requirement, then this requirement must be satisfied in all clusters.
+If an app has special requirements, then these requirements must be satisfied in all clusters.
 
-For example, if an app requires a GPU, then every cluster must have a GPU worker node, even if it is used only by this single app — this may lead to inefficient usage of resources.
+For example, if an app requires a GPU, then every cluster must have at least one GPU worker node — even if it is used only by a single app.
 
-**This concludes our discussion of the different cluster approaches.**
-
-_Let's wrap up._
+This may lead to higher costs and an inefficient resource usage.
 
 ## Conclusion
 
-This article discussed some possible Kubernetes cluster approaches on a scale from _"few large shared clusers"_ to _"many small dedicated clusters"_:
+If you have a given set of applications, you can run them either on few large clusters or many small clusters.
+
+This article discussed the pros and cons of various approaches:
 
 - [**One large shared cluster**](#1-one-large-shared-cluster)
 - [**Many small single-use clusters**](#2-many-small-single-use-clusters)
 - [**Cluster per application**](#3-cluster-per-application)
 - [**Cluster per environment**](#4-cluster-per-environment)
 
-For your convenience, here's a table that summarises the pros and cons of each approach with respect to some common requirements:
-
-![Comparison table](assets/table.svg)
-
 _So, which approach should you choose?_
 
 As usual, the answer depends on your use case — you have to trade-off the pros and cons of the different approaches against each other to find the solution that works best for you.
 
-But note that the choice is not limited to the above example configurations — it can be any combination!
+However, the choice is not limited to the above examples — it can be any combination of them!
 
-For example, you might think about a development cluster as well as a production cluster per team.
+For example, you might think about having two clusters for each team: a development cluster (used for the _dev_ and _test_ environments) and a production cluster (used for the _prod_ environment).
 
-This is a combination of several of the aspects that have been discussed in this article — and you can combine the pros and cons accordingly.
-
-_In the end, the solution must fit **your** use case._
+By analysing the above example scenarios, you can combine the pros and cons accordingly.
