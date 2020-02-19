@@ -78,7 +78,7 @@ function renderPage(state: State) {
                     <input type='hidden' name='id' defaultValue='8ecff1a8cf' />
                   </li>
                   <li>
-                    <label htmlFor='MERGE1' className='db tl ttu pb2 fw6'>
+                    <label htmlFor='MERGE1' className='db tl ttu pb2 b'>
                       Your first name
                     </label>
                     <input
@@ -90,7 +90,7 @@ function renderPage(state: State) {
                     />
                   </li>
                   <li className='mt4'>
-                    <label htmlFor='MERGE0' className='db tl ttu pb2 fw6'>
+                    <label htmlFor='MERGE0' className='db tl ttu pb2 b'>
                       Your email address
                     </label>
                     <input

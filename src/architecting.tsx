@@ -384,7 +384,7 @@ setTimeout(ldinsp, 0);
                   href='https://academy.learnk8s.io/bundle-architecting'
                   className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                   target='_self'
-                  ref='noreferrer'
+                  rel='noreferrer'
                 >
                   Buy now →
                 </a>
@@ -426,7 +426,7 @@ setTimeout(ldinsp, 0);
                   href='https://academy.learnk8s.io/all'
                   className='no-underline dib ba b--sky sky br1 pv3 ph4 b f4 br2'
                   target='_self'
-                  ref='noreferrer'
+                  rel='noreferrer'
                 >
                   Buy now →
                 </a>
@@ -473,7 +473,7 @@ setTimeout(ldinsp, 0);
                     href='https://academy.learnk8s.io/single-containers'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
-                    ref='noreferrer'
+                    rel='noreferrer'
                   >
                     Buy now →
                   </a>
@@ -516,7 +516,7 @@ setTimeout(ldinsp, 0);
                     href='https://academy.learnk8s.io/single-fundamentals'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
-                    ref='noreferrer'
+                    rel='noreferrer'
                   >
                     Buy now →
                   </a>
@@ -559,7 +559,7 @@ setTimeout(ldinsp, 0);
                     href='https://academy.learnk8s.io/single-deployment-strategies'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
-                    ref='noreferrer'
+                    rel='noreferrer'
                   >
                     Buy now →
                   </a>

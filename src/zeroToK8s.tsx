@@ -101,7 +101,7 @@ function renderPage(state: State) {
       </Head>
       <Body>
         <div className='mw8 center pl3'>
-          <a href='/' className='db pt4 w4' target='_self' ref='noreferrer'>
+          <a href='/' className='db pt4 w4' target='_self' rel='noreferrer'>
             <img src='assets/logo_color.svg' alt='Learnk8s logo' />
           </a>
         </div>
@@ -432,7 +432,7 @@ export const Form: React.StatelessComponent<{}> = ({ children }) => {
       <form action='https://academy.learnk8s.io/login' method='POST' className='relative'>
         <ol className='list pl0'>
           <li>
-            <label htmlFor='name' className='db tl ttu pb2 fw6'>
+            <label htmlFor='name' className='db tl ttu pb2 b'>
               Your first name
             </label>
             <input
@@ -444,7 +444,7 @@ export const Form: React.StatelessComponent<{}> = ({ children }) => {
             />
           </li>
           <li className='mt4'>
-            <label htmlFor='email' className='db tl ttu pb2 fw6'>
+            <label htmlFor='email' className='db tl ttu pb2 b'>
               Your email address
             </label>
             <input

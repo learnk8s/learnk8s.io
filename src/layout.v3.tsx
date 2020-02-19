@@ -172,7 +172,7 @@ export const Footer: React.StatelessComponent<{}> = ({}) => {
                 href='https://github.com/learnk8s'
                 className='link dib w2 h2 icon'
                 title='Learnk8s on GitHub'
-                ref='noreferrer'
+                rel='noreferrer'
                 target='_blank'
               >
                 <GithubLogo />
@@ -183,7 +183,7 @@ export const Footer: React.StatelessComponent<{}> = ({}) => {
                 href='https://twitter.com/learnk8s'
                 className='link dib w2 h2 icon'
                 title='Learnk8s on Twitter'
-                ref='noreferrer'
+                rel='noreferrer'
                 target='_blank'
               >
                 <TwitterLogo />
@@ -194,7 +194,7 @@ export const Footer: React.StatelessComponent<{}> = ({}) => {
                 href='https://www.linkedin.com/company/learnk8s/'
                 className='link dib w2 h2 icon'
                 title='Learnk8s on LinkedIn'
-                ref='noreferrer'
+                rel='noreferrer'
                 target='_blank'
               >
                 <LinkedInLogo />
@@ -205,7 +205,7 @@ export const Footer: React.StatelessComponent<{}> = ({}) => {
                 href='https://learnk8s-slack-invite.herokuapp.com'
                 className='link dib w2 h2 icon'
                 title='Learnk8s on Slack'
-                ref='noreferrer'
+                rel='noreferrer'
                 target='_blank'
               >
                 <SlackLogo />
@@ -527,9 +527,9 @@ export const Subscribe: React.StatelessComponent<{ identifier: string }> = ({ id
   )
 }
 
-export const WhatIsLearnk8s: React.StatelessComponent<{}> = ({}) => {
+export const WhatIsLearnk8s: React.StatelessComponent<{ className?: string }> = ({ className }) => {
   return (
-    <div className='mb4 mb5-l mw8 center'>
+    <div className={`mb4 mb5-l mw8 center ${className || ''}`}>
       <ul className='list pl0 flex flex-wrap'>
         <li className='w-50-ns f5 bg-evian br2 ph4'>
           <p className='pb3 f2 b navy mb2 b mt4'>What's Learnk8s?</p>

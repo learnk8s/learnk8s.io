@@ -96,7 +96,7 @@ function renderPage(state: State) {
               href='/architecting-scaling-apps-kubernetes'
               className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
               target='_self'
-              ref='noreferrer'
+              rel='noreferrer'
             >
               Learn more →
             </a>
@@ -159,7 +159,7 @@ function renderPage(state: State) {
               href='/advanced-kubernetes-in-practice'
               className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
               target='_self'
-              ref='noreferrer'
+              rel='noreferrer'
             >
               Learn more →
             </a>
@@ -222,7 +222,7 @@ function renderPage(state: State) {
               href='/microservices-at-scale'
               className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
               target='_self'
-              ref='noreferrer'
+              rel='noreferrer'
             >
               Learn more →
             </a>
@@ -285,7 +285,7 @@ function renderPage(state: State) {
               href='/exploring-kubernetes'
               className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
               target='_self'
-              ref='noreferrer'
+              rel='noreferrer'
             >
               Learn more →
             </a>
