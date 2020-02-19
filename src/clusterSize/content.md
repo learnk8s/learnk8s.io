@@ -1,3 +1,9 @@
+**TL;DR:** you can run a given set of workloads either on few large clusters (with many workloads in each cluster) or on many clusters (with few workloads in each cluster).
+
+Here's a table that summarises the pros and cons of various approaches:
+
+![Comparison table](assets/table.svg)
+
 **If you use Kubernetes as the operational platform for your applications, you are confronted with some fundamental questions about the way you use clusters:**
 
 - _How many clusters should you have?_
@@ -228,7 +234,7 @@ _However, there are also some interesting intermediate cases._
 
 ## 3. Cluster per application
 
-With this approach, you have a separate cluster for all the versions of a specific application:
+With this approach, you have a separate cluster for all the instances of a specific application:
 
 ![One cluster per app](assets/cluster-per-app.svg)
 
@@ -270,7 +276,7 @@ _Let's see what the pros and cons of this approach are._
 
 ### 👍 Isolation of the _prod_ environment
 
-In general, this approach isolates all the environments from each other, but, in practice, this especially matters for the _prod_ environment.
+In general, this approach isolates all the environments from each other — but, in practice, this especially matters for the _prod_ environment.
 
 If all the production instances of the apps run in their own cluster, then they're not affected by any mishappenings in the other clusters (for example, a new development version of an app creating havoc in the _dev_ cluster).
 
@@ -308,7 +314,7 @@ If an app has a special requirement, then this requirement must be satisfied in 
 
 For example, if an app requires a GPU, then every cluster must have a GPU worker node, even if it is used only by this single app — this may lead to inefficient usage of resources.
 
-**This concludes our discussion of the different cluster approaches.**
+This may lead to higher costs and inefficient resource usage.
 
 _Let's wrap up._
 
@@ -335,4 +341,4 @@ For example, you might think about a development cluster as well as a production
 
 This is a combination of several of the aspects that have been discussed in this article — and you can combine the pros and cons accordingly.
 
-_In the end, the solution must fit **your** use case._
+By knowing the above example scenarios, you can combine the pros and cons for your specific approach accordingly.
