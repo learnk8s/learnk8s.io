@@ -317,4 +317,4 @@ However, the choice is not limited to the above examples — it can be any combi
 
 For example, you might think about having two clusters for each team: a development cluster (used for the _dev_ and _test_ environments) and a production cluster (used for the _prod_ environment).
 
-By knowing the above example scenarios, you can combine the pros and cons for your specific approach accordingly.
+By knowing the above example scenarios, you can combine the pros and cons for your specific scenario accordingly.
