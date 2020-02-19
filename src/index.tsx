@@ -31,6 +31,8 @@ import * as BiteSizedRenderer from './biteSized.v2'
 import { store, getConfig } from './store'
 import * as Training from './training.v2'
 import * as BestPractices from './best-practices/best'
+import * as FreeTools from './freeTools'
+import * as Wallpaper from './wallpaper'
 import * as Flipboard from './flipboard'
 import { checkPageDetail } from './checkPageDetail'
 import { register } from './register'
@@ -40,6 +42,8 @@ register(store)
 Landing.Mount({ store })
 Training.Mount({ store })
 BestPractices.Mount({ store })
+FreeTools.Mount({ store })
+Wallpaper.Mount({ store })
 Careers.Mount({ store })
 TermsAndConditions.Mount({ store })
 Consulting.Mount({ store })
