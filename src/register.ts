@@ -32,6 +32,7 @@ import * as ZeroToK8sJs from './02k8sjs/02k8sjs'
 import * as Troubleshooting from './troubleshooting/troubleshooting'
 import * as Templating from './templating/templating'
 import * as PersitentConnections from './persistent-connections/peristentConnections'
+import * as ClusterSize from './clusterSize/clusterSize'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedArticles from './bite-sized-articles'
@@ -82,4 +83,5 @@ export function register(store: Store<State, Actions>) {
   ExploringKubernetes.Register(store)
   Templating.Register(store)
   PersitentConnections.Register(store)
+  ClusterSize.Register(store)
 }
