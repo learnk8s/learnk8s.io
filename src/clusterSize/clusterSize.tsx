@@ -8,8 +8,8 @@ import { toVFile } from '../files'
 export const ClusterSize = {
   id: 'cluster-size',
   url: '/kubernetes-cluster-size',
-  title: 'Architecting Kubernetes clusters — choosing a cluster size',
-  description: `Should you use one big cluster or many small clusters for running your applications?. This article looks at the pros and cons of the different options you have.`,
+  title: 'Architecting Kubernetes clusters — how many clusters are right?',
+  description: `How many Kubernetes clusters should you have? One big cluster or multiple smaller clusters? This article investigates the pros and cons of different approaches.`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -21,11 +21,11 @@ export function Register(store: Store<State, Actions>) {
       image: (
         <img
           src='src/clusterSize/architecting-clusters.png'
-          alt='Architecting Kubernetes clusters — choosing a cluster size'
+          alt='Architecting Kubernetes clusters — how many clusters are right?'
         />
       ),
       title: ClusterSize.title,
-      description: `If you use Kubernetes as your application platform, one of the fundamental questions is: should use one big cluster for all your applications, or multiple smaller clusters for individual workloads? This article investigates the pros and cons of the different options you have.Learn how you can leverage tools such as yq and kustomize to template your Kubernetes YAML file. Learn how to write your own tool to generate YAML programatically with a real programming language such as Java, Node.js, Go, Python or C#.`,
+      description: `If you use Kubernetes as your application platform, one of the fundamental questions is: how many clusters should you have? One big cluster or multiple smaller clusters? This article investigates the pros and cons of different approaches.`,
     }),
   )
   store.dispatch(
@@ -34,8 +34,8 @@ export function Register(store: Store<State, Actions>) {
       pageId: ClusterSize.id,
       authorId: Authors.danielWeibel.id,
       title: ClusterSize.title,
-      description: `If you use Kubernetes as your application platform, one of the fundamental questions is: should use one big cluster for all your applications, or multiple smaller clusters for individual workloads? This article investigates the pros and cons of the different options you have.`,
-      publishedDate: '2020-02-19',
+      description: `If you use Kubernetes as your application platform, one of the fundamental questions is: how many clusters should you have? One big cluster or multiple smaller clusters? This article investigates the pros and cons of different approaches.`,
+      publishedDate: '2020-02-20',
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
