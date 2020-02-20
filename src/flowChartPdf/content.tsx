@@ -12,7 +12,7 @@ export interface FlowchartPdf {
 export const content: Record<string, FlowchartPdf> = {
   chokolates: {
     title: 'Flowchart 1',
-    featureImg: <img src='src/flowchartPdf/assets/flowchart.jpg' alt='Flowchart' />,
+    featureImg: <img src='src/flowchartPdf/assets/flowchart.png' alt='Flowchart' />,
     downloadList: [
       {
         text: 'Download Flowchart 1',
@@ -22,7 +22,7 @@ export const content: Record<string, FlowchartPdf> = {
   },
   magic: {
     title: 'Flowchart 2',
-    featureImg: <img src='src/flowchartPdf/assets/flowchart.jpg' alt='Flowchart' />,
+    featureImg: <img src='src/flowchartPdf/assets/flowchart.png' alt='Flowchart' />,
     downloadList: [
       {
         text: 'Download Flowchart 2',
