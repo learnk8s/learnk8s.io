@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1300px" height="380px" viewBox="0 0 1300 380" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>dimensions</title>
+    <desc>Created with Sketch.</desc>
+    <g id="dimensions" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="1300" height="380"></rect>
+        <text id="FEW-LARGE-CLUSTERS" font-family="Helvetica-Bold, Helvetica" font-size="28" font-weight="bold" letter-spacing="-0.16" fill="#333333">
+            <tspan x="44.1364844" y="306">FEW</tspan>
+            <tspan x="26.4" y="340">LARGE</tspan>
+            <tspan x="0.191757812" y="374">CLUSTERS</tspan>
+        </text>
+        <text id="LARGE-SHARED-CLUSTER" transform="translate(397.179492, 102.000000) rotate(-30.000000) translate(-397.179492, -102.000000) " font-family="Helvetica-Bold, Helvetica" font-size="28" font-weight="bold" letter-spacing="-0.16" fill="#333333">
+            <tspan x="285.679492" y="96">LARGE SHARED</tspan>
+            <tspan x="285.679492" y="130">CLUSTER</tspan>
+        </text>
+        <text id="CLUSTER-PER-ENVIRONM" transform="translate(625.000000, 109.000000) rotate(-30.000000) translate(-625.000000, -109.000000) " font-family="Helvetica-Bold, Helvetica" font-size="28" font-weight="bold" letter-spacing="-0.16" fill="#333333">
+            <tspan x="522" y="103">CLUSTER PER</tspan>
+            <tspan x="522" y="137">ENVIRONMENT</tspan>
+        </text>
+        <text id="CLUSTER-PER-APPLICAT" transform="translate(853.000000, 109.000000) rotate(-30.000000) translate(-853.000000, -109.000000) " font-family="Helvetica-Bold, Helvetica" font-size="28" font-weight="bold" letter-spacing="-0.16" fill="#333333">
+            <tspan x="755" y="103">CLUSTER PER</tspan>
+            <tspan x="755" y="137">APPLICATION</tspan>
+        </text>
+        <text id="SMALL-SINGLE-USE-CLU" transform="translate(1119.542940, 90.500000) rotate(-30.000000) translate(-1119.542940, -90.500000) " font-family="Helvetica-Bold, Helvetica" font-size="28" font-weight="bold" letter-spacing="-0.16" fill="#333333">
+            <tspan x="983.04294" y="84.5">SMALL SINGLE-USE</tspan>
+            <tspan x="983.04294" y="118.5">CLUSTERS</tspan>
+        </text>
+        <text id="MANY-SMALL-CLUSTERS" font-family="Helvetica-Bold, Helvetica" font-size="28" font-weight="bold" letter-spacing="-0.16" fill="#333333">
+            <tspan x="1179.0993" y="306">MANY</tspan>
+            <tspan x="1172.18613" y="340">SMALL</tspan>
+            <tspan x="1145.19176" y="374">CLUSTERS</tspan>
+        </text>
+        <path id="Line" d="M1071.5,301.5 L1125.5,328.5 L1071.5,355.5 L1071.5,333.5 L204.5,333.5 L204.5,355.5 L150.5,328.5 L204.5,301.5 L204.5,323.5 L1071.5,323.5 L1071.5,301.5 Z" fill="#333333" fill-rule="nonzero"></path>
+        <circle id="Oval" stroke="#333333" stroke-width="10" fill="#0D1EEF" cx="288" cy="329" r="25"></circle>
+        <circle id="Oval" stroke="#333333" stroke-width="10" fill="#FB1313" cx="987" cy="329" r="25"></circle>
+        <circle id="Oval" stroke="#333333" stroke-width="10" fill="#588FF8" cx="521" cy="328" r="25"></circle>
+        <circle id="Oval" stroke="#333333" stroke-width="10" fill="#EC5555" cx="754" cy="329" r="25"></circle>
+        <line x1="288.5" y1="304.435897" x2="288.5" y2="173.564103" id="Line-2" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="521.5" y1="304.431624" x2="521.5" y2="172.568376" id="Line-2" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="754.5" y1="305.431624" x2="754.5" y2="173.568376" id="Line-2" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="987.5" y1="305.431624" x2="987.5" y2="173.568376" id="Line-2" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+    </g>
+</svg>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1210px" height="446px" viewBox="0 0 1210 446" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>table</title>
+    <desc>Created with Sketch.</desc>
+    <g id="table" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="1210" height="446"></rect>
+        <text id="SMALL-SINGLE-USE-CLU" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="207" y="385">SMALL SINGLE-USE</tspan>
+            <tspan x="207" y="407">CLUSTERS</tspan>
+        </text>
+        <text id="CLUSTER-PER-APPLICAT" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="207" y="297">CLUSTER PER</tspan>
+            <tspan x="207" y="319">APPLICATION</tspan>
+        </text>
+        <text id="MANY-CLUSTERS" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="22.2066908" y="411">MANY</tspan>
+            <tspan x="0.408987165" y="433">CLUSTERS</tspan>
+        </text>
+        <text id="FEW-CLUSTERS" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="95.6591685" y="90">FEW</tspan>
+            <tspan x="67.4089872" y="112">CLUSTERS</tspan>
+        </text>
+        <text id="CLUSTER-PER-ENVIRONM" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="207" y="209">CLUSTER PER</tspan>
+            <tspan x="207" y="231">ENVIRONMENT</tspan>
+        </text>
+        <text id="LARGE-SHARED-CLUSTER" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="207" y="127">LARGE SHARED</tspan>
+            <tspan x="207" y="149">CLUSTER</tspan>
+        </text>
+        <text id="COST-EFFICIENCY" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="415.26264" y="54">COST-EFFICIENCY</tspan>
+        </text>
+        <text id="RESILIENCE" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="844.005497" y="54">RESILIENCE</tspan>
+        </text>
+        <text id="APPLICATION-SECURITY" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="1033.7288" y="43">APPLICATION</tspan>
+            <tspan x="1048.40606" y="65">SECURITY</tspan>
+        </text>
+        <text id="EASE-OF-MANAGEMENT" font-family="Helvetica-Bold, Helvetica" font-size="18" font-weight="bold" letter-spacing="-0.102857143" fill="#333333">
+            <tspan x="657.353164" y="43">EASE OF</tspan>
+            <tspan x="631.518192" y="65">MANAGEMENT</tspan>
+        </text>
+        <line x1="189.5" y1="347.5" x2="1193.45469" y2="347.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="189.5" y1="260.5" x2="1193.45469" y2="260.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="189.5" y1="172.5" x2="1194.45469" y2="172.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="395" y1="10" x2="395.5" y2="435.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="189.5" y1="84.5" x2="1198.45469" y2="84.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="596" y1="9" x2="596" y2="435" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="797" y1="9" x2="797" y2="435" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="998" y1="9" x2="998" y2="435" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="1199" y1="9" x2="1199" y2="435" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <line x1="189.045307" y1="436" x2="1198.45469" y2="435.5" id="Line-3" stroke="#333333" stroke-width="5" stroke-linecap="square"></line>
+        <rect id="Rectangle" fill="#3ADA16" x="417" y="107" width="150" height="41"></rect>
+        <rect id="Rectangle" fill="#F88A1C" x="417" y="282" width="38" height="41"></rect>
+        <rect id="Rectangle" fill="#F8E919" x="417" y="195" width="75" height="41"></rect>
+        <rect id="Rectangle" fill="#FF1717" x="417" y="372" width="19" height="41"></rect>
+        <rect id="Rectangle" fill="#3ADA16" x="618" y="107" width="150" height="41"></rect>
+        <rect id="Rectangle" fill="#F88A1C" x="618" y="282" width="38" height="41"></rect>
+        <rect id="Rectangle" fill="#F8E919" x="618" y="195" width="75" height="41"></rect>
+        <rect id="Rectangle" fill="#FF1717" x="618" y="372" width="19" height="41"></rect>
+        <rect id="Rectangle" fill="#3ADA16" transform="translate(898.000000, 392.500000) scale(1, -1) translate(-898.000000, -392.500000) " x="823" y="372" width="150" height="41"></rect>
+        <rect id="Rectangle" fill="#F88A1C" transform="translate(842.000000, 217.500000) scale(1, -1) translate(-842.000000, -217.500000) " x="823" y="197" width="38" height="41"></rect>
+        <rect id="Rectangle" fill="#F8E919" transform="translate(860.500000, 304.500000) scale(1, -1) translate(-860.500000, -304.500000) " x="823" y="284" width="75" height="41"></rect>
+        <rect id="Rectangle" fill="#FF1717" transform="translate(832.500000, 127.500000) scale(1, -1) translate(-832.500000, -127.500000) " x="823" y="107" width="19" height="41"></rect>
+        <rect id="Rectangle" fill="#3ADA16" transform="translate(1095.000000, 392.500000) scale(1, -1) translate(-1095.000000, -392.500000) " x="1020" y="372" width="150" height="41"></rect>
+        <rect id="Rectangle" fill="#F88A1C" transform="translate(1039.000000, 217.500000) scale(1, -1) translate(-1039.000000, -217.500000) " x="1020" y="197" width="38" height="41"></rect>
+        <rect id="Rectangle" fill="#F8E919" transform="translate(1057.500000, 304.500000) scale(1, -1) translate(-1057.500000, -304.500000) " x="1020" y="284" width="75" height="41"></rect>
+        <rect id="Rectangle" fill="#FF1717" transform="translate(1029.500000, 127.500000) scale(1, -1) translate(-1029.500000, -127.500000) " x="1020" y="107" width="19" height="41"></rect>
+        <path id="Line" d="M50.9958915,82.9958983 L50.9999966,85.4958949 L51.453,361.495 L63.4531825,361.476229 L49.000821,390.499999 L34.4532216,361.523848 L46.453,361.504 L46.0000034,85.5041051 L45.9958983,83.0041085 L50.9958915,82.9958983 Z" fill="#333333" fill-rule="nonzero"></path>
+        <path id="Line" d="M115.499179,123.000001 L130.046778,151.976152 L118.046,151.995 L118.499997,427.995895 L118.504102,430.495892 L113.504108,430.504102 L113.500003,428.004105 L113.046,152.004 L101.046818,152.023771 L115.499179,123.000001 Z" fill="#333333" fill-rule="nonzero"></path>
+    </g>
+</svg>
