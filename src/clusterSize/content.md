@@ -27,7 +27,8 @@ In the above example, there are 3 applications and 3 environments, which results
 Each application instance is a self-contained deployment unit that can be operated and independently from the others.
 
 > Note that an **application instance** may consist of multiple **components**, such as the frontend, backend, database, etc. In a microservices application, an application instance would consist of all the microservices.
-> As a Kubernetes user, this raises some questions:
+
+As a Kubernetes user, this raises some questions:
 
 - _Should you run all application instances on a single cluster?_
 - _Or should you have a separate cluster for each application instance?_
@@ -47,7 +48,8 @@ The first two approaches are the extremes on the scale from _few large_ to _many
 ![Scale of cluster sizes](assets/dimensions.svg)
 
 > In general, a cluster can be defined "larger" than another if it contains a larger sum of nodes and Pods — for example, a cluster with 10 nodes and 100 Pods is larger than a cluster with 1 node and 10 Pods.
-> _Let's get started!_
+
+_Let's get started!_
 
 ## 1. One large shared cluster
 
@@ -58,7 +60,8 @@ The first option is to run all your workloads in the same cluster:
 With this approach, the cluster is used like general-purpose **infrastructure platform** — whatever you need to run, you deploy it to your existing Kubernetes cluster.
 
 > Kubernetes provides [namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) to logically separate portions of a cluster from each other, and in the above case, you could use a separate namespace for each application instance.
-> _Let's look at the pros and cons of this approach._
+
+_Let's look at the pros and cons of this approach._
 
 ### 👍 Efficient resource usage
 
@@ -98,7 +101,7 @@ If you have only a single cluster, you need to do all of this only once.
 
 If you have many clusters, then you need to apply everything multiple times, which probably requires you to develop some automated processes and tools for being able to do this consistently.
 
-**Let's look at the cons.**
+> **Now, to the cons.**
 
 ### 👎 Single point of failure
 
@@ -120,7 +123,8 @@ If multiple apps run in the same Kubernetes cluster, this means that these apps 
 Concretely, two containers of two different apps running on the same node are technically two processes running on the same hardware and operating system kernel.
 
 > Linux containers provide some form of isolation, but this isolation is not as strong as the one provided by, for example, virtual machines (VMs). Under the hood, a process in a container is still just a process running on the host's operating system.
-> This may be an issue from a security point of view — it theoretically allows unrelated apps to interact with each other in undesired ways (intentionally and unintentionally).
+
+This may be an issue from a security point of view — it theoretically allows unrelated apps to interact with each other in undesired ways (intentionally and unintentionally).
 
 Furthermore, all the workloads in a Kubernetes cluster share certain cluster-wide services, such as [DNS](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/) — this allows apps to discover the Services of other apps in the cluster.
 
@@ -159,7 +163,8 @@ However, in practice, challenges may show up already with much smaller cluster s
 The reason is that larger clusters put a higher strain on the Kubernetes control plane, which requires careful planning to keep the cluster functional and efficient.
 
 > This issue is also discussed in a related article of this blog named [**Architecting Kubernetes clusters — choosing a worker node size**](https://learnk8s.io/kubernetes-node-size).
-> **Now, let's look at the opposite approach — many small clusters.**
+
+_Let's look at the opposite approach — many small clusters._
 
 ## 2. Many small single-use clusters
 
@@ -189,7 +194,7 @@ If every cluster runs only a small set of workload, then fewer people need to ha
 
 _The fewer people have access to a cluster, the lower the risk that something breaks._
 
-**Let's look at the cons.**
+> **Let's look at the cons.**
 
 ### 👎 Inefficient resource usage
 
@@ -219,7 +224,7 @@ With this approach, you have a separate cluster for all the instances of a speci
 
 ![One cluster per app](assets/cluster-per-app.svg)
 
-You can see this as a generalisation of a **cluster per team**, since usually a team develops one or more apps.
+You can see this as a generalisation of a **cluster per team** since usually a team develops one or more apps.
 
 _Let's look at the particular pros and cons of this approach._
 
@@ -239,7 +244,7 @@ For example, the _prod_ version of an app runs in the same cluster as the _dev_ 
 
 So, if a developer or a buggy _dev_ version creates some damage in the cluster, the _prod_ version is potentially affected too — which is a big disadvantage.
 
-_There's one more approach._
+_Let's look at the last example approach._
 
 ## 4. Cluster per environment
 
@@ -249,7 +254,7 @@ With this approach, you have a separate cluster for each environment:
 
 For example, you can have a _dev_, _test_, and _prod_ cluster where you run all the application instances of a specific environment.
 
-_Here are the pros and cons of this approach are._
+_Here are the pros and cons of this approach._
 
 ### 👍 Isolation of the _prod_ environment
 
@@ -277,6 +282,8 @@ You can go as far as not granting access to the _prod_ cluster to any humans at 
 
 This should greatly decrease the risk of human error in the _prod_ cluster, which is where it matters most!
 
+> **Now, to the cons.**
+
 ### 👎 Lack of isolation between apps
 
 The main disadvantage of this approach is the missing hardware and resource isolation between apps.
@@ -295,9 +302,9 @@ This may lead to higher costs and inefficient resource usage.
 
 ## Conclusion
 
-If you have a given set of applications, you can run them either on few large clusters or many small clusters.
+In general, if you have a given set of applications, you can run them either on few large clusters or many small clusters.
 
-This article discussed the pros and cons of various approaches:
+This article discussed the pros and cons of various approaches on a scale from _few large_ to _many small_ clusters:
 
 - [**One large shared cluster**](#1-one-large-shared-cluster)
 - [**Many small single-use clusters**](#2-many-small-single-use-clusters)
