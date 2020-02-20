@@ -41,7 +41,7 @@ import * as Courses from './courses'
 import * as Training from './training.v2'
 import * as BestPractices from './best-practices/best'
 import * as FreeTools from './freeTools'
-import * as Wallpaper from './wallpaper'
+import * as Wallpaper from './wallpaper/wallpaper'
 import * as Flipboard from './flipboard'
 import { Store } from 'redux'
 
