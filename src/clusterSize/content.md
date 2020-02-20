@@ -27,7 +27,7 @@ In the above example, there are 3 applications and 3 environments, which results
 Each application instance is a self-contained deployment unit that can be operated and independently from the others.
 
 > Note that an **application instance** may consist of multiple **components**, such as the frontend, backend, database, etc. In a microservices application, an application instance would consist of all the microservices.
-As a Kubernetes user, this raises some questions:
+> As a Kubernetes user, this raises some questions:
 
 - _Should you run all application instances on a single cluster?_
 - _Or should you have a separate cluster for each application instance?_
@@ -47,7 +47,7 @@ The first two approaches are the extremes on the scale from _few large_ to _many
 ![Scale of cluster sizes](assets/dimensions.svg)
 
 > In general, a cluster can be defined "larger" than another if it contains a larger sum of nodes and Pods — for example, a cluster with 10 nodes and 100 Pods is larger than a cluster with 1 node and 10 Pods.
-_Let's get started!_
+> _Let's get started!_
 
 ## 1. One large shared cluster
 
@@ -58,7 +58,7 @@ The first option is to run all your workloads in the same cluster:
 With this approach, the cluster is used like general-purpose **infrastructure platform** — whatever you need to run, you deploy it to your existing Kubernetes cluster.
 
 > Kubernetes provides [namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) to logically separate portions of a cluster from each other, and in the above case, you could use a separate namespace for each application instance.
-_Let's look at the pros and cons of this approach._
+> _Let's look at the pros and cons of this approach._
 
 ### 👍 Efficient resource usage
 
@@ -120,7 +120,7 @@ If multiple apps run in the same Kubernetes cluster, this means that these apps 
 Concretely, two containers of two different apps running on the same node are technically two processes running on the same hardware and operating system kernel.
 
 > Linux containers provide some form of isolation, but this isolation is not as strong as the one provided by, for example, virtual machines (VMs). Under the hood, a process in a container is still just a process running on the host's operating system.
-This may be an issue from a security point of view — it theoretically allows unrelated apps to interact with each other in undesired ways (intentionally and unintentionally).
+> This may be an issue from a security point of view — it theoretically allows unrelated apps to interact with each other in undesired ways (intentionally and unintentionally).
 
 Furthermore, all the workloads in a Kubernetes cluster share certain cluster-wide services, such as [DNS](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/) — this allows apps to discover the Services of other apps in the cluster.
 
@@ -159,7 +159,7 @@ However, in practice, challenges may show up already with much smaller cluster s
 The reason is that larger clusters put a higher strain on the Kubernetes control plane, which requires careful planning to keep the cluster functional and efficient.
 
 > This issue is also discussed in a related article of this blog named [**Architecting Kubernetes clusters — choosing a worker node size**](https://learnk8s.io/kubernetes-node-size).
-**Now, let's look at the opposite approach — many small clusters.**
+> **Now, let's look at the opposite approach — many small clusters.**
 
 ## 2. Many small single-use clusters
 

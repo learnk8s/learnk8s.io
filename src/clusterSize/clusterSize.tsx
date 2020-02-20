@@ -7,8 +7,8 @@ import { toVFile } from '../files'
 
 export const ClusterSize = {
   id: 'cluster-size',
-  url: '/kubernetes-cluster-size',
-  title: 'Architecting Kubernetes clusters — how many clusters are right?',
+  url: '/how-many-clusters',
+  title: 'Architecting Kubernetes clusters — how many should you have?',
   description: `How many Kubernetes clusters should you have? One big cluster or multiple smaller clusters? This article investigates the pros and cons of different approaches.`,
 }
 
@@ -21,7 +21,7 @@ export function Register(store: Store<State, Actions>) {
       image: (
         <img
           src='src/clusterSize/architecting-clusters.png'
-          alt='Architecting Kubernetes clusters — how many clusters are right?'
+          alt='Architecting Kubernetes clusters — how many should you have?'
         />
       ),
       title: ClusterSize.title,
