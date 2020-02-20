@@ -42,6 +42,7 @@ import * as Training from './training.v2'
 import * as BestPractices from './best-practices/best'
 import * as FreeTools from './freeTools'
 import * as Wallpaper from './wallpaper/wallpaper'
+import * as Flowchart from './flowChartPdf/flowchartPdf'
 import * as Flipboard from './flipboard'
 import { Store } from 'redux'
 
@@ -52,6 +53,7 @@ export function register(store: Store<State, Actions>) {
   BestPractices.Register(store)
   FreeTools.Register(store)
   Wallpaper.Register(store)
+  Flowchart.Register(store)
   Careers.Register(store)
   TermsAndConditions.Register(store)
   Consulting.Register(store)

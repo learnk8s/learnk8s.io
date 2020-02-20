@@ -73,9 +73,9 @@ function renderPage(state: State) {
           <ul className='flex flex-wrap items-start list pl0 bt bw2 b--near-white pt4'>
             <UrlBlock
               title='Kubernetes production best practices'
-              img={<img src='assets/material/cover_fundamentals.svg' alt='Kubernetes production best practices' />}
+              img={<img src='src/best-practices/checklist.jpg' alt='Kubernetes production best practices' />}
               url='/production-best-practices'
-              className='w-third'
+              className='w-third-l w-100'
             >
               <p className='lh-copy masure f5'>
                 This document highlights and consolidates best practices for building, deploying and scaling apps on
@@ -84,9 +84,9 @@ function renderPage(state: State) {
             </UrlBlock>
             <UrlBlock
               title='Desktop Wallpaper'
-              img={<img src='assets/material/cover_fundamentals.svg' alt='Desktop Wallpaper' />}
+              img={<img src='src/wallpaper/assets/chokolates-01.png' alt='Desktop Wallpaper' />}
               url='/wallpaper'
-              className='w-third'
+              className='w-third-l w-100'
             >
               <p className='lh-copy masure f5'>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, facilis.
@@ -94,9 +94,9 @@ function renderPage(state: State) {
             </UrlBlock>
             <UrlBlock
               title='Flowchart PDF'
-              img={<img src='assets/material/cover_fundamentals.svg' alt='Flowchart PDF' />}
-              url='/'
-              className='w-third'
+              img={<img src='src/flowchartPdf/assets/flowchart.jpg' alt='Flowchart PDF' />}
+              url='/flowchart-pdf'
+              className='w-third-l w-100'
             >
               <p className='lh-copy masure f5'>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, facilis.

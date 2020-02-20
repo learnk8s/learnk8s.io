@@ -5,24 +5,24 @@ import { getOpenGraph, getPages, getConfig, State, Actions, Action, getBlogPosts
 import { defaultAssetsPipeline } from '../optimise'
 import { Store } from 'redux'
 import { tachyons } from '../tachyons/tachyons'
-import { content, Wallpaper as WallpaperType } from './content'
+import { content, FlowchartPdf } from './content'
 
-export const Wallpaper = {
-  id: 'wallpaper',
-  url: '/wallpaper',
-  title: 'Download Wallpaper ⎈ Learnk8s',
-  description: 'Free Tools  -  Download Desktop Wallpaper and Cover',
+export const Flowchart = {
+  id: 'flowchart-pdf',
+  url: '/flowchart-pdf',
+  title: 'Download Flowchart ⎈ Learnk8s',
+  description: 'Free Tools  -  Download Desktop Flowchart PDF here',
 }
 
 export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Wallpaper))
+  store.dispatch(Action.registerPage(Flowchart))
   store.dispatch(
     Action.registerOpenGraph({
-      id: 'og-wallpaper',
-      pageId: Wallpaper.id,
+      id: 'og-flowchart-pdf',
+      pageId: Flowchart.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      title: 'Download Wallpaper',
-      description: 'Free Tools  -  Download Desktop Wallpaper and Cover',
+      title: 'Download Flowchart',
+      description: 'Free Tools  -  Download Desktop Flowchart PDF here',
     }),
   )
 }
@@ -33,17 +33,17 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
     jsx: renderPage(state),
     isOptimisedBuild: getConfig(state).isProduction,
     siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-    url: Wallpaper.url,
+    url: Flowchart.url,
     outputFolder: getConfig(state).outputFolder,
   })
 }
 
 function renderPage(state: State) {
   const pages = getPages(state)
-  const page = pages.find(it => it.id === Wallpaper.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Wallpaper.id)
+  const page = pages.find(it => it.id === Flowchart.id)!
+  const openGraph = getOpenGraph(state).find(it => it.pageId === Flowchart.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
-  const wallpaperList = Object.values(content).map((it, i) => (
+  const flowchartList = Object.values(content).map((it, i) => (
     <DownloadListItem className='db w-100 mb4' item={it} key={i} />
   ))
   return (
@@ -66,7 +66,7 @@ function renderPage(state: State) {
         <Navbar />
 
         <section className='ph3 pv4 center'>
-          <ul className='flex flex-wrap items-start list pl0 bt bw2 b--near-white pt4'>{wallpaperList}</ul>
+          <ul className='flex flex-wrap items-start list pl0 bt bw2 b--near-white pt4'>{flowchartList}</ul>
         </section>
 
         <Consultation />
@@ -78,7 +78,7 @@ function renderPage(state: State) {
 
 const DownloadListItem: React.StatelessComponent<{
   className?: string
-  item: WallpaperType
+  item: FlowchartPdf
   key: number
 }> = ({ children, className, item, key }) => {
   const items = item.downloadList.map((it, i) => (
