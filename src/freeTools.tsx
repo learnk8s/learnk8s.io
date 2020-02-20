@@ -94,7 +94,7 @@ function renderPage(state: State) {
             </UrlBlock>
             <UrlBlock
               title='Flowchart PDF'
-              img={<img src='src/flowchartPdf/assets/flowchart.png' alt='Flowchart PDF' />}
+              img={<img src='src/flowChartPdf/assets/flowchart.jpg' alt='Flowchart PDF' />}
               url='/flowchart-pdf'
               className='w-third-l w-100'
             >
