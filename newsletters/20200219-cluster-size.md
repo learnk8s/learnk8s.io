@@ -17,7 +17,7 @@ Here's a preview of what you will find in the article:
 
 You can read the article in full here:
 
-[Read how to decide how many clusters you should run](https://learnk8s.io/kubernetes-cluster-size)
+[Read how to decide how many clusters you should run](https://learnk8s.io/how-many-clusters "Read how to decide how many clusters you should run")
 
 — Ale
 
