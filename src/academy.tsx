@@ -105,7 +105,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.docker.name}
               img={material.docker.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Beginner'
               defaultUSPrice={39}
               priceId='single-containers'
@@ -118,7 +118,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.kubernetesFundamentals.name}
               img={material.kubernetesFundamentals.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Intermediate'
               defaultUSPrice={49}
               priceId='single-fundamentals'
@@ -131,7 +131,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.deploymentStrategies.name}
               img={material.deploymentStrategies.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Intermediate'
               defaultUSPrice={49}
               priceId='single-deployment-strategies'
@@ -168,7 +168,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.architecture.name}
               img={material.architecture.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Intermediate'
               defaultUSPrice={49}
               priceId='single-architecture'
@@ -181,7 +181,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.networking.name}
               img={material.networking.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Advanced'
               defaultUSPrice={59}
               priceId='single-networking'
@@ -194,7 +194,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.advancedNetworking.name}
               img={material.advancedNetworking.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Advanced'
               defaultUSPrice={59}
               priceId='single-advanced-networking'
@@ -231,7 +231,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.templating.name}
               img={material.templating.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Intermediate'
               defaultUSPrice={49}
               priceId='single-templating'
@@ -244,7 +244,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.autoscaling.name}
               img={material.autoscaling.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Advanced'
               defaultUSPrice={59}
               priceId='single-autoscaling'
@@ -257,7 +257,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.serviceMeshes.name}
               img={material.serviceMeshes.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Advanced'
               defaultUSPrice={59}
               priceId='single-service-meshes'
@@ -294,7 +294,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.managingState.name}
               img={material.managingState.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Advanced'
               defaultUSPrice={59}
               priceId='single-managing-state'
@@ -307,7 +307,7 @@ function renderPage(state: State) {
             <CourseBlock
               title={material.ckad.name}
               img={material.ckad.cover}
-              className='w-third-l w-100'
+              className='w-third-l center db mw6'
               difficulty='Advanced'
               defaultUSPrice={49}
               priceId='single-ckad'
