@@ -308,7 +308,7 @@ const ListItem: React.StatelessComponent<{ id: string; title: JSX.Element }> = (
           id={id}
           className='tick-checkbox input-reset h2 w2 ba bw2 b--light-gray br-100 v-mid bg-white pointer flex-shrink-0'
         />
-        <p className='f5 f4-ns v-mid pl3 navy pointer' data-toggle={`.details-${id},.controls-${id}`}>
+        <p className='f5 f4-ns v-mid pl3 navy pointer pr4' data-toggle={`.details-${id},.controls-${id}`}>
           {title}
         </p>
         <div className={`controls controls-${id} absolute top-50 right-1`}>
