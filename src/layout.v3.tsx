@@ -69,10 +69,10 @@ export const Navbar: React.StatelessComponent<{}> = ({}) => {
         <a href='#main-menu' className='db h2 dn-l' title='Open menu'>
           <span className='hamburger-icon' />
         </a>
-        <a href='#' className='reveal pt2 pr2 tc white absolute top-0 right-0 z-5 dn-l'>
+        <a href='#' className='z-9999 reveal pt2 pr2 tc white absolute top-0 right-0 z-5 dn-l'>
           <span className='x-icon' />
         </a>
-        <ul className='reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
+        <ul className='z-999 reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
           <li className='ttu mh2 bb bn-l'>
             <a
               href='/production-best-practices'
@@ -438,7 +438,7 @@ export const PackageRight: React.StatelessComponent<{ heading: string; subheadin
 }
 
 export const PackageList: React.StatelessComponent<{}> = ({ children }) => {
-  return <ul className='cf list'>{children}</ul>
+  return <ul className='cf list pl0'>{children}</ul>
 }
 
 export const Hero: React.StatelessComponent<{ image: JSX.Element; imageClass: string }> = ({
