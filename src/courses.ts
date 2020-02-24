@@ -212,6 +212,18 @@ export function Register(store: Store<State, Actions>) {
   Object.values(CoursePrice).forEach(price => store.dispatch(Action.registerCoursePrice(price)))
   store.dispatch(
     Action.registerWorkshop({
+      id: 'LK8S|SINGAPORE|20200217',
+      startAt: '2020-03-16T10:00:00',
+      endsAt: '2020-03-18T17:00:00',
+      timezone: 'Asia/Singapore',
+      courseId: Courses.threeDays.id,
+      priceId: CoursePrice.Singapore.id,
+      venueId: Venues.JustCoSg.id,
+      pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerWorkshop({
       id: 'LK8S|SYDNEY|20200304',
       startAt: '2020-03-04T09:30:00',
       endsAt: '2020-03-06T05:00:00',
