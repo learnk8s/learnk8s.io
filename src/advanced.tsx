@@ -101,9 +101,10 @@ setTimeout(ldinsp, 0);
         />
       </Head>
       <Body>
-        {[material.architecture, material.networking, material.advancedNetworking].map(it => {
+        {[material.architecture, material.networking, material.advancedNetworking].map((it, index) => {
           return (
             <JsonLd<Course>
+              key={index}
               item={{
                 '@type': 'Course',
                 '@context': 'https://schema.org',
