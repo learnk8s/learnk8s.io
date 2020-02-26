@@ -572,7 +572,7 @@ function renderPage(state: State) {
           <p className='lh-copy f4 black-70 measure center tc'>
             Don't worry. We run in-person classrooms in Europe, North America and Asia. If your city is not on the list,
             drop us a line at{' '}
-            <a className='link underline' href={mailto(newLocationEnquiry)}>
+            <a className='link underline navy' href={mailto(newLocationEnquiry)}>
               hello@learnk8s.io
             </a>{' '}
             and will try to make it happen.
