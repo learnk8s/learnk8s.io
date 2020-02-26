@@ -142,8 +142,8 @@ function renderPage(state: State) {
         <section className='pt1 pb4 bg-evian ph3'>
           <p className='f2 navy b tc mb2 pt5-ns pt3'>Keep it going!</p>
           <p className='lh-copy f4 black-70 measure center tc'>
-            If you enjoy discussing the latest news on Kubernetes and sharing your learnings, you might want to join
-            the Learnk8s Telegram group. You can{' '}
+            If you enjoy discussing the latest news on Kubernetes and sharing your learnings, you might want to join the
+            Learnk8s Telegram group. You can{' '}
             <a href='https://t.me/learnk8s' className='link navy underline'>
               join us using this link
             </a>

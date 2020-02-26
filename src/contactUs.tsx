@@ -102,31 +102,48 @@ function renderPage(state: State) {
         <section className='w-100 cf pv3 pv4-m pv5-l ph3'>
           <div className='left fl-ns w-50-ns tc mv4 ph3'>
             <h2 className='navy'>
-              Join us on Slack{' '}
+              Technical support for students{' '}
               <span className='w2 dib v-mid'>
                 <img src='assets/contact-us/slack_in_colours.svg' alt='Slack logo' />
               </span>
             </h2>
-            <p className='measure black-70 center'>
-              If you have technical questions, chat live with developers in #dev.{' '}
+            <p className='f4 measure-narrow black-70 center lh-copy'>
+              If you have technical questions, chat live with the Learnk8s instructors in the{' '}
+              <span className='navy'>#academy</span> channel.{' '}
               <a href='https://learnk8s-slack-invite.herokuapp.com' className='link underline navy'>
-                Join now
+                Join Learnk8s on Slack
               </a>
+              .
             </p>
           </div>
           <div className='right fl-ns w-50-ns tc bl-ns b--light-gray mv4 ph3'>
-            <h2 className='navy'>General communication</h2>
-            <p className='measure black-70 center'>
-              For general queries, including partnership opportunities, please email{' '}
-              <a href='mailto:hello@learnk8s.io' className='link navy underline'>
-                hello@learnk8s.io
+            <h2 className='navy'>
+              Be part of the community{' '}
+              <span className='w2 dib v-mid'>
+                <img src='assets/contact-us/telegram.svg' alt='Telegram logo' />
+              </span>
+            </h2>
+            <p className='f4 measure-narrow black-70 center lh-copy'>
+              If you want to discuss the latest changes and share your victories with Kubernetes{' '}
+              <a href='https://t.me/learnk8s' className='link underline navy'>
+                join now the Learnk8s telegram group
               </a>
               .
             </p>
           </div>
         </section>
 
-        <Consultation />
+        <section className='pt1 pb4 bg-evian ph3'>
+          <p className='f2 navy b tc mb2 pt3-ns pt3'>For any other inquiry</p>
+          <p className='lh-copy f4 black-70 measure center tc'>
+            For general queries, including partnership opportunities, please send email to{' '}
+            <a href='mailto:hello@learnk8s.io' className='link navy underline'>
+              hello@learnk8s.io
+            </a>
+            .
+          </p>
+        </section>
+
         <Footer />
       </Body>
     </Html>
