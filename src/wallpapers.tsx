@@ -67,7 +67,7 @@ function renderPage(state: State) {
         <Navbar />
 
         <section className='ph3 pv4 center'>
-          <h1 className='f2 navy b tc ph3'>Kubernetes wallpapers</h1>
+          <h1 className='f2 f1-ns navy b tc ph3'>Kubernetes wallpapers</h1>
           <p className='lh-copy f4 black-70 measure center tc ph3'>
             A collection of free Kubernetes wallpapers for your computer.
           </p>
@@ -76,12 +76,11 @@ function renderPage(state: State) {
             <li className='mv4'>
               <div className=''>
                 <div className='aspect-ratio aspect-ratio--4x3'>
-                  {React.createElement('img', {
-                    src: 'assets/wallpapers/wallpaper-magician.svg',
-                    alt: 'The magician',
-                    loading: 'lazy',
-                    className: 'aspect-ratio--object',
-                  })}
+                  <img
+                    src='assets/wallpapers/wallpaper-magician.svg'
+                    alt='The magician'
+                    className='aspect-ratio--object'
+                  />
                 </div>
               </div>
               <div className='ph3'>
@@ -215,7 +214,7 @@ function renderPage(state: State) {
           </ul>
         </section>
 
-        <section className='pb4 bg-evian'>
+        <section className='pt1 pb4 bg-evian ph3'>
           <p className='f2 navy b tc mb2 pt5-ns pt3'>
             What about <span className='i underline'>my</span> screen resolution?
           </p>

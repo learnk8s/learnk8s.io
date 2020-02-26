@@ -63,27 +63,26 @@ function renderPage(state: State) {
         <Navbar />
 
         <section className='ph3 pv4 center'>
-          <h1 className='f1 navy b tc ph3'>
+          <h1 className='f2 f1-ns navy b tc ph3'>
             Kubernetes <span className='ttu'>free</span> tools
           </h1>
           <p className='lh-copy f4 black-70 measure center tc ph3'>
             A collection of free tools to help you navigate your Kubernetes journey.
           </p>
 
-          <ul className='list pt4'>
-            <li className='mv3 pv3 flex mw8 center items-center justify-center ph4 border-box'>
-              <div className='w-40'>
+          <ul className='pl0 list pt4'>
+            <li className='mv3 pv3 flex-ns mw8 center items-center justify-center ph4 border-box'>
+              <div className='w-40-ns'>
                 <div className='aspect-ratio aspect-ratio--4x3'>
-                  {React.createElement('img', {
-                    src: 'assets/free-tools/checklist.svg',
-                    alt: 'Kubernetes production best practices',
-                    loading: 'lazy',
-                    className: 'aspect-ratio--object',
-                  })}
+                  <img
+                    src='assets/free-tools/checklist.svg'
+                    alt='Kubernetes production best practices'
+                    className='aspect-ratio--object'
+                  />
                 </div>
               </div>
-              <div className='w-60'>
-                <div className='pl4'>
+              <div className='w-60-ns'>
+                <div className='pl4-ns'>
                   <h2 className='f3 b navy lh-solid'>Kubernetes production best practices</h2>
                   <p className='lh-copy measure-narrow f4 black-80'>
                     A curated checklist of best practices designed to help you release to production
@@ -93,8 +92,8 @@ function renderPage(state: State) {
               </div>
             </li>
 
-            <li className='mv3 pv3 flex mw8 center items-center justify-center bg-evian ph4 border-box'>
-              <div className='w-40'>
+            <li className='mv3 pv3 flex-ns mw8 center items-center justify-center bg-evian ph4 border-box'>
+              <div className='w-40-ns'>
                 <div className='aspect-ratio aspect-ratio--4x3'>
                   {React.createElement('img', {
                     src: 'assets/free-tools/troubleshooting.svg',
@@ -104,8 +103,8 @@ function renderPage(state: State) {
                   })}
                 </div>
               </div>
-              <div className='w-60'>
-                <div className='pl4'>
+              <div className='w-60-ns'>
+                <div className='pl4-ns'>
                   <h2 className='f3 b navy lh-solid'>Troubleshooting flowchart (PDF)</h2>
                   <p className='lh-copy measure-narrow f4 black-80'>
                     A handy flowchart to help you debug your deployments in Kubernetes. No more surprises when you see a{' '}
@@ -116,8 +115,8 @@ function renderPage(state: State) {
               </div>
             </li>
 
-            <li className='mv3 pv3 flex mw8 center items-center justify-center ph4 border-box'>
-              <div className='w-40'>
+            <li className='mv3 pv3 flex-ns mw8 center items-center justify-center ph4 border-box'>
+              <div className='w-40-ns'>
                 <div className='aspect-ratio aspect-ratio--4x3'>
                   {React.createElement('img', {
                     src: 'assets/free-tools/wallpaper-magician.svg',
@@ -127,8 +126,8 @@ function renderPage(state: State) {
                   })}
                 </div>
               </div>
-              <div className='w-60'>
-                <div className='pl4'>
+              <div className='w-60-ns'>
+                <div className='pl4-ns'>
                   <h2 className='f3 b navy lh-solid'>Kubernetes wallpapers</h2>
                   <p className='lh-copy measure-narrow f4 black-80'>
                     A collection of free Kubernetes wallpapers for your computer.
@@ -140,7 +139,7 @@ function renderPage(state: State) {
           </ul>
         </section>
 
-        <section className='pb4 bg-evian'>
+        <section className='pt1 pb4 bg-evian ph3'>
           <p className='f2 navy b tc mb2 pt5-ns pt3'>Keep it going!</p>
           <p className='lh-copy f4 black-70 measure center tc'>
             If you enjoying discussing the latest news on Kubernetes and sharing your learnings, you might want to join
