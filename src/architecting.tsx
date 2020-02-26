@@ -101,10 +101,9 @@ setTimeout(ldinsp, 0);
         />
       </Head>
       <Body>
-        {[material.docker, material.kubernetesFundamentals, material.deploymentStrategies].map((it, index) => {
+        {[material.docker, material.kubernetesFundamentals, material.deploymentStrategies].map(it => {
           return (
             <JsonLd<Course>
-              key={index}
               item={{
                 '@type': 'Course',
                 '@context': 'https://schema.org',

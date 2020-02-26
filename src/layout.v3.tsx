@@ -75,11 +75,11 @@ export const Navbar: React.StatelessComponent<{}> = ({}) => {
         <ul className='z-999 reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
           <li className='ttu mh2 bb bn-l'>
             <a
-              href='/kubernetes-free-tools'
+              href='/production-best-practices'
               className='white link db b ph1 mv2 pv2 f5 underline-hover mr4 mr0-l'
               title='Kubernetes production best practices'
             >
-              Free Tools
+              Best practices
             </a>
           </li>
           <li className='ttu mh2 bb bn-l'>
