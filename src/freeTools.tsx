@@ -107,7 +107,7 @@ function renderPage(state: State) {
                 <div className='pl4-ns'>
                   <h2 className='f3 b navy lh-solid'>Troubleshooting flowchart (PDF)</h2>
                   <p className='lh-copy measure-narrow f4 black-80'>
-                    A handy flowchart to help you debug your deployments in Kubernetes. No more surprises when you see a{' '}
+                    A handy diagram to help you debug your deployments in Kubernetes. No more surprises when you see a{' '}
                     <span className='i'>CrashLoopBackOff</span> error message.
                   </p>
                   <PrimaryButton href='/troubleshooting-deployments' text='Download &#8594;' />
@@ -142,7 +142,7 @@ function renderPage(state: State) {
         <section className='pt1 pb4 bg-evian ph3'>
           <p className='f2 navy b tc mb2 pt5-ns pt3'>Keep it going!</p>
           <p className='lh-copy f4 black-70 measure center tc'>
-            If you enjoying discussing the latest news on Kubernetes and sharing your learnings, you might want to join
+            If you enjoy discussing the latest news on Kubernetes and sharing your learnings, you might want to join
             the Learnk8s Telegram group. You can{' '}
             <a href='https://t.me/learnk8s' className='link navy underline'>
               join us using this link
