@@ -9,7 +9,7 @@ import { tachyons } from './tachyons/tachyons'
 export const Wallpaper = {
   id: 'wallpaper',
   url: '/kubernetes-wallpapers',
-  title: 'Kubernetes desktop Wallpapers ⎈ Learnk8s',
+  title: 'Kubernetes wallpapers ⎈ Learnk8s',
   description: 'A collection of free Kubernetes wallpapers for your computer.',
 }
 
@@ -25,8 +25,8 @@ export function Register(store: Store<State, Actions>) {
     Action.registerOpenGraph({
       id: 'og-wallpaper',
       pageId: Wallpaper.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      title: 'Kubernetes desktop Wallpapers ⎈ Learnk8s',
+      image: <img src='assets/wallpapers/wallpaper-magician.png' alt='Kubernetes wallpapers' />,
+      title: 'Kubernetes wallpapers ⎈ Learnk8s',
       description: 'A collection of free Kubernetes wallpapers for your computer.',
     }),
   )
