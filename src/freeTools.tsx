@@ -1,16 +1,17 @@
 import React from 'react'
-import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
+import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Actions, Action, getBlogPosts, hasTag } from './store'
+import { getOpenGraph, getPages, getConfig, State, Actions, Action } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
 import { tachyons } from './tachyons/tachyons'
+import { PrimaryButton } from './homepage'
 
 export const FreeTools = {
   id: 'free-tools',
-  url: '/free-tools',
-  title: 'Free Tools ⎈ Learnk8s',
-  description: 'Best Practices, Download Desktop Wallpaper, Flowchart Pdf',
+  url: '/kubernetes-free-tools',
+  title: 'Kubernetes free tools ⎈ Learnk8s',
+  description: 'A collection of free tools to help you navigate your Kubernetes journey.',
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -20,8 +21,8 @@ export function Register(store: Store<State, Actions>) {
       id: 'og-free-tools',
       pageId: FreeTools.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      title: 'Free Tools',
-      description: 'Best Practices, Download Desktop Wallpaper, Flowchart Pdf',
+      title: 'Kubernetes free tools',
+      description: 'A collection of free tools to help you navigate your Kubernetes journey.',
     }),
   )
 }
@@ -59,83 +60,100 @@ function renderPage(state: State) {
       </Head>
 
       <Body>
-        <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
-          <Navbar />
-
-          <section className='ph5-l'>
-            <div className='w-100'>
-              <h1 className='f1 pl3 pl4-ns f-subheadline-l'>Free Tools</h1>
-            </div>
-          </section>
-        </div>
+        <Navbar />
 
         <section className='ph3 pv4 center'>
-          <ul className='flex flex-wrap items-start list pl0 bt bw2 b--near-white pt4'>
-            <UrlBlock
-              title='Kubernetes production best practices'
-              img={<img src='src/best-practices/checklist.jpg' alt='Kubernetes production best practices' />}
-              url='/production-best-practices'
-              className='w-third-l w-100'
-            >
-              <p className='lh-copy masure f5'>
-                This document highlights and consolidates best practices for building, deploying and scaling apps on
-                Kubernetes in production.
-              </p>
-            </UrlBlock>
-            <UrlBlock
-              title='Desktop Wallpaper'
-              img={<img src='src/wallpaper/assets/chokolates-01.png' alt='Desktop Wallpaper' />}
-              url='/wallpaper'
-              className='w-third-l w-100'
-            >
-              <p className='lh-copy masure f5'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, facilis.
-              </p>
-            </UrlBlock>
-            <UrlBlock
-              title='Flowchart PDF'
-              img={<img src='src/flowChartPdf/assets/flowchart.jpg' alt='Flowchart PDF' />}
-              url='/flowchart-pdf'
-              className='w-third-l w-100'
-            >
-              <p className='lh-copy masure f5'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, facilis.
-              </p>
-            </UrlBlock>
+          <h1 className='f1 navy b tc ph3'>
+            Kubernetes <span className='ttu'>free</span> tools
+          </h1>
+          <p className='lh-copy f4 black-70 measure center tc ph3'>
+            A collection of free tools to help you navigate your Kubernetes journey.
+          </p>
+
+          <ul className='list pt4'>
+            <li className='mv3 pv3 flex mw8 center items-center justify-center ph4 border-box'>
+              <div className='w-40'>
+                <div className='aspect-ratio aspect-ratio--4x3'>
+                  {React.createElement('img', {
+                    src: 'assets/free-tools/checklist.svg',
+                    alt: 'Kubernetes production best practices',
+                    loading: 'lazy',
+                    className: 'aspect-ratio--object',
+                  })}
+                </div>
+              </div>
+              <div className='w-60'>
+                <div className='pl4'>
+                  <h2 className='f3 b navy lh-solid'>Kubernetes production best practices</h2>
+                  <p className='lh-copy measure-narrow f4 black-80'>
+                    A curated checklist of best practices designed to help you release to production
+                  </p>
+                  <PrimaryButton href='/production-best-practices' text='Get started &#8594;' />
+                </div>
+              </div>
+            </li>
+
+            <li className='mv3 pv3 flex mw8 center items-center justify-center bg-evian ph4 border-box'>
+              <div className='w-40'>
+                <div className='aspect-ratio aspect-ratio--4x3'>
+                  {React.createElement('img', {
+                    src: 'assets/free-tools/troubleshooting.svg',
+                    alt: 'Troubleshooting deployments in Kubernetes',
+                    loading: 'lazy',
+                    className: 'aspect-ratio--object',
+                  })}
+                </div>
+              </div>
+              <div className='w-60'>
+                <div className='pl4'>
+                  <h2 className='f3 b navy lh-solid'>Troubleshooting flowchart (PDF)</h2>
+                  <p className='lh-copy measure-narrow f4 black-80'>
+                    A handy flowchart to help you debug your deployments in Kubernetes. No more surprises when you see a{' '}
+                    <span className='i'>CrashLoopBackOff</span> error message.
+                  </p>
+                  <PrimaryButton href='/troubleshooting-deployments' text='Download &#8594;' />
+                </div>
+              </div>
+            </li>
+
+            <li className='mv3 pv3 flex mw8 center items-center justify-center ph4 border-box'>
+              <div className='w-40'>
+                <div className='aspect-ratio aspect-ratio--4x3'>
+                  {React.createElement('img', {
+                    src: 'assets/free-tools/wallpaper-magician.svg',
+                    alt: 'Kubernetes wallpapers',
+                    loading: 'lazy',
+                    className: 'aspect-ratio--object',
+                  })}
+                </div>
+              </div>
+              <div className='w-60'>
+                <div className='pl4'>
+                  <h2 className='f3 b navy lh-solid'>Kubernetes wallpapers</h2>
+                  <p className='lh-copy measure-narrow f4 black-80'>
+                    A collection of free Kubernetes wallpapers for your computer.
+                  </p>
+                  <PrimaryButton href='/kubernetes-wallpapers' text='Download &#8594;' />
+                </div>
+              </div>
+            </li>
           </ul>
         </section>
 
-        <Consultation />
+        <section className='pb4 bg-evian'>
+          <p className='f2 navy b tc mb2 pt5-ns pt3'>Keep it going!</p>
+          <p className='lh-copy f4 black-70 measure center tc'>
+            If you enjoying discussing the latest news on Kubernetes and sharing your learnings, you might want to join
+            the Learnk8s Telegram group. You can{' '}
+            <a href='https://t.me/learnk8s' className='link navy underline'>
+              join us using this link
+            </a>
+            .
+          </p>
+        </section>
+
         <Footer />
       </Body>
     </Html>
-  )
-}
-
-const UrlBlock: React.StatelessComponent<{
-  className?: string
-  img: JSX.Element
-  title: string
-  url: string
-}> = ({ children, className, img, title, url }) => {
-  return (
-    <li className={`${className || ''}`}>
-      <a href={url} className='black link underline-hover'>
-        <div className='br2 br--top shadow-4 ma3'>
-          <div className='aspect-ratio aspect-ratio--7x5 relative'>
-            {React.createElement('img', {
-              src: img.props.src,
-              alt: img.props.alt,
-              loading: 'lazy',
-              className: 'aspect-ratio--object br2 br--top z-1',
-            })}
-          </div>
-          <div className='ph3 pb4'>
-            <h3 className='f3 lh-solid mt3'>{title}</h3>
-            {children}
-          </div>
-        </div>
-      </a>
-    </li>
   )
 }
