@@ -40,6 +40,8 @@ import { State, Actions } from './store'
 import * as Courses from './courses'
 import * as Training from './training.v2'
 import * as BestPractices from './best-practices/best'
+import * as FreeTools from './freeTools'
+import * as Wallpapers from './wallpapers'
 import * as Flipboard from './flipboard'
 import { Store } from 'redux'
 
@@ -48,6 +50,8 @@ export function register(store: Store<State, Actions>) {
   Training.Register(store)
   Landing.Register(store)
   BestPractices.Register(store)
+  FreeTools.Register(store)
+  Wallpapers.Register(store)
   Careers.Register(store)
   TermsAndConditions.Register(store)
   Consulting.Register(store)

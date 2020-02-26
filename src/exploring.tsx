@@ -101,9 +101,10 @@ setTimeout(ldinsp, 0);
         />
       </Head>
       <Body>
-        {[material.managingState, material.ckad].map(it => {
+        {[material.managingState, material.ckad].map((it, index) => {
           return (
             <JsonLd<Course>
+              key={index}
               item={{
                 '@type': 'Course',
                 '@context': 'https://schema.org',
