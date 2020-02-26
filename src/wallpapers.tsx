@@ -215,7 +215,7 @@ function renderPage(state: State) {
         </section>
 
         <section className='pt1 pb4 bg-evian ph3'>
-          <p className='f2 navy b tc mb2 pt5-ns pt3'>
+          <p className='f2 navy b tc mb2 pt3-ns pt3'>
             What about <span className='i underline'>my</span> screen resolution?
           </p>
           <p className='lh-copy f4 black-70 measure center tc'>
