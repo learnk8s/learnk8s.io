@@ -95,13 +95,13 @@ function renderPage(state: State) {
                 <p className='ttu f6 gray b mv4'>Download:</p>
                 <ul className='f4'>
                   <li className='mv3'>
-                    <a href='assets/wallpapers/magician-3840×2160.png' className='link navy underline-hover' download>
-                      4k <span className='gray'>(3840×2160)</span>
+                    <a href='assets/wallpapers/magician-3840x2160.png' className='link navy underline-hover' download>
+                      4k <span className='gray'>(3840x2160)</span>
                     </a>
                   </li>
                   <li className='mv3'>
-                    <a href='assets/wallpapers/magician-3840×1600.png' className='link navy underline-hover' download>
-                      Ultrawide <span className='gray'>(3840×1600)</span>
+                    <a href='assets/wallpapers/magician-3840x1600.png' className='link navy underline-hover' download>
+                      Ultrawide <span className='gray'>(3840x1600)</span>
                     </a>
                   </li>
                   <li className='mv3'>
@@ -179,13 +179,13 @@ function renderPage(state: State) {
                 <p className='ttu f6 gray b mv4'>Download:</p>
                 <ul className='f4'>
                   <li className='mv3'>
-                    <a href='assets/wallpapers/choco-3840×2160.png' className='link navy underline-hover' download>
-                      4k <span className='gray'>(3840×2160)</span>
+                    <a href='assets/wallpapers/choco-3840x2160.png' className='link navy underline-hover' download>
+                      4k <span className='gray'>(3840x2160)</span>
                     </a>
                   </li>
                   <li className='mv3'>
-                    <a href='assets/wallpapers/choco-3840×1600.png' className='link navy underline-hover' download>
-                      Ultrawide <span className='gray'>(3840×1600)</span>
+                    <a href='assets/wallpapers/choco-3840x1600.png' className='link navy underline-hover' download>
+                      Ultrawide <span className='gray'>(3840x1600)</span>
                     </a>
                   </li>
                   <li className='mv3'>
