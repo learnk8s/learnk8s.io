@@ -1145,7 +1145,7 @@ It defines the following things:
 - The port that the container listens on (8080)
 - An environment variable (`MONGO_URL`) that will be made available to the process in the container
 
-The above arguments should look familiar to you: you used similar ones when you ran your app with `docker run` in the [previous section](02_containerisation.md#running-the-container).
+The above arguments should look familiar to you: you used similar ones when you ran your app with `docker run` previously.
 
 That's not a coincidence.
 
