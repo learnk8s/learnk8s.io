@@ -125,6 +125,22 @@ export const Authors = {
     link: 'https://github.com/errge',
     description: 'Gergely is an instructor at Learnk8s.',
   },
+  mauricioSalatino: {
+    id: 'mauricio-salatino',
+    fullName: 'Mauricio Salatino',
+    avatar: (
+      <img
+        src='assets/authors/mauricio_salatino/mauricio-salatino-64x64.jpg'
+        srcSet='
+    assets/authors/mauricio_salatino/mauricio-salatino-64x64.jpg 1x,
+    assets/authors/mauricio_salatino/mauricio-salatino-128x128.jpg 2x
+    '
+        alt='Mauricio Salatino'
+      />
+    ),
+    link: 'https://salaboy.com',
+    description: 'Mauricio is a Principal Software Engineer at Camunda and a Learnk8s instructor.',
+  },
 }
 
 export function Register(store: Store<State, Actions>) {
