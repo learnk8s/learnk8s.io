@@ -8,7 +8,7 @@ import { toVFile } from '../files'
 export const ZeroToK8sJava = {
   id: '02k8s-java',
   url: '/spring-boot-kubernetes-guide',
-  title: 'Hands-on guide: developing & deploying Java apps in Kubernetes',
+  title: 'Developing and deploying Spring Boot microservices on Kubernetes',
   description: `Learn how to design and architect Spring Boot microservices that leverage Kubernetes and scale to millions of requests.`,
 }
 
@@ -21,7 +21,7 @@ export function Register(store: Store<State, Actions>) {
       image: (
         <img src='src/02k8s-java/jury.png' alt='Hands-on guide: developing and deploying Java apps in Kubernetes' />
       ),
-      title: 'Hands-on guide: developing and deploying Java apps in Kubernetes',
+      title: 'Developing and deploying Spring Boot microservices on Kubernetes',
       description: `Learning how to design and architect Spring Boot microservices that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
     }),
   )
@@ -31,7 +31,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: ZeroToK8sJava.id,
       authorId: Authors.mauricioSalatino.id,
       description: `Learning how to design and architect Spring Boot microservicesleverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
-      title: 'Hands-on guide: developing and deploying Java apps in Kubernetes',
+      title: 'Developing and deploying Spring Boot microservices on Kubernetes',
       publishedDate: '2020-03-11',
 
       content: toVFile({ path: join(__dirname, 'content.md') }),

@@ -1,18 +1,6 @@
-The essential ingredient to learning how to deploy and scale applications in Kubernetes is the application itself.
+> **TL;DR:** In this guide you will launch a local Kubernetes cluster, develop an app using the Spring Boot framework and deploy it as a container in Kubernetes.
 
-As you'll learn throughout this guide, **mastering Kubernetes doesn't guarantee that you have zero incidents in production.**
-
-If your application isn't designed to be resilient and observable, the risk of downtime in production is high — even if you're using Kubernetes.
-
-You should also be aware that Kubernetes makes a few assumptions on how your application behaves.
-
-As an example, Kubernetes assumes that your app can be stopped and restarted in another node at any given time.
-
-But what if you're building a real-time app that uses Websockets, **would you be okay with your app being terminated and restarted at any time?**
-
-_Probably not._
-
-Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to 30 million requests and beyond.
+Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling in the cloud.
 
 In this guide, you will develop a small application for note-taking similar to [Evernote](https://evernote.com/) and [Google Keep](https://www.google.com/keep/).
 
@@ -1221,4 +1209,4 @@ The next steps are:
 1. refactoring the app to make it stateless
 1. deploying the same app in the cloud
 
-This guide in a excerpt of the Learnk8s Academy — the online course designed to learn Kubernetes.
+This guide in a excerpt of the [Learnk8s Academy — the online course designed to learn Kubernetes](/academy).
