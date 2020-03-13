@@ -645,10 +645,10 @@ export const CourseRow: React.StatelessComponent<{
             <p className='ma0 mv3'>
               <span className='ttu b black-20 f6'>Price:</span>{' '}
               <span className='f4 black-70 dib'>
-                {event.offer.price.toLocaleString(event.offer.locale, {
+                {new Intl.NumberFormat(event.offer.locale, {
                   style: 'currency',
                   currency: event.offer.currency,
-                })}{' '}
+                }).format(event.offer.price)}{' '}
               </span>
             </p>
             <p>

@@ -345,18 +345,12 @@ setTimeout(ldinsp, 0);
               ></ThreeItems>
               <p className='f3 strike lh-solid mt3 mb4 gray tc'>
                 <span className='db' id='bundle-advanced-kubernetes-full'>
-                  {(167).toLocaleString('US', {
-                    style: 'currency',
-                    currency: 'USD',
-                  })}
+                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(167)}
                 </span>
               </p>
               <p className='f2 navy tc mv4 bs'>
                 <span className='db' id='bundle-advanced-kubernetes'>
-                  {(119).toLocaleString('US', {
-                    style: 'currency',
-                    currency: 'USD',
-                  })}
+                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(119)}
                 </span>
               </p>
               <ul className='list ph2'>
@@ -398,10 +392,7 @@ setTimeout(ldinsp, 0);
               <p className='f3 lh-solid mt3 mb4 tc navy b'>Unlimited access to all courses</p>
               <p className='f2 navy tc mv4 bs'>
                 <span className='db' id='all'>
-                  {(499).toLocaleString('US', {
-                    style: 'currency',
-                    currency: 'USD',
-                  })}
+                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(499)}
                 </span>
               </p>
               <ul className='list ph2'>
@@ -454,10 +445,7 @@ setTimeout(ldinsp, 0);
                 </div>
                 <p className='f2 navy tc mv4 bs'>
                   <span className='db' id='single-architecture'>
-                    {(49).toLocaleString('US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
+                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(49)}
                   </span>
                 </p>
                 <p className='tc mt4'>
@@ -497,10 +485,7 @@ setTimeout(ldinsp, 0);
                 </div>
                 <p className='f2 navy tc mv4 bs'>
                   <span className='db' id='single-networking'>
-                    {(59).toLocaleString('US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
+                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(59)}
                   </span>
                 </p>
                 <p className='tc mt4'>
@@ -540,10 +525,7 @@ setTimeout(ldinsp, 0);
                 </div>
                 <p className='f2 navy tc mv4 bs'>
                   <span className='db' id='single-advanced-networking'>
-                    {(59).toLocaleString('US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    })}
+                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(59)}
                   </span>
                 </p>
                 <p className='tc mt4'>
@@ -618,10 +600,10 @@ request.onload = function() {
         var element = document.querySelector('#' + key)
         if (!!element) {
           var price = resp[key]
-          element.innerHTML = price.gross.toLocaleString(price.country, {
+          element.innerHTML = new Intl.NumberFormat('en-' + price.country, {
             style: 'currency',
             currency: price.currency,
-          })
+          }).format(price.gross)
         }
       }
     } catch(error) {

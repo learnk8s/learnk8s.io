@@ -337,10 +337,10 @@ request.onload = function() {
         var element = document.querySelector('#' + key)
         if (!!element) {
           var price = resp[key]
-          element.innerHTML = price.gross.toLocaleString(price.country, {
+          element.innerHTML = new Intl.NumberFormat('en-' + price.country, {
             style: 'currency',
             currency: price.currency,
-          })
+          }).format(price.gross)
         }
       }
     } catch(error) {
@@ -398,10 +398,7 @@ const CourseBlock: React.StatelessComponent<{
           <div className='z-2 absolute bottom-1 right-1 bg-navy b f6 ph2 pv1 br4 white ttu'>
             Price:{' '}
             <span id={priceId}>
-              {defaultUSPrice.toLocaleString('US', {
-                style: 'currency',
-                currency: 'USD',
-              })}
+              {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(defaultUSPrice)}
             </span>
           </div>
         </div>
