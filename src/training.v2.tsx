@@ -648,6 +648,7 @@ export const CourseRow: React.StatelessComponent<{
                 {new Intl.NumberFormat(event.offer.locale, {
                   style: 'currency',
                   currency: event.offer.currency,
+                  currencyDisplay: 'code',
                 }).format(event.offer.price)}{' '}
               </span>
             </p>
