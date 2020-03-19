@@ -431,7 +431,7 @@ kubectl get pods
 You can expose your deployment with:
 
 ```powershell|command=1|title=PowerShell
-kubectl expose deployment smashing --type=NodePort
+kubectl expose pods smashing --type=NodePort
 ```
 
 You can open the dashboard in your browser with:

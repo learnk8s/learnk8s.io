@@ -404,7 +404,7 @@ And since the Service always has the same IP, you won't need to update anything 
 You can create a service with:
 
 ```terminal|command=1|title=bash
-kubectl expose deployment laravel-kubernetes-demo --type=NodePort --port=80
+kubectl expose pods laravel-kubernetes-demo --type=NodePort --port=80
 service "laravel-kubernetes-demo" exposed
 ```
 
