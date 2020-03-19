@@ -6,11 +6,9 @@
   command = "npm install && npm test && mkdir -p _site && echo -e \"\nDisallow: /\" >> _site/robots.txt && npm run fmt && npm run build"
 [context.deploy-preview.environment]
   NODE_ENV = "production"
-  IS_BUILD_OPTIMISED = "yes"
   PUBLISH_EVENTS = "no"
 [context.production.environment]
   NODE_ENV = "production"
-  IS_BUILD_OPTIMISED = "yes"
   PUBLISH_EVENTS = "yes"
 [[headers]]
   for = "*.js" # js files should be set this way

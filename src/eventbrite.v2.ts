@@ -56,7 +56,7 @@ export async function SyncEvents({
             timezone: course.timezone,
             currency: course.price.currency,
             locationName: course.venue.locationName,
-            startAt: course.startAt,
+            startAt: course.startsAt,
             endsAt: course.endsAt,
           },
           venues,
@@ -101,7 +101,7 @@ export async function SyncEvents({
               timezone: course.timezone,
               currency: course.price.currency,
               locationName: course.venue.locationName,
-              startAt: course.startAt,
+              startAt: course.startsAt,
               endsAt: course.endsAt,
             },
             venues,
@@ -153,8 +153,8 @@ function isSameDescription(a: { code: string; description: string }, b: { descri
   )
 }
 
-function isSameDate(a: { startAt: string; timezone: string }, b: EventEventBrite) {
-  return zonedTimeToUtc(a.startAt, a.timezone).valueOf() === new Date(b.start.utc).valueOf()
+function isSameDate(a: { startsAt: string; timezone: string }, b: EventEventBrite) {
+  return zonedTimeToUtc(a.startsAt, a.timezone).valueOf() === new Date(b.start.utc).valueOf()
 }
 
 function isSamePrice(a: { price: number }, b: EventEventBrite) {

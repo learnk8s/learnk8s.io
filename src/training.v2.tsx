@@ -22,11 +22,18 @@ import {
   Body,
 } from './layout.v3'
 import { PrimaryButton } from './homepage'
-import { Course, CourseInstance, Boolean, ItemAvailabilityEnum } from 'schema-dts'
+import {
+  Course,
+  CourseInstance,
+  Boolean,
+  EventAttendanceModeEnumeration,
+  ItemAvailability,
+  EventStatusType,
+} from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
 import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getWorkshops, getConfig } from './store'
+import { State, Actions, Action, getPages, getOpenGraph, getWorkshops, getConfig, getOnlineCourses } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
@@ -74,6 +81,15 @@ const publicCourseEnquiry = (date: Date | number, timezone: string, venue: { cit
   email: 'hello@learnk8s.io',
 })
 
+const publicOnlineCourseEnquiry = (date: Date | number, timezone: string): MailTo => ({
+  subject: 'Kubernetes training — Public course enquiry',
+  body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held online on the ${format(
+    date,
+    'do',
+  )} of ${format(date, 'LLLL')}.\n\nKind regards,\n`,
+  email: 'hello@learnk8s.io',
+})
+
 const privateGroupEnquiry: MailTo = {
   subject: 'Advanced Kubernetes training — Private group enquiry',
   body: `Hi Learnk8s,\n\nWe wish to train ___(number) people to Kubernetes and containers in ____(month). Can you help?\n\nBest regards,\n`,
@@ -89,6 +105,12 @@ const newLocationEnquiry: MailTo = {
 const customRequest: MailTo = {
   subject: 'Advanced Kubernetes training — Module enquiry',
   body: `Hi Learnk8s,\n\nI'd like to know if you cover _______ in your course.\n\nBest regards,\n`,
+  email: 'hello@learnk8s.io',
+}
+
+const genericRequest: MailTo = {
+  subject: 'Kubernetes training — Generic enquiry',
+  body: `Hi Learnk8s,\n\nI'd like to know ______.\n\nBest regards,\n`,
   email: 'hello@learnk8s.io',
 }
 
@@ -115,19 +137,24 @@ export function Register(store: Store<State, Actions>) {
 
 export function Mount({ store }: { store: Store<State, Actions> }) {
   const state = store.getState()
-  defaultAssetsPipeline({
-    jsx: renderPage(state),
-    isOptimisedBuild: getConfig(state).isProduction,
-    siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-    url: Training.url,
-    outputFolder: getConfig(state).outputFolder,
-  })
+  try {
+    defaultAssetsPipeline({
+      jsx: renderPage(state),
+      isOptimisedBuild: getConfig(state).isProduction,
+      siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
+      url: Training.url,
+      outputFolder: getConfig(state).outputFolder,
+    })
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 function renderPage(state: State) {
   const page = getPages(state).find(it => it.id === Training.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
   const courses = getWorkshops(state)
+  const onlineCourses = getOnlineCourses(state)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   return (
     <Html>
@@ -164,9 +191,9 @@ function renderPage(state: State) {
                     name: course.title,
                     description: `In this course, you'll take an app, build it into a container then use Kubernetes to deploy, scale, and update it. You will learn how to build a cluter and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
                     courseMode: 'full-time',
-                    duration: course.duration as any,
+                    duration: course.duration,
                     inLanguage: course.language,
-                    startDate: course.startAt,
+                    startDate: course.startsAt,
                     endDate: course.endsAt,
                     location: {
                       '@type': 'Place',
@@ -176,17 +203,70 @@ function renderPage(state: State) {
                     isAccessibleForFree: Boolean.False,
                     offers: {
                       '@type': 'Offer',
-                      availability: ItemAvailabilityEnum.InStock,
+                      availability: ItemAvailability.InStock,
                       price: course.price.price,
                       priceCurrency: course.price.currency,
                       url: currentAbsoluteUrl,
-                      validFrom: subDays(new Date(course.startAt), 90).toISOString(),
+                      validFrom: subDays(new Date(course.startsAt), 90).toISOString(),
                     },
                     image: `${course.picture.src}`,
                     performer: {
                       '@type': 'Organization',
                       name: 'Learnk8s',
                     },
+                    eventStatus: EventStatusType.EventPostponed,
+                    eventAttendanceMode: EventAttendanceModeEnumeration.OfflineEventAttendanceMode,
+                  } as CourseInstance,
+                ],
+              }}
+            />
+          )
+        })}
+        {onlineCourses.map((course, index) => {
+          return (
+            <JsonLd<Course>
+              key={index}
+              item={{
+                '@type': 'Course',
+                '@context': 'https://schema.org',
+                name: course.title,
+                courseCode: course.id,
+                description: `In this course, you'll take an app, build it into a container then use Kubernetes to deploy, scale, and update it. You will learn how to build a cluter and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+                educationalCredentialAwarded: 'Certificate of completetion',
+                provider: {
+                  '@type': 'Organization',
+                  name: 'Learnk8s',
+                },
+                hasCourseInstance: [
+                  {
+                    '@type': 'CourseInstance',
+                    name: course.title,
+                    description: `In this course, you'll take an app, build it into a container then use Kubernetes to deploy, scale, and update it. You will learn how to build a cluter and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+                    courseMode: 'full-time',
+                    duration: '3 days',
+                    inLanguage: 'English',
+                    startDate: course.startsAt,
+                    endDate: course.endsAt,
+                    location: {
+                      '@type': 'VirtualLocation',
+                      url: `https://academy.learnk8s.io`,
+                    },
+                    isAccessibleForFree: Boolean.False,
+                    offers: {
+                      '@type': 'Offer',
+                      availability: ItemAvailability.InStock,
+                      price: course.defaultPrice.gross,
+                      priceCurrency: course.defaultPrice.currency,
+                      url: currentAbsoluteUrl,
+                      validFrom: subDays(new Date(course.startsAt), 90).toISOString(),
+                    },
+                    image: `${course.image}`,
+                    performer: {
+                      '@type': 'Organization',
+                      name: 'Learnk8s',
+                    },
+                    eventStatus: EventStatusType.EventScheduled,
+                    eventAttendanceMode: EventAttendanceModeEnumeration.OnlineEventAttendanceMode,
                   } as CourseInstance,
                 ],
               }}
@@ -527,7 +607,87 @@ function renderPage(state: State) {
         </section>
 
         <section id='start' className='w-60-ns ph3 center pt3 pb3 pb5-l'>
-          <h2 className='navy f4 f3-l'>Upcoming events</h2>
+          <div className='pb4'>
+            <h2 className='navy f4 f3-l'>Upcoming online events</h2>
+            <ul className='events list pl0 pt3'>
+              {onlineCourses
+                .slice(0)
+                .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
+                .map((event, i) => {
+                  const id = `online${i}`
+                  return (
+                    <li className='' key={id}>
+                      <div className='mv3 flex-ns items-start pb3 pb0-l module'>
+                        <div className='date bg-sky w3 h3 white tc b'>
+                          <p className='f2 ma0'>{format(new Date(event.startsAt), 'd')}</p>
+                          <p className='ttu ma0'>{format(new Date(event.startsAt), 'MMM')}</p>
+                        </div>
+                        <div className='bg-evian ph4 pt2 flex-auto relative'>
+                          <h3 className='f3 ma0 mt3 mb2'>{event.title}</h3>
+                          <h4 className='normal black-70 mt1 mb4'>3 days course</h4>
+                          <div className={`controls controls-${id} absolute top-1 right-1`}>
+                            <button
+                              className='open bg-sky pa2 white f7 tc lh-solid bn br1'
+                              data-toggle={`.details-${id},.controls-${id}`}
+                              data-toggle-collapsed
+                            >
+                              ▼
+                            </button>
+                            <button
+                              className='close bg-sky pa2 white f7 tc lh-solid bn br1'
+                              data-toggle={`.details-${id},.controls-${id}`}
+                            >
+                              ▲
+                            </button>
+                          </div>
+                          <div className={`details details-${id}`}>
+                            <p className='ma0 mv3'>
+                              <span className='ttu b black-20 f6 v-mid'>Timezone:</span> <span />
+                              &nbsp;
+                              <span className='link dib navy underline v-mid'>{event.timezone}</span>
+                            </p>
+                            <p className='ma0 mv3'>
+                              <span className='ttu b black-20 f6'>Starts at:</span>{' '}
+                              <span className='f5 black-70 dib'>{format(new Date(event.startsAt), 'h:mm aaaa')}</span>
+                            </p>
+                            <p className='ma0 mv3'>
+                              <span className='ttu b black-20 f6'>Price:</span>{' '}
+                              <span className='f4 black-70 dib' data-price='online-course'>
+                                {new Intl.NumberFormat(`en-${event.defaultPrice.country}`, {
+                                  style: 'currency',
+                                  currency: event.defaultPrice.currency,
+                                  currencyDisplay: 'code',
+                                }).format(event.defaultPrice.gross)}{' '}
+                              </span>
+                            </p>
+                            <p>
+                              <PrimaryButton
+                                text='Get in touch &#8594;'
+                                mailto={mailto(publicOnlineCourseEnquiry(new Date(event.startsAt), event.timezone))}
+                              />
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  )
+                })}
+            </ul>
+          </div>
+
+          <h2 className='navy f4 f3-l'>Upcoming in-person events</h2>
+
+          <div className='pv3'>
+            <p className='measure-wide f4 lh-copy center bl bw3 b--blue pa4 bg-evian'>
+              Please note that, given the developing international situation, Learnk8s will deliver remote only
+              workshops. The events below are moved online. If you have questions,{' '}
+              <a href={mailto(genericRequest)} className='link navy'>
+                please get in touch
+              </a>
+              .
+            </p>
+          </div>
+
           <input className='dn' id='all' type='radio' name='country' />
           <input className='dn' id='america' type='radio' name='country' />
           <input className='dn' defaultChecked id='europe' type='radio' name='country' />
@@ -554,12 +714,12 @@ function renderPage(state: State) {
           <ul className='events list pl0 pt3'>
             {courses
               .slice(0)
-              .sort((a, b) => new Date(a.startAt).valueOf() - new Date(b.startAt).valueOf())
+              .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
               .map(it => (
                 <CourseRow
                   event={{
                     timezone: it.timezone,
-                    startAt: it.startAt,
+                    startsAt: it.startsAt,
                     location: it.venue,
                     details: it,
                     offer: it.price,
@@ -586,6 +746,44 @@ function renderPage(state: State) {
         <Consultation />
         <Footer />
         <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+var request = new XMLHttpRequest();
+request.open('GET', 'https://academy.learnk8s.io/api/v1/prices', true);
+
+request.onload = function() {
+  if (this.status >= 200 && this.status < 400) {
+    try {
+      var resp = JSON.parse(this.response);
+      const keys = Object.keys(resp)
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i]
+        var elements = [].slice.call(document.querySelectorAll("[data-price='" + key + "']"))
+        if (Array.isArray(elements) && elements.length > 0) {
+          var price = resp[key]
+          for (var j = 0, len = elements.length; j < len; j++) {
+            var element = elements[j]
+            element.innerHTML = new Intl.NumberFormat('en-' + price.country, {
+              style: 'currency',
+              currency: price.currency,
+              currencyDisplay: 'code',
+            }).format(price.gross)
+          }
+        }
+      }
+    } catch(error) {
+      console.log(error)
+    }
+  } else {}
+};
+
+request.onerror = function() {};
+
+request.send();
+      `,
+          }}
+        />
       </Body>
     </Html>
   )
@@ -594,21 +792,21 @@ function renderPage(state: State) {
 export const CourseRow: React.StatelessComponent<{
   event: {
     timezone: string
-    startAt: string
+    startsAt: string
     location: { address?: string; city: string; country: string }
     details: { title: string }
     offer: { price: number; locale: string; currency: string }
   }
 }> = ({ event }) => {
-  const id = `e-${event.startAt}-${event.location.address || ''}-${event.location.city}`
+  const id = `e-${event.startsAt}-${event.location.address || ''}-${event.location.city}`
     .toLowerCase()
     .replace(/[^\w]+/g, '-')
   return (
-    <li className={`${event.timezone}`.split('/')[0].toLowerCase()}>
+    <li className={`${event.timezone}`.split('/')[0].toLowerCase()} key={id}>
       <div className='mv3 flex-ns items-start pb3 pb0-l module'>
         <div className='date bg-sky w3 h3 white tc b'>
-          <p className='f2 ma0'>{format(new Date(event.startAt), 'd')}</p>
-          <p className='ttu ma0'>{format(new Date(event.startAt), 'MMM')}</p>
+          <p className='f2 ma0'>{format(new Date(event.startsAt), 'd')}</p>
+          <p className='ttu ma0'>{format(new Date(event.startsAt), 'MMM')}</p>
         </div>
         <div className='bg-evian ph4 pt2 flex-auto relative'>
           <h3 className='f3 ma0 mt3 mb2'>
@@ -640,7 +838,7 @@ export const CourseRow: React.StatelessComponent<{
             </p>
             <p className='ma0 mv3'>
               <span className='ttu b black-20 f6'>Starts at:</span>{' '}
-              <span className='f5 black-70 dib'>{format(new Date(event.startAt), 'h:mm aaaa')}</span>
+              <span className='f5 black-70 dib'>{format(new Date(event.startsAt), 'h:mm aaaa')}</span>
             </p>
             <p className='ma0 mv3'>
               <span className='ttu b black-20 f6'>Price:</span>{' '}
@@ -655,7 +853,7 @@ export const CourseRow: React.StatelessComponent<{
             <p>
               <PrimaryButton
                 text='Get in touch &#8594;'
-                mailto={mailto(publicCourseEnquiry(new Date(event.startAt), event.timezone, event.location))}
+                mailto={mailto(publicCourseEnquiry(new Date(event.startsAt), event.timezone, event.location))}
               />
             </p>
           </div>

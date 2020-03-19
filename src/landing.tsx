@@ -2,7 +2,14 @@ import React from 'react'
 import { CourseRow, faqs, DashboardModule, PackageFeatures } from './training.v2'
 import { material } from './material'
 import { PrimaryButton } from './homepage'
-import { Course, Boolean, ItemAvailabilityEnum, CourseInstance } from 'schema-dts'
+import {
+  Course,
+  Boolean,
+  ItemAvailability,
+  CourseInstance,
+  EventStatusType,
+  EventAttendanceModeEnumeration,
+} from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { Store } from 'redux'
 import {
@@ -160,7 +167,7 @@ export function renderPage(state: State, pageId: string): JSX.Element {
                     courseMode: 'full-time',
                     duration: course.duration as any,
                     inLanguage: course.language,
-                    startDate: course.startAt,
+                    startDate: course.startsAt,
                     endDate: course.endsAt,
                     location: {
                       '@type': 'Place',
@@ -170,17 +177,19 @@ export function renderPage(state: State, pageId: string): JSX.Element {
                     isAccessibleForFree: Boolean.False,
                     offers: {
                       '@type': 'Offer',
-                      availability: ItemAvailabilityEnum.InStock,
+                      availability: ItemAvailability.InStock,
                       price: course.price.price,
                       priceCurrency: course.price.currency,
                       url: currentAbsoluteUrl,
-                      validFrom: subDays(new Date(course.startAt), 90).toISOString(),
+                      validFrom: subDays(new Date(course.startsAt), 90).toISOString(),
                     },
                     image: `${course.picture.src}`,
                     performer: {
                       '@type': 'Organization',
                       name: 'Learnk8s',
                     },
+                    eventStatus: EventStatusType.EventPostponed,
+                    eventAttendanceMode: EventAttendanceModeEnumeration.OfflineEventAttendanceMode,
                   } as CourseInstance,
                 ],
               }}
@@ -216,12 +225,12 @@ export function renderPage(state: State, pageId: string): JSX.Element {
           <ul className='list'>
             {courses
               .slice(0)
-              .sort((a, b) => new Date(a.startAt).valueOf() - new Date(b.startAt).valueOf())
+              .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
               .map(it => (
                 <CourseRow
                   event={{
                     timezone: it.timezone,
-                    startAt: it.startAt,
+                    startsAt: it.startsAt,
                     location: it.venue,
                     details: it,
                     offer: it.price,

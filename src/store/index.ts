@@ -2,6 +2,7 @@ import { createStore, combineReducers } from 'redux'
 import * as CoursesReducer from './coursesReducer'
 import * as WebsiteReducer from './websiteReducer'
 import * as ConfigReducer from './configReducer'
+import { OnlineCourse } from './coursesReducer'
 
 export type State = {
   courses: CoursesReducer.State
@@ -94,4 +95,8 @@ export function getRedirects(state: State): WebsiteReducer.Redirect[] {
 
 export function getPreviewPictures(state: State): WebsiteReducer.PreviewPicture[] {
   return Object.values(state.website.previewPictures)
+}
+
+export function getOnlineCourses(state: State): OnlineCourse[] {
+  return Object.values(state.courses.onlineCourse)
 }
