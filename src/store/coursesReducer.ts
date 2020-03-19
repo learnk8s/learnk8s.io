@@ -17,6 +17,9 @@ export const Action = {
   registerCoursePicture(args: CoursePicture) {
     return { type: 'REGISTER_COURSE_PIC' as const, ...args }
   },
+  registerOnlineCourse(args: OnlineCourse) {
+    return { type: 'ONLINE_COURSE' as const, ...args }
+  },
 }
 
 export type Actions = ReturnType<typeof Action[keyof typeof Action]>
@@ -30,7 +33,7 @@ export type FullWorkshop = Omit<Workshop, 'courseId' | 'priceId' | 'venueId'> &
 
 type Workshop = {
   id: string
-  startAt: string
+  startsAt: string
   endsAt: string
   timezone: string
   courseId: string
@@ -64,12 +67,23 @@ export type CourseVenue = {
 
 type CoursePrice = { id: string; price: number; currency: string; locale: string }
 
+export type OnlineCourse = {
+  id: string
+  defaultPrice: { country: string; currency: string; gross: number }
+  timezone: string
+  startsAt: string
+  endsAt: string
+  title: string
+  image: string
+}
+
 export interface State {
   courses: Record<string, Course>
   venues: Record<string, CourseVenue>
   prices: Record<string, CoursePrice>
   workshops: Record<string, Workshop>
   pics: Record<string, CoursePicture>
+  onlineCourse: Record<string, OnlineCourse>
 }
 
 export function createInitialState(options: {}): State {
@@ -80,6 +94,7 @@ export function createInitialState(options: {}): State {
     prices: {},
     workshops: {},
     pics: {},
+    onlineCourse: {},
   }
 }
 
@@ -114,6 +129,9 @@ export const RootReducer: Reducer<State, Actions> = (
     }
     case 'REGISTER_COURSE_PIC': {
       return { ...state, pics: { ...state.pics, [action.id]: { ...action } } }
+    }
+    case 'ONLINE_COURSE': {
+      return { ...state, onlineCourse: { ...state.onlineCourse, [action.id]: { ...action } } }
     }
     default:
       assertUnreachable(action)

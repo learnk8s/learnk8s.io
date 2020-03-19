@@ -213,7 +213,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SINGAPORE|20200217',
-      startAt: '2020-03-16T10:00:00',
+      startsAt: '2020-03-16T10:00:00',
       endsAt: '2020-03-18T17:00:00',
       timezone: 'Asia/Singapore',
       courseId: Courses.threeDays.id,
@@ -225,7 +225,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SYDNEY|20200304',
-      startAt: '2020-03-04T09:30:00',
+      startsAt: '2020-03-04T09:30:00',
       endsAt: '2020-03-06T05:00:00',
       timezone: 'Australia/Sydney',
       courseId: Courses.threeDays.id,
@@ -237,7 +237,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|BERLIN|20200304',
-      startAt: '2020-02-26T09:30:00',
+      startsAt: '2020-02-26T09:30:00',
       endsAt: '2020-02-28T05:00:00',
       timezone: 'Europe/Berlin',
       courseId: Courses.threeDays.id,
@@ -249,7 +249,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|LONDON|20200311',
-      startAt: '2020-04-27T09:30:00',
+      startsAt: '2020-04-27T09:30:00',
       endsAt: '2020-04-29T05:00:00',
       timezone: 'Europe/London',
       courseId: Courses.threeDays.id,
@@ -261,7 +261,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|HONGKONG|20200311',
-      startAt: '2020-03-11T09:30:00',
+      startsAt: '2020-03-11T09:30:00',
       endsAt: '2020-03-13T05:00:00',
       timezone: 'Asia/Hong_Kong',
       courseId: Courses.threeDays.id,
@@ -273,7 +273,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|MILAN|20200318',
-      startAt: '2020-03-18T09:30:00',
+      startsAt: '2020-03-18T09:30:00',
       endsAt: '2020-03-20T05:00:00',
       timezone: 'Europe/Rome',
       courseId: Courses.threeDays.id,
@@ -285,7 +285,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|DUBAI|20200318',
-      startAt: '2020-03-18T09:30:00',
+      startsAt: '2020-03-18T09:30:00',
       endsAt: '2020-03-20T05:00:00',
       timezone: 'Asia/Dubai',
       courseId: Courses.threeDays.id,
@@ -297,7 +297,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|LONDON|20200629',
-      startAt: '2020-06-29T09:30:00',
+      startsAt: '2020-06-29T09:30:00',
       endsAt: '2020-07-01T05:00:00',
       timezone: 'Europe/London',
       courseId: Courses.threeDays.id,
@@ -309,7 +309,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SANFRANCISCO|20200622',
-      startAt: '2020-06-22T09:30:00',
+      startsAt: '2020-06-22T09:30:00',
       endsAt: '2020-06-24T05:00:00',
       timezone: 'America/Los_Angeles',
       courseId: Courses.threeDays.id,
@@ -321,7 +321,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|MELBOURNE|20200615',
-      startAt: '2020-06-15T09:30:00',
+      startsAt: '2020-06-15T09:30:00',
       endsAt: '2020-06-17T05:00:00',
       timezone: 'Australia/Sydney',
       courseId: Courses.threeDays.id,
@@ -333,7 +333,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|HONGKONG|20200610',
-      startAt: '2020-06-10T09:30:00',
+      startsAt: '2020-06-10T09:30:00',
       endsAt: '2020-06-12T05:00:00',
       timezone: 'Asia/Hong_Kong',
       courseId: Courses.threeDays.id,
@@ -345,7 +345,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|MUNICH|20200608',
-      startAt: '2020-06-08T09:30:00',
+      startsAt: '2020-06-08T09:30:00',
       endsAt: '2020-06-10T05:00:00',
       timezone: 'Europe/Berlin',
       courseId: Courses.threeDays.id,
@@ -357,7 +357,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|DUBAI|20200609',
-      startAt: '2020-06-09T09:30:00',
+      startsAt: '2020-06-09T09:30:00',
       endsAt: '2020-06-11T05:00:00',
       timezone: 'Asia/Dubai',
       courseId: Courses.threeDays.id,
@@ -369,7 +369,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SINGAPORE|20200601',
-      startAt: '2020-06-01T10:00:00',
+      startsAt: '2020-06-01T10:00:00',
       endsAt: '2020-06-03T17:00:00',
       timezone: 'Asia/Singapore',
       courseId: Courses.threeDays.id,
@@ -381,7 +381,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|ZURICH|20200601',
-      startAt: '2020-06-01T09:30:00',
+      startsAt: '2020-06-01T09:30:00',
       endsAt: '2020-06-03T05:00:00',
       timezone: 'Europe/Zurich',
       courseId: Courses.threeDays.id,
@@ -393,7 +393,7 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|TORONTO|20200615',
-      startAt: '2020-06-15T09:30:00',
+      startsAt: '2020-06-15T09:30:00',
       endsAt: '2020-06-17T05:00:00',
       timezone: 'America/Toronto',
       courseId: Courses.threeDays.id,
@@ -405,13 +405,58 @@ export function Register(store: Store<State, Actions>) {
   store.dispatch(
     Action.registerWorkshop({
       id: 'LK8S|SEATTLE|20200629',
-      startAt: '2020-06-29T09:30:00',
+      startsAt: '2020-06-29T09:30:00',
       endsAt: '2020-07-01T05:00:00',
       timezone: 'America/Los_Angeles',
       courseId: Courses.threeDays.id,
       priceId: CoursePrice.UnitedStates.id,
       venueId: Venues.GenericSeattle.id,
       pictureId: NewPictures.one.id,
+    }),
+  )
+  store.dispatch(
+    Action.registerOnlineCourse({
+      id: 'LK8S|ONLINE|20200427',
+      timezone: 'Central European Time (CET) UTC+1',
+      defaultPrice: {
+        country: 'US',
+        currency: 'USD',
+        gross: 2250,
+      },
+      startsAt: '2020-04-27T09:00:00',
+      endsAt: '2020-04-29T17:00:00',
+      title: 'Advanced Kubernetes Workshop (Europe and Africa)',
+      image: NewPictures.one.src,
+    }),
+  )
+  store.dispatch(
+    Action.registerOnlineCourse({
+      id: 'LK8S|ONLINE|20200513',
+      timezone: 'Central Time US (CDT) UTC-5',
+      defaultPrice: {
+        country: 'US',
+        currency: 'USD',
+        gross: 2250,
+      },
+      startsAt: '2020-05-13T09:00:00',
+      endsAt: '2020-05-15T17:00:00',
+      title: 'Advanced Kubernetes Workshop (Americas)',
+      image: NewPictures.one.src,
+    }),
+  )
+  store.dispatch(
+    Action.registerOnlineCourse({
+      id: 'LK8S|ONLINE|20200527',
+      timezone: 'Singapore (SGT) UTC+8',
+      defaultPrice: {
+        country: 'US',
+        currency: 'USD',
+        gross: 2250,
+      },
+      startsAt: '2020-05-27T09:00:00',
+      endsAt: '2020-05-27T17:00:00',
+      title: 'Advanced Kubernetes Workshop (Asia Pacific)',
+      image: NewPictures.one.src,
     }),
   )
 }

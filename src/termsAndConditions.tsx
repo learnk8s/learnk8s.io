@@ -3,7 +3,7 @@ import marked from 'marked'
 import { cat } from 'shelljs'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
 import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph, getWorkshops } from './store'
+import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -48,7 +48,6 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 function renderPage(state: State) {
   const page = getPages(state).find(it => it.id === TermsAndConditions.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === TermsAndConditions.id)
-  const courses = getWorkshops(state)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   return (
     <Html>
