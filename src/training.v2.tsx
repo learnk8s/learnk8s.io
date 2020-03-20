@@ -55,14 +55,6 @@ export const faqs: FAQ[] = [
       'You will receive the joining instructions with all the material needed to run the course after you sign up for the course.',
   },
   {
-    title: 'What tools do you use?',
-    content: 'Slack for chatting and Google Hangouts or Zoom for video conferencing.',
-  },
-  {
-    title: 'Is there a 2-way audio with the instructor?',
-    content: 'Yes, you will be able to ask questions like if you were in a physical class.',
-  },
-  {
     title: 'What version of Kubernetes was this created for?',
     content: 'The material was authored for Minikube 1.8.x, Kubernetes 1.17, Helm 3',
   },
