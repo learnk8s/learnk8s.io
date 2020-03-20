@@ -60,7 +60,7 @@ const faqs: FAQ[] = [
   {
     title: 'Who is this workshop for?',
     content:
-      'Intended for Software developers, Architects and Deployment engineers seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerized applications.',
+      'It is intended for Software developers, Architects and Deployment engineers seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerised applications.',
   },
   {
     title: 'Are there any joining instructions?',
@@ -72,7 +72,7 @@ const faqs: FAQ[] = [
     content: 'Slack for chatting and Google Hangouts or Zoom for video conferencing.',
   },
   {
-    title: 'Is there a 2-way audio with the instructor?',
+    title: 'Is there 2-way audio with the instructor?',
     content: 'Yes, you will be able to ask questions like if you were in a physical class.',
   },
   {
@@ -81,7 +81,7 @@ const faqs: FAQ[] = [
   },
   {
     title: `What if I'm not thrilled?`,
-    content: `We want to make sure you get real value out of this so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt and I will refund you.`,
+    content: `We want to make sure you get real value out of this, so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt, and we will refund you.`,
   },
   {
     title: 'Do you offer a student discount?',
@@ -226,12 +226,13 @@ export function renderPage(state: State): JSX.Element {
             <p className='measure f3-l f4 lh-copy center'>Things you need to know about the course:</p>
             <ul className='list ph2'>
               <ListItem>
-                You will get you hands dirty: the split is <span className='b'>40% lecture and 60% hands-on labs</span>.
+                You will get your hands dirty: the split is <span className='b'>40% lecture and 60% hands-on labs</span>
+                .
               </ListItem>
               <ListItem>
                 You will have the chance to <span className='b'>ask questions and discuss with the instructor.</span>
               </ListItem>
-              <ListItem>The event is small and cozy, so everyone has a fair chance to participate and enagage</ListItem>
+              <ListItem>The event is small and cosy, so everyone has a fair chance to participate and engage</ListItem>
               <ListItem>
                 You will learn from expert instructors (you can find us on the{' '}
                 <a href='https://t.me/learnk8s' className='link navy underline' ref='noreferrer'>
@@ -239,12 +240,12 @@ export function renderPage(state: State): JSX.Element {
                 </a>
                 ).
               </ListItem>
-              <ListItem>The event is streamed using excellent video quality and we use Slack as chat.</ListItem>
+              <ListItem>The event is streamed using excellent video quality, and we use Slack as chat.</ListItem>
               <ListItem>
                 You will have <span className='b'>access to all the material after the course.</span>
               </ListItem>
               <ListItem>
-                There's a well defined agenda, so that you can take a walk or look after the kids in-btween lectures.
+                There's a clear schedule so that you can take a walk or look after the kids in-between lectures.
               </ListItem>
             </ul>
             <p className='measure f3-l f4 lh-copy center'>This course is not:</p>
@@ -481,9 +482,9 @@ export function renderPage(state: State): JSX.Element {
         </Section>
 
         <Section className=''>
-          <h2 className='f1-l f2 navy tc'>What's the agenda?</h2>
+          <h2 className='f1-l f2 navy tc'>What's the plan?</h2>
           <p className='lh-copy f4 black-70 measure center tc ph3 mb3 mb5-ns'>
-            A typical agenda for the three days course:
+            A typical schedule for the three days course:
           </p>
           <ul className='list pl0 flex justify-center flex-wrap mb0 mw7 center'>
             <li className='br2 br--right br--top order-0 w-third'>
@@ -679,7 +680,7 @@ export function renderPage(state: State): JSX.Element {
           </ul>
 
           <p className='lh-copy f4 black-80 measure center tc ph3 mt4'>
-            You can also book a private session for your team with a fully customisable agenda.{' '}
+            You can also book a private session for your team with a fully customisable schedule.{' '}
             <a href={mailto(privateGroupEnquiry)} className='link navy undderline'>
               Get in touch to discuss your options
             </a>
