@@ -19,6 +19,7 @@ import * as Consulting from './consulting'
 import * as ContactUs from './contactUs'
 import * as Homepage from './homepage'
 import * as Landing from './landing'
+import * as Online from './online'
 import * as Newsletter from './newsletter'
 import * as Redirect from './redirect'
 import * as RSS from './rss'
@@ -40,6 +41,7 @@ import { register } from './register'
 register(store)
 
 Landing.Mount({ store })
+Online.Mount({ store })
 Training.Mount({ store })
 BestPractices.Mount({ store })
 FreeTools.Mount({ store })

@@ -141,6 +141,22 @@ export const Authors = {
     link: 'https://salaboy.com',
     description: 'Mauricio is a Principal Software Engineer at Camunda and a Learnk8s instructor.',
   },
+  chrisNesbittSmith: {
+    id: 'chris-nesbitt-smith',
+    fullName: 'Chris Nesbitt-Smith',
+    avatar: (
+      <img
+        src='assets/authors/chris_nesbitt-smith/chris_nesbitt-smith-64x64.jpg'
+        srcSet='
+    assets/authors/chris_nesbitt-smith/chris_nesbitt-smith-64x64.jpg 1x,
+    assets/authors/chris_nesbitt-smith/chris_nesbitt-smith-128x128.jpg 2x
+    '
+        alt='Chris Nesbitt-Smith'
+      />
+    ),
+    link: 'https://www.linkedin.com/in/cnesbittsmith/',
+    description: 'Chris is a young and enthusiastic instructor at Learnk8s.',
+  },
 }
 
 export function Register(store: Store<State, Actions>) {

@@ -408,7 +408,7 @@ export interface FAQ {
 export const FAQs: React.StatelessComponent<{ faqs: FAQ[] }> = ({ faqs }) => {
   return (
     <section className='ph3 measure-wide pv4 center'>
-      <h3 className='f3 f2-l navy pb3'>Frequently asked questions</h3>
+      <h3 className='f3 f2-l navy pb3 mt0 mt3-ns'>Frequently asked questions</h3>
       <ul className='list pl0'>
         {faqs.map((it, index) => {
           return (

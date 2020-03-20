@@ -425,7 +425,7 @@ export function Register(store: Store<State, Actions>) {
       },
       startsAt: '2020-04-27T09:00:00',
       endsAt: '2020-04-29T17:00:00',
-      title: 'Advanced Kubernetes Workshop (Europe and Africa)',
+      title: 'Advanced Kubernetes course — Europe & Africa',
       image: NewPictures.one.src,
     }),
   )
@@ -440,7 +440,7 @@ export function Register(store: Store<State, Actions>) {
       },
       startsAt: '2020-05-13T09:00:00',
       endsAt: '2020-05-15T17:00:00',
-      title: 'Advanced Kubernetes Workshop (Americas)',
+      title: 'Advanced Kubernetes course — Americas',
       image: NewPictures.one.src,
     }),
   )
@@ -455,7 +455,7 @@ export function Register(store: Store<State, Actions>) {
       },
       startsAt: '2020-05-27T09:00:00',
       endsAt: '2020-05-27T17:00:00',
-      title: 'Advanced Kubernetes Workshop (Asia Pacific)',
+      title: 'Advanced Kubernetes course — Asia Pacific',
       image: NewPictures.one.src,
     }),
   )

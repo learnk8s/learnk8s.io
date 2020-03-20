@@ -12,6 +12,7 @@ import * as Consulting from './consulting'
 import * as ContactUs from './contactUs'
 import * as Homepage from './homepage'
 import * as Landing from './landing'
+import * as Online from './online'
 import * as Newsletter from './newsletter'
 import * as RSS from './rss'
 import * as TermsAndConditions from './termsAndConditions'
@@ -90,4 +91,5 @@ export function register(store: Store<State, Actions>) {
   Templating.Register(store)
   PersitentConnections.Register(store)
   ClusterSize.Register(store)
+  Online.Register(store)
 }
