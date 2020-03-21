@@ -275,6 +275,15 @@ function renderPage(state: State) {
         })}
       </Head>
       <Body>
+        <div className='sticky bg-black white tc pa3 top-0 left-0 z-max shadow-3'>
+          <div className='mw7 center ba b--gray ph3 pv2 bw1 f4-ns f5 br1'>
+            Due to Covid-19, all in-person{' '}
+            <a href='/kubernetes-online-classroom' className='white underline'>
+              workshops are delivered as online classrooms
+            </a>
+            .
+          </div>
+        </div>
         <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
           <Navbar />
 

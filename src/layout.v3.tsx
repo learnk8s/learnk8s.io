@@ -69,10 +69,10 @@ export const Navbar: React.StatelessComponent<{}> = ({}) => {
         <a href='#main-menu' className='db h2 dn-l' title='Open menu'>
           <span className='hamburger-icon' />
         </a>
-        <a href='#' className='z-9999 reveal pt2 pr2 tc white absolute top-0 right-0 z-5 dn-l'>
+        <a href='#' className='z-max reveal pt2 pr2 tc white absolute top-0 right-0 dn-l'>
           <span className='x-icon' />
         </a>
-        <ul className='z-999 reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
+        <ul className='z-max reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
           <li className='ttu mh2 bb bn-l'>
             <a
               href='/kubernetes-free-tools'
