@@ -471,6 +471,12 @@
 }
 
 /* slides */
+input[type='checkbox']:checked ~ .checked-reveal {
+  display: block;
+}
+input[type='checkbox']:checked ~ .checked-hide {
+  display: none;
+}
 input[type='radio']:checked ~ .checked-reveal {
   display: block;
 }
