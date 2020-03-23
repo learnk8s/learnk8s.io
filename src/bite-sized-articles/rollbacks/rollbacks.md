@@ -296,15 +296,16 @@ In other words, **keeping the previous ReplicaSets around is a convenient mechan
 
 By default Kubernetes stores the last 10 ReplicaSets and lets you roll back to any of them.
 
-But you can change how many ReplicaSets should be retained by changing the `Deployment.spec.revisionHistoryLimit` in your deployment.
+But you can change how many ReplicaSets should be retained by changing the `spec.revisionHistoryLimit` in your Deployment.
 
-```yaml|highlight=15|title=deployment.yaml
+```yaml|highlight=7|title=deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: example-deployment
 spec:
   replicas: 3
+  revisionHistoryLimit: 100
   selector:
     matchLabels:
       name: app
@@ -313,7 +314,6 @@ spec:
       labels:
         name: app
     spec:
-      revisionHistoryLimit: 100
       containers:
       - name: app
         image: learnk8s/hello:1.0.0
