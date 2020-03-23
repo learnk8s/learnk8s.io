@@ -8,8 +8,8 @@ import { toVFile } from '../files'
 export const ProvisionCloudResources = {
   id: 'provision-cloud-resources',
   url: '/provision-cloud-resources-kubernetes',
-  title: 'Provision cloud resources from Kubernetes',
-  description: `Provision cloud resources from Kubernetes .......................`,
+  title: 'Provisioning cloud provider managed services in Kubernetes',
+  description: `Provisioning cloud provider managed services in Kubernetes .......................`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -21,11 +21,11 @@ export function Register(store: Store<State, Actions>) {
       image: (
         <img
           src='src/provision-cloud-resources/cloud-resources.png'
-          alt='Provision cloud resources from Kubernetes'
+          alt='Provisioning cloud provider managed services in Kubernetes'
         />
       ),
-      title: 'Provision cloud resources from Kubernetes',
-      description: `Provision cloud resources from Kubernetes`,
+      title: 'Provisioning cloud provider managed services in Kubernetes',
+      description: `Provisioning cloud provider managed services in Kubernetes`,
     }),
   )
   store.dispatch(
@@ -33,8 +33,8 @@ export function Register(store: Store<State, Actions>) {
       id: 'bp-provision-cloud-resources',
       pageId: ProvisionCloudResources.id,
       authorId: Authors.danielePolencic.id,
-      description: `Provision cloud resources from Kubernetes`,
-      title: 'Provision cloud resources from Kubernetes',
+      description: `Provisioning cloud provider managed services in Kubernetes`,
+      title: 'Provisioning cloud provider managed services in Kubernetes',
       publishedDate: '2020-03-25',
 
       content: toVFile({ path: join(__dirname, 'content.md') }),
