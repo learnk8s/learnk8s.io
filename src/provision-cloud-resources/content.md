@@ -1,20 +1,18 @@
-**TL;DR:** You can create and connect to databases or messages brokers from within Kubernetes by manually creating the resources, using the Service Catalogue or with a tool that excute Infrastructure as Code script in your cluster.
+**TL;DR:** You can create and connect to managed cloud provider services from Kubernetes using the [Service Catalog](https://github.com/kubernetes-sigs/service-catalog), a tool such as [Kubeform](https://kubeform.com/) or specific operators such as [Config Connector](https://cloud.google.com/config-connector) and [AWS Operator Service](https://github.com/aws/aws-service-operator-k8s).
 
 There are two main kinds of application that you can deploy in Kubernetes: stateless and stateful apps.
 
 Stateless applications don't hold any state and are an excellent use case for Kubernetes.
 
-With stateless apps, you can take advantage of the horizontal scaling and survive Pod evictions with limited to no disruption of Service.
+With stateless apps, you can take advantage of the horizontal scaling and create copies of your app without worrying about synchronisation.
 
-You can also schedule Podds anywhere in your infrastructure without having particular constraints.
-
-Since you don't have state, there's no need to attach disks located in particular Nodes.
+You can also schedule Pods anywhere in your infrastructure without having particular constraints.
 
 On the contrary, stateful applications present quite a few challenges:
 
 - Pods should have access to persistent disks which could be located on specific nodes.
 - It's often impractical to move volumes with Terabytes of data to other Nodes. Stateful apps are usually scheduled and respawned on the same Nodes.
-- Stateful apps should not compete for I/O. You should isolate the workloads for noisy neighbours.
+- Stateful apps should not compete for I/O. You should isolate the workloads from noisy neighbours.
 - There should be a backup and retention policy in place.
 - You might need to configure failover and leader election, and sharding and rebalancing.
 
@@ -24,7 +22,7 @@ _But what if you don't have the expertise and time, but still need to provide a 
 
 _What if you're a team of one and prefer using an external message broker service with a guaranteed Service Level Agreement (SLA)?_
 
-A popular option is to leverage managed services from a cloud vendor.
+A popular option is to leverage managed services from a cloud provider.
 
 Cloud providers such as Amazon Web Services, Google Cloud Platform and Azure offer several managed services such as:
 
@@ -34,9 +32,9 @@ Cloud providers such as Amazon Web Services, Google Cloud Platform and Azure off
 
 When you need a MySQL database for your app, you don't have to worry about provisioning it from scratch.
 
-You can ask your cloud provider to provide an instance.
+You can ask your cloud provider to provision an instance.
 
-And since the cloud provider offers APIs, you can also script creating, updating and deleting databases.
+And since the cloud vendor offers APIs for its managed services, you can also script creating, updating and deleting databases.
 
 You can use tools such as Terraform or Cloudformation to create the database programmatically when you create an environment such as dev or prod.
 
@@ -60,9 +58,9 @@ However, there is little consensus on how you should provision those resources a
 
 There are three options you can choose from:
 
-1. Externally provisioned — you can create the managed resource on your cloud provider and store the details such as connection detail, username and password in Kubernetes
-1. Internally provisioned using Custom Resource Definitions (CRDs) — You can map the managed resources to Kubernetes objects and have a component that creates the resources on the cloud provider
-1. Internally provisioned using infrastructure as code (IaC) — You can script creating the resources. The script is stored and executed in the cluster.
+1. **Externally provisioned** — you can create the managed resource on your cloud provider and store the details such as connection detail, username and password in Kubernetes.
+1. **Internally provisioned using Custom Resource Definitions (CRDs)** — You can map the managed resources to Kubernetes objects and have a component that creates the resources on the cloud provider.
+1. **Internally provisioned using infrastructure as code (IaC)** — You can script creating the resources. The script is stored and executed in the cluster.
 
 Let's explore the three options in more detail.
 
@@ -77,15 +75,15 @@ Let's have a look at an example.
 You can provision an Amazon RDS database with:
 
 ```terminal|command=1,2,3-9,10-11,12-13|title=bash
-export USERNAME=master
-export PASSWORD=secret99
+export DB_USERNAME=master
+export DB_PASSWORD=secret99
 aws rds create-db-instance \
   --allocated-storage 20 \
   --db-instance-class db.m1.small \
   --db-instance-identifier test-instance \
   --engine mysql \
-  --master-username $USERNAME \
-  --master-user-password $PASSWORD
+  --master-username $DB_USERNAME \
+  --master-user-password $DB_PASSWORD
 aws rds wait db-instance-available \
   --db-instance-identifier test-instance
 aws rds describe-db-instances \
@@ -176,7 +174,7 @@ Let's have a look at some of the advantages of managing resources externally:
 
 Managing resources externally has some drawbacks too, though:
 
-1. You need to have a strategy to keep the credentials in sync. You can manually copy them or have a script that does on your behalf.
+1. You need to have a strategy to keep the credentials in sync. You could manually copy them or have a script that does on your behalf.
 1. You need to create the database or message broker ahead of time.
 1. The managed serviced is deployed separately from the app. You can't use `kubectl apply -f` and create an entire stack with a single command.
 
@@ -227,7 +225,7 @@ In other words:
 
 As you can imagine, you could end up with a long but useful list.
 
-You could also open source it and share it with your friends and colleagues.
+You could also open source it and share it with your friends and colleagues since they might find it useful.
 
 The Kubernetes community did precisely that, but they developed a more generic solution called the Service Catalog.
 
@@ -235,9 +233,11 @@ The Service Catalog is a pluggable system that integrates to the cloud provider 
 
 It also maps resources — if you use Amazon Web Services (AWS), you can create an RDS database object in Kubernetes.
 
-The Service Catalog is available on all major cloud providers ([Azure](https://github.com/Azure/open-service-broker-azure), [Amazon Web Service](https://github.com/awslabs/aws-servicebroker), [Google](https://github.com/GoogleCloudPlatform/gcp-service-broker)) and others as well.
+In turn, the Service Catalog calls the API on the cloud provider, creates the resource and populates a Secret in Kubernetes with all the details.
 
-Let's have a look at how it works in Amazon Web Services.
+The Service Catalog has integrations for all major cloud providers ([Azure](https://github.com/Azure/open-service-broker-azure), [Amazon Web Service](https://github.com/awslabs/aws-servicebroker), [Google](https://github.com/GoogleCloudPlatform/gcp-service-broker)) and you can write your own as well.
+
+Let's have a look at how it works in Amazon Web Services (AWS).
 
 > Please note that the steps are similar for other cloud providers.
 
@@ -266,7 +266,7 @@ f4b249ea-71ea-59dd-9d0b-4f7f1c651b5d   rdsmssql           sb
 You can inspect the class for the S3 service with:
 
 ```terminal|command=1|title=bash
-kubectl get clusterserviceclasses ca3e9a89-0310-530b-8a5d-21ef88888822 -o yaml
+kubectl get ClusterServiceClass ca3e9a89-0310-530b-8a5d-21ef88888822 -o yaml
 ```
 
 The response is a YAML definition:
@@ -300,25 +300,25 @@ spec:
   - Object Storage
 ```
 
-The ClusterServiceClass is a description of what the Service does.
+The _ClusterServiceClass_ is a description of what the Service does.
+
+But you can't select or change the size of the service, for example.
 
 All the configuration and parameters that you can tune in the service are collected in a Service Plan.
 
 You can retrieve all the Service plans for the AWS S3 Service with:
 
 ```terminal|command=1|title=bash
-kubectl get clusterserviceplans
+kubectl get ClusterServicePlans
 NAME                                   EXTERNAL-NAME   BROKER   CLASS
 3050c541-df46-55e2-9ecc-71fed5085852   custom          sb       ca3e9a89-0310-530b-8a5d-21ef88888822
 733fc2af-ade8-533d-85f3-0bb1051aa2f0   production      sb       ca3e9a89-0310-530b-8a5d-21ef88888822
 ```
 
-> Please make sure that the "CLASS" column matches the "NAME" of the service — and not the "EXTERNAL NAME".
-
 You can inspect the plan for the AWS S3 Service with:
 
 ```terminal|command=1|title=bash
-kubectl get clusterserviceplan 3050c541-df46-55e2-9ecc-71fed5085852 -o yaml
+kubectl get ClusterServicePlan 3050c541-df46-55e2-9ecc-71fed5085852 -o yaml
 ```
 
 > Please note that `3050c541-df46-55e2-9ecc-71fed5085852` is the name of the plan.
@@ -359,7 +359,7 @@ spec:
       # ... more properties
 ```
 
-To create an instance of S3, you have to combine ClusterServiceClass and ClusterServicePlan in a ServiceInstance resource:
+To create an instance of S3, you have to combine _ClusterServiceClass_ and _ClusterServicePlan_ in a _ServiceInstance_ resource:
 
 ```yaml|highlight=6,7|title=s3.yaml
 apiVersion: servicecatalog.k8s.io/v1beta1
@@ -373,7 +373,7 @@ spec:
     BucketName: my-test-20200325
 ```
 
-As soon as you type the command, the Service broker calls the APIs and create the resource.
+As soon as you type the command, the Service broker calls the APIs on Amazon Web Services (AWS) and creates the resource.
 
 You can check the progress with:
 
@@ -413,7 +413,7 @@ _How do you access it in the cluster, though?_
 
 You need to bind the resource to use it.
 
-You should create a ServiceBinding resource:
+You should create a _ServiceBinding_ resource:
 
 ```yaml|title=s3-binding.yaml
 apiVersion: servicecatalog.k8s.io/v1beta1
@@ -462,29 +462,38 @@ type: Opaque
 
 Great, you can use the value in the Secret to connect to the S3 bucket.
 
+You have to use four Custom Resource Definitions (CRDs) to use the Service Catalog:
+
+1. Managed services are described in a **ClusterServiceClass**.
+1. If you want to use a service, you can choose an appropriate plan with **ClusterServicePlans**.
+1. You can combine the service and its plan into a _ServiceInstance_. As soon as you submit it, the cloud provider creates the resource.
+1. Creating resources is not enough. When you want to use it, you should claim it with a _ServiceBinding_.
+
 ## Service broker limitations
 
-In the previous example, you provisioned an S3 bucket in Amazon Web Services, but you can create other services such as Databases (RDS) and message brokers (SQS, AMQP).
-
-You can also set up a Service Catalog and broker for Azure and create managed services there.
-
-Creating managed resources requires two Custom Resource Definitions (ServiceInstance and ServiceBinding), but it's straightforward once you understand how it works.
+In the previous example, you provisioned an S3 bucket in Amazon Web Services (AWS), but you can create other services such as Databases (RDS) and message brokers (SQS, AMQP).
 
 There's one caveat, though.
 
-There's no easy way to import or bind to existing resources.
+**There's no easy way to import or bind to existing resources.**
 
 Imagine you have three clusters:
 
-1. One for the development environment.
-1. One for the testing environment.
-1. One for the production environment.
+1. One for the _development_ environment.
+1. One for the _testing_ environment.
+1. One for the _production_ environment.
 
 The production environment has its own database, but you want to share a single database between testing a development.
 
 _How can you do so with the Service Catalog?_
 
+_If you create the database from the development cluster using the Service Catalog, how do you import it in the testing environment?_
+
 You can't, unless you copy the Secret from one cluster to the other.
+
+The Service Catalog is designed to create new resources only.
+
+There's no way to import existing services.
 
 So you're back at square one: provisioning resources and manually copying secrets.
 
@@ -498,11 +507,13 @@ The Service Catalog runs a controller that calls the cloud provider APIs to crea
 
 _What if you could replace that controller with another?_
 
-That's the idea behind Kubeform — a controller that crates cloud resources using Terraform.
+That's the idea behind [Kubeform](https://kubeform.com/) — a controller that crates cloud resources using [Terraform](https://terraform.io).
+
+> Terraform is a convenient tool for creating cloud resources using code.
 
 When you install Kubeform in your cluster, you can create resources likes this:
 
-```yaml
+```yaml|title=s3.yaml
 apiVersion: aws.kubeform.com/v1alpha1
 kind: S3Bucket
 metadata:
@@ -531,9 +542,9 @@ As an example, when configuring an S3 Bucket, the Service catalogue exposes abou
 - EnableLogging
 - etc.
 
-For the same object, [Terraform has over a hundred fields](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html).
+For the same object, [Terraform has over a hundred parameters](https://www.terraform.io/docs/providers/aws/r/s3_bucket.html).
 
-Also, when you use the Service Catalog, all the parameters in the ServiceInstance object are unchecked.
+Also, when you use the Service Catalog, all the parameters in the _ServiceInstance_ object are not checked.
 
 You can add as many properties as you want, Kubernetes won't stop you:
 
@@ -566,29 +577,27 @@ spec:
     name: aws
 ```
 
-Kubernetes will validate the resource and make sure that only defined fields are accepted.
+Kubernetes will validate the resource and make sure that only defined fields are accepted before the resource is stored in etcd.
 
 _So, should you always use Kubeform instead of the Service Catalog?_
 
-Terraform stores the current state of the infrastructure into a state file.
+Terraform stores the current state of the infrastructure into [a state file](https://www.terraform.io/docs/state/index.html).
 
 If you run a command twice, Terraform provision the difference between the current and previous state only.
 
-Kubeform stores the state in etcd — similarly to the Service Catalog.
+Kubeform stores that state in etcd — similarly to the Service Catalog.
 
-But there's no easy way to retrieve the state of fix it when it gets corrupted.
+But there's no easy way to retrieve the state of fix it [when it gets corrupted or out of sync](https://stackoverflow.com/questions/41856270/how-should-i-handle-deposed-resources-in-terraform).
 
-And this happens quite often with Terraform.
-
-Also, Kubeform cannot import existing resources in the Terraform state.
+Or to use the state to [manually import resources](https://www.terraform.io/docs/import/index.html).
 
 So if you want to share a database between development and testing environment, you're out of luck — again.
 
 ## Exploring more options on Amazon Web Services (AWS)
 
-Amazon Web Services offers the Service Catalog integration as well as the AWS Service Operator — a component that lives in the cluster and is capable of creating managed resources.
+Amazon Web Services offers the Service Catalog integration as well as the [AWS Service Operator](https://github.com/aws/aws-service-operator-k8s) — a component that lives in the cluster and is capable of creating managed resources.
 
-The operator works similarly to the Service Broker, but instead of using ServiceInstances and ServiceBindings, you use Custom Resource Definitions (CRDs).
+The operator works similarly to the Service Broker, but instead of using _ServiceInstances_ and _ServiceBindings_, you use Custom Resource Definitions (CRDs).
 
 Here's an example of how you can define a DynamoDB table:
 
@@ -608,13 +617,15 @@ spec:
   writeCapacityUnits: 5
 ```
 
-But there's something you should know.
+The AWS Service Operator combines a dedicated controller with Custom Resource Definitions (CRDs), making it an excellent solution provision managed services on AWS.
 
-The AWS Service operator was initially released in 2018 and is currently deprecated without migration path.
+_But there's something you should know._
+
+The AWS Service operator was initially released in 2018 and is currently [deprecated without migration path](https://github.com/aws/aws-service-operator-k8s#status).
 
 At the time of writing, the engineering team at Amazon is rewriting the operator from the ground up.
 
-While it's an excellent alternative to the Service Catalog, it's not viable at the moment.
+While it's an excellent alternative to the Service Catalog, it's not a viable option at the moment.
 
 ## Exploring more options on Google Cloud
 
@@ -637,9 +648,13 @@ spec:
   numNodes: 1
 ```
 
-On the plus side, Google deigned Config Connector to work nicely with existing service.
+The solution is remarkably similar to the AWS service operator, but it _actually_ exists.
 
-If you have an existing Cloud SQL or Cloud Pub/Sub [you can import those in the cluster](https://cloud.google.com/config-connector/docs/how-to/managing-deleting-resources).
+And, on the plus side, Google deigned Config Connector to work nicely with existing service.
+
+So you can import pre-existing resources with Config Connector and use them in your cluster.
+
+If you have an existing Cloud SQL or Cloud Pub/Sub [you can import those in the cluster](https://cloud.google.com/config-connector/docs/how-to/managing-deleting-resources) too.
 
 ## Other tools
 
@@ -649,13 +664,13 @@ If you have an existing Cloud SQL or Cloud Pub/Sub [you can import those in the 
 
 ## Summary and way forward
 
-There are several ways to configure managed services such as databases in your cluster.
+There are several ways to configure cloud managed services such as databases in your cluster.
 
-Some options are fully integrated with your cluster, and they behave as if they were deployed in the cluster.
+Some options give you full integration, and you create resources without noticing that they are not part of the cluster.
 
 With the Service Catalog, for example, you submit a YAML definition in the cluster the triggers the creation of a managed resource in your cloud provider.
 
-Managing resources with Kubernetes feel natural, and you can offer a more consistent and unified experience to the user of your cluster.
+Managing resources with Kubernetes feels natural, and you can offer a more consistent and unified experience to the user of your cluster.
 
 _But what's the price?_
 
@@ -685,7 +700,11 @@ _Is there anything better than that?_
 
 Not without a lot of trade-offs.
 
+The team behind the Service Catalog has the [ups-broker a component that could be used to import existing services](https://github.com/kubernetes-sigs/service-catalog/issues/2789#issuecomment-604991193), but it's [not well documented and only meant for testing](https://github.com/kubernetes-sigs/service-catalog/issues/2789#issuecomment-605296084).
+
 The [Service Binding Operator](https://github.com/redhat-developer/service-binding-operator) is one of the most exciting experiments in this area, but it's designed to run on OpenShift and support only a few cloud services.
+
+It's also quite complicated and requires an external binding server.
 
 ## Closing notes and further reading
 
