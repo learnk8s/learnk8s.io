@@ -1,5 +1,20 @@
 **TL;DR:** You can create and connect to managed cloud provider services from Kubernetes using the [Service Catalog](https://github.com/kubernetes-sigs/service-catalog), a tool such as [Kubeform](https://kubeform.com/) or specific operators such as [Config Connector](https://cloud.google.com/config-connector) and [AWS Operator Service](https://github.com/aws/aws-service-operator-k8s).
 
+## Table of content
+
+1. [Managing cloud providers' services](#managing-cloud-providers-services)
+1. [Creating Secrets manually](#creating-secrets-manually)
+1. [The Kubernetes Service Catalog](#the-kubernetes-service-catalog)
+1. [Service Catalog limitations](#service-catalog-limitations)
+1. [Terraform to the rescue](#terraform-to-the-rescue)
+1. [Exploring more options on Amazon Web Services (AWS)](#exploring-more-options-on-amazon-web-services-aws-)
+1. [Exploring more options on Google Cloud Platform (GCP)](#exploring-more-options-on-google-cloud-platform-gcp-)
+1. [Other tools](#other-tools)
+1. [Summary and way forward](#summary-and-way-forward)
+1. [Closing notes and further reading](#closing-notes-and-further-reading)
+
+## Managing cloud providers' services
+
 There are two main kinds of application that you can deploy in Kubernetes: stateless and stateful apps.
 
 Stateless applications don't hold any state and are an excellent use case for Kubernetes.
@@ -64,7 +79,7 @@ There are three options you can choose from:
 
 Let's explore the three options in more detail.
 
-## Provisioning managed resources externally
+## Creating Secrets manually
 
 You can provision your managed databases or message brokers manually or using a tool such as Terraform or Cloudformation.
 
@@ -206,7 +221,7 @@ _Can you create a `ManagedDatabase` object?_
 
 You can get close.
 
-## Managed services and Custom Resource Definitions
+## The Kubernetes Service Catalog
 
 Cloud providers have an extensive collection of managed services.
 
@@ -469,7 +484,7 @@ You have to use four Custom Resource Definitions (CRDs) to use the Service Catal
 1. You can combine the service and its plan into a _ServiceInstance_. As soon as you submit it, the cloud provider creates the resource.
 1. Creating resources is not enough. When you want to use it, you should claim it with a _ServiceBinding_.
 
-## Service broker limitations
+## Service Catalog limitations
 
 In the previous example, you provisioned an S3 bucket in Amazon Web Services (AWS), but you can create other services such as Databases (RDS) and message brokers (SQS, AMQP).
 
@@ -627,7 +642,7 @@ At the time of writing, the engineering team at Amazon is rewriting the operator
 
 While it's an excellent alternative to the Service Catalog, it's not a viable option at the moment.
 
-## Exploring more options on Google Cloud
+## Exploring more options on Google Cloud Platform (GCP)
 
 Google Cloud offers the [Config Connector](https://cloud.google.com/config-connector) — a component that lives in the cluster and behaves like the Service Catalog.
 
