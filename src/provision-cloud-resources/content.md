@@ -15,7 +15,7 @@
 
 ## Managing cloud providers' services
 
-There are two main kinds of application that you can deploy in Kubernetes: stateless and stateful apps.
+Generally, there are two kinds of applications that you can deploy in Kubernetes: stateless and stateful applications.
 
 Stateless applications don't hold any state and are an excellent use case for Kubernetes.
 
@@ -26,34 +26,34 @@ You can also schedule Pods anywhere in your infrastructure without having partic
 On the contrary, stateful applications present quite a few challenges:
 
 - Pods should have access to persistent disks which could be located on specific nodes.
-- It's often impractical to move volumes with Terabytes of data to other Nodes. Stateful apps are usually scheduled and respawned on the same Nodes.
-- Stateful apps should not compete for I/O. You should isolate the workloads from noisy neighbours.
+- It is often impractical to move volumes with Terabytes of data to other Nodes. Stateful apps are usually scheduled and respawned on the same Nodes.
+- Stateful apps should not compete for I/O. Workloads should be isolated from noisy neighbours.
 - There should be a backup and retention policy in place.
-- You might need to configure failover and leader election, and sharding and rebalancing.
+- You might need to configure failover and leader election, sharding and rebalancing.
 
-You can be successful at running stateful applications on Kubernetes such as databases or message brokers if you invest the time to learn how to operate it.
+You can be successful at running stateful applications on Kubernetes such as databases or message brokers if you invest the time to learn how to operate them.
 
-_But what if you don't have the expertise and time, but still need to provide a production-grade database to your teams?_
+_But what if you don't have the expertise or time and still need to provide a production-grade database to your teams?_
 
-_What if you're a team of one and prefer using an external message broker service with a guaranteed Service Level Agreement (SLA)?_
+_What if you are a team of one and prefer using an external message broker service with a guaranteed Service Level Agreement (SLA)?_
 
 A popular option is to leverage managed services from a cloud provider.
 
 Cloud providers such as Amazon Web Services, Google Cloud Platform and Azure offer several managed services such as:
 
 - Databases ([Amazon RDS](https://aws.amazon.com/rds/), [Azure Database](https://azure.microsoft.com/en-us/product-categories/databases/), [GCP Cloud SQL](https://cloud.google.com/sql))
-- Message brokers [Amazon SQS](https://aws.amazon.com/sqs/), [Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/), [Cloud Pub/Sub](https://cloud.google.com/pubsub)
+- Message brokers ([Amazon SQS](https://aws.amazon.com/sqs/), [Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/), [Cloud Pub/Sub](https://cloud.google.com/pubsub))
 - Elastic Search ([Amazon Elasticsearch Service](https://aws.amazon.com/elasticsearch-service/), [Azure Elasticsearch Service](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/elastic.elasticsearch))
 
 When you need a MySQL database for your app, you don't have to worry about provisioning it from scratch.
 
 You can ask your cloud provider to provision an instance.
 
-And since the cloud vendor offers APIs for its managed services, you can also script creating, updating and deleting databases.
+Since the cloud vendor offers APIs for its managed services, you can also script creating, updating and deleting databases.
 
-You can use tools such as Terraform or Cloudformation to create the database programmatically when you create an environment such as dev or prod.
+You can use tools such as Terraform or Cloudformation to create the database programmatically when you create an environment for development or production.
 
-The community contributed to several scripts and modules to make it easier to provision databases, messages brokers, etc.
+The community has contributed to several scripts and modules to make it easier to provision databases, messages brokers, etc.
 
 Here's a short selection:
 
@@ -73,7 +73,7 @@ However, there is little consensus on how you should provision those resources a
 
 There are three options you can choose from:
 
-1. **Externally provisioned** — you can create the managed resource on your cloud provider and store the details such as connection detail, username and password in Kubernetes.
+1. **Externally provisioned** — you can create the managed resource on your cloud provider and store the details such as connection detail, username and password in Kubernetes as secrets.
 1. **Internally provisioned using Custom Resource Definitions (CRDs)** — You can map the managed resources to Kubernetes objects and have a component that creates the resources on the cloud provider.
 1. **Internally provisioned using infrastructure as code (IaC)** — You can script creating the resources. The script is stored and executed in the cluster.
 
@@ -81,7 +81,7 @@ Let's explore the three options in more detail.
 
 ## Creating Secrets manually
 
-You can provision your managed databases or message brokers manually or using a tool such as Terraform or Cloudformation.
+You can provision your managed databases or message brokers manually or you could use IaC tools such as Terraform or Cloudformation.
 
 And you can pass the details such as username or password to your apps using a [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/).
 
@@ -152,7 +152,7 @@ data:
 
 You can use the values from the Secret in any Pod.
 
-Below there's an example on how you could inject the values as environment variables:
+Example below shows how you can inject username, password & url as environment variables:
 
 ```yaml|title=pod.yaml
 apiVersion: v1
@@ -184,14 +184,14 @@ spec:
 Let's have a look at some of the advantages of managing resources externally:
 
 1. If you've already use managed services, the steps above are familiar. The only change is storing the values in a Kubernetes secret.
-1. It is flexible as you can create the managed service manually, through the command line, with Terraform or Clouformation, etc.
+1. It is flexible as you can create the managed services manually, through the command line, with Terraform or Clouformation, etc.
 1. If you want to share an existing managed service, you only need to copy the details in the Kubernetes Secret.
 
-Managing resources externally has some drawbacks too, though:
+Managing resources externally has some drawbacks:
 
 1. You need to have a strategy to keep the credentials in sync. You could manually copy them or have a script that does on your behalf.
 1. You need to create the database or message broker ahead of time.
-1. The managed serviced is deployed separately from the app. You can't use `kubectl apply -f` and create an entire stack with a single command.
+1. The managed service is deployed separately from the app. You can't use `kubectl apply -f` and create an entire stack with a single command.
 
 If you're willing to accept the trade-offs, managing resources externally is a viable option to have apps in Kubernetes consuming cloud provider services such as a database.
 
@@ -225,11 +225,11 @@ You can get close.
 
 Cloud providers have an extensive collection of managed services.
 
-And all the managed services can be scripted: the cloud provider exposes an API to create, update, consume and delete resources.
+All of the managed services can be scripted: the cloud provider exposes an API to create, update, consume and delete resources.
 
-So, before you start using services from a cloud provider, you could do three things:
+So, before you start using services from a cloud provider, you could do the following:
 
-1. Collect all the managed serviced that you wish to use into a list.
+1. Collect all the managed services that you wish to use into a list.
 1. Create a Kubernetes object for each item in that list.
 1. Create a component that can map custom Kubernetes objects to the cloud provider managed services.
 
@@ -242,7 +242,7 @@ As you can imagine, you could end up with a long but useful list.
 
 You could also open source it and share it with your friends and colleagues since they might find it useful.
 
-The Kubernetes community did precisely that, but they developed a more generic solution called the Service Catalog.
+The Kubernetes community did precisely that. However, they developed a more generic solution called the Service Catalog.
 
 The Service Catalog is a pluggable system that integrates to the cloud provider and lists all managed services available.
 
@@ -486,7 +486,7 @@ You have to use four Custom Resource Definitions (CRDs) to use the Service Catal
 
 ## Service Catalog limitations
 
-In the previous example, you provisioned an S3 bucket in Amazon Web Services (AWS), but you can create other services such as Databases (RDS) and message brokers (SQS, AMQP).
+In the previous example, you provisioned an S3 bucket in Amazon Web Services (AWS). You can also create other services such as Databases (RDS) and message brokers (SQS, AMQP).
 
 There's one caveat, though.
 
@@ -498,7 +498,7 @@ Imagine you have three clusters:
 1. One for the _testing_ environment.
 1. One for the _production_ environment.
 
-The production environment has its own database, but you want to share a single database between testing a development.
+The production environment has its own database but you want to share a single database between testing a development.
 
 _How can you do so with the Service Catalog?_
 
@@ -545,7 +545,7 @@ _It looks very similar to the Service Catalog, so what's the difference?_
 
 Kubeform calls the Terraform provider for Amazon Web Services (AWS), Google Cloud, Azure etc.
 
-Terraform is a mature product, and it is battle-tested in production by small and large companies.
+Terraform is a mature and has been battle-tested in production by small and large companies.
 
 As a consequence, it has the most up to date list of configurations parameters.
 
@@ -602,7 +602,7 @@ If you run a command twice, Terraform provision the difference between the curre
 
 Kubeform stores that state in etcd — similarly to the Service Catalog.
 
-But there's no easy way to retrieve the state of fix it [when it gets corrupted or out of sync](https://stackoverflow.com/questions/41856270/how-should-i-handle-deposed-resources-in-terraform).
+But there's no easy way to retrieve the state or fix it [when it gets corrupted or out of sync](https://stackoverflow.com/questions/41856270/how-should-i-handle-deposed-resources-in-terraform).
 
 Or to use the state to [manually import resources](https://www.terraform.io/docs/import/index.html).
 
@@ -612,7 +612,7 @@ So if you want to share a database between development and testing environment, 
 
 Amazon Web Services offers the Service Catalog integration as well as the [AWS Service Operator](https://github.com/aws/aws-service-operator-k8s) — a component that lives in the cluster and is capable of creating managed resources.
 
-The operator works similarly to the Service Broker, but instead of using _ServiceInstances_ and _ServiceBindings_, you use Custom Resource Definitions (CRDs).
+The operator works similarly to the Service Broker but instead of using _ServiceInstances_ and _ServiceBindings_, you use Custom Resource Definitions (CRDs).
 
 Here's an example of how you can define a DynamoDB table:
 
@@ -681,19 +681,19 @@ If you have an existing Cloud SQL or Cloud Pub/Sub [you can import those in the 
 
 There are several ways to configure cloud managed services such as databases in your cluster.
 
-Some options give you full integration, and you create resources without noticing that they are not part of the cluster.
+Some options give you full integration and you can create resources without noticing that they are not part of the cluster.
 
 With the Service Catalog, for example, you submit a YAML definition in the cluster the triggers the creation of a managed resource in your cloud provider.
 
-Managing resources with Kubernetes feels natural, and you can offer a more consistent and unified experience to the user of your cluster.
+Managing resources with Kubernetes feels natural and you can offer a more consistent and unified experience to the user of your cluster.
 
 _But what's the price?_
 
 Most of the solutions discussed above are quite complicated:
 
 - You need to create and understand the lifecycle of a resource in the Service Catalog.
-- Kubeform is an ingenious tool to provision infrastructure with Terraform, but it's hard to debug and fix issues with the state.
-- Proprietary tools such as Google Config Connector and AWS Service Operator are great, but they are not mature.
+- Kubeform is an ingenious tool to provision infrastructure with Terraform but it's hard to debug and fix issues with the state.
+- Proprietary tools such as Google Config Connector and AWS Service Operator are great but they are not mature.
 
 And even if you can manage the complexity, there is a deal-breaker for most of them: you can't import existing managed services.
 
@@ -717,7 +717,7 @@ Not without a lot of trade-offs.
 
 The team behind the Service Catalog has the [ups-broker a component that could be used to import existing services](https://github.com/kubernetes-sigs/service-catalog/issues/2789#issuecomment-604991193), but it's [not well documented and only meant for testing](https://github.com/kubernetes-sigs/service-catalog/issues/2789#issuecomment-605296084).
 
-The [Service Binding Operator](https://github.com/redhat-developer/service-binding-operator) is one of the most exciting experiments in this area, but it's designed to run on OpenShift and support only a few cloud services.
+The [Service Binding Operator](https://github.com/redhat-developer/service-binding-operator) is one of the most exciting experiments in this area. However, it is designed to run on OpenShift and supports only a few cloud services.
 
 It's also quite complicated and requires an external binding server.
 
