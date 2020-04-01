@@ -1,4 +1,4 @@
-**TL;DR:** You can create and connect to managed cloud provider services from Kubernetes using the [Service Catalog](https://github.com/kubernetes-sigs/service-catalog), a tool such as [Kubeform](https://kubeform.com/) or cloud-specific operators such as [Config Connector](https://cloud.google.com/config-connector) and [AWS Operator Service](https://github.com/aws/aws-service-operator-k8s).
+**TL;DR:** You can create and connect to managed cloud resources from Kubernetes using the [Service Catalog](https://github.com/kubernetes-sigs/service-catalog), a tool such as [Kubeform](https://kubeform.com/) or cloud-specific operators such as [Config Connector](https://cloud.google.com/config-connector) and [AWS Operator Service](https://github.com/aws/aws-service-operator-k8s).
 
 ## Table of content
 
@@ -787,3 +787,5 @@ A few notes on the Service Catalog:
 
 - The Engineering team at Amazon Web Services are planning to [merge the AWS Service Operator and the AWS Service Broker](https://github.com/aws/aws-service-operator-k8s/issues/19#issuecomment-575534359).
 - [OpenShift deprecated the Service Catalog](https://docs.openshift.com/container-platform/4.1/release_notes/ocp-4-1-release-notes.html#ocp-4-1-notable-technical-changes).
+
+Many thanks to [Daniel Weibel](https://medium.com/@weibeld) and [Salman Iqbal](https://twitter.com/soulmaniqbal) for offering some invaluable suggestions.
