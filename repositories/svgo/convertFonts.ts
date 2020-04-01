@@ -119,31 +119,31 @@ const FONT_ASSETS = {
     '900': 'fonts/JetBrainsMono-ExtraBold.ttf',
     default: 'fonts/JetBrainsMono-ExtraBold.ttf',
   },
-  'Inter-Thin': {
+  'Inter-Regular_Thin': {
     default: 'fonts/Inter-Thin-slnt=0.ttf',
   },
-  'Inter-ExtraLight': {
+  'Inter-Regular_ExtraLight': {
     default: 'fonts/Inter-ExtraLight-slnt=0.ttf',
   },
-  'Inter-Light': {
+  'Inter-Regular_Light': {
     default: 'fonts/Inter-Light-slnt=0.ttf',
   },
   'Inter-Regular': {
     default: 'fonts/Inter-Regular-slnt=0.ttf',
   },
-  'Inter-Medium': {
+  'Inter-Regular_Medium': {
     default: 'fonts/Inter-Medium-slnt=0.ttf',
   },
-  'Inter-SemiBold': {
+  'Inter-Regular_SemiBold': {
     default: 'fonts/Inter-SemiBold-slnt=0.ttf',
   },
-  'Inter-Bold': {
+  'Inter-Regular_Bold': {
     default: 'fonts/Inter-Bold-slnt=0.ttf',
   },
-  'Inter-ExtraBold': {
+  'Inter-Regular_ExtraBold': {
     default: 'fonts/Inter-ExtraBold-slnt=0.ttf',
   },
-  'Inter-Black': {
+  'Inter-Regular_Black': {
     default: 'fonts/Inter-Black-slnt=0.ttf',
   },
   Inter: {
@@ -251,10 +251,22 @@ export function rasteriseFonts(hast: Node) {
       throw `wordSpacing not supported. Aborting`
     }
     text.node.tagName = 'g'
-    text.node.properties = omit(
-      ['fontFamily', 'fontSize', 'letterSpacing', 'fontWeight', 'textAnchor', 'textDecoration', 'wordSpacing'],
-      props,
-    )
+    text.node.properties = {
+      ...omit(
+        [
+          'fontFamily',
+          'fontSize',
+          'letterSpacing',
+          'fontWeight',
+          'textAnchor',
+          'textDecoration',
+          'wordSpacing',
+          'fillRule',
+        ],
+        props,
+      ),
+      fillRule: 'nonzero',
+    }
   })
 }
 
