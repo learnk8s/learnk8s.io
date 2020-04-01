@@ -109,17 +109,17 @@ The output of the last command is a JSON payload with the endpoint of the databa
 
 ```json|highlight=10|title=aws-cli-output.json
 {
-  "DBInstances":[
+  "DBInstances": [
     {
-      "DBInstanceIdentifier":"test-instance",
-      "DBInstanceClass":"db.m5.large",
-      "Engine":"postgres",
-      "DBInstanceStatus":"available",
-      "MasterUsername":"master",
-      "Endpoint":{
-        "Address":"test-instance.cddqgyucel9j.eu-west-1.rds.amazonaws.com",
-        "Port":5432,
-        "HostedZoneId":"Z29XKXDKYMONMX"
+      "DBInstanceIdentifier": "test-instance",
+      "DBInstanceClass": "db.m5.large",
+      "Engine": "postgres",
+      "DBInstanceStatus": "available",
+      "MasterUsername": "master",
+      "Endpoint": {
+        "Address": "test-instance.cddqgyucel9j.eu-west-1.rds.amazonaws.com",
+        "Port": 5432,
+        "HostedZoneId": "Z29XKXDKYMONMX"
       }
       /* ... more details ... */
     }
@@ -147,24 +147,24 @@ metadata:
   name: my-pod
 spec:
   containers:
-  - name: my-container
-    image: app
-    env:
-      - name: DB_USERNAME
-        valueFrom:
-          secretKeyRef:
-            name: my-secret
-            key: username
-      - name: DB_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: my-secret
-            key: password
-      - name: DB_URL
-        valueFrom:
-          secretKeyRef:
-            name: my-secret
-            key: connection_url
+    - name: my-container
+      image: app
+      env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: password
+        - name: DB_URL
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: connection_url
 ```
 
 Let's have a look at some of the **advantages of managing resources externally:**
@@ -191,7 +191,7 @@ kind: ManagedDatabase
 metadata:
   name: rds-mysql
 spec:
-  version: "11.5"
+  version: '11.5'
   storageType: Durable
 ```
 
@@ -242,7 +242,35 @@ The Service Catalog has integrations for all major cloud providers ([Azure](http
 
 Let's have a look at how it works in Amazon Web Services (AWS).
 
-> [You can follow these steps to install the Service Catalog on AWS.](https://github.com/learnk8s/service-catalog-aws)
+```slideshow
+{
+  "description": "ServiceClass and ServicePlan",
+  "slides": [
+    {
+      "image": "assets/service-catalog-1.svg",
+      "description": "You have an existing cluster deployed in AWS, and you wish to use Amazon S3 with the Service Catalog."
+    },
+    {
+      "image": "assets/service-catalog-2.svg",
+      "description": "As soon as you deployed the Service Catalog with the AWS integration, all managed services are mapped into **ServiceClass** objects in Kubernetes."
+    },
+    {
+      "image": "assets/service-catalog-3.svg",
+      "description": "Managed Service might have different features and plans."
+    },
+    {
+      "image": "assets/service-catalog-4.svg",
+      "description": "The Service Catalog maps the plans with **ServicePlan** objects in Kubernetes."
+    },
+    {
+      "image": "assets/service-catalog-5.svg",
+      "description": "The **ServicePlan**s describe how the managed resource can be customised."
+    }
+  ]
+}
+```
+
+> If you need help setting up the Service Catalog on Amazon Web Services (AWS) [you might find this repository useful.](https://github.com/learnk8s/service-catalog-aws)
 
 Once the Service Catalog is installed, you can list all available resources with:
 
@@ -296,9 +324,9 @@ spec:
   externalName: s3
   planUpdatable: false
   tags:
-  - AWS
-  - S3
-  - Object Storage
+    - AWS
+    - S3
+    - Object Storage
 ```
 
 The _ClusterServiceClass_ is a description of what the Service does.
@@ -349,6 +377,30 @@ spec:
         type: string
       # ... more properties
 ```
+
+_But how do you use the S3 resource in your Pods?_
+
+```slideshow
+{
+  "description": "ServiceInstance",
+  "slides": [
+    {
+      "image": "assets/service-catalog-6.svg",
+      "description": "_How does the Pod use ClusterServiceClass and ClusterServicePlan to connect to Amazon S3?_ It doesn't."
+    },
+    {
+      "image": "assets/service-catalog-7.svg",
+      "description": "Before you can use the Amazon S3 service, you need to create an instance. The Service Catalog exposes a **ServiceInstance** objects where you can define the _ClusterServiceClass_ and _ClusterServicePlan_ to use."
+    },
+    {
+      "image": "assets/service-catalog-8.svg",
+      "description": "As soon as you submit the **ServiceInstance** to the cluster, the resource is created."
+    }
+  ]
+}
+```
+
+Let's have a look at the code.
 
 To create an instance of S3, you have to combine _ClusterServiceClass_ and _ClusterServicePlan_ in a _ServiceInstance_ resource:
 
@@ -403,6 +455,34 @@ Excellent, the resource exists!
 _How do you access it in the cluster, though?_
 
 You need to bind the resource to use it.
+
+```slideshow
+{
+  "description": "ServiceBindings",
+  "slides": [
+    {
+      "image": "assets/service-catalog-9.svg",
+      "description": "_Now that the S3 service is created, can you consume it from the Pod?_ No, you can't."
+    },
+    {
+      "image": "assets/service-catalog-10.svg",
+      "description": "If you wish to use a managed resource created with a _ServiceInstance_ object you need to create a ServiceBinding object."
+    },
+    {
+      "image": "assets/service-catalog-11.svg",
+      "description": "The Service Catalog reads the ServiceBinding object and calls the cloud provider API to retrieve the credentials to connect to the Amazon S3 service."
+    },
+    {
+      "image": "assets/service-catalog-12.svg",
+      "description": "Then the Service Catalog creates a Kubernetes Secret with the credentials."
+    },
+    {
+      "image": "assets/service-catalog-13.svg",
+      "description": "You can use the Secret from your Pod to connect to the Amazon S3 services."
+    }
+  ]
+}
+```
 
 You should create a _ServiceBinding_ resource:
 
