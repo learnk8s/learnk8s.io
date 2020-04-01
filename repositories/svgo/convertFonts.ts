@@ -119,6 +119,46 @@ const FONT_ASSETS = {
     '900': 'fonts/JetBrainsMono-ExtraBold.ttf',
     default: 'fonts/JetBrainsMono-ExtraBold.ttf',
   },
+  'Inter-Thin': {
+    default: 'fonts/Inter-Thin-slnt=0.ttf',
+  },
+  'Inter-ExtraLight': {
+    default: 'fonts/Inter-ExtraLight-slnt=0.ttf',
+  },
+  'Inter-Light': {
+    default: 'fonts/Inter-Light-slnt=0.ttf',
+  },
+  'Inter-Regular': {
+    default: 'fonts/Inter-Regular-slnt=0.ttf',
+  },
+  'Inter-Medium': {
+    default: 'fonts/Inter-Medium-slnt=0.ttf',
+  },
+  'Inter-SemiBold': {
+    default: 'fonts/Inter-SemiBold-slnt=0.ttf',
+  },
+  'Inter-Bold': {
+    default: 'fonts/Inter-Bold-slnt=0.ttf',
+  },
+  'Inter-ExtraBold': {
+    default: 'fonts/Inter-ExtraBold-slnt=0.ttf',
+  },
+  'Inter-Black': {
+    default: 'fonts/Inter-Black-slnt=0.ttf',
+  },
+  Inter: {
+    '100': 'fonts/Inter-Thin-slnt=0.ttf',
+    '200': 'fonts/Inter-ExtraLight-slnt=0.ttf',
+    '300': 'fonts/Inter-Light-slnt=0.ttf',
+    '400': 'fonts/Inter-Regular-slnt=0.ttf',
+    '500': 'fonts/Inter-Medium-slnt=0.ttf',
+    '600': 'fonts/Inter-SemiBold-slnt=0.ttf',
+    '700': 'fonts/Inter-Bold-slnt=0.ttf',
+    '800': 'fonts/Inter-ExtraBold-slnt=0.ttf',
+    '900': 'fonts/Inter-Black-slnt=0.ttf',
+    bold: 'fonts/Inter-Bold-slnt=0.ttf',
+    default: 'fonts/Inter-Regular-slnt=0.ttf',
+  },
   default: {
     bold: 'fonts/Roboto-Bold.ttf',
     default: 'fonts/Roboto-Regular.ttf',
