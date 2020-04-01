@@ -1,4 +1,4 @@
-**TL;DR:** You can create and connect to managed cloud provider services from Kubernetes using the [Service Catalog](https://github.com/kubernetes-sigs/service-catalog), a tool such as [Kubeform](https://kubeform.com/) or specific operators such as [Config Connector](https://cloud.google.com/config-connector) and [AWS Operator Service](https://github.com/aws/aws-service-operator-k8s).
+**TL;DR:** You can create and connect to managed cloud provider services from Kubernetes using the [Service Catalog](https://github.com/kubernetes-sigs/service-catalog), a tool such as [Kubeform](https://kubeform.com/) or cloud-specific operators such as [Config Connector](https://cloud.google.com/config-connector) and [AWS Operator Service](https://github.com/aws/aws-service-operator-k8s).
 
 ## Table of content
 
@@ -17,13 +17,13 @@
 
 Generally, there are two kinds of applications that you can deploy in Kubernetes: stateless and stateful applications.
 
-Stateless applications don't hold any state and are an excellent use case for Kubernetes.
+**Stateless applications don't hold any state and are an excellent use case for Kubernetes.**
 
 With stateless apps, you can take advantage of horizontal scaling and create copies of your app without worrying about synchronisation.
 
 You can also schedule Pods anywhere in your infrastructure without having particular constraints.
 
-On the contrary, stateful applications present quite a few challenges:
+On the contrary, **stateful applications present quite a few challenges:**
 
 - Pods should have access to persistent disks which could be located on specific nodes.
 - It is often impractical to move volumes with Terabytes of data to other Nodes. Stateful apps are usually scheduled and respawned on the same Nodes.
@@ -37,7 +37,7 @@ _But what if you don't have the expertise or time and still need to provide a pr
 
 _What if you are a team of one and prefer using an external message broker service with a guaranteed Service Level Agreement (SLA)?_
 
-A popular option is to leverage managed services from a cloud provider.
+**A popular option is to leverage managed services from a cloud provider.**
 
 Cloud providers such as Amazon Web Services, Google Cloud Platform and Azure offer several managed services such as:
 
@@ -67,7 +67,7 @@ _What if you could use the same managed services in your Kubernetes cluster?_
 
 _If Amazon RDS, Cloud SQL and Azure Database are so convenient, why not use those instead of rolling out and maintaining your database in Kubernetes?_
 
-The good news is that you can use managed services in Kubernetes.
+**The good news is that you can use managed services in Kubernetes.**
 
 However, there is little consensus on how you should provision those resources and make them available to your apps in the cluster.
 
@@ -81,7 +81,7 @@ Let's explore the three options in more detail.
 
 ## Creating Secrets manually
 
-You can provision your managed databases or message brokers manually or you could use infrastructure-as-code tools such as Terraform or AWS CloudFormation.
+You can provision your managed databases or message brokers manually, or you could use infrastructure-as-code tools such as Terraform or AWS CloudFormation.
 
 And you can pass the details such as username or password to your apps using a [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/).
 
@@ -121,7 +121,7 @@ The output of the last command is a JSON payload with the endpoint of the databa
         "Port":5432,
         "HostedZoneId":"Z29XKXDKYMONMX"
       }
-      /* ... more details */
+      /* ... more details ... */
     }
   ]
 }
@@ -138,9 +138,9 @@ kubectl create secret generic my-secret \
 
 You can use the values from the Secret in any Pod.
 
-Example below shows how you can inject username, password & url as environment variables:
+The example below shows how you can inject username, password and connection string as environment variables:
 
-```yaml|title=pod.yaml
+```yaml|highlight=12-14,17-19,22-24|title=pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -167,13 +167,13 @@ spec:
             key: connection_url
 ```
 
-Let's have a look at some of the advantages of managing resources externally:
+Let's have a look at some of the **advantages of managing resources externally:**
 
 1. If you've already use managed services, the steps above are familiar. The only change is storing the values in a Kubernetes secret.
 1. It is flexible as you can create the managed services manually, through the command line, with Terraform or Clouformation, etc.
 1. If you want to share an existing managed service, you only need to copy the details in the Kubernetes Secret.
 
-Managing resources externally has some drawbacks:
+**Managing resources externally has some drawbacks:**
 
 1. You need to have a strategy to keep the credentials in sync. You could manually copy them or have a script that does this on your behalf.
 1. You need to create the database or message broker ahead of time.
@@ -232,7 +232,7 @@ The Kubernetes community did precisely that.
 
 However, they developed a more generic solution called the Service Catalog.
 
-The Service Catalog is a pluggable system that integrates to the cloud provider and lists all managed services available.
+**The Service Catalog is a pluggable system that integrates to the cloud provider and lists all managed services available.**
 
 It also maps resources — if you use Amazon Web Services (AWS), you can create an RDS database object in Kubernetes.
 
@@ -242,9 +242,7 @@ The Service Catalog has integrations for all major cloud providers ([Azure](http
 
 Let's have a look at how it works in Amazon Web Services (AWS).
 
-> Please note that the steps are similar for other cloud providers.
-
-[You can follow these steps to install the Service Catalog on AWS.](https://github.com/learnk8s/service-catalog-aws)
+> [You can follow these steps to install the Service Catalog on AWS.](https://github.com/learnk8s/service-catalog-aws)
 
 Once the Service Catalog is installed, you can list all available resources with:
 
@@ -305,9 +303,9 @@ spec:
 
 The _ClusterServiceClass_ is a description of what the Service does.
 
-But you can't select or change the size of the service, for example.
+Notice how the description doesn't contain any information on how much space you could use or what other parameters you could tweak in the service.
 
-All the configuration and parameters that you can tune in the service are collected in a Service Plan.
+All the configuration and parameters are collected in a Service Plan.
 
 You can retrieve all the Service plans for the AWS S3 Service with:
 
@@ -324,29 +322,19 @@ You can inspect the plan for the AWS S3 Service with:
 kubectl get ClusterServicePlan 3050c541-df46-55e2-9ecc-71fed5085852 -o yaml
 ```
 
-> Please note that `3050c541-df46-55e2-9ecc-71fed5085852` is the name of the plan.
+> Please note that `3050c541-df46-55e2-9ecc-71fed5085852` is the name of the _custom_ plan.
 
 The response is a (rather long) YAML definition:
 
-```yaml|highlight=23-31|title=s3-custom-plan.yaml
+```yaml|highlight=13-21|title=s3-custom-plan.yaml
 apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ClusterServicePlan
 metadata:
   name: 3050c541-df46-55e2-9ecc-71fed5085852
 spec:
-  bindable: true
-  clusterServiceBrokerName: sb
   clusterServiceClassRef:
     name: ca3e9a89-0310-530b-8a5d-21ef88888822
   description: S3 Bucket pre-configured with custom configuration
-  externalID: 3050c541-df46-55e2-9ecc-71fed5085852
-  externalMetadata:
-    cost: https://aws.amazon.com/s3/pricing/
-    displayName: Custom
-    longDescription: Amazon Simple Storage Service (Amazon S3) is storage for the
-      Internet. You can use Amazon S3 to store and retrieve any amount of data at
-      any time, from anywhere on the web. You can accomplish these tasks using the
-      simple and intuitive web interface of the AWS Management Console.
   externalName: custom
   free: false
   instanceCreateParameterSchema:
@@ -376,7 +364,7 @@ spec:
     BucketName: my-test-20200325
 ```
 
-As soon as you type the command, the Service broker calls the APIs on Amazon Web Services (AWS) and creates the resource.
+As soon as you submit the resource to the cluster, the Service broker calls the APIs on Amazon Web Services (AWS) and creates the S3 bucket.
 
 You can check the progress with:
 
@@ -445,7 +433,7 @@ default-token-zbl2r   kubernetes.io/service-account-token   3
 my-s3-binding         Opaque                                6
 ```
 
-Excellent, let's inspect the secret:
+Excellent, let's inspect the `my-s3-binding` Secret:
 
 ```terminal|command=1|title=bash
 kubectl get secret my-s3-binding -o yaml
@@ -478,6 +466,8 @@ In the previous example, you provisioned an S3 bucket in Amazon Web Services (AW
 
 You can also create other services such as Databases (RDS) and message brokers (SQS, AMQP).
 
+You can also use the Service Catalog with another cloud vendor such as Google Cloud or Azure.
+
 There's one caveat, though.
 
 **There's no easy way to import or bind to existing resources.**
@@ -496,9 +486,9 @@ _If you create the database from the development cluster using the Service Catal
 
 You can't, unless you copy the Secret from one cluster to the other.
 
-The Service Catalog is designed to create new resources only.
+**The Service Catalog is designed to create new resources only.**
 
-There's no way to import existing services.
+**There's no way to import existing services.**
 
 So you're back at square one: provisioning resources and manually copying secrets.
 
@@ -553,7 +543,7 @@ Also, when you use the Service Catalog, all the parameters in the _ServiceInstan
 
 You can add as many properties as you want, Kubernetes won't stop you:
 
-```yaml|highlight=11|title=s3.yaml
+```yaml|highlight=10|title=s3.yaml
 apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceInstance
 metadata:
@@ -644,8 +634,6 @@ Here's the definition for Spanner:
 apiVersion: spanner.cnrm.cloud.google.com/v1beta1
 kind: SpannerInstance
 metadata:
-  labels:
-    label-one: "value-one"
   name: spannerinstance-sample
 spec:
   config: regional-us-west1
@@ -653,7 +641,7 @@ spec:
   numNodes: 1
 ```
 
-The solution is remarkably similar to the AWS service operator, but it _actually_ exists.
+The solution is remarkably similar to the AWS Service Operator, but the operator _actually_ exists.
 
 And, on the plus side, Google designed Config Connector to work nicely with existing service.
 
