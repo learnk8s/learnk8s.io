@@ -160,12 +160,12 @@ const FONT_ASSETS = {
     default: 'fonts/Inter-Regular-slnt=0.ttf',
   },
   default: {
-    bold: 'fonts/Roboto-Bold.ttf',
-    default: 'fonts/Roboto-Regular.ttf',
+    bold: 'fonts/Inter-Bold-slnt=0.ttf',
+    default: 'fonts/Inter-Regular-slnt=0.ttf',
   },
   '-apple-system': {
-    bold: 'fonts/Roboto-Bold.ttf',
-    default: 'fonts/Roboto-Regular.ttf',
+    bold: 'fonts/Inter-Bold-slnt=0.ttf',
+    default: 'fonts/Inter-Regular-slnt=0.ttf',
   },
 } as Record<string, Record<string, string>>
 
