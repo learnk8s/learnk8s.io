@@ -56,6 +56,12 @@ const privateGroupEnquiry: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
+const moreInfo = (date: string): MailTo => ({
+  subject: 'Online Kubernetes workshop',
+  body: `Hi Learnk8s,\n\nI'd like to know ____ about the next online workshop scheduled for the ${date}. Can you help?\n\nBest regards,\n`,
+  email: 'hello@learnk8s.io',
+})
+
 const faqs: FAQ[] = [
   {
     title: 'Who is this workshop for?',
@@ -211,6 +217,7 @@ export function renderPage(state: State): JSX.Element {
                   title={it.title}
                   duration={'Full time (6 hours per day), 3 days'}
                   id={`event${i}`}
+                  isLive={i === 0}
                   submitUrl={'https://academy.learnk8s.io/checkout?product%5B%5D=online-course'}
                 />
               ))}
@@ -731,6 +738,7 @@ export function renderPage(state: State): JSX.Element {
                     title={it.title}
                     duration={'Full time (6 hours per day), 3 days'}
                     id={`event${i}`}
+                    isLive={i === 0}
                     submitUrl={'https://academy.learnk8s.io/checkout?product%5B%5D=online-course'}
                   />
                 ))}
@@ -857,7 +865,8 @@ const CourseRow: React.StatelessComponent<{
   id: string
   duration: string
   submitUrl: string
-}> = ({ timezone, startsAt, title, id, duration, submitUrl }) => {
+  isLive: boolean
+}> = ({ timezone, startsAt, title, id, duration, submitUrl, isLive }) => {
   return (
     <li className='' key={id}>
       <div className='mv3 flex items-start'>
@@ -895,9 +904,22 @@ const CourseRow: React.StatelessComponent<{
               }).format(2249)}
             </p>
 
-            <a href={submitUrl} className='link dib white bg-sky br1 pa3 b f5 mv3'>
-              Book a ticket →
-            </a>
+            {isLive ? (
+              <a href={submitUrl} className='link dib white bg-sky br1 pa3 b f5 mv3'>
+                Book a ticket →
+              </a>
+            ) : (
+              <Form id={`waiting list: ${title}`}></Form>
+            )}
+            <p className='lh-copy gray f6'>
+              Questions?{' '}
+              <a
+                href={mailto(moreInfo(format(new Date(startsAt), "do 'of' LLLL")))}
+                className='underline gray link hover-navy'
+              >
+                Get in touch.
+              </a>
+            </p>
           </div>
 
           <label
@@ -989,5 +1011,39 @@ const Module: React.StatelessComponent<{
         </div>
       </div>
     </div>
+  )
+}
+
+const Form: React.StatelessComponent<{ id: string; className?: string }> = ({ children, className, id }) => {
+  return (
+    <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST' className='relative'>
+      <ol className='list pl0'>
+        <li>
+          <input type='hidden' name='u' defaultValue='2f82ec7d5caaa9ced71141211' />
+        </li>
+        <li>
+          <input type='hidden' name='id' defaultValue='8ecff1a8cf' />
+        </li>
+        <li className='mt4'>
+          <label htmlFor='MERGE0' className='db tl pb3 black-80'>
+            Leave your email address here to be notified:
+          </label>
+          <input
+            className='pa3 br3 input-reset ba b--none bg-near-white w-100 measure-narrow'
+            type='email'
+            required={true}
+            name='MERGE0'
+            id='MERGE0'
+            placeholder='Your email address'
+          />
+        </li>
+        <li>
+          <input className='pa3 w-100 br3 input-reset b--none' type='hidden' name='SOURCE' id='SOURCE' value={id} />
+        </li>
+      </ol>
+      <button className='link dib white bg-sky br1 pa3 b f5 mv3 submit br2 b--none' type='submit'>
+        Join the waiting list ⇢
+      </button>
+    </form>
   )
 }
