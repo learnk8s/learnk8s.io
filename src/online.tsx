@@ -217,7 +217,7 @@ export function renderPage(state: State): JSX.Element {
                   title={it.title}
                   duration={'Full time (6 hours per day), 3 days'}
                   id={`event${i}`}
-                  isLive={i === 0}
+                  isLive={false}
                   submitUrl={'https://academy.learnk8s.io/checkout?product%5B%5D=online-course'}
                 />
               ))}
@@ -738,7 +738,7 @@ export function renderPage(state: State): JSX.Element {
                     title={it.title}
                     duration={'Full time (6 hours per day), 3 days'}
                     id={`event${i}`}
-                    isLive={i === 0}
+                    isLive={false}
                     submitUrl={'https://academy.learnk8s.io/checkout?product%5B%5D=online-course'}
                   />
                 ))}
