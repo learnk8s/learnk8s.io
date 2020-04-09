@@ -13,3 +13,4 @@ _site/
 .jekyll-metadata
 .vscode/
 backstop_data/
+lambda/

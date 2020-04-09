@@ -9,7 +9,9 @@
     "build": "ts-node --files --transpile-only src/index.tsx",
     "fmt": "ts-node --files --transpile-only src/check.ts",
     "test": "cross-env tsc --noEmit && ts-node --files node_modules/tape/bin/tape \"src/**/test.ts\" \"src/**/*.test.ts\" \"src/**/*.integration.ts\" \"src/**/integration.ts\"",
-    "start": "ts-node --files --transpile-only src/start.ts"
+    "start": "ts-node --files --transpile-only src/start.ts",
+    "lambda-serve": "netlify-lambda serve functions",
+    "lambda-build": "netlify-lambda build functions"
   },
   "author": "Learnk8s",
   "license": "UNLICENSED",
@@ -48,6 +50,7 @@
     "md5": "^2.2.1",
     "mdast-util-to-string": "^1.0.6",
     "mjml": "^4.5.1",
+    "netlify-lambda": "^1.6.3",
     "opentype.js": "^1.1.0",
     "postcss": "^7.0.14",
     "prettier": "^1.19.1",
