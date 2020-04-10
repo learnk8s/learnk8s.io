@@ -1,37 +1,122 @@
-Kubernetes provides support for multiple user authentication methods out-of-the-box:
+Kubernetes supports certain authentication methods out-of-the-box, such as X.509 client certificates, static HTTP bearer tokens, and [OpenID Connect](https://openid.net/) tokens.
 
-- [X.509 client certificates](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#x509-client-certs)
-- [Bearer tokens](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-token-file)
-- [OpenID Connect](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens)
+_However, Kubernetes also provides the means to integrate a cluster with any desired authentication method and user management system._
 
-> Earlier versions of Kubernetes also supported [HTTP basic authentication](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-password-file), however, this authentication method has been [deprecated in Kubernetes v1.16](https://v1-16.docs.kubernetes.io/docs/setup/release/notes/#deprecations-and-removals).
+This article explains how to do this by walking you through an example of setting [LDAP authentication](https://connect2id.com/products/ldapauth/auth-explained) for a Kubernetes cluster.
 
-However, Kubernetes also provides you the means to integrate any authentication method you like.
+This means that users will be able to authenticate to Kubernetes with their existing credentials from a [Lightweight Directory Access Protocol (LDAP)](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol) directory.
 
-In this article, you will learn how you can enable [LDAP authentication](https://connect2id.com/products/ldapauth/auth-explained) for your Kubernetes cluster.
+![Kubernetes LDAP authentication](assets/intro.svg)
 
-This means that the users will be able to authenticate to your Kubernetes cluster by using their existing username and password from a [Lightweight Directory Access Protocol (LDAP)](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol) directory.
+However, LDAP is used just as an example here — the goal of this article is to show the general principles for integrate custom authentication methods with Kubernetes.
 
-## How authentication works
+_Think of [Kerberos](https://en.wikipedia.org/wiki/Kerberos%5f%28protocol%29), [Keycloak](https://www.keycloak.org/), [OAuth](https://en.wikipedia.org/wiki/OAuth), [SAML](https://en.wikipedia.org/wiki/SAML%5f2.0), custom certificates, custom tokens, and any kind of existing single-sign on infrastructure._
+
+You can integrate all of them with Kubernetes!
+
+And the principles for doing that are the same as those you will learn in this article.
+
+_But before starting, let's briefly review the fundamentals of how the Kubernetes API is accessed._
+
+## How access to the Kubernetes API is controlled
+
+Every request to the Kubernetes API server has to pass through three stages to be accepted: **authentication**, **authorisation**, and **admission control**:
+
+![Kubernetes API access](assets/kubernetes-api-access.svg)
+
+Each stage has a well-defined purpose:
+
+- [Authentication](https://kubernetes.io/docs/reference/access-authn-authz/authentication/) checks whether the user is a legitimate user of the API and, if yes, establishes its user identity
+- [Authorisation](https://kubernetes.io/docs/reference/access-authn-authz/authorization/) checks whether the identified user has permission to execute the requested API operation
+- [Admission control](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/) performs a variety of further checks on the request to enforce configurable cluster policies
+
+At each stage, a request can fail, and only requests that successfully make it through all three stages are handled by the Kubernetes API.
+
+The task of the authentication stage is to check whether a request does come from a legitimate user and to reject all requests that don't.
+
+This is done by verifying some form of credentials in the request and establishing the identity of the user that these credentials belong to.
+
+Internally, the authentication stage is organised as a sequence of authentication plugins:
+
+![Authentication plugins](assets/authentication-plugins.svg)
+
+Each authentication plugin implements a specific authentication method, and an incoming request is presented to each authentication plugin in sequence.
+
+If any of the authentication plugins can successfully authenticate a request, then authentication is complete and the request proceeds to the authorisation stage.
+
+If none of the authentication plugin can authenticate the request, the request is rejected with a [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) HTTP status code.
+
+> Note that the [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) status code is a [long-standing misnomer](https://stackoverflow.com/a/6937030/4747193) as it indicates _authentication_ errors and **not** _authorisation_ errors. The HTTP status code for authorisation errors is [403 Forbidden](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403).
+
+_So what authentication plugin do there exist?_
+
+Well, first of all, Kubernetes does not provide an open plugin mechanism that allows you to develop your own plugins and simply plug them into Kubernetes.
+
+Rather, Kubernetes provides a fixed set of in-tree authentication plugins that are compiled in the API server binary.
+
+These plugins can be selectively enabled and configured with [command-line flags](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/9) when the API server is started up.
+
+There are three "closed" authentication plugins that implementing specific authentication methods:
+
+- [**X.509 Client Certs**](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#x509-client-certs)
+- [**Static Token File**](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-token-file)
+- [**OpenID Connect Tokens**](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens)
+
+> Up to and including Kubernetes v1.15, there was additionally the [Static Password File](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-password-file) authentication plugin which implemented [HTTP basic authentication](https://tools.ietf.org/html/rfc7617), however, it was [deprecated in Kubernetes v1.16](https://v1-16.docs.kubernetes.io/docs/setup/release/notes/#deprecations-and-removals).
+
+Furthermore, there are two "open-ended" authentication plugins that don't implement a specific authentication method but provide a framework for incorporating custom authentication logics:
+
+- [**Webhook Token**](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication)
+- [**Authenticating Proxy**](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authenticating-proxy)
+
+The flexibility of the Kubernetes authentication mechanisms comes from these two open-ended authentication plugins.
+
+_They allow to integrate any desired authentication method with a Kubernetes cluster._
+
+And that's what the tutorial in the remainder of this article is about.
+
+In this tutorial, you will use the [Webhook Token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) authentication plugin to implement [LDAP authentication](https://connect2id.com/products/ldapauth/auth-explained) for your Kubernetes cluster.
+
+> As mentioned, LDAP authentication is just an example, and you can use the same principles for binding any other custom authentication method to Kubernetes.
+
+_Let's get started!_
+
+## Prerequisites
+
+This tutorial assumes that you have a [Google Cloud Platform (GCP)](https://connect2id.com/products/ldapauth/auth-explained) account and a working installation of the [`gcloud`](https://cloud.google.com/sdk/gcloud) command-line tool on your system.
+
+If you haven't a GCP account yet, you can [create a new one](https://cloud.google.com/), in which case you get USD 300 credits that you can use for this tutorial.
+
+You can install `gcloud` by installing the [Google Cloud SDK](https://cloud.google.com/sdk/docs/) according to the [GCP documentation](https://cloud.google.com/sdk/docs/downloads-interactive).
+
+The accumulated costs for the resources created in this tutorial are no more than 10 US cents per hour.
+
+> Any charges will be subtracted from the USD 300 free credits if you create a new account.
 
 ## Setting up an LDAP directory
 
-As a first step, you will set up an LDAP directory with some users in it.
+The first thing that you will do is creating an LDAP directory.
 
-You can look at this LDAP directory as your pre-existing central user management system that you use for the authentication of various applications.
+In general, [Lightweight Directory Access Protocol (LDAP)](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol) is a [directory service](https://en.wikipedia.org/wiki/Directory_service) and thus is in the same category of applications as the [Domain Name System (DNS)](https://en.wikipedia.org/wiki/Domain_Name_System) — in essence, it resolves names to values.
 
-This tutorial assumes that you have a [Google Cloud Platform (GCP)](https://cloud.google.com/) account, since you will use GCP as the underlying infrastructure.
+In practice, LDAP is often used to centrally store user information, such as personal data (name, address, email address, etc.), usernames, passwords, group affiliations and so on.
 
-> If you [create a new GCP account](https://cloud.google.com/), you get USD 300 credits that you can use for this tutorial.
+This information is then accessed by various applications for authentication purposes, such as validating the username and passwod supplied by the user.
 
-Start by creating a new [VPC network and subnet](https://cloud.google.com/vpc/docs/vpc) for the components of your system:
+_This is called [LDAP authentication](https://connect2id.com/products/ldapauth/auth-explained)._
+
+One of the most popular LDAP server implementations is [OpenLDAP](https://www.openldap.org/), which is what you will use for this tutorial.
+
+_You will deploy all the components for this tutorial to GCP, so let's start by creating the necessary GCP infrastructure._
+
+Create a new GCP [VPC network and subnet](https://cloud.google.com/vpc/docs/vpc):
 
 ```terminal|command=1,2|title=bash
 gcloud compute networks create my-net --subnet-mode custom
 gcloud compute networks subnets create my-subnet --network my-net --range 10.0.0.0/16
 ```
 
-Next, create a compute instance for the LDAP directory in the created subnet:
+Next, create a GCP [compute instance](https://cloud.google.com/compute/docs/instances) for the LDAP directory in the new subnet:
 
 ```terminal|command=1-5|title=bash
 gcloud compute instances create authn \
@@ -41,32 +126,32 @@ gcloud compute instances create authn \
   --image-project ubuntu-os-cloud
 ```
 
-GCP creates a default firewall rule for all compute instances that allows all outgoing traffic but blocks all incoming traffic (no matter whether it originates from within or outside the VPC network).
+By default, GCP compute instances can't accept any traffic unless you define [firewall rules](https://cloud.google.com/vpc/docs/firewalls) that explicitly allow certain types of traffic.
 
-So, to make your instance reachable, you have to create a firewall rule that allows certain types of incoming traffic:
+In your case, traffic should be accepted from other instances in the same VPC network as well as from your local machine.
 
-```terminal|command=1-5|title=bash
+To realise this, create the following firewall rule:
+
+```terminal|command=1-4|title=bash
 gcloud compute firewall-rules create allow-internal-and-admin \
   --network my-net \
   --allow icmp,tcp,udp \
   --source-ranges 10.0.0.0/16,$(curl checkip.amazonaws.com)
 ```
 
-The above command defines a firewall rule for all the instances in your VPC network that allows all incoming traffic which originates either from within the VPC network (specified by the 10.0.0.0/16 range) or from your local machine.
+> If the public IP address of your local machine ever changes, you can update the firewall rule with [`gcloud compute firewall-rules update`](https://cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/update).
 
-> If the public IP address of your local machine ever changes, you can update the firewall rule with `gcloud compute firewall-rules update`.
-
-At this point, you should be able to connect to your instance with SSH:
+Now, log in to your instance with SSH:
 
 ```terminal|command=1|title=bash
 gcloud compute ssh root@authn
 ```
 
-You should now be logged in to your instance as root.
+_Your next task is to install OpenLDAP on the instance._
 
-_The next step is to install OpenLDAP on this instance._
+OpenLDAP is distributed as the [`slapd`](https://packages.ubuntu.com/bionic/slapd) Debian package.
 
-OpenLDAP is available in the [`slapd`](https://packages.ubuntu.com/bionic/slapd) Debian package, but befor you install it, you should do the following configurations:
+However, before you install this package, you should preset some of its settings, which will make the configuration easier:
 
 ```terminal|command=1-6|title=bash
 cat <<EOF | debconf-set-selections
@@ -77,7 +162,7 @@ slapd shared/organization string mycompany.com
 EOF
 ```
 
-The above configurations set the password for the default admin user of the LDAP directory and the domain suffix for your LDAP database (which means that your LDAP entries will be hierarchically saved as nodes under `*.mycompany.com`).
+The above command sets the password of the LDAP admin user to `adminpassword` and the base of your LDAP database to `mycompany.com`.
 
 Now, you can install the `slapd` package:
 
@@ -86,45 +171,44 @@ apt-get update
 apt-get install -y slapd
 ```
 
-OpenLDAP should now be up and running on your compute instance, so you can log out from it:
+_That's it — OpenLDAP should now be installed, configured, and running on your instance._
+
+Log out from the instance:
 
 ```terminal|command=1|title=bash
 exit
 ```
 
-_Back on your local machine, let's test if OpenLDAP is correctly set up and accessible._
+_Let's test if you can access the LDAP directory from your local machine._
 
-You can do this by listing the current content of your LDAP directory.
+To do so, you can use the `ldapsearch` command-line tool which allows to make [LDAP Search](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare) requests to an LDAP directory.
 
-To make LDAP queries (more precisely, [LDAP Search](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare) operations), you can use a tool called `ldapsearch`.
-
-If you're on macOS, then `ldapsearch` shoud be installed by default; if you're on Linux, you can install it with:
+If you're on macOS, then `ldapsearch` shoud be already installed — if you're on Linux, you can install it with:
 
 ```terminal|command=1|title=bash
 sudo apt-get install ldap-utils
 ```
 
-With `ldapsearch` installed, execute the following command:
+With `ldapsearch` installed, run the following command:
 
-```terminal|command=1|title=bash
-ldapsearch -LLL -H ldap://<IP> -x -D cn=admin,dc=mycompany,dc=com -w adminpassword -b dc=mycompany,dc=com
+```terminal|command=1-3|title=bash
+ldapsearch -LLL -H ldap://<AUTHN-EXTERNAL-IP> \
+  -x -D cn=admin,dc=mycompany,dc=com -w adminpassword \
+  -b dc=mycompany,dc=com
 ```
 
-> Please replace `<IP>` with the _external IP address_ of your compute instance, which you can find it out with `gcloud compute instances list`.
+> Please replace `<AUTHN-EXTERNAL-IP>` with the _external IP address_ of the `authn` compute instance that you just created. You can find it out with `gcloud compute instances list`.
 
 The above command might look cryptic, but it's the canonical way to interact with an LDAP directory, so here are some explanations:
 
 - The `-LLL` option simplifies the output format be removing comments and other metadata
 - The `-H` option specifies the URL of the LDAP directory
-- The `-x`, `-D`, and `-w` options specify the authentication information for connecting to the LDAP directory. The `-D` option specifies the user to connect as and the `-w` option specifies the corresponding password (note that this is the default admin user whose password you defined in the initial configuration before you installed the `slapd` package).
-- The `-b` option specifies the search base, that is, the node in the LDAP directory under which the search is applied (in the above command, this is the root node, since the suffix of your LDAP database is `mycompany.com`).
+- The `-x`, `-D`, and `-w` options provide authentication information for connecting to the LDAP directory: `-D` specifies the user to connect as and `-w` specifies the corresponding password (note that this user is the LDAP admin user whose password you defined in the initial `slapd` package configuration).
+- The `-b` option specifies the search base, that is, the node in the LDAP directory under which the search is performed.
 
-In general, an LDAP directory is a hierarchical database and a node is identified by a so-called _distinguished name (DN)_ consisting of a sequence of attribute types and values:
+In general, an LDAP directory is a tree-like hierarchical database (like DNS): a node like `dc=mycompany,dc=com` (`dc` stands for _domain component_) can be read as `mycompany.com`; so a node like `cn=admin,dc=mycompany,dc=com` (`admin.mycompany.com`) is one level under `dc=mycompany,dc=com`.
 
-- `dc` is the _domain component_ attribute type and `dc=mycompany,dc=com` specifies the node `mycompany.com` (which is the root node).
-- `cn` is the _common name_ attribute type and `cn=admin,dc=mycompany,dc=com` specifies the node `admin.mycompany.com` (which is just under the root node).
-
-In any case, the output of the command should look something like that:
+In any case, the output of the command should look like that:
 
 ```
 dn: dc=mycompany,dc=com
@@ -142,209 +226,490 @@ description: LDAP administrator
 userPassword:: e1NTSEF9bHF4NGljTGlyL1BDSkhiYVVFMXcrQ2ZpM045S2laMzc=
 ```
 
-These are the two LDAP entries that currently exist in your LDAP directory (note that the second one is the LDAP admin user).
+These are the two LDAP entries that currently exist in your LDAP directory.
 
-_That's great — your LDAP directory is up and running and accessible from your local machine!_
+An LDAP entry is like at a DNS record or a row in a relational database — the basic entity that contains the data.
 
-## Creating an LDAP user
+In general, an LDAP entry consists of an identifier called the _distinguished name_ (`dn`) and a set of attributes, such as `objectClass`, `cn` (_common name_), `o` (_organisation_), or `userPassword`.
 
-An empty LDAP directory is not of much use, so let's create a user in it.
+_All in all, the above result tells you that your LDAP directory is working!_
 
-The first user that you want to manage in your LDAP directory is Alice:
+## Creating an LDAP user entry
+
+Currently there's not much useful informatin in your LDAP directory, but let's change that.
+
+Your goal is to create an entry for the user Alice in the LDAP directory.
+
+The following information should be saved:
 
 - First name: Alice
 - Last name: Wonderland
 - Username: `alice`
 - Password: `alicepassword`
-- Groups: `dev`
+- Group: `dev`
 
-All in all, this defines a username of `alice`, a password of `alicepassword` and a group membership in the `dev` group for Alice Wonderland.
+To store this as an LDAP entry, you have to express it in the [LDAP Data Interchange Format (LDIF)](https://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format) format.
 
-To store this information in the LDAP directory, you have to express it in the [LDAP Data Interchange Format (LDIF)](https://en.wikipedia.org/wiki/LDAP_Data_Interchange_Format) as follows follows:
+Here's how this looks like (save the following in a file named `alice.ldif`):
 
 ```title=alice.ldif
 dn: cn=alice,dc=mycompany,dc=com
 objectClass: top
 objectClass: inetOrgPerson
-cn: alice
 gn: Alice
 sn: Wonderland
+cn: alice
 userPassword: alicepassword
 ou: dev
 ```
 
-Go on and save the above in a file named `alice.ldif`.
+The above specification defines an entry with a _distinguished name_ (`dn`) of `cn=alice,dc=mycompany,dc=com` which will be the unique identifier of this entry in your LDAP directory.
 
-In general, an LDIF entry consists of a _distinguished name_ (`dn`, here `cn=alice,dc=mycompany,dc=com`)  and a set of attributes; the attribute types in the above entry are:
+Furthermore, the entry has a set of attributes:
 
-- `objectClass`: defines the type of the entry and which other attributes are allowed and mandatory; the [`inetOrgPerson`](https://tools.ietf.org/html/rfc2798) object class is commonly used for storing user information
-_ `cn`: is the _common name_ attribute and is commonly used for the username
-- `gn`: is the _given name_ attribute
-- `sn`: is the _surname_ attribute
-- `userPassword`: the user's password
-- `ou`: is the _organisational unit_ attribute and is commonly used for defining grou memberships
+- `objectClass` defines the type of the entry and dictates which other attributes are allowed or mandatory; [`inetOrgPerson`](https://tools.ietf.org/html/rfc2798) is a standard object class for storing user information.
+- `gn` stands for _given name_
+- `sn` stands for _surname_
+- `cn` stands for _common name_ and is commonly used for the username
+- `userPassword` is the user's personal password
+- `ou` stands for _organisational unit_ and is commonly used to express affiliations
 
-To add an entry to an LDAP directory (through the [LDAP Add](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Add) operation), you can use the `ldapadd` tool.
+To create this entry in the LDAP directory, you can use the `ldapadd` command-line tool which allows you to make [LDAP Add](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Add) requests to an LDAP directory.
 
-> `ldapadd` comes bundled with `ldapsearch` and other LDAP client tools, so you should have it installed on your system by now.
+> If you have installed `ldapsearch`, you should also have `ldapadd` because they are bundled together.
 
+Run the following command:
 
-You can create the entry for Alice tha you just defined with the following command (again, replace `<IP>` with the external IP address of your compute instance):
-
-```terminal|command=1|title=bash
-ldapadd -H ldap://<IP> -x -D cn=admin,dc=mycompany,dc=com -w adminpassword -f alice.ldif
+```terminal|command=1-2|title=bash
+ldapadd -H ldap://<AUTHN-EXTERNAL-IP> \
+  -x -D cn=admin,dc=mycompany,dc=com -w adminpassword -f alice.ldif
 ```
+> Please replace `<AUTHN-EXTERNAL-IP>` with the _external IP address_ of the `authn` compute instance.
 
-The output should say something like:
+The output should say:
 
 ```
 adding new entry "cn=alice,dc=mycompany,dc=com"
 ```
 
-_Sounds like the entry for Alice has been added!_
+_Sounds good!_
 
-But to be sure, let's query the LDAP directory again to see if the entry is really there.
+To be sure that the entry has been added, let's try to query it witht the following command:
 
-In particular, you are looking for an entry with a `cn` attribute (username) of `alice` — here's how you can query for it:
-
-```terminal|command=1-2|title=bash
-ldapsearch -LLL -H ldap://<IP> -x -D cn=admin,dc=mycompany,dc=com -w adminpassword -b dc=mycompany,dc=com cn=alice
+```terminal|command=1-3|title=bash
+ldapsearch -LLL -H ldap://<AUTHN-EXTERNAL-IP> \
+  -x -D cn=admin,dc=mycompany,dc=com -w adminpassword \
+  -b dc=mycompany,dc=com cn=alice
 ```
 
-> The last argument in the above command defines the _filter_ for the [LDAP Search](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare) request. It causes the query to return only those entries that match the filter expression.
+Note that this command is similar to the one you issued previously, but it has an additional argument at the end (`cn=alice`) — this is the _search filter_ and it causes only those entries to be returned that match the filter.
 
-The output should be:
+In your case, the filter is `cn=alice` and there is currently only single entry with a `cn=alice` attribute in your LDAP directory — so the command should print the following output:
 
 ```
 dn: cn=alice,dc=mycompany,dc=com
 objectClass: top
 objectClass: inetOrgPerson
-cn: alice
 givenName: Alice
 sn: Wonderland
+cn: alice
 userPassword:: YWxpY2VwYXNzd29yZA==
 ou: dev
 ```
 
-_Bingo!_
+That's precisely the entry that you just created, so it has indeed been added to the database.
 
-That's precisely the entry for Alice that you just created.
+> Note that the password in the output is [Base64-encoded](https://en.wikipedia.org/wiki/Base64), which is done automatically by LDAP. You can decode it with `echo YWxpY2VwYXNzd29yZA== | base64 -D` which results in `alicepassword`.
 
-> The password in the output is [Base64](https://en.wikipedia.org/wiki/Base64) encoded. You can decode it with `echo YWxpY2VwYXNzd29yZA== | base64 -D` which results in `alicepassword`.
+_Congratulations — you're successfully operating an LDAP directory!_
 
-Let's summarise what you have at this point:
+The real goal of all this is, of course, to enable LDAP authentication for your (future) Kubernetes cluster.
 
-- You have an LDAP directory containing an entry for the user Alice
-- The entry defines that Alice has a username of `alice` and a password of `alicepassword`
-- These are Alice's credentials that she might use with various applications in your organisation
-- This works by Alice presenting these credentials to the application, and the application verifying them with the LDAP directory 
+_Let's take care of this next!_
 
-And here we come to the goal of this tutorial: you want to enable this type of authentication for your future Kubernetes cluster too.
+## Using the Webhook Token authentication plugin
 
-In particular, Alice should be able to authenticate to Kubernetes with her username `alice` and password `alicepassword` from the LDAP directory.
+In this tutorial, you will use the [Webhook Token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) authentication plugin to implement LDAP authentiation for your Kubernetes cluster.
 
-This has great advantages:
-
-- No need for Alice to remember new credentials just for Kubernetes — Alice can just reuse her existing credentials
-- No need for an admin to manage a separate user account for Alice on the Kubernetes cluster — all user information is managed centrally in the LDAP directory
-- If some user information about Alice changes (such as the password), it has to be updated only once — in the LDAP directory — and the changes are immediately reflected across all the applications that use LDAP authentication
-
-_In the next section, you will start implementing the binding of Kubernetes to your LDAP directory._
-
-## Creating a webhook token authentication service
-
-You will implement LDAP authentication for your Kubernetes cluster by the means of the [Webhook Token authentication plugin](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication).
-
-Here is how it works:
+Here is how the Webhook Token authentication plugin works:
 
 ![Webhook Token authentication plugin](assets/webhook-token-authentication-plugin.svg)
 
-The Webhook Token authentication plugin requires requests to the Kubernetes API to include an [HTTP bearer token](https://swagger.io/docs/specification/authentication/bearer-authentication/).
+To be authenticatable by the Webhook Token authentication plugin, requests must include an [HTTP bearer token](https://swagger.io/docs/specification/authentication/bearer-authentication/).
 
-> An HTTP bearer token is included as an HTTP header of the form `Authorization: Bearer <TOKEN>`.
+> An HTTP bearer token is included in the `Authorization` header as as `Authorization: Bearer <TOKEN>`.
 
-When it receives such a request, the Webhook Token authentication plugin extracts the bearer token and submits it to the configured _webhook token authentication service_.
+When the Webhook Token authentication plugin receives a request, it extracts the HTTP bearer token and submits it to an external webhook token authentication service.
 
-This authentication service is provided by the cluster administrator (that is, by you) and it may run either inside or outside the cluster — it is _not_ part of Kubernetes.
+The service is invoked with an HTTP POST request (hence the name "webhook") and the token is submitted in a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1-authentication-k8s-io) object in JSON format.
 
-The task of the authentication service is to verify the received token and return an appropriate response to the Kubernetes API server.
+The webhook token authentication service is provided and operated by the cluster administrator and it must already exist when the API server is configured with the Webhook Token authentication plugin — it is completely independent from Kubernetes.
 
-In the case that the token is valid, the response must include the _user info_ data fields.
+The task of the authentication service is to verify the received token and, in the case that the token is valid, establish the identify of the user who made the request.
 
-Based on this response, the Webhook Token authentication plugin then either accepts or rejects the request.
+This user identity is then returned as a [_user info_](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#userinfo-v1beta1-authentication-k8s-io) data structure to the API server (again in a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1-authentication-k8s-io) object).
 
-As you can see, the webhook token authentication service may implement any logic you like and that's why the Webhook Token authentication plugin can be used to bind any desired authentication method to the cluster.
+_The crucial point is that the webhook token authentication service may implement any imaginable logic to verify the token — there are no limits._
 
-_So, how do you implement LDAP authentication with the Webhook Token authentication plugin?_
+That's why the Webhook Token authentication plugin allows to implement any desired authentication method.
 
-Here's the solution that you will use:
+**So, how does a concrete solution for LDAP authentication look like?**
+
+Here's how:
 
 ![LDAP authentication](assets/ldap-authentication.svg)
 
-The HTTP bearer token that users include in their requests has the following form:
+In your solution, the HTTP bearer token has the following form:
 
 ```
 username:password
 ```
 
-Where `username` and `password` are the username and password of a user from the LDAP directory, respectively.
+Where `username` and `password` are the username and password of a user as saved in the LDAP directory.
 
-The authentication service extracts the `username` and `password` parts from this token and queries the LDAP directory for a user with the given username and password.
+> In a real-world scenario, you would most probably [Base64-encode](https://en.wikipedia.org/wiki/Base64) the token to correctly handle special characters in the token. For simplicity, this is omitted from this tutorial.
 
-_This is a similar LDAP query to the one you previously did with `ldapsearch`._
+When this token is submitted to the webhook token authentication service, the service extracts the `username` and `password` parts of the token and verifies them by talking to the LDAP directory.
 
-If such a user exists in the LDAP directory, then the token is valid, else it is invalid.
+In particular, the authentication service performs an [LDAP Search](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare) querying wether there exists a user entry with the given username and password:
 
-> The _user info_ that the authentication service must return in the case that the token is valid is also obtained from the corresponding LDAP user entry.
+- If yes, the token is valid, and the authentication service returns the identity of this user (_user info_) to the API server
+- If no, the token is invalid and the authentication service returns a corresponding negative resopnse to the API server
 
-At this point, you have already created the LDAP directory
+You will implement this authentication service from scratch in [Go](https://golang.org/).
 
+_So, the road to your Kubernetes cluster with LDAP authentication looks as follows:_
+
+1. Implement and deploy the webhook token authentication service
+1. Create the Kubernetes cluster and configure it to use the webhook token authentication service
+
+_Let's tackle the implementation of the authentication service next._
+
+## Implementing the webhook token authentication service
+
+As mentioned, you will implement the authentication service in Go, so you have to make sure to have Go installed on your system.
+
+If you're using macOS, you can install Go simply with:
+
+```terminal|command=1|title=bash
+brew install go
+```
+
+If you're using Linux, you can install the latest version of Go as described in the [Go documentation](https://golang.org/doc/install#tarball):
+
+```terminal|command=1,2,3|title=bash
+wget https://dl.google.com/go/go1.14.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.14.linux-amd64.tar.gz
+echo "PATH=$PATH:/usr/local/go/bin" >>~/.bash_profile && . ~/.bash_profile
+```
+
+You can find the complete source code of the authentication service in the file [`authn.go`](https://github.com/learnk8s/authentication/blob/master/authn.go) in [this GitHub repository](https://github.com/learnk8s/authentication).
+
+For the quickest result, you may just download this file to your local machine:
+
+```terminal|command=1|title=bash
+wget https://raw.githubusercontent.com/learnk8s/authentication/master/authn.go
+```
+
+Or you may type the code yourself to be sure you understand every part of it.
+
+_Let's go through this source code file step by step._
+
+The implementation starts with the following code:
+
+```go|title=authn.go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/go-ldap/ldap"
+	"io/ioutil"
+	"k8s.io/api/authentication/v1"
+	"log"
+	"net/http"
+	"os"
+	"strings"
+)
+# ...
+```
+
+As usual in Go, a source file starts with the package declaration and the list of imported packages.
+
+Note that one of the imported packages, `k8s.io/api/authentication/v1`, comes directly from the Kubernetes source code — this will prove very useful in your implementation.
+
+> The ability to directly import packages from the Kubernetes source code is one of the main advantages of using Go for Kubernetes-related applications.
+
+The next part looks as follows:
+
+```go|title=authn.go
+# ...
+var ldapURL string
+
+func main() {
+	ldapURL = "ldap://" + os.Args[1]
+	log.Printf("Using LDAP directory %s\n", ldapURL)
+	log.Println("Listening on port 443 for requests...")
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServeTLS(":443", os.Args[3], os.Args[2], nil))
+}
+# ...
+```
+
+This is the `main` function of your implementation, and it sets up a web server serving HTTPS — besides that, it also ready the IP address of the LDAP directory from a command-line argument.
+
+The bulk of the rest of the code will be the implementation of the HTTPS handler function.
+
+This is the function that will handle the requests from the API server carrying the HTTP bearer token in a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1beta1-authentication-k8s-io) object.
+
+Here's how it starts:
+
+```go|title=authn.go
+# ...
+func handler(w http.ResponseWriter, r *http.Request) {
+
+	// Read body of POST request
+	b, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		writeError(w, err)
+		return
+	}
+	log.Printf("Receiving: %s\n", string(b))
+# ...
+```
+
+The above code reads the body data of the received HTTPS POST request which is supposed to be a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1beta1-authentication-k8s-io) object in JSON format.
+
+The following code deserialises this body data into a Go `TokenReview` structure:
+
+```go|title=authn.go
+# ...
+	// Unmarshal JSON from POST request to TokenReview object
+	var tr v1.TokenReview
+	err = json.Unmarshal(b, &tr)
+	if err != nil {
+		writeError(w, err)
+		return
+	}
+#...
+```
+
+Note that the `TokenReview` type comes from a [Kubernetes source code package](https://github.com/kubernetes/api/blob/master/authentication/v1/types.go), which makes it very easy for you to deserialise the JSON object.
+
+The following code extracts the username and password parts from the HTTP bearer token in the TokenReview object:
+
+```go|title=authn.go
+# ...
+	// Extract username and password from the token in the TokenReview object
+	s := strings.SplitN(tr.Spec.Token, ":", 2)
+	if len(s) != 2 {
+		writeError(w, fmt.Errorf("badly formatted token: %s", tr.Spec.Token))
+		return
+	}
+	username, password := s[0], s[1]
+# ...
+```
+
+The following code makes an [LDAP Search](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare) request to the LDAP directory:
+
+```go|title=authn.go
+# ...
+	// Make LDAP Search request with extracted username and password
+	userInfo, err := ldapSearch(username, password)
+	if err != nil {
+		writeError(w, fmt.Errorf("failed LDAP Search request: %v", err))
+		return
+	}
+# ...
+```
+The request effectively queries the LDAP directory for a user entry with the given username and password.
+
+> You will implement the `ldapSearch` function in a moment.
+
+The following code prepares the response (which is also a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1beta1-authentication-k8s-io) object) to the API server:
+
+```go|title=authn.go
+# ...
+	// Set status of TokenReview object
+	if userInfo == nil {
+		tr.Status.Authenticated = false
+	} else {
+		tr.Status.Authenticated = true
+		tr.Status.User = *userInfo
+	}
+# ...
+```
+
+Finally, the following code sends the response back to the API server:
+
+```go|title=authn.go
+# ...
+	// Marshal the TokenReview to JSON and send it back
+	b, err = json.Marshal(tr)
+	if err != nil {
+		writeError(w, err)
+		return
+	}
+	w.Write(b)
+	log.Printf("Returning: %s\n", string(b))
+}
+```
+
+That was the complete HTTPS handler function.
+
+Related to this is also the following helper function for handling errors:
+
+```go|title=authn.go
+# ...
+func writeError(w http.ResponseWriter, err error) {
+	err = fmt.Errorf("Error: %v", err)
+	w.WriteHeader(http.StatusInternalServerError) // 500
+	fmt.Fprintln(w, err)
+	log.Println(err)
+}
+# ...
+```
+
+The last part of the implementation is the `ldapSearch` function that makes the actual request to th LDAP directory.
+
+That's how it starts:
+
+```go|title=authn.go
+# ...
+func ldapSearch(username, password string) (*v1.UserInfo, error) {
+
+	// Connect to LDAP directory
+	l, err := ldap.DialURL(ldapURL)
+	if err != nil {
+		return nil, err
+	}
+	defer l.Close()
+# ...
+```
+
+The above code establishes the initial connection to the LDAP directory.
+
+The following code authenticates to the LDAP directory as the LDAP admin user:
+
+```go|title=authn.go
+# ...
+	// Authenticate as LDAP admin user
+	err = l.Bind("cn=admin,dc=mycompany,dc=com", "adminpassword")
+	if err != nil {
+		return nil, err
+	}
+# ...
+```
+
+Note that this corresponds to the `-x`, `-D`, and `-w` options that you used in your previous manual LDAP requests.
+
+The following code performs the actual LDAP Search request:
+
+```go|title=authn.go
+# ...
+	// Execute LDAP Search request
+	searchRequest := ldap.NewSearchRequest(
+		"dc=mycompany,dc=com",  // Search base
+		ldap.ScopeWholeSubtree, // Search scope
+		ldap.NeverDerefAliases, // Dereference aliases
+		0,                      // Size limit (0 = no limit)
+		0,                      // Time limit (0 = no limit)
+		false,                  // Types only
+		fmt.Sprintf("(&(objectClass=inetOrgPerson)(cn=%s)(userPassword=%s))", username, password), // Filter
+		nil, // Attributes (nil = all user attributes)
+		nil, // Additional 'Controls'
+	)
+	result, err := l.Search(searchRequest)
+	if err != nil {
+		return nil, err
+	}
+# ...
+```
+
+The crucial part is the _filter_ argument: it effectively searches for an LDAP entry with object class `intetOrgPerson`, and a `cn` and `userPassword` attribute corresponding to the provided username and password.
+
+If such an entry exists, then the provided username and password, and thus the token, is valid — else it is not.
+
+Finally, the following code inspects the response from the LDAP directory and constructs the return value of the function:
+
+```go|title=authn.go
+# ...
+	// If LDAP Search produced a result, return UserInfo, otherwise, return nil
+	if len(result.Entries) == 0 {
+		return nil, nil
+	} else {
+		return &v1.UserInfo{
+			Username: username,
+			UID:      username,
+			Groups:   result.Entries[0].GetAttributeValues("ou"),
+		}, nil
+	}
+}
+```
+
+If the LDAP response includes an entry, the code constructs a `UserInfo` structure (which is als provided by the Kubernetes source code package) that describes the identity of the user and returns it to the calling function.
+
+That's it — the complete code of your webhook token authentication service!
+
+_The next step is to deploy the code._
 
 ## Deploying the webhook token authentication service
 
-Compile the webhook token authentication service with:
+To deploy the service, you first of all have to compile the code:
 
 ```terminal|command=1|title=bash
 GOOS=linux GOARCH=amd64 go build authn.go
 ```
 
-Upload the resulting binary to the compute instance:
+This should produce a binary named `authn`.
+
+You will deploy the service to the same GCP compute instance that also hosts the LDAP directory.
+
+You can upload the binary to this compute instance as follows:
 
 ```terminal|command=1|title=bash
 gcloud compute scp authn root@authn:
 ```
 
-Log in to the compute instance
+To launch the service, log in to the compute instance with SSH:
 
 ```terminal|command=1|title=bash
 gcloud compute ssh root@authn
 ```
 
-On the instance, create a private key and certificate for the authentication service:
+The service depends on a private key and certificate for serving HTTPS.
+
+You can create both of them with the following command:
 
 ```terminal|command=1|title=bash
 openssl req -x509 -newkey rsa:2048 -nodes -subj "/CN=localhost" -keyout key.pem -out cert.pem
 ```
 
-Now, launch the service with:
+> Note that the above command creates a self-signed certificate. This is fine for the purpose of this tutorial, but in a production scenario, you should use a certificate that's signed by a proper certificate authority (CA).
+
+Now, launch the service as follows:
 
 ```terminal|command=1|title=bash
 ./authn localhost key.pem cert.pem &>/var/log/authn.log &
 ```
 
-Your authentication service should now be up and running on the compute instance.
+Note the following about this command:
 
-> You can check the logs of your service with `tail -f /var/log/authn.log` and you can terminate it with `pkill authn` (for example, if you want to restart it).
+- The first command-line argument is the IP address of the LDAP directory. Since the service runs on the same host as the LDAP directory, you can use `localhost` there.
+- The `key.pem` and `cert.pem` arguments are the private key and certificate that you just created above
+- The output of the command is directed to the log file `/var/log/authn.log`
 
-Log out from the compute instance:
+_Your service should now be up and running!_
+
+You can stream its logs with:
 
 ```terminal|command=1|title=bash
-exit
+tail -f /var/log/authn.log
 ```
 
-Let's test if your authentication service works as expected by submitting it a sample TokenReview object.
+_Let's test if the service works as expected._
 
-Save the following in a file:
+To do so, create the following file on your local machine:
 
 ```json|title=tokenreview.json
 {
@@ -356,15 +721,19 @@ Save the following in a file:
 }
 ```
 
-Now, submit this TokenReview object to your authentication service with:
+The above is a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1beta1-authentication-k8s-io) object in JSON format — that's exactly what will be received by your authentication service from the Kubernetes API server in production.
+
+Note also that the TokenReview object contains the token `alice:alicepassword` which is the valid HTTP bearer token of the user Alice in your LDAP directory.
+
+Now, in a separate terminal window on your local machine, submit this TokenReview object to the authentication service as an HTTP POST request:
 
 ```terminal|command=1|title=bash
-curl -k -X POST -d @tokenreview.json https://<IP>
+curl -k -X POST -d @tokenreview.json https://<AUHTN-EXTERNAL-IP>
 ```
 
-> Please replace `<IP>` with the _external IP address_ of your compute instance.
+The authentication service should print a few log lines, indicating that a request was received and a response was sent back!
 
-You should get back a JSON object of the following form:
+And the result of the request should look as follows:
 
 ```json
 {
@@ -389,13 +758,21 @@ You should get back a JSON object of the following form:
 }
 ```
 
-The JSON output that you get from the above command is compressed on a single line — for a more readable formatting, as shown above, you can pipe the output of the command to [`jq`](https://stedolan.github.io/jq/):
+Note that the actual response of the above command is compresses on a single line — but you can pipe the ouput to [`jq`](https://stedolan.github.io/jq/) to nicely format it as shown above:
 
 ```terminal|command=1|title=bash
-curl -k -X POST -d @tokenreview.json https://<IP> | jq
+curl -k -X POST -d @tokenreview.json https://<AUTHN-EXTERNAL-IP> | jq
 ```
 
-## Creating a Kubernetes cluster
+The response object is a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1beta1-authentication-k8s-io) object — as expected by the Kubernetes API sever.
+
+Furhermore, this TokenReview object has the Status.Authenticated field set to `true` and the Status.User field set to the user identity `alice` of the identified user.
+
+This means that the authentication service successfully verified the token that you submitted and associated with the user Alice.
+
+_Your webhook token authentication service works and is ready to be used by Kubernetes!_
+
+## Creating the Kubernetes cluster
 
 Create a compute instance for the single-node Kubernetes cluster:
 
@@ -776,7 +1153,3 @@ kube-system   kube-scheduler-k8s                 1/1     Running   0          80
 _Bingo!_
 
 Since Alice's password is now officially `otheralicepassword`, the token is valid and the request succeeds.
-
-
-
-
