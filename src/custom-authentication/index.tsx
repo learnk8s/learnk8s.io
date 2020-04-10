@@ -9,7 +9,7 @@ export const CustomAuthentication = {
   id: 'custom-authentication',
   url: '/custom-authentication',
   title: 'Implementing a custom Kubernetes authentication method',
-  description: `Kubernetes allows integrating a cluster with any authentication method. In this article, you will learn how to implement LDAP authentication for your Kubernetes cluster.`
+  description: `Kubernetes allows integrating a cluster with any authentication method. In this article, you will learn how to implement LDAP authentication for your Kubernetes cluster.`,
 }
 
 export function Register(store: Store<State, Actions>) {
@@ -19,10 +19,7 @@ export function Register(store: Store<State, Actions>) {
       id: 'og-custom-authentication',
       pageId: CustomAuthentication.id,
       image: (
-        <img
-          src='src/custom-authentication/title.png'
-          alt='Implementing a custom Kubernetes authentication method'
-        />
+        <img src='src/custom-authentication/title.png' alt='Implementing a custom Kubernetes authentication method' />
       ),
       title: 'Implementing a custom Kubernetes authentication method',
       description: `Kubernetes supports some predefined authentication methods out-of-the-box, such as client certificates, bearer tokens, and OpenID Connect tokens. However, Kubernetes also allows integrating arbitrary custom authentication methods with a cluster. In this article, you will learn how to implement LDAP authentication for your Kubernetes cluster.`,

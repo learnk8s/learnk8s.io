@@ -284,6 +284,7 @@ Run the following command:
 ldapadd -H ldap://<AUTHN-EXTERNAL-IP> \
   -x -D cn=admin,dc=mycompany,dc=com -w adminpassword -f alice.ldif
 ```
+
 > Please replace `<AUTHN-EXTERNAL-IP>` with the _external IP address_ of the `authn` compute instance.
 
 The output should say:
@@ -522,6 +523,7 @@ The following code makes an [LDAP Search](https://en.wikipedia.org/wiki/Lightwei
     }
 # ...
 ```
+
 The request effectively queries the LDAP directory for a user entry with the given username and password.
 
 > You will implement the `ldapSearch` function in a moment.
@@ -928,6 +930,7 @@ kubectl --kubeconfig /etc/kubernetes/admin.conf \
 Second, you have to install a CNI plugin in the cluster (which is not done automatically by kubeadm).
 
 Let's use the [Cilium](https://cilium.io/) CNI plugin, which you can install as follows:
+
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig /etc/kubernetes/admin.conf \
   apply -f https://raw.githubusercontent.com/cilium/cilium/1.7.2/install/kubernetes/quick-install.yaml
@@ -1034,7 +1037,8 @@ _The authentication succeeded!_
 The response of the kubectl command, however, should say something like this:
 
 ```
-Error from server (Forbidden): pods is forbidden: User "alice" cannot list resource "pods" in API group "" at the cluster scope
+Error from server (Forbidden): pods is forbidden: User "alice" cannot list resource "pods" in API group "" \
+  at the cluster scope
 ```
 
 Get this: this message has nothing to do with _authentication_ but with _authorisation_:
