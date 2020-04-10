@@ -50,8 +50,8 @@
             <path d="M446.501041,307.002081 C449.929017,307.002081 452.5,309.658317 452.5,313.000033 C452.5,316.427433 449.757619,319.083669 446.329642,318.997984 C442.987365,318.912299 440.416382,316.256063 440.502081,312.828663 C440.416382,309.486947 443.073064,306.916396 446.501041,307.002081 Z" id="Shape" fill="#151D38"></path>
             <path d="M378.457447,319 C375.138298,319 372.5,316.446809 372.5,313.042553 C372.5,309.638298 374.968085,307.085106 378.37234,307 C381.861702,307 384.5,309.553191 384.5,312.957447 C384.414894,316.361702 381.861702,319 378.457447,319 Z" id="Shape" fill="#151D38"></path>
         </g>
-        <text id="Kubernetes-API-SERVE" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" letter-spacing="-0.16" fill="#333333">
-            <tspan x="1481.00244" y="1887">KUBERNETES API SERVER</tspan>
+        <text id="API-SERVER" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" letter-spacing="-0.16" fill="#333333">
+            <tspan x="1665.45021" y="1887">API SERVER</tspan>
         </text>
         <text id="User" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" letter-spacing="-0.16" fill="#333333">
             <tspan x="184.187543" y="1494">USER</tspan>
