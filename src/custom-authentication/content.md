@@ -8,7 +8,7 @@ This means that users will be able to authenticate to Kubernetes with their exis
 
 ![Kubernetes LDAP authentication](assets/intro.svg)
 
-However, LDAP is used just as an example here — the goal of this article is to show the general principles for integrate custom authentication methods with Kubernetes.
+However, LDAP is used just as an example here — the goal of this article is to show the general principles for integrating custom authentication methods with Kubernetes.
 
 _Think of [Kerberos](https://en.wikipedia.org/wiki/Kerberos%5f%28protocol%29), [Keycloak](https://www.keycloak.org/), [OAuth](https://en.wikipedia.org/wiki/OAuth), [SAML](https://en.wikipedia.org/wiki/SAML%5f2.0), custom certificates, custom tokens, and any kind of existing single-sign on infrastructure._
 
@@ -44,11 +44,11 @@ Each authentication plugin implements a specific authentication method, and an i
 
 If any of the authentication plugins can successfully authenticate a request, then authentication is complete and the request proceeds to the authorisation stage.
 
-If none of the authentication plugin can authenticate the request, the request is rejected with a [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) HTTP status code.
+If none of the authentication plugins can authenticate the request, the request is rejected with a [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) HTTP status code.
 
 > Note that the [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) status code is a [long-standing misnomer](https://stackoverflow.com/a/6937030/4747193) as it indicates _authentication_ errors and **not** _authorisation_ errors. The HTTP status code for authorisation errors is [403 Forbidden](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403).
 
-_So what authentication plugin do there exist?_
+_So what authentication plugins do there exist?_
 
 Well, first of all, Kubernetes does not provide an open plugin mechanism that allows you to develop your own plugins and simply plug them into Kubernetes.
 
@@ -71,7 +71,7 @@ Furthermore, there are two "open-ended" authentication plugins that don't implem
 
 The flexibility of the Kubernetes authentication mechanisms comes from these two open-ended authentication plugins.
 
-_They allow to integrate any desired authentication method with a Kubernetes cluster._
+_They allow integrating any desired authentication method with a Kubernetes cluster._
 
 And that's what the tutorial in the remainder of this article is about.
 
@@ -101,7 +101,7 @@ In general, [Lightweight Directory Access Protocol (LDAP)](https://en.wikipedia.
 
 In practice, LDAP is often used to centrally store user information, such as personal data (name, address, email address, etc.), usernames, passwords, group affiliations and so on.
 
-This information is then accessed by various applications for authentication purposes, such as validating the username and passwod supplied by the user.
+This information is then accessed by various applications for authentication purposes, such as validating the username and password supplied by the user.
 
 _This is called [LDAP authentication](https://connect2id.com/products/ldapauth/auth-explained)._
 
@@ -181,9 +181,9 @@ exit
 
 _Let's test if you can access the LDAP directory from your local machine._
 
-To do so, you can use the `ldapsearch` command-line tool which allows to make [LDAP Search](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare) requests to an LDAP directory.
+To do so, you can use the `ldapsearch` command-line tool which allows making [LDAP Search](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare) requests to an LDAP directory.
 
-If you're on macOS, then `ldapsearch` shoud be already installed — if you're on Linux, you can install it with:
+If you're on macOS, then `ldapsearch` should be already installed — if you're on Linux, you can install it with:
 
 ```terminal|command=1|title=bash
 sudo apt-get install ldap-utils
@@ -236,7 +236,7 @@ _All in all, the above result tells you that your LDAP directory is working!_
 
 ## Creating an LDAP user entry
 
-Currently there's not much useful informatin in your LDAP directory, but let's change that.
+Currently, there's not much useful information in your LDAP directory, but let's change that.
 
 Your goal is to create an entry for the user Alice in the LDAP directory.
 
@@ -294,7 +294,7 @@ adding new entry "cn=alice,dc=mycompany,dc=com"
 
 _Sounds good!_
 
-To be sure that the entry has been added, let's try to query it witht the following command:
+To be sure that the entry has been added, let's try to query it with the following command:
 
 ```terminal|command=1-3|title=bash
 ldapsearch -LLL -H ldap://<AUTHN-EXTERNAL-IP> \
@@ -329,7 +329,7 @@ _Let's take care of this next!_
 
 ## Using the Webhook Token authentication plugin
 
-In this tutorial, you will use the [Webhook Token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) authentication plugin to implement LDAP authentiation for your Kubernetes cluster.
+In this tutorial, you will use the [Webhook Token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) authentication plugin to implement LDAP authentication for your Kubernetes cluster.
 
 Here is how the Webhook Token authentication plugin works:
 
@@ -343,15 +343,15 @@ When the Webhook Token authentication plugin receives a request, it extracts the
 
 The service is invoked with an HTTP POST request (hence the name "webhook") and the token is submitted in a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1-authentication-k8s-io) object in JSON format.
 
-The webhook token authentication service is provided and operated by the cluster administrator and it must already exist when the API server is configured with the Webhook Token authentication plugin — it is completely independent from Kubernetes.
+The webhook token authentication service is provided and operated by the cluster administrator and it must already exist when the API server is configured with the Webhook Token authentication plugin — it is completely independent of Kubernetes.
 
-The task of the authentication service is to verify the received token and, in the case that the token is valid, establish the identify of the user who made the request.
+The task of the authentication service is to verify the received token and, in the case that the token is valid, establish the identity of the user who made the request.
 
 This user identity is then returned as a [_user info_](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#userinfo-v1beta1-authentication-k8s-io) data structure to the API server (again in a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1-authentication-k8s-io) object).
 
 _The crucial point is that the webhook token authentication service may implement any imaginable logic to verify the token — there are no limits._
 
-That's why the Webhook Token authentication plugin allows to implement any desired authentication method.
+That's why the Webhook Token authentication plugin allows implementing any desired authentication method.
 
 **So, how does a concrete solution for LDAP authentication look like?**
 
@@ -371,10 +371,10 @@ Where `username` and `password` are the username and password of a user as saved
 
 When this token is submitted to the webhook token authentication service, the service extracts the `username` and `password` parts of the token and verifies them by talking to the LDAP directory.
 
-In particular, the authentication service performs an [LDAP Search](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare) querying wether there exists a user entry with the given username and password:
+In particular, the authentication service performs an [LDAP Search](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare) querying whether there exists a user entry with the given username and password:
 
 - If yes, the token is valid, and the authentication service returns the identity of this user (_user info_) to the API server
-- If no, the token is invalid and the authentication service returns a corresponding negative resopnse to the API server
+- If no, the token is invalid and the authentication service returns a corresponding negative response to the API server
 
 You will implement this authentication service from scratch in [Go](https://golang.org/).
 
@@ -421,15 +421,15 @@ The implementation starts with the following code:
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"github.com/go-ldap/ldap"
-	"io/ioutil"
-	"k8s.io/api/authentication/v1"
-	"log"
-	"net/http"
-	"os"
-	"strings"
+    "encoding/json"
+    "fmt"
+    "github.com/go-ldap/ldap"
+    "io/ioutil"
+    "k8s.io/api/authentication/v1"
+    "log"
+    "net/http"
+    "os"
+    "strings"
 )
 # ...
 ```
@@ -447,11 +447,11 @@ The next part looks as follows:
 var ldapURL string
 
 func main() {
-	ldapURL = "ldap://" + os.Args[1]
-	log.Printf("Using LDAP directory %s\n", ldapURL)
-	log.Println("Listening on port 443 for requests...")
-	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServeTLS(":443", os.Args[3], os.Args[2], nil))
+    ldapURL = "ldap://" + os.Args[1]
+    log.Printf("Using LDAP directory %s\n", ldapURL)
+    log.Println("Listening on port 443 for requests...")
+    http.HandleFunc("/", handler)
+    log.Fatal(http.ListenAndServeTLS(":443", os.Args[3], os.Args[2], nil))
 }
 # ...
 ```
@@ -468,13 +468,13 @@ Here's how it starts:
 # ...
 func handler(w http.ResponseWriter, r *http.Request) {
 
-	// Read body of POST request
-	b, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		writeError(w, err)
-		return
-	}
-	log.Printf("Receiving: %s\n", string(b))
+    // Read body of POST request
+    b, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        writeError(w, err)
+        return
+    }
+    log.Printf("Receiving: %s\n", string(b))
 # ...
 ```
 
@@ -484,13 +484,13 @@ The following code deserialises this body data into a Go `TokenReview` structure
 
 ```go|title=authn.go
 # ...
-	// Unmarshal JSON from POST request to TokenReview object
-	var tr v1.TokenReview
-	err = json.Unmarshal(b, &tr)
-	if err != nil {
-		writeError(w, err)
-		return
-	}
+    // Unmarshal JSON from POST request to TokenReview object
+    var tr v1.TokenReview
+    err = json.Unmarshal(b, &tr)
+    if err != nil {
+        writeError(w, err)
+        return
+    }
 #...
 ```
 
@@ -500,13 +500,13 @@ The following code extracts the username and password parts from the HTTP bearer
 
 ```go|title=authn.go
 # ...
-	// Extract username and password from the token in the TokenReview object
-	s := strings.SplitN(tr.Spec.Token, ":", 2)
-	if len(s) != 2 {
-		writeError(w, fmt.Errorf("badly formatted token: %s", tr.Spec.Token))
-		return
-	}
-	username, password := s[0], s[1]
+    // Extract username and password from the token in the TokenReview object
+    s := strings.SplitN(tr.Spec.Token, ":", 2)
+    if len(s) != 2 {
+        writeError(w, fmt.Errorf("badly formatted token: %s", tr.Spec.Token))
+        return
+    }
+    username, password := s[0], s[1]
 # ...
 ```
 
@@ -514,12 +514,12 @@ The following code makes an [LDAP Search](https://en.wikipedia.org/wiki/Lightwei
 
 ```go|title=authn.go
 # ...
-	// Make LDAP Search request with extracted username and password
-	userInfo, err := ldapSearch(username, password)
-	if err != nil {
-		writeError(w, fmt.Errorf("failed LDAP Search request: %v", err))
-		return
-	}
+    // Make LDAP Search request with extracted username and password
+    userInfo, err := ldapSearch(username, password)
+    if err != nil {
+        writeError(w, fmt.Errorf("failed LDAP Search request: %v", err))
+        return
+    }
 # ...
 ```
 The request effectively queries the LDAP directory for a user entry with the given username and password.
@@ -530,13 +530,13 @@ The following code prepares the response (which is also a [TokenReview](https://
 
 ```go|title=authn.go
 # ...
-	// Set status of TokenReview object
-	if userInfo == nil {
-		tr.Status.Authenticated = false
-	} else {
-		tr.Status.Authenticated = true
-		tr.Status.User = *userInfo
-	}
+    // Set status of TokenReview object
+    if userInfo == nil {
+        tr.Status.Authenticated = false
+    } else {
+        tr.Status.Authenticated = true
+        tr.Status.User = *userInfo
+    }
 # ...
 ```
 
@@ -544,14 +544,14 @@ Finally, the following code sends the response back to the API server:
 
 ```go|title=authn.go
 # ...
-	// Marshal the TokenReview to JSON and send it back
-	b, err = json.Marshal(tr)
-	if err != nil {
-		writeError(w, err)
-		return
-	}
-	w.Write(b)
-	log.Printf("Returning: %s\n", string(b))
+    // Marshal the TokenReview to JSON and send it back
+    b, err = json.Marshal(tr)
+    if err != nil {
+        writeError(w, err)
+        return
+    }
+    w.Write(b)
+    log.Printf("Returning: %s\n", string(b))
 }
 ```
 
@@ -562,15 +562,15 @@ Related to this is also the following helper function for handling errors:
 ```go|title=authn.go
 # ...
 func writeError(w http.ResponseWriter, err error) {
-	err = fmt.Errorf("Error: %v", err)
-	w.WriteHeader(http.StatusInternalServerError) // 500
-	fmt.Fprintln(w, err)
-	log.Println(err)
+    err = fmt.Errorf("Error: %v", err)
+    w.WriteHeader(http.StatusInternalServerError) // 500
+    fmt.Fprintln(w, err)
+    log.Println(err)
 }
 # ...
 ```
 
-The last part of the implementation is the `ldapSearch` function that makes the actual request to th LDAP directory.
+The last part of the implementation is the `ldapSearch` function that makes the actual request to the LDAP directory.
 
 That's how it starts:
 
@@ -578,12 +578,12 @@ That's how it starts:
 # ...
 func ldapSearch(username, password string) (*v1.UserInfo, error) {
 
-	// Connect to LDAP directory
-	l, err := ldap.DialURL(ldapURL)
-	if err != nil {
-		return nil, err
-	}
-	defer l.Close()
+    // Connect to LDAP directory
+    l, err := ldap.DialURL(ldapURL)
+    if err != nil {
+        return nil, err
+    }
+    defer l.Close()
 # ...
 ```
 
@@ -593,11 +593,11 @@ The following code authenticates to the LDAP directory as the LDAP admin user:
 
 ```go|title=authn.go
 # ...
-	// Authenticate as LDAP admin user
-	err = l.Bind("cn=admin,dc=mycompany,dc=com", "adminpassword")
-	if err != nil {
-		return nil, err
-	}
+    // Authenticate as LDAP admin user
+    err = l.Bind("cn=admin,dc=mycompany,dc=com", "adminpassword")
+    if err != nil {
+        return nil, err
+    }
 # ...
 ```
 
@@ -607,22 +607,22 @@ The following code performs the actual LDAP Search request:
 
 ```go|title=authn.go
 # ...
-	// Execute LDAP Search request
-	searchRequest := ldap.NewSearchRequest(
-		"dc=mycompany,dc=com",  // Search base
-		ldap.ScopeWholeSubtree, // Search scope
-		ldap.NeverDerefAliases, // Dereference aliases
-		0,                      // Size limit (0 = no limit)
-		0,                      // Time limit (0 = no limit)
-		false,                  // Types only
-		fmt.Sprintf("(&(objectClass=inetOrgPerson)(cn=%s)(userPassword=%s))", username, password), // Filter
-		nil, // Attributes (nil = all user attributes)
-		nil, // Additional 'Controls'
-	)
-	result, err := l.Search(searchRequest)
-	if err != nil {
-		return nil, err
-	}
+    // Execute LDAP Search request
+    searchRequest := ldap.NewSearchRequest(
+        "dc=mycompany,dc=com",  // Search base
+        ldap.ScopeWholeSubtree, // Search scope
+        ldap.NeverDerefAliases, // Dereference aliases
+        0,                      // Size limit (0 = no limit)
+        0,                      // Time limit (0 = no limit)
+        false,                  // Types only
+        fmt.Sprintf("(&(objectClass=inetOrgPerson)(cn=%s)(userPassword=%s))", username, password), // Filter
+        nil, // Attributes (nil = all user attributes)
+        nil, // Additional 'Controls'
+    )
+    result, err := l.Search(searchRequest)
+    if err != nil {
+        return nil, err
+    }
 # ...
 ```
 
@@ -634,20 +634,20 @@ Finally, the following code inspects the response from the LDAP directory and co
 
 ```go|title=authn.go
 # ...
-	// If LDAP Search produced a result, return UserInfo, otherwise, return nil
-	if len(result.Entries) == 0 {
-		return nil, nil
-	} else {
-		return &v1.UserInfo{
-			Username: username,
-			UID:      username,
-			Groups:   result.Entries[0].GetAttributeValues("ou"),
-		}, nil
-	}
+    // If LDAP Search produced a result, return UserInfo, otherwise, return nil
+    if len(result.Entries) == 0 {
+        return nil, nil
+    } else {
+        return &v1.UserInfo{
+            Username: username,
+            UID:      username,
+            Groups:   result.Entries[0].GetAttributeValues("ou"),
+        }, nil
+    }
 }
 ```
 
-If the LDAP response includes an entry, the code constructs a `UserInfo` structure (which is als provided by the Kubernetes source code package) that describes the identity of the user and returns it to the calling function.
+If the LDAP response includes an entry, the code constructs a `UserInfo` structure (which is also provided by the Kubernetes source code package) that describes the identity of the user and returns it to the calling function.
 
 That's it — the complete code of your webhook token authentication service!
 
@@ -655,7 +655,7 @@ _The next step is to deploy the code._
 
 ## Deploying the webhook token authentication service
 
-To deploy the service, you first of all have to compile the code:
+To deploy the service, first of all, you have to compile the code:
 
 ```terminal|command=1|title=bash
 GOOS=linux GOARCH=amd64 go build authn.go
@@ -758,15 +758,15 @@ And the result of the request should look as follows:
 }
 ```
 
-Note that the actual response that yout get with the above command is rendered as a single line — but you can pipe the ouput to [`jq`](https://stedolan.github.io/jq/) to nicely format it as shown above:
+Note that the actual response that you get with the above command is rendered as a single line — but you can pipe the output to [`jq`](https://stedolan.github.io/jq/) to nicely format it as shown above:
 
 ```terminal|command=1|title=bash
 curl -k -X POST -d @tokenreview.json https://<AUTHN-EXTERNAL-IP> | jq
 ```
 
-As you can see, the response object is a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1beta1-authentication-k8s-io) object — as expected by the Kubernetes API sever.
+As you can see, the response object is a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1beta1-authentication-k8s-io) object — as expected by the Kubernetes API server.
 
-Furhermore, the TokenReview object has the Status.Authenticated field set to `true` and the Status.User field set to the user identity of the identified user `alice`.
+Furthermore, the TokenReview object has the Status.Authenticated field set to `true` and the Status.User field set to the user identity of the identified user `alice`.
 
 _This means that the authentication service successfully verified the token that you submitted and associated it with the user `alice`._
 
@@ -837,7 +837,7 @@ The Webhook Token authentication plugin is enabled by setting the [`--authentica
 
 The value of this command-line flag must be a configuration file that describes how to access the webhook token authentication service.
 
-The format of this cofiguration file is described in the [Kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication).
+The format of this configuration file is described in the [Kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication).
 
 Here's how this file looks like (save the following in a file named `authn-config.yaml` on the compute instance):
 
@@ -863,8 +863,8 @@ current-context: authn
 
 Note that this configuration file — somewhat oddly — uses the [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) file format:
 
-- The `clusters` section, which usually describes the Kubernetes API server, in this case describes the webhook token authentication service
-- The `users` section, which usually describes a Kubernetes user, in this case describes the Kubernetes API server
+- The `clusters` section, which usually describes the Kubernetes API server, in this case, describes the webhook token authentication service
+- The `users` section, which usually describes a Kubernetes user, in this case, describes the Kubernetes API server
 
 In a general sense, a kubeconfig file describes how to access a remote service, and in this scenario, the webhook token authentication server is a remote service and the API server is a user of that service.
 
@@ -896,7 +896,7 @@ apiServer:
     - <K8S-EXTERNAL-IP>
 ```
 
-> Please replace `<K8S-EXTERNAL-IP>` with the _external IP address_ of the Kubernetes compute instance, which you can find out by rnning `gcloud compute instances list` on your local machine.
+> Please replace `<K8S-EXTERNAL-IP>` with the _external IP address_ of the Kubernetes compute instance, which you can find out by running `gcloud compute instances list` on your local machine.
 
 The kubeadm configuration file contains three sections:
 
@@ -958,7 +958,7 @@ To do so, you can download the kubeconfig file that you previously used on the i
 gcloud compute scp root@k8s:/etc/kubernetes/admin.conf .
 ```
 
-This kubeconfig file uses the _internal_ IP address of the Kubernetes compute instance in the the API server URL — since this IP address is not accessible from your local machine you have to replace it by the _external_ IP address of the instance:
+This kubeconfig file uses the _internal_ IP address of the Kubernetes compute instance in the API server URL — since this IP address is not accessible from your local machine you have to replace it by the _external_ IP address of the instance:
 
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig admin.conf \
@@ -1029,7 +1029,7 @@ kubectl --kubeconfig admin.conf --context alice@kubernetes \
 
 The log of the authentication service should print a few lines indicating that a request was received and a response was returned!
 
-If you look closely at the logs, you should see that the response indicaates that the token was valid.
+If you look closely at the logs, you should see that the response indicates that the token was valid.
 
 _The authentication succeeded!_
 
@@ -1042,7 +1042,7 @@ Error from server (Forbidden): pods is forbidden: User "alice" cannot list resou
 Get this: this message has nothing to do with _authentication_ but with _authorisation_:
 
 - As you can see, the user `alice` has been identified, which means that the request successfully passed the authentication stage
-- The messages says that the user `alice` does not have permission for the [`list Pods`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#read-pod-v1-core) operation, which means that the request failed at the authorisation stage
+- The message says that the user `alice` does not have permission for the [`list Pods`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#read-pod-v1-core) operation, which means that the request failed at the authorisation stage
 
 The reason that the request failed is that currently the user `alice` does not have any permissions for any API operations.
 
@@ -1082,7 +1082,7 @@ Your expectations came true — Alice is able to access the cluster with her cre
 
 Note well that you never configured these credentials in Kubernetes — the only place where they are saved is in the LDAP directory.
 
-> Note that if you make several request quickly one after another, only the first one results in an invocation of the authentication service. This is because the API server caches the responses from the webhook token authentication service for a limited amount of time and reuses them for future requests with the same token. By default, the cache duration is 2 minutes.
+> Note that if you make several requests quickly one after another, only the first one results in an invocation of the authentication service. This is because the API server caches the responses from the webhook token authentication service for a limited amount of time and reuses them for future requests with the same token. By default, the cache duration is 2 minutes.
 
 _Let's do some further experiments._
 
@@ -1106,7 +1106,7 @@ kubectl --kubeconfig admin.conf --context alice@kubernetes \
   get pods --all-namespaces
 ```
 
-If you look at the logs of the authentication service, you should see some lines being printed — however, if you look closely at the reponse object, you can see that it indicates that the verfification of the token failed.
+If you look at the logs of the authentication service, you should see some lines being printed — however, if you look closely at the response object, you can see that it indicates that the verification of the token failed.
 
 And the output of the kubectl should say the following:
 
@@ -1143,12 +1143,12 @@ ldapmodify -H ldap://<AUTHN-EXTERNAL-IP> -x -D cn=admin,dc=mycompany,dc=com -w a
 The output of the command should say something like (TODO: verify the following output):
 
 ```
-modifiying entry "cn=alice,dc=mycompany,dc=com"
+modifying entry "cn=alice,dc=mycompany,dc=com"
 ```
 
 That means, Alice's password has now been updated to `otheralicepassword` in the central LDAP user management system.
 
-Theoretically, Alice should now be able to authenticate to Kubernetes with her new password `otheralicepassword` (which is already save in the kubeconfig file).
+Theoretically, Alice should now be able to authenticate to Kubernetes with her new password `otheralicepassword` (which is already saved in the kubeconfig file).
 
 _But will it work?_
 
@@ -1177,7 +1177,7 @@ By now you can conclude that your custom LDAP authentication scheme works as exp
 
 **Congratulations!**
 
-You should also haved noticed the advantages of using a centralised user management system, such as LDAP:
+You should also have noticed the advantages of using a centralised user management system, such as LDAP:
 
 - Users can use their existing credentials for new applications and services
 - Updating a piece of user information (such as a password) makes it immediately available across all the applications that use the centralised authentication system
@@ -1207,7 +1207,7 @@ There are various directions where you can go from here:
 - LDAP authentication served just as an example authentication method in this article. You can use the same mechanisms to integrate Kubernetes with any authentication method.
   - In that case, you would develop a new webhook token authentication service that would verify the token in its own different way — for example, by connecting to a different type of user management system.
 - Alternatively to the [Webhook Token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) authentication plugin, you can also use the [Authenticating Proxy](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authenticating-proxy) authentication plugin to implement an integration with an arbitrary authentication method.
-  - With the Authenticatin Proxy authentication plugin, you have to put a proxy server in front of the Kubernetes cluster which takes care of authenticating users and conveys the user identity of identified users ot the Kubernetes API server over a trusted connection
+  - With the Authenticating Proxy authentication plugin, you have to put a proxy server in front of the Kubernetes cluster which takes care of authenticating users and conveys the user identity of identified users to the Kubernetes API server over a trusted connection
 - Finally, if you want to use an authentication method that's implemented by any of the other existing authentication plugins (such as X.509 client certificates, static bearer tokens, or OpenID Connect), you can directly use the corresponding authentication plugins without having to implement the logic yourself.
 
 Going even further, the logical next step after _authentication_ is _authorisation_.
