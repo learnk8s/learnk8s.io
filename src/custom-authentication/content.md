@@ -731,6 +731,8 @@ Now, in a separate terminal window on your local machine, make an HTTP POST requ
 curl -k -X POST -d @tokenreview.json https://<AUHTN-EXTERNAL-IP>
 ```
 
+> Please replace `<AUHTN-EXTERNAL-IP>` with the _external IP address_ of the `authn` compute instance.
+
 The authentication service should print a few log lines, indicating that a request was received and a response was sent back.
 
 And the result of the request should look as follows:
@@ -772,11 +774,7 @@ _This means that the authentication service successfully verified the token that
 
 If you want, you can repeat the request with an invalid token, such as `alice:wrongpassword` — in that case, the returned TokenReview object should have an empty Status field, indicating that the verification of the token failed.
 
-All of that indicates that your webhook token authentication service works as expected.
-
-_It is ready to be used by Kubernetes!_
-
-The next step is to create the Kubernetes cluster.
+_All of that indicates that your webhook token authentication service works as expected and is ready to be used by Kubernetes!_
 
 ## Creating the Kubernetes cluster
 
@@ -784,7 +782,7 @@ In this section, you will create a Kubernetes cluster and configure it to use th
 
 For the sake of this tutorial, you will just create a very small Kubernetes cluster consisting of a single node.
 
-_The configuration of the Webhook Token authentication plugin is the same, no matter what's the size of the cluster._
+> The configuration of the Webhook Token authentication plugin is the same, no matter what's the size of the cluster.
 
 You will create this cluster with [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/).
 
@@ -882,7 +880,7 @@ To do so, you have to create a [kubeadm configuration file](https://pkg.go.dev/k
 
 Here it is (save the following in a file named `kubeadm-config.yaml` on the compute instance):
 
-```yaml|highlight=5|title=kubeadm-config.yaml
+```yaml|title=kubeadm-config.yaml
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 apiServer:
@@ -1088,9 +1086,7 @@ _Let's do some further experiments._
 
 Imagine that someone wants to impersonate Alice but doesn't know her real password — say, the wrongdoer uses `otheralicepassword` instead of `alicepassword` in the authentication token.
 
-What will happen?
-
-Let's test it.
+_Let's test what will happen in this case._
 
 Change Alice's token in the kubeconfig file as follows:
 
@@ -1114,7 +1110,7 @@ And the output of the kubectl should say the following:
 error: You must be logged in to the server (Unauthorized)
 ```
 
-That means that the request was indeed rejected at the authentication stage — as expected!
+_That means that the request was indeed rejected at the authentication stage — no luck for the attacker!_
 
 > The `Unauthorized` in the kubectl response refers to a [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) HTTP response code which indicates an authentication error. You can see more details about the response by increasing the verbosity by appending, for example, `-v 5` to the request.
 
@@ -1173,7 +1169,7 @@ _Bingo!_
 
 Updating the password in the LDAP directory made it immediately valid for the Kubernetes cluster.
 
-By now you can conclude that your custom LDAP authentication scheme works as expected.
+_By now you can conclude that your custom LDAP authentication scheme works as expected._
 
 **Congratulations!**
 
@@ -1205,11 +1201,11 @@ This article showed how to implement [LDAP authentication](https://connect2id.co
 There are various directions where you can go from here:
 
 - LDAP authentication served just as an example authentication method in this article. You can use the same mechanisms to integrate Kubernetes with any authentication method.
-  - In that case, you would develop a new webhook token authentication service that would verify the token in its own different way — for example, by connecting to a different type of user management system.
+- In that case, you would develop a new webhook token authentication service that would verify the token in its own different way — for example, by connecting to a different type of user management system.
 - Alternatively to the [Webhook Token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) authentication plugin, you can also use the [Authenticating Proxy](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authenticating-proxy) authentication plugin to implement an integration with an arbitrary authentication method.
-  - With the Authenticating Proxy authentication plugin, you have to put a proxy server in front of the Kubernetes cluster which takes care of authenticating users and conveys the user identity of identified users to the Kubernetes API server over a trusted connection
+- With the Authenticating Proxy authentication plugin, you have to put a proxy server in front of the Kubernetes cluster which takes care of authenticating users and conveys the user identity of identified users to the Kubernetes API server over a trusted connection
 - Finally, if you want to use an authentication method that's implemented by any of the other existing authentication plugins (such as X.509 client certificates, static bearer tokens, or OpenID Connect), you can directly use the corresponding authentication plugins without having to implement the logic yourself.
 
 Going even further, the logical next step after _authentication_ is _authorisation_.
 
-_Stay tuned for a future article about this topic!_
+_Stay tuned for a future article about Kubernetes authorisation!_
