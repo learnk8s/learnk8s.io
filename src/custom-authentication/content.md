@@ -725,13 +725,13 @@ The above is a [TokenReview](https://kubernetes.io/docs/reference/generated/kube
 
 Note also that the TokenReview object contains the token `alice:alicepassword` which is the valid HTTP bearer token of the user Alice in your LDAP directory.
 
-Now, in a separate terminal window on your local machine, submit this TokenReview object to the authentication service as an HTTP POST request:
+Now, in a separate terminal window on your local machine, make an HTTP POST request to the authentication service with the TokenReview object as the body data:
 
 ```terminal|command=1|title=bash
 curl -k -X POST -d @tokenreview.json https://<AUHTN-EXTERNAL-IP>
 ```
 
-The authentication service should print a few log lines, indicating that a request was received and a response was sent back!
+The authentication service should print a few log lines, indicating that a request was received and a response was sent back.
 
 And the result of the request should look as follows:
 
@@ -758,23 +758,37 @@ And the result of the request should look as follows:
 }
 ```
 
-Note that the actual response of the above command is compresses on a single line — but you can pipe the ouput to [`jq`](https://stedolan.github.io/jq/) to nicely format it as shown above:
+Note that the actual response that yout get with the above command is rendered as a single line — but you can pipe the ouput to [`jq`](https://stedolan.github.io/jq/) to nicely format it as shown above:
 
 ```terminal|command=1|title=bash
 curl -k -X POST -d @tokenreview.json https://<AUTHN-EXTERNAL-IP> | jq
 ```
 
-The response object is a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1beta1-authentication-k8s-io) object — as expected by the Kubernetes API sever.
+As you can see, the response object is a [TokenReview](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#tokenreview-v1beta1-authentication-k8s-io) object — as expected by the Kubernetes API sever.
 
-Furhermore, this TokenReview object has the Status.Authenticated field set to `true` and the Status.User field set to the user identity `alice` of the identified user.
+Furhermore, the TokenReview object has the Status.Authenticated field set to `true` and the Status.User field set to the user identity of the identified user `alice`.
 
-This means that the authentication service successfully verified the token that you submitted and associated with the user Alice.
+_This means that the authentication service successfully verified the token that you submitted and associated it with the user `alice`._
 
-_Your webhook token authentication service works and is ready to be used by Kubernetes!_
+If you want, you can repeat the request with an invalid token, such as `alice:wrongpassword` — in that case, the returned TokenReview object should have an empty Status field, indicating that the verification of the token failed.
+
+All of that indicates that your webhook token authentication service works as expected.
+
+_It is ready to be used by Kubernetes!_
+
+The next step is to create the Kubernetes cluster.
 
 ## Creating the Kubernetes cluster
 
-Create a compute instance for the single-node Kubernetes cluster:
+In this section, you will create a Kubernetes cluster and configure it to use the webhook token authentication service that you deployed in the previous section.
+
+For the sake of this tutorial, you will just create a very small Kubernetes cluster consisting of a single node.
+
+_The configuration of the Webhook Token authentication plugin is the same, no matter what's the size of the cluster._
+
+You will create this cluster with [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/).
+
+Start by creating a new GCP compute instance for the single node of your cluster:
 
 ```terminal|command=1-5|title=bash
 gcloud compute instances create k8s \
@@ -784,16 +798,15 @@ gcloud compute instances create k8s \
   --image-project ubuntu-os-cloud
 ```
 
-Log in to the instance:
+Then, log in to the instance:
 
 ```terminal|command=1|title=bash
 gcloud compute ssh root@k8s
 ```
 
+Since you will install Kubernetes with kubeadm, the first step is to install kubeadm on the instance.
 
-Since you will install Kubernetes with kubeadm, you have to install kubeadm on the instance.
-
-To install kubeadm, you first have to add the APT package repository from Google that distributes the kubeadm package:
+To do so, you first have to register the Kubernetes APT package repository that hosts the kubeadm package:
 
 ```terminal|command=1,2,3,4|title=bash
 apt-get update
@@ -802,7 +815,7 @@ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" >/etc/apt/sources.list.d/kubernetes.list
 ```
 
-Now, you can install kubeadm, and since Kubernetes depends on Docker, you have to install Docker too:
+Now, you can install the kubeadm package — and since Kubernetes depends on Docker, you have to install the Docker package too:
 
 ```terminal|command=1,2|title=bash
 apt-get update
@@ -816,13 +829,17 @@ kubeadm version
 docker version
 ```
 
-_The next task is to install Kubernetes with kubeadm._
+_The next step is to install Kubernetes with kubeadm._
 
-The crucial point here is that you have to set up the API server to use the Webhook Token authentication plugin, as well as pointing the Webhook Token authentication plugin to the authentication service that you deployed before.
+The crucial point here is the configuration of the Webhook Token authentication plugin, which has to be done during the installation of Kubernetes.
 
-This is done by setting the [`--authentication-token-webhook-config-file`](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/) command-line flag of the API server to a configuration file (whose format is described in the [Kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication)) that describes the location of the webhook token authentication service.
+The Webhook Token authentication plugin is enabled by setting the [`--authentication-token-webhook-config-file`](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/) command-line flag of the API server.
 
-Let's start by creating this configuration file on the compute instance:
+The value of this command-line flag must be a configuration file that describes how to access the webhook token authentication service.
+
+The format of this cofiguration file is described in the [Kubernetes documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication).
+
+Here's how this file looks like (save the following in a file named `authn-config.yaml` on the compute instance):
 
 ```yaml|title=/root/authn-config.yaml
 apiVersion: v1
@@ -842,40 +859,30 @@ contexts:
 current-context: authn
 ```
 
-> In the above file, please replace `<AUTHN-INTERNAL-IP>` with the _internal IP address_ of the compute instance hosting your authentication service, which you can find out by running `gcloud compute instances list` on your local machine.
+> Please replace `<AUTHN-INTERNAL-IP>` with the _internal IP address_ of the `authn` compute instance. You can find out this IP address by running `gcloud compute instances list` on your local machine.
 
-Note that the configuration for the webhook token authentiation service, somewhat peculiarly, uses the [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) file format:
+Note that this configuration file — somewhat oddly — uses the [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/) file format:
 
-- The `clusters` section refers to the webhook token authentication service
-- The `users` section refers to the API server
+- The `clusters` section, which usually describes the Kubernetes API server, in this case describes the webhook token authentication service
+- The `users` section, which usually describes a Kubernetes user, in this case describes the Kubernetes API server
 
-So, in this scenario, the webhook token authentication service is the "cluster" and the API server is the "user" — after all, a kubeconfig file specifies how to access a remote service, and from the point of view of the API server, the webhook token authentication service is just a remote service.
+In a general sense, a kubeconfig file describes how to access a remote service, and in this scenario, the webhook token authentication server is a remote service and the API server is a user of that service.
 
-The crucial part of this configuration file is the `server` field, which defines the URL of the webhook token authentication service.
+The crucial part in the above configuration file is the `server` field in the `clusters` section: it contains the URL of the webhook token authentication service that the Webhook Token authentication plugin is supposed to use.
 
-Note also that the `insecure-skip-tls-verify` field is set to `true`, which causes the API server to omit the verification of the authentication service's certificate (this is similar to setting the `-k` option of `curl`) — this is necessary because you're currently using a simple self-signed certificate for your authentication service that couldn't be verified by the API server.
+In a production scenario, the `clusters` section would also contain the certificate authority (CA) certificate that the API server can use to validate the server certificate of the webhook token authentication service.
 
-_The next step is to get kubeadm to pass this configuration file to the `--authentication-token-webhook-config-file` command-line flag of the API server._
+However, recall that currently you just use a self-signed server certificate for your authentication service, and for that reason, the configuration file contains `insecure-skip-tls-verify` instead — this causes the API server to simply skip the validation of the server certificate.
 
-To do so, you have to create yet another configuration file — namely, a [kubeadm configuration file](https://pkg.go.dev/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2?tab=doc) of type [ClusterConfiguration](https://pkg.go.dev/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2?tab=doc#ClusterConfiguration).
+_The next step is to configure kubeadm._
 
-Here's the beginning of this configuration file:
+In particular, you want kubeadm to pass the above configuration file to `--authentication-token-webhook-config-file` option of the API server binary.
+
+To do so, you have to create a [kubeadm configuration file](https://pkg.go.dev/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2?tab=doc) of type [ClusterConfiguration](https://pkg.go.dev/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2?tab=doc#ClusterConfiguration).
+
+Here it is (save the following in a file named `kubeadm-config.yaml` on the compute instance):
 
 ```yaml|highlight=5|title=kubeadm-config.yaml
-apiVersion: kubeadm.k8s.io/v1beta2
-kind: ClusterConfiguration
-apiServer:
-  extraArgs:
-    authentication-token-webhook-config-file: /etc/authn-config.yaml
-```
-
-The highlighted line above causes kubeadm to set the [`--authentication-token-webhook-config-file`](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/) command-line flag of the API server to point to the authentication service configuration file that you just created above.
-
-However, that's not enough: kubeadm launches the API server as a Pod, and thus, it can't access files on the host file system.
-
-To make the configuration file accessible to the API server, you have to mount it as a volume into the API server Pod:
-
-```yaml|highlight=6-9|title=kubeadm-config.yaml
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 apiServer:
@@ -885,54 +892,48 @@ apiServer:
     - name: authentication-token-webhook-config-file
       mountPath: /etc/authn-config.yaml
       hostPath: /root/authn-config.yaml
-```
-
-The above setting adds a volume to the API server Pod that mounts the `/root/authn-config.yaml` file of the host file system as `/etc/authn-config.yaml` in the API server Pod, where it can be accessed by the API server.
-
-_That's all the configuration that you need for setting up the Webhook Token authentication plugin._
-
-However, for convenience, let's add one last setting to the kubeadm configuration file:
-
-```yaml|highlight=10-11|title=kubeadm-config.yaml
-apiVersion: kubeadm.k8s.io/v1beta2
-kind: ClusterConfiguration
-apiServer:
-  # ...
   certSANs:
     - <K8S-EXTERNAL-IP>
 ```
 
-> Please replace `<K8S-EXTERNAL-IP>` with the _external IP address_ of your Kubernetes compute instance. You can find it out by running `curl -s checkip.amazonaws.com` on the compute instance.
+> Please replace `<K8S-EXTERNAL-IP>` with the _external IP address_ of the Kubernetes compute instance, which you can find out by rnning `gcloud compute instances list` on your local machine.
 
-This adds the external IP address of your Kubernetes node as a subject alternative name (SAN) to the API server certificate — this will allow you to properly access the Kubernetes cluster from your local machine via through external IP address.
+The kubeadm configuration file contains three sections:
 
-_Now, everything is prepared to start the installation of Kubernetes!_
+- `extraArgs` causes kubeadm to set the `--authentication-token-webhook-config-file` command-line option on the API server binary with a value pointing to the webhook token configuration file that you created above.
+- `extraVolumes` mounts this file as a volume in the API server Pod. This is necessary because kubeadm launches the API server (as well as all other Kubernetes components) as Pods. If you wouldn't mount the file as a volume, the API server couldn't access it on the host filesystem.
+- `certSANs` adds the master node's external IP address as an additional subject alternative name (SAN) to the API server certificate. This will allow you to access the cluster from your local machine through the external IP address of the master node.
 
-You can install Kubernetes by running the following [`kubeadm init`](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/) command:
+_Now everything is ready to start the installation of Kubernetes._
+
+You can start the installation with the following command:
 
 ```terminal|command=1|title=bash
 kubeadm init --config kubeadm-config.yaml
 ```
 
-Since you're creating a single-node cluster, that's all you have to do — you don't need to run any further kubeadm commands on other nodes.
+When this command completes, Kubernetes has been installed!
 
-However, since your master node acts at the same time as a worker node, you have remove its `NoSchedule` [taint](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) to allow workload Pods to be scheduled to the master node:
+Since you're creating only a single-node cluster, you don't need to run any other kubeadm commands on different nodes.
+
+Kubeadm created a kubeconfig file in `/etc/kubernetes/admin.conf` that you can use to access the cluster with kubectl.
+
+You will use that to make some final setups to your cluster.
+
+First, since you created a single-node cluster the master node must act at the same time as a worker node — for that reason, you have to remove the `NoSchedule` [taint](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) from the master node to allow it to run workload Pods:
 
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig /etc/kubernetes/admin.conf \
   taint node k8s node-role.kubernetes.io/master:NoSchedule- 
 ```
 
-The final step is to install a CNI plugin in your cluster (which is not done automatically by kubeadm).
+Second, you have to install a CNI plugin in the cluster (which is not done automatically by kubeadm).
 
-You can install the [Cilium](https://cilium.io/) CNI plugin as follows:
-
+Let's use the [Cilium](https://cilium.io/) CNI plugin, which you can install as follows:
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig /etc/kubernetes/admin.conf \
   apply -f https://raw.githubusercontent.com/cilium/cilium/1.7.2/install/kubernetes/quick-install.yaml
 ```
-
-> Different CNI plugins have different requirements. Cilium works very well in the current context.
 
 You can now watch all the system Pods of your cluster coming alive:
 
@@ -941,126 +942,122 @@ kubectl --kubeconfig /etc/kubernetes/admin.conf \
   get pods --all-namespaces --watch
 ```
 
-_Your Kubernetes cluster is complete!_
+_Your Kubernetes cluster is now complete!_
 
-You can now log out from the compute instance:
+You can log out from the compute instance:
 
 ```terminal|command=1|title=bash
 exit
 ```
 
-To be able to access the cluster from your local machine, you can download the automatically created kubeconfig file from the master node:
+_The next step is to make the cluster accessible from your local machine._
+
+To do so, you can download the kubeconfig file that you previously used on the instance:
 
 ```terminal|command=1|title=bash
 gcloud compute scp root@k8s:/etc/kubernetes/admin.conf .
 ```
 
-There's a little change you have to make to this kubeconfig file though: the URL of the API server in the kubeconfig file currently contains the _internal_ IP address of the compute instance; however, to be able to access the cluster from _outside_ the VPC network, you have to replace this with the _external_ IP address of the compute instance:
+This kubeconfig file uses the _internal_ IP address of the Kubernetes compute instance in the the API server URL — since this IP address is not accessible from your local machine you have to replace it by the _external_ IP address of the instance:
 
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig admin.conf \
   config set-cluster kubernetes --server https://<K8S-EXTERNAL-IP>:6443
 ```
 
-> Please replace `<K8S-EXTERNAL-IP>` with the external IP address of the master node.
+> Please replace `<K8S-EXTERNAL-IP>` with the _external IP address_ of the Kubernetes master node instance.
 
-You should now be all set ot access the cluster:
+_You're now all set._
+
+Try to make a request to the cluster with:
 
 ```terminal|command=1|title=bash
 kubectl --kubeconfig admin.conf get pods --all-namespaces
 ```
 
-_Congratulations — you just created a Kubernetes cluster from scratch!_
+The request should succeed and you should see all the cluster's system Pods.
 
-But you didn't just create an ordinary cluster — you configured it with a custom authentication method.
+**Congratulations!**
 
-_It's time to test if this authentication method works as expected._
+You successfully bootstrapped a Kubernetes cluster from scratch and made it accessible from your local machine.
 
-## Testing the custom authentication method
+_But the real highlight comes now._
 
-Remember that you have created a user named Alice with username `alice` and password `alicepassword` in the LDAP directory.
+You configured this cluster to use your custom webhook token authentication service for implementing LDAP authentication.
 
-If your custom LDAP authentication method works as expected, then Alice should now be able to access the cluster with the following HTTP bearer token:
+_Let's test if this authentication method is working now._
 
-```
-alice:alicepassword
-```
+## Testing the LDAP authentication method
 
-Cluster access credentials are saved in the kubeconfig file and you can add an entry for Alice as follows:
+Currently, you have a single user, Alice, in your LDAP directory.
+
+Let's try if Alice is now able to access the Kubernetes cluster with her existing credentials from the LDAP directory.
+
+To do so, you can add an additional `user` entry with Alice's authentication token to the kubeconfig file:
 
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig admin.conf \
   config set-credentials alice --token alice:alicepassword
 ```
 
-You also need to create a separate context for the credentials of Alice:
+Note that the above command uses the token `alice:alicepassword` which consists of Alice's username and password as saved in the LDAP directory.
+
+To be able to use Alice's credentials, you also need to create a `context` entry that refers to them:
 
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig admin.conf \
   config set-context alice@kubernetes --cluster kubernetes --user alice
 ```
 
-If you make a request now with this context, the following should happen:
+Now, whenever you use the `alice@kubernetes` context, kubectl will include Alice's authentication token in the request (rather than admin user's credentials, which are also saved in the same kubeconfig file).
 
-- kubectl should include the token `alice:alicepassword` in the request
-- The API server passes the token to your webhook token authentication service
-- The authentication service queries the LDAP directory for a user with username `alice` and password `alicepassword`
-- The authentication of the request succeeds
+If your authentication method works as expected, then, on submitting a request with Alice's token, the API server should invoke your webhook token authentication service to verify the token.
 
-To see if your authentication service really gets invoked, log in to the compute instance that hosts the authentication service in a separate terminal window:
+To verify that, stream the logs of the authentication service in a separate terminal window:
 
-```terminal|command=1|title=bash-1
+```terminal|command=1,2|title=bash-1
 gcloud compute ssh root@authn
-```
-
-And stream the logs of the authentication service:
-
-```terminal|command=1|title=bash-1
 tail -f /var/log/authn.log
 ```
 
-Back in the main terminal window, execute the following request:
+Now try to make a request with the `alice@kubernetes` context:
 
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig admin.conf --context alice@kubernetes \
   get pods --all-namespaces
 ```
 
-> Note that this request uses the kubeconfig context with Alice's credentials.
+The log of the authentication service should print a few lines indicating that a request was received and a response was returned!
 
-_Woohoo!_
+If you look closely at the logs, you should see that the response indicaates that the token was valid.
 
-The logs of the authentication service should print some additional lines, that means, the service was invoked!
+_The authentication succeeded!_
 
-> Note that if you repeat the request immediately, there won't be any new lines in the log of the authentication service. This is because the API server caches the response from the webhook token authentication service for a limited amount of time and reuses it for future request. By default, the cache duration is 2 minutes.
-
-However, the response of the kubectl command is something like this:
+The response of the kubectl command, however, should say something like this:
 
 ```
 Error from server (Forbidden): pods is forbidden: User "alice" cannot list resource "pods" in API group "" at the cluster scope
 ```
 
-This response tells you two things:
+Get this: this message has nothing to do with _authentication_ but with _authorisation_:
 
-- First, the request has successfully passed the _authentication_ stage: the user `alice` has been correctly identified
-- Second, the request failed at the _authorisation_ stage: the user `alice` does not have permission to execute the [`list Pods`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#read-pod-v1-core) operation
+- As you can see, the user `alice` has been identified, which means that the request successfully passed the authentication stage
+- The messages says that the user `alice` does not have permission for the [`list Pods`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#read-pod-v1-core) operation, which means that the request failed at the authorisation stage
 
-Regarding the second point, Alice does not yet have any permissions at all — but you can easily change that by binding an [RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) [_role_](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole) to the user `alice` with a [_role binding_](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding).
+The reason that the request failed is that currently the user `alice` does not have any permissions for any API operations.
 
-You could either create your own role or reuse one of the [Kubernetes default roles](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles), such as `view`, `edit`, `admin`, and `cluster-admin`.
+You can change that by binding a [role](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole) to `alice`, which is done by creating a [role binding](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding).
 
-Let's bind the `cluster-admin` ClusterRole to the user `alice` with the following ClusterRolebinding:
+The following command creates a role binding that binds the default [`cluster-admin`](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles) role to the `alice`:
 
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig admin.conf --context kubernetes-admin@kubernetes \
   create clusterrolebinding alice --clusterrole cluster-admin --user alice
 ```
 
-> Note that the above command uses the kubeconfig context with the credentials of the default admin user that has been automatically created by kubeadm.
+> Note that the above command uses the `kubernetes-admin@kubernetes` context which uses the credentials of the admin user. That's why the command succeeds.
 
-Now Alice _should_ have permissions for the `list Pods` operations.
-
-Let's try to make a request as Alice again:
+With the permission issue sorted out, try to repeat the previous request with the `alice@kubernetes` context:
 
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig admin.conf --context alice@kubernetes \
@@ -1077,39 +1074,53 @@ kube-system   kube-proxy-jxcq8                   1/1     Running   0          55
 kube-system   kube-scheduler-k8s                 1/1     Running   0          55m
 ```
 
-_Wohoo!_
+**Wohoo!**
 
-Alice has now full access to the cluster.
+This time the request succeeds.
 
-But let's do some more testing — assume that Alice uses a different password in her token than is saved in the LDAP directory.
+Your expectations came true — Alice is able to access the cluster with her credentials `alice:alicepassword` from the LDAP directory.
 
-Change the password in Alice's token in the kubeconfig file to `otheralicepassword`:
+Note well that you never configured these credentials in Kubernetes — the only place where they are saved is in the LDAP directory.
+
+> Note that if you make several request quickly one after another, only the first one results in an invocation of the authentication service. This is because the API server caches the responses from the webhook token authentication service for a limited amount of time and reuses them for future requests with the same token. By default, the cache duration is 2 minutes.
+
+_Let's do some further experiments._
+
+Imagine that someone wants to impersonate Alice but doesn't know her real password — say, the wrongdoer uses `otheralicepassword` instead of `alicepassword` in the authentication token.
+
+What will happen?
+
+Let's test it.
+
+Change Alice's token in the kubeconfig file as follows:
 
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig admin.conf \
   config set-credentials alice --token alice:otheralicepassword
 ```
 
-Now, try to make another request as Alice:
+Then, try to make a request with the `alice@kubernetes` context:
 
 ```terminal|command=1-2|title=bash
 kubectl --kubeconfig admin.conf --context alice@kubernetes \
   get pods --all-namespaces
 ```
 
-The response of the kubectl command should say something like:
+If you look at the logs of the authentication service, you should see some lines being printed — however, if you look closely at the reponse object, you can see that it indicates that the verfification of the token failed.
+
+And the output of the kubectl should say the following:
 
 ```
 error: You must be logged in to the server (Unauthorized)
 ```
 
-That means, that the request could not be authenticated — which makes sense because the token is invalid.
+That means that the request was indeed rejected at the authentication stage — as expected!
 
-_This is the message that everyone will see who tries to impersonate Alice but doesn't know her real password._
+> The `Unauthorized` in the kubectl response refers to a [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) HTTP response code which indicates an authentication error. You can see more details about the response by increasing the verbosity by appending, for example, `-v 5` to the request.
 
-But now let's assume that Alice really wants to change her password to `otheraliceassword`.
+_But now let's assume that Alice indeed wants to change her password to `otheraliceassword`._
 
-Changing a user password is done by updating the user entry in the LDAP directory.
+Since the central place where you manage all user information is the LDAP directory, you have to update this password in the LDAP directory.
 
 To do so, you have to create an LDAP modification specification in LDIF format:
 
@@ -1120,7 +1131,7 @@ replace: userPassword
 userPassword: otheralicepassword
 ```
 
-You can then execute the corresponding [LDAP Modify](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Modify) request with the `ldapmodify` tool as follows:
+You can then execute this request with the `ldapmodify` tool:
 
 ```terminal|command=1-2|title=bash
 ldapmodify -H ldap://<AUTHN-EXTERNAL-IP> -x -D cn=admin,dc=mycompany,dc=com -w adminpassword \
@@ -1129,9 +1140,17 @@ ldapmodify -H ldap://<AUTHN-EXTERNAL-IP> -x -D cn=admin,dc=mycompany,dc=com -w a
 
 > Please replace `<AUTHN-EXTERNAL-IP>` with the external IP address of the `authn` compute instance.
 
-Alice's password is now be centrally changed to `otheralicepassword` and should be valid immediately for all the applications that use LDAP authentication.
+The output of the command should say something like (TODO: verify the following output):
 
-_Will this make the formerly rejected request with the token `alice:otheralicepassword` work?_
+```
+modifiying entry "cn=alice,dc=mycompany,dc=com"
+```
+
+That means, Alice's password has now been updated to `otheralicepassword` in the central LDAP user management system.
+
+Theoretically, Alice should now be able to authenticate to Kubernetes with her new password `otheralicepassword` (which is already save in the kubeconfig file).
+
+_But will it work?_
 
 Let's test it:
 
@@ -1152,4 +1171,45 @@ kube-system   kube-scheduler-k8s                 1/1     Running   0          80
 
 _Bingo!_
 
-Since Alice's password is now officially `otheralicepassword`, the token is valid and the request succeeds.
+Updating the password in the LDAP directory made it immediately valid for the Kubernetes cluster.
+
+By now you can conclude that your custom LDAP authentication scheme works as expected.
+
+**Congratulations!**
+
+You should also haved noticed the advantages of using a centralised user management system, such as LDAP:
+
+- Users can use their existing credentials for new applications and services
+- Updating a piece of user information (such as a password) makes it immediately available across all the applications that use the centralised authentication system
+- Admins can manage all user information centrally and there's no risk of fragmentation and configuration drifts
+
+_That's the end of this tutorial._
+
+As an important last step, you should delete all the GCP resources that you created as soon as you don't need them anymore. 
+
+## Cleaning up
+
+You can delete all the GCP resources that you created for this tutorial with the following commands:
+
+```terminal|command=1,2,3,4|title=bash
+gcloud compute instances delete authn k8s
+gcloud compute firewall-rules allow-internal-and-admin
+gcloud compute networks subnets delete my-subnet
+gcloud compute networks delete my-net
+```
+
+## Conclusion
+
+This article showed how to implement [LDAP authentication](https://connect2id.com/products/ldapauth/auth-explained) for a Kubernetes cluster with the [Webhook Token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) authentication plugin.
+
+There are various directions where you can go from here:
+
+- LDAP authentication served just as an example authentication method in this article. You can use the same mechanisms to integrate Kubernetes with any authentication method.
+  - In that case, you would develop a new webhook token authentication service that would verify the token in its own different way — for example, by connecting to a different type of user management system.
+- Alternatively to the [Webhook Token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) authentication plugin, you can also use the [Authenticating Proxy](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authenticating-proxy) authentication plugin to implement an integration with an arbitrary authentication method.
+  - With the Authenticatin Proxy authentication plugin, you have to put a proxy server in front of the Kubernetes cluster which takes care of authenticating users and conveys the user identity of identified users ot the Kubernetes API server over a trusted connection
+- Finally, if you want to use an authentication method that's implemented by any of the other existing authentication plugins (such as X.509 client certificates, static bearer tokens, or OpenID Connect), you can directly use the corresponding authentication plugins without having to implement the logic yourself.
+
+Going even further, the logical next step after _authentication_ is _authorisation_.
+
+_Stay tuned for a future article about this topic!_
