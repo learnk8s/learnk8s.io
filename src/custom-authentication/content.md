@@ -1116,9 +1116,9 @@ Guess what — this error has nothing to do with authentication, but with author
 
 Here's what happened:
 
-![Testing the custom authentication method](assets/testing-2-svg)
+![Testing the custom authentication method](assets/testing-2.svg)
 
-> You can observe that the request returns a [403 Forbidden](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403) HTTP status code by increase the log level of the kubectl request with `-v 5`.
+> You can observe that the request returns a [403 Forbidden](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403) HTTP status code by increase the log level of the kubectl command with `-v 5`.
 
 _That's good news for you — your authentication method did its job corectly!_
 
@@ -1190,7 +1190,7 @@ This makes complete sense, because the token is invalid.
 
 Here's what happened:
 
-![Testing the custom authentication method](assets/testing-3-svg)
+![Testing the custom authentication method](assets/testing-3.svg)
 
 > You can observe that the request returns a [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401) HTTP status code by increasing the log level of the kubectl command with `-v 5`.
 
