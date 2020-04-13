@@ -1,14 +1,14 @@
 Kubernetes supports several authentication methods out-of-the-box, such as X.509 client certificates, static HTTP bearer tokens, and [OpenID Connect](https://openid.net/).
 
-_However, Kubernetes also provides points of extensibility that allow you to bind any desired authentication method and user management system to a cluster._
+_However, Kubernetes also provides extension points that allow you to bind a cluster to any custom authentication method or user management system._
 
 This article explains how you can implement [LDAP authentication](https://connect2id.com/products/ldapauth/auth-explained) for your Kubernetes cluster.
 
-LDAP authentication means that users will be able to authenticate to Kubernetes with their existing credentials from a [Lightweight Directory Access Protocol (LDAP)](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol) directory:
+LDAP authentication means that users will be able to authenticate to the Kubernetes cluster with their existing credentials from a [Lightweight Directory Access Protocol (LDAP)](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol) directory:
 
 ![Kubernetes LDAP authentication](assets/intro.svg)
 
-LDAP authentication will be used as an example — the goal of the article is to show the _general principles_ of how to implement a custom authentication method.
+The role of LDAP authentication in this tutorial is to serve as an illustrative example — the goal of the article is to show the _general principles_ of how to implement a custom authentication method.
 
 You can use the same knowledge that you gain in this article for integrating any other authentication technology.
 
@@ -16,7 +16,7 @@ _Think of [Kerberos](https://en.wikipedia.org/wiki/Kerberos%5f%28protocol%29), [
 
 You can use all of them with Kubernetes!
 
-_Before starting with the implementation, let's briefly review the fundamentals of the Kubernetes API access._
+_Before starting with the implementation, let's briefly review the fundamentals of how the Kubernetes API is accessed._
 
 ## How access to the Kubernetes API is controlled
 
