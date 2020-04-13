@@ -10,6 +10,7 @@
         </linearGradient>
     </defs>
     <g id="ldap-authentication" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="2649" height="1905"></rect>
         <rect id="Rectangle" fill="#CADCF8" x="1099" y="813" width="1445" height="1000"></rect>
         <rect id="Rectangle" fill="#A1BCF3" x="1231" y="944" width="738" height="738"></rect>
         <text id="Authentication" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" letter-spacing="-0.233513514" fill="#333333">
@@ -31,17 +32,17 @@
         <text id="API-SERVER" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" letter-spacing="-0.16" fill="#333333">
             <tspan x="1665.45021" y="1892">API SERVER</tspan>
         </text>
-        <text id="TOKEN-&lt;username:pass" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" line-spacing="58" letter-spacing="-0.248727273">
-            <tspan x="858.056642" y="1207" fill="#333333">TOKEN</tspan>
-            <tspan x="591" y="1271.52917" font-family="JetBrainsMono-Bold, JetBrains Mono" fill="#FF0000">&lt;username:password&gt;</tspan>
+        <text id="TOKEN-&lt;username:pass" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" line-spacing="58" letter-spacing="-0.248727273" fill="#333333">
+            <tspan x="858.056642" y="1207">TOKEN</tspan>
+            <tspan x="591" y="1271.52917" font-family="JetBrainsMono-Bold, JetBrains Mono">&lt;username:password&gt;</tspan>
         </text>
-        <text id="TOKEN-&lt;username:pass" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" line-spacing="58" letter-spacing="-0.248727273">
-            <tspan x="1082.05664" y="738" fill="#333333">TOKEN</tspan>
-            <tspan x="815" y="802.529175" font-family="JetBrainsMono-Bold, JetBrains Mono" fill="#FF0000">&lt;username:password&gt;</tspan>
+        <text id="TOKEN-&lt;username:pass" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" line-spacing="58" letter-spacing="-0.248727273" fill="#333333">
+            <tspan x="1082.05664" y="738">TOKEN</tspan>
+            <tspan x="815" y="802.529175" font-family="JetBrainsMono-Bold, JetBrains Mono">&lt;username:password&gt;</tspan>
         </text>
-        <text id="LDAP-SEARCH-username" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" line-spacing="58" letter-spacing="-0.248727273">
-            <tspan x="820.638409" y="473" fill="#333333">LDAP SEARCH</tspan>
-            <tspan x="666" y="537.529175" font-family="JetBrainsMono-Bold, JetBrains Mono" fill="#FF0000">username, password</tspan>
+        <text id="LDAP-SEARCH-username" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" line-spacing="58" letter-spacing="-0.248727273" fill="#333333">
+            <tspan x="820.638409" y="473">LDAP SEARCH</tspan>
+            <tspan x="666" y="537.529175" font-family="JetBrainsMono-Bold, JetBrains Mono">username, password</tspan>
         </text>
         <text id="LDAP-response" font-family="Inter-Bold, Inter" font-size="54" font-weight="bold" letter-spacing="-0.248727273" fill="#333333">
             <tspan x="699.211898" y="126">LDAP RESPONSE</tspan>
