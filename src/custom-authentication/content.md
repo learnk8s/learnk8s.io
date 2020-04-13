@@ -8,7 +8,7 @@ In particular, this means that users will be able to authenticate to Kubernetes 
 
 ![Kubernetes LDAP authentication](assets/intro.svg)
 
-LDAP authentication is used mainly as an example here — the goal of this article is to show the _general principles_ of how to implement a custom authentication methods.
+LDAP authentication is used mainly as an example here — the goal of this article is to show the _general principles_ of how to implement a custom authentication method.
 
 Using this knowledge, you can bind any authentication technology to Kubernetes.
 
@@ -70,7 +70,7 @@ There are three "closed" authentication plugins that implement specific authenti
 
 > Up to and including Kubernetes v1.15, there was additionally the [Static Password File](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-password-file) authentication plugin which implemented [HTTP basic authentication](https://tools.ietf.org/html/rfc7617), however, it was [deprecated in Kubernetes v1.16](https://v1-16.docs.kubernetes.io/docs/setup/release/notes/#deprecations-and-removals).
 
-Furthermore, there are two "open-ended" authentication plugins that don't implement a specific authentication method but provide a point of extensibility for incorporating custom authentiation logic:
+Furthermore, there are two "open-ended" authentication plugins that don't implement a specific authentication method but provide a point of extensibility for incorporating custom authentication logic:
 
 - [**Webhook Token**](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication)
 - [**Authenticating Proxy**](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authenticating-proxy)
@@ -97,7 +97,7 @@ You can install `gcloud` by installing the [Google Cloud SDK](https://cloud.goog
 
 The accumulated costs for the GCP resources created in this tutorial are no more than 10 US cents per hour.
 
-> All charges will be subtracted from the USD 300 free credits that you get when create a new account.
+> All charges will be subtracted from the USD 300 free credits that you get when you create a new account.
 
 ## Setting up an LDAP directory
 
@@ -282,7 +282,7 @@ Furthermore, the entry has the following attributes:
 - `userPassword` is the user's password
 - `ou` stands for _organisational unit_ and is often used for storing affiliations
 
-To create this entry, you can use the `ldapadd` tool which allows to make [LDAP Add](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Add) requests to an LDAP directory.
+To create this entry, you can use the `ldapadd` tool which allows making [LDAP Add](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Add) requests to an LDAP directory.
 
 > If you installed `ldapsearch`, you should also have `ldapadd` because they are bundled together.
 
@@ -366,14 +366,14 @@ Here's how this TokenReview object looks like:
 }
 ```
 
-The webhook token authentication service is completely independent of Kubernetes and it is implemented and operated by the clsuter administrator (that is, by you).
+The webhook token authentication service is completely independent of Kubernetes and it is implemented and operated by the cluster administrator (that is, by you).
 
 The task of the webhook token authentication service is to verify the token, and, if it's valid, return the identity of the user it belongs to.
 
 The user identity has the form of a [UserInfo](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#userinfo-v1beta1-authentication-k8s-io) data structure, which contains the following fields:
 
 - **Username** (primary identifier of the user)
-- **UID** (temporally unique identifier of th user)
+- **UID** (temporally unique identifier of the user)
 - **Groups** (array of groups that the user belongs to)
 - **Extras** (array of custom data)
 
@@ -395,7 +395,7 @@ username:password
 
 In this token, `username` and `password` are the username and password of the user from the LDAP directory.
 
-> In a real-world scenario, should be [Base64-encoded](https://en.wikipedia.org/wiki/Base64) to correctly handle special characters. This tutorial omits this step for simplicity.
+> In a real-world scenario, the token should be [Base64-encoded](https://en.wikipedia.org/wiki/Base64) to correctly handle special characters. This tutorial omits this step for simplicity.
 
 The Webhook Token authentication plugin then submits this token to the webhook token authentication service for verification.
 
@@ -603,7 +603,7 @@ func writeError(w http.ResponseWriter, err error) {
 # ...
 ```
 
-And finally there's the `ldapSearch` function that's invoked above by the `handler` function.
+Finally, there's the `ldapSearch` function that's invoked above by the `handler` function.
 
 The `ldapSearch` function takes a username and password as an argument and makes an [LDAP Search](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare) request for a user entry with the given username and password — if such an entry exists, the function returns a [UserInfo](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#userinfo-v1beta1-authentication-k8s-io) object containing the user identity, else it returns `nil`.
 
@@ -828,7 +828,7 @@ As you can see, the response object is a [TokenReview](https://kubernetes.io/doc
 
 _That means that the authentication succeeded!_
 
-This is what you expected because the subnitted token includes the correct username and password of Alice.
+This is what you expected because the submitted token includes the correct username and password of Alice.
 
 The above is exactly how your authentication service will work in practice, with the only difference that the requests will be made by the Kubernetes API server.
 
@@ -948,7 +948,7 @@ The `server` field defines the URL of the webhook token authentication service.
 
 The `insecure-skip-tls-verify` field causes the API server to skip the validation of the authentication service's certificate — this is necessary because your authentication service uses a self-signed certificate that can't be validated by the API server.
 
-> In a producation scenario with a properly signed certificate, the configuration file would contain a certificate authority (CA) certificate instead that allows to validate the authentication service's certificate.
+> In a production scenario with a properly signed certificate, the configuration file would contain a certificate authority (CA) certificate instead that allows validating the authentication service's certificate.
 
 The rest of the values in the configuration file, such as `authn` and `kube-apiserver` are arbitrary identifiers without an intrinsic meaning and can be freely made up.
 
@@ -992,11 +992,11 @@ You can launch the installation with the following command:
 kubeadm init --config kubeadm-config.yaml
 ```
 
-_After this command completes, you're done — you don't need to run any further kubeadm commands, since you're creating only a single-node cluster._
+_After this command completes, you're done — you don't need to run any further kubeadm commands since you're creating only a single-node cluster._
 
 However, you have to do some final adjustments to your cluster.
 
-To do so, you will  use the default kubeconfig file `/etc/kubernetes/admin.conf` that kubeadm automatically created.
+To do so, you will use the default kubeconfig file `/etc/kubernetes/admin.conf` that kubeadm automatically created.
 
 First, since your master node acts at the same time as a worker node, you have to remove the `NoSchedule` [taint](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) to allow workload Pods to be scheduled to it:
 
@@ -1112,7 +1112,7 @@ Error from server (Forbidden): pods is forbidden: User "alice" cannot list resou
 Guess what — this error has nothing to do with authentication, but with authorisation:
 
 - The request has been successfully authenticated and identified as coming from the user `alice`
-- The request could not be authorised beacause the user `alice` does not have permission for the [`list Pods`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#read-pod-v1-core) operation
+- The request could not be authorised because the user `alice` does not have permission for the [`list Pods`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#read-pod-v1-core) operation
 
 Here's what happened:
 
@@ -1154,7 +1154,7 @@ _Wohoo!_
 
 This time the request succeeds — it passed both the authentication _and_ the authorisation stage.
 
-_Your expectaions came true — Alice is able to access the cluster by using her username and password from the LDAP directory!_
+_Your expectations came true — Alice is able to access the cluster by using her username and password from the LDAP directory!_
 
 > If you make several quickly consecutive requests with the same authentication token, only the first one will be handled by the authentication service. This is because the API server caches the response from the authentication service and reuses it for future similar requests. By default, the cache duration is 2 minutes.
 
@@ -1186,7 +1186,7 @@ error: You must be logged in to the server (Unauthorized)
 
 _The authentication failed!_
 
-This makes complete sense, because the token is invalid.
+This makes complete sense because the token is invalid.
 
 Here's what happened:
 
@@ -1224,7 +1224,7 @@ The output of the command looks like that:
 modifying entry "cn=alice,dc=mycompany,dc=com"
 ```
 
-That means, the password of Alice has now centrally be changed to `otherpassword`.
+That means, the password of Alice has now been centrally changed to `otherpassword`.
 
 Now try to repeat the request that previously failed:
 
@@ -1256,7 +1256,7 @@ _You successfully implemented LDAP authentication for Kubernetes!_
 By now, you should also have noticed the advantages of using an external centralised user management system, such as an LDAP directory:
 
 - Users can use the same credentials for multiple applications and services
-- All applications and services has access to the same set of user information
+- All applications and services have access to the same set of user information
 - Updating a password or another piece of information makes it immediately applicable to all applications and services
 - All user information is managed only once at a central place and there's no need to keep multiple data sets in sync
 
@@ -1279,11 +1279,11 @@ This article showed how to implement [LDAP authentication](https://connect2id.co
 
 There are various directions into which you can go from here:
 
-- LDAP authentication is just one of many authentication methods taht you can integrate with Kubernetes. You can use the [Webhook Token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) authentication plugin to integrate literally every authentication technology.
-- In that case, you need to implement a different customised _webhook token authentication service_ that verifies teh tokens in some other way — for example, by connecting to a different type of user management system.
-- Alternatively to the Webhook Token authentication plugin, you can use the [Authenticating Proxy](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authenticating-proxy) authentication plugin which also allows to integrate any desired authentication technology.
+- LDAP authentication is just one of many authentication methods that you can integrate with Kubernetes. You can use the [Webhook Token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#webhook-token-authentication) authentication plugin to integrate literally every authentication technology.
+- In that case, you need to implement a different customised _webhook token authentication service_ that verifies the tokens in some other way — for example, by connecting to a different type of user management system.
+- Alternatively to the Webhook Token authentication plugin, you can use the [Authenticating Proxy](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authenticating-proxy) authentication plugin which also allows integrating any desired authentication technology.
 - With the Authenticating Proxy authentication plugin, you use a proxy server in front of the Kubernetes cluster which autonomously carries out the authentication of the user requests, and, if the authentication succeeds, forwards the request along with the identity of the authenticated user to the Kubernetes API server.
-- Finally, if your desired authentication method is already implemented by any of the other existign authentication plugins ([X.509 Client Certs](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#x509-client-certs), [Static Token File](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-token-file), and [OpenID Connect Tokens](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens)), you can directly use these authetnication plugins without having to implement the authentication logic yourself.
+- Finally, if your desired authentication method is already implemented by any of the other existing authentication plugins ([X.509 Client Certs](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#x509-client-certs), [Static Token File](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#static-token-file), and [OpenID Connect Tokens](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens)), you can directly use these authentication plugins without having to implement the authentication logic yourself.
 
 Going even further, the logical next step after [_authentication_](https://kubernetes.io/docs/reference/access-authn-authz/authentication/) is [_authorisation_](https://kubernetes.io/docs/reference/access-authn-authz/authorization/).
 
