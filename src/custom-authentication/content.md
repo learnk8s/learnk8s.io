@@ -433,6 +433,15 @@ You can verify the installation of Go with:
 go version
 ```
 
+Next, you need to install two Go packages that are not in the standard library but that you will need in your implementation:
+
+```terminal|command=1,2|title=bash
+go get github.com/go-ldap/ldap
+go get k8s.io/api/authentication/v1
+```
+
+You're now ready to start writing code!
+
 _You can find the complete source code of the webhook token authentication service [on GitHub](https://github.com/learnk8s/authentication) in a file named `authn.go`._
 
 You may download this file to your local machine:
