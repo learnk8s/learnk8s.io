@@ -444,13 +444,15 @@ You're now ready to start writing code!
 
 _You can find the complete source code of the webhook token authentication service [on GitHub](https://github.com/learnk8s/authentication) in a file named `authn.go`._
 
-You may download this file to your local machine:
+You can download this source file to your local machine:
 
 ```terminal|command=1|title=bash
 wget https://raw.githubusercontent.com/learnk8s/authentication/master/authn.go
 ```
 
-_Let's go through the most important parts of this source file._
+⟶ If you want, you can directly jump ahead to the [deployment of the service](#deploying-the-webhook-token-authentication-service).
+
+_Otherwise, you can find below some explanations of how the code works:_
 
 ```go|title=authn.go
 package main
@@ -705,7 +707,7 @@ The next step is to deploy this code!
 
 ## Deploying the webhook token authentication service
 
-To deploy the code, you first have to compile it:
+To deploy the service, you first have to compile it:
 
 ```terminal|command=1|title=bash
 GOOS=linux GOARCH=amd64 go build authn.go
