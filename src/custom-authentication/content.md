@@ -16,7 +16,21 @@ _Think of [Kerberos](https://en.wikipedia.org/wiki/Kerberos%5f%28protocol%29), [
 
 You can use all of them with Kubernetes!
 
-_Before starting with the implementation, let's briefly review the fundamentals of how the Kubernetes API is accessed._
+_Let's start by briefly reviewing the fundamentals of how the access to the Kubernetes API is controlled._
+
+## Contents
+
+1. [**How access to the Kubernetes API is controlled**](#how-access-to-the-kubernetes-api-is-controlled)
+1. [**Prerequisites**](#prerequisites)
+1. [**Setting up an LDAP directory**](#setting-up-an-ldap-directory)
+1. [**Creating an LDAP user entry**](#creating-an-ldap-user-entry)
+1. [**Using the Webhook Token authentication plugin**](#using-the-webhook-token-authentication-plugin)
+1. [**Implementing the webhook token authentication service**](#implementing-the-webhook-token-authentication-service)
+1. [**Deploying the webhook token authentication service**](#deploying-the-webhook-token-authentication-service)
+1. [**Creating the Kubernetes cluster**](#creating-the-kubernetes-cluster)
+1. [**Testing the LDAP authentication method**](#testing-the-ldap-authentication-method)
+1. [**Cleaning up**](#cleaning-up)
+1. [**Conclusion**](#conclusion)
 
 ## How access to the Kubernetes API is controlled
 
