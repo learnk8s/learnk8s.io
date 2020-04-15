@@ -36,6 +36,7 @@ import * as PersitentConnections from './persistent-connections/peristentConnect
 import * as ClusterSize from './clusterSize/clusterSize'
 import * as ZeroToK8sJava from './02k8s-java/02k8s-java'
 import * as ProvisionCloudResources from './provision-cloud-resources/provision-cloud-resources'
+import * as CustomAuthentication from './custom-authentication/index'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedArticles from './bite-sized-articles'
@@ -94,4 +95,5 @@ export function register(store: Store<State, Actions>) {
   ClusterSize.Register(store)
   Online.Register(store)
   ProvisionCloudResources.Register(store)
+  CustomAuthentication.Register(store)
 }
