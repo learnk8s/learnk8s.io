@@ -7,7 +7,7 @@ import { toVFile } from '../files'
 
 export const CustomAuthentication = {
   id: 'custom-authentication',
-  url: '/custom-authentication',
+  url: '/kubernetes-custom-authentication',
   title: 'Implementing a custom Kubernetes authentication method',
   description: `Kubernetes allows binding a cluster to arbitrary authentication methods. In this article, you will learn how to implement LDAP authentication for your Kubernetes cluster.`,
 }
