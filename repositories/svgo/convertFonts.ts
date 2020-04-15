@@ -197,42 +197,92 @@ export function rasteriseFonts(hast: Node) {
   ) {
     throw 'All text within <text> elements should be wrapped in a <tspan>. Aborting.'
   }
+  if (selectAll('g[font-family]', tree).length > 0) {
+    throw '<g> element should not have a "font-family" property.\nPlease apply the property to the <text> elements. Aborting.'
+  }
+  if (selectAll('g[font-size]', tree).length > 0) {
+    throw '<g> element should not have a "font-size" property.\nPlease apply the property to the <text> elements. Aborting.'
+  }
+  if (selectAll('g[font-weight]', tree).length > 0) {
+    throw '<g> element should not have a "font-weight" property.\nPlease apply the property to the <text> elements. Aborting.'
+  }
+  if (selectAll('g[letter-spacing]', tree).length > 0) {
+    throw '<g> element should not have a "letter-spacing" property.\nPlease apply the property to the <text> elements. Aborting.'
+  }
 
   tspans.forEach(tspan => {
     const text = tspan.parent!
+    const parentProps = text.node.properties as Partial<{
+      fontFamily: string
+      fontSize: string
+      letterSpacing: string
+      fontWeight: string
+      textAnchor: 'start' | 'middle' | 'end'
+      x: string
+      y: string
+    }>
     const props = {
       fontFamily: 'Roboto',
       fontSize: '16',
       letterSpacing: '0',
       fontWeight: 'default',
-      ...pick(['fontFamily', 'fontSize', 'letterSpacing', 'fontWeight'], text.node.properties as any),
+      x: '0',
+      y: '0',
+      ...pick(['fontFamily', 'fontSize', 'letterSpacing', 'fontWeight'], parentProps as any),
       ...(tspan.node.properties as object),
     } as {
       fontFamily: string
       fontWeight: string
-      x?: string
-      y?: string
+      x: string
+      y: string
       fontSize: string
       letterSpacing: string
       fill?: string
+      transform?: string
     }
     const [firstFontFamily] = props.fontFamily.split(',').map(it => it.trim())
-    const glyphs = loadSync(getFontPath(firstFontFamily, props.fontWeight))
-    const path = glyphs.getPath(
-      toString(tspan),
-      props.x ? parseFloat(props.x) : 0,
-      props.y ? parseFloat(props.y) : 0,
-      parseInt(props.fontSize),
-      {
-        ...DEFAULT_OPTION,
-        letterSpacing: parseFloat(props.letterSpacing) / parseInt(props.fontSize),
-      },
-    )
+    const fontFamily = getFontPath(firstFontFamily, props.fontWeight)
+    const font = loadSync(fontFamily)
+    const path = font.getPath(toString(tspan), parseFloat(props.x), parseFloat(props.y), parseInt(props.fontSize), {
+      ...DEFAULT_OPTION,
+      letterSpacing: parseFloat(props.letterSpacing) / parseInt(props.fontSize),
+    })
+    const width = font.getAdvanceWidth(toString(tspan), parseInt(props.fontSize), {
+      ...DEFAULT_OPTION,
+      letterSpacing: parseFloat(props.letterSpacing) / parseInt(props.fontSize),
+    })
+    if (props.transform) {
+      throw `The "transform" property on tspans is not supported.`
+    }
+    switch (parentProps.textAnchor) {
+      case 'end': {
+        props.transform = `translate(${-width},0)`
+        break
+      }
+      case 'middle': {
+        props.transform = `translate(${-width / 2},0)`
+        break
+      }
+      case 'start':
+      default: {
+        break
+      }
+    }
     tspan.node.tagName = 'path'
     tspan.node.properties = {
       d: `${path.toPathData(6)}`,
       ...omit(
-        ['fontFamily', 'fontSize', 'letterSpacing', 'fontWeight', 'textAnchor', 'textDecoration', 'wordSpacing'],
+        [
+          'fontFamily',
+          'fontSize',
+          'letterSpacing',
+          'fontWeight',
+          'textAnchor',
+          'textDecoration',
+          'wordSpacing',
+          'x',
+          'y',
+        ],
         props,
       ),
     }
@@ -241,9 +291,6 @@ export function rasteriseFonts(hast: Node) {
 
   texts.forEach(text => {
     const props = text.node.properties
-    if ('textAnchor' in props) {
-      throw `textAnchor not supported. Aborting`
-    }
     if ('textDecoration' in props) {
       throw `textDecoration not supported. Aborting`
     }
