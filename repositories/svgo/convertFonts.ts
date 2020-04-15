@@ -137,7 +137,7 @@ const FONT_ASSETS = {
   'Inter-Regular_SemiBold': {
     default: 'fonts/Inter-SemiBold-slnt=0.ttf',
   },
-  'Inter-Regular_Bold': {
+  'Inter-Bold': {
     default: 'fonts/Inter-Bold-slnt=0.ttf',
   },
   'Inter-Regular_ExtraBold': {
