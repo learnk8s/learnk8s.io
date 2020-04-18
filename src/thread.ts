@@ -1,7 +1,19 @@
 import commander from 'commander'
-import { readFileSync, existsSync } from 'fs'
+import { readFileSync, existsSync, writeFileSync } from 'fs'
 import Twitter from 'twitter-lite'
 import { resolve, join, dirname, extname } from 'path'
+import { tempdir } from 'shelljs'
+import { tachyons } from './tachyons/tachyons'
+import { jsxToHast } from './jsx-utils/jsxToHast'
+import toHtml from 'hast-util-to-html'
+import * as Hast from 'hast'
+import { transform } from './markdown/utils'
+import { mdast2Jsx } from './markdown/jsx'
+import { toMdast } from './markdown'
+import { toVFile } from './files'
+import { selectAll, matches } from 'hast-util-select'
+import remove from 'unist-util-remove'
+import open from 'open'
 
 const KEYS_AND_SECRETS = {
   consumer_key: process.env.CONSUMER_KEY || '',
@@ -54,7 +66,7 @@ commander
   })
 
 commander
-  .command('apply <filename>')
+  .command('preview <filename>')
   .description('Renders a twitter thread')
   .action((filename, options) => {
     if (!existsSync(filename)) {
@@ -64,10 +76,32 @@ commander
     const file = readFileSync(filename, 'utf8')
     const blocks = file.split('---')
     const mappedBlocks = blocks.map((it, i) => {
-      const counter = `${i}/${blocks.length - 1}`
-      return `${counter} ${it}`
+      const mdast = toMdast(toVFile({ contents: it }))
+      const hast = jsxToHast(transform(mdast, mdast2Jsx()))
+      const root = { type: 'root', children: Array.isArray(hast) ? hast : [hast] } as Hast.Root
+      const imageSrcs = selectAll('img', root).map(image => {
+        return (image.properties as { src: string }).src
+      })
+      remove(root, { cascade: true }, node => matches('img', node))
+      const html = toHtml(root, {
+        allowDangerousHTML: true,
+      })
+      const imagesHtml =
+        imageSrcs.length === 0
+          ? ''
+          : `<div class="flex pt4">${imageSrcs
+              .map(src => `<div><img src="${resolve(join(dirname(filename), src))}"/></div>`)
+              .join('')}</div>`
+      const counter = `<p class="gray f5 b lh-copy">${i}/${blocks.length - 1}</p>`
+      return `<li class='mv4 bg-white pt3 pb4 ph4 br2'><div>${i === 0 ? '' : counter}${html}</div>${imagesHtml}</li>`
     })
-    console.log(mappedBlocks.join('---\n'))
+    const html = `<html><head><title></title><style>${tachyons}</style></head><body class="sans-serif bg-evian"><ol class="list pl0 mw7 ph3 center pv4">${mappedBlocks.join(
+      '\n',
+    )}</ol></body></html>`
+    const tmpFolder = tempdir()
+    const previewFile = join(tmpFolder, `thread-${Date.now()}.html`)
+    writeFileSync(previewFile, html)
+    open(previewFile)
   })
 
 commander
