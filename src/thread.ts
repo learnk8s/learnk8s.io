@@ -9,9 +9,10 @@ import toHtml from 'hast-util-to-html'
 import * as Hast from 'hast'
 import { transform } from './markdown/utils'
 import { mdast2Jsx } from './markdown/jsx'
-import { toMdast } from './markdown'
+import { toMdast, toMd } from './markdown'
 import { toVFile } from './files'
-import { selectAll, matches } from 'hast-util-select'
+import * as Hast$ from 'hast-util-select'
+import * as Unist$ from 'unist-util-select'
 import remove from 'unist-util-remove'
 import open from 'open'
 
@@ -54,8 +55,12 @@ commander
     for (let i = 0, length = blocks.length; i < length; i++) {
       const counter = `${i}/${blocks.length - 1}`
       const text = blocks[i]
-      const currentBlock = `${counter} ${text}`
-      console.log(`Block [${counter}]: ${text}\nIt has ${currentBlock.length} characters.`)
+      const mdast = toMdast(toVFile({ contents: text }))
+      remove(mdast, { cascade: true }, node => Unist$.matches('image', node))
+      const currentBlock = i === 0 ? text : `${counter} ${toMd(mdast, toVFile({ contents: '' })).contents}`
+      console.log(
+        `Block [${counter}]: ${toMd(mdast, toVFile({ contents: '' })).contents}\nIt has ${currentBlock.length} characters.`,
+      )
       if (currentBlock.length > 280) {
         console.log('It should have stopped at:\n', currentBlock.slice(0, 280))
         break
@@ -79,12 +84,13 @@ commander
       const mdast = toMdast(toVFile({ contents: it }))
       const hast = jsxToHast(transform(mdast, mdast2Jsx()))
       const root = { type: 'root', children: Array.isArray(hast) ? hast : [hast] } as Hast.Root
-      const imageSrcs = selectAll('img', root).map(image => {
+      const imageSrcs = Hast$.selectAll('img', root).map(image => {
         return (image.properties as { src: string }).src
       })
-      remove(root, { cascade: true }, node => matches('img', node))
+      remove(root, { cascade: true }, node => Hast$.matches('img', node))
       const html = toHtml(root, {
         allowDangerousHTML: true,
+        allowDangerousCharacters: true,
       })
       const imagesHtml =
         imageSrcs.length === 0
