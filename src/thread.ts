@@ -59,7 +59,9 @@ commander
       remove(mdast, { cascade: true }, node => Unist$.matches('image', node))
       const currentBlock = i === 0 ? text : `${counter} ${toMd(mdast, toVFile({ contents: '' })).contents}`
       console.log(
-        `Block [${counter}]: ${toMd(mdast, toVFile({ contents: '' })).contents}\nIt has ${currentBlock.length} characters.`,
+        `Block [${counter}]: ${toMd(mdast, toVFile({ contents: '' })).contents}\nIt has ${
+          currentBlock.length
+        } characters.`,
       )
       if (currentBlock.length > 280) {
         console.log('It should have stopped at:\n', currentBlock.slice(0, 280))
