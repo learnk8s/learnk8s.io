@@ -277,7 +277,7 @@ function makeBlocks(filename: string): string[] {
   return file.split('---').map((text, i, arr) => {
     const total = arr.length - 1
     const counter = `${i}/${total}`
-    return `${counter}\n\n${text.trim()}`
+    return `${counter}\n\n${text}`
   })
 }
 
@@ -300,7 +300,7 @@ function extractImage({ blocks, filename }: { blocks: string[]; filename: string
     })
     const text = block.replace(imagesRegex, '')
     return {
-      text: text,
+      text: text.trim(),
       images: imagePaths,
     }
   })
