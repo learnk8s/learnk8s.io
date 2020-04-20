@@ -83,11 +83,21 @@ const faqs: FAQ[] = [
   },
   {
     title: 'What version of Kubernetes was this created for?',
-    content: 'The material was authored for Minikube 1.8.x, Kubernetes 1.17, Helm 3',
+    content: 'The material was authored for Minikube 1.9.x, Kubernetes 1.17, Helm 3',
   },
   {
     title: `What if I'm not thrilled?`,
     content: `We want to make sure you get real value out of this, so we only want your money if you are happy with the product! If you aren't satisfied, please send an email to [hello@learnk8s.io](mailto:hello@learnk8s.io) with a copy of your receipt, and we will refund you.`,
+  },
+  {
+    title: 'Is the course guaranteed to run?',
+    content:
+      'Not all courses are guaranteed to run. [Please get in touch](mailto:hello@learnk8s.io) and we will confirm with you which event is guaranteed to run.',
+  },
+  {
+    title: 'How many people attend a class',
+    content:
+      'We can participations at 20 students per class. We might reimburse your ticket if you are oversubscribed.',
   },
   {
     title: 'Do you offer a student discount?',
@@ -217,7 +227,7 @@ export function renderPage(state: State): JSX.Element {
                   title={it.title}
                   duration={'Full time (6 hours per day), 3 days'}
                   id={`event${i}`}
-                  isLive={false}
+                  isLive={i === 0}
                   submitUrl={'https://academy.learnk8s.io/checkout?product%5B%5D=online-course'}
                 />
               ))}
@@ -738,7 +748,7 @@ export function renderPage(state: State): JSX.Element {
                     title={it.title}
                     duration={'Full time (6 hours per day), 3 days'}
                     id={`event${i}`}
-                    isLive={false}
+                    isLive={i === 0}
                     submitUrl={'https://academy.learnk8s.io/checkout?product%5B%5D=online-course'}
                   />
                 ))}

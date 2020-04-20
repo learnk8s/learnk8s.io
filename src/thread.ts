@@ -4,6 +4,19 @@ import Twitter from 'twitter-lite'
 import { resolve, join, dirname, extname } from 'path'
 import { homedir } from 'os'
 import { createInterface, Interface } from 'readline'
+import { tempdir } from 'shelljs'
+import { tachyons } from './tachyons/tachyons'
+import { jsxToHast } from './jsx-utils/jsxToHast'
+import toHtml from 'hast-util-to-html'
+import * as Hast from 'hast'
+import { transform } from './markdown/utils'
+import { mdast2Jsx } from './markdown/jsx'
+import { toMdast, toMd } from './markdown'
+import { toVFile } from './files'
+import * as Hast$ from 'hast-util-select'
+import * as Unist$ from 'unist-util-select'
+import remove from 'unist-util-remove'
+import open from 'open'
 
 const configFile = join(homedir(), '.thread.json')
 
@@ -54,8 +67,12 @@ commander
     for (let i = 0, length = blocks.length; i < length; i++) {
       const counter = `${i}/${blocks.length - 1}`
       const text = blocks[i]
-      const currentBlock = `${counter} ${text}`
-      console.log(`Block [${counter}]: ${text}\nIt has ${currentBlock.length} characters.`)
+      const mdast = toMdast(toVFile({ contents: text }))
+      remove(mdast, { cascade: true }, node => Unist$.matches('image', node))
+      const currentBlock = i === 0 ? text : `${counter} ${toMd(mdast, toVFile({ contents: '' })).contents}`
+      console.log(
+        `Block [${counter}]: ${toMd(mdast, toVFile({ contents: '' })).contents}\nIt has ${currentBlock.length} characters.`,
+      )
       if (currentBlock.length > 280) {
         console.log('It should have stopped at:\n', currentBlock.slice(0, 280))
         break
@@ -66,7 +83,7 @@ commander
   })
 
 commander
-  .command('apply <filename>')
+  .command('preview <filename>')
   .description('Renders a twitter thread')
   .action((filename, options) => {
     if (!existsSync(filename)) {
@@ -76,10 +93,33 @@ commander
     const file = readFileSync(filename, 'utf8')
     const blocks = file.split('---')
     const mappedBlocks = blocks.map((it, i) => {
-      const counter = `${i}/${blocks.length - 1}`
-      return `${counter} ${it}`
+      const mdast = toMdast(toVFile({ contents: it }))
+      const hast = jsxToHast(transform(mdast, mdast2Jsx()))
+      const root = { type: 'root', children: Array.isArray(hast) ? hast : [hast] } as Hast.Root
+      const imageSrcs = Hast$.selectAll('img', root).map(image => {
+        return (image.properties as { src: string }).src
+      })
+      remove(root, { cascade: true }, node => Hast$.matches('img', node))
+      const html = toHtml(root, {
+        allowDangerousHTML: true,
+        allowDangerousCharacters: true,
+      })
+      const imagesHtml =
+        imageSrcs.length === 0
+          ? ''
+          : `<div class="flex pt4">${imageSrcs
+              .map(src => `<div><img src="${resolve(join(dirname(filename), src))}"/></div>`)
+              .join('')}</div>`
+      const counter = `<p class="gray f5 b lh-copy">${i}/${blocks.length - 1}</p>`
+      return `<li class='mv4 bg-white pt3 pb4 ph4 br2'><div>${i === 0 ? '' : counter}${html}</div>${imagesHtml}</li>`
     })
-    console.log(mappedBlocks.join('---\n'))
+    const html = `<html><head><title></title><style>${tachyons}</style></head><body class="sans-serif bg-evian"><ol class="list pl0 mw7 ph3 center pv4">${mappedBlocks.join(
+      '\n',
+    )}</ol></body></html>`
+    const tmpFolder = tempdir()
+    const previewFile = join(tmpFolder, `thread-${Date.now()}.html`)
+    writeFileSync(previewFile, html)
+    open(previewFile)
   })
 
 commander
