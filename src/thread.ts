@@ -1,13 +1,25 @@
 import commander from 'commander'
-import { readFileSync, existsSync } from 'fs'
+import { readFileSync, existsSync, writeFileSync } from 'fs'
 import Twitter from 'twitter-lite'
 import { resolve, join, dirname, extname } from 'path'
+import { homedir } from 'os'
+import { createInterface, Interface } from 'readline'
 
-const KEYS_AND_SECRETS = {
-  consumer_key: process.env.CONSUMER_KEY || '',
-  consumer_secret: process.env.CONSUMER_SECRET || '',
-  access_token_key: process.env.ACCESS_TOKEN_KEY || '',
-  access_token_secret: process.env.ACCESS_TOKEN_SECRET || '',
+const configFile = join(homedir(), '.thread.json')
+
+type Config = Record<string, Profile>
+
+interface Profile {
+  name: string
+  active: boolean
+  credential: TwitterCredential
+}
+
+interface TwitterCredential {
+  consumer_key: string
+  consumer_secret: string
+  access_token_key: string
+  access_token_secret: string
 }
 
 interface Content {
@@ -72,8 +84,12 @@ commander
 
 commander
   .command('post <filename>')
-  .description('Post to twitter thread')
+  .description('Post a twitter thread')
   .action(async filename => {
+    const profile = getProfile()
+    if (!profile) {
+      return
+    }
     checkFileExists(filename)
     const blocks = makeBlocks(filename)
     const contents = extractImage({ blocks, filename })
@@ -87,7 +103,13 @@ commander
     const imagesData = imagePaths.map(getImagesData)
     imagesData.forEach(checkImageSize)
 
-    const twMedia = initTwitterMediaClient()
+    const confirmation = await confirmProfile(profile)
+    if (confirmation.input.toLowerCase() !== 'y') {
+      console.log('Tweets do not post.')
+      confirmation.rl.close()
+    }
+
+    const twMedia = initTwitterMediaClient(profile.credential)
     const pathAndImageId = await uploadImages(twMedia, imagesData)
     const postContents = contents.map(content => {
       const mediaIds = content.images.map(path => pathAndImageId.find(img => path === img.path))
@@ -97,15 +119,109 @@ commander
       }
     })
 
-    const tw = initTwitterClient()
+    const tw = initTwitterClient(profile.credential)
     await post({ tw, index: postContents.length - 1, contents: postContents })
-    console.log('Completed')
+
+    console.log('Post Completed')
+    confirmation.rl.close()
+  })
+
+commander
+  .command('authenticate <profileName>')
+  .option('--ckey <consumer-key>', 'The consumer key of Twitter API')
+  .option('--csecret <consumer-secret>', 'The consumer secret of Twitter API')
+  .option('--tkey <access-token-key>', 'The access token key of Twitter API')
+  .option('--tsecret <access-token-secret>', 'The access token secret of Twitter API')
+  .description('Create new Twitter client profile')
+  .action((profileName, options) => {
+    if (!profileName || `${profileName}`.length === 0) {
+      console.log('Please enter a valid profile name.')
+      return
+    }
+    if (!options.ckey) {
+      console.log("Please enter your consumer key with '--ckey'.")
+      return
+    }
+    if (!options.csecret) {
+      console.log("Please enter your consumer secret with '--csecret'.")
+      return
+    }
+    if (!options.tkey) {
+      console.log("Please enter your access token key with '--tkey'.")
+      return
+    }
+    if (!options.tsecret) {
+      console.log("Please enter your access token secret with '--tsecret'.")
+      return
+    }
+
+    const config = readConfig(configFile)
+    const newConfig: Config = {
+      ...config,
+      [profileName]: {
+        name: profileName,
+        active: false,
+        credential: {
+          consumer_key: options.ckey,
+          consumer_secret: options.csecret,
+          access_token_key: options.tkey,
+          access_token_secret: options.tsecret,
+        },
+      },
+    }
+    writeConfig(newConfig)
+    console.log('Profile created.')
+  })
+
+commander
+  .command('profile:list')
+  .description('Lists all profiles')
+  .action(() => {
+    const config = readConfig(configFile)
+    console.table(
+      Object.values(config).map(it => ({
+        name: it.name,
+        active: it.active ? '☑️' : '',
+      })),
+    )
+  })
+
+commander
+  .command('profile:set <profileName>')
+  .description('Sets a profile as active')
+  .action(profileName => {
+    if (!profileName || `${profileName}`.length === 0) {
+      console.log('Please enter a valid profile name and retry.')
+      return
+    }
+    const config = readConfig(configFile)
+    const profiles = Object.values(config)
+    if (!profiles.some(it => it.name === profileName)) {
+      console.log('The profile does not exist. Please check the name and retry.')
+      return
+    }
+    const newConfig = profiles.reduce((acc, profile) => {
+      acc[profile.name] = { ...profile, active: profileName === profile.name }
+      return acc
+    }, {} as Config)
+    writeConfig(newConfig)
+    console.log(`Profile switched to ${profileName}.`)
   })
 
 commander.parse(process.argv)
 
 if (commander.args.length === 0) {
   commander.help()
+}
+
+function getProfile(): false | Profile {
+  const config = readConfig(configFile)
+  const profile = Object.values(config).find(p => p.active)
+  if (!profile) {
+    console.log('There is no active profile. Did you add one?')
+    return false
+  }
+  return profile
 }
 
 function checkFileExists(filename: string) {
@@ -184,9 +300,9 @@ function getImagesData(path: string): ImageData {
   }
 }
 
-function initTwitterMediaClient(): Twitter {
+function initTwitterMediaClient(keysAndSecrets: TwitterCredential): Twitter {
   return new Twitter({
-    ...KEYS_AND_SECRETS,
+    ...keysAndSecrets,
     subdomain: 'upload',
   })
 }
@@ -233,9 +349,9 @@ async function uploadImages(twMedia: Twitter, data: ImageData[]) {
   )
 }
 
-function initTwitterClient(): Twitter {
+function initTwitterClient(keysAndSecrets: TwitterCredential): Twitter {
   return new Twitter({
-    ...KEYS_AND_SECRETS,
+    ...keysAndSecrets,
   })
 }
 
@@ -263,4 +379,39 @@ async function post({
   })
   console.log(`Posted ${index}/${contents.length - 1}`)
   return response
+}
+
+function checkAndCreateConfigFile(filename: string) {
+  if (!existsSync(filename)) {
+    writeFileSync(configFile, JSON.stringify({}))
+  }
+}
+
+function readConfig(filename: string): Config {
+  try {
+    checkAndCreateConfigFile(filename)
+    return JSON.parse(readFileSync(filename, 'utf8'))
+  } catch (e) {
+    console.log(e.message)
+    return {}
+  }
+}
+
+function writeConfig(config: Record<string, Profile>) {
+  writeFileSync(configFile, JSON.stringify(config))
+}
+
+function confirmProfile(profile: Profile): Promise<{ input: string; rl: Interface }> {
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
+
+  rl.on('close', function() {
+    process.exit(0)
+  })
+
+  return new Promise(resolve => {
+    rl.question(`Active Profile: ${profile.name}, proceed to post tweets? (y/n)`, input => resolve({ input, rl }))
+  })
 }
