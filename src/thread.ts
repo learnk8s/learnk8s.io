@@ -71,7 +71,9 @@ commander
       remove(mdast, { cascade: true }, node => Unist$.matches('image', node))
       const currentBlock = i === 0 ? text : `${counter} ${toMd(mdast, toVFile({ contents: '' })).contents}`
       console.log(
-        `Block [${counter}]: ${toMd(mdast, toVFile({ contents: '' })).contents}\nIt has ${currentBlock.length} characters.`,
+        `Block [${counter}]: ${toMd(mdast, toVFile({ contents: '' })).contents}\nIt has ${
+          currentBlock.length
+        } characters.`,
       )
       if (currentBlock.length > 280) {
         console.log('It should have stopped at:\n', currentBlock.slice(0, 280))
@@ -275,7 +277,7 @@ function makeBlocks(filename: string): string[] {
   return file.split('---').map((text, i, arr) => {
     const total = arr.length - 1
     const counter = `${i}/${total}`
-    return `${counter}\n\n${text.trim()}`
+    return `${counter}\n\n${text}`
   })
 }
 
@@ -298,7 +300,7 @@ function extractImage({ blocks, filename }: { blocks: string[]; filename: string
     })
     const text = block.replace(imagesRegex, '')
     return {
-      text: text,
+      text: text.trim(),
       images: imagePaths,
     }
   })
