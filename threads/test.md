@@ -1,12 +1,34 @@
 THREAD
 
-This the thread title. Testing
+## heading
 
-![magic](./assets/magic.png)
+text abc
+
+__bold__
+
+*italic*
+
+__*bold and italic* bold__
+
+1. listitem 1
+1. listitem 2
+1. listitem 3
+
+[abc](http://abc.com)
 
 ---
 
-Adipisicing do nulla et sunt exercitation in dolor non occaecat excepteur. Eiusmod officia adipisicing duis ipsum anim fugiat labore ipsum mollit cillum. Ad aliquip anim ad veniam proident ea enim qui ut aliqua ipsum.
+* listunorder 1
+* listunorder 2
+* listunorder 3
+
+`inlineCode`
+
+```
+code
+```
+
+~~delete~~
 
 ![knote-add-image.gif](./assets/knote-add-image.gif)
 
