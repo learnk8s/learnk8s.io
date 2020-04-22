@@ -17,6 +17,9 @@ import * as Hast$ from 'hast-util-select'
 import * as Unist$ from 'unist-util-select'
 import remove from 'unist-util-remove'
 import open from 'open'
+import inspect from 'unist-util-inspect'
+import { selectAll } from 'unist-util-select'
+import { mdast2tweet } from './markdown/tweet'
 
 const configFile = join(homedir(), '.thread.json')
 
@@ -137,35 +140,41 @@ commander
     const contents = extractImage({ blocks, filename })
     lint(contents.map(c => c.text))
 
-    const imagePaths = contents
-      .reduce((acc, b) => [...acc, ...b.images], [] as string[])
-      .filter((path, i, arr) => arr.indexOf(path) === i)
-    imagePaths.forEach(path => checkFileExists(path))
-    checkImageNumberPerPost(contents)
-    const imagesData = imagePaths.map(getImagesData)
-    imagesData.forEach(checkImageSize)
+    // const imagePaths = contents
+    //   .reduce((acc, b) => [...acc, ...b.images], [] as string[])
+    //   .filter((path, i, arr) => arr.indexOf(path) === i)
+    // imagePaths.forEach(path => checkFileExists(path))
+    // checkImageNumberPerPost(contents)
+    // const imagesData = imagePaths.map(getImagesData)
+    // imagesData.forEach(checkImageSize)
 
-    const confirmation = await confirmProfile(profile)
-    if (confirmation.input.toLowerCase() !== 'y') {
-      console.log('Tweets do not post.')
-      confirmation.rl.close()
-    }
+    // const confirmation = await confirmProfile(profile)
+    // if (confirmation.input.toLowerCase() !== 'y') {
+    //   console.log('Tweets do not post.')
+    //   confirmation.rl.close()
+    // }
 
-    const twMedia = initTwitterMediaClient(profile.credential)
-    const pathAndImageId = await uploadImages(twMedia, imagesData)
-    const postContents = contents.map(content => {
-      const mediaIds = content.images.map(path => pathAndImageId.find(img => path === img.path))
-      return {
-        text: content.text,
-        mediaIds: mediaIds.map(it => it?.mediaId),
-      }
-    })
+    // const twMedia = initTwitterMediaClient(profile.credential)
+    // const pathAndImageId = await uploadImages(twMedia, imagesData)
+    // const postContents = contents.map(content => {
+    //   const mediaIds = content.images.map(path => pathAndImageId.find(img => path === img.path))
+    //   return {
+    //     text: content.text,
+    //     mediaIds: mediaIds.map(it => it?.mediaId),
+    //   }
+    // })
 
     const tw = initTwitterClient(profile.credential)
-    await post({ tw, index: postContents.length - 1, contents: postContents })
+    // await post({ tw, index: postContents.length - 1, contents: postContents })
 
+
+    const response = await tw.post('statuses/update', {
+      status: contents[0].text,
+    })
+    console.log(contents[0].text)
+    console.log(`Posted ${0}/${contents.length - 1}`)
     console.log('Post Completed')
-    confirmation.rl.close()
+    // confirmation.rl.close()
   })
 
 commander
@@ -272,12 +281,21 @@ function checkFileExists(filename: string) {
   }
 }
 
-function makeBlocks(filename: string): string[] {
+function makeBlocks(filename: string): Content[] {
   const file = readFileSync(filename, 'utf8')
-  return file.split('---').map((text, i, arr) => {
+  return file.split('---').map((block, i, arr) => {
+    const mdast = toMdast(toVFile({ contents: block }))
+    const tweets: any[] = transform(mdast, mdast2tweet())
+
     const total = arr.length - 1
     const counter = `${i}/${total}`
-    return `${counter}\n\n${text}`
+
+    const text = tweets.filter((it: string | string[]) => Array.isArray(it)).join('\n\n')
+    const tweetAndImage = {
+      text: i === 0 ? text : `${counter}\n\n${text}`,
+      images: tweets.filter((it: string | string[]) => !Array.isArray(it)),
+    }
+    return tweetAndImage
   })
 }
 
@@ -289,18 +307,14 @@ function lint(blocks: string[]): void {
   })
 }
 
-function extractImage({ blocks, filename }: { blocks: string[]; filename: string }): Content[] {
-  const imagesRegex = /!\[.*?\]\(.+?\)/g
-  const imagePathRegex = /!\[.*?\]\((.+?)\)/
+function extractImage({ blocks, filename }: { blocks: Content[]; filename: string }): Content[] {
   return blocks.map(block => {
-    const images = block.match(imagesRegex) || []
-    const imagePaths = images.map(img => {
-      const [, path] = img.match(imagePathRegex)!
-      return join(resolve(dirname(filename)), path)
+
+    const imagePaths = block.images.map(img => {
+      return join(resolve(dirname(filename)), img)
     })
-    const text = block.replace(imagesRegex, '')
     return {
-      text: text.trim(),
+      text: block.text,
       images: imagePaths,
     }
   })
