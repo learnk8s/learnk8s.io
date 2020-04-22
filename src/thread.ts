@@ -140,41 +140,36 @@ commander
     const contents = extractImage({ blocks, filename })
     lint(contents.map(c => c.text))
 
-    // const imagePaths = contents
-    //   .reduce((acc, b) => [...acc, ...b.images], [] as string[])
-    //   .filter((path, i, arr) => arr.indexOf(path) === i)
-    // imagePaths.forEach(path => checkFileExists(path))
-    // checkImageNumberPerPost(contents)
-    // const imagesData = imagePaths.map(getImagesData)
-    // imagesData.forEach(checkImageSize)
+    const imagePaths = contents
+      .reduce((acc, b) => [...acc, ...b.images], [] as string[])
+      .filter((path, i, arr) => arr.indexOf(path) === i)
+    imagePaths.forEach(path => checkFileExists(path))
+    checkImageNumberPerPost(contents)
+    const imagesData = imagePaths.map(getImagesData)
+    imagesData.forEach(checkImageSize)
 
-    // const confirmation = await confirmProfile(profile)
-    // if (confirmation.input.toLowerCase() !== 'y') {
-    //   console.log('Tweets do not post.')
-    //   confirmation.rl.close()
-    // }
+    const confirmation = await confirmProfile(profile)
+    if (confirmation.input.toLowerCase() !== 'y') {
+      console.log('Tweets do not post.')
+      confirmation.rl.close()
+    }
 
-    // const twMedia = initTwitterMediaClient(profile.credential)
-    // const pathAndImageId = await uploadImages(twMedia, imagesData)
-    // const postContents = contents.map(content => {
-    //   const mediaIds = content.images.map(path => pathAndImageId.find(img => path === img.path))
-    //   return {
-    //     text: content.text,
-    //     mediaIds: mediaIds.map(it => it?.mediaId),
-    //   }
-    // })
+    const twMedia = initTwitterMediaClient(profile.credential)
+    const pathAndImageId = await uploadImages(twMedia, imagesData)
+    const postContents = contents.map(content => {
+      const mediaIds = content.images.map(path => pathAndImageId.find(img => path === img.path))
+      return {
+        text: content.text,
+        mediaIds: mediaIds.map(it => it?.mediaId),
+      }
+    })
 
     const tw = initTwitterClient(profile.credential)
-    // await post({ tw, index: postContents.length - 1, contents: postContents })
+    await post({ tw, index: postContents.length - 1, contents: postContents })
 
 
-    const response = await tw.post('statuses/update', {
-      status: contents[0].text,
-    })
-    console.log(contents[0].text)
-    console.log(`Posted ${0}/${contents.length - 1}`)
     console.log('Post Completed')
-    // confirmation.rl.close()
+    confirmation.rl.close()
   })
 
 commander

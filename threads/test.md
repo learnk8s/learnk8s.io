@@ -4,9 +4,11 @@ THREAD
 
 text abc
 
-__bold__
+__0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz__
 
 *italic*
+
+---
 
 __*bold and italic* bold__
 
