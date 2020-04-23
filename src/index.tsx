@@ -30,7 +30,8 @@ import * as GenericBlogPost from './genericBlogPost'
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedRenderer from './biteSized.v2'
 import { store, getConfig } from './store'
-import * as Training from './training.v2'
+import * as Workshop from './training.v2'
+import * as Training from './learn'
 import * as BestPractices from './best-practices/best'
 import * as FreeTools from './freeTools'
 import * as Wallpapers from './wallpapers'
@@ -42,6 +43,7 @@ register(store)
 
 Landing.Mount({ store })
 Online.Mount({ store })
+Workshop.Mount({ store })
 Training.Mount({ store })
 BestPractices.Mount({ store })
 FreeTools.Mount({ store })
