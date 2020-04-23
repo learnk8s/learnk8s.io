@@ -6,11 +6,9 @@ text abc
 
 __0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz__
 
-*italic*
-
 ---
 
-__*bold and italic* bold__
+*ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz*
 
 1. listitem 1
 1. listitem 2
@@ -29,8 +27,6 @@ __*bold and italic* bold__
 ```
 code
 ```
-
-~~delete~~
 
 ![knote-add-image.gif](./assets/knote-add-image.gif)
 
