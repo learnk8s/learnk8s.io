@@ -6,7 +6,7 @@
     "visual:test": "ts-node --files --transpile-only test.ts --test",
     "visual:approve": "ts-node --files --transpile-only test.ts --approve",
     "check:canonical": "ts-node --files --transpile-only src/checkCanonical.ts",
-    "build": "npm run lambda-build && ts-node --files --transpile-only src/index.tsx",
+    "build": "ts-node --files --transpile-only src/index.tsx",
     "fmt": "ts-node --files --transpile-only src/check.ts",
     "test": "cross-env tsc --noEmit && ts-node --files node_modules/tape/bin/tape \"src/**/test.ts\" \"src/**/*.test.ts\" \"src/**/*.integration.ts\" \"src/**/integration.ts\"",
     "start": "ts-node --files --transpile-only src/start.ts"

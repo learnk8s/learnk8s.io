@@ -72,19 +72,14 @@ export const Navbar: React.StatelessComponent<{}> = ({}) => {
         <a href='#' className='z-max reveal pt2 pr2 tc white absolute top-0 right-0 dn-l'>
           <span className='x-icon' />
         </a>
-        <ul className='z-max reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
+        <ul className='z-9 reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
           <li className='ttu mh2 bb bn-l'>
             <a
-              href='/kubernetes-free-tools'
+              href='/learn'
               className='white link db b ph1 mv2 pv2 f5 underline-hover mr4 mr0-l'
-              title='Kubernetes production best practices'
+              title='Training & courses'
             >
-              Free Tools
-            </a>
-          </li>
-          <li className='ttu mh2 bb bn-l'>
-            <a href='/training' className='white link db b ph1 mv2 pv2 f5 underline-hover mr4 mr0-l' title='Training'>
-              Training
+              Training & courses
             </a>
           </li>
           <li className='ttu mh2 bb bn-l'>
@@ -92,16 +87,15 @@ export const Navbar: React.StatelessComponent<{}> = ({}) => {
               Blog
             </a>
           </li>
-          <li className='ttu mh2'>
-            <a href='/academy' className='white link db b ph1 mv2 pv2 f5 underline-hover' title='Academy'>
-              Online courses
+          <li className='ttu mh2 bb bn-l'>
+            <a
+              href='/kubernetes-free-tools'
+              className='white link db b ph1 mv2 pv2 f5 underline-hover mr4 mr0-l'
+              title='Kubernetes free tools'
+            >
+              Tools
             </a>
           </li>
-          {/* <li className='ttu mh2'>
-            <a href='/free-tools' className='white link db b ph1 mv2 pv2 f5 underline-hover' title='Academy'>
-              Free tools
-            </a>
-          </li> */}
         </ul>
       </div>
     </nav>
@@ -131,7 +125,8 @@ export const Footer: React.StatelessComponent<{}> = ({}) => {
           <ul className='list pl0'>
             {[
               ['Training', '/training'],
-              ['Online courses', '/academy'],
+              ['Online classrooms', '/kubernetes-online-classroom'],
+              ['Self-paced courses', '/academy'],
               ['Consulting', '/consulting'],
             ].map(([title, url]) => {
               return (
