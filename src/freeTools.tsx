@@ -10,7 +10,7 @@ import { PrimaryButton } from './homepage'
 export const FreeTools = {
   id: 'free-tools',
   url: '/kubernetes-free-tools',
-  title: 'Kubernetes free tools ⎈ Learnk8s',
+  title: 'Kubernetes tools ⎈ Learnk8s',
   description: 'A collection of free tools to help you navigate your Kubernetes journey.',
 }
 
@@ -21,7 +21,7 @@ export function Register(store: Store<State, Actions>) {
       id: 'og-free-tools',
       pageId: FreeTools.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      title: 'Kubernetes free tools',
+      title: 'Kubernetes tools',
       description: 'A collection of free tools to help you navigate your Kubernetes journey.',
     }),
   )
@@ -63,9 +63,7 @@ function renderPage(state: State) {
         <Navbar />
 
         <section className='ph3 pv4 center'>
-          <h1 className='f2 f1-ns navy b tc ph3'>
-            Kubernetes <span className='ttu'>free</span> tools
-          </h1>
+          <h1 className='f2 f1-ns navy b tc ph3'>Kubernetes tools</h1>
           <p className='lh-copy f4 black-70 measure center tc ph3'>
             A collection of free tools to help you navigate your Kubernetes journey.
           </p>
