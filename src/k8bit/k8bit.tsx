@@ -7,9 +7,9 @@ import { toVFile } from '../files'
 
 export const K8Bit = {
   id: 'k8bit',
-  url: '/detect-changes-kubernetes',
-  title: 'How do you detect changes to Pods in Kubernetes?',
-  description: `How can you be notified when a Pod is added, removed or modified? In this article you will learn how to use the Kubernetes API to track changes to Kubernetes resources.`,
+  url: '/real-time-dashboard',
+  title: 'Coding a real-time dashboard for Kubernetes',
+  description: `In Kubernetes, how can you be notified when a Pod is added, removed or modified? In this article you'll learn how to use the API to track changes to Kubernetes resources.`,
 }
 
 export function Register(store: Store<State, Actions>) {
