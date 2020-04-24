@@ -8,7 +8,7 @@ import { tachyons } from './tachyons/tachyons'
 import { JsonLd } from 'react-schemaorg'
 import { Course } from 'schema-dts'
 
-export const Training = {
+export const Learn = {
   id: 'learn',
   url: '/learn',
   title: 'Kubernetes Courses ⎈ Learnk8s',
@@ -17,13 +17,13 @@ export const Training = {
 }
 
 export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Training))
+  store.dispatch(Action.registerPage(Learn))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-learn',
-      pageId: Training.id,
+      pageId: Learn.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      description: Training.description,
+      description: Learn.description,
       title: 'Kubernetes Training Courses',
     }),
   )
@@ -36,7 +36,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
       jsx: renderPage(state),
       isOptimisedBuild: getConfig(state).isProduction,
       siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-      url: Training.url,
+      url: Learn.url,
       outputFolder: getConfig(state).outputFolder,
     })
   } catch (error) {
@@ -45,8 +45,8 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Training.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
+  const page = getPages(state).find(it => it.id === Learn.id)!
+  const openGraph = getOpenGraph(state).find(it => it.pageId === Learn.id)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   return (
     <Html>
