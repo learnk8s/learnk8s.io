@@ -17,6 +17,8 @@ import * as Hast$ from 'hast-util-select'
 import * as Unist$ from 'unist-util-select'
 import remove from 'unist-util-remove'
 import open from 'open'
+import { homedir } from 'os'
+import { createInterface, Interface } from 'readline'
 
 const configFile = join(homedir(), '.thread.json')
 
