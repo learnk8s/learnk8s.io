@@ -1,4 +1,4 @@
-**TL;DR:** _In Kubernetes you can use the Shared Informer — an efficient pattern to watch for API changes. This article teaches you how it works and how you can build [a real-time dashboard for Kubernetes](https://github.com/learnk8s/k8bit) with it._
+**TL;DR:** _In Kubernetes you can use the Shared Informer — an efficient code pattern to watch for resource changes. This article teaches you how it works and how you can build [a real-time dashboard for Kubernetes](https://github.com/learnk8s/k8bit) with it._
 
 In Kubernetes, you can monitor changes to Pods in real-time with the `--watch` flag:
 
@@ -30,9 +30,9 @@ GET https://api-server:8443/api/v1/namespaces/my-namespace/pods?watch=1
 
 **The response is temporarily empty and hangs.**
 
-The reason is straightforward: this is long-lived request, and the API is ready to respond with events as soon as there's one.
+The reason is straightforward: this is a long-lived request, and the API is ready to respond with events as soon as there's one.
 
-Since nothing happened, the connection is kept open.
+Since nothing happened, the connection stays open.
 
 Let's test this with a real cluster.
 
@@ -120,7 +120,7 @@ The output from the watch command has another entry:
 In other words, every time you use the `watch=1` query string, you can expect:
 
 1. The request stays open.
-1. An update every time a Pod is added, deleted or modified.
+1. There is an update every time a Pod is added, deleted or modified.
 
 If you recall, that's precisely the output from `kubectl get pods --watch`.
 
@@ -178,7 +178,7 @@ kubectl proxy --www=.
 Starting to serve on 127.0.0.1:8001
 ```
 
-You discovered already that `kubectl proxy` creates a tunnel from your local machine to the API server using your credentials.
+You learned already that `kubectl proxy` creates a tunnel from your local machine to the API server using your credentials.
 
 If you use the flag `--www=<folder>` you can also serve static content from a specific directory.
 
@@ -224,7 +224,7 @@ fetch(`/api/v1/pods?watch=1`).then((response) => {
 
 While the initial call to the API is similar, handling the response is more complicated.
 
-**Since the response never ends, you have to parse the incoming stream as more bytes are received.**
+**Since the response never ends and stays open, you have to parse the incoming stream as more bytes are received.**
 
 You also have to remember to parse the JSON responses every time there's a new line.
 
@@ -328,7 +328,7 @@ Those two pods are duplicates
 as you've already seen them
 ```
 
-**The Pod is listed twice:**
+**There's a Pod is listed twice:**
 
 1. In the "list all the Pods" API request and
 1. In the "stream the updates for all Pods" request.
@@ -347,7 +347,7 @@ _How do you track only **new** changes reliably?_
 
 Ideally, you want to track all changes that happen **after** the first call to the API.
 
-Every Kubernetes object has a [`resourceVersion` field that represents the version of the resource in the cluster](https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions).
+Fortunately, every Kubernetes object has a [`resourceVersion` field that represents the version of the resource in the cluster](https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions).
 
 You can inspect the field in your existing cluster with:
 
@@ -365,9 +365,7 @@ curl localhost:8001/api/v1/pods | jq ".metadata.resourceVersion"
 12031
 ```
 
-You can think about the `resourceVersion` number as the x-axis on a timeline.
-
-As objects are created in the cluster, the number is increased.
+You can think about the `resourceVersion` number as a number that increments every time you type a command or a resource is created.
 
 The same number can be used to retrieve the state of the cluster in a given point in time.
 
@@ -380,7 +378,7 @@ curl localhost:8001/api/v1/pods?resourceVersion=12031
 
 The `resourceVersion` could help you make your code more robust.
 
-Here's what you can change:
+Here's what you could do:
 
 1. The first request retrieves all the Pods. The response is a list of Pods with a `resourceVersion`. You should save that number.
 1. You start the Watch API from that specific `resourceVersion`.
@@ -412,7 +410,7 @@ Congrats!
 
 **If you add or delete a Pod in the cluster, you should be able to see an update in your web console.**
 
-The code is reliable, and you only receive updates for events that you don't know!
+The code is reliable, and you only receive updates for new events!
 
 _Can you track the Node where each Pod is deployed?_
 
@@ -435,7 +433,7 @@ So you can keep a list of all Pods, but filter the list only for Pods that a `.s
 
 You can keep track of all Pods in your cluster with a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map).
 
-```javascript|highlight=17-18|title=app.js
+```javascript|highlight=1,17-18|title=app.js
 const pods = new Map()
 
 fetch('/api/v1/pods')
@@ -501,17 +499,17 @@ Perhaps the API was restarted, or the load balancer between you and the API deci
 
 You should handle this edge case — when it happens.
 
-And when you decide to reconnect, you should reconnect from the last update.
+And when you decide to reconnect, you should only receive updates after the last one.
 
 _But how do you know what was the last update?_
 
 Again, the `resourceVersion` field is here to the rescue.
 
-Since each update has a `resourceVersion` field, you should always store the last one you saved.
+Since each update has a `resourceVersion` field, you should always save the last one you saw.
 
-If the request is interrupted, you can initiate a new request to the API starting from the last `resourceVersion` field that you saw.
+If the request is interrupted, you can initiate a new request to the API starting from the last `resourceVersion` field.
 
-You can change the code to keep track of the last `resourceVersion` field seen like this:
+You can change the code to keep track of the last `resourceVersion` with:
 
 ```javascript|highlight=1,9,12,17|title=dashboard.js
 let lastResourceVersion
@@ -598,7 +596,7 @@ You can find an example of the shared informer in several programming languages:
 - [Python (in progress)](https://github.com/kubernetes-client/python/issues/868)
 - [C# (in progress)](https://github.com/kubernetes-client/csharp/pull/394)
 
-Using the official Javascript client library for Kubernetes you can refactor your code in less than 20 lines of code:
+Using the official Javascript client library for Kubernetes you can refactor your code in less than 20 lines:
 
 ```javascript|title=informer.js
 const listFn = () => listPodForAllNamespaces();
@@ -620,7 +618,7 @@ informer.start()
 
 ## Summary
 
-All code written so far ran against `kubectl proxy`.
+All code written so far runs against `kubectl proxy`.
 
 However, the same code could be repackaged and deployed inside your cluster.
 
