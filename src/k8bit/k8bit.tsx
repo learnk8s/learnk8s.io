@@ -37,13 +37,6 @@ export function Register(store: Store<State, Actions>) {
   )
   store.dispatch(Action.assignTag({ id: 'general-post', pageId: K8Bit.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
-      id: 'k8bit-related-0',
-      blogPostId: 'bp-k8bit',
-      content: toVFile({ path: join(__dirname, 'k8bit-related.md') }),
-    }),
-  )
-  store.dispatch(
     Action.registerPreviewPicture({
       id: 'k8bit-picture',
       pageId: K8Bit.id,

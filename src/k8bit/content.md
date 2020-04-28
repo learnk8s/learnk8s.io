@@ -1,4 +1,4 @@
-**TL;DR:** _Kubernetes libraries expose the Shared Informer — an efficient pattern to watch for API changes. This article teaches you how to build your own and [a real-time dashboard for Kubernetes with only client-side Javascript.](https://github.com/learnk8s/k8bit)_
+**TL;DR:** _In Kubernetes you can use the Shared Informer — an efficient pattern to watch for API changes. This article teaches you how it works and how you can build [a real-time dashboard for Kubernetes](https://github.com/learnk8s/k8bit) with it._
 
 In Kubernetes, you can monitor changes to Pods in real-time with the `--watch` flag:
 
@@ -6,9 +6,9 @@ In Kubernetes, you can monitor changes to Pods in real-time with the `--watch` f
 kubectl get pods --watch
 ```
 
-The `--watch` flag is part of the Kubernetes API, and it is designed to dispatch update events incrementally.
+The `--watch` flag is part of the Kubernetes API, and it is designed to [dispatch update events incrementally](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes).
 
-If you tried the command in the past, you might have noticed who the output is often confusing:
+If you tried the command in the past, you might have noticed how the output is often confusing:
 
 ![`kubectl get pods --watch`](watch.svg)
 
@@ -22,22 +22,13 @@ Let's dive into what happens when you execute that command.
 
 ## kubectl watch
 
-Depending on what you do, `kubectl` goes through the following steps:
-
-1. Validates client-side that the current resource is valid.
-1. Uses [generators](https://kubernetes.io/docs/user-guide/kubectl-conventions/#generators) to serialise the resources (if any).
-1. [Scans the cluster APIs for the right endpoint to call](https://github.com/kubernetes/kubernetes/blob/v1.14.0/pkg/kubectl/cmd/run/run.go#L674-L686) and [assembles a client that talk to that particular version](https://github.com/kubernetes/kubernetes/blob/v1.14.0/pkg/kubectl/cmd/run/run.go#L705-L708).
-1. Authenticates with the API using your kubeconfig credentials.
-
-The first two points are skipped here, but the remaining still apply.
-
-And once they are completed, `kubectl` issues a request to :
+When you type `kubectl get pods --watch`, a request is issued to:
 
 ```
 GET https://api-server:8443/api/v1/namespaces/my-namespace/pods?watch=1
 ```
 
-The response is temporarily empty and hangs.
+**The response is temporarily empty and hangs.**
 
 The reason is straightforward: this is long-lived request, and the API is ready to respond with events as soon as there's one.
 
@@ -45,16 +36,20 @@ Since nothing happened, the connection is kept open.
 
 Let's test this with a real cluster.
 
-You can connect to your Kubernetes API with:
+You can start a proxy to the Kubernetes API server on your local machine with:
 
 ```terminal|command=1|title=bash
 kubectl proxy
 Starting to serve on 127.0.0.1:8001
 ```
 
-Kubectl proxy creates a tunnel from your local machine to the remote API server.
+[Kubectl proxy creates a tunnel from your local machine to the remote API server.](https://kubernetes.io/docs/tasks/access-kubernetes-api/http-proxy-access-api/)
 
-You can verify that you're connected by issuing a request in another terminal:
+It also uses your credentials stored in KUBECONFIG to authenticate.
+
+From now on, when you send requests to `127.0.0.1:8001` kubectl forwards them to the API server in your cluster.
+
+You can verify it by issuing a request in another terminal:
 
 ```terminal|command=1|title=bash
 curl localhost:8001
@@ -77,7 +72,7 @@ It's time to subscribe for updates with:
 curl localhost:8001/api/v1/pods?watch=1
 ```
 
-Notice how the request does not complete and hangs.
+Notice how the request does not complete and stays open.
 
 In another terminal, create a Pod in the _default_ namespace with:
 
@@ -87,7 +82,7 @@ kubectl run random-pod --image=nginx --restart=Never
 
 Observe the previous command.
 
-There's output this time! — and a lot of it.
+**There's output this time! — and a lot of it.**
 
 ```json|title=output.json
 {"type":"ADDED","object":{"kind":"Pod","apiVersion":"v1",/* more json */}}
@@ -124,7 +119,7 @@ The output from the watch command has another entry:
 
 In other words, every time you use the `watch=1` query string, you can expect:
 
-1. The request to hang.
+1. The request stays open.
 1. An update every time a Pod is added, deleted or modified.
 
 If you recall, that's precisely the output from `kubectl get pods --watch`.
@@ -149,13 +144,13 @@ Something like this:
 
 When a new Pod is added, a green block is created in a Node.
 
-When an existing Pod is deleted, a green block is removed from a Pod.
+When an existing Pod is deleted, a green block is removed from a Node.
 
 _Where do you start?_
 
-In this article, you will focus on working with the Kubernetes API rather than a specific language.
+Since the dashboard is web-based, in this article, you will focus on working with the Kubernetes API with Javascript.
 
-And since the dashboard is web-based, you will use Javascript to interact with the APIs.
+But the same API calls and code patterns can be applied to any other language.
 
 Let's start.
 
@@ -183,11 +178,19 @@ kubectl proxy --www=.
 Starting to serve on 127.0.0.1:8001
 ```
 
+You discovered already that `kubectl proxy` creates a tunnel from your local machine to the API server using your credentials.
+
+If you use the flag `--www=<folder>` you can also serve static content from a specific directory.
+
+The static content is served at `/static` by default, but you can customise that too with the flag `--www-prefix='/<my-url>/'`.
+
+> Please note that serving the API and the static assets under the same domain saves you from dealing with [CORS permissions](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
+
 You can open your browser at <http://localhost:8001/static> to see the _Hello World!_ page.
 
 Let's see if you can connect to the Kubernetes API too.
 
-create a Javascript file named `app.js` with the following content:
+Create a Javascript file named `app.js` with the following content:
 
 ```javascript|title=app.js
 fetch(`/api/v1/pods`)
@@ -221,7 +224,7 @@ fetch(`/api/v1/pods?watch=1`).then((response) => {
 
 While the initial call to the API is similar, handling the response is more complicated.
 
-Since the response never ends, you have to parse the incoming stream as more bytes are received.
+**Since the response never ends, you have to parse the incoming stream as more bytes are received.**
 
 You also have to remember to parse the JSON responses every time there's a new line.
 
@@ -325,6 +328,11 @@ Those two pods are duplicates
 as you've already seen them
 ```
 
+**The Pod is listed twice:**
+
+1. In the "list all the Pods" API request and
+1. In the "stream the updates for all Pods" request.
+
 _Isn't the watch API supposed to stream only updates?_
 
 _Why is it streaming events that happened in the past?_
@@ -363,7 +371,7 @@ As objects are created in the cluster, the number is increased.
 
 The same number can be used to retrieve the state of the cluster in a given point in time.
 
-You could list all the Pods when the `resourceVersion` number `12031` with:
+You could list all the Pods from the `resourceVersion` number `12031` with:
 
 ```terminal|command=1|title=bash
 curl localhost:8001/api/v1/pods?resourceVersion=12031
@@ -374,10 +382,10 @@ The `resourceVersion` could help you make your code more robust.
 
 Here's what you can change:
 
-1. The first request retrieves all the Pods. The response is a `PodList` with a `resourceVersion`. You should save that.
-1. You start the Watch API from that `resourceVersion`.
+1. The first request retrieves all the Pods. The response is a list of Pods with a `resourceVersion`. You should save that number.
+1. You start the Watch API from that specific `resourceVersion`.
 
-The code should change to something like this:
+The code should change to:
 
 ```javascript|highlight=7,10|title=dashboard.js
 fetch('/api/v1/pods')
@@ -402,7 +410,7 @@ The code now works as expected and there are no duplicate Pods.
 
 Congrats!
 
-If you add or delete a Pod in the cluster, you should be able to see an update in your web console.
+**If you add or delete a Pod in the cluster, you should be able to see an update in your web console.**
 
 The code is reliable, and you only receive updates for events that you don't know!
 
@@ -468,18 +476,18 @@ function display() {
 
 At this point, you should have a solid foundation to build the rest of the dashboard.
 
-## Handling exceptions
-
 Please note that the current code is missing:
 
 1. A friendly user interface.
-1. Retires when a request is terminated prematurely.
+1. Retries when a request is terminated prematurely.
 
 Rendering the HTML and writing the CSS are omitted in this tutorial.
 
 [You can find the full project (including a friendly user interface) in this repository](https://github.com/learnk8s/k8bit), though.
 
-Instead, the retry mechanism is worth discussing.
+However, the retry mechanism is worth discussing.
+
+## Handling exceptions
 
 When you make a request using the watch flag, you keep the request open.
 
@@ -487,19 +495,19 @@ _But does it always stay connected?_
 
 Nothing in life lasts forever.
 
-The request could be terminated for a variety of reasons.
+**The request could be terminated for a variety of reasons.**
 
 Perhaps the API was restarted, or the load balancer between you and the API decided to terminate the connection.
 
-You should handle this case when it happens.
+You should handle this edge case — when it happens.
 
-If you decide to reconnect, you should reconnect from the last update.
+And when you decide to reconnect, you should reconnect from the last update.
 
 _But how do you know what was the last update?_
 
 Again, the `resourceVersion` field is here to the rescue.
 
-Since each update has a `resourceVersion` field, you should always store the last one you saw.
+Since each update has a `resourceVersion` field, you should always store the last one you saved.
 
 If the request is interrupted, you can initiate a new request to the API starting from the last `resourceVersion` field that you saw.
 
@@ -569,7 +577,7 @@ A quick recap of the code changes that you did:
 
 If you were to extend the same logic to Service and Deployments or any other Kubernetes resource, you probably want to have a very similar code.
 
-It's a good idea to encapsulate the above logic in a library, so you don't have to keep reinventing the wheel every time you wish to track objects.
+**It's a good idea to encapsulate the above logic in a library,** so you don't have to keep reinventing the wheel every time you wish to track objects.
 
 That's what the Kubernetes community thought too.
 
@@ -620,4 +628,20 @@ Imagine being able to track Pods, Deployments, Services, DaemonSets, etc. from w
 
 That's precisely what happens when you deploy an operator or a controller in Kubernetes.
 
-In a way, this article helped you to write (almost) your first Kubernetes operator.
+_What else can you build?_
+
+I [connected a Google Spreadsheet to Kubernetes](https://github.com/learnk8s/xlskubectl), and I was able to change replicas for my Deployments with formulas.
+
+_Odd, right?_
+
+That's to show how powerful the Kubernetes API is.
+
+## That's all folks
+
+_What can you connect the Kubernetes API too?_
+
+_Do you have a brilliant idea on how to leverage the real-time updates in Kubernetes?_
+
+[Let us know!](https://twitter.com/learnk8s)
+
+A special thank you goes to [Daniel Weibel](https://medium.com/@weibeld) and [Chris Nesbitt-Smith](https://github.com/chrisns) that reviewed the content of this article.
