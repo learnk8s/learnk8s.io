@@ -1,4 +1,4 @@
-**TL;DR:** _In Kubernetes you can use the Shared Informer — an efficient code pattern to watch for resource changes. This article teaches you how it works and how you can build [a real-time dashboard for Kubernetes](https://github.com/learnk8s/k8bit) with it._
+**TL;DR:** _In Kubernetes you can use the Shared Informer — an efficient code pattern to watch for changes in Kubernetes resources. In this article you will learn how it works and how you can build [a real-time dashboard for Kubernetes](https://github.com/learnk8s/k8bit) with it._
 
 In Kubernetes, you can monitor changes to Pods in real-time with the `--watch` flag:
 
@@ -224,7 +224,7 @@ fetch(`/api/v1/pods?watch=1`).then((response) => {
 
 While the initial call to the API is similar, handling the response is more complicated.
 
-**Since the response never ends and stays open, you have to parse the incoming stream as more bytes are received.**
+**Since the response never ends and stays open, you have to parse the incoming payloads as they come.**
 
 You also have to remember to parse the JSON responses every time there's a new line.
 
@@ -251,7 +251,7 @@ resumed here
 
 That means that:
 
-1. You should buffer all incoming bytes.
+1. You should buffer all incoming payloads.
 1. As the buffer grows, check if there are new lines.
 1. Every time there's a new line, parse it as a JSON blob.
 1. Call a function that prints the event in the console.
@@ -422,11 +422,11 @@ Well almost every Pod exposes `.spec.nodeName`.
 
 When a Pod is created:
 
-1. It is stored in etcd.
+1. It is stored in the database.
 1. An "ADDED" event is dispatched.
 1. The Pod is added to the scheduler queue.
 1. The scheduler binds the Pod to a Node.
-1. The Pod is updated in etcd.
+1. The Pod is updated in the database.
 1. The "MODIFIED" event is dispatched.
 
 So you can keep a list of all Pods, but filter the list only for Pods that a `.spec.nodeName`.
@@ -507,7 +507,7 @@ Again, the `resourceVersion` field is here to the rescue.
 
 Since each update has a `resourceVersion` field, you should always save the last one you saw.
 
-If the request is interrupted, you can initiate a new request to the API starting from the last `resourceVersion` field.
+If the request is interrupted, you can initiate a new request to the API starting from the last `resourceVersion`.
 
 You can change the code to keep track of the last `resourceVersion` with:
 
@@ -636,7 +636,7 @@ That's to show how powerful the Kubernetes API is.
 
 ## That's all folks
 
-_What can you connect the Kubernetes API too?_
+_What can you connect the Kubernetes API?_
 
 _Do you have a brilliant idea on how to leverage the real-time updates in Kubernetes?_
 
