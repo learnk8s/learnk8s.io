@@ -15,6 +15,7 @@ import { minify } from 'terser'
 import postcss from 'postcss'
 import cssnano from 'cssnano'
 import purgecss from '@fullhuman/postcss-purgecss'
+import purgeHtml from 'purgecss-from-html'
 import toString from 'hast-util-to-string'
 import React from 'react'
 import { jsxToString, jsxToHast } from './jsx-utils/jsxToHast'
@@ -202,7 +203,15 @@ async function optimiseCss({ $ }: { $: Cheerio }): Promise<Cheerio> {
   linkTags.remove()
   const digestCss = md5(css)
   const result = await postcss([
-    purgecss({ content: [{ raw: $.html(), extension: 'html' }] }) as any,
+    purgecss({
+      content: [{ raw: $.html(), extension: 'html' }],
+      extractors: [
+        {
+          extractor: purgeHtml,
+          extensions: ['html'],
+        },
+      ],
+    }) as any,
     cssnano,
   ]).process(css, { from: 'src/style.css', to: `_site/a/${digestCss}.css` })
   $.find('head').append(<style dangerouslySetInnerHTML={{ __html: result.content }}></style>)
