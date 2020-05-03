@@ -1,6 +1,4 @@
 import React from 'react'
-import { Course } from 'schema-dts'
-import { JsonLd } from 'react-schemaorg'
 import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
 import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
 import { Store } from 'redux'
@@ -417,32 +415,6 @@ const CourseBlock: React.StatelessComponent<{
   )
 }
 
-const Module: React.StatelessComponent<{
-  title: string
-  preview: JSX.Element
-  className?: string
-  tag?: string
-}> = ({ children, title, preview, className, tag }) => {
-  return (
-    <div className={`mh3 ${className}`}>
-      <div className='module pt3 pb4 ph4 shadow-2 mv4 bg-white flex items-start mw8 center'>
-        <div className='w-50-ns'>
-          <h2 className={`f2 navy b ack-20 pb3 ${tag ? 'mb0' : ''}`}>{title}</h2>
-          {tag ? <p className='f6 ttu bg-light-green pa2 dib br2 b black-80'>{tag}</p> : null}
-          <div className=''>{children}</div>
-        </div>
-        <div className='w-50 flex-ns flex-wrap items-start pt3 dn'>
-          <div className='w-100'>
-            <div className='padding-hack-75 relative'>
-              <img src={preview.props.src} alt={preview.props.alt} className='absolute top-0 right-0' />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export const Feedback: React.StatelessComponent<{
   description: string
   author: string
@@ -473,98 +445,6 @@ export const ListItemQuestion: React.StatelessComponent<{}> = ({ children }) => 
   )
 }
 
-const ListItem: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
-  return (
-    <li className={`mv2 flex justify-center ${className || ''}`}>
-      <div className='v-top tc'>
-        <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
-      </div>
-      <div className='v-top pl3 w-90'>
-        <p className='mv0 f3-l f4 lh-copy black-80'>{children}</p>
-      </div>
-    </li>
-  )
-}
-
-const ListItemX: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
-  return (
-    <li className={`mv2 flex justify-center ${className || ''}`}>
-      <div className='v-top tc'>
-        <img src='assets/x.svg' alt='Tick' className='w2 h2' />
-      </div>
-      <div className='v-top pl3 w-90'>
-        <p className='mv0 f3-l f4 lh-copy black-80'>{children}</p>
-      </div>
-    </li>
-  )
-}
-
-const Quiz: React.StatelessComponent<{
-  className?: string
-  correctAnswer: 'yes' | 'no'
-  id: string
-  labelYes: string
-  labelNo: string
-}> = ({ id, children, className, correctAnswer, labelYes, labelNo }) => {
-  return (
-    <div className={`yesno ${correctAnswer === 'yes' ? 'first-right' : 'second-right'} ${className || ''}`}>
-      <input type='radio' name={id} id={`yes-${id}`} className='dn yes' />
-      <input type='radio' name={id} id={`no-${id}`} className='dn no' />
-      <ol className='ph5-l ph2 list'>
-        <li className='yes mv2 pa2 br2'>
-          <label htmlFor={`yes-${id}`} className='h2 flex items-center'>
-            <span className='radio ba w2 h2 br-100 bw1 v-mid dib' />
-            <span className='pl3 f3-l f4'>{labelYes}</span>
-          </label>
-        </li>
-        <li className='no mv2 pa2 br2'>
-          <label htmlFor={`no-${id}`} className='h2 flex items-center'>
-            <span className='radio ba w2 h2 br-100 bw1 v-mid dib' />
-
-            <span className='pl3 f3-l f4'>{labelNo}</span>
-          </label>
-        </li>
-      </ol>
-      <p className='pt3 f5-l f6 ttu lh-copy b'>Answer:</p>
-      <div className='answer'>{children}</div>
-    </div>
-  )
-}
-
 const Section: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
   return <section className={`pv4 black-80 ph3 ${className || ''}`}>{children}</section>
-}
-
-function CreateToggle() {
-  function doesntExist<T>(it: T): boolean {
-    return !it
-  }
-  function Toggle(element: Element) {
-    var target = element.getAttribute('data-toggle')
-    if (!target) {
-      return
-    }
-    var targetElements = target.split(',').map(function(selector) {
-      return document.querySelector(selector)
-    })
-    if (targetElements.some(doesntExist)) {
-      return
-    }
-    if (targetElements[0]!.classList.contains('toggle-collapse')) {
-      targetElements.forEach(function(it) {
-        return it!.classList.remove('toggle-collapse')
-      })
-    } else {
-      targetElements.forEach(function(it) {
-        return it!.classList.add('toggle-collapse')
-      })
-    }
-  }
-
-  ;[].slice.call(document.querySelectorAll('[data-toggle]')).forEach(function(element: Element) {
-    element.addEventListener('click', function() {
-      Toggle(element)
-    })
-  })
-  ;[].slice.call(document.querySelectorAll('[data-toggle-collapsed]')).forEach(Toggle)
 }

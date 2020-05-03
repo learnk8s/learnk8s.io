@@ -243,7 +243,7 @@ function renderPage(state: State, sections: Section[]) {
 
         <Footer />
 
-        <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} className='toggle-collapse' />
         <script
           dangerouslySetInnerHTML={{
             __html: `(${TrackProgress.toString()})('${jsxToString(<ProgressWidget />)}')`,

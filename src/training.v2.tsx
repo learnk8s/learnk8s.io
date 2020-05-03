@@ -754,7 +754,7 @@ function renderPage(state: State) {
 
         <Consultation />
         <Footer />
-        <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} className='toggle-collapse' />
         <script
           dangerouslySetInnerHTML={{
             __html: `

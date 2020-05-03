@@ -463,7 +463,10 @@ export function mdast2Jsx(): MdastVisitors<JSX.Element> {
       return (
         <div className='js-animation-svg'>
           <object data={node.children[0].url} type='image/svg+xml' />
-          <script dangerouslySetInnerHTML={{ __html: `(${ResetAnimation.toString()})()` }} />
+          <script
+            dangerouslySetInnerHTML={{ __html: `(${ResetAnimation.toString()})()` }}
+            className='dn ok relative pv3 pv4-ns mb4 absolute bottom-0 left-0 w2 dim pointer z-3 top right z-1'
+          />
         </div>
       )
     },
