@@ -51,7 +51,7 @@ export const tachyons = [
   boxSizing(),
   colour({
     black: '#000',
-    // 'near-black': '#111',
+    'near-black': '#111',
     'dark-gray': '#333',
     // 'mid-gray': '#555',
     gray: '#777',
@@ -89,7 +89,7 @@ export const tachyons = [
     'light-red': '#ff725c',
     // red: '#ff4136',
     // orange: '#ff6300',
-    // gold: '#ffb700',
+    gold: '#ffb700',
     yellow: '#ffd700',
     // 'light-yellow': '#fbf1a9',
     // purple: '#5e2ca5',
@@ -1065,6 +1065,11 @@ function codeHighlightingCommon(): string {
 
 [class^="code-"] .token.entity {
   cursor: help;
+}
+
+[class^="code-"] .code {
+  min-width: 100%;
+  float: left;
 }
 
 [class^="code-"] .highlight,
