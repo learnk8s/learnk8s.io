@@ -72,8 +72,8 @@ export const Navbar: React.StatelessComponent<{}> = ({}) => {
         <a href='#' className='z-max reveal pt2 pr2 tc white absolute top-0 right-0 dn-l'>
           <span className='x-icon' />
         </a>
-        <ul className='z-9 reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
-          <li className='ttu mh2 bb bn-l'>
+        <ul className='z-999 reveal w5 list pl0 mv0 flex-l items-center-l absolute top-0 right-0 z-1 static-l w-100-l'>
+          <li className='ttu mh2 bb bn-l b--white'>
             <a
               href='/learn'
               className='white link db b ph1 mv2 pv2 f5 underline-hover mr4 mr0-l'
@@ -82,12 +82,12 @@ export const Navbar: React.StatelessComponent<{}> = ({}) => {
               Training & courses
             </a>
           </li>
-          <li className='ttu mh2 bb bn-l'>
+          <li className='ttu mh2 bb bn-l b--white'>
             <a href='/blog' className='white link db b ph1 mv2 pv2 f5 underline-hover' title='Blog'>
               Blog
             </a>
           </li>
-          <li className='ttu mh2 bb bn-l'>
+          <li className='ttu mh2'>
             <a
               href='/kubernetes-free-tools'
               className='white link db b ph1 mv2 pv2 f5 underline-hover mr4 mr0-l'
