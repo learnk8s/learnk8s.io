@@ -224,10 +224,18 @@ async function optimiseCss({ $ }: { $: Cheerio }): Promise<Cheerio> {
               .reduce((acc, it) => {
                 return acc.concat((it.properties as any).id as string[])
               }, [] as string[])
-            $.findAll('input').forEach(element => {
+            $.findAll('[type]').forEach(element => {
               attributes.names.push('type')
               attributes.values.push((element.properties as any).type as string)
             })
+            const titles = $.findAll('[title]').get()
+            if (titles.length > 0) {
+              attributes.names.push('title')
+            }
+            const hiddens = $.findAll('[hidden]').get()
+            if (hiddens.length > 0) {
+              attributes.names.push('hidden')
+            }
             return { classes, ids, tags, attributes, undetermined: [] } as any
           },
           extensions: ['hast'],
