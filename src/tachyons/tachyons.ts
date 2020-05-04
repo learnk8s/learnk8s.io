@@ -51,7 +51,7 @@ export const tachyons = [
   boxSizing(),
   colour({
     black: '#000',
-    // 'near-black': '#111',
+    'near-black': '#111',
     'dark-gray': '#333',
     // 'mid-gray': '#555',
     gray: '#777',
@@ -89,7 +89,7 @@ export const tachyons = [
     'light-red': '#ff725c',
     // red: '#ff4136',
     // orange: '#ff6300',
-    // gold: '#ffb700',
+    gold: '#ffb700',
     yellow: '#ffd700',
     // 'light-yellow': '#fbf1a9',
     // purple: '#5e2ca5',
@@ -304,7 +304,7 @@ function aspectRatios(): string {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 100;
+    z-index: 8;
 }`
 }
 
@@ -1040,7 +1040,10 @@ function opacity(scale: number[]): string {
 }
 
 function codeHighlightingCommon(): string {
-  return `[class^="code-"] {
+  const themes = ['code-light-theme', 'code-dark-theme', 'code-powershell']
+  return themes
+    .map(it => {
+      return `.${it} {
   -moz-tab-size: 4;
   -o-tab-size: 4;
   tab-size: 4;
@@ -1050,27 +1053,32 @@ function codeHighlightingCommon(): string {
   hyphens: none;
 }
 
-[class^="code-"] .namespace {
+.${it} .namespace {
   opacity: 0.7
 }
 
-[class^="code-"] .token.important,
-[class^="code-"] .token.bold {
+.${it} .token.important,
+.${it} .token.bold {
   font-weight: bold;
 }
 
-[class^="code-"] .token.italic {
+.${it} .token.italic {
   font-style: italic;
 }
 
-[class^="code-"] .token.entity {
+.${it} .token.entity {
   cursor: help;
 }
 
-[class^="code-"] .highlight,
-[class^="code-"] .standard,
-[class^="code-"] .command,
-[class^="code-"] .output {
+.${it} .code {
+  min-width: 100%;
+  float: left;
+}
+
+.${it} .highlight,
+.${it} .standard,
+.${it} .command,
+.${it} .output {
   padding-left: 2rem;
   padding-right: 2rem;
   display: block;
@@ -1078,24 +1086,24 @@ function codeHighlightingCommon(): string {
   box-sizing: border-box;
 }
 
-[class^="code-"] .code .prompt.active:after {
+.${it} .code .prompt.active:after {
   content: ' _';
 }
-[class^="code-"] .code .prompt.empty:after {
+.${it} .code .prompt.empty:after {
   content: '_';
 }
 
-[class^="code-"] .code .prompt.active:after,
-[class^="code-"] .code .prompt.empty:after,
-[class^="code-"] .blinking-cursor {
+.${it} .code .prompt.active:after,
+.${it} .code .prompt.empty:after,
+.${it} .blinking-cursor {
   -webkit-animation: 1s blinking step-end infinite;
   -moz-animation: 1s blinking step-end infinite;
   -ms-animation: 1s blinking step-end infinite;
   -o-animation: 1s blinking step-end infinite;
   animation: 1s blinking step-end infinite;
-}
-
-@keyframes blinking {
+}`
+    })
+    .join('\n').concat(`@keyframes blinking {
   from,
   to {
     color: transparent;
@@ -1143,7 +1151,7 @@ function codeHighlightingCommon(): string {
   50% {
     color: white;
   }
-}`
+}`)
 }
 
 function codeHighlighting(): string {

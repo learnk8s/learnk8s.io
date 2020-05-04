@@ -203,7 +203,10 @@ setTimeout(ldinsp, 0);
               </ul>
             </Module>
 
-            <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
+            <script
+              dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }}
+              className='toggle-collapse'
+            />
           </div>
         </Section>
 

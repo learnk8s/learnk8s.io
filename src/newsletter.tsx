@@ -114,7 +114,7 @@ function renderPage(state: State) {
                   Invalid email.
                 </p>
               </form>
-              <script dangerouslySetInnerHTML={{ __html: `(${SubmitWithAjax.toString()})()` }} />
+              <script dangerouslySetInnerHTML={{ __html: `(${SubmitWithAjax.toString()})()` }} className='dn' />
             </div>
           </section>
         </div>
