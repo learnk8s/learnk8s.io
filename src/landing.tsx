@@ -217,7 +217,7 @@ export function renderPage({
               Kubernetes <span className='nowrap'>instructor-led</span> training course in {landingPageLocation.city}
             </h1>
             <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>
-              Become an expert in deploing and scaling applications with Kubernetes.
+              Become an expert in deploying and scaling applications with Kubernetes.
             </h2>
             <div className='dn db-l mw6 mh3 mh4-ns tc'>
               <div className='w3 h3 dib'>
