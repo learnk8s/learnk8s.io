@@ -3,6 +3,7 @@ import * as CoursesReducer from './coursesReducer'
 import * as WebsiteReducer from './websiteReducer'
 import * as ConfigReducer from './configReducer'
 import { OnlineCourse } from './coursesReducer'
+import { configureStore } from '@reduxjs/toolkit'
 
 export type State = {
   courses: CoursesReducer.State
@@ -15,6 +16,22 @@ export type Actions = CoursesReducer.Actions | WebsiteReducer.Actions
 export const Action = {
   ...CoursesReducer.Action,
   ...WebsiteReducer.Action,
+}
+
+export const ActionV2 = {
+  ...CoursesReducer.ActionV2,
+}
+
+export type StoreV2 = typeof storeV2
+
+export const storeV2 = configureStore({
+  reducer: {
+    courses: CoursesReducer.courseSlice.reducer,
+  },
+})
+
+export const selector = {
+  ...CoursesReducer.selector,
 }
 
 export const store = createStore<State, Actions, {}, {}>(
@@ -49,7 +66,7 @@ export function getWorkshops(state: State): CoursesReducer.FullWorkshop[] {
       price: Object.values(state.courses.prices).find(it => it.id === workshop.priceId)!,
       venue: Object.values(state.courses.venues).find(it => it.id === workshop.venueId)!,
       picture: Object.values(state.courses.pics).find(it => it.id === workshop.pictureId)!,
-      ...Object.values(state.courses.courses).find(it => it.id === workshop.courseId)!,
+      ...Object.values(selector.courses.selectAll(storeV2.getState())).find(it => it.id === workshop.courseId)!,
       ...workshop,
     }
   })

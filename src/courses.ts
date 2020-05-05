@@ -1,7 +1,8 @@
 import { Store } from 'redux'
-import { State, Actions, Action } from './store'
+import { State, Actions, Action, storeV2 } from './store'
 import { toVFile } from './files'
 import { join } from 'path'
+import { ActionV2 } from './store/coursesReducer'
 
 const Venues = {
   JustCoSg: {
@@ -207,7 +208,7 @@ const NewPictures = {
 
 export function Register(store: Store<State, Actions>) {
   Object.values(NewPictures).forEach(picture => store.dispatch(Action.registerCoursePicture(picture)))
-  Object.values(Courses).forEach(course => store.dispatch(Action.registerCourse(course)))
+  Object.values(Courses).forEach(course => storeV2.dispatch(ActionV2.courses.add(course)))
   Object.values(Venues).forEach(venue => store.dispatch(Action.registerCourseVenue(venue)))
   Object.values(CoursePrice).forEach(price => store.dispatch(Action.registerCoursePrice(price)))
   store.dispatch(

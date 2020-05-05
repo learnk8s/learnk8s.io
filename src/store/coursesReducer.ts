@@ -1,10 +1,38 @@
 import { Reducer } from 'redux'
 import { VReference } from '../files'
+import { createEntityAdapter, createSlice, configureStore } from '@reduxjs/toolkit'
+import { storeV2 } from '.'
+
+const courseAdapter = createEntityAdapter<Course>({})
+
+export const courseSlice = createSlice({
+  name: 'courses',
+  initialState: courseAdapter.getInitialState(),
+  reducers: {
+    add: courseAdapter.addOne,
+  },
+})
+
+export const courseStore = configureStore({
+  reducer: {
+    courses: courseSlice.reducer,
+  },
+})
+
+export const ActionV2 = {
+  courses: { ...courseSlice.actions },
+}
+
+type StateV2 = ReturnType<typeof storeV2.getState>
+
+export const selector = {
+  courses: courseAdapter.getSelectors<StateV2>(state => state.courses),
+}
 
 export const Action = {
-  registerCourse(args: Course) {
-    return { type: 'REGISTER_COURSE' as const, ...args }
-  },
+  // registerCourse(args: Course) {
+  //   return { type: 'REGISTER_COURSE' as const, ...args }
+  // },
   registerCourseVenue(args: CourseVenue) {
     return { type: 'REGISTER_COURSE_VENUE' as const, ...args }
   },
@@ -78,7 +106,7 @@ export type OnlineCourse = {
 }
 
 export interface State {
-  courses: Record<string, Course>
+  // courses: Record<string, Course>
   venues: Record<string, CourseVenue>
   prices: Record<string, CoursePrice>
   workshops: Record<string, Workshop>
@@ -89,7 +117,7 @@ export interface State {
 export function createInitialState(options: {}): State {
   return {
     ...options,
-    courses: {},
+    // courses: {},
     venues: {},
     prices: {},
     workshops: {},
@@ -103,9 +131,9 @@ export const RootReducer: Reducer<State, Actions> = (
   action: Actions,
 ): State => {
   switch (action.type) {
-    case 'REGISTER_COURSE': {
-      return { ...state, courses: { ...state.courses, [action.id]: { ...action } } }
-    }
+    // case 'REGISTER_COURSE': {
+    //   return { ...state, courses: { ...state.courses, [action.id]: { ...action } } }
+    // }
     case 'REGISTER_COURSE_VENUE': {
       return { ...state, venues: { ...state.venues, [action.id]: { ...action } } }
     }
@@ -113,9 +141,9 @@ export const RootReducer: Reducer<State, Actions> = (
       return { ...state, prices: { ...state.prices, [action.id]: { ...action } } }
     }
     case 'REGISTER_WORKSHOP': {
-      if (!(action.courseId in state.courses)) {
-        throw new Error(`I couldn't find the course ${action.courseId}. Please fix Workshop ${action.id}`)
-      }
+      // if (!(action.courseId in state.courses)) {
+      //   throw new Error(`I couldn't find the course ${action.courseId}. Please fix Workshop ${action.id}`)
+      // }
       if (!(action.venueId in state.venues)) {
         throw new Error(`I couldn't find the venue ${action.venueId}. Please fix Workshop ${action.id}`)
       }
