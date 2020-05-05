@@ -6,10 +6,11 @@ import { OnlineCourse } from './coursesReducer'
 import { configureStore } from '@reduxjs/toolkit'
 
 export type State = {
-  courses: CoursesReducer.State
   website: WebsiteReducer.State
   config: ConfigReducer.State
 }
+
+export type StateV2 = CoursesReducer.StateV2
 
 export type Actions = CoursesReducer.Actions | WebsiteReducer.Actions
 
@@ -27,6 +28,11 @@ export type StoreV2 = typeof storeV2
 export const storeV2 = configureStore({
   reducer: {
     courses: CoursesReducer.courseSlice.reducer,
+    venues: CoursesReducer.venueSlice.reducer,
+    workshops: CoursesReducer.workshopSlice.reducer,
+    pictures: CoursesReducer.pictureSlice.reducer,
+    prices: CoursesReducer.priceSlice.reducer,
+    onlineCourses: CoursesReducer.onlineCourseSlice.reducer,
   },
 })
 
@@ -36,12 +42,10 @@ export const selector = {
 
 export const store = createStore<State, Actions, {}, {}>(
   combineReducers({
-    courses: CoursesReducer.RootReducer,
     website: WebsiteReducer.RootReducer,
     config: ConfigReducer.RootReducer,
   }),
   {
-    courses: CoursesReducer.createInitialState({}),
     website: WebsiteReducer.createInitialState({}),
     config: ConfigReducer.createInitialState({
       organisationId: process.env.ENVENTBRITE_ORG as string,
@@ -56,20 +60,24 @@ export const store = createStore<State, Actions, {}, {}>(
   },
 )
 
-export function getVenues(state: State): CoursesReducer.CourseVenue[] {
-  return Object.values(state.courses.venues)
+export function getVenues(state: StateV2): CoursesReducer.CourseVenue[] {
+  return Object.values(state.venues)
 }
 
-export function getWorkshops(state: State): CoursesReducer.FullWorkshop[] {
-  return Object.values(state.courses.workshops).map(workshop => {
+export function getWorkshops(state: StateV2): CoursesReducer.FullWorkshop[] {
+  return Object.values(selector.workshops.selectAll(state)).map(workshop => {
     return {
-      price: Object.values(state.courses.prices).find(it => it.id === workshop.priceId)!,
-      venue: Object.values(state.courses.venues).find(it => it.id === workshop.venueId)!,
-      picture: Object.values(state.courses.pics).find(it => it.id === workshop.pictureId)!,
-      ...Object.values(selector.courses.selectAll(storeV2.getState())).find(it => it.id === workshop.courseId)!,
+      price: Object.values(selector.prices.selectAll(state)).find(it => it.id === workshop.priceId)!,
+      venue: Object.values(selector.venues.selectAll(state)).find(it => it.id === workshop.venueId)!,
+      picture: Object.values(selector.pictures.selectAll(state)).find(it => it.id === workshop.pictureId)!,
+      ...Object.values(selector.courses.selectAll(state)).find(it => it.id === workshop.courseId)!,
       ...workshop,
     }
   })
+}
+
+export function getOnlineCourses(state: StateV2): OnlineCourse[] {
+  return Object.values(selector.onlineCourses.selectAll(state))
 }
 
 export function getConfig(state: State): ConfigReducer.State {
@@ -112,8 +120,4 @@ export function getRedirects(state: State): WebsiteReducer.Redirect[] {
 
 export function getPreviewPictures(state: State): WebsiteReducer.PreviewPicture[] {
   return Object.values(state.website.previewPictures)
-}
-
-export function getOnlineCourses(state: State): OnlineCourse[] {
-  return Object.values(state.courses.onlineCourse)
 }

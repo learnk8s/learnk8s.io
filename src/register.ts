@@ -41,7 +41,7 @@ import * as K8Bit from './k8bit/k8bit'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedArticles from './bite-sized-articles'
-import { State, Actions } from './store'
+import { State, Actions, storeV2 } from './store'
 import * as Courses from './courses'
 import * as Workshops from './training.v2'
 import * as Training from './learn'
@@ -52,7 +52,7 @@ import * as Flipboard from './flipboard'
 import { Store } from 'redux'
 
 export function register(store: Store<State, Actions>) {
-  Courses.Register(store)
+  Courses.Register(store, storeV2)
   Workshops.Register(store)
   Training.Register(store)
   Landing.Register(store)

@@ -33,7 +33,18 @@ import {
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
 import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getWorkshops, getConfig, getOnlineCourses } from './store'
+import {
+  State,
+  Actions,
+  Action,
+  getPages,
+  getOpenGraph,
+  getWorkshops,
+  getConfig,
+  getOnlineCourses,
+  StoreV2,
+  StateV2,
+} from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
@@ -135,11 +146,12 @@ export function Register(store: Store<State, Actions>) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store, storeV2 }: { store: Store<State, Actions>; storeV2: StoreV2 }) {
   const state = store.getState()
+  const stateV2 = storeV2.getState()
   try {
     defaultAssetsPipeline({
-      jsx: renderPage(state),
+      jsx: renderPage(state, stateV2),
       isOptimisedBuild: getConfig(state).isProduction,
       siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
       url: Training.url,
@@ -150,11 +162,11 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
   }
 }
 
-function renderPage(state: State) {
+function renderPage(state: State, stateV2: StateV2) {
   const page = getPages(state).find(it => it.id === Training.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
-  const courses = getWorkshops(state)
-  const onlineCourses = getOnlineCourses(state)
+  const courses = getWorkshops(stateV2)
+  const onlineCourses = getOnlineCourses(stateV2)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   return (
     <Html>

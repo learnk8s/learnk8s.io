@@ -21,6 +21,8 @@ import {
   getWorkshops,
   getLandingPageLocations,
   getConfig,
+  StoreV2,
+  StateV2,
 } from './store'
 import {
   Html,
@@ -95,12 +97,13 @@ export function Register(store: Store<State, Actions>) {
   })
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store, storeV2 }: { store: Store<State, Actions>; storeV2: StoreV2 }) {
   const state = store.getState()
+  const stateV2 = storeV2.getState()
   const pages = getPages(state).filter(it => Object.keys(Pages).includes(it.id))
   pages.forEach(page => {
     defaultAssetsPipeline({
-      jsx: renderPage(state, page.id),
+      jsx: renderPage({ state, stateV2, pageId: page.id }),
       isOptimisedBuild: getConfig(state).isProduction,
       siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
       url: page.url,
@@ -121,14 +124,22 @@ const privateGroupEnquiry: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-export function renderPage(state: State, pageId: string): JSX.Element {
+export function renderPage({
+  state,
+  stateV2,
+  pageId,
+}: {
+  state: State
+  stateV2: StateV2
+  pageId: string
+}): JSX.Element {
   const page = getPages(state).find(it => it.id === pageId)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === pageId)
   const [landingPageLocation] = getLandingPageLocations(state).filter(it => it.pageId === pageId)
   if (!landingPageLocation) {
     throw new Error(`Invalid location for landing page ${pageId}`)
   }
-  const courses = getWorkshops(state).filter(it => it.venue.city === landingPageLocation.city)
+  const courses = getWorkshops(stateV2).filter(it => it.venue.city === landingPageLocation.city)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   return (
     <Html>

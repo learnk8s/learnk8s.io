@@ -10,7 +10,18 @@ import {
 } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig, getAuthors, getOnlineCourses } from './store'
+import {
+  State,
+  Actions,
+  Action,
+  getPages,
+  getOpenGraph,
+  getConfig,
+  getAuthors,
+  getOnlineCourses,
+  StoreV2,
+  StateV2,
+} from './store'
 import { Html, Head, OpenGraph, Body, Navbar, mailto, FAQs, Footer, MailTo, FAQ } from './layout.v3'
 import { join } from 'path'
 import { defaultAssetsPipeline } from './optimise'
@@ -39,10 +50,11 @@ export function Register(store: Store<State, Actions>) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store, storeV2 }: { store: Store<State, Actions>; storeV2: StoreV2 }) {
   const state = store.getState()
+  const stateV2 = storeV2.getState()
   defaultAssetsPipeline({
-    jsx: renderPage(state),
+    jsx: renderPage({ state, stateV2 }),
     isOptimisedBuild: getConfig(state).isProduction,
     siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
     url: Page.url,
@@ -109,11 +121,11 @@ const faqs: FAQ[] = [
   },
 ]
 
-export function renderPage(state: State): JSX.Element {
+export function renderPage({ state, stateV2 }: { state: State; stateV2: StateV2 }): JSX.Element {
   const pageId = Page.id
   const page = getPages(state).find(it => it.id === pageId)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === pageId)
-  const courses = getOnlineCourses(state)
+  const courses = getOnlineCourses(stateV2)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
 
   const instructors = getAuthors(state).filter(it =>

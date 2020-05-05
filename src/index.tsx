@@ -29,7 +29,7 @@ import * as GenericBlogPost from './genericBlogPost'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedRenderer from './biteSized.v2'
-import { store, getConfig } from './store'
+import { store, getConfig, storeV2 } from './store'
 import * as Workshop from './training.v2'
 import * as Training from './learn'
 import * as BestPractices from './best-practices/best'
@@ -41,9 +41,9 @@ import { register } from './register'
 
 register(store)
 
-Landing.Mount({ store })
-Online.Mount({ store })
-Workshop.Mount({ store })
+Landing.Mount({ store, storeV2 })
+Online.Mount({ store, storeV2 })
+Workshop.Mount({ store, storeV2 })
 Training.Mount({ store })
 BestPractices.Mount({ store })
 FreeTools.Mount({ store })
@@ -83,6 +83,7 @@ if (!!config.canPublishEvents && !!config.eventBriteToken && !!config.organisati
       headers: { Authorization: `Bearer ${config.eventBriteToken}` },
     }),
     state: store.getState(),
+    stateV2: storeV2.getState(),
     canPublish: config.canPublishEvents,
   })
 } else {

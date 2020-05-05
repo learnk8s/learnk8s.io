@@ -1,5 +1,5 @@
 import { Store } from 'redux'
-import { State, Actions, Action, storeV2 } from './store'
+import { State, Actions, Action, storeV2, StoreV2 } from './store'
 import { toVFile } from './files'
 import { join } from 'path'
 import { ActionV2 } from './store/coursesReducer'
@@ -206,13 +206,13 @@ const NewPictures = {
   },
 }
 
-export function Register(store: Store<State, Actions>) {
-  Object.values(NewPictures).forEach(picture => store.dispatch(Action.registerCoursePicture(picture)))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  Object.values(NewPictures).forEach(picture => storeV2.dispatch(ActionV2.pictures.add(picture)))
   Object.values(Courses).forEach(course => storeV2.dispatch(ActionV2.courses.add(course)))
-  Object.values(Venues).forEach(venue => store.dispatch(Action.registerCourseVenue(venue)))
-  Object.values(CoursePrice).forEach(price => store.dispatch(Action.registerCoursePrice(price)))
-  store.dispatch(
-    Action.registerWorkshop({
+  Object.values(Venues).forEach(venue => storeV2.dispatch(ActionV2.venues.add(venue)))
+  Object.values(CoursePrice).forEach(price => storeV2.dispatch(ActionV2.prices.add(price)))
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|SINGAPORE|20200217',
       startsAt: '2020-03-16T10:00:00',
       endsAt: '2020-03-18T17:00:00',
@@ -223,8 +223,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|SYDNEY|20200304',
       startsAt: '2020-03-04T09:30:00',
       endsAt: '2020-03-06T05:00:00',
@@ -235,8 +235,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|BERLIN|20200304',
       startsAt: '2020-02-26T09:30:00',
       endsAt: '2020-02-28T05:00:00',
@@ -247,8 +247,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|LONDON|20200311',
       startsAt: '2020-04-27T09:30:00',
       endsAt: '2020-04-29T05:00:00',
@@ -259,8 +259,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|HONGKONG|20200311',
       startsAt: '2020-03-11T09:30:00',
       endsAt: '2020-03-13T05:00:00',
@@ -271,8 +271,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|MILAN|20200318',
       startsAt: '2020-03-18T09:30:00',
       endsAt: '2020-03-20T05:00:00',
@@ -283,8 +283,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|DUBAI|20200318',
       startsAt: '2020-03-18T09:30:00',
       endsAt: '2020-03-20T05:00:00',
@@ -295,8 +295,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|LONDON|20200629',
       startsAt: '2020-06-29T09:30:00',
       endsAt: '2020-07-01T05:00:00',
@@ -307,8 +307,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|SANFRANCISCO|20200622',
       startsAt: '2020-06-22T09:30:00',
       endsAt: '2020-06-24T05:00:00',
@@ -319,8 +319,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|MELBOURNE|20200615',
       startsAt: '2020-06-15T09:30:00',
       endsAt: '2020-06-17T05:00:00',
@@ -331,8 +331,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|HONGKONG|20200610',
       startsAt: '2020-06-10T09:30:00',
       endsAt: '2020-06-12T05:00:00',
@@ -343,8 +343,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|MUNICH|20200608',
       startsAt: '2020-06-08T09:30:00',
       endsAt: '2020-06-10T05:00:00',
@@ -355,8 +355,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|DUBAI|20200609',
       startsAt: '2020-06-09T09:30:00',
       endsAt: '2020-06-11T05:00:00',
@@ -367,8 +367,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|SINGAPORE|20200601',
       startsAt: '2020-06-01T10:00:00',
       endsAt: '2020-06-03T17:00:00',
@@ -379,8 +379,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|ZURICH|20200601',
       startsAt: '2020-06-01T09:30:00',
       endsAt: '2020-06-03T05:00:00',
@@ -391,8 +391,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|TORONTO|20200615',
       startsAt: '2020-06-15T09:30:00',
       endsAt: '2020-06-17T05:00:00',
@@ -403,8 +403,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerWorkshop({
+  storeV2.dispatch(
+    ActionV2.workshops.add({
       id: 'LK8S|SEATTLE|20200629',
       startsAt: '2020-06-29T09:30:00',
       endsAt: '2020-07-01T05:00:00',
@@ -415,8 +415,8 @@ export function Register(store: Store<State, Actions>) {
       pictureId: NewPictures.one.id,
     }),
   )
-  store.dispatch(
-    Action.registerOnlineCourse({
+  storeV2.dispatch(
+    ActionV2.onlineCourses.add({
       id: 'LK8S|ONLINE|20200427',
       timezone: 'Central European Time (CET) UTC+1',
       defaultPrice: {
@@ -430,8 +430,8 @@ export function Register(store: Store<State, Actions>) {
       image: NewPictures.one.src,
     }),
   )
-  store.dispatch(
-    Action.registerOnlineCourse({
+  storeV2.dispatch(
+    ActionV2.onlineCourses.add({
       id: 'LK8S|ONLINE|20200513',
       timezone: 'Central Time US (CDT) UTC-5',
       defaultPrice: {
@@ -445,8 +445,8 @@ export function Register(store: Store<State, Actions>) {
       image: NewPictures.one.src,
     }),
   )
-  store.dispatch(
-    Action.registerOnlineCourse({
+  storeV2.dispatch(
+    ActionV2.onlineCourses.add({
       id: 'LK8S|ONLINE|20200527',
       timezone: 'Singapore (SGT) UTC+8',
       defaultPrice: {
