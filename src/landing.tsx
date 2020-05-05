@@ -418,7 +418,10 @@ export function renderPage({
                 <li className='lh-copy mv1'>{material.extensions.name}</li>
               </ul>
             </DashboardModule>
-            <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
+            <script
+              dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }}
+              className='toggle-collapse'
+            />
           </div>
 
           <div className='pt5-m pb4 pb5-ns ph3 measure-wide center'>

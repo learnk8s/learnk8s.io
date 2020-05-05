@@ -2,6 +2,7 @@ import hastParser from 'hast-util-raw'
 import { Node } from 'unist'
 import inspect from 'unist-util-inspect'
 import { selectAll, select, matches } from 'hast-util-select'
+import * as Unist$ from 'unist-util-select'
 import remove from 'unist-util-remove'
 import toHtml from 'hast-util-to-html'
 import { ok } from 'assert'
@@ -14,6 +15,7 @@ import { mkdir, cp } from 'shelljs'
 import { minify } from 'terser'
 import postcss from 'postcss'
 import cssnano from 'cssnano'
+import purgecss from '@fullhuman/postcss-purgecss'
 import toString from 'hast-util-to-string'
 import React from 'react'
 import { jsxToString, jsxToHast } from './jsx-utils/jsxToHast'
@@ -32,7 +34,7 @@ export async function defaultAssetsPipeline({
   url: string
 }) {
   const $ = Cheerio.of(jsxToString(jsx))
-  await optimise({ $, siteUrl: siteUrl, isOptimisedBuild })
+  await optimise({ $, siteUrl: siteUrl, isOptimisedBuild: true })
 
   $.findAll('a')
     .get()
@@ -100,6 +102,9 @@ export class Cheerio {
   }
   findAll(selector: string): CheerioSelectionAll {
     return new CheerioSelectionAll(this.tree, selector)
+  }
+  findAllNodes(selector: string): Node[] {
+    return Unist$.selectAll(selector, this.tree)
   }
   html() {
     return toHtml(this.tree, { allowDangerousHTML: true })
@@ -200,7 +205,45 @@ async function optimiseCss({ $ }: { $: Cheerio }): Promise<Cheerio> {
   styleTags.remove()
   linkTags.remove()
   const digestCss = md5(css)
-  const result = await postcss([cssnano]).process(css, { from: 'src/style.css', to: `_site/a/${digestCss}.css` })
+  const result = await postcss([
+    purgecss({
+      content: [{ raw: $ as any, extension: 'hast' }],
+      extractors: [
+        {
+          extractor: (content: any): any => {
+            const $ = content as Cheerio
+            const attributes = { names: [] as string[], values: [] as string[] }
+            const classes = $.findAll('[class]')
+              .get()
+              .reduce((acc, it) => {
+                return acc.concat((it.properties as any).className as string[])
+              }, [] as string[])
+            const tags = $.findAllNodes('[type="element"]').map(it => it.tagName as string)
+            const ids = $.findAll('[id]')
+              .get()
+              .reduce((acc, it) => {
+                return acc.concat((it.properties as any).id as string[])
+              }, [] as string[])
+            $.findAll('[type]').forEach(element => {
+              attributes.names.push('type')
+              attributes.values.push((element.properties as any).type as string)
+            })
+            const titles = $.findAll('[title]').get()
+            if (titles.length > 0) {
+              attributes.names.push('title')
+            }
+            const hiddens = $.findAll('[hidden]').get()
+            if (hiddens.length > 0) {
+              attributes.names.push('hidden')
+            }
+            return { classes, ids, tags, attributes, undetermined: [] } as any
+          },
+          extensions: ['hast'],
+        },
+      ],
+    }) as any,
+    cssnano,
+  ]).process(css, { from: 'src/style.css', to: `_site/a/${digestCss}.css` })
   $.find('head').append(<style dangerouslySetInnerHTML={{ __html: result.content }}></style>)
   return $
 }

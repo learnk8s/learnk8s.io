@@ -1,8 +1,6 @@
 import { Store } from 'redux'
 import { Actions, State, getPages, getRedirects, getOpenGraph, getBlogPosts, store } from './store'
 import { ok } from 'assert'
-import { Cheerio } from './optimise'
-import * as Hast from 'hast'
 
 function getCommonPages(state: State) {
   const redirectPageIds = getRedirects(state).map(it => it.fromPageId)

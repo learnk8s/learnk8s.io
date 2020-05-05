@@ -440,25 +440,35 @@
   color: lightgray;
 }
 /* RESPONSIVE ARROWS */
-[class^='arr-'] {
+.arr-right {
   border: solid currentColor;
   border-width: 0 0.2em 0.2em 0;
   display: inline-block;
   padding: 0.4em;
-}
-.arr-right {
   transform: rotate(-45deg);
   -webkit-transform: rotate(-45deg);
 }
 .arr-left {
+  border: solid currentColor;
+  border-width: 0 0.2em 0.2em 0;
+  display: inline-block;
+  padding: 0.4em;
   transform: rotate(135deg);
   -webkit-transform: rotate(135deg);
 }
 .arr-up {
+  border: solid currentColor;
+  border-width: 0 0.2em 0.2em 0;
+  display: inline-block;
+  padding: 0.4em;
   transform: rotate(-135deg) translate(-0.2em, -0.2em);
   -webkit-transform: rotate(-135deg) translate(-0.2em, -0.2em);
 }
 .arr-down {
+  border: solid currentColor;
+  border-width: 0 0.2em 0.2em 0;
+  display: inline-block;
+  padding: 0.4em;
   transform: rotate(45deg) translate(-0.2em, -0.2em);
   -webkit-transform: rotate(45deg) translate(-0.2em, -0.2em);
 }
