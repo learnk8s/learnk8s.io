@@ -10,12 +10,11 @@ export type State = {
   config: ConfigReducer.State
 }
 
-export type StateV2 = CoursesReducer.StateV2
+export type StateV2 = CoursesReducer.State
 
-export type Actions = CoursesReducer.Actions | WebsiteReducer.Actions
+export type Actions = WebsiteReducer.Actions
 
 export const Action = {
-  ...CoursesReducer.Action,
   ...WebsiteReducer.Action,
 }
 
@@ -61,7 +60,7 @@ export const store = createStore<State, Actions, {}, {}>(
 )
 
 export function getVenues(state: StateV2): CoursesReducer.CourseVenue[] {
-  return Object.values(state.venues)
+  return Object.values(selector.venues.selectAll(state))
 }
 
 export function getWorkshops(state: StateV2): CoursesReducer.FullWorkshop[] {
