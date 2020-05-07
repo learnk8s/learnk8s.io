@@ -34,7 +34,7 @@ export async function defaultAssetsPipeline({
   url: string
 }) {
   const $ = Cheerio.of(jsxToString(jsx))
-  await optimise({ $, siteUrl: siteUrl, isOptimisedBuild: true })
+  await optimise({ $, siteUrl: siteUrl, isOptimisedBuild })
 
   $.findAll('a')
     .get()
