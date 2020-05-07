@@ -303,6 +303,19 @@ function renderPage(state: State) {
               </a>
             </CourseBlock>
             <CourseBlock
+              title={material.authentication.name}
+              img={material.authentication.cover}
+              className='w-third-l center db mw6'
+              difficulty='Advanced'
+              defaultUSPrice={59}
+              priceId='single-authentication'
+            >
+              <p className='lh-copy masure f5'>{material.authentication.description}</p>
+              <a href='/exploring-kubernetes' className='link no-underline underline-hover navy'>
+                Learn more &#8594;
+              </a>
+            </CourseBlock>
+            <CourseBlock
               title={material.ckad.name}
               img={material.ckad.cover}
               className='w-third-l center db mw6'

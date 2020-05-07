@@ -274,7 +274,7 @@ const content = {
     id: 'LK8S-MANAGING-STATE',
     name: 'Managing state in Kubernetes',
     description: `How does Kubernetes store state? Can you host databases in your cluster? Can you extract configurations and share them with different deployments? How do you make sure that your storage layer is replicated and persisted even if a node becomes unavailable? In this course, you will learn how to deploy a database with durable persistence.`,
-    cover: <img src='assets/material/cover_managing-state.svg' alt='Managing state' />,
+    cover: <img src='assets/material/cover-managing-state.svg' alt='Managing state' />,
     topics: {
       configMaps: {
         title: 'Managing configurations',
@@ -517,7 +517,7 @@ const content = {
     name: 'CKAD exam preparation',
     description:
       'This course is designed to help you prepare and pass the Certified Kubernetes Application Developer (CKAD) exam. It has practical challenges as well as tips and tricks on how to be efficient with your time during the exam.',
-    cover: <img src='assets/material/cover_ckad.svg' alt='CKAD exam preparation' />,
+    cover: <img src='assets/material/cover-ckad.svg' alt='CKAD exam preparation' />,
     topics: {
       intro: {
         title: 'Introduction to the CKAD exam',
@@ -542,6 +542,29 @@ const content = {
       },
       state: {
         title: 'State persistence',
+      },
+    },
+  },
+  authentication: {
+    id: 'LK8S-AUTHENTICATION',
+    name: 'Authentication in Kubernetes',
+    description: `How are requests to the Kubernetes API authenticated? What types of credentials does Kubernetes support? What does it mean that Kubernetes delegates the management of users to an external user management system? And how can you integrate Kubernetes with an existing user management system? In this course, you will learn everything you need to know about Kubernetes authentication.`,
+    cover: <img src='assets/material/cover-authentication.svg' alt='Authentication in Kubernetes' />,
+    topics: {
+      howItWorks: {
+        title: 'How authentication works',
+      },
+      plugins: {
+        title: 'Authentication plugins',
+      },
+      ldap: {
+        title: 'Implementing an authentication service with LDAP',
+      },
+      deploy: {
+        title: 'Deploying the authentication service',
+      },
+      testing: {
+        title: 'Testing the authentication method',
       },
     },
   },
