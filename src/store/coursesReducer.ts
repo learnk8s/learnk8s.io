@@ -1,5 +1,5 @@
 import { VReference } from '../files'
-import { createEntityAdapter, createSlice } from '@reduxjs/toolkit'
+import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { storeV2 } from '.'
 
 const courseAdapter = createEntityAdapter<Course>({})
@@ -29,7 +29,45 @@ export const workshopSlice = createSlice({
   name: 'workshop',
   initialState: workshopAdapter.getInitialState(),
   reducers: {
-    add: workshopAdapter.addOne,
+    add: (state, action: PayloadAction<Workshop>) => {
+      if (
+        !selector.courses
+          .selectAll(storeV2.getState())
+          .map(it => it.id)
+          .includes(action.payload.courseId)
+      ) {
+        throw new Error(
+          `I couldn't find the course ${action.payload.courseId}. Please fix Workshop ${action.payload.id}`,
+        )
+      }
+      if (
+        !selector.venues
+          .selectAll(storeV2.getState())
+          .map(it => it.id)
+          .includes(action.payload.venueId)
+      ) {
+        throw new Error(`I couldn't find the venue ${action.payload.venueId}. Please fix Workshop ${action.payload.id}`)
+      }
+      if (
+        !selector.prices
+          .selectAll(storeV2.getState())
+          .map(it => it.id)
+          .includes(action.payload.priceId)
+      ) {
+        throw new Error(`I couldn't find the price ${action.payload.priceId}. Please fix Workshop ${action.payload.id}`)
+      }
+      if (
+        !selector.pictures
+          .selectAll(storeV2.getState())
+          .map(it => it.id)
+          .includes(action.payload.pictureId)
+      ) {
+        throw new Error(
+          `I couldn't find the picture ${action.payload.pictureId}. Please fix Workshop ${action.payload.id}`,
+        )
+      }
+      return workshopAdapter.addOne(state, action)
+    },
   },
 })
 
