@@ -1,5 +1,5 @@
 import React from 'react'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
+import { State, Actions, Action, getPages, getOpenGraph, getConfig, StoreV2, ActionV2 } from './store'
 import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
 import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
@@ -14,8 +14,8 @@ export const Academy = {
   description: `Learn Kubernetes from the comfort of wherever you are with step-by-step tutorial and guided, hands-on material.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Academy))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Academy))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-academy',

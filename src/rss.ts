@@ -1,6 +1,17 @@
 import { join } from 'path'
 import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getBlogPosts, getAuthors, getOpenGraph } from './store'
+import {
+  State,
+  Actions,
+  Action,
+  getConfig,
+  getPages,
+  getBlogPosts,
+  getAuthors,
+  getOpenGraph,
+  StoreV2,
+  ActionV2,
+} from './store'
 import { RSSPipeline } from './optimise'
 
 export const RSS = {
@@ -17,9 +28,9 @@ const OldRSS = {
   description: `RSS Feed`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(RSS))
-  store.dispatch(Action.registerPage(OldRSS))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(RSS))
+  storeV2.dispatch(ActionV2.pages.add(OldRSS))
   store.dispatch(Action.assignTag({ id: 'no-sitemap', pageId: RSS.id }))
   store.dispatch(
     Action.registerRedirect({

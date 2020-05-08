@@ -1,7 +1,7 @@
 import React from 'react'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
+import { State, Actions, Action, getPages, getOpenGraph, getConfig, StoreV2, ActionV2 } from './store'
 import { material } from './material'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo, FAQs, FAQ } from './layout.v3'
 import { Store } from 'redux'
@@ -45,8 +45,8 @@ export const Architecting = {
   description: `A hands-on, online course on mastering Kubernetes, containers and the tools you'll need to build real, working applications at scale.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Architecting))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Architecting))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-academy-architecting-and-scaling',

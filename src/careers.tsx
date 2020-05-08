@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, Footer, Consultation, Html, Head, Body, OpenGraph } from './layout.v3'
 import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
+import { State, Actions, Action, getConfig, getPages, getOpenGraph, StoreV2, ActionV2 } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -13,8 +13,8 @@ export const Career = {
   description: 'Join Learnk8s and help others learn Docker and Kubernetes.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Career))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Career))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-career',

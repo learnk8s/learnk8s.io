@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,8 +12,8 @@ export const K8Bit = {
   description: `In Kubernetes, how can you be notified when a Pod is added, removed or modified? In this article you'll learn how to use the API to track changes to Kubernetes resources.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(K8Bit))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(K8Bit))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-k8bit',

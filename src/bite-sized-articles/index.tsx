@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
 import { Authors } from '../aboutUs'
 import { toVFile } from '../files'
 import { join } from 'path'
@@ -65,8 +65,8 @@ export const Pages = {
   },
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Pages.multipleClusters))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Pages.multipleClusters))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-multiple-kubernetes-clusters',
@@ -89,7 +89,7 @@ export function Register(store: Store<State, Actions>) {
   )
   store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.multipleClusters.id }))
 
-  store.dispatch(Action.registerPage(Pages.ingressApiGateway))
+  storeV2.dispatch(ActionV2.pages.add(Pages.ingressApiGateway))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-ingress-api-gateway',
@@ -120,7 +120,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
 
-  store.dispatch(Action.registerPage(Pages.visualiseYaml))
+  storeV2.dispatch(ActionV2.pages.add(Pages.visualiseYaml))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-visualise-yaml',
@@ -143,7 +143,7 @@ export function Register(store: Store<State, Actions>) {
   )
   store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.visualiseYaml.id }))
 
-  store.dispatch(Action.registerPage(Pages.helm))
+  storeV2.dispatch(ActionV2.pages.add(Pages.helm))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-helm-templating',
@@ -173,7 +173,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
 
-  store.dispatch(Action.registerPage(Pages.nodeSize))
+  storeV2.dispatch(ActionV2.pages.add(Pages.nodeSize))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-kubernetes-node-size',
@@ -205,7 +205,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
 
-  store.dispatch(Action.registerPage(Pages.secretsGitOps))
+  storeV2.dispatch(ActionV2.pages.add(Pages.secretsGitOps))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-secrets-git-ops',
@@ -237,7 +237,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
 
-  store.dispatch(Action.registerPage(Pages.autoscaling))
+  storeV2.dispatch(ActionV2.pages.add(Pages.autoscaling))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-autoscaling-apps-kubernetes',
@@ -267,7 +267,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
 
-  store.dispatch(Action.registerPage(Pages.rollbacks))
+  storeV2.dispatch(ActionV2.pages.add(Pages.rollbacks))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-kubernetes-rollbacks',

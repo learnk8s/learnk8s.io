@@ -1,7 +1,18 @@
 import * as React from 'react'
 import { Navbar, Footer, Consultation, Html, Head, Body, OpenGraph } from './layout.v3'
 import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph, getBlogPosts, hasTag } from './store'
+import {
+  State,
+  Actions,
+  Action,
+  getConfig,
+  getPages,
+  getOpenGraph,
+  getBlogPosts,
+  hasTag,
+  StoreV2,
+  ActionV2,
+} from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { BlogPost } from './store/websiteReducer'
@@ -16,8 +27,8 @@ export const BiteSized = {
     'A regular column on the most interesting questions that we see online and during our workshops answered by a Kubernetes expert',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(BiteSized))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(BiteSized))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-bite-sized',

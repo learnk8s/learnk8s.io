@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Actions, Action } from './store'
+import { getOpenGraph, getPages, getConfig, State, Actions, Action, StoreV2, ActionV2 } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
 import { tachyons } from './tachyons/tachyons'
@@ -19,8 +19,8 @@ const wallpaperRequest: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Wallpaper))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Wallpaper))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-wallpaper',

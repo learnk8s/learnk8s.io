@@ -21,6 +21,7 @@ import {
   getOnlineCourses,
   StoreV2,
   StateV2,
+  ActionV2,
 } from './store'
 import { Html, Head, OpenGraph, Body, Navbar, mailto, FAQs, Footer, MailTo, FAQ } from './layout.v3'
 import { join } from 'path'
@@ -36,8 +37,8 @@ export const Page = {
   description: 'Become an expert in deploying application at scale with Kubernetes.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Page))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Page))
   store.dispatch(
     Action.registerOpenGraph({
       id: `og-${Page.id}`,

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
-import { Action, State, Actions, getConfig, getPages, getOpenGraph } from './store'
+import { Action, State, Actions, getConfig, getPages, getOpenGraph, StoreV2, ActionV2 } from './store'
 import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
@@ -13,8 +13,8 @@ export const Newsletter = {
   description: 'Keep yourself up to date with the latest news from Learnk8s.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Newsletter))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Newsletter))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-newsletter',

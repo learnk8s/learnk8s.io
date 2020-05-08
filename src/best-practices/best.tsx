@@ -1,7 +1,7 @@
 import React from 'react'
 import { Html, Head, OpenGraph, Body, Navbar, Footer, WhatIsLearnk8s } from '../layout.v3'
 import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig } from '../store'
+import { State, Actions, Action, getPages, getOpenGraph, getConfig, StoreV2, ActionV2 } from '../store'
 import { join } from 'path'
 import { toMdast } from '../markdown'
 import { toVFile } from '../files'
@@ -24,8 +24,8 @@ export const BestPractices = {
     'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(BestPractices))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(BestPractices))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-best-practices',

@@ -14,7 +14,7 @@ import {
   MailTo,
 } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Actions, Action } from './store'
+import { getOpenGraph, getPages, getConfig, State, Actions, Action, StoreV2, ActionV2 } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
 import { tachyons } from './tachyons/tachyons'
@@ -44,8 +44,8 @@ export const Consulting = {
   description: 'Expertise in software development, strategy and operations to help you innovate at speed and scale.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Consulting))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Consulting))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-consulting',

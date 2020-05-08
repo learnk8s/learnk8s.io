@@ -23,6 +23,7 @@ import {
   getConfig,
   StoreV2,
   StateV2,
+  ActionV2,
 } from './store'
 import {
   Html,
@@ -74,9 +75,9 @@ export const Pages = {
   },
 }
 
-export function Register(store: Store<State, Actions>) {
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   Object.values(Pages).forEach(page => {
-    store.dispatch(Action.registerPage(page))
+    storeV2.dispatch(ActionV2.pages.add(page))
     store.dispatch(
       Action.registerLandingPageLocation({
         id: `${page.id}-location`,

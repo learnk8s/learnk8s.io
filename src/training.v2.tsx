@@ -44,6 +44,7 @@ import {
   getOnlineCourses,
   StoreV2,
   StateV2,
+  ActionV2,
 } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
@@ -133,8 +134,8 @@ export const Training = {
     'Join an instructor-led, hands-on course and become an expert in deploying and scaling applications with containers and Kubernetes.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Training))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Training))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-training',

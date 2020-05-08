@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,8 +12,8 @@ export const Troubleshooting = {
   description: `Troubleshooting in Kubernetes can be a daunting task. In this article you will learn how to diagnose issues in Pods, Services and Ingress.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Troubleshooting))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Troubleshooting))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-troubleshooting-deployments',

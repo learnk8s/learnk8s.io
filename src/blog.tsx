@@ -1,7 +1,18 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Actions, Action, getBlogPosts, hasTag } from './store'
+import {
+  getOpenGraph,
+  getPages,
+  getConfig,
+  State,
+  Actions,
+  Action,
+  getBlogPosts,
+  hasTag,
+  StoreV2,
+  ActionV2,
+} from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
 import { BlogPost } from './store/websiteReducer'
@@ -15,8 +26,8 @@ export const Blog = {
   description: 'The fastest way to become an expert in deploying applications at scale with Kubernetes.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Blog))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Blog))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-blog',

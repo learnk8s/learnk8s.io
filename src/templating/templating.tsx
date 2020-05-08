@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,8 +12,8 @@ export const Templating = {
   description: `Learn how you can parametrise resource definitions with yq, kustomize and real code.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Templating))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(Templating))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-templating-yaml-options',

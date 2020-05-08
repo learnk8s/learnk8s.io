@@ -1,5 +1,5 @@
 import { ok } from 'assert'
-import { store, getPages, getRedirects } from './store'
+import { store, getPages, getRedirects, storeV2 } from './store'
 import commander from 'commander'
 import { register } from './register'
 import * as Hast from 'hast'
@@ -13,7 +13,7 @@ commander
 
 ok(commander.hostname, 'Please provide a hostname such as --hostname http://localhost:4000')
 
-register(store)
+register(store, storeV2)
 const state = store.getState()
 const redirectPageIds = getRedirects(state).map(it => it.fromPageId)
 const pages = getPages(state)

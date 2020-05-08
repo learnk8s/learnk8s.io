@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,8 +12,8 @@ export const SpotInstances = {
   description: `How can you save money, but work around disappearing servers? Learn how you can leverage Kubernetes to self-heal your infrastructure and cut costs with Spot Instances.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(SpotInstances))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(SpotInstances))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-spot-instances',

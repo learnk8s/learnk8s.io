@@ -2,7 +2,7 @@ import { Store } from 'redux'
 import { State, Actions, Action, storeV2, StoreV2 } from './store'
 import { toVFile } from './files'
 import { join } from 'path'
-import { ActionV2 } from './store/coursesReducer'
+import { ActionV2 } from './store'
 
 const Venues = {
   JustCoSg: {

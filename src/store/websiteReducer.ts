@@ -1,10 +1,60 @@
 import { Reducer } from 'redux'
 import { VReference } from '../files'
+import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { storeV2 } from '.'
+
+const pageAdapter = createEntityAdapter<Page>({})
+const redirectAdapter = createEntityAdapter<Redirect>({})
+
+export const pageSlice = createSlice({
+  name: 'page',
+  initialState: pageAdapter.getInitialState(),
+  reducers: {
+    add: pageAdapter.addOne,
+  },
+})
+
+// export const redirectSlice = createSlice({
+//   name: 'redirect',
+//   initialState: redirectAdapter.getInitialState(),
+//   reducers: {
+//     add: (state, action: PayloadAction<Redirect>) => {
+//       if (
+//         !selector.pages
+//           .selectAll(storeV2.getState())
+//           .map(it => it.id)
+//           .includes(action.payload.fromPageId)
+//       ) {
+//         throw new Error(
+//           `Couldn't create redirect ${action.payload.fromPageId} -> ${action.payload.redirectToPageId}. FROM does not exist`,
+//         )
+//       }
+//       if (
+//         !selector.pages
+//           .selectAll(storeV2.getState())
+//           .map(it => it.id)
+//           .includes(action.payload.redirectToPageId)
+//       ) {
+//         throw new Error(
+//           `Couldn't create redirect ${action.payload.fromPageId} -> ${action.payload.redirectToPageId}. TO does not exist`,
+//         )
+//       }
+//       return redirectAdapter.addOne(state, action)
+//     },
+//   },
+// })
+
+export type StateV2 = ReturnType<typeof storeV2.getState>
+
+export const ActionV2 = {
+  pages: { ...pageSlice.actions },
+}
+
+export const selector = {
+  pages: pageAdapter.getSelectors<StateV2>(state => state.pages),
+}
 
 export const Action = {
-  registerPage(args: Page) {
-    return { type: 'REGISTER_PAGE' as const, ...args }
-  },
   registerLandingPageLocation(args: LandingPage) {
     return { type: 'REGISTER_LANDING' as const, ...args }
   },
@@ -97,7 +147,6 @@ export type BlogPostMarkdownBlock = {
 }
 
 export interface State {
-  pages: Record<string, Page>
   openGraph: Record<string, OpenGraph>
   landingPages: Record<string, LandingPage>
   blogPosts: Record<string, BlogPost>
@@ -111,7 +160,6 @@ export interface State {
 export function createInitialState(options: {}): State {
   return {
     ...options,
-    pages: {},
     openGraph: {},
     landingPages: {},
     blogPosts: {},
@@ -128,12 +176,6 @@ export const RootReducer: Reducer<State, Actions> = (
   action: Actions,
 ): State => {
   switch (action.type) {
-    case 'REGISTER_PAGE': {
-      if (!!Object.values(state.pages).find(it => it.url === action.url)) {
-        throw new Error(`Duplicate page url: ${action.url}`)
-      }
-      return { ...state, pages: { ...state.pages, [action.id]: { ...action } } }
-    }
     case 'REGISTER_OG': {
       if (action.id in state.openGraph) {
         throw new Error(`Duplicate openGraph id ${action.id}`)
@@ -153,7 +195,12 @@ export const RootReducer: Reducer<State, Actions> = (
       return { ...state, authors: { ...state.authors, [action.id]: { ...action } } }
     }
     case 'ASSIGN_TAG': {
-      if (!(action.pageId in state.pages)) {
+      if (
+        !selector.pages
+          .selectAll(storeV2.getState())
+          .map(it => it.id)
+          .includes(action.pageId)
+      ) {
         throw new Error(`Trying to create a tag ${action.id} for the not existent page ${action.pageId}.`)
       }
       return {
@@ -174,12 +221,22 @@ export const RootReducer: Reducer<State, Actions> = (
       }
     }
     case 'REGISTER_REDIRECT': {
-      if (!(action.fromPageId in state.pages)) {
+      if (
+        !selector.pages
+          .selectAll(storeV2.getState())
+          .map(it => it.id)
+          .includes(action.fromPageId)
+      ) {
         throw new Error(
           `Couldn't create redirect ${action.fromPageId} -> ${action.redirectToPageId}. FROM does not exist`,
         )
       }
-      if (!(action.redirectToPageId in state.pages)) {
+      if (
+        !selector.pages
+          .selectAll(storeV2.getState())
+          .map(it => it.id)
+          .includes(action.redirectToPageId)
+      ) {
         throw new Error(
           `Couldn't create redirect ${action.fromPageId} -> ${action.redirectToPageId}. TO does not exist`,
         )
@@ -187,7 +244,12 @@ export const RootReducer: Reducer<State, Actions> = (
       return { ...state, redirects: { ...state.redirects, [action.id]: { ...action } } }
     }
     case 'REGISTER_PREVIEW_PICTURE': {
-      if (!(action.pageId in state.pages)) {
+      if (
+        !selector.pages
+          .selectAll(storeV2.getState())
+          .map(it => it.id)
+          .includes(action.pageId)
+      ) {
         throw `Invalid pageId ${action.pageId} for picture ${action.id}`
       }
       return { ...state, previewPictures: { ...state.previewPictures, [action.id]: { ...action } } }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, Html, OpenGraph, Head, Body, Footer, Consultation } from './layout.v3'
 import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
+import { State, Actions, Action, getConfig, getPages, getOpenGraph, StoreV2, ActionV2 } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -159,8 +159,8 @@ export const Authors = {
   },
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(AboutUs))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(AboutUs))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-about-us',

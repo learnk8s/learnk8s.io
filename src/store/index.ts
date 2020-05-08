@@ -10,7 +10,7 @@ export type State = {
   config: ConfigReducer.State
 }
 
-export type StateV2 = CoursesReducer.State
+export type StateV2 = CoursesReducer.State | WebsiteReducer.StateV2
 
 export type Actions = WebsiteReducer.Actions
 
@@ -19,7 +19,8 @@ export const Action = {
 }
 
 export const ActionV2 = {
-  ...CoursesReducer.ActionV2,
+  ...CoursesReducer.Action,
+  ...WebsiteReducer.ActionV2,
 }
 
 export type StoreV2 = typeof storeV2
@@ -32,11 +33,13 @@ export const storeV2 = configureStore({
     pictures: CoursesReducer.pictureSlice.reducer,
     prices: CoursesReducer.priceSlice.reducer,
     onlineCourses: CoursesReducer.onlineCourseSlice.reducer,
+    pages: WebsiteReducer.pageSlice.reducer,
   },
 })
 
 export const selector = {
   ...CoursesReducer.selector,
+  ...WebsiteReducer.selector,
 }
 
 export const store = createStore<State, Actions, {}, {}>(
@@ -84,7 +87,7 @@ export function getConfig(state: State): ConfigReducer.State {
 }
 
 export function getPages(state: State): WebsiteReducer.Page[] {
-  return Object.values(state.website.pages)
+  return Object.values(selector.pages.selectAll(storeV2.getState()))
 }
 
 export function getOpenGraph(state: State): WebsiteReducer.OpenGraph[] {

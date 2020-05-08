@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
 import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
+import { State, Actions, Action, getConfig, getPages, getOpenGraph, StoreV2, ActionV2 } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -13,8 +13,8 @@ export const NotFound404 = {
   description: `The page you that tried to visit does not exist. If you think this is mistake, please get in touch.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(NotFound404))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(NotFound404))
   store.dispatch(Action.assignTag({ id: 'skip-sitemap', pageId: NotFound404.id }))
   store.dispatch(
     Action.registerOpenGraph({

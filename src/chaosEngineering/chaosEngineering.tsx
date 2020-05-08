@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { State, Actions, Action } from '../store'
+import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
 import { Store } from 'redux'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
@@ -12,8 +12,8 @@ export const ChaosEngineering = {
   description: `When you deploy an app in Kubernetes, your code ends up running on one or more worker nodes. But what happens when a node breaks and the network proxy crashes?`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(ChaosEngineering))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(ChaosEngineering))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-chaos-engineering',

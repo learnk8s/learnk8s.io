@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Actions, Action } from './store'
+import { getOpenGraph, getPages, getConfig, State, Actions, Action, StoreV2, ActionV2 } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { Store } from 'redux'
 import { tachyons } from './tachyons/tachyons'
@@ -14,8 +14,8 @@ export const FreeTools = {
   description: 'A collection of free tools to help you navigate your Kubernetes journey.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(FreeTools))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(FreeTools))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-free-tools',

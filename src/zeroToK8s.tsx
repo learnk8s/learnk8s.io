@@ -9,7 +9,7 @@ import { toVFile } from './files'
 import { mdast2JsxInline } from './markdown/jsx'
 import { Html, Head, Body, OpenGraph } from './layout.v3'
 import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
+import { State, Actions, Action, getConfig, getPages, getOpenGraph, StoreV2, ActionV2 } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -40,8 +40,8 @@ export const ZeroToK8s = {
   description: `Zero to Kubernetes is a step-by-step course on how to design, develop and deploy Node.js applications on Kubernetes.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(ZeroToK8s))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(ZeroToK8s))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-zero-to-k8s',

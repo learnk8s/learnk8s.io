@@ -1,6 +1,5 @@
-import { Reducer } from 'redux'
 import { VReference } from '../files'
-import { createEntityAdapter, createSlice, configureStore, EntityAdapter, Slice, EntityState } from '@reduxjs/toolkit'
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit'
 import { storeV2 } from '.'
 
 const courseAdapter = createEntityAdapter<Course>({})
@@ -60,7 +59,7 @@ export const onlineCourseSlice = createSlice({
 
 export type State = ReturnType<typeof storeV2.getState>
 
-export const ActionV2 = {
+export const Action = {
   courses: { ...courseSlice.actions },
   venues: { ...venueSlice.actions },
   workshops: { ...workshopSlice.actions },

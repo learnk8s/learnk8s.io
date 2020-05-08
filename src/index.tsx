@@ -39,7 +39,7 @@ import * as Flipboard from './flipboard'
 import { checkPageDetail } from './checkPageDetail'
 import { register } from './register'
 
-register(store)
+register(store, storeV2)
 
 Landing.Mount({ store, storeV2 })
 Online.Mount({ store, storeV2 })

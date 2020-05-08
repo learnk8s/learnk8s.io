@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
+import { State, Actions, Action, getPages, getOpenGraph, getConfig, StoreV2, ActionV2 } from './store'
 import { join } from 'path'
 import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
@@ -13,8 +13,8 @@ export const ContactUs = {
   description: 'Feel free to get in touch and let us know how we can help. ',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(ContactUs))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(ContactUs))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-contact-us',

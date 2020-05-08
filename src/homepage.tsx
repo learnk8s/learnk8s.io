@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, ListItem, Interlude, Consultation, Hero } from './layout.v3'
 import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
+import { State, Actions, Action, getConfig, getPages, getOpenGraph, StoreV2, ActionV2 } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { Training } from './training.v2'
@@ -17,8 +17,8 @@ export const HomePage = {
     'We help you get started on your Kubernetes journey through comprehensive online, in person or remote training.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(HomePage))
+export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+  storeV2.dispatch(ActionV2.pages.add(HomePage))
   store.dispatch(
     Action.registerOpenGraph({
       id: 'og-homepage',
