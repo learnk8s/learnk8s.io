@@ -1,5 +1,5 @@
 import React from 'react'
-import { CourseRow, faqs, DashboardModule, PackageFeatures } from './training.v2'
+import { CourseRowOld, faqs, DashboardModule, PackageFeatures } from './training.v2'
 import { material } from './material'
 import { PrimaryButton } from './homepage'
 import {
@@ -227,7 +227,7 @@ export function renderPage(state: State, pageId: string): JSX.Element {
               .slice(0)
               .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
               .map(it => (
-                <CourseRow
+                <CourseRowOld
                   event={{
                     timezone: it.timezone,
                     startsAt: it.startsAt,
