@@ -58,8 +58,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       redirectToPageId: DeployLaravel.id,
     }),
   )
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'deploy-laravel-picture',
       pageId: DeployLaravel.id,
       image: <img src='src/deployLaravel/laravel_k8s.svg' alt={DeployLaravel.title} />,

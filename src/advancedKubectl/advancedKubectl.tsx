@@ -48,8 +48,8 @@ The goal of this article is not only to make your daily work with Kubernetes mor
       content: toVFile({ path: join(__dirname, 'kubectl-productivity-related.md') }),
     }),
   )
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'kubectl-productivity-picture',
       pageId: KubectlProductivity.id,
       image: <img src='src/advancedKubectl/magic.svg' alt={KubectlProductivity.title} />,

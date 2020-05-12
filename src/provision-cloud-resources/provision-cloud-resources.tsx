@@ -48,8 +48,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'provision-cloud-resources-related.md') }),
     }),
   )
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'provision-cloud-resources-picture',
       pageId: ProvisionCloudResources.id,
       image: <img src='src/provision-cloud-resources/cloud-resources.svg' alt={ProvisionCloudResources.title} />,

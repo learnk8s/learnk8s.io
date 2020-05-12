@@ -48,8 +48,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content-related.md') }),
     }),
   )
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'custom-authentication-picture',
       pageId: CustomAuthentication.id,
       image: <img src='src/custom-authentication/authentication.svg' alt={CustomAuthentication.title} />,

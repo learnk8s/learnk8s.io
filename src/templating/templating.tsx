@@ -35,8 +35,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
     }),
   )
   store.dispatch(Action.assignTag({ id: 'general-post', pageId: Templating.id }))
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'templating-yaml-options-picture',
       pageId: Templating.id,
       image: <img src='src/templating/templating.svg' alt={Templating.title} />,

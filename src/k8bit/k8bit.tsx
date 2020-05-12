@@ -36,8 +36,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
     }),
   )
   store.dispatch(Action.assignTag({ id: 'general-post', pageId: K8Bit.id }))
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'k8bit-picture',
       pageId: K8Bit.id,
       image: <img src='src/k8bit/k8bit.svg' alt={K8Bit.title} />,

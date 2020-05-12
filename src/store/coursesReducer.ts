@@ -61,6 +61,15 @@ export const onlineCourseSlice = createSlice({
 
 export type State = ReturnType<typeof storeV2.getState>
 
+export const courseReducer = {
+  courses: courseSlice.reducer,
+  venues: venueSlice.reducer,
+  workshops: workshopSlice.reducer,
+  pictures: pictureSlice.reducer,
+  prices: priceSlice.reducer,
+  onlineCourses: onlineCourseSlice.reducer,
+}
+
 export const Action = {
   courses: { ...courseSlice.actions },
   venues: { ...venueSlice.actions },
@@ -79,13 +88,21 @@ export const Selector = {
   onlineCourses: onlineCourseAdapter.getSelectors<State>(state => state.onlineCourses),
 }
 
-export const middlewares = [checkWorkshopRegisterRequire]
+const checkWorkshop = middlewareCheck(checkWorkshopRequirement)
 
-function checkWorkshopRegisterRequire(store: any) {
-  return (next: Dispatch<PayloadAction<Workshop>>) => (action: PayloadAction<Workshop>) => {
-    if (action.type !== 'workshop/add') {
+export const middlewares = [checkWorkshop]
+
+function middlewareCheck<T>(checkFn: (action: PayloadAction<T>, store: any) => void) {
+  return (store: any) => {
+    return (next: Dispatch<PayloadAction<T>>) => (action: PayloadAction<T>) => {
+      checkFn(action, store)
       return next(action)
     }
+  }
+}
+
+function checkWorkshopRequirement(action: PayloadAction<Workshop>, store: any) {
+  if (action.type === 'workshop/add') {
     if (
       !Selector.courses
         .selectAll(storeV2.getState())
@@ -120,7 +137,6 @@ function checkWorkshopRegisterRequire(store: any) {
         `I couldn't find the picture ${action.payload.pictureId}. Please fix Workshop ${action.payload.id}`,
       )
     }
-    return next(action)
   }
 }
 

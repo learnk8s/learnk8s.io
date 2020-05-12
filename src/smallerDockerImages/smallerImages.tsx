@@ -43,8 +43,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'smaller-images-related.md') }),
     }),
   )
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'smaller-images-picture',
       pageId: SmallerImages.id,
       image: <img src='src/smallerDockerImages/smaller_images.svg' alt={SmallerImages.title} />,

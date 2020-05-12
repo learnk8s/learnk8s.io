@@ -45,8 +45,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, '02k8sjs-related.md') }),
     }),
   )
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'v-picture',
       pageId: ZeroToK8sJs.id,
       image: <img src='src/02k8sjs/jury.svg' alt={ZeroToK8sJs.title} />,

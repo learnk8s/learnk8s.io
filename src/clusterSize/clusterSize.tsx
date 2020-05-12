@@ -40,8 +40,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
     }),
   )
   store.dispatch(Action.assignTag({ id: 'general-post', pageId: ClusterSize.id }))
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'cluster-size-picture',
       pageId: ClusterSize.id,
       image: <img src='src/clusterSize/architecting-clusters.svg' alt={ClusterSize.title} />,

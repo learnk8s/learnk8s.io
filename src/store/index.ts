@@ -27,16 +27,10 @@ export type StoreV2 = typeof storeV2
 
 export const storeV2 = configureStore({
   reducer: {
-    courses: CoursesReducer.courseSlice.reducer,
-    venues: CoursesReducer.venueSlice.reducer,
-    workshops: CoursesReducer.workshopSlice.reducer,
-    pictures: CoursesReducer.pictureSlice.reducer,
-    prices: CoursesReducer.priceSlice.reducer,
-    onlineCourses: CoursesReducer.onlineCourseSlice.reducer,
-    pages: WebsiteReducer.pageSlice.reducer,
-    redirects: WebsiteReducer.redirectSlice.reducer,
+    ...CoursesReducer.courseReducer,
+    ...WebsiteReducer.websiteReducer,
   },
-  middleware: [...WebsiteReducer.middlewares, ...CoursesReducer.middlewares]
+  middleware: [...WebsiteReducer.middlewares, ...CoursesReducer.middlewares],
 })
 
 export const Selector = {
@@ -123,5 +117,5 @@ export function getRedirects(state: State): WebsiteReducer.Redirect[] {
 }
 
 export function getPreviewPictures(state: State): WebsiteReducer.PreviewPicture[] {
-  return Object.values(state.website.previewPictures)
+  return Object.values(Selector.previewPictures.selectAll(storeV2.getState()))
 }

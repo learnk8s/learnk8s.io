@@ -1,15 +1,11 @@
 import { Reducer, applyMiddleware } from 'redux'
 import { VReference } from '../files'
-import {
-  createEntityAdapter,
-  createSlice,
-  Dispatch,
-  PayloadAction,
-} from '@reduxjs/toolkit'
+import { createEntityAdapter, createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 import { storeV2 } from '.'
 
 const pageAdapter = createEntityAdapter<Page>({})
 const redirectAdapter = createEntityAdapter<Redirect>({})
+const previewPictureAdapter = createEntityAdapter<PreviewPicture>({})
 
 export const pageSlice = createSlice({
   name: 'page',
@@ -23,52 +19,88 @@ export const redirectSlice = createSlice({
   name: 'redirect',
   initialState: redirectAdapter.getInitialState(),
   reducers: {
-    add: (state, action: PayloadAction<Redirect>) => {
-      return redirectAdapter.addOne(state, action)
-    },
+    add: redirectAdapter.addOne,
+  },
+})
+
+export const previewPictureSlice = createSlice({
+  name: 'previewPicture',
+  initialState: previewPictureAdapter.getInitialState(),
+  reducers: {
+    add: previewPictureAdapter.addOne,
   },
 })
 
 export type StateV2 = ReturnType<typeof storeV2.getState>
 
+export const websiteReducer = {
+  pages: pageSlice.reducer,
+  redirects: redirectSlice.reducer,
+  previewPictures: previewPictureSlice.reducer,
+}
+
 export const ActionV2 = {
   pages: { ...pageSlice.actions },
   redirects: { ...redirectSlice.actions },
-}
-
-export const middlewares = [checkRedirectPage]
-
-function checkRedirectPage(store: any) {
-  return (next: Dispatch<PayloadAction<Redirect>>) => (action: PayloadAction<Redirect>) => {
-    if (action.type === 'redirect/add') {
-      if (
-        !Selector.pages
-          .selectAll(store.getState())
-          .map(it => it.id)
-          .includes(action.payload.fromPageId)
-      ) {
-        throw new Error(
-          `Couldn't create redirect ${action.payload.fromPageId} -> ${action.payload.redirectToPageId}. FROM does not exist`,
-        )
-      }
-      if (
-        !Selector.pages
-          .selectAll(store.getState())
-          .map(it => it.id)
-          .includes(action.payload.redirectToPageId)
-      ) {
-        throw new Error(
-          `Couldn't create redirect ${action.payload.fromPageId} -> ${action.payload.redirectToPageId}. TO does not exist`,
-        )
-      }
-    }
-    return next(action)
-  }
+  previewPictures: { ...previewPictureSlice.actions },
 }
 
 export const Selector = {
   pages: pageAdapter.getSelectors<StateV2>(state => state.pages),
   redirects: redirectAdapter.getSelectors<StateV2>(state => state.redirects),
+  previewPictures: previewPictureAdapter.getSelectors<StateV2>(state => state.previewPictures),
+}
+
+const checkRedirectPage = middlewareCheck(checkRedirectPageRequirement)
+const checkPreviewPicture = middlewareCheck(checkPreviewPictureRequirement)
+
+export const middlewares = [checkRedirectPage, checkPreviewPicture]
+
+function middlewareCheck<T>(checkFn: (action: PayloadAction<T>, store: any) => void) {
+  return (store: any) => {
+    return (next: Dispatch<PayloadAction<T>>) => (action: PayloadAction<T>) => {
+      checkFn(action, store)
+      return next(action)
+    }
+  }
+}
+
+function checkRedirectPageRequirement(action: PayloadAction<Redirect>, store: any) {
+  if (action.type === 'redirect/add') {
+    if (
+      !Selector.pages
+        .selectAll(store.getState())
+        .map(it => it.id)
+        .includes(action.payload.fromPageId)
+    ) {
+      throw new Error(
+        `Couldn't create redirect ${action.payload.fromPageId} -> ${action.payload.redirectToPageId}. FROM does not exist`,
+      )
+    }
+    if (
+      !Selector.pages
+        .selectAll(store.getState())
+        .map(it => it.id)
+        .includes(action.payload.redirectToPageId)
+    ) {
+      throw new Error(
+        `Couldn't create redirect ${action.payload.fromPageId} -> ${action.payload.redirectToPageId}. TO does not exist`,
+      )
+    }
+  }
+}
+
+function checkPreviewPictureRequirement(action: PayloadAction<PreviewPicture>, store: any) {
+  if (action.type === 'previewPicture/add') {
+    if (
+      !Selector.pages
+        .selectAll(storeV2.getState())
+        .map(it => it.id)
+        .includes(action.payload.pageId)
+    ) {
+      throw `Invalid pageId ${action.payload.pageId} for picture ${action.payload.id}`
+    }
+  }
 }
 
 export const Action = {
@@ -81,9 +113,9 @@ export const Action = {
   registerBlogPost(args: BlogPost) {
     return { type: 'REGISTER_BLOG_POST.V2' as const, ...args }
   },
-  registerPreviewPicture(args: PreviewPicture) {
-    return { type: 'REGISTER_PREVIEW_PICTURE' as const, ...args }
-  },
+  // registerPreviewPicture(args: PreviewPicture) {
+  //   return { type: 'REGISTER_PREVIEW_PICTURE' as const, ...args }
+  // },
   registerAuthor(args: Author) {
     return { type: 'REGISTER_AUTHOR' as const, ...args }
   },
@@ -171,7 +203,7 @@ export interface State {
   tags: Record<string, string[]>
   relatedBlocks: Record<string, BlogPostMarkdownBlock>
   // redirects: Record<string, Redirect>
-  previewPictures: Record<string, PreviewPicture>
+  // previewPictures: Record<string, PreviewPicture>
 }
 
 export function createInitialState(options: {}): State {
@@ -184,7 +216,7 @@ export function createInitialState(options: {}): State {
     tags: {},
     relatedBlocks: {},
     // redirects: {},
-    previewPictures: {},
+    // previewPictures: {},
   }
 }
 
@@ -260,17 +292,17 @@ export const RootReducer: Reducer<State, Actions> = (
     //   }
     //   return { ...state, redirects: { ...state.redirects, [action.id]: { ...action } } }
     // }
-    case 'REGISTER_PREVIEW_PICTURE': {
-      if (
-        !Selector.pages
-          .selectAll(storeV2.getState())
-          .map(it => it.id)
-          .includes(action.pageId)
-      ) {
-        throw `Invalid pageId ${action.pageId} for picture ${action.id}`
-      }
-      return { ...state, previewPictures: { ...state.previewPictures, [action.id]: { ...action } } }
-    }
+    // case 'REGISTER_PREVIEW_PICTURE': {
+    //   if (
+    //     !Selector.pages
+    //       .selectAll(storeV2.getState())
+    //       .map(it => it.id)
+    //       .includes(action.pageId)
+    //   ) {
+    //     throw `Invalid pageId ${action.pageId} for picture ${action.id}`
+    //   }
+    //   return { ...state, previewPictures: { ...state.previewPictures, [action.id]: { ...action } } }
+    // }
     default:
       assertUnreachable(action)
       return state

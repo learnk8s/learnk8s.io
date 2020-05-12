@@ -43,8 +43,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'scaling-spring-boot-related.md') }),
     }),
   )
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'scaling-spring-boot-picture',
       pageId: ScalingSpringBoot.id,
       image: <img src='src/scalingSpringBoot/autoscaling.svg' alt={ScalingSpringBoot.title} />,

@@ -37,8 +37,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
     }),
   )
   store.dispatch(Action.assignTag({ id: 'general-post', pageId: PersistentConnections.id }))
-  store.dispatch(
-    Action.registerPreviewPicture({
+  storeV2.dispatch(
+    ActionV2.previewPictures.add({
       id: 'persistent-connections-picture',
       pageId: PersistentConnections.id,
       image: <img src='src/persistent-connections/persistent-connections.svg' alt={PersistentConnections.title} />,
