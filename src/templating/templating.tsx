@@ -31,6 +31,7 @@ export function Register(store: Store<State, Actions>) {
       title: Templating.title,
       description: `Learn how you can leverage tools such as yq and kustomize to template your Kubernetes YAML file. Learn how to write your own tool to generate YAML programatically with a real programming language such as Java, Node.js, Go, Python or C#.`,
       publishedDate: '2020-01-09',
+      lastModifiedDate: '2020-05-12',
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
