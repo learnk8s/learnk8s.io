@@ -1,52 +1,56 @@
-Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows.
+**TL;DR:** In this article, you will learn the basics of how to deploy a Laravel application in Kubernetes.
 
-How you deal with deploying the application is a different story. Vagrant is very good with setting up a local environment similar to a remote server.
+Laravel is an excellent framework for developing PHP applications.
 
-However, in production, you will most likely require more than just one web host and one database.
+Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows.
 
-You'll probably have separate services for several requirements.
+_How you deal with deploying the application is a different story._
 
-You also need to have mechanisms in place to ensure that the application is always online and that the servers can efficiently balance the load.
+[Vagrant is an excellent choice to set up a development environment](https://laravel.com/docs/7.x/homestead) that mirrors your production environment.
 
-In this article, I'll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.
+But it's still limited to a single machine.
 
-## Kubernetes, Why and What?
+**In production, you will most likely require more than just one web server and database.**
 
-Kubernetes is an open-source system initially designed by Google to facilitate the management of containerised applications in a clustered environment.
+And you probably don't have a single app, but multiple apps with different concerns such as an API, a front-end, workers to process batch jobs, etc.
 
-Some refer to it as an orchestration platform, and Kubernetes is not the only available platform of this type.
+_How do you deploy your apps and make sure that they can scale efficiently with your users?_
 
-Although, it does have a very high and fast adoption rate.
+In this article, you will learn how to set up a Laravel application in Kubernetes.
 
-Not to mention that it is quite easy to implement once you get used to it.
+## Kubernetes, why and what?
 
-If you're still wondering why someone can benefit from using Kubernetes, the answer is simple.
+_Who has lots of application deployed in production?_
 
-Kubernetes makes it easier to set up and manage as many clusters as required across multiple projects.
+**Google, of course.**
+
+[Kubernetes is an open-source tool](https://kubernetes.io) that was initially born from Google to facilitate a large number of deployments across their infrastructure.
+
+It is good at three things:
+
+1. Running any type of app (not just PHP).
+1. Scheduling deployments across several servers.
+1. Being programmable.
+
+Let's have a look at how you can leverage Kubernetes to deploy a Laravel app.
 
 ## Deploying a Laravel Application to Minikube
 
-As I've afore-mentioned, I will be showing you how to deploy a straightforward and stateless Laravel application to Kubernetes.
+You can run Kubernetes on several cloud hosting providers such as [Google Cloud Engine (GCP)](https://cloud.google.com/kubernetes-engine), [Amazon Web Services (AWS)](https://aws.amazon.com/eks/), [Azure](https://azure.microsoft.com/en-us/services/kubernetes-service/).
 
-I aim to detail the steps involved in accomplishing this while explaining why specific actions are required.
+In this tutorial, you will run the application on [Minikube](https://minikube.sigs.k8s.io/docs/) — a tool that makes it easier to run Kubernetes locally.
 
-Furthermore, I will show you how to quickly scale the application and also make it available on a named host using an Ingress controller.
-
-You can run Kubernetes on several cloud hosting providers such as Google Cloud Engine and Amazon Web Services.
-
-In this tutorial, you will run the application on Minikube, a tool that makes it easy to run Kubernetes locally.
-
-Similar to Vagrant, Minikube is merely a Virtual Machine that contains a Kubernetes platform and Docker.
-
-You will need both to deploy your application as a Docker container and scale it to three instances using Kubernetes.
+Similar to Vagrant, Minikube is merely a Virtual Machine that contains a Kubernetes cluster.
 
 ## The application
 
-I have prepared a simple Laravel application which you can clone from [the repository on GitHub](https://github.com/learnk8s/laravel-kubernetes-demo). It is nothing more than a fresh Laravel installation.
+I have prepared a simple Laravel application which you can clone from [the repository on GitHub](https://github.com/learnk8s/laravel-kubernetes-demo).
 
-Therefore you can follow this example using either the demo application or just create a new Laravel application.
+It is nothing more than a fresh Laravel installation.
 
-To use the demo application clone it in your project's directory.
+Therefore you can follow this tutorial using either the demo application or you can create a new Laravel application.
+
+Let's get started by cloning the project with:
 
 ```terminal|command=1,2|title=bash
 cd /to/your/working/directory
@@ -55,7 +59,7 @@ git clone git@github.com:learnk8s/laravel-kubernetes-demo.git .
 
 ## Before you start
 
-To follow with this demonstration, you will need the following installed on your local system:
+To follow with this demonstration, you will need the following tools installed in your computer:
 
 1. [Docker](https://docs.docker.com/install/)
 1. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
@@ -63,11 +67,39 @@ To follow with this demonstration, you will need the following installed on your
 
 > Are you having problems installing and running these applications on Windows? Check out the article [Getting started with Docker and Kubernetes on Windows 10](/installing-docker-and-kubernetes-on-windows), for a step by step guide.
 
-## Building a Docker image
+## Packaging Laravel in a container
 
-Kubernetes deploys containerised applications, and therefore as a first step, you will need to build a Docker image of the demo application.
+Kubernetes doesn't know how to deploy Laravel apps.
 
-Since this tutorial will be run locally on Minikube, you can just build a local Docker Image from the `Dockerfile` included in the example code.
+_Or Java._
+
+_Or Node.js._
+
+_Or any other programming language._
+
+**Kubernetes only knows how to deploy containers.**
+
+Containers are a Linux feature that is used to limit what a process can do.
+
+When you start a process such as PHP as a container, you can define how much memory and CPU it can use.
+
+Also, you can define what network and filesystem it is allowed to see (and a few more things).
+
+You could use containers isolate and launch several PHP instances on your server.
+
+_Just as you use virtual machine to isolate your development environment._
+
+Docker is the most popular tool to create and run containers.
+
+But there are several other options such as [LXC](https://en.wikipedia.org/wiki/LXC), [Podman](https://podman.io/), [containerd](https://containerd.io/), etc.
+
+**In this tutorial, you will use Docker.**
+
+So, as a first step, you should build a Docker image of your application.
+
+An image contains all the file needed to launch the container.
+
+Go ahead and create a `Dockerfile` _(capital "D")_ in the root of your project:
 
 ```dockerfile|title=Dockerfile
 FROM composer:1.6.5 as build
@@ -79,80 +111,142 @@ FROM php:7.1.8-apache
 EXPOSE 80
 COPY --from=build /app /app
 COPY vhost.conf /etc/apache2/sites-available/000-default.conf
-RUN chown -R www-data:www-data /app \
-    && a2enmod rewrite
+RUN chown -R www-data:www-data /app a2enmod rewrite
 ```
 
-This `Dockerfile` is made of two parts:
+This `Dockerfile` has two parts:
 
-- The first part extends a PHP `composer` image so that you can install the application's dependencies.
-- The second part creates a final Docker image with an Apache web server to serve the application.
+- In the first part, you install all the application's dependencies.
+- The second part prepares the webserver with PHP-mod.
 
-Before you can test the Docker image, you will need to build it:
+> A `Dockerfile` above uses a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/).
+
+The Dockerfile is just a description of what files should be bundled in the container.
+
+You can execute the instructions and create the Docker image with:
 
 ```terminal|command=1,2|title=bash
-cd /to/your/project/directory
 docker build -t yourname/laravel-kubernetes-demo .
 ```
 
-Then run the application with:
+Note the following about this command:
+
+- `-t yourname/laravel-kubernetes-demo` defines the name ("tag") of your container — in this case, your container is just called `yourname/laravel-kubernetes-demo`
+- `.` is the location of the `Dockerfile` and application code — in this case, it's the current directory
+
+**The output is a Docker image.**
+
+_What is a Docker image?_
+
+A Docker image is an archive containing all the files that belong to a container.
+
+If you want to test it, you should run the container (and the process inside it).
+
+You can run the container with:
 
 ```terminal|command=1-4|title=bash
 docker run -ti \
   -p 8080:80 \
   -e APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY= \
-  laravel-kubernetes-demo
+  yourname/laravel-kubernetes-demo
 ```
 
-And the application should be available on `http://localhost:8080`.
+And the application should be available on <http://localhost:8080>.
 
-With this setup, the container is generic and the `APP_KEY` is not hardcoded or shared.
+> Please note that, with this setup, the container is generic and the `APP_KEY` is not hardcoded or shared.
 
-## Building a Docker image in minikube
+## Sharing Docker image with a registry
 
-```terminal|command=1,2,3|title=bash
-cd /to/your/project/directory
-eval $(minikube docker-env)
-docker build -t yourname/laravel-kubernetes-demo .
+_You built and ran the container locally, but how do you make it available to your Kubernetes cluster?_
+
+Usually, to share images, you can use a container registry such as [Docker Hub](https://hub.docker.com) or [Quay.io](https://quay.io).
+
+Container registries are web apps that store container images — like the `yourname/laravel-kubernetes-demo` image that you built earlier.
+
+In this tutorial you will use Docker Hub to upload your containers.
+
+**To use Docker Hub, you first have to [create a Docker ID](https://hub.docker.com/signup).**
+
+A Docker ID is your Docker Hub username.
+
+Once you have your Docker ID, you have to authorise Docker to connect to the Docker Hub account:
+
+```terminal|command=1|title=bash
+docker login
 ```
 
-> Don't forget to execute the eval. Building the image within the virtual machine is necessary. You should run the command only once in the current terminal.
+Before you can upload your image, there is one last thing to do.
+
+**Images uploaded to Docker Hub must have a name of the form `username/image`:**
+
+- `username` is your Docker ID
+- `image` is the name of the image
+
+If you wish to rename your image according to this format, run the following command:
+
+```terminal|command=1|title=bash
+docker tag previousaccount/previousname <username>/laravel-kubernetes-demo
+```
+
+> Please replace `<username>` with your Docker ID this time.
+
+**Now you can upload your image to Docker Hub:**
+
+```terminal|command=1|title=bash
+docker push <username>/laravel-kubernetes-demo
+```
+
+Your image is now publicly available as `<username>/laravel-kubernetes-demo` on Docker Hub and everybody can download and run it.
+
+To verify this, you can re-run your app, but this time using the new image name.
+
+```terminal|command=1-5,6-12|title=bash
+docker run -ti \
+  -p 8080:80 \
+  -e APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY= \
+  your-username/laravel-kubernetes-demo
+```
+
+Everything should work exactly as before.
+
+The image is now available in the registry.
+
+Anybody who has access to the registry it can use it.
 
 ## Deploying Laravel in Kubernetes
 
-Now that the application's image is built and available in Minikube you can go ahead with deploying it.
+Now that the application's image is built and available, you can go ahead an deploy it.
 
-I always start with making sure that `kubectl` is in the correct context. In this case, the context is Minikube. You can quickly switch context as follows:
+You can deploy the container image with:
 
-```terminal|command=1|title=bash
-kubectl config use-context minikube
-```
-
-then you can deploy the container image:
-
-```terminal|command=1-5|title=bash
+```terminal|command=1-6|title=bash
 kubectl run laravel-kubernetes-demo \
-  --image=yourname/laravel-kubernetes-demo \
+  --restart=Never \
+  --image=your-username/laravel-kubernetes-demo \
   --port=80 \
-  --image-pull-policy=IfNotPresent \
   --env=APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY=
 ```
 
-The above command tells `kubectl` to run our demo application from the Docker image.
+Let's review the command:
 
-The first parameter of the command simply asks `kubectl` to not pull the image from a registry such as Docker Hub if it exists locally which in this case it does.
+- `kubectl run laravel-kubernetes-demo` deploys an app in the cluster and gives it the name `laravel-kubernetes-demo`.
+- `--restart=Never` is used not to restart the app when it crashes.
+- `--image=yourname/laravel-kubernetes-demo` and `--port=80` are the name of the image and the port exposed on the container.
 
-Do note that you still need to be logged on to Docker's so that `kubectl` can check if the image is up to date.
+> Please note that 80 is the port exposed in the container. If you make a mistake, you shouldn't increment the port; you can still use port 80.
+> If you make a mistake, you can execute `kubectl delete pod app` and start again.
 
-You can check that a Pod is created for the application by running:
+In Kubernetes, an app deployed in the cluster is called a Pod.
+
+You can check that a Pod is successfully created with:
 
 ```terminal|command=1|title=bash
 kubectl get pods
-NAME                                       READY     STATUS    RESTARTS   AGE
-laravel-kubernetes-demo-7dbb9d6b48-q54wp   1/1       Running   0          18m
+NAME                        READY     STATUS    RESTARTS   AGE
+laravel-kubernetes-demo     1/1       Running   0          18m
 ```
 
-You can also use the Minikube GUI dashboard to monitor the pods and cluster.
+You can also use the Minikube dashboard to monitor the pods and cluster.
 
 The GUI also helps with visualising most of the discussed concepts.
 
@@ -170,15 +264,23 @@ minikube dashboard --url=true
 
 ## Exposing the application
 
-So far you have created a deployment which is running the application's container.
+So far, you have only deployed an application.
 
-A Pod running in the cluster has a dynamic IP. If you route the traffic directly to it using the IP, you may still need to update the routing table every time you restart the Pod.
+_But how do you access it?_
 
-In fact, on every deployment or container restart, a new IP is assigned to the Pod. To avoid managing IP addresses manually, you need to use a Service.
+The deployed application has a dynamic IP address assigned.
 
-The Service acts as a load balancer for a set of Pods. So even if the IP address of a Pod changes, the service is always pointing to it.
+That means that every time you deploy or scale an app, a different IP address is assigned to it.
 
-And since the Service always has the same IP, you won't need to update anything manually.
+You might find it difficult to route the traffic directly to the app.
+
+To avoid updating IP addresses manually when visiting the app, you can use a load balancer.
+
+In Kubernetes, a Service is a load balancer for a collection of Pods.
+
+So even if the IP address of a Pod changes, the IP address of the Service is always fixed.
+
+The Service is designed to keep track of the Pods' IP addresses, so you don't have to update IP address manually.
 
 ```include
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 829" id="service">
@@ -408,15 +510,15 @@ kubectl expose pods laravel-kubernetes-demo --type=NodePort --port=80
 service "laravel-kubernetes-demo" exposed
 ```
 
-Running the following command:
+You can verify that the Service was created successfully with:
 
 ```terminal|command=1|title=bash
 kubectl get services
 ```
 
-will show you a list of running services. You can also view the running service under the "Services" navigation menu within the dashboard.
+You can also view the running service under the "Services" navigation menu within the dashboard.
 
-A more exciting way to verify this deployment and the service exposure is obviously seeing the running application in the browser 😊
+A more exciting way to verify this deployment and the service is seeing it in the browser.
 
 To obtain the URL of the application (service), you can use the following command:
 
@@ -431,13 +533,108 @@ or, launch the application directly in the browser:
 minikube service laravel-kubernetes-demo
 ```
 
+## Breaking the app
+
+At this point you should have a local Kubernetes cluster with:
+
+- A single Pod running
+- A Service that routes traffic to a Pod
+
+Having a single Pod is usually not enough.
+
+_For instance, what happens when the Pod is accidentally deleted?_
+
+Let's find out.
+
+You can delete the Pod with:
+
+```terminal|command=1|title=bash
+kubectl delete pod laravel-kubernetes-demo
+```
+
+If you visit the app with `minikube service laravel-kubernetes-demo`, does it still work?
+
+_It doesn't._
+
+**But why?**
+
+You deployed a single Pod in isolation.
+
+There's no process looking after and respawning it when it's deleted.
+
+As you can imagine, this deployment is of limited used.
+
+It'd be better if there could be a mechanism to watch Pods and restart them when they are deleted, or they crash.
+
+Kubernetes has an abstraction designed to solve that specific challenge: the Deployment object.
+
+Here's an example for a Deployment definition:
+
+```yaml|title=deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel-kubernetes-demo
+spec:
+  selector:
+    matchLabels:
+      run: laravel-kubernetes-demo
+  template:
+    metadata:
+      labels:
+        run: laravel-kubernetes-demo
+    spec:
+      containers:
+        - name: demo
+          image: your-username/laravel-kubernetes-demo
+          ports:
+            - containerPort: 80
+          env:
+            - name: APP_KEY
+              value: base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY=
+```
+
+You can save the file above as `deployment.yaml`.
+
+You can submit the Deployment to the cluster with:
+
+```terminal|command=1|title=bash
+kubectl apply -f deployment.yaml
+```
+
+If you try to visit the application with `minikube service laravel-kubernetes-demo`, _do you see the app?_
+
+Yes, it worked.
+
+_Did the Deployment create a Pod?_
+
+Let's find out:
+
+```terminal|command=1|title=bash
+kubectl get pods
+```
+
+The Deployment created a single Pod.
+
+_What happens when you delete it again?_
+
+```terminal|command=1,2|title=bash
+kubectl delete pod <replace with pod id>
+```
+
+The Deployment immediately respawned another Pod.
+
+**Great!**
+
 ## Scaling the application
 
-And that is it. You have successfully deployed the application in Kubernetes. It's exciting.
+You have successfully deployed the application in Kubernetes that is resilient.
 
-But what's the point of doing all of this? Well, you only have one deployment with a single Pod running, provisioned to a Node with the exposed web service.
+But you still have one deployment with a single Pod running.
 
-Let's scale this deployment to two more instances of the application.
+_What if your application becomes more popular?_
+
+Let's scale this deployment to three instances.
 
 ```include
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 725" id="scaling">
@@ -644,25 +841,19 @@ Let's scale this deployment to two more instances of the application.
 </script>
 ```
 
-So that you understand where you are at this moment, run the following command to get a list of desired and available Pods:
-
-```terminal|command=1|title=bash
-kubectl get deployment
-NAME                      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-laravel-kubernetes-demo   1         1         1            1           57m
-```
-
-The output will be "1" for each. You want to have three available Pods so let's scale this up:
+You can use the following command to scale the Deployment:
 
 ```terminal|command=1|title=bash
 kubectl scale --replicas=3 deployment/laravel-kubernetes-demo
 deployment "laravel-kubernetes-demo" scaled
 ```
 
-Done. You have replicated the first Pod to another two, giving you three Pods running this service. Running the `get deployment` command will verify this.
+You have three replicas.
+
+You can verify it with:
 
 ```terminal|command=1|title=bash
-kubectl get deployment
+kubectl get deployment,pods
 NAME                      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 laravel-kubernetes-demo   3         3         3            3           59m
 ```
@@ -688,7 +879,7 @@ You can see how convenient it is to use Kubernetes to scale your website.
 
 ## Using Nginx Ingress to expose the app
 
-You've already achieved great things, you deployed the application and scaled the deployment.
+You've already achieved great things; you deployed the application and scaled the deployment.
 
 You have already seen the running application in the browser when pointed to the cluster's (Minikube) IP address and node's port number.
 
@@ -698,9 +889,9 @@ To use a URL in Kubernetes, you need an Ingress.
 
 An Ingress is a set of rules to allow inbound connections to reach a Kubernetes cluster.
 
-The Ingress is necessary because, in Kubernetes, resources such as Pods only have IP addresses which are routable by and within the cluster.
+In the past, you might have used Nginx or Apache as a reverse proxy.
 
-Meaning that they are not accessible or reachable to and from the world outside.
+The Ingress is the equivalent of a reverse proxy in Kubernetes.
 
 ```include
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 829" id="ingress">
@@ -943,11 +1134,7 @@ metadata:
   annotations:
     ingress.kubernetes.io/rewrite-target: /
 spec:
-  backend:
-    serviceName: default-http-server
-    servicePort: 80
   rules:
-    - host: laravel-kubernetes.demo
     - http:
         paths:
           - path: /
@@ -958,11 +1145,9 @@ spec:
 
 Among the basic content you would expect from a Kubernetes resource file, this file defines a set of rules to follow when routing inbound traffic.
 
-The `laravel-kubernetes.demo` URL will point to the Service where the application is running, as previously labelled `laravel-kubernetes-demo` on port 8181.
-
 The Ingress resource is useless without an Ingress controller so you will need to create a new controller or use an existing one.
 
-This tutorial uses the Nginx Ingress controller for routing the traffic. Minikube (v0.14 and above) comes with the Nginx setup as an addon which you will need to enable manually:
+Minikube comes with the Nginx as Ingress controller, and you can enable it with:
 
 ```terminal|command=1|title=bash
 minikube addons enable ingress
@@ -973,7 +1158,7 @@ minikube addons enable ingress
 Once you have enabled the Ingress addon, you can create the Ingress in this way:
 
 ```terminal|command=1|title=bash
-kubectl create -f path-to-your-ingress-file.yaml
+kubectl create -f ingress.yaml
 ```
 
 You can verify and obtain the Ingress' information by running the following command:
@@ -998,7 +1183,9 @@ Events:
   Normal  UPDATE  20s   nginx-ingress-controller  Ingress default/laravel-kubernetes-demo-ingress
 ```
 
-You can now access the application through the minikube IP address as shown above. To access the application through the URL `https://laravel-kubernetes.demo`, you will need to add an entry in your hosts file.
+You can now access the application through the minikube IP address, as shown above.
+
+You can visit the app at <http://minikube_ip>.
 
 ## This is just the beginning
 
@@ -1007,7 +1194,3 @@ Hopefully, this article has helped you in getting acquainted with Kubernetes.
 From my own experience, once one has performed similar deployments a couple or more times, things start getting habitual and make a lot more sense.
 
 But our Kubernetes journey has only just begun.
-
-In future articles, we will walk through more real-life applications using storage volumes to persist state, and we will also learn how to deploy to Cloud providers such as Google's Cloud Platform.
-
-Until then, check out [these training courses](/training) to get up to speed and possibly even become a Certified Kubernetes Administrator (CKA).
