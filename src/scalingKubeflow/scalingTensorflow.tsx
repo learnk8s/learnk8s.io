@@ -50,8 +50,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
     }),
   )
   storeV2.dispatch(ActionV2.pages.add(InfiniteConf))
-  store.dispatch(
-    Action.registerRedirect({
+  storeV2.dispatch(
+    ActionV2.redirects.add({
       id: 'redirect-infinite-conf',
       fromPageId: InfiniteConf.id,
       redirectToPageId: ScalingTensorflow.id,

@@ -32,8 +32,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(RSS))
   storeV2.dispatch(ActionV2.pages.add(OldRSS))
   store.dispatch(Action.assignTag({ id: 'no-sitemap', pageId: RSS.id }))
-  store.dispatch(
-    Action.registerRedirect({
+  storeV2.dispatch(
+    ActionV2.redirects.add({
       id: 'redirect-rss',
       fromPageId: OldRSS.id,
       redirectToPageId: RSS.id,

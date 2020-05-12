@@ -1,6 +1,11 @@
-import { Reducer } from 'redux'
+import { Reducer, applyMiddleware } from 'redux'
 import { VReference } from '../files'
-import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import {
+  createEntityAdapter,
+  createSlice,
+  Dispatch,
+  PayloadAction,
+} from '@reduxjs/toolkit'
 import { storeV2 } from '.'
 
 const pageAdapter = createEntityAdapter<Page>({})
@@ -14,44 +19,56 @@ export const pageSlice = createSlice({
   },
 })
 
-// export const redirectSlice = createSlice({
-//   name: 'redirect',
-//   initialState: redirectAdapter.getInitialState(),
-//   reducers: {
-//     add: (state, action: PayloadAction<Redirect>) => {
-//       if (
-//         !selector.pages
-//           .selectAll(storeV2.getState())
-//           .map(it => it.id)
-//           .includes(action.payload.fromPageId)
-//       ) {
-//         throw new Error(
-//           `Couldn't create redirect ${action.payload.fromPageId} -> ${action.payload.redirectToPageId}. FROM does not exist`,
-//         )
-//       }
-//       if (
-//         !selector.pages
-//           .selectAll(storeV2.getState())
-//           .map(it => it.id)
-//           .includes(action.payload.redirectToPageId)
-//       ) {
-//         throw new Error(
-//           `Couldn't create redirect ${action.payload.fromPageId} -> ${action.payload.redirectToPageId}. TO does not exist`,
-//         )
-//       }
-//       return redirectAdapter.addOne(state, action)
-//     },
-//   },
-// })
+export const redirectSlice = createSlice({
+  name: 'redirect',
+  initialState: redirectAdapter.getInitialState(),
+  reducers: {
+    add: (state, action: PayloadAction<Redirect>) => {
+      return redirectAdapter.addOne(state, action)
+    },
+  },
+})
 
 export type StateV2 = ReturnType<typeof storeV2.getState>
 
 export const ActionV2 = {
   pages: { ...pageSlice.actions },
+  redirects: { ...redirectSlice.actions },
 }
 
-export const selector = {
+export const middlewares = [checkRedirectPage]
+
+function checkRedirectPage(store: any) {
+  return (next: Dispatch<PayloadAction<Redirect>>) => (action: PayloadAction<Redirect>) => {
+    if (action.type === 'redirect/add') {
+      if (
+        !Selector.pages
+          .selectAll(store.getState())
+          .map(it => it.id)
+          .includes(action.payload.fromPageId)
+      ) {
+        throw new Error(
+          `Couldn't create redirect ${action.payload.fromPageId} -> ${action.payload.redirectToPageId}. FROM does not exist`,
+        )
+      }
+      if (
+        !Selector.pages
+          .selectAll(store.getState())
+          .map(it => it.id)
+          .includes(action.payload.redirectToPageId)
+      ) {
+        throw new Error(
+          `Couldn't create redirect ${action.payload.fromPageId} -> ${action.payload.redirectToPageId}. TO does not exist`,
+        )
+      }
+    }
+    return next(action)
+  }
+}
+
+export const Selector = {
   pages: pageAdapter.getSelectors<StateV2>(state => state.pages),
+  redirects: redirectAdapter.getSelectors<StateV2>(state => state.redirects),
 }
 
 export const Action = {
@@ -76,9 +93,9 @@ export const Action = {
   registerBlogPostMarkdownBlock(args: BlogPostMarkdownBlock) {
     return { type: 'REGISTER_RELATED_BLOCK' as const, ...args }
   },
-  registerRedirect(args: Redirect) {
-    return { type: 'REGISTER_REDIRECT' as const, ...args }
-  },
+  // registerRedirect(args: Redirect) {
+  //   return { type: 'REGISTER_REDIRECT' as const, ...args }
+  // },
 }
 
 export type Actions = ReturnType<typeof Action[keyof typeof Action]>
@@ -153,7 +170,7 @@ export interface State {
   authors: Record<string, Author>
   tags: Record<string, string[]>
   relatedBlocks: Record<string, BlogPostMarkdownBlock>
-  redirects: Record<string, Redirect>
+  // redirects: Record<string, Redirect>
   previewPictures: Record<string, PreviewPicture>
 }
 
@@ -166,7 +183,7 @@ export function createInitialState(options: {}): State {
     authors: {},
     tags: {},
     relatedBlocks: {},
-    redirects: {},
+    // redirects: {},
     previewPictures: {},
   }
 }
@@ -196,7 +213,7 @@ export const RootReducer: Reducer<State, Actions> = (
     }
     case 'ASSIGN_TAG': {
       if (
-        !selector.pages
+        !Selector.pages
           .selectAll(storeV2.getState())
           .map(it => it.id)
           .includes(action.pageId)
@@ -220,32 +237,32 @@ export const RootReducer: Reducer<State, Actions> = (
         relatedBlocks: { ...state.relatedBlocks, [Object.keys(state.relatedBlocks).length + 1]: { ...action } },
       }
     }
-    case 'REGISTER_REDIRECT': {
-      if (
-        !selector.pages
-          .selectAll(storeV2.getState())
-          .map(it => it.id)
-          .includes(action.fromPageId)
-      ) {
-        throw new Error(
-          `Couldn't create redirect ${action.fromPageId} -> ${action.redirectToPageId}. FROM does not exist`,
-        )
-      }
-      if (
-        !selector.pages
-          .selectAll(storeV2.getState())
-          .map(it => it.id)
-          .includes(action.redirectToPageId)
-      ) {
-        throw new Error(
-          `Couldn't create redirect ${action.fromPageId} -> ${action.redirectToPageId}. TO does not exist`,
-        )
-      }
-      return { ...state, redirects: { ...state.redirects, [action.id]: { ...action } } }
-    }
+    // case 'REGISTER_REDIRECT': {
+    //   if (
+    //     !Selector.pages
+    //       .selectAll(storeV2.getState())
+    //       .map(it => it.id)
+    //       .includes(action.fromPageId)
+    //   ) {
+    //     throw new Error(
+    //       `Couldn't create redirect ${action.fromPageId} -> ${action.redirectToPageId}. FROM does not exist`,
+    //     )
+    //   }
+    //   if (
+    //     !Selector.pages
+    //       .selectAll(storeV2.getState())
+    //       .map(it => it.id)
+    //       .includes(action.redirectToPageId)
+    //   ) {
+    //     throw new Error(
+    //       `Couldn't create redirect ${action.fromPageId} -> ${action.redirectToPageId}. TO does not exist`,
+    //     )
+    //   }
+    //   return { ...state, redirects: { ...state.redirects, [action.id]: { ...action } } }
+    // }
     case 'REGISTER_PREVIEW_PICTURE': {
       if (
-        !selector.pages
+        !Selector.pages
           .selectAll(storeV2.getState())
           .map(it => it.id)
           .includes(action.pageId)

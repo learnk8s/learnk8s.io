@@ -51,8 +51,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
     }),
   )
   storeV2.dispatch(ActionV2.pages.add(OldDeployLaravel))
-  store.dispatch(
-    Action.registerRedirect({
+  storeV2.dispatch(
+    ActionV2.redirects.add({
       id: 'redirect-laravel',
       fromPageId: OldDeployLaravel.id,
       redirectToPageId: DeployLaravel.id,

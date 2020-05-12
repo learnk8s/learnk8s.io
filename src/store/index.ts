@@ -34,12 +34,14 @@ export const storeV2 = configureStore({
     prices: CoursesReducer.priceSlice.reducer,
     onlineCourses: CoursesReducer.onlineCourseSlice.reducer,
     pages: WebsiteReducer.pageSlice.reducer,
+    redirects: WebsiteReducer.redirectSlice.reducer,
   },
+  middleware: [...WebsiteReducer.middlewares, ...CoursesReducer.middlewares]
 })
 
-export const selector = {
-  ...CoursesReducer.selector,
-  ...WebsiteReducer.selector,
+export const Selector = {
+  ...CoursesReducer.Selector,
+  ...WebsiteReducer.Selector,
 }
 
 export const store = createStore<State, Actions, {}, {}>(
@@ -63,23 +65,23 @@ export const store = createStore<State, Actions, {}, {}>(
 )
 
 export function getVenues(state: StateV2): CoursesReducer.CourseVenue[] {
-  return Object.values(selector.venues.selectAll(state))
+  return Object.values(Selector.venues.selectAll(state))
 }
 
 export function getWorkshops(state: StateV2): CoursesReducer.FullWorkshop[] {
-  return Object.values(selector.workshops.selectAll(state)).map(workshop => {
+  return Object.values(Selector.workshops.selectAll(state)).map(workshop => {
     return {
-      price: Object.values(selector.prices.selectAll(state)).find(it => it.id === workshop.priceId)!,
-      venue: Object.values(selector.venues.selectAll(state)).find(it => it.id === workshop.venueId)!,
-      picture: Object.values(selector.pictures.selectAll(state)).find(it => it.id === workshop.pictureId)!,
-      ...Object.values(selector.courses.selectAll(state)).find(it => it.id === workshop.courseId)!,
+      price: Object.values(Selector.prices.selectAll(state)).find(it => it.id === workshop.priceId)!,
+      venue: Object.values(Selector.venues.selectAll(state)).find(it => it.id === workshop.venueId)!,
+      picture: Object.values(Selector.pictures.selectAll(state)).find(it => it.id === workshop.pictureId)!,
+      ...Object.values(Selector.courses.selectAll(state)).find(it => it.id === workshop.courseId)!,
       ...workshop,
     }
   })
 }
 
 export function getOnlineCourses(state: StateV2): OnlineCourse[] {
-  return Object.values(selector.onlineCourses.selectAll(state))
+  return Object.values(Selector.onlineCourses.selectAll(state))
 }
 
 export function getConfig(state: State): ConfigReducer.State {
@@ -87,7 +89,7 @@ export function getConfig(state: State): ConfigReducer.State {
 }
 
 export function getPages(state: State): WebsiteReducer.Page[] {
-  return Object.values(selector.pages.selectAll(storeV2.getState()))
+  return Object.values(Selector.pages.selectAll(storeV2.getState()))
 }
 
 export function getOpenGraph(state: State): WebsiteReducer.OpenGraph[] {
@@ -117,7 +119,7 @@ export function getBlogPostMarkdownBlocks(state: State): WebsiteReducer.BlogPost
 }
 
 export function getRedirects(state: State): WebsiteReducer.Redirect[] {
-  return Object.values(state.website.redirects)
+  return Object.values(Selector.redirects.selectAll(storeV2.getState()))
 }
 
 export function getPreviewPictures(state: State): WebsiteReducer.PreviewPicture[] {
