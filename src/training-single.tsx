@@ -106,22 +106,22 @@ const genericRequest: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-export const Training = {
-  id: 'training',
-  url: '/training',
+export const TrainingSingle = {
+  id: 'training-single',
+  url: '/training-single',
   title: 'Instructor-led Kubernetes Training',
   description:
     'Join an instructor-led, hands-on course and become an expert in deploying and scaling applications with containers and Kubernetes.',
 }
 
 export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Training))
+  store.dispatch(Action.registerPage(TrainingSingle))
   store.dispatch(
     Action.registerOpenGraph({
-      id: 'og-training',
-      pageId: Training.id,
+      id: 'og-training-single',
+      pageId: TrainingSingle.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      description: Training.description,
+      description: TrainingSingle.description,
       title: 'Kubernetes Training Courses',
     }),
   )
@@ -134,7 +134,7 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
       jsx: renderPage(state),
       isOptimisedBuild: getConfig(state).isProduction,
       siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-      url: Training.url,
+      url: TrainingSingle.url,
       outputFolder: getConfig(state).outputFolder,
     })
   } catch (error) {
@@ -143,8 +143,8 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Training.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
+  const page = getPages(state).find(it => it.id === TrainingSingle.id)!
+  const openGraph = getOpenGraph(state).find(it => it.pageId === TrainingSingle.id)
   const courses = getWorkshops(state)
   const onlineCourses = getOnlineCourses(state)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
@@ -314,47 +314,46 @@ function renderPage(state: State) {
       <Body>
         <Navbar />
 
-        <div className='new-hero pt4 pb5-l pb4 flex-ns justify-center-ns ph4'>
-          <div className='mw6-m mw7-l pr2 pr4-ns'>
-            <h1 className='f-subheadline-l f1 b white mv0 lh-solid'>Instructor-led Kubernetes training</h1>
-            <div className='f4 measure'>
-              <p className='f2-l f3 white bt bw2 pt3 o-90'>
-                Master Kubernetes networking, architecture, authentication, scaling, storage{' '}
-                <span className='i'>(and more)</span> in scrupulous detail.
-              </p>
-            </div>
-          </div>
-          <div className='dn db-ns flex-auto-l w4-m mw5-l'>
-            <div className='aspect-ratio aspect-ratio--3x4'>
-              <img src={'assets/training/in-person3x4.svg'} alt='' className='aspect-ratio--object' />
-            </div>
-          </div>
-        </div>
-
         <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt5'>
-          <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Join the next class</p>
-          <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>
-            Join the next public class in your city or from your comfort of your home.
-          </p>
-          <ul className='list pl0'>
-            {newCourses
-              .slice(0, 3)
-              .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
-              .map((it, i) => (
-                <CourseRow
-                  startsAt={it.startsAt}
-                  title={`${it.title} — ${it.location}`}
-                  id={`event${i}`}
-                  tags={it.tags}
-                  price={it.price}
-                  link='#'
-                />
-              ))}
+          <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Join the next Advanced Kubernetes course in London</p>
+          <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>What you need to know:</p>
+
+          <ul className='pl0 list f3 mw6 center'>
+            <li className='mv3 flex items-center'>
+              <p className='b w-30 mv0'>When:</p>
+              <p className='mv0 w-70'>27th of April 2020 (in 4 days)</p>
+            </li>
+            <li className='mv3 flex items-center'>
+              <p className='b w-30 mv0'>Starts at:</p>
+              <p className='mv0 w-70'>9 am CET</p>
+            </li>
+            <li className='mv3 flex items-center'>
+              <p className='b w-30 mv0'>Where:</p>
+              <p className='mv0 w-70'>Online</p>
+            </li>
+            <li className='mv3 flex items-center'>
+              <p className='b w-30 mv0'>Duration:</p>
+              <p className='mv0 w-70'>3 days / 6 hours per day</p>
+            </li>
+            <li className='mv3 flex items-center'>
+              <p className='b w-30 mv0'>Price:</p>
+              <p className='mv0 w-70'>USD 2,500.00</p>
+            </li>
           </ul>
+
           <div className='tc'>
             <a href='#start' className='link dib white bg-sky br1 pa3 b f5 mv3 submit br2 b--none ttu'>
-              Show all
+              Book a ticket now
             </a>
+          </div>
+
+          <div className='tc'>
+            <p className='lh-solid'>
+              Have questions?{' '}
+              <a href='mailto:' className='link navy underline'>
+                Speak to an instructor.
+              </a>
+            </p>
           </div>
         </section>
 
@@ -366,6 +365,9 @@ function renderPage(state: State) {
             </p>
             <p className='measure f3-l f4 lh-copy center'>Things you need to know about the course:</p>
             <ul className='list pl0 ph2-ns'>
+              <ListItem>
+                This is a <span className='b'>real event held in London.</span>
+              </ListItem>
               <ListItem>
                 You will get your hands dirty: the split is <span className='b'>40% lecture and 60% hands-on labs</span>
                 .
@@ -548,177 +550,20 @@ function renderPage(state: State) {
           </div>
         </Section>
 
-        <section id='start'>
-          <div className='mw8 center'>
-            <p className='f1-l f2 navy b tc ph3 mb3 mt4'>When is the next event?</p>
-
-            <div className='js-filters flex-ns justify-center-ns dn'>
-              <div className='w-100 mw5 f5 bg-evian ph3 pv2 br2 br--left'>
-                <p className='ttu gray f6 lh-solid'>Filter by location:</p>
-                <ul className='list pl1'>
-                  <li className='mv2'>
-                    <input className='' defaultChecked id='country-all' type='radio' name='country' />
-                    <label htmlFor='country-all' className='pl2'>
-                      All
-                    </label>
-                  </li>
-                  <li className='mv2'>
-                    <input className='' id='country-na' type='radio' name='country' />
-                    <label htmlFor='country-na' className='pl2'>
-                      North America
-                    </label>
-                  </li>
-                  <li className='mv2'>
-                    <input className='' id='country-europe' type='radio' name='country' />
-                    <label htmlFor='country-europe' className='pl2'>
-                      Europe
-                    </label>
-                  </li>
-                  <li className='mv2'>
-                    <input className='' id='country-sea' type='radio' name='country' />
-                    <label htmlFor='country-sea' className='pl2'>
-                      South East Asia
-                    </label>
-                  </li>
-                  <li className='mv2'>
-                    <input className='' id='country-oceania' type='radio' name='country' />
-                    <label htmlFor='country-oceania' className='pl2'>
-                      Oceania
-                    </label>
-                  </li>
-                </ul>
-              </div>
-              <div className='w-100 mw5 f5 bg-evian ph3 pv2 br2 br--right'>
-                <p className='ttu gray f6 lh-solid'>Filter by course type:</p>
-                <ul className='list pl1'>
-                  <li className='mv2'>
-                    <input className='' defaultChecked id='course-all' type='radio' name='course-type' />
-                    <label htmlFor='course-all' className='pl2'>
-                      All
-                    </label>
-                  </li>
-                  <li className='mv2'>
-                    <input className='' id='course-in-person' type='radio' name='course-type' />
-                    <label htmlFor='course-in-person' className='pl2'>
-                      In-person
-                    </label>
-                  </li>
-                  <li className='mv2'>
-                    <input className='' id='course-online' type='radio' name='course-type' />
-                    <label htmlFor='course-online' className='pl2'>
-                      Online
-                    </label>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className='ph3'>
-              <table className='js-table w-100 collapse mt4'>
-                <thead>
-                  <tr className='dn dt-row-ns'>
-                    <th className='tc pv3'>Date</th>
-                    <th className='tc pv3'>Location</th>
-                    <th className='tc pv3'>Course</th>
-                    <th className='tc pv3 dn-m'>Duration</th>
-                    <th className='tc pv3 dn-m'>Time Zone</th>
-                    <th className='tc pv3'>Price</th>
-                  </tr>
-                </thead>
-                <tbody className='results black-70'>
-                  {newCourses
-                    .slice(0)
-                    .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
-                    .map((event, i) => {
-                      return (
-                        <tr
-                          key={i}
-                          className={`db dt-row-ns relative static-ns ${
-                            i % 2 === 0 ? 'bg-evian' : ''
-                          } hover-bg-washed-yellow f5-m f4 ph3 pt3 mv3 pa0-ns ma0-ns`}
-                          data-tags={event.tags.join(' ')}
-                        >
-                          <td className='absolute static-ns top-0 right-0 dtc-ns'>
-                            <div className='date bg-sky w3 h3 white tc b'>
-                              <p className='f2 ma0'>{format(new Date(event.startsAt), 'd')}</p>
-                              <p className='ttu ma0'>{format(new Date(event.startsAt), 'MMM')}</p>
-                            </div>
-                          </td>
-                          <td className='tc-ns db dtc-ns table-label mr5 mr0-ns' data-label='Location'>
-                            {event.location}
-                          </td>
-                          <td className='tc-ns db dtc-ns ph1-m ph3-l table-label mr5 mr0-ns' data-label='Course'>
-                            {event.title}
-                          </td>
-                          <td className='tc-ns db dtc-ns table-label mr5 mr0-ns dn-m' data-label='Duration'>
-                            {event.durationInDays} days
-                            <span className='f7 dark-gray dn dib-l'> / {event.hoursPerDay} hours per day</span>
-                          </td>
-                          <td className='tc-ns db dtc-ns table-label dn-m' data-label='Timezone'>
-                            {event.timezone}
-                          </td>
-                          <td className='js-price tc-ns db dtc-ns table-label' data-label='Price'>
-                            {event.price}
-                          </td>
-                          <td className='tc-ns db dtc-ns'>
-                            <a
-                              href={event.link}
-                              className='link dib white bg-sky br1 pv2 ph3 b f6 mv3 submit br2 b--none lh-solid mh1-m mh2-l'
-                            >
-                              Book&nbsp;⇢
-                            </a>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                </tbody>
-              </table>
-              <div className='js-empty-results dn tc'>
-                <p className='tc b bg-navy pa2 dib br2 white'>Oops, we don't run any event with that selection.</p>
-              </div>
-            </div>
-            <script dangerouslySetInnerHTML={{ __html: `(${FilterTable.toString()})()` }}></script>
-
-            <div className='ph3'>
-              <p className='f2-l f3 navy b tc mb2 pt4-ns pt2'>
-                What about <span className='i'>other locations</span>?
-              </p>
-              <p className='lh-copy f4 black-70 measure center tc'>
-                Learnk8s runs in-person workshops in Europe, North America, South East Asia and Australia. If you have a
-                suggestion for a new location, drop us a line at{' '}
-                <a className='link underline navy' href={mailto(newLocationEnquiry)}>
-                  hello@learnk8s.io
-                </a>{' '}
-                and will make it happen.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <Section className='bg-evian mt3 mt5-ns'>
+        <Section className='bg-evian'>
           <div className='mw7 center'>
-            <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Training your team?</p>
-            <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>Design your own private session:</p>
-            <ul className='pl0 list f4 measure center'>
+            <p className='f1-l f2 navy b tc ph3 mb3 mt4'>What are the prerequisites?</p>
+            <ul className='pl0 list f4 measure center pt4 pb4-ns'>
+              <ListItem className=''>Knowledge of basic Linux command and navigation.</ListItem>
+              <ListItem>Familiarity with Linux networking.</ListItem>
+              <ListItem>Some experience with reverse proxies such as Nginx or HAProxy.</ListItem>
+              <ListItem>Exposure to Virtual Machines.</ListItem>
+              <ListItem className='b'>A laptop with 8GB of memory and 20GB of space available.</ListItem>
               <ListItem>
-                <span className='b'>Customise the agenda in full</span> and select the modules relevant to you
-              </ListItem>
-              <ListItem>
-                Increase the session length <span className='b'>up to five full-time days</span>
-              </ListItem>
-              <ListItem>
-                Include <span className='b'>ad-hoc consulting sessions</span> to address your cluster configuration
-              </ListItem>
-              <ListItem>
-                Add <span className='b'>ad-hoc modules</span> developed to help you deliver your cluster to production
+                <span className='b'>Windows 10 Pro,</span> macOS, Ubuntu (or your favourite Linux distribution).
               </ListItem>
             </ul>
           </div>
-          <p className='tc pb4-ns'>
-            <a href={mailto(privateGroupEnquiry)} className='link dib white bg-sky br1 pa3 b f5 mv3'>
-              Get in touch →
-            </a>
-          </p>
         </Section>
 
         <Section className='mb4'>
@@ -755,6 +600,94 @@ function renderPage(state: State) {
                 Learnk8s' Telegram Group
               </a>
               !
+            </p>
+          </div>
+        </Section>
+
+        <Section className='bg-evian'>
+          <div className='mw7 center'>
+            <p className='f1-l f2 navy b tc ph3 mb3 mt4'>What happens after I buy the ticket?</p>
+            <ul className='pl0 list f4 measure center pt4 pb4-ns'>
+              <ListItem className=''>An instructor will get in touch with you.</ListItem>
+              <ListItem>You will receive a list of tools that you should install ahead of the event.</ListItem>
+              <ListItem>We will collect your dietary requirements (if any).</ListItem>
+              <ListItem>
+                You will be granted access to the{' '}
+                <a href='/academy' className='navy link underline'>
+                  Learnk8s Academy
+                </a>
+                .
+              </ListItem>
+              <ListItem>We will keep you informed (and send gentle reminders) until the day of the event.</ListItem>
+            </ul>
+          </div>
+        </Section>
+
+        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt5'>
+          <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Join the next Advanced Kubernetes course in London</p>
+          <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>What you need to know:</p>
+
+          <ul className='pl0 list f3 mw6 center'>
+            <li className='mv3 flex items-center'>
+              <p className='b w-30 mv0'>When:</p>
+              <p className='mv0 w-70'>27th of April 2020 (in 4 days)</p>
+            </li>
+            <li className='mv3 flex items-center'>
+              <p className='b w-30 mv0'>Starts at:</p>
+              <p className='mv0 w-70'>9 am CET</p>
+            </li>
+            <li className='mv3 flex items-center'>
+              <p className='b w-30 mv0'>Where:</p>
+              <p className='mv0 w-70'>Online</p>
+            </li>
+            <li className='mv3 flex items-center'>
+              <p className='b w-30 mv0'>Duration:</p>
+              <p className='mv0 w-70'>3 days / 6 hours per day</p>
+            </li>
+            <li className='mv3 flex items-center'>
+              <p className='b w-30 mv0'>Price:</p>
+              <p className='mv0 w-70'>USD 2,500.00</p>
+            </li>
+          </ul>
+
+          <div className='tc'>
+            <a href='#start' className='link dib white bg-sky br1 pa3 b f5 mv3 submit br2 b--none ttu'>
+              Book a ticket now
+            </a>
+          </div>
+
+          <div className='tc'>
+            <p className='lh-solid'>
+              Have questions?{' '}
+              <a href='mailto:' className='link navy underline'>
+                Speak to an instructor.
+              </a>
+            </p>
+          </div>
+        </section>
+
+
+        <Section className=''>
+          <div className='f3 measure center tc'>
+            <h2 className='f1-l f2 navy navy'>The Learnk8s Academy Guarantee: Our promise to you</h2>
+          </div>
+          <div className='mw7 center'>
+            <p className='lh-copy f3-l f4 black-70 b mb1 mt5-l mt4'>
+              We care more about our students' success than taking their money.
+            </p>
+            <p className='lh-copy f3-l f4 black-70 mt1'>
+              If you follow the lectures and practise the material and still DO NOT feel like you are making progress 30
+              days after you begin doing the work, we will try to work with you to identify what's missing. And if that
+              doesn't work, we'll give you a full refund.
+            </p>
+            <p className='lh-copy f3-l f4 black-70 b mb1 mt5-l mt4'>
+              We're honest to the end about the level of effort, skills, and other ingredients required.
+            </p>
+            <p className='lh-copy f3-l f4 black-70 mt1'>
+              This is not a <span className='i'>watch someone else deploying containers in Kubernetes</span> video
+              course. Completing the Learnk8s Academy's modules takes time and effort…{' '}
+              <span className='b'>but it does work.</span> The learning curve is steep; then, the plateau of usefulness
+              is very long and smooth. It's a great feeling operating Kubernetes after you've mastered it.
             </p>
           </div>
         </Section>
