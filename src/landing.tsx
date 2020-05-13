@@ -85,8 +85,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
         pageId: page.id,
       }),
     )
-    store.dispatch(
-      Action.registerOpenGraph({
+    storeV2.dispatch(
+      ActionV2.openGraphs.add({
         id: `og-${page.id}`,
         pageId: page.id,
         image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,

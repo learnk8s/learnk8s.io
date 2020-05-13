@@ -14,8 +14,8 @@ export const SmallerImages = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(SmallerImages))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-smaller-images',
       pageId: SmallerImages.id,
       image: <img src='src/smallerDockerImages/smaller_images.png' alt='Docker whale' />,

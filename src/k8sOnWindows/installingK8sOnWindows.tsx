@@ -14,8 +14,8 @@ export const K8sOnWindows = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(K8sOnWindows))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-k8s-on-windows',
       pageId: K8sOnWindows.id,
       image: (

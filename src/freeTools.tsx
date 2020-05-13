@@ -16,8 +16,8 @@ export const FreeTools = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(FreeTools))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-free-tools',
       pageId: FreeTools.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,

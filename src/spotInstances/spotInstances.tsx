@@ -14,8 +14,8 @@ export const SpotInstances = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(SpotInstances))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-spot-instances',
       pageId: SpotInstances.id,
       image: <img src='src/spotInstances/cheap-cluster.jpg' alt='Serving cheaper servers' />,

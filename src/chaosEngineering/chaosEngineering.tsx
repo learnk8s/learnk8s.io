@@ -14,8 +14,8 @@ export const ChaosEngineering = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(ChaosEngineering))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-chaos-engineering',
       pageId: ChaosEngineering.id,
       image: <img src='src/chaosEngineering/chaos-engineering-kubernetes.png' alt='Chaos engineering' />,

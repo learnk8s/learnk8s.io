@@ -26,8 +26,8 @@ export const BestPractices = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(BestPractices))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-best-practices',
       pageId: BestPractices.id,
       image: <img src='src/best-practices/checklist.jpg' alt='Kubernetes production best practices' />,

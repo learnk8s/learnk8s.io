@@ -8,6 +8,7 @@ const redirectAdapter = createEntityAdapter<Redirect>({})
 const previewPictureAdapter = createEntityAdapter<PreviewPicture>({})
 const landingAdapter = createEntityAdapter<LandingPage>({})
 const authorAdapter = createEntityAdapter<Author>({})
+const openGraphAdapter = createEntityAdapter<OpenGraph>({})
 
 export const pageSlice = createSlice({
   name: 'page',
@@ -49,6 +50,14 @@ export const authorSlice = createSlice({
   },
 })
 
+export const openGraphSlice = createSlice({
+  name: 'openGraph',
+  initialState: openGraphAdapter.getInitialState(),
+  reducers: {
+    add: openGraphAdapter.addOne,
+  },
+})
+
 export type StateV2 = ReturnType<typeof storeV2.getState>
 
 export const websiteReducer = {
@@ -57,6 +66,7 @@ export const websiteReducer = {
   previewPictures: previewPictureSlice.reducer,
   landings: landingSlice.reducer,
   authors: authorSlice.reducer,
+  openGraphs: openGraphSlice.reducer,
 }
 
 export const ActionV2 = {
@@ -65,6 +75,7 @@ export const ActionV2 = {
   previewPictures: { ...previewPictureSlice.actions },
   landings: { ...landingSlice.actions },
   authors: { ...authorSlice.actions },
+  openGraphs: { ...openGraphSlice.actions },
 }
 
 export const Selector = {
@@ -73,12 +84,14 @@ export const Selector = {
   previewPictures: previewPictureAdapter.getSelectors<StateV2>(state => state.previewPictures),
   landings: landingAdapter.getSelectors<StateV2>(state => state.landings),
   authors: authorAdapter.getSelectors<StateV2>(state => state.authors),
+  openGraphs: openGraphAdapter.getSelectors<StateV2>(state => state.openGraphs),
 }
 
 const checkRedirectPage = middlewareCheck(checkRedirectPageRequirement)
 const checkPreviewPicture = middlewareCheck(checkPreviewPictureRequirement)
+const checkOpenGraph = middlewareCheck(checkOpenGraphRequirement)
 
-export const middlewares = [checkRedirectPage, checkPreviewPicture]
+export const middlewares = [checkRedirectPage, checkPreviewPicture, checkOpenGraph]
 
 function middlewareCheck<T>(checkFn: (action: PayloadAction<T>, store: any) => void) {
   return (store: any) => {
@@ -127,13 +140,26 @@ function checkPreviewPictureRequirement(action: PayloadAction<PreviewPicture>, s
   }
 }
 
+function checkOpenGraphRequirement(action: PayloadAction<OpenGraph>, store: any) {
+  if (action.type === 'openGraph/add') {
+    if (
+      Selector.openGraphs
+        .selectAll(storeV2.getState())
+        .map(it => it.id)
+        .includes(action.payload.id)
+    ) {
+      throw new Error(`Duplicate openGraph id ${action.payload.id}`)
+    }
+  }
+}
+
 export const Action = {
   // registerLandingPageLocation(args: LandingPage) {
   //   return { type: 'REGISTER_LANDING' as const, ...args }
   // },
-  registerOpenGraph(args: OpenGraph) {
-    return { type: 'REGISTER_OG' as const, ...args }
-  },
+  // registerOpenGraph(args: OpenGraph) {
+  //   return { type: 'REGISTER_OG' as const, ...args }
+  // },
   registerBlogPost(args: BlogPost) {
     return { type: 'REGISTER_BLOG_POST.V2' as const, ...args }
   },
@@ -220,7 +246,7 @@ export type BlogPostMarkdownBlock = {
 }
 
 export interface State {
-  openGraph: Record<string, OpenGraph>
+  // openGraph: Record<string, OpenGraph>
   // landingPages: Record<string, LandingPage>
   blogPosts: Record<string, BlogPost>
   // authors: Record<string, Author>
@@ -233,7 +259,7 @@ export interface State {
 export function createInitialState(options: {}): State {
   return {
     ...options,
-    openGraph: {},
+    // openGraph: {},
     // landingPages: {},
     blogPosts: {},
     // authors: {},
@@ -249,17 +275,17 @@ export const RootReducer: Reducer<State, Actions> = (
   action: Actions,
 ): State => {
   switch (action.type) {
-    case 'REGISTER_OG': {
-      if (action.id in state.openGraph) {
-        throw new Error(`Duplicate openGraph id ${action.id}`)
-      }
-      return { ...state, openGraph: { ...state.openGraph, [action.id]: { ...action } } }
-    }
+    // case 'REGISTER_OG': {
+    //   if (action.id in state.openGraph) {
+    //     throw new Error(`Duplicate openGraph id ${action.id}`)
+    //   }
+    //   return { ...state, openGraph: { ...state.openGraph, [action.id]: { ...action } } }
+    // }
     // case 'REGISTER_LANDING': {
     //   return { ...state, landingPages: { ...state.landingPages, [action.id]: { ...action } } }
     // }
     case 'REGISTER_BLOG_POST.V2': {
-      if (!Selector.authors.selectAll(storeV2.getState()).some(it => it.id === action.authorId )) {
+      if (!Selector.authors.selectAll(storeV2.getState()).some(it => it.id === action.authorId)) {
         throw new Error(`The author ${action.authorId} for the blog post ${action.title} doesn't exist`)
       }
       return { ...state, blogPosts: { ...state.blogPosts, [action.id]: { ...action } } }

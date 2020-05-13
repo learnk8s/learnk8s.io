@@ -67,8 +67,8 @@ export const Pages = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(Pages.multipleClusters))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-multiple-kubernetes-clusters',
       pageId: Pages.multipleClusters.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -90,8 +90,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.multipleClusters.id }))
 
   storeV2.dispatch(ActionV2.pages.add(Pages.ingressApiGateway))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-ingress-api-gateway',
       pageId: Pages.ingressApiGateway.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -121,8 +121,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 
   storeV2.dispatch(ActionV2.pages.add(Pages.visualiseYaml))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-visualise-yaml',
       pageId: Pages.visualiseYaml.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -144,8 +144,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.visualiseYaml.id }))
 
   storeV2.dispatch(ActionV2.pages.add(Pages.helm))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-helm-templating',
       pageId: Pages.helm.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -174,8 +174,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 
   storeV2.dispatch(ActionV2.pages.add(Pages.nodeSize))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-kubernetes-node-size',
       pageId: Pages.nodeSize.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -206,8 +206,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 
   storeV2.dispatch(ActionV2.pages.add(Pages.secretsGitOps))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-secrets-git-ops',
       pageId: Pages.secretsGitOps.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -238,8 +238,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 
   storeV2.dispatch(ActionV2.pages.add(Pages.autoscaling))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-autoscaling-apps-kubernetes',
       pageId: Pages.autoscaling.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -268,8 +268,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 
   storeV2.dispatch(ActionV2.pages.add(Pages.rollbacks))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-kubernetes-rollbacks',
       pageId: Pages.rollbacks.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,

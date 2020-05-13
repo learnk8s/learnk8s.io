@@ -16,8 +16,8 @@ export const NotFound404 = {
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(NotFound404))
   store.dispatch(Action.assignTag({ id: 'skip-sitemap', pageId: NotFound404.id }))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-not-found-404',
       pageId: NotFound404.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,

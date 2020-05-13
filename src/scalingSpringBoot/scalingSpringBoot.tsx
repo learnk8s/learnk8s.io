@@ -14,8 +14,8 @@ export const ScalingSpringBoot = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(ScalingSpringBoot))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-scaling-spring-boot',
       pageId: ScalingSpringBoot.id,
       image: <img src='src/scalingSpringBoot/autoscaling.png' alt='Containers' />,

@@ -21,8 +21,8 @@ const wallpaperRequest: MailTo = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(Wallpaper))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-wallpaper',
       pageId: Wallpaper.id,
       image: <img src='assets/wallpapers/wallpaper-magician.png' alt='Kubernetes wallpapers' />,

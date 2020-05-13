@@ -14,8 +14,8 @@ export const K8Bit = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(K8Bit))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-k8bit',
       pageId: K8Bit.id,
       image: <img src='src/k8bit/k8bit.png' alt={K8Bit.title} />,

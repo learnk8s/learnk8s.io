@@ -14,8 +14,8 @@ export const WhatIsKubernetes = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(WhatIsKubernetes))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-what-is-kubernetes',
       pageId: WhatIsKubernetes.id,
       image: <img src='src/whatIsKubernetes/why-kube.png' alt='Kubernetes bucks' />,

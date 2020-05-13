@@ -14,8 +14,8 @@ export const Templating = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(Templating))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-templating-yaml-options',
       pageId: Templating.id,
       image: <img src='src/templating/templating.png' alt='Troubleshooting Kubernetes deployments' />,

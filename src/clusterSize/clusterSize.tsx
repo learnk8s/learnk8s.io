@@ -14,8 +14,8 @@ export const ClusterSize = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(ClusterSize))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-cluster-size',
       pageId: ClusterSize.id,
       image: (

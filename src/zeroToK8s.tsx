@@ -42,8 +42,8 @@ export const ZeroToK8s = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(ZeroToK8s))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-zero-to-k8s',
       pageId: ZeroToK8s.id,
       image: <img src='assets/02k8s/opengraph.jpg' alt='Learnk8s preview' />,

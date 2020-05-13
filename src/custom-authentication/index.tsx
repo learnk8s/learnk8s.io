@@ -14,8 +14,8 @@ export const CustomAuthentication = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(CustomAuthentication))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-custom-authentication',
       pageId: CustomAuthentication.id,
       image: (

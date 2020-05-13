@@ -14,8 +14,8 @@ export const Troubleshooting = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(Troubleshooting))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-troubleshooting-deployments',
       pageId: Troubleshooting.id,
       image: <img src='src/troubleshooting/flowchart.png' alt='Troubleshooting Kubernetes deployments' />,

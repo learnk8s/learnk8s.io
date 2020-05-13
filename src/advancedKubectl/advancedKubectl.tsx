@@ -14,8 +14,8 @@ export const KubectlProductivity = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(KubectlProductivity))
-  store.dispatch(
-    Action.registerOpenGraph({
+  storeV2.dispatch(
+    ActionV2.openGraphs.add({
       id: 'og-kubectl-productivity',
       pageId: KubectlProductivity.id,
       image: <img src='src/advancedKubectl/magic.jpg' alt='Advanced kubectl usage' />,
