@@ -91,7 +91,7 @@ export function getOpenGraph(state: State): WebsiteReducer.OpenGraph[] {
 }
 
 export function getLandingPageLocations(state: State): WebsiteReducer.LandingPage[] {
-  return Object.values(state.website.landingPages)
+  return Object.values(Selector.landings.selectAll(storeV2.getState()))
 }
 
 export function getAuthors(state: State): WebsiteReducer.Author[] {

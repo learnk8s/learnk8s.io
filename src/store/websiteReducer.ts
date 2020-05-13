@@ -6,6 +6,7 @@ import { storeV2 } from '.'
 const pageAdapter = createEntityAdapter<Page>({})
 const redirectAdapter = createEntityAdapter<Redirect>({})
 const previewPictureAdapter = createEntityAdapter<PreviewPicture>({})
+const landingAdapter = createEntityAdapter<LandingPage>({})
 
 export const pageSlice = createSlice({
   name: 'page',
@@ -31,24 +32,35 @@ export const previewPictureSlice = createSlice({
   },
 })
 
+export const landingSlice = createSlice({
+  name: 'landing',
+  initialState: landingAdapter.getInitialState(),
+  reducers: {
+    add: landingAdapter.addOne,
+  },
+})
+
 export type StateV2 = ReturnType<typeof storeV2.getState>
 
 export const websiteReducer = {
   pages: pageSlice.reducer,
   redirects: redirectSlice.reducer,
   previewPictures: previewPictureSlice.reducer,
+  landings: landingSlice.reducer,
 }
 
 export const ActionV2 = {
   pages: { ...pageSlice.actions },
   redirects: { ...redirectSlice.actions },
   previewPictures: { ...previewPictureSlice.actions },
+  landings: { ...landingSlice.actions },
 }
 
 export const Selector = {
   pages: pageAdapter.getSelectors<StateV2>(state => state.pages),
   redirects: redirectAdapter.getSelectors<StateV2>(state => state.redirects),
   previewPictures: previewPictureAdapter.getSelectors<StateV2>(state => state.previewPictures),
+  landings: landingAdapter.getSelectors<StateV2>(state => state.landings),
 }
 
 const checkRedirectPage = middlewareCheck(checkRedirectPageRequirement)
@@ -104,9 +116,9 @@ function checkPreviewPictureRequirement(action: PayloadAction<PreviewPicture>, s
 }
 
 export const Action = {
-  registerLandingPageLocation(args: LandingPage) {
-    return { type: 'REGISTER_LANDING' as const, ...args }
-  },
+  // registerLandingPageLocation(args: LandingPage) {
+  //   return { type: 'REGISTER_LANDING' as const, ...args }
+  // },
   registerOpenGraph(args: OpenGraph) {
     return { type: 'REGISTER_OG' as const, ...args }
   },
@@ -197,7 +209,7 @@ export type BlogPostMarkdownBlock = {
 
 export interface State {
   openGraph: Record<string, OpenGraph>
-  landingPages: Record<string, LandingPage>
+  // landingPages: Record<string, LandingPage>
   blogPosts: Record<string, BlogPost>
   authors: Record<string, Author>
   tags: Record<string, string[]>
@@ -210,7 +222,7 @@ export function createInitialState(options: {}): State {
   return {
     ...options,
     openGraph: {},
-    landingPages: {},
+    // landingPages: {},
     blogPosts: {},
     authors: {},
     tags: {},
@@ -231,9 +243,9 @@ export const RootReducer: Reducer<State, Actions> = (
       }
       return { ...state, openGraph: { ...state.openGraph, [action.id]: { ...action } } }
     }
-    case 'REGISTER_LANDING': {
-      return { ...state, landingPages: { ...state.landingPages, [action.id]: { ...action } } }
-    }
+    // case 'REGISTER_LANDING': {
+    //   return { ...state, landingPages: { ...state.landingPages, [action.id]: { ...action } } }
+    // }
     case 'REGISTER_BLOG_POST.V2': {
       if (!(action.authorId in state.authors)) {
         throw new Error(`The author ${action.authorId} for the blog post ${action.title} doesn't exist`)

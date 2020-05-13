@@ -78,8 +78,8 @@ export const Pages = {
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   Object.values(Pages).forEach(page => {
     storeV2.dispatch(ActionV2.pages.add(page))
-    store.dispatch(
-      Action.registerLandingPageLocation({
+    storeV2.dispatch(
+      ActionV2.landings.add({
         id: `${page.id}-location`,
         city: Pages[page.id as keyof typeof Pages].city,
         pageId: page.id,
