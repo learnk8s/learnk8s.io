@@ -41,7 +41,6 @@ import { register } from './register'
 
 register(store)
 
-Online.Mount({ store })
 Workshop.Mount({ store })
 Training.Mount({ store })
 BestPractices.Mount({ store })

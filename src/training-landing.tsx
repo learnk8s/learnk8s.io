@@ -24,7 +24,7 @@ export const faqs: FAQ[] = [
   {
     title: 'Who is this workshop for?',
     content:
-      'Software developers, Data engineers, Architects and DevOps seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerized applications.',
+      'Software developers, Data engineers, Architects and DevOps seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerised applications.',
   },
   {
     title: 'Are there any joining instructions?',
@@ -249,7 +249,7 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
                 </a>
               </ListItem>
               <ListItem>
-                It's <span className='b'>beginner friendly</span>, but you will learn some pretty advanced topics during
+                It's <span className='b'>beginner-friendly</span>, but you will learn some pretty advanced topics during
                 day 3.
               </ListItem>
             </ul>
@@ -431,7 +431,7 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
                 </a>
               </ListItem>
               <ListItem>
-                It's <span className='b'>beginner friendly</span>, but you will learn some pretty advanced topics during
+                It's <span className='b'>beginner-friendly</span>, but you will learn some pretty advanced topics during
                 day 3.
               </ListItem>
               <ListItem>
@@ -883,7 +883,7 @@ const Agenda: React.StatelessComponent<{ className?: string }> = ({ children, cl
   return (
     <>
       <h2 className='f1-l f2 navy tc'>What does it cover?</h2>
-      <p className='lh-copy f4 black-70 measure center tc ph3 mb4'>A typical agenda for the 3 days is as follows:</p>
+      <p className='lh-copy f4 black-70 measure center tc ph3 mb4'>A typical schedule for the 3 days is as follows:</p>
 
       <div className='mw8 center'>
         <ol className='list pl0 f4 measure-wide center'>
@@ -984,13 +984,13 @@ const Agenda: React.StatelessComponent<{ className?: string }> = ({ children, cl
           <ListItem>ML/AI with Kubeflow</ListItem>
         </ul>
         <p className='lh-copy f4 black-80 measure center ph3 mt4'>
-          During the third day the instructor will ask you to vote for your favourite topics.
+          During the third day, the instructor will ask you to vote for your favourite topics.
         </p>
         <p className='lh-copy f4 black-80 measure center ph3 mt4'>
-          You will cover as many modules as possible starting from the most populars.
+          You will cover as many modules as possible, starting from the most popular.
         </p>
         <p className='lh-copy f4 black-80 measure center ph3 mb3 mb5-ns b'>
-          In private and corporate training, you can customise the agenda in full.{' '}
+          In private and corporate training, you can customise the schedule in full.{' '}
           <a href={mailto(privateGroupEnquiry)} className='link navy underline'>
             Get in touch to learn more.
           </a>

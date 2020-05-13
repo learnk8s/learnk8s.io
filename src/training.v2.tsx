@@ -20,9 +20,13 @@ import { Authors } from './aboutUs'
 
 export const faqs: FAQ[] = [
   {
+    title: 'What about Covid-19?',
+    content: 'The situation with Covid-19 is evolving rapidly. Please get in touch to confirm your attendance.',
+  },
+  {
     title: 'Who is this workshop for?',
     content:
-      'Intended for Software developers, Architects and Deployment engineers seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerized applications.',
+      'Software developers, Data engineers, Architects and DevOps seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerised applications.',
   },
   {
     title: 'Are there any joining instructions?',
@@ -262,7 +266,7 @@ function renderPage(state: State) {
         <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt5'>
           <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Join the next class</p>
           <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>
-            Join the next public class in your city or from your comfort of your home.
+            Join the next public class in your city or from the comfort of your home.
           </p>
           <ul className='list pl0'>
             {allCourses
@@ -315,7 +319,7 @@ function renderPage(state: State) {
                 </a>
               </ListItem>
               <ListItem>
-                It's <span className='b'>beginner friendly</span>, but you will learn some pretty advanced topics during
+                It's <span className='b'>beginner-friendly</span>, but you will learn some pretty advanced topics during
                 day 3.
               </ListItem>
             </ul>
@@ -332,7 +336,7 @@ function renderPage(state: State) {
         <Section className='bg-evian'>
           <h2 className='f1-l f2 navy tc'>What does it cover?</h2>
           <p className='lh-copy f4 black-70 measure center tc ph3 mb4'>
-            A typical agenda for the 3 days is as follows:
+            A typical schedule for the 3 days is as follows:
           </p>
 
           <div className='mw8 center'>
@@ -434,14 +438,14 @@ function renderPage(state: State) {
               <ListItem>ML/AI with Kubeflow</ListItem>
             </ul>
             <p className='lh-copy f4 black-80 measure center ph3 mt4'>
-              During the third day the instructor will ask you to vote for your favourite topics.
+              During the third day, the instructor will ask you to vote for your favourite topics.
             </p>
             <p className='lh-copy f4 black-80 measure center ph3 mt4'>
-              You will cover as many modules as possible starting from the most populars.
+              You will cover as many modules as possible, starting from the most popular.
             </p>
             <p className='lh-copy f4 black-80 measure center ph3 mb3 mb5-ns b'>
               <a href='#' className='link navy underline'>
-                In private and corporate training, you can customise the agenda in full.
+                In private and corporate training, you can customise the schedule in full.
               </a>
             </p>
           </div>
@@ -567,8 +571,8 @@ function renderPage(state: State) {
                           data-tags={event.tags.join(' ')}
                         >
                           <td className='absolute static-ns top-0 right-0 dtc-ns'>
-                            <div className='date bg-sky w3 h3 white tc b'>
-                              <p className='f2 ma0'>{format(new Date(event.startsAt), 'd')}</p>
+                            <div className='date bg-sky w3 h3 white tc'>
+                              <p className='f2 ma0 b'>{format(new Date(event.startsAt), 'd')}</p>
                               <p className='ttu ma0'>{format(new Date(event.startsAt), 'MMM')}</p>
                             </div>
                           </td>
@@ -626,10 +630,10 @@ function renderPage(state: State) {
         <Section className='bg-evian mt3 mt5-ns'>
           <div className='mw7 center'>
             <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Training your team?</p>
-            <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>Design your own private session:</p>
+            <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>Design your private session:</p>
             <ul className='pl0 list f4 measure center'>
               <ListItem>
-                <span className='b'>Customise the agenda in full</span> and select the modules relevant to you
+                <span className='b'>Customise the schedule in full</span> and select the modules relevant to you
               </ListItem>
               <ListItem>
                 Increase the session length <span className='b'>up to five full-time days</span>
@@ -638,7 +642,7 @@ function renderPage(state: State) {
                 Include <span className='b'>ad-hoc consulting sessions</span> to address your cluster configuration
               </ListItem>
               <ListItem>
-                Add <span className='b'>ad-hoc modules</span> developed to help you deliver your cluster to production
+                Add <span className='b'>ad-hoc modules</span> developed to help you deliver your cluster to production.
               </ListItem>
             </ul>
           </div>
