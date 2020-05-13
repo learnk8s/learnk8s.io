@@ -170,7 +170,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: 'Experienced software consultants, specialising in Kubernetes.',
     }),
   )
-  Object.values(Authors).forEach(author => store.dispatch(Action.registerAuthor(author)))
+  Object.values(Authors).forEach(author => storeV2.dispatch(ActionV2.authors.add(author)))
 }
 
 export function Mount({ store }: { store: Store<State, Actions> }) {

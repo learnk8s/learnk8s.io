@@ -7,6 +7,7 @@ const pageAdapter = createEntityAdapter<Page>({})
 const redirectAdapter = createEntityAdapter<Redirect>({})
 const previewPictureAdapter = createEntityAdapter<PreviewPicture>({})
 const landingAdapter = createEntityAdapter<LandingPage>({})
+const authorAdapter = createEntityAdapter<Author>({})
 
 export const pageSlice = createSlice({
   name: 'page',
@@ -40,6 +41,14 @@ export const landingSlice = createSlice({
   },
 })
 
+export const authorSlice = createSlice({
+  name: 'author',
+  initialState: authorAdapter.getInitialState(),
+  reducers: {
+    add: authorAdapter.addOne,
+  },
+})
+
 export type StateV2 = ReturnType<typeof storeV2.getState>
 
 export const websiteReducer = {
@@ -47,6 +56,7 @@ export const websiteReducer = {
   redirects: redirectSlice.reducer,
   previewPictures: previewPictureSlice.reducer,
   landings: landingSlice.reducer,
+  authors: authorSlice.reducer,
 }
 
 export const ActionV2 = {
@@ -54,6 +64,7 @@ export const ActionV2 = {
   redirects: { ...redirectSlice.actions },
   previewPictures: { ...previewPictureSlice.actions },
   landings: { ...landingSlice.actions },
+  authors: { ...authorSlice.actions },
 }
 
 export const Selector = {
@@ -61,6 +72,7 @@ export const Selector = {
   redirects: redirectAdapter.getSelectors<StateV2>(state => state.redirects),
   previewPictures: previewPictureAdapter.getSelectors<StateV2>(state => state.previewPictures),
   landings: landingAdapter.getSelectors<StateV2>(state => state.landings),
+  authors: authorAdapter.getSelectors<StateV2>(state => state.authors),
 }
 
 const checkRedirectPage = middlewareCheck(checkRedirectPageRequirement)
@@ -128,9 +140,9 @@ export const Action = {
   // registerPreviewPicture(args: PreviewPicture) {
   //   return { type: 'REGISTER_PREVIEW_PICTURE' as const, ...args }
   // },
-  registerAuthor(args: Author) {
-    return { type: 'REGISTER_AUTHOR' as const, ...args }
-  },
+  // registerAuthor(args: Author) {
+  //   return { type: 'REGISTER_AUTHOR' as const, ...args }
+  // },
   assignTag(args: Tag) {
     return { type: 'ASSIGN_TAG' as const, ...args }
   },
@@ -211,7 +223,7 @@ export interface State {
   openGraph: Record<string, OpenGraph>
   // landingPages: Record<string, LandingPage>
   blogPosts: Record<string, BlogPost>
-  authors: Record<string, Author>
+  // authors: Record<string, Author>
   tags: Record<string, string[]>
   relatedBlocks: Record<string, BlogPostMarkdownBlock>
   // redirects: Record<string, Redirect>
@@ -224,7 +236,7 @@ export function createInitialState(options: {}): State {
     openGraph: {},
     // landingPages: {},
     blogPosts: {},
-    authors: {},
+    // authors: {},
     tags: {},
     relatedBlocks: {},
     // redirects: {},
@@ -247,14 +259,14 @@ export const RootReducer: Reducer<State, Actions> = (
     //   return { ...state, landingPages: { ...state.landingPages, [action.id]: { ...action } } }
     // }
     case 'REGISTER_BLOG_POST.V2': {
-      if (!(action.authorId in state.authors)) {
+      if (!Selector.authors.selectAll(storeV2.getState()).some(it => it.id === action.authorId )) {
         throw new Error(`The author ${action.authorId} for the blog post ${action.title} doesn't exist`)
       }
       return { ...state, blogPosts: { ...state.blogPosts, [action.id]: { ...action } } }
     }
-    case 'REGISTER_AUTHOR': {
-      return { ...state, authors: { ...state.authors, [action.id]: { ...action } } }
-    }
+    // case 'REGISTER_AUTHOR': {
+    //   return { ...state, authors: { ...state.authors, [action.id]: { ...action } } }
+    // }
     case 'ASSIGN_TAG': {
       if (
         !Selector.pages

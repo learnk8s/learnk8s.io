@@ -95,7 +95,7 @@ export function getLandingPageLocations(state: State): WebsiteReducer.LandingPag
 }
 
 export function getAuthors(state: State): WebsiteReducer.Author[] {
-  return Object.values(state.website.authors)
+  return Object.values(Selector.authors.selectAll(storeV2.getState()))
 }
 
 export function getBlogPosts(state: State): WebsiteReducer.BlogPost[] {
