@@ -23,8 +23,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: ChaosEngineering.description,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-chaos-engineering',
       pageId: ChaosEngineering.id,
       authorId: Authors.danielePolencic.id,
@@ -35,9 +35,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ChaosEngineering.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: ChaosEngineering.id + '-general-post', tag: 'general-post', pageId: ChaosEngineering.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'chaos-engineering-related-0',
       blogPostId: 'bp-chaos-engineering',
       content: toVFile({ path: join(__dirname, 'chaos-engineering-related.md') }),

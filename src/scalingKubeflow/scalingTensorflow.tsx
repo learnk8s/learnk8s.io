@@ -30,8 +30,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: ScalingTensorflow.description,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-scaling-tensorflow',
       pageId: ScalingTensorflow.id,
       authorId: Authors.salmanIqbal.id,
@@ -41,9 +41,15 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ScalingTensorflow.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({
+      id: ScalingTensorflow.id + '-general-post',
+      tag: 'general-post',
+      pageId: ScalingTensorflow.id,
+    }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'scaling-tensorflow-related-0',
       blogPostId: 'bp-scaling-tensorflow',
       content: toVFile({ path: join(__dirname, 'scaling-tensorflow-related.md') }),

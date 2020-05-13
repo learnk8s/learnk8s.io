@@ -25,8 +25,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: K8sOnWindows.description,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-k8s-on-windows',
       pageId: K8sOnWindows.id,
       authorId: Authors.keithMifsud.id,
@@ -37,9 +37,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: K8sOnWindows.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: K8sOnWindows.id + '-general-post', tag: 'general-post', pageId: K8sOnWindows.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'k8s-on-windows-related-0',
       blogPostId: 'bp-k8s-on-windows',
       content: toVFile({ path: join(__dirname, 'k8s-on-windows-related.md') }),

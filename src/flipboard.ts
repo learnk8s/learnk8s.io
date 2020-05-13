@@ -23,7 +23,7 @@ export const RSS = {
 
 export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   storeV2.dispatch(ActionV2.pages.add(RSS))
-  store.dispatch(Action.assignTag({ id: 'no-sitemap', pageId: RSS.id }))
+  storeV2.dispatch(ActionV2.tags.add({ id: RSS.id + '-no-sitemap', tag: 'no-sitemap', pageId: RSS.id }))
 }
 
 export function Mount({ store }: { store: Store<State, Actions> }) {

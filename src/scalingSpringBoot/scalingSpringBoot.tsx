@@ -23,8 +23,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-scaling-spring-boot',
       pageId: ScalingSpringBoot.id,
       authorId: Authors.danielePolencic.id,
@@ -35,9 +35,15 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ScalingSpringBoot.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({
+      id: ScalingSpringBoot.id + '-general-post',
+      tag: 'general-post',
+      pageId: ScalingSpringBoot.id,
+    }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'scaling-spring-boot-related-0',
       blogPostId: 'bp-scaling-spring-boot',
       content: toVFile({ path: join(__dirname, 'scaling-spring-boot-related.md') }),

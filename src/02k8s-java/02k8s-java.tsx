@@ -25,8 +25,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `Learning how to design and architect Spring Boot microservices that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-02k8s-java',
       pageId: ZeroToK8sJava.id,
       authorId: Authors.mauricioSalatino.id,
@@ -37,9 +37,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ZeroToK8sJava.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: ZeroToK8sJava.id + '-general-post', tag: 'general-post', pageId: ZeroToK8sJava.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: '02k8s-java-related-0',
       blogPostId: 'bp-02k8s-java',
       content: toVFile({ path: join(__dirname, '02k8s-java-related.md') }),

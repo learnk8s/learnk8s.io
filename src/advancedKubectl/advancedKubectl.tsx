@@ -24,8 +24,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
         'If you work with Kubernetes, then kubectl is probably one of your most-used tools. This article contains a series of tips and tricks to make your usage of kubectl more efficient and effective.',
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-kubectl-productivity',
       pageId: KubectlProductivity.id,
       authorId: Authors.danielWeibel.id,
@@ -40,9 +40,15 @@ The goal of this article is not only to make your daily work with Kubernetes mor
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: KubectlProductivity.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({
+      id: KubectlProductivity.id + 'general-post',
+      tag: 'general-post',
+      pageId: KubectlProductivity.id,
+    }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'kubectl-productivity-related-0',
       blogPostId: 'bp-kubectl-productivity',
       content: toVFile({ path: join(__dirname, 'kubectl-productivity-related.md') }),

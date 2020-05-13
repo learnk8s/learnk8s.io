@@ -6,7 +6,7 @@ import { OnlineCourse } from './coursesReducer'
 import { configureStore } from '@reduxjs/toolkit'
 
 export type State = {
-  website: WebsiteReducer.State
+  // website: WebsiteReducer.State
   config: ConfigReducer.State
 }
 
@@ -40,11 +40,11 @@ export const Selector = {
 
 export const store = createStore<State, Actions, {}, {}>(
   combineReducers({
-    website: WebsiteReducer.RootReducer,
+    // website: WebsiteReducer.RootReducer,
     config: ConfigReducer.RootReducer,
   }),
   {
-    website: WebsiteReducer.createInitialState({}),
+    // website: WebsiteReducer.createInitialState({}),
     config: ConfigReducer.createInitialState({
       organisationId: process.env.ENVENTBRITE_ORG as string,
       isProduction: process.env.NODE_ENV === 'production',
@@ -99,17 +99,21 @@ export function getAuthors(state: State): WebsiteReducer.Author[] {
 }
 
 export function getBlogPosts(state: State): WebsiteReducer.BlogPost[] {
-  return Object.values(state.website.blogPosts)
+  return Object.values(Selector.blogPosts.selectAll(storeV2.getState()))
 }
 
 export function hasTag(state: State, tagId: string) {
   return (page: WebsiteReducer.Page) => {
-    return state.website.tags[page.id] && state.website.tags[page.id].includes(tagId)
+    console.log(Selector.tags.selectAll(storeV2.getState()))
+    return Selector.tags
+      .selectAll(storeV2.getState())
+      .filter(it => it.pageId === page.id)
+      .some(it => it.tag === tagId)
   }
 }
 
 export function getBlogPostMarkdownBlocks(state: State): WebsiteReducer.BlogPostMarkdownBlock[] {
-  return Object.values(state.website.relatedBlocks)
+  return Object.values(Selector.relatedBlogs.selectAll(storeV2.getState()))
 }
 
 export function getRedirects(state: State): WebsiteReducer.Redirect[] {

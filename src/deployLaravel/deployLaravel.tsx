@@ -30,8 +30,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: DeployLaravel.description,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-deploy-laravel',
       pageId: DeployLaravel.id,
       authorId: Authors.keithMifsud.id,
@@ -42,9 +42,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: DeployLaravel.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: DeployLaravel.id + '-general-post', tag: 'general-post', pageId: DeployLaravel.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'deploy-laravel-related-0',
       blogPostId: 'bp-deploy-laravel',
       content: toVFile({ path: join(__dirname, 'deploy-laravel-related.md') }),

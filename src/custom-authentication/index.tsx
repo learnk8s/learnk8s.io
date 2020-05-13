@@ -28,8 +28,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `Kubernetes supports some predefined authentication methods out-of-the-box, such as client certificates, bearer tokens, and OpenID Connect. However, Kubernetes also allows binding arbitrary custom authentication methods to a cluster. In this article, you will learn how to implement LDAP authentication for your Kubernetes cluster.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-custom-authentication',
       pageId: CustomAuthentication.id,
       authorId: Authors.danielWeibel.id,
@@ -40,9 +40,15 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: CustomAuthentication.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({
+      id: CustomAuthentication.id + '-general-post',
+      tag: 'general-post',
+      pageId: CustomAuthentication.id,
+    }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'custom-authentication',
       blogPostId: 'bp-custom-authentication',
       content: toVFile({ path: join(__dirname, 'content-related.md') }),

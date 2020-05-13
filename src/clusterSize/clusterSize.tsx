@@ -28,8 +28,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `If you use Kubernetes as your application platform, one of the fundamental questions is: how many clusters should you have? One big cluster or multiple smaller clusters? This article investigates the pros and cons of different approaches.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-cluster-size',
       pageId: ClusterSize.id,
       authorId: Authors.danielWeibel.id,
@@ -39,7 +39,9 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ClusterSize.id }))
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: ClusterSize.id + '-general-post', tag: 'general-post', pageId: ClusterSize.id }),
+  )
   storeV2.dispatch(
     ActionV2.previewPictures.add({
       id: 'cluster-size-picture',
@@ -47,8 +49,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       image: <img src='src/clusterSize/architecting-clusters.svg' alt={ClusterSize.title} />,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'kubernetes-cluster-size-related-0',
       blogPostId: 'bp-cluster-size',
       content: toVFile({ path: join(__dirname, 'clusterSize-related.md') }),

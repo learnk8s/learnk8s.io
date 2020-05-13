@@ -23,8 +23,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: Troubleshooting.description,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-troubleshooting-deployments',
       pageId: Troubleshooting.id,
       authorId: Authors.danielePolencic.id,
@@ -34,7 +34,9 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: Troubleshooting.id }))
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: Troubleshooting.id + '-general-post', tag: 'general-post', pageId: Troubleshooting.id }),
+  )
   storeV2.dispatch(
     ActionV2.previewPictures.add({
       id: 'troubleshooting-picture',

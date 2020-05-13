@@ -23,8 +23,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `When it comes to building Docker containers, you should always strive for smaller images. Images that share layers and are smaller in size are quicker to transfer and deploy. But how do you keep the size under control when every RUN statement creates a new layer, and you need intermediate artefacts before the image is ready?`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-smaller-images',
       pageId: SmallerImages.id,
       authorId: Authors.danielePolencic.id,
@@ -35,9 +35,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: SmallerImages.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: SmallerImages.id + '-general-post', tag: 'general-post', pageId: SmallerImages.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'smaller-images-related-0',
       blogPostId: 'bp-smaller-images',
       content: toVFile({ path: join(__dirname, 'smaller-images-related.md') }),

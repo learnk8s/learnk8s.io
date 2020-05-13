@@ -25,8 +25,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-terraform-aks',
       pageId: TerraformAks.id,
       authorId: Authors.danielePolencic.id,
@@ -36,9 +36,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: TerraformAks.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: TerraformAks.id + '-general-post', tag: 'general-post', pageId: TerraformAks.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'terraform-aks-related-0',
       blogPostId: 'bp-terraform-aks',
       content: toVFile({ path: join(__dirname, 'terraform-aks-related.md') }),

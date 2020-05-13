@@ -76,8 +76,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `In Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and availability. Should you use a single cluster over a unified network or multiple clusters? Learn what options you have.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-multiple-kubernetes-clusters',
       pageId: Pages.multipleClusters.id,
       authorId: Authors.danielePolencic.id,
@@ -87,7 +87,13 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'connectMultipleClusters/connectMultipleClusters.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.multipleClusters.id }))
+  storeV2.dispatch(
+    ActionV2.tags.add({
+      id: Pages.multipleClusters.id + '-bite-sized',
+      tag: 'bite-sized',
+      pageId: Pages.multipleClusters.id,
+    }),
+  )
 
   storeV2.dispatch(ActionV2.pages.add(Pages.ingressApiGateway))
   storeV2.dispatch(
@@ -99,8 +105,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster. You can select an Ingress that is also an API gateway.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-ingress-api-gateway',
       pageId: Pages.ingressApiGateway.id,
       authorId: Authors.danielePolencic.id,
@@ -111,9 +117,15 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'ingressApiGateway/ingressApiGateway.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.ingressApiGateway.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({
+      id: Pages.ingressApiGateway.id + '-bite-sized',
+      tag: 'bite-sized',
+      pageId: Pages.ingressApiGateway.id,
+    }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'ingress-api-gateway-related-0',
       blogPostId: 'bp-ingress-api-gateway',
       content: toVFile({ path: join(__dirname, 'ingressApiGateway/ingressApiGateway-related.md') }),
@@ -130,8 +142,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: Pages.visualiseYaml.description,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-visualise-yaml',
       pageId: Pages.visualiseYaml.id,
       authorId: Authors.danielePolencic.id,
@@ -141,7 +153,9 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'visualiseYaml/visualiseYaml.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.visualiseYaml.id }))
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: Pages.visualiseYaml.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.visualiseYaml.id }),
+  )
 
   storeV2.dispatch(ActionV2.pages.add(Pages.helm))
   storeV2.dispatch(
@@ -153,8 +167,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: Pages.helm.description,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-helm-templating',
       pageId: Pages.helm.id,
       authorId: Authors.danielePolencic.id,
@@ -164,9 +178,9 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'helm/helm.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.helm.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(ActionV2.tags.add({ id: Pages.helm.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.helm.id }))
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'helm-templating-related-0',
       blogPostId: 'bp-helm-templating',
       content: toVFile({ path: join(__dirname, 'helm/helm-related.md') }),
@@ -184,8 +198,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
         'When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use, and how many of them?". This article looks at the pros and cons of either using many small or few large worker nodes in your cluster.',
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-kubernetes-node-size',
       pageId: Pages.nodeSize.id,
       authorId: Authors.danielWeibel.id,
@@ -196,9 +210,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'nodes-size/smallOrLarge.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.nodeSize.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: Pages.nodeSize.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.nodeSize.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'kubernetes-node-size-related-0',
       blogPostId: 'bp-kubernetes-node-size',
       content: toVFile({ path: join(__dirname, 'nodes-size/smallOrLarge-related.md') }),
@@ -216,8 +232,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
         'Kubernetes secrets that you load into the cluster must exist somewhere. Do you keep a copy or rely on Kubernetes to be the only source of truth? How do you back them up? What if you keep a copy and they go out of sync?',
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-secrets-git-ops',
       pageId: Pages.secretsGitOps.id,
       authorId: Authors.omerLeviHevroni.id,
@@ -228,9 +244,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'secrets/secrets.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.secretsGitOps.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: Pages.secretsGitOps.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.secretsGitOps.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'secrets-git-ops-related-0',
       blogPostId: 'bp-secrets-git-ops',
       content: toVFile({ path: join(__dirname, 'secrets/secrets-related.md') }),
@@ -247,8 +265,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `Deploying an app to production with a static configuration is not optimal. Traffic patterns can change quickly and the app should be able to adapt to them. Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-autoscaling-apps-kubernetes',
       pageId: Pages.autoscaling.id,
       authorId: Authors.danielWeibel.id,
@@ -258,9 +276,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'autoscaling/autoscaling.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.autoscaling.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: Pages.autoscaling.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.autoscaling.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'autoscaling-apps-kubernetes-related-0',
       blogPostId: 'bp-autoscaling-apps-kubernetes',
       content: toVFile({ path: join(__dirname, 'autoscaling/autoscaling-related.md') }),
@@ -277,8 +297,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-kubernetes-rollbacks',
       pageId: Pages.rollbacks.id,
       authorId: Authors.gergelyRisko.id,
@@ -288,9 +308,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'rollbacks/rollbacks.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.rollbacks.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: Pages.rollbacks.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.rollbacks.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'kubernetes-rollbacks-related-0',
       blogPostId: 'bp-kubernetes-rollbacks',
       content: toVFile({ path: join(__dirname, 'rollbacks/rollbacks-related.md') }),

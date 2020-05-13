@@ -23,8 +23,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: SpotInstances.description,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-spot-instances',
       pageId: SpotInstances.id,
       authorId: Authors.césarTronLozai.id,
@@ -34,9 +34,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: SpotInstances.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: SpotInstances.id + '-general-post', tag: 'general-post', pageId: SpotInstances.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'spot-instances-related-0',
       blogPostId: 'bp-spot-instances',
       content: toVFile({ path: join(__dirname, 'spot-instances-related.md') }),

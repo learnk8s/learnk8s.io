@@ -28,8 +28,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `You can create and connect to managed cloud resources using the Service Catalog, a tool such as Kubeform or cloud-specific operators such as Config Connector and AWS Operator Service.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-provision-cloud-resources',
       pageId: ProvisionCloudResources.id,
       authorId: Authors.danielePolencic.id,
@@ -40,9 +40,15 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ProvisionCloudResources.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({
+      id: ProvisionCloudResources.id + '-general-post',
+      tag: 'general-post',
+      pageId: ProvisionCloudResources.id,
+    }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'provision-cloud-resources-related-0',
       blogPostId: 'bp-provision-cloud-resources',
       content: toVFile({ path: join(__dirname, 'provision-cloud-resources-related.md') }),

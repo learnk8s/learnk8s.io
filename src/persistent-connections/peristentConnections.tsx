@@ -25,8 +25,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `Kubernetes doesn't load balance long-lived connections, and some Pods might receive more requests than others. If you're using HTTP/2, gRPC, RSockets, AMQP or any other long-lived connection such as a database connection, you might want to consider client-side load balancing.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-persistent-connections',
       pageId: PersistentConnections.id,
       authorId: Authors.danielePolencic.id,
@@ -36,7 +36,13 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: PersistentConnections.id }))
+  storeV2.dispatch(
+    ActionV2.tags.add({
+      id: PersistentConnections.id + '-general-post',
+      tag: 'general-post',
+      pageId: PersistentConnections.id,
+    }),
+  )
   storeV2.dispatch(
     ActionV2.previewPictures.add({
       id: 'persistent-connections-picture',

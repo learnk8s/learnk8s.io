@@ -23,8 +23,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `The industry has experienced a shift towards developing smaller applications. But how does that impact the infrastructure? Don't end up paying the extra price in your cloud bill; learn how you can fix it with Kubernetes.`,
     }),
   )
-  store.dispatch(
-    Action.registerBlogPost({
+  storeV2.dispatch(
+    ActionV2.blogPosts.add({
       id: 'bp-what-is-kubernetes',
       pageId: WhatIsKubernetes.id,
       authorId: Authors.danielePolencic.id,
@@ -34,9 +34,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: WhatIsKubernetes.id }))
-  store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+  storeV2.dispatch(
+    ActionV2.tags.add({ id: WhatIsKubernetes.id + '-general-post', tag: 'general-post', pageId: WhatIsKubernetes.id }),
+  )
+  storeV2.dispatch(
+    ActionV2.relatedBlogs.add({
       id: 'what-is-kubernetes-related-0',
       blogPostId: 'bp-what-is-kubernetes',
       content: toVFile({ path: join(__dirname, 'what-is-kubernetes-related.md') }),
