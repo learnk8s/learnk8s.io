@@ -178,7 +178,7 @@ function renderPage(state: State) {
                       url: currentAbsoluteUrl,
                       validFrom: subDays(new Date(course.startsAt), 90).toISOString(),
                     },
-                    image: `assets/open_graph.png`,
+                    image: `assets/open_graph_preview.png`,
                     performer: {
                       '@type': 'Organization',
                       name: 'Learnk8s',
@@ -229,7 +229,7 @@ function renderPage(state: State) {
                       url: currentAbsoluteUrl,
                       validFrom: subDays(new Date(course.startsAt), 90).toISOString(),
                     },
-                    image: `assets/open_graph.png`,
+                    image: `assets/open_graph_preview.png`,
                     performer: {
                       '@type': 'Organization',
                       name: 'Learnk8s',
