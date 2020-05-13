@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navbar, Consultation, Footer, mailto, MailTo, FAQs, FAQ, Html, Head, OpenGraph, Body } from './layout.v3'
+import { Navbar, Footer, mailto, MailTo, FAQs, FAQ, Html, Head, OpenGraph, Body } from './layout.v3'
 import { PrimaryButton } from './homepage'
 import {
   Course,
@@ -12,17 +12,7 @@ import {
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
 import { Store } from 'redux'
-import {
-  State,
-  Actions,
-  Action,
-  getPages,
-  getOpenGraph,
-  getWorkshops,
-  getConfig,
-  getOnlineCourses,
-  getAuthors,
-} from './store'
+import { State, Actions, Action, getPages, getOpenGraph, getConfig, getAuthors, Selector } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
@@ -58,27 +48,12 @@ export const faqs: FAQ[] = [
   },
 ]
 
-const moreInfo = (date: string): MailTo => ({
-  subject: 'Online Kubernetes workshop',
-  body: `Hi Learnk8s,\n\nI'd like to know ____ about the next online workshop scheduled for the ${date}. Can you help?\n\nBest regards,\n`,
-  email: 'hello@learnk8s.io',
-})
-
 const publicCourseEnquiry = (date: Date | number, timezone: string, venue: { city: string }): MailTo => ({
   subject: 'Kubernetes training — Public course enquiry',
   body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held on the ${format(
     date,
     'do',
   )} of ${format(date, 'LLLL')} in ${venue.city}.\n\nKind regards,\n`,
-  email: 'hello@learnk8s.io',
-})
-
-const publicOnlineCourseEnquiry = (date: Date | number, timezone: string): MailTo => ({
-  subject: 'Kubernetes training — Public course enquiry',
-  body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held online on the ${format(
-    date,
-    'do',
-  )} of ${format(date, 'LLLL')}.\n\nKind regards,\n`,
   email: 'hello@learnk8s.io',
 })
 
@@ -91,18 +66,6 @@ const privateGroupEnquiry: MailTo = {
 const newLocationEnquiry: MailTo = {
   subject: 'Advanced Kubernetes training — New location enquiry',
   body: `Hi Learnk8s,\n\nI'd like to know when you plan to visit ________.\n\nBest regards,\n`,
-  email: 'hello@learnk8s.io',
-}
-
-const customRequest: MailTo = {
-  subject: 'Advanced Kubernetes training — Module enquiry',
-  body: `Hi Learnk8s,\n\nI'd like to know if you cover _______ in your course.\n\nBest regards,\n`,
-  email: 'hello@learnk8s.io',
-}
-
-const genericRequest: MailTo = {
-  subject: 'Kubernetes training — Generic enquiry',
-  body: `Hi Learnk8s,\n\nI'd like to know ______.\n\nBest regards,\n`,
   email: 'hello@learnk8s.io',
 }
 
@@ -145,8 +108,6 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 function renderPage(state: State) {
   const page = getPages(state).find(it => it.id === Training.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
-  const courses = getWorkshops(state)
-  const onlineCourses = getOnlineCourses(state)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
   const instructors = getAuthors(state).filter(it =>
     [
@@ -158,41 +119,9 @@ function renderPage(state: State) {
       Authors.chrisNesbittSmith.id,
     ].includes(it.id),
   )
-  const newCourses = [
-    {
-      startsAt: new Date().toISOString(),
-      title: 'Advanced Kubernetes course',
-      price: 'USD 2,249.00',
-      location: 'London',
-      tags: ['country-europe', 'course-in-person'],
-      durationInDays: 3,
-      hoursPerDay: 6,
-      timezone: 'GMT',
-      link: '#',
-    },
-    {
-      startsAt: new Date().toISOString(),
-      title: 'Advanced Kubernetes course',
-      price: 'USD 2,249.00',
-      location: 'San Francisco',
-      tags: ['country-na', 'course-in-person'],
-      durationInDays: 3,
-      hoursPerDay: 6,
-      timezone: 'PDT',
-      link: '#',
-    },
-    {
-      startsAt: new Date().toISOString(),
-      title: 'Advanced Kubernetes course',
-      price: 'USD 2,249.00',
-      location: 'Online',
-      tags: ['course-online', 'price-online-course'],
-      durationInDays: 3,
-      hoursPerDay: 6,
-      timezone: 'PDT',
-      link: '#',
-    },
-  ]
+  const onlineCourses = Selector.onlineCourses.selectAll(state)
+  const inPersonCourses = Selector.inPersonCourses.selectAll(state)
+  const allCourses = [...onlineCourses, ...inPersonCourses]
   return (
     <Html>
       <Head title={page.title} description={page.description}>
@@ -207,7 +136,7 @@ function renderPage(state: State) {
         <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         <link rel='canonical' href={currentAbsoluteUrl} />
-        {courses.map((course, index) => {
+        {inPersonCourses.map((course, index) => {
           return (
             <JsonLd<Course>
               key={index}
@@ -228,25 +157,25 @@ function renderPage(state: State) {
                     name: course.title,
                     description: `In this course, you'll take an app, build it into a container then use Kubernetes to deploy, scale, and update it. You will learn how to build a cluter and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
                     courseMode: 'full-time',
-                    duration: course.duration,
-                    inLanguage: course.language,
+                    duration: `3 days`,
+                    inLanguage: 'English',
                     startDate: course.startsAt,
                     endDate: course.endsAt,
                     location: {
                       '@type': 'Place',
-                      name: course.venue.locationName,
-                      address: `${course.venue.city}, ${course.venue.country}`,
+                      name: course.location,
+                      address: course.address,
                     },
                     isAccessibleForFree: Boolean.False,
                     offers: {
                       '@type': 'Offer',
                       availability: ItemAvailability.InStock,
-                      price: course.price.price,
-                      priceCurrency: course.price.currency,
+                      price: course.price,
+                      priceCurrency: course.currency,
                       url: currentAbsoluteUrl,
                       validFrom: subDays(new Date(course.startsAt), 90).toISOString(),
                     },
-                    image: `${course.picture.src}`,
+                    image: `assets/open_graph.png`,
                     performer: {
                       '@type': 'Organization',
                       name: 'Learnk8s',
@@ -292,12 +221,12 @@ function renderPage(state: State) {
                     offers: {
                       '@type': 'Offer',
                       availability: ItemAvailability.InStock,
-                      price: course.defaultPrice.gross,
-                      priceCurrency: course.defaultPrice.currency,
+                      price: course.price,
+                      priceCurrency: course.currency,
                       url: currentAbsoluteUrl,
                       validFrom: subDays(new Date(course.startsAt), 90).toISOString(),
                     },
-                    image: `${course.image}`,
+                    image: `assets/open_graph.png`,
                     performer: {
                       '@type': 'Organization',
                       name: 'Learnk8s',
@@ -320,7 +249,7 @@ function renderPage(state: State) {
             <div className='f4 measure'>
               <p className='f2-l f3 white bt bw2 pt3 o-90'>
                 Master Kubernetes networking, architecture, authentication, scaling, storage{' '}
-                <span className='i'>(and more)</span> in scrupulous detail.
+                <span className='i'>(and more)</span> in excruciating detail.
               </p>
             </div>
           </div>
@@ -337,7 +266,7 @@ function renderPage(state: State) {
             Join the next public class in your city or from your comfort of your home.
           </p>
           <ul className='list pl0'>
-            {newCourses
+            {allCourses
               .slice(0, 3)
               .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
               .map((it, i) => (
@@ -346,8 +275,8 @@ function renderPage(state: State) {
                   title={`${it.title} — ${it.location}`}
                   id={`event${i}`}
                   tags={it.tags}
-                  price={it.price}
-                  link='#'
+                  price={it.priceAsString}
+                  link={it.url}
                 />
               ))}
           </ul>
@@ -626,7 +555,7 @@ function renderPage(state: State) {
                   </tr>
                 </thead>
                 <tbody className='results black-70'>
-                  {newCourses
+                  {allCourses
                     .slice(0)
                     .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
                     .map((event, i) => {
@@ -651,18 +580,18 @@ function renderPage(state: State) {
                             {event.title}
                           </td>
                           <td className='tc-ns db dtc-ns table-label mr5 mr0-ns dn-m' data-label='Duration'>
-                            {event.durationInDays} days
-                            <span className='f7 dark-gray dn dib-l'> / {event.hoursPerDay} hours per day</span>
+                            3 days
+                            <span className='f7 dark-gray dn dib-l'> / 6 hours per day</span>
                           </td>
                           <td className='tc-ns db dtc-ns table-label dn-m' data-label='Timezone'>
                             {event.timezone}
                           </td>
                           <td className='js-price tc-ns db dtc-ns table-label' data-label='Price'>
-                            {event.price}
+                            {event.priceAsString}
                           </td>
                           <td className='tc-ns db dtc-ns'>
                             <a
-                              href={event.link}
+                              href={event.url}
                               className='link dib white bg-sky br1 pv2 ph3 b f6 mv3 submit br2 b--none lh-solid mh1-m mh2-l'
                             >
                               Book&nbsp;⇢

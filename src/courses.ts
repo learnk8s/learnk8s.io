@@ -459,4 +459,58 @@ export function Register(store: Store<State, Actions>) {
       image: NewPictures.one.src,
     }),
   )
+
+  store.dispatch(
+    Action.addInPersonCourse({
+      id: 'LK8S|LONDON|20200527',
+      startsAt: new Date().toISOString(),
+      endsAt: new Date().toISOString(),
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'USD 2,249.00',
+      price: 2249,
+      currency: 'USD',
+      location: 'London',
+      address: 'London, UK',
+      tags: ['country-europe', 'course-in-person'],
+      timezone: 'GMT',
+      link: '#',
+      url: '/london-may-2020',
+    }),
+  )
+  store.dispatch(
+    Action.addInPersonCourse({
+      id: 'LK8S|SANFRAN|20200527',
+      startsAt: new Date().toISOString(),
+      endsAt: new Date().toISOString(),
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'USD 2,249.00',
+      price: 2249,
+      currency: 'USD',
+      location: 'San Francisco',
+      address: 'San Francisco, CA',
+      tags: ['country-europe', 'course-in-person'],
+      timezone: 'GMT',
+      link: '#',
+      url: '/san-francisco-may-2020',
+    }),
+  )
+  store.dispatch(
+    Action.addOnlineCourse({
+      id: 'LK8S|ONLINE|20200527',
+      startsAt: new Date().toISOString(),
+      endsAt: new Date().toISOString(),
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'USD 2,249.00',
+      price: 2249,
+      currency: 'USD',
+      location: 'Online',
+      tags: ['course-online', 'price-online-course'],
+      timezone: 'GMT',
+      link: '#',
+      url: '/online-may-2020',
+    }),
+  )
 }

@@ -31,7 +31,7 @@ import * as BiteSizedListing from './biteSized'
 import * as BiteSizedRenderer from './biteSized.v2'
 import { store, getConfig } from './store'
 import * as Workshop from './training.v2'
-import * as TrainingSingle from './training-single'
+import * as TrainingLandingPage from './training-landing'
 import * as Training from './learn'
 import * as BestPractices from './best-practices/best'
 import * as FreeTools from './freeTools'
@@ -71,7 +71,7 @@ Sitemap.Mount({ store })
 AdvancedInPractice.Mount({ store })
 MicroservicesAtScale.Mount({ store })
 ExploringKubernetes.Mount({ store })
-TrainingSingle.Mount({ store })
+TrainingLandingPage.Mount({ store })
 
 checkPageDetail(store)
 
