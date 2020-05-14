@@ -19,13 +19,11 @@ export function Register(store: Store<State, Actions>) {
       id: 'og-terraform-aws',
       pageId: TerraformAWS.id,
       image: (
-        <img
-          src='src/terraform-aws/terraform-aws.jpg'
-          alt='Bootstrapping Kubernetes clusters on AWS with Terraform'
-        />
+        <img src='src/terraform-aws/terraform-aws.jpg' alt='Bootstrapping Kubernetes clusters on AWS with Terraform' />
       ),
       title: 'Bootstrapping Kubernetes clusters on AWS with Terraform',
-      description: 'There are many ways to create Kubernetes clusters and they generally pose a trade-off between automation and flexibility. In this article, you will learn how you can create a flexible cluster with kubeadm on AWS with a single command. The solution makes use of Terraform for both infrastructure provisioning and cluster bootstrapping.',
+      description:
+        'There are many ways to create Kubernetes clusters and they generally pose a trade-off between automation and flexibility. In this article, you will learn how you can create a flexible cluster with kubeadm on AWS with a single command. The solution makes use of Terraform for both infrastructure provisioning and cluster bootstrapping.',
     }),
   )
   store.dispatch(
@@ -34,7 +32,8 @@ export function Register(store: Store<State, Actions>) {
       pageId: TerraformAWS.id,
       authorId: Authors.danielWeibel.id,
       title: 'Bootstrapping Kubernetes clusters on AWS with Terraform',
-      description: 'There are many ways to create Kubernetes clusters and they generally pose a trade-off between automation and flexibility. In this article, you will learn how you can create a flexible cluster with kubeadm on AWS with a single command. The solution makes use of Terraform for both infrastructure provisioning and cluster bootstrapping.',
+      description:
+        'There are many ways to create Kubernetes clusters and they generally pose a trade-off between automation and flexibility. In this article, you will learn how you can create a flexible cluster with kubeadm on AWS with a single command. The solution makes use of Terraform for both infrastructure provisioning and cluster bootstrapping.',
       publishedDate: '2020-05-14',
 
       content: toVFile({ path: join(__dirname, 'content.md') }),
