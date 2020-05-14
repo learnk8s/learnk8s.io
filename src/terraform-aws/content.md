@@ -2,24 +2,24 @@ There are many ways to create a Kubernetes cluster — from simple cluster insta
 
 Generally, the available options pose a trade-off between automation and flexibility:
 
-- On one hand, you could use a managed Kubernetes services which make creating a cluster extremely easy, but the cluster will likely have many preconfigured settings that you can't modify
-- On the other hand, you could install Kubernetes manually [without any scripts and tools](https://github.com/kelseyhightower/kubernetes-the-hard-way) which allows you to configure every single detail of the cluster, but it requires a lot manual error-prone steps
+- On one hand, you could use a managed Kubernetes service which makes creating a cluster extremely easy; but the cluster will likely have many preconfigured settings that you can't modify
+- On the other hand, you could install Kubernetes manually [without any scripts and tools](https://github.com/kelseyhightower/kubernetes-the-hard-way) which allows you to configure every single detail of the cluster; but this requires many manual and error-prone steps
 
 _Often, what you want is a middle ground between these two extremes._
 
-Such as creating an unopinionated cluster in an automated fashion — preferably with a single command.
+Such as creating an bare-bones unopinionated cluster in simple way — preferably with a single command.
 
-This is especially true if you want to run experiments about specific settings and features of Kubernetes, such as testing [CNI plugins](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/).
+This is especially true if you want to experiment with specific Kubernetes settings and features, like, for example, testing [CNI plugins](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/).
 
-In such cases, using highly automated cluster creation methods might simply not be an option because they don't allow you to configure the settings that you need.
+In such cases, using one of the available autoamted cluster creation methods (such as a managed Kubernetes service) might be not be an option because it doesn't allow you to configure the settings that you need.
 
-_This article presents an approach that combines both automation and flexibility._
+_This article presents an approach that atempts to combine both automation and flexibility._
 
-The solution consists of a [Terraform module](https://registry.terraform.io/modules/weibeld/kubeadm/aws) based on [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/) that allows creating a bare-bones cluster on AWS with a single command:
+The solution consists of a [Terraform module](https://registry.terraform.io/modules/weibeld/kubeadm/aws) based on [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/) that allows creating bare-bones cluster on AWS with a single command:
 
 ![Screencast](assets/screencast.gif)
 
-The aim of the project is to make the creation of disposable clusters trivial, which forms the basis for running repeatable experiments on Kubernetes.
+The aim of the project is to enable the creation of disposable kubeadm clusters which is an enabler for running controlled and automated Kubernetes experiments.
 
 _The remainder of this article first reviews the available options for creating Kubernetes clusters and then presents the Terraform module._
 
@@ -35,15 +35,15 @@ Naturally, managed Kubernetes services provide the highest degree of automation 
 
 The most popular managed Kubernetes services are provided by the major cloud providers:
 
-- [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) on GCP
-- [Amazon Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/) on AWS
-- [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/azure/aks/) on Azure
+- [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) by GCP
+- [Amazon Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/) by AWS
+- [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/azure/aks/) by Azure
 
 ## Kubernetes installation tools
 
 Kubernetes installation tools allow you to install Kubernetes on your own infrastructure (both on-premises or in the cloud).
 
-_They allow you to use Kubernetes like a traditional self-managed piece of software._
+_They allow you to use Kubernetes as a self-managed piece of software._
 
 Installation tools provide varying degrees of automation and flexibility depending on the extent to which the tool wants to "get it right for you".
 
@@ -65,7 +65,7 @@ That means, you can go from zero to a running cluster with effectively a single 
 
 On the other hand, kops anticipates many decisions for you, thus reducing your flexibility for how you want your cluster to look like.
 
-For example, kops requires the name of your cluster to a valid DNS name, and it also requires you to set up DNS records that resolve this name; you're also required to create an [Amazon S3 bucket](https://aws.amazon.com/s3/) for kops to store its state.
+For example, kops requires the name of the cluster to be a valid DNS name, and requires you to set up DNS records that resolve this name; you also have to create an [Amazon S3 bucket](https://aws.amazon.com/s3/) for kops to store its state.
 
 ### kubespray
 
@@ -77,11 +77,11 @@ Once you have your infrastructure, kubespray provides a large number of options 
 
 However, at the same time, kubespray attempts to create a "production-ready" cluster, which causes it to apply certain default settings and features (such as installing a CNI plugin by default).
 
-This is great if you really want a production-ready cluster, but if all you want is a "bare-bones" cluster that you can then configure very selectively for running controlled experiments on it, the well-intentioned defaults of kubespray might get in your way.
+This is great if you really want a production-ready cluster, but if all you want is a "bare-bones" cluster that you can then configure very selectively, the well-intentioned defaults of kubespray might get in your way.
 
 ### kubeadm
 
-[kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/) is the most basic and low-level one of the three presented cluster installation tools.
+[kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/) is the most basic and low-level one of the three presented cluster installation tools (in fact, kubesrpay uses kubeadm under the hood).
 
 Consequently, kubeadm provides the lowest degree of automation but the highest degree of flexibility.
 
@@ -89,24 +89,31 @@ kubeadm is an executable that is run directly on the infrastructure on which the
 
 In contrast to the other presented installation tools, kubeadm does not make any strong assumptions about the purpose of the cluster, such that it should be production-ready, or highly available.
 
-Rather kubeadm aims to create a "minimum viable" cluster (conforming to very basic best practices) that you can then customise yourself according to your requirements.
+In particular, kubeadm performs the following tasks:
 
-kubeadm also allows you to configure almost every aspect of the cluster in a straightforward way — for example, you can directly set command-line arguments for the individual Kubernetes components (API server, scheduler, etc.) through the [kubeadm configuration file](https://pkg.go.dev/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2).
+- Creating and distributing client and server certificates for the individual Kubernetes components (API server, etcd, scheduler, etc.)
+- Creating and distributing kubeconfig files for the individual Kubernetes components (so that they can talk to the API server)
+- Launching the kubelet as a [systemd](https://systemd.io/) process
+- Launching the remaining Kubernetes components as Pods in the [host network](https://github.com/kubernetes/api/blob/master/core/v1/types.go#L2938) (managed by the kubelet)
 
-_In short, kubeadm is an optimal solution if you want to have a large degree of control over the cluster configuration._
+The result is "minimum viable" cluster that you can then freely customise yourself according to your requirements.
 
-However, the flipside of the coin is that creating a cluster with kubeadm is by no means done with a single command (as it's the case for kops and kubespray).
+Moreover, kubeadm allows fine control over the individual cluster settings — for example, you can directly define command-line arguments for the individual Kubernetes components with a [kubeadm configuration file](https://pkg.go.dev/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2).
+
+_In short, kubaedm is an optimal solution if you want maximum control over the cluster creation process._
+
+However, the flipside is that creating a cluster with kubeadm is by no means done with a single command (as it's the case for kops and kubespray).
 
 Rather, it requires a whole series of manual steps:
 
-- Provision the infrastructure on which to create the cluster
-- Log in to every node of the cluster and install kubeadm on it
-- Run a specific command ([`kubeadm init`](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/)) on one of the nodes
-- Run another command ([`kubeadm join`](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-join/)) on all the other nodes
+- Provision the infrastructure on which you want to create the cluster
+- Log in to every node and install kubeadm and Docker on it
+- Run the [`kubeadm init`](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/) command on one of the nodes
+- Run the [`kubeadm join`](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-join/) command on all the other nodes
 
-The commands that you need to run on the nodes further depend on each other — the `kubeadm join` commands must include a token that is generated by the initial `kubeadm init` command.
+These steps furthermore depend on each other — for exapmle, the `kubeadm join` commands must include a token and other identifiers that are generated by the initial `kubeadm init` command.
 
-In summary, creating a cluster with kubeadm is a tedious process when done manually, which counteracts the goal of creating quick disposable clusters that you need for experiments.
+In summary, creating a Kubernetes cluster with kubeadm is a time-consuming tedious process when done manually, which counteracts the goal of having quick disposable clusters for running experiments.
 
 _This is where the Terraform kubeadm module comes in._
 
@@ -116,11 +123,11 @@ Learnk8s created the [Terraform kubeadm module](https://registry.terraform.io/mo
 
 ![Terraform kubeadm module](assets/terraform-kubeadm-module.png)
 
-The Terraform module automates both the provisioning of the infrastructure and the execution of kubeadm on this infrastructure to bootstrap a Kubernetes cluster.
+The Terraform module automates both the provisioning of infrastructure and the execution of kubeadm on this infrastructure to create a Kubernetes cluster.
 
-With the Terraform kubeadm module, you can go from zero to a running Kubernetes cluster with a single command in a few minutes.
+With the Terraform kubeadm module, you can go from zero to a running cluster with a single command in a few minutes.
 
-This brings you the convenience of kops without any of the bloated features that might just get in your way.
+This brings you the convenience of kops without having to deal with opinionated features that you might not need.
 
 With the Terraform kubeadm module, you get the exact same "minimum viable" cluster that you also get when running kubeadm manually.
 
@@ -142,27 +149,25 @@ The power and versatility of Terraform comes from the [Terraform providers](http
 
 Terraform providers are plugin-style components that encapsulate the interaction with the API of a specific service (e.g. AWS, GCP, Cloudflare) and expose the resources that can be managed through this service as [Terraform resources](https://www.terraform.io/docs/configuration/resources.html).
 
-These Terraform resources are the basic building blocks of a Terraform configuration.
+Terraform resources are the basic building blocks of a Terraform configuration.
 
 For example, there exists a [Terraform provider for AWS](https://www.terraform.io/docs/providers/aws/index.html), and this provider defines a Terraform resource named [`aws_instance`](https://www.terraform.io/docs/providers/aws/r/instance.html) which corresponds to an [Amazon EC2 instance](https://aws.amazon.com/ec2/).
 
-When you define an `aws_instance` resource in your Terraform configuration, Terraform will create an EC2 instance for you.
+When you define an `aws_instance` Terraform resource in your Terraform configuration, Terraform will create an EC2 instance for you.
 
-Furthermore, when you change the definition of this `aws_instance` resource in your Terraform configuration, Terraform will apply the corresponding changes to the real EC2 instance.
+Furthermore, when you change the definition of the `aws_instance` resource in your configuration, Terraform will apply the corresponding changes to the real EC2 instance in your AWS account.
 
-_There exist over a hundred [officially supported Terraform providers](https://www.terraform.io/docs/providers/index.html) and many more [provided by the community](https://www.terraform.io/docs/providers/type/community-index.html)._
+**There exist over a hundred [officially supported Terraform providers](https://www.terraform.io/docs/providers/index.html) and many more [provided by the community](https://www.terraform.io/docs/providers/type/community-index.html).**
 
 A Terraform configuration can be organised as a [Terraform module](https://www.terraform.io/docs/modules/index.html).
 
 A Terraform module encapsulates a piece of Terraform configuration so that it can be reused and shared.
 
-The [Terraform Registry](https://registry.terraform.io/) is the primary place where Terraform modules are hosted and shared.
+The [Terraform Registry](https://registry.terraform.io/) is the primary place where Terraform modules are hosted and shared — you can browse hundreds of freely available Terraform modules there.
 
-The [Terraform kubeadm module](https://registry.terraform.io/modules/weibeld/kubeadm/aws) is such a Terraform module and it is freely available on the Terraform Registry.
+The [Terraform kubeadm module](https://registry.terraform.io/modules/weibeld/kubeadm/aws) is also freely available on the Terraform Registry, and the following sections explain how to use it.
 
-_Let's get started using this module for creating a cluster!_
-
-The following first describes the prerequisites for using the Terraform kubeadm module.
+_The next section describes the prerequisites for using the module._ 
 
 ## Prerequisites
 
@@ -174,11 +179,11 @@ To use Terraform on your machine, you first have to install it.
 
 Terraform is distributed as a statically linked, precompiled binary (written in Go) and to install it, you simply have to download it and move it to any directory in your `PATH`.
 
-You can find the Terraform binaries for various target platforms on the [Terraform website](https://www.terraform.io/downloads.html):
+The [Terraform website](https://www.terraform.io/downloads.html) contains the latest versions of the Terraform binaries for all supported target platforms:
 
 ![Install Terraform](assets/terraform-download.png)
 
-After you downloaded the correct package, unzip it, and move the contained binary to some directory in your `PATH`, such as `/usr/bin`.
+Download the package corresponding to your platform, unzip it, and move the contained binary to some directory in your `PATH`, such as `/usr/bin`.
 
 On macOS, you can alternatively install Terraform with:
 
@@ -192,11 +197,11 @@ Once Terraform is installed, you can verify the installation with:
 terraform version
 ```
 
-> Please make sure to have at least version 0.12 of Terraform since this is the minimum version that is required by the Terraform kubeadm module.
+> Please make sure that you have at least version 0.12 since this is the minimum version required by the Terraform kubeadm module.
 
 ### 2. Configure AWS credentials
 
-First of all, you need, of course, an [AWS account](https://aws.amazon.com/).
+First of all, you need an [AWS account](https://aws.amazon.com/).
 
 Since the Terraform kubeadm module will create AWS resources on your behalf, it needs to have access to the [Access Key ID and Secret Access Key](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys) of an [IAM User](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html) in your AWS account.
 
@@ -225,7 +230,7 @@ The Terraform kubeadm module will set up SSH access to the nodes of the cluster 
 - `~/.ssh/id_rsa` (private key)
 - `~/.ssh/id_rsa.pub` (public key)
 
-If you currently don't have these key on your local machine, you can generate them with the following command:
+If you currently don't have these files on your local machine, you can generate them with the following command:
 
 ```terminal|command=1|title=bash
 ssh-keygen
@@ -261,15 +266,15 @@ module "cluster" {
 
 The above is a Terraform configuration that invokes the [Terraform kubeadm module](https://registry.terraform.io/modules/weibeld/kubeadm/aws).
 
-_This is all the code you have to write to create a basic Kubernetes cluster with the Terraform kubeadm module._
+_That's all the code you have to write to create a minimal Kubernetes cluster._
 
-But first, you have to initialise Terraform in your current working directory as follows:
+But before you can do so, you have to initialise Terraform in your current working directory as follows:
 
 ```terminal|command=1|title=bash
 terraform init
 ```
 
-The [`terraform init`](https://www.terraform.io/docs/commands/init.html) downloads both the AWS provider and the Terraform kubeadm module to your current working directory (into a subdirectory named `.terraform`).
+The [`terraform init`](https://www.terraform.io/docs/commands/init.html) downloads both the AWS provider and the Terraform kubeadm module to a subdirectory named `.terraform` in your current working directory.
 
 Now you can start the process of turning your configuration into reality:
 
@@ -277,19 +282,23 @@ Now you can start the process of turning your configuration into reality:
 terraform apply
 ```
 
-The [`terraform apply`](https://www.terraform.io/docs/commands/apply.html) command shows you a list of [Terraform resources](https://www.terraform.io/docs/configuration/resources.html) that Terraform is planning to create (this is called an [execution plan](https://www.terraform.io/docs/commands/plan.html)).
+The [`terraform apply`](https://www.terraform.io/docs/commands/apply.html) command first shows you a so-called [execution plan](https://www.terraform.io/docs/commands/plan.html) which is a summary of resources that Terraform wil create, modify, or delete.
 
-The command also prompts you if you want to proceed; confirm it with:
+In your case, since you're starting from zero, there should be only resources to create.
+
+The command prompts you if you want to proceed, which you can confirm by typing `yes`:
 
 ```
 yes
 ```
 
-At this point, you can lean back and wait for Terraform to create your cluster.
+Terraform now turns the execution plan into reality by creating the necessary AWS resources in your AWS account.
+
+You can lean back and wait for Terraform to create your cluster!
 
 _It shouldn't take longer than 3-4 minutes._
 
-When the command completes, your cluster should be up and running — let's test it!
+When the command completes, your cluster should be up and running!
 
 In your current working directory, you should now have a file with a random pet name (e.g. `real-hedgehog`) and a `.conf` extension:
 
@@ -312,9 +321,11 @@ You should see the system Pods of your cluster.
 
 _Congratulations, you just created your first cluster!_
 
-> If you want, you can check the [AWS EC2 Console](console.aws.amazon.com/ec2/v2/home) to confirm that Terraform really created EC2 instances for your cluster nodes.
+> You can see the EC2 instances (and other resources) that Terraform created in your AWS account in the [AWS EC2 Console](console.aws.amazon.com/ec2/v2/home).
 
-If you inspect the above output a bit closer, however, you should see that the `coredns` Pods are `Pending`:
+_So, looks like you have a running cluster, right?_
+
+However, if you inspect the above output a bit closer, you should see that the `coredns` Pods are `Pending`:
 
 ```terminal|command=1|title=bash
 kubectl --kubeconfig real-hedgehog.conf get pods --all-namespaces
@@ -323,7 +334,7 @@ kube-system   coredns-66bff467f8-j2mmc         0/1     Pending   0          4m2s
 kube-system   coredns-66bff467f8-n265d         0/1     Pending   0          4m2s
 ```
 
-And if you list the nodes of the cluster, you should see that they are `NotReady`:
+And if the nodes of the cluster should be `NotReady`:
 
 ```terminal|command=1|title=bash
 kubectl --kubeconfig real-hedgehog.conf get nodes
@@ -333,23 +344,35 @@ worker-0   NotReady   <none>   8m41s   v1.18.2
 worker-1   NotReady   <none>   8m41s   v1.18.2
 ```
 
-_Don't worry! This doesn't mean that there's something wrong, but it's the expected behaviour!_
+_Don't worry!_
 
-The reason is that there is currently no [CNI plugin](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/) installed in your cluster.
+This doesn't mean that there's something wrong, it's the expected behaviour!
 
-This is because, as mentioned, kubeadm doesn't install a CNI plugin by default, leaving this choice to you.
+The reason is that your cluster doesn't yet have a [CNI plugin](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/) installed — this keeps the nodes in the `NotReady` state and prevents any Pods in the Pod network from being scheduled.
 
-You will fix this later by installing a selected CNI plugin, but for now, let's first explore the cluster a bit more.
+> In case you wonder why the other Pods are all `Running`: that's because these Pods run in the [host network](https://github.com/kubernetes/api/blob/master/core/v1/types.go#L2938) (i.e. they have `.spec.hostNetwork` set to `true`) rather than in the Pod network, which doesn't depend on a CNI plugin.
+
+The reason that youc cluster has no CNI plugin installed is that kubeadm doesn't install a CNI plugin by default — rather it leaves this choice to the user.
+
+The article will show how to install a CNI plugin in your cluster later.
+
+_For now, let's first explore the cluster a bit more._
 
 ## Connecting to a node
 
-In the following, you will connect to one of the cluster nodes with SSH.
+In the following, you will SSH into one of the nodes of your cluster.
 
-To do so, you need the public IP addresses of your cluster nodes.
+To do so, you need to know the public IP address of this node.
 
-You could find them out by locating the EC2 instances corresponding to the nodes in the [AWS EC2 Console](console.aws.amazon.com/ec2/v2/home), but the Terraform kubeadm module allows to output this information right in Terraform.
+You could do so by going to the [AWS EC2 Console](console.aws.amazon.com/ec2/v2/home) and looking up the public IP address of the EC2 instance that corresponds to the node.
 
-Modify your Terraform configuration to look like this:
+However, the Terraform kubeadm module provides an easier way to get this information.
+
+The module features a collection of [output values](https://registry.terraform.io/modules/weibeld/kubeadm/aws?tab=outputs) that convey internal information about the cluster to the user.
+
+One of these outputs is called `cluster_nodes` and it contains information about the individual nodes of the cluster, including their public IP addresses.
+
+You can include this output in your Terraform configuration as follows:
 
 ```hcl|highlight=10-12|title=main.tf
 provider "aws" {
@@ -366,21 +389,15 @@ output "nodes" {
 }
 ```
 
-The added code defines a [Terraform output](https://www.terraform.io/docs/configuration/outputs.html) that in turn refers to an output value of the kubeadm module.
-
-> You can see an overview of all output values of the kubeadm module on the [Terraform Registry](https://registry.terraform.io/modules/weibeld/kubeadm/aws?tab=outputs).
-
-To display this output, run the `terraform apply` command again:
+To display this output, you have to run `terraform apply` again:
 
 ```terminal|command=1|title=bash
 terraform apply --auto-approve
 ```
 
-> The `--auto-approve` flag automatically applies `yes` to the execution plan prompt.
+> The `--auto-approve` flag automatically approves the execution plan so that you don't need to type `yes`.
 
-This time, the `terraform apply` command won't create any AWS resources, but it will display the output value that you just defined.
-
-It should look something like this:
+When the command completes, you should see an output looking something like this:
 
 ```
 nodes = [
@@ -405,33 +422,33 @@ nodes = [
 ]
 ```
 
-The output includes some information about each node of the cluster, including its public IP address.
+As you can see, this contains some information about each node of the cluster, including its public IP address.
 
-With this information, and your default OpenSSH private key, you can now SSH into any of your cluster nodes as follows:
+With this information, you can now SSH into any node of the cluster as follows:
 
 ```terminal|command=1|title=bash
-ssh -i ~/.ssh/id_rsa ubuntu@3.127.72.79
+ssh -i ~/.ssh/id_rsa ubuntu@<NODE-PUBLIC-IP>
 ```
 
-> Please replace `3.127.72.79` with the public IP address of one of your nodes.
+> Note that `~/.ssh/id_rsa` is the default OpenSSH private key that is used by default by the Terraform kubeadm module to set up SSH access to the cluster nodes. It's the credential that allows you to connect to all the nodes of the cluster.
 
-You should now be logged into the node, where you can do interesting things, such as inspecting the running containers:
+You should now be logged into the node, where you can do all kind of interesting things, such as listing the running containers:
 
 ```terminal|command=1|title=bash
 sudo docker ps
 ```
 
-But for now, let's go back to your local machine:
+But for now, just return to your local machine:
 
 ```terminal|command=1|title=bash
 exit
 ```
 
-_There's a way to further improve your cluster setup._
+_There's a way you can improve your cluster infrastructure!_
 
 ## Using a dedicated VPC
 
-By default, the kubeadm module creates the cluster in the [default VPC](https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html) of the configured AWS region.
+By default, the kubeadm module creates the cluster in the [default VPC](https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html) of the specified AWS region.
 
 That means, the cluster coexists with other AWS resources in this VPC.
 
@@ -463,59 +480,59 @@ output "nodes" {
 }
 ```
 
-The above configuration makes use of the [network submodule](https://github.com/weibeld/terraform-aws-kubeadm/tree/master/modules/network) which is distributed as part of the kubeadm module.
+The above configuration adds an invocation of the [network submodule](https://github.com/weibeld/terraform-aws-kubeadm/tree/master/modules/network).
 
-The network submodule creates a new VPC with a single subnet.
+The network submodule is distributed as part of the kubeadm module and it creates a VPC that is suitable for hosting a cluster created by the kubeadm module.
 
-The IDs of this VPC and subnet are then passed to the kubeadm module via the `vpc_id` and `subnet_id` input variables, which causes the kubeadm module to create the cluster in this VPC.
+The configuration passes the IDs of the created VPC and its subnet to the `vpc_id` and `subnet_id` [input variables](https://registry.terraform.io/modules/weibeld/kubeadm/aws?tab=inputs) of the kubeadm module.
 
-> You can see all input variables of the kubeadm module on its [Terraform Registry page](https://registry.terraform.io/modules/weibeld/kubeadm/aws?tab=inputs).
+This causes the kubeadm module to create the cluster in the specified VPC and subnet, which means that your cluster will run this new dedicated VPC.
 
-This causes the kubeadm module to create the cluster in the specified VPC and subnet, which means that your cluster will run in its own brand-new dedicated VPC.
-
-Since you added a new module invocation, you need to run `terraform init` again:
+Since you added a new module invocation, you first need to run `terraform init` before you can apply the configuration:
 
 ```terminal|command=1|title=bash
 terraform init
 ```
 
-Then you can apply your updated configuration:
+This downloads the network submodule to your local directory.
+
+Now you can apply your new configuration:
 
 ```terminal|command=1|title=bash
 terraform apply
 ```
 
-Terraform now figures out how to get from the current state to the updated specification and shows you the execution plan.
+Terraform now figures out how to get from the current state to the new specification and shows you the execution plan.
 
-If you pay attention, you can see that the `aws_instance` resources get destroyed and recreated, which means that you will get effectively a new cluster.
+If you pay close attention to the execution plan, you can see that the `aws_instance` resources get destroyed and recreated — this means that Terraform will effectively destroy the existing cluster and create a new one in the new VPC.
 
 To confirm the execution plan, type `yes`.
 
-_When the command completes, your cluster has just been recreated in a new VPC._
+When the command completes, you should have both a new VPC and a new cluster running in it.
 
-> You can confirm that a new VPC has indeed been created in the [AWS VPC Console](https.//console.aws.amazon.com/vpc/home).
+> You can see the VPC that Terraform created in the [AWS VPC Console](https.//console.aws.amazon.com/vpc/home).
 
-The kubeconfig file in your current working directory has been updated as well to point to the new cluster.
-
-You can confirm that you can access the new cluster with:
+Let's test if you can still access this new cluster:
 
 ```terminal|command=1|title=bash
 kubectl --kubeconfig real-hedgehog.conf get pods --all-namespaces
 ```
 
-> Please replace `real-hedgehog.conf` with the name of your kubeconfig file.
+_Bingo!_
 
-You should see the list of system Pods as before.
+You should see the list of system Pods just like before.
+
+But now your cluster is running in its own VPC isolated from any other AWS resources!
 
 ## Multiple clusters
 
-So far, you created only a single cluster, but what if you wanted a whole series of clusters?
+So far, you created only a single cluster, but what if you want multiple ones?
 
-_For example, for running a series of experiments?_
+_For example, if you wanted to run a series of experiments on multiple clusters in parallel?_
 
-The Terraform kubeadm module has you covered here.
+In the following, you will extend your fleet of clusters to three clusters in total.
 
-To create two additional clusters (for a total of three), edit your configuration as follows:
+To do so, edit your configuration as follows:
 
 ```hcl|highlight=13-25,28-32|title=main.tf
 module "network" {
@@ -553,35 +570,35 @@ output "nodes" {
 }
 ```
 
-The main change consists in repeating the invocation of the kubeadm module.
+The main change of the above configuration consists in the addition of two invocations of the kubeadm module.
 
-Now, the kubeadm module is invoked three times in total, which results in the creation of three clusters.
+The configuration now includes three invocations of the kubeadm module, which results in Terraform creating three clusters.
 
-The output value is also updated to show the node information for each of the three clusters.
+In the present configuration, all clusters use the same settings, but you could configure each cluster separately by specifying different [input variales](https://registry.terraform.io/modules/weibeld/kubeadm/aws?tab=inputs) for the individual invocations of the kubeadm module.
 
-> Note that the new clusters use the same VPC as the first cluster. If you wanted, you could create a dedicated VPC for each cluster by adding an invocation of the network submodule for each invocation of the kubeadm module.
+> You could also create a dedicated VPC for each cluster by adding additional invocations of the network submodule.
 
-Since you added module invocations, you need to run `terraform init` again:
+_If this configuration works, then, after applying it, you should have three running clusters._
+
+Since you added additional module invocations, you first need to run `terraform init`:
 
 ```terminal|command=1|title=bash
 terraform init
 ```
 
-Now, you're ready to apply your updated configuration:
+Now, you can apply the configuration with `terraform apply`:
 
 ```terminal|command=1|title=bash
 terraform apply
 ```
 
-If you look at the execution plan Terraform presents to you, you should see that the resources corresponding to two clusters will be created.
+If you pay attention to the execution plan that Terraform presents to you, you should see that it includes the creation of the resources belonging to two new clusters.
 
-This means, that Terraform will create two new clusters while leaving the initial cluster unchanged.
+This means, that Terraform will create two new clusters while leaving the existing cluster unchanged — that's because you just added two new cluster specifications in your configuration, but didn't modify the existing one.
 
-Confirm the prompt with `yes`.
+_After you confirm the prompt with `yes` and the command completes, there should now be three running clusters!_
 
-_When the command completes, your three clusters should be up and running!_
-
-In your current working directory, you should now have three kubeconfig files, one for each cluster:
+You should now also have three kubeconfig files in your current working directory, one for each cluster:
 
 ```terminal|command=1|title=bash
 ls *.conf
@@ -590,7 +607,7 @@ obliging-eft.conf
 real-hedgehog.conf
 ```
 
-Let's test if they allow to access each cluster:
+Let's test if you can access each of the clusters:
 
 ```terminal|command=1,2,3|title=bash
 kubectl get nodes --kubeconfig growing-cattle.conf
@@ -598,36 +615,51 @@ kubectl get nodes --kubeconfig obliging-eft.conf
 kubectl get nodes --kubeconfig real-hedgehog.conf
 ```
 
-_You should see the nodes of each cluster, so they are all up and running!_
+All the commands should succeed!
+
+Which means that all three clusters are running.
+
+_Congratulations, you just created a fleet of three Kubernetes clusters!_
 
 ## Installing CNI plugins
 
-Your three clusters are now up, but they are not yet ready because, as mentioned, they don't have a CNI plugin installed yet.
+You have three clusters now, but something might still itch you about them.
 
-_Having three freshly bootstrapped clusters is a great opportunity to compare different CNI plugins in a controlled environment._
+They have no CNI plugin installed which causes the nodes to be `NotReady` and prevents any Pods from being scheduled.
 
-Three of the most popular CNI plugins are [Calico](https://www.projectcalico.org/), [Weave Net](https://www.weave.works/docs/net/latest/overview/), and [Cilium](https://cilium.io/), so let's install each of them on one of the clusters.
+_Let's fix that!_
 
+Having three freshly bootstrapped clusters is a actually great opportunity to compare different CNI plugins in a controlled environment.
 
-Here's how you can [install Calico](https://docs.projectcalico.org/getting-started/kubernetes/quickstart) on the first cluster:
+Three of the most popular CNI plugins are:
+
+- [Calico](https://www.projectcalico.org/)
+- [Weave Net](https://www.weave.works/docs/net/latest/overview/)
+- [Cilium](https://cilium.io/)
+
+So let's install one of them on each cluster.
+
+[Install Calico](https://docs.projectcalico.org/getting-started/kubernetes/quickstart) on the first cluster:
 
 ```terminal|command=1|title=bash
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml --kubeconfig growing-cattle.conf 
 ```
 
-Here's how you can [install Weave Net](https://www.weave.works/docs/net/latest/kubernetes/kube-addon/) on the second cluster:
+[Install Weave Net](https://www.weave.works/docs/net/latest/kubernetes/kube-addon/) on the second cluster:
 
 ```terminal|command=1|title=bash
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" --kubeconfig obliging-eft.conf 
 ```
 
-And here's how you can [install Cilium](https://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/) on the third cluster:
+And [install Cilium](https://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/) on the third cluster:
 
 ```terminal|command=1|title=bash
-kubectl create -f https://raw.githubusercontent.com/cilium/cilium/1.7.0/install/kubernetes/quick-install.yaml --kubeconfig real-hedgehog.conf 
+kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/1.7.0/install/kubernetes/quick-install.yaml --kubeconfig real-hedgehog.conf 
 ```
 
-Give the CNI plugins some time to initialise, then list the nodes of your clusters again:
+_Now, give the CNI plugins some time to initialise._
+
+Then query the nodes of your clusters again:
 
 ```terminal|command=1,2,3|title=bash
 kubectl get nodes --kubeconfig growing-cattle.conf
@@ -635,17 +667,21 @@ kubectl get nodes --kubeconfig obliging-eft.conf
 kubectl get nodes --kubeconfig real-hedgehog.conf
 ```
 
-Bingo!
+_Bingo!_
 
-All the nodes should be `Ready` now.
+All the nodes should be `Ready` now!
 
-_Congratulations, you just performed your first Kubernetes experiment._
+If you list the Pods, they should now also all be `Running`.
+
+_The CNI plugins indeed completed the setup of your clusters and rendered them fully functional._
+
+At this point, you can launch further Pods in your clusters and do any other kinds of experiments.
 
 ## Destroying the clusters
 
-When you're done experimenting with the clusters, you should delete them, because running clusters on AWS costs money.
+When you're done experimenting with the clusters, you should delete them because, unfortunately, running clusters on AWS costs money.
 
-Fortunately, Terraform makes deleting infrastructure extremely easy.
+_Fortunately, Terraform makes this very easy._
 
 All you have to is to issue the following command:
 
@@ -653,20 +689,22 @@ All you have to is to issue the following command:
 terraform destroy
 ```
 
-The [`terraform destroy`](https://www.terraform.io/docs/commands/destroy.html) command also shows you an execution plan which consists of the deletion of all currently existing resources.
+The [`terraform destroy`](https://www.terraform.io/docs/commands/destroy.html) deletes all the resources from your configuration that are curently running.
 
-When you confirm the prompt with `yes`, Terraform will delete all the AWS resources that it previously created.
+This means that all the AWS resources corresponding to your clusters will be deleted.
 
-This will revert your AWS account to exactly the state it was in before you ran `terraform apply` for the first time!
+The command also shows you an execution plan, specifying the exact set of resources that will be deleted, which you can confirm with `yes`.
 
-## Summary
+When the command completes, your AWS account will be in exactly the same state as it was before your ran `terraform apply` for the first time!
 
-This article presented the [Terraform kubeadm module](https://registry.terraform.io/modules/weibeld/kubeadm/aws) which allows to automatically bootstrap Kubernetes clusters on AWS.
+## Conclusion
 
-Only the most basic usage was presented so far — the module features various [input variables](https://registry.terraform.io/modules/weibeld/kubeadm/aws?tab=inputs) that allow configuring the cluster.
+This article presented the [Terraform kubeadm module](https://registry.terraform.io/modules/weibeld/kubeadm/aws) which allows to automatically create Kubernetes clusters on AWS.
 
-For example, you can define the number and type of worker nodes, the internal Pod network CIDR block, or secure access to your cluster by narrowing the range of IP addresses that may connect to it.
+There are various directions into which you can go from here:
 
-The module is still being extended and new configuration options will be added in the future.
-
-Furthermore, equivalent Terraform modules for GCP and Azure will follow.
+- The article presented only the most basic usage of the module. The module has various [input variables](https://registry.terraform.io/modules/weibeld/kubeadm/aws?tab=inputs) that allow configuring the clusters in different ways.
+- For example, you can define the number and type of worker nodes, the CIDR block for the Pod network, or the IP addresses that may access your cluster to secure it from unwanted access.
+- The module is still in an early stage of development and new features will be added in the future, such as new input variables.
+- Future work on equivalent modules for GCP and Azure is planned.
+- You can [raise issues and create pull requests for the module](https://github.com/weibeld/terraform-aws-kubeadm) on GitHub.
