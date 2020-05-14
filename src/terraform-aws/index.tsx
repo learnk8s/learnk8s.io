@@ -20,7 +20,7 @@ export function Register(store: Store<State, Actions>) {
       pageId: TerraformAWS.id,
       image: (
         <img
-          src='src/terraform-aws/terraform-aws.png'
+          src='src/terraform-aws/terraform-aws.jpg'
           alt='Bootstrapping Kubernetes clusters on AWS with Terraform'
         />
       ),
