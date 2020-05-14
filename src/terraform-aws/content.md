@@ -641,21 +641,21 @@ So let's install one of them on each cluster.
 
 [Install Calico](https://docs.projectcalico.org/getting-started/kubernetes/quickstart) on the first cluster:
 
-```terminal|command=1|title=bash
+```terminal|command=1-2|title=bash
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml \
   --kubeconfig growing-cattle.conf 
 ```
 
 [Install Weave Net](https://www.weave.works/docs/net/latest/kubernetes/kube-addon/) on the second cluster:
 
-```terminal|command=1|title=bash
+```terminal|command=1-2|title=bash
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" \
   --kubeconfig obliging-eft.conf 
 ```
 
 And [install Cilium](https://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/) on the third cluster:
 
-```terminal|command=1|title=bash
+```terminal|command=1-2|title=bash
 kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/1.7.0/install/kubernetes/quick-install.yaml \
   --kubeconfig real-hedgehog.conf 
 ```
