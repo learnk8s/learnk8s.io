@@ -321,7 +321,7 @@ You should see the system Pods of your cluster.
 
 _Congratulations, you just created your first cluster!_
 
-> You can see the EC2 instances (and other resources) that Terraform created in your AWS account in the [AWS EC2 Console](console.aws.amazon.com/ec2/v2/home).
+> You can see the EC2 instances (and other resources) that Terraform created in your AWS account in the [AWS EC2 Console](https://console.aws.amazon.com/ec2/v2/home).
 
 _So, looks like you have a running cluster, right?_
 
@@ -364,7 +364,7 @@ In the following, you will SSH into one of the nodes of your cluster.
 
 To do so, you need to know the public IP address of this node.
 
-You could do so by going to the [AWS EC2 Console](console.aws.amazon.com/ec2/v2/home) and looking up the public IP address of the EC2 instance that corresponds to the node.
+You could do so by going to the [AWS EC2 Console](https://console.aws.amazon.com/ec2/v2/home) and looking up the public IP address of the EC2 instance that corresponds to the node.
 
 However, the Terraform kubeadm module provides an easier way to get this information.
 
