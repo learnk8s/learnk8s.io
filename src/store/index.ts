@@ -1,5 +1,6 @@
 import { createStore, combineReducers } from 'redux'
 import * as CoursesReducer from './coursesReducer'
+import * as CoursesReducer2 from './coursesReducer.v2'
 import * as WebsiteReducer from './websiteReducer'
 import * as ConfigReducer from './configReducer'
 import { OnlineCourse } from './coursesReducer'
@@ -8,13 +9,21 @@ export type State = {
   courses: CoursesReducer.State
   website: WebsiteReducer.State
   config: ConfigReducer.State
+  coursesInPerson: ReturnType<typeof CoursesReducer2.courseInPersonSlice.reducer>
+  coursesOnline: ReturnType<typeof CoursesReducer2.courseOnlineSlice.reducer>
 }
 
-export type Actions = CoursesReducer.Actions | WebsiteReducer.Actions
+export type Actions =
+  | CoursesReducer.Actions
+  | WebsiteReducer.Actions
+  | ReturnType<typeof CoursesReducer2.courseInPersonSlice.actions.add>
+  | ReturnType<typeof CoursesReducer2.courseOnlineSlice.actions.add>
 
 export const Action = {
   ...CoursesReducer.Action,
   ...WebsiteReducer.Action,
+  addInPersonCourse: CoursesReducer2.courseInPersonSlice.actions.add,
+  addOnlineCourse: CoursesReducer2.courseOnlineSlice.actions.add,
 }
 
 export const store = createStore<State, Actions, {}, {}>(
@@ -22,6 +31,8 @@ export const store = createStore<State, Actions, {}, {}>(
     courses: CoursesReducer.RootReducer,
     website: WebsiteReducer.RootReducer,
     config: ConfigReducer.RootReducer,
+    coursesInPerson: CoursesReducer2.courseInPersonSlice.reducer,
+    coursesOnline: CoursesReducer2.courseOnlineSlice.reducer,
   }),
   {
     courses: CoursesReducer.createInitialState({}),
@@ -53,6 +64,11 @@ export function getWorkshops(state: State): CoursesReducer.FullWorkshop[] {
       ...workshop,
     }
   })
+}
+
+export const Selector = {
+  onlineCourses: CoursesReducer2.courseOnlineAdapter.getSelectors<State>(state => state.coursesOnline),
+  inPersonCourses: CoursesReducer2.courseInPersonAdapter.getSelectors<State>(state => state.coursesInPerson),
 }
 
 export function getConfig(state: State): ConfigReducer.State {

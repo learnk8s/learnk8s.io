@@ -18,7 +18,6 @@ import * as Careers from './careers'
 import * as Consulting from './consulting'
 import * as ContactUs from './contactUs'
 import * as Homepage from './homepage'
-import * as Landing from './landing'
 import * as Online from './online'
 import * as Newsletter from './newsletter'
 import * as Redirect from './redirect'
@@ -31,6 +30,7 @@ import * as BiteSizedListing from './biteSized'
 import * as BiteSizedRenderer from './biteSized.v2'
 import { store, getConfig } from './store'
 import * as Workshop from './training.v2'
+import * as TrainingLandingPage from './training-landing'
 import * as Training from './learn'
 import * as BestPractices from './best-practices/best'
 import * as FreeTools from './freeTools'
@@ -41,8 +41,6 @@ import { register } from './register'
 
 register(store)
 
-Landing.Mount({ store })
-Online.Mount({ store })
 Workshop.Mount({ store })
 Training.Mount({ store })
 BestPractices.Mount({ store })
@@ -70,6 +68,7 @@ Sitemap.Mount({ store })
 AdvancedInPractice.Mount({ store })
 MicroservicesAtScale.Mount({ store })
 ExploringKubernetes.Mount({ store })
+TrainingLandingPage.Mount({ store })
 
 checkPageDetail(store)
 

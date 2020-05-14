@@ -1,27 +1,5 @@
 import React from 'react'
-import {
-  Navbar,
-  Consultation,
-  Footer,
-  ListItem,
-  Interlude,
-  SpecialListItem,
-  Testimonal,
-  mailto,
-  MailTo,
-  YourTeam,
-  FAQs,
-  FAQ,
-  PackageList,
-  PackageLeft,
-  PackageRight,
-  Hero,
-  Html,
-  Head,
-  OpenGraph,
-  Body,
-} from './layout.v3'
-import { PrimaryButton } from './homepage'
+import { Navbar, Footer, mailto, MailTo, FAQs, FAQ, Html, Head, OpenGraph, Body } from './layout.v3'
 import {
   Course,
   CourseInstance,
@@ -33,21 +11,22 @@ import {
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
 import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getWorkshops, getConfig, getOnlineCourses } from './store'
+import { State, Actions, Action, getPages, getOpenGraph, getConfig, getAuthors, Selector } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
-import { transform } from './markdown/utils'
-import { toMdast } from './markdown'
-import { toVFile } from './files'
-import { mdast2JsxInline } from './markdown/jsx'
 import { tachyons } from './tachyons/tachyons'
+import { Authors } from './aboutUs'
 
 export const faqs: FAQ[] = [
   {
+    title: 'What about Covid-19?',
+    content: 'The situation with Covid-19 is evolving rapidly. Please get in touch to confirm your attendance.',
+  },
+  {
     title: 'Who is this workshop for?',
     content:
-      'Intended for Software developers, Architects and Deployment engineers seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerized applications.',
+      'Software developers, Data engineers, Architects and DevOps seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerised applications.',
   },
   {
     title: 'Are there any joining instructions?',
@@ -81,15 +60,6 @@ const publicCourseEnquiry = (date: Date | number, timezone: string, venue: { cit
   email: 'hello@learnk8s.io',
 })
 
-const publicOnlineCourseEnquiry = (date: Date | number, timezone: string): MailTo => ({
-  subject: 'Kubernetes training — Public course enquiry',
-  body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held online on the ${format(
-    date,
-    'do',
-  )} of ${format(date, 'LLLL')}.\n\nKind regards,\n`,
-  email: 'hello@learnk8s.io',
-})
-
 const privateGroupEnquiry: MailTo = {
   subject: 'Advanced Kubernetes training — Private group enquiry',
   body: `Hi Learnk8s,\n\nWe wish to train ___(number) people to Kubernetes and containers in ____(month). Can you help?\n\nBest regards,\n`,
@@ -102,22 +72,10 @@ const newLocationEnquiry: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-const customRequest: MailTo = {
-  subject: 'Advanced Kubernetes training — Module enquiry',
-  body: `Hi Learnk8s,\n\nI'd like to know if you cover _______ in your course.\n\nBest regards,\n`,
-  email: 'hello@learnk8s.io',
-}
-
-const genericRequest: MailTo = {
-  subject: 'Kubernetes training — Generic enquiry',
-  body: `Hi Learnk8s,\n\nI'd like to know ______.\n\nBest regards,\n`,
-  email: 'hello@learnk8s.io',
-}
-
 export const Training = {
   id: 'training',
   url: '/training',
-  title: 'Kubernetes Training Courses ⎈ Learnk8s',
+  title: 'Instructor-led Kubernetes Training',
   description:
     'Join an instructor-led, hands-on course and become an expert in deploying and scaling applications with containers and Kubernetes.',
 }
@@ -153,9 +111,20 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 function renderPage(state: State) {
   const page = getPages(state).find(it => it.id === Training.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
-  const courses = getWorkshops(state)
-  const onlineCourses = getOnlineCourses(state)
   const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const instructors = getAuthors(state).filter(it =>
+    [
+      Authors.danielePolencic.id,
+      Authors.salmanIqbal.id,
+      Authors.gergelyRisko.id,
+      Authors.mauricioSalatino.id,
+      Authors.danielWeibel.id,
+      Authors.chrisNesbittSmith.id,
+    ].includes(it.id),
+  )
+  const onlineCourses = Selector.onlineCourses.selectAll(state)
+  const inPersonCourses = Selector.inPersonCourses.selectAll(state)
+  const allCourses = [...onlineCourses, ...inPersonCourses]
   return (
     <Html>
       <Head title={page.title} description={page.description}>
@@ -170,7 +139,7 @@ function renderPage(state: State) {
         <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         <link rel='canonical' href={currentAbsoluteUrl} />
-        {courses.map((course, index) => {
+        {inPersonCourses.map((course, index) => {
           return (
             <JsonLd<Course>
               key={index}
@@ -191,25 +160,25 @@ function renderPage(state: State) {
                     name: course.title,
                     description: `In this course, you'll take an app, build it into a container then use Kubernetes to deploy, scale, and update it. You will learn how to build a cluter and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
                     courseMode: 'full-time',
-                    duration: course.duration,
-                    inLanguage: course.language,
+                    duration: `3 days`,
+                    inLanguage: 'English',
                     startDate: course.startsAt,
                     endDate: course.endsAt,
                     location: {
                       '@type': 'Place',
-                      name: course.venue.locationName,
-                      address: `${course.venue.city}, ${course.venue.country}`,
+                      name: course.location,
+                      address: course.address,
                     },
                     isAccessibleForFree: Boolean.False,
                     offers: {
                       '@type': 'Offer',
                       availability: ItemAvailability.InStock,
-                      price: course.price.price,
-                      priceCurrency: course.price.currency,
+                      price: course.price,
+                      priceCurrency: course.currency,
                       url: currentAbsoluteUrl,
                       validFrom: subDays(new Date(course.startsAt), 90).toISOString(),
                     },
-                    image: `${course.picture.src}`,
+                    image: `assets/open_graph_preview.png`,
                     performer: {
                       '@type': 'Organization',
                       name: 'Learnk8s',
@@ -255,12 +224,12 @@ function renderPage(state: State) {
                     offers: {
                       '@type': 'Offer',
                       availability: ItemAvailability.InStock,
-                      price: course.defaultPrice.gross,
-                      priceCurrency: course.defaultPrice.currency,
+                      price: course.price,
+                      priceCurrency: course.currency,
                       url: currentAbsoluteUrl,
                       validFrom: subDays(new Date(course.startsAt), 90).toISOString(),
                     },
-                    image: `${course.image}`,
+                    image: `assets/open_graph_preview.png`,
                     performer: {
                       '@type': 'Organization',
                       name: 'Learnk8s',
@@ -275,700 +244,657 @@ function renderPage(state: State) {
         })}
       </Head>
       <Body>
-        <div className='sticky bg-black white tc pa3 top-0 left-0 z-max shadow-3'>
-          <div className='mw7 center ba b--gray ph3 pv2 bw1 f4-ns f5 br1'>
-            Due to Covid-19, all in-person{' '}
-            <a href='/kubernetes-online-classroom' className='white underline'>
-              workshops are delivered as online classrooms
-            </a>
-            .
+        <Navbar />
+
+        <div className='new-hero pt4 pb5-l pb4 flex-ns justify-center-ns ph4'>
+          <div className='mw6-m mw7-l pr2 pr4-ns'>
+            <h1 className='f-subheadline-l f1 b white mv0 lh-solid'>Instructor-led Kubernetes training</h1>
+            <div className='f4 measure'>
+              <p className='f2-l f3 white bt bw2 pt3 o-90'>
+                Master Kubernetes networking, architecture, authentication, scaling, storage{' '}
+                <span className='i'>(and more)</span> in excruciating detail.
+              </p>
+            </div>
+          </div>
+          <div className='dn db-ns flex-auto-l w4-m mw5-l'>
+            <div className='aspect-ratio aspect-ratio--3x4'>
+              <img src={'assets/training/in-person3x4.svg'} alt='' className='aspect-ratio--object' />
+            </div>
           </div>
         </div>
-        <div className='trapezoid-1 trapezoid-2-l white pt3 pt0-ns pb5 pb4-ns'>
-          <Navbar />
 
-          <Hero image={<img src='assets/training/training.svg' alt='Training' />} imageClass='i-training'>
-            <h1 className='f1 f-subheadline-l'>
-              Kubernetes <span className='nowrap'>instructor-led</span> training
-            </h1>
-            <h2 className='f4 normal measure-narrow lh-copy pb3-ns f3-l'>
-              Learn how to deploy and scale applications with Kubernetes.
-            </h2>
-            <ul className='list w-60-m center-m mw6 bg-white black-70 ph3 pv1 shadow-1 mh3 mh4-ns mt4'>
-              <li className='flex items-center justify-between ph2 bb b--light-gray'>
-                <p className='ttu'>Private courses</p>
-                <div className='w2 h2'>
-                  <img src='assets/training/tick.svg' alt='Tick' />
-                </div>
-              </li>
-              <li className='flex items-center justify-between ph2 bb b--light-gray'>
-                <p className='ttu'>Public courses</p>
-                <div className='w2 h2'>
-                  <img src='assets/training/tick.svg' alt='Tick' />
-                </div>
-              </li>
-              <li className='flex items-center justify-between ph2'>
-                <p className='ttu v-mid mt2 mb1'>
-                  Online courses{' '}
-                  <span className='dib w2 v-mid'>
-                    <img src='assets/training/slack_in_colours.svg' alt='Slack' />
-                  </span>
-                </p>
-                <div className='w2 h2'>
-                  <img src='assets/training/tick.svg' alt='Tick' />
-                </div>
-              </li>
-            </ul>
-            <div className='dn db-l mw6 mh3 mh4-ns tc'>
-              <div className='w3 h3 dib'>
-                <img src='assets/training/down_arrow_white.svg' alt='Down' />
-              </div>
-            </div>
-          </Hero>
-        </div>
-
-        <section className='content ph3 ph4-ns flex items-center justify-center pt5-ns relative z3'>
-          <div className='w-50-l dn db-l tc'>
-            <div className='dib'>
-              <div className='i-more-cargo-loading relative'>
-                {React.createElement('img', {
-                  src: 'assets/training/more_cargo_loading.svg',
-                  alt: 'Cargo loading',
-                  loading: 'lazy',
-                  className: 'absolute top-0 right-0',
-                })}
-              </div>
-            </div>
-          </div>
-
-          <div className='w-50-l center pt3'>
-            <h2 className='f3 navy f2-l measure-narrow'>Instructor-led, hands-on courses</h2>
-            <div className='measure-wide'>
-              <p className='lh-copy f4-l black-70'>These courses are great if you wish to:</p>
-              <ul className='list black-70 pl0 pt2'>
-                <ListItem>
-                  <InlineMarkdown
-                    content={
-                      '**Get started with Kubernetes in your next project** and you need to quickly get up to speed in deploying and scaling your Node.js, Java, .NET, Scala, etc. microservices'
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <InlineMarkdown
-                    content={
-                      '**Design and architect micro services on Kubernetes** that leverage the strength of distributed systems'
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <InlineMarkdown
-                    content={
-                      '**Design applications that can be deployed on AWS, GCP, Azure, etc.**, without requiring changing any of the application or infrastrucure code'
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <InlineMarkdown
-                    content={'**Autoscale your clusters and applications as your service becomes more popular**'}
-                  />
-                </ListItem>
-                <ListItem>
-                  <InlineMarkdown
-                    content={
-                      '**Standarise your development environments and workflow** and design processes for continuous delivery and intregration with Kubernetes'
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <InlineMarkdown
-                    content={
-                      'Become a **Certified Kubernetes Administrator** (CKA) or **Certified Kubernetes Application Developer** (CKAD)'
-                    }
-                  />
-                </ListItem>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <Interlude />
-
-        <section className='pt5'>
-          <PackageList>
-            <PackageLeft heading='Advanced Kubernetes Course' subheading='Most popular option — 3 days course'>
-              <PackageFeatures
-                description='The course lasts three days and you can choose from Kubernetes core modules and a selection of popular optional module. You will learn how to:'
-                benefits={[
-                  'Package applications in Linux containers',
-                  'Deploy containers in Kubernetes',
-                  'Zero downtime deployment strategies in Kubernetes',
-                  'How to expose services to the public internet',
-                  'The Kubernetes architecture and core components',
-                  'The Kubernetes networking model',
-                  'Autoscaling the cluster and the applications',
-                  'Secure your cluster and your network',
-                  'Design automated processes to leverage Kubernetes and continuous integration',
-                ]}
-              />
-              <p className='tc pb4'>
-                <PrimaryButton text='Learn more ⇢' anchor='#start' />
-              </p>
-            </PackageLeft>
-            <PackageRight heading='Kubernetes Private Training' subheading='Make your own course'>
-              <PackageFeatures
-                description='The private training course is excellent if you wish to customise your learning path to adopt Kubernetes.'
-                benefits={[
-                  'Pick the modules relevant to your team',
-                  'Deep dive into the content with a three, four or five days course',
-                  'Delivered on site, remotely or in a cozy meeting room',
-                  'Classes from 5+ delegates',
-                ]}
-              >
-                <SpecialListItem>
-                  <span className='b'>Perfect for the Certified Kubernetes Administrator (CKA) exam</span> (exam not
-                  included and optional)
-                </SpecialListItem>
-              </PackageFeatures>
-              <p className='tc pb4'>
-                <PrimaryButton text='Get in touch ⇢' mailto={mailto(privateGroupEnquiry)} />
-              </p>
-            </PackageRight>
-          </PackageList>
-        </section>
-
-        <Testimonal
-          quote='It is an excellent course covering a wide range of Kubernetes concepts, that will give you more than enough knowledge to go back to experiment and be productive with Kubernetes.'
-          author='Luke Anderson, Senior IT Engineer'
-        />
-
-        <section className='bg-evian pt4' id='start'>
-          <p className='f2 navy b tc ph3'>Advanced Kubernetes course modules</p>
-          <p className='lh-copy f4 black-70 measure center tc ph3'>
-            The advanced course is made 6 core modules that are designed to last 2 full days. You're recommended to
-            select 4 optional modules for the third day, but you choose more if you wish.
+        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt5'>
+          <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Join the next class</p>
+          <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>
+            Join the next public class in your city or from the comfort of your home.
           </p>
-
-          <div className='ma3 ma5-l flex-l flex-wrap justify-center'>
-            <DashboardModule
-              className='w-40-l'
-              preview={<img src='assets/training/docker.png' alt='Linux containers and Kubernetes' />}
-              title={`1. ${material.docker.name}`}
-              description={material.docker.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn how to package and run applications in Docker containers. The module covers the following
-                topics:
-              </p>
-              <ul>
-                {Object.values(material.docker.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </DashboardModule>
-
-            <DashboardModule
-              className='w-40-l'
-              preview={<img src='assets/training/zero.png' alt='Zero to Kubernetes' />}
-              title={`2. ${material.kubernetesFundamentals.name}`}
-              description={material.kubernetesFundamentals.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the
-                following topics:
-              </p>
-              <ul>
-                {Object.values(material.kubernetesFundamentals.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </DashboardModule>
-
-            <DashboardModule
-              className='w-40-l'
-              preview={<img src='assets/training/deploy.png' alt='Deployment strategies' />}
-              title={`3. ${material.deploymentStrategies.name}`}
-              description={material.deploymentStrategies.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn different techniques to deploy your applications with zero downtime. The module covers
-                the following topics:
-              </p>
-              <ul>
-                {Object.values(material.deploymentStrategies.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </DashboardModule>
-
-            <DashboardModule
-              className='w-40-l'
-              preview={<img src='assets/training/architecture.png' alt='Kubernetes architecture' />}
-              title={`4. ${material.architecture.name}`}
-              description={material.architecture.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn the core components in Kubernetes and how they work. The module covers the following
-                topics:
-              </p>
-              <ul>
-                {Object.values(material.architecture.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </DashboardModule>
-
-            <DashboardModule
-              className='w-40-l'
-              preview={<img src='assets/training/networking.png' alt='Kubernetes networking' />}
-              title={`5. ${material.networking.name}`}
-              description={material.networking.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn how the traffic flows inside the cluster. You will also learn how to expose your apps to
-                the public internet. The module covers the following topics:
-              </p>
-              <ul>
-                {Object.values(material.networking.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </DashboardModule>
-
-            <DashboardModule
-              className='w-40-l'
-              preview={<img src='assets/training/state.png' alt='Managing state with Kubernetes' />}
-              title={`6. ${material.managingState.name}`}
-              description={material.managingState.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn how to persist data in Kubernetes. The module covers the following topics:
-              </p>
-              <ul>
-                {Object.values(material.managingState.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </DashboardModule>
-
-            <DashboardModule
-              className='w-40-l'
-              preview={<img src='assets/training/templating.png' alt='Templating Kubernetes resources' />}
-              title={`7. ${material.templating.name}`}
-              description={material.templating.description}
-            >
-              <p className='lh-copy measure-wide'>
-                You will learn how to template resources for different environments. The module covers the following
-                topics:
-              </p>
-              <ul>
-                {Object.values(material.templating.topics).map((it, index) => (
-                  <li key={index} className='lh-copy mv1'>
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </DashboardModule>
-
-            <DashboardModule
-              className='w-40-l'
-              preview={<img src='assets/training/optionals.png' alt='Optional modules' />}
-              title='Optionals'
-              description={`Kubernetes is a vast subject and there're many other topics you might be interested in such what's the best autoscaler and how you should secure your cluster. If you worked in a regulated environment, you could find interesting advanced allocations: scheduling workloads only on specific Nodes.`}
-            >
-              <p className='lh-copy measure-wide'>
-                You can pick and choose from the modules below. Looking for something in particular?{' '}
-                <a className='link underline' href={mailto(customRequest)}>
-                  Get in touch!
-                </a>
-              </p>
-              <ul>
-                <li className='lh-copy mv1'>{material.advancedNetworking.name}</li>
-                <li className='lh-copy mv1'>{material.security.name}</li>
-                <li className='lh-copy mv1'>{material.autoscaling.name}</li>
-                <li className='lh-copy mv1'>{material.advancedScheduling.name}</li>
-                <li className='lh-copy mv1'>{material.multiCloud.name}</li>
-                <li className='lh-copy mv1'>{material.serviceMeshes.name}</li>
-                <li className='lh-copy mv1'>{material.extensions.name}</li>
-              </ul>
-            </DashboardModule>
-          </div>
-
-          <div className='pt5-m pb4 pb5-ns ph3 measure-wide center'>
-            <p className='f3 mb1 mt0 lh-copy'>
-              &ldquo;A really enjoyable 3-day workshop on Kubernetes. I cemented my understanding of Kubernetes and can
-              now start implementing and furthering my knowledge with real examples and workflows. Next stop, production
-              experience.&rdquo;
-            </p>
-            <p className='f4 i mb2'>— David Heward, Senior Devops Engineer</p>
-          </div>
-        </section>
-
-        <section id='start' className='w-60-ns ph3 center pt3 pb3 pb5-l'>
-          <div className='pb4'>
-            <h2 className='navy f4 f3-l'>Upcoming online events</h2>
-            <ul className='events list pl0 pt3'>
-              {onlineCourses
-                .slice(0)
-                .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
-                .map((event, i) => {
-                  const id = `online${i}`
-                  return (
-                    <li className='' key={id}>
-                      <div className='mv3 flex-ns items-start pb3 pb0-l module'>
-                        <div className='date bg-sky w3 h3 white tc b'>
-                          <p className='f2 ma0'>{format(new Date(event.startsAt), 'd')}</p>
-                          <p className='ttu ma0'>{format(new Date(event.startsAt), 'MMM')}</p>
-                        </div>
-                        <div className='bg-evian ph4 pt2 flex-auto relative'>
-                          <h3 className='f3 ma0 mt3 mb2'>{event.title}</h3>
-                          <h4 className='normal black-70 mt1 mb4'>3 days course</h4>
-                          <div className={`controls controls-${id} absolute top-1 right-1`}>
-                            <button
-                              className='open bg-sky pa2 white f7 tc lh-solid bn br1'
-                              data-toggle={`.details-${id},.controls-${id}`}
-                              data-toggle-collapsed
-                            >
-                              ▼
-                            </button>
-                            <button
-                              className='close bg-sky pa2 white f7 tc lh-solid bn br1'
-                              data-toggle={`.details-${id},.controls-${id}`}
-                            >
-                              ▲
-                            </button>
-                          </div>
-                          <div className={`details details-${id}`}>
-                            <p className='ma0 mv3'>
-                              <span className='ttu b black-20 f6 v-mid'>Timezone:</span> <span />
-                              &nbsp;
-                              <span className='link dib navy underline v-mid'>{event.timezone}</span>
-                            </p>
-                            <p className='ma0 mv3'>
-                              <span className='ttu b black-20 f6'>Starts at:</span>{' '}
-                              <span className='f5 black-70 dib'>{format(new Date(event.startsAt), 'h:mm aaaa')}</span>
-                            </p>
-                            <p className='ma0 mv3'>
-                              <span className='ttu b black-20 f6'>Price:</span>{' '}
-                              <span className='f4 black-70 dib' data-price='online-course'>
-                                {new Intl.NumberFormat(`en-${event.defaultPrice.country}`, {
-                                  style: 'currency',
-                                  currency: event.defaultPrice.currency,
-                                  currencyDisplay: 'code',
-                                }).format(event.defaultPrice.gross)}{' '}
-                              </span>
-                            </p>
-                            <p>
-                              <PrimaryButton
-                                text='Get in touch &#8594;'
-                                mailto={mailto(publicOnlineCourseEnquiry(new Date(event.startsAt), event.timezone))}
-                              />
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  )
-                })}
-            </ul>
-          </div>
-
-          <h2 className='navy f4 f3-l'>Upcoming in-person events</h2>
-
-          <div className='pv3'>
-            <p className='measure-wide f4 lh-copy center bl bw3 b--blue pa4 bg-evian'>
-              Please note that, given the developing international situation, Learnk8s will deliver remote only
-              workshops. The events below are moved online. If you have questions,{' '}
-              <a href={mailto(genericRequest)} className='link navy'>
-                please get in touch
-              </a>
-              .
-            </p>
-          </div>
-
-          <input className='dn' id='all' type='radio' name='country' />
-          <input className='dn' id='america' type='radio' name='country' />
-          <input className='dn' defaultChecked id='europe' type='radio' name='country' />
-          <input className='dn' id='asia' type='radio' name='country' />
-          <input className='dn' id='australia' type='radio' name='country' />
-          <ul className='legend list pl0 flex'>
-            <li className='all dib pa2 navy bb bw1 b--near-white bg-evian br1 br--left'>
-              <label htmlFor='all'>All</label>
-            </li>
-            <li className='america dib pa2 navy bb bl bw1 b--near-white bg-evian'>
-              <label htmlFor='america'>North America</label>
-            </li>
-            <li className='europe dib pa2 navy bb bl bw1 b--near-white bg-evian'>
-              <label htmlFor='europe'>Europe</label>
-            </li>
-            <li className='asia dib pa2 navy bb bl bw1 b--near-white bg-evian'>
-              <label htmlFor='asia'>Asia</label>
-            </li>
-            <li className='australia dib pa2 navy bb bw1 b--near-white bg-evian br1 br--right'>
-              <label htmlFor='australia'>Australia & New Zeland</label>
-            </li>
-          </ul>
-
-          <ul className='events list pl0 pt3'>
-            {courses
-              .slice(0)
+          <ul className='list pl0'>
+            {allCourses
+              .slice(0, 3)
               .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
-              .map(it => (
+              .map((it, i) => (
                 <CourseRow
-                  event={{
-                    timezone: it.timezone,
-                    startsAt: it.startsAt,
-                    location: it.venue,
-                    details: it,
-                    offer: it.price,
-                  }}
+                  startsAt={it.startsAt}
+                  title={`${it.title} — ${it.location}`}
+                  id={`event${i}`}
+                  tags={it.tags}
+                  price={it.priceAsString}
+                  link={it.url}
                 />
               ))}
           </ul>
-
-          <p className='f2 navy b tc mb2 pt4-ns pt2'>Your city is not on the list?</p>
-          <p className='lh-copy f4 black-70 measure center tc'>
-            Don't worry. We run in-person classrooms in Europe, North America and Asia. If your city is not on the list,
-            drop us a line at{' '}
-            <a className='link underline navy' href={mailto(newLocationEnquiry)}>
-              hello@learnk8s.io
-            </a>{' '}
-            and will try to make it happen.
-          </p>
+          <div className='tc'>
+            <a href='#start' className='link dib white bg-sky br1 pa3 b f5 mv3 submit br2 b--none ttu'>
+              Show all
+            </a>
+          </div>
         </section>
 
-        <YourTeam mailto={mailto(privateGroupEnquiry)} />
+        <Section>
+          <div className='mt4 measure f3-l f4 center'>
+            <h2 className='f1-l f2 navy tc'>How does it work?</h2>
+            <p className='measure f3-l f4 lh-copy center'>
+              This is a <span className='b'>full time, 3 days course</span> on learning and mastering Kubernetes.
+            </p>
+            <p className='measure f3-l f4 lh-copy center'>Things you need to know about the course:</p>
+            <ul className='list pl0 ph2-ns'>
+              <ListItem>
+                You will get your hands dirty: the split is <span className='b'>40% lecture and 60% hands-on labs</span>
+                .
+              </ListItem>
+              <ListItem>
+                You will have the chance to <span className='b'>ask questions and discuss with the instructor.</span>
+              </ListItem>
+              <ListItem>
+                You will learn from expert instructors (you can find us on the{' '}
+                <a href='https://t.me/learnk8s' className='link navy underline' ref='noreferrer'>
+                  Learnk8s Telegram group
+                </a>
+                ).
+              </ListItem>
+              <ListItem>
+                You will have <span className='b'>access to all the material after the course.</span> That's the{' '}
+                <a href='/academy' className='link navy underline'>
+                  full Learnk8s Academy (12 courses)
+                </a>
+              </ListItem>
+              <ListItem>
+                It's <span className='b'>beginner-friendly</span>, but you will learn some pretty advanced topics during
+                day 3.
+              </ListItem>
+            </ul>
+            <p className='measure f3-l f4 lh-copy center'>This course is not:</p>
+            <ul className='list pl0 ph2-ns'>
+              <ListItemX>
+                <span className='b'>Not Death by PowerPoint</span>. There are slides, but most of the content is
+                hands-on labs.
+              </ListItemX>
+            </ul>
+          </div>
+        </Section>
 
-        <FAQs faqs={faqs} />
+        <Section className='bg-evian'>
+          <h2 className='f1-l f2 navy tc'>What does it cover?</h2>
+          <p className='lh-copy f4 black-70 measure center tc ph3 mb4'>
+            A typical schedule for the 3 days is as follows:
+          </p>
 
-        <Consultation />
+          <div className='mw8 center'>
+            <ol className='list pl0 f4 measure-wide center'>
+              <li>
+                <p className='f2-l f3 navy b'>Day 1</p>
+                <ol className='list pl0'>
+                  <DrillDown
+                    title={`1. ${material.docker.name}`}
+                    subtitle='Lecture + hands-on labs + challenges'
+                    topics={Object.values(material.docker.topics)}
+                    description={material.docker.description}
+                    className='mv4'
+                  ></DrillDown>
+                  <DrillDown
+                    title={`2. ${material.kubernetesFundamentals.name}`}
+                    subtitle='Lecture + hands-on labs + challenges'
+                    topics={Object.values(material.kubernetesFundamentals.topics)}
+                    description={material.kubernetesFundamentals.description}
+                    className='mv4'
+                  ></DrillDown>
+                  <DrillDown
+                    title={`3. ${material.deploymentStrategies.name}`}
+                    subtitle='Lecture + hands-on labs + challenges'
+                    topics={Object.values(material.deploymentStrategies.topics)}
+                    description={material.deploymentStrategies.description}
+                    className='mv4'
+                  ></DrillDown>
+                </ol>
+              </li>
+              <li>
+                <p className='f2-l f3 navy b'>Day 2</p>
+                <ol className='list pl0'>
+                  <DrillDown
+                    title={`1. ${material.architecture.name}`}
+                    subtitle='Lecture + hands-on labs'
+                    topics={Object.values(material.architecture.topics)}
+                    description={material.architecture.description}
+                    className='mv4'
+                  ></DrillDown>
+                  <DrillDown
+                    title={`2. ${material.networking.name}`}
+                    subtitle='Lecture + hands-on labs'
+                    topics={Object.values(material.networking.topics)}
+                    description={material.networking.description}
+                    className='mv4'
+                  ></DrillDown>
+                  <DrillDown
+                    title={`3. ${material.advancedNetworking.name}`}
+                    subtitle='Lecture'
+                    topics={Object.values(material.advancedNetworking.topics)}
+                    description={material.advancedNetworking.description}
+                    className='mv4'
+                  ></DrillDown>
+                </ol>
+              </li>
+              <li>
+                <p className='f2-l f3 navy b'>Day 3</p>
+                <ol className='list pl0'>
+                  <DrillDown
+                    title={`1. ${material.managingState.name}`}
+                    subtitle='Lecture + hands-on labs'
+                    topics={Object.values(material.managingState.topics)}
+                    description={material.managingState.description}
+                    className='mv4'
+                  ></DrillDown>
+                  <DrillDown
+                    title={`2. ${material.templating.name}`}
+                    subtitle='Lecture + hands-on labs'
+                    topics={Object.values(material.templating.topics)}
+                    description={material.templating.description}
+                    className='mv4'
+                  ></DrillDown>
+                  <DrillDown
+                    title={`3. ${material.autoscaling.name}`}
+                    subtitle='Lecture'
+                    topics={Object.values(material.autoscaling.topics)}
+                    description={material.autoscaling.description}
+                    className='mv4'
+                  ></DrillDown>
+                  <DrillDown
+                    title={`4. ${material.security.name}`}
+                    subtitle='Lecture'
+                    topics={Object.values(material.security.topics)}
+                    description={material.security.description}
+                    className='mv4'
+                  ></DrillDown>
+                </ol>
+              </li>
+            </ol>
+
+            <p className='f2-l f3 navy tc b'>Plus a few more</p>
+            <ul className='pl0 f4 measure center'>
+              <ListItem>CI/CD</ListItem>
+              <ListItem>Service Meshes (and Istio)</ListItem>
+              <ListItem>CKA/CKAD exam preparation</ListItem>
+              <ListItem>Multi-cloud, multi-data centre deployments</ListItem>
+              <ListItem>Advanced Scheduling workloads</ListItem>
+              <ListItem>ML/AI with Kubeflow</ListItem>
+            </ul>
+            <p className='lh-copy f4 black-80 measure center ph3 mt4'>
+              During the third day, the instructor will ask you to vote for your favourite topics.
+            </p>
+            <p className='lh-copy f4 black-80 measure center ph3 mt4'>
+              You will cover as many modules as possible, starting from the most popular.
+            </p>
+            <p className='lh-copy f4 black-80 measure center ph3 mb3 mb5-ns b'>
+              <a href='#' className='link navy underline'>
+                In private and corporate training, you can customise the schedule in full.
+              </a>
+            </p>
+          </div>
+        </Section>
+
+        <Section className=''>
+          <div className='mw7 center'>
+            <p className='f1-l f2 navy b tc ph3 mb3 mt4'>What's included?</p>
+            <ul className='pl0 list f4 measure center pt4 pb4-ns'>
+              <ListItem className='b'>
+                <span data-tags='price-all'>
+                  Lifetime access to the{' '}
+                  <a href='/academy' className='navy link underline'>
+                    Learnk8s Academy
+                  </a>{' '}
+                  — the online Kubernetes courses (worth{' '}
+                  <span className='js-price'>
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'currency',
+                      currency: 'USD',
+                      currencyDisplay: 'code',
+                    }).format(499)}
+                  </span>
+                  ).
+                </span>
+              </ListItem>
+              <ListItem>All the slides from the events.</ListItem>
+              <ListItem>A virtual workstation in the cloud for the duration of the course.</ListItem>
+              <ListItem>Lifetime access to the private Slack channel where you can always ask for help.</ListItem>
+              <ListItem>A certificate of completion signed by the instructor.</ListItem>
+            </ul>
+          </div>
+        </Section>
+
+        <section id='start'>
+          <div className='mw8 center'>
+            <p className='f1-l f2 navy b tc ph3 mb3 mt4'>When is the next event?</p>
+
+            <div className='js-filters flex-ns justify-center-ns dn'>
+              <div className='w-100 mw5 f5 bg-evian ph3 pv2 br2 br--left'>
+                <p className='ttu gray f6 lh-solid'>Filter by location:</p>
+                <ul className='list pl1'>
+                  <li className='mv2'>
+                    <input className='' defaultChecked id='country-all' type='radio' name='country' />
+                    <label htmlFor='country-all' className='pl2'>
+                      All
+                    </label>
+                  </li>
+                  <li className='mv2'>
+                    <input className='' id='country-na' type='radio' name='country' />
+                    <label htmlFor='country-na' className='pl2'>
+                      North America
+                    </label>
+                  </li>
+                  <li className='mv2'>
+                    <input className='' id='country-europe' type='radio' name='country' />
+                    <label htmlFor='country-europe' className='pl2'>
+                      Europe
+                    </label>
+                  </li>
+                  <li className='mv2'>
+                    <input className='' id='country-sea' type='radio' name='country' />
+                    <label htmlFor='country-sea' className='pl2'>
+                      South East Asia
+                    </label>
+                  </li>
+                  <li className='mv2'>
+                    <input className='' id='country-oceania' type='radio' name='country' />
+                    <label htmlFor='country-oceania' className='pl2'>
+                      Oceania
+                    </label>
+                  </li>
+                </ul>
+              </div>
+              <div className='w-100 mw5 f5 bg-evian ph3 pv2 br2 br--right'>
+                <p className='ttu gray f6 lh-solid'>Filter by course type:</p>
+                <ul className='list pl1'>
+                  <li className='mv2'>
+                    <input className='' defaultChecked id='course-all' type='radio' name='course-type' />
+                    <label htmlFor='course-all' className='pl2'>
+                      All
+                    </label>
+                  </li>
+                  <li className='mv2'>
+                    <input className='' id='course-in-person' type='radio' name='course-type' />
+                    <label htmlFor='course-in-person' className='pl2'>
+                      In-person
+                    </label>
+                  </li>
+                  <li className='mv2'>
+                    <input className='' id='course-online' type='radio' name='course-type' />
+                    <label htmlFor='course-online' className='pl2'>
+                      Online
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className='ph3'>
+              <table className='js-table w-100 collapse mt4'>
+                <thead>
+                  <tr className='dn dt-row-ns'>
+                    <th className='tc pv3'>Date</th>
+                    <th className='tc pv3'>Location</th>
+                    <th className='tc pv3'>Course</th>
+                    <th className='tc pv3 dn-m'>Duration</th>
+                    <th className='tc pv3 dn-m'>Time Zone</th>
+                    <th className='tc pv3'>Price</th>
+                  </tr>
+                </thead>
+                <tbody className='results black-70'>
+                  {allCourses
+                    .slice(0)
+                    .sort((a, b) => new Date(a.startsAt).valueOf() - new Date(b.startsAt).valueOf())
+                    .map((event, i) => {
+                      return (
+                        <tr
+                          key={i}
+                          className={`db dt-row-ns relative static-ns ${
+                            i % 2 === 0 ? 'bg-evian' : ''
+                          } hover-bg-washed-yellow f5-m f4 ph3 pt3 mv3 pa0-ns ma0-ns`}
+                          data-tags={event.tags.join(' ')}
+                        >
+                          <td className='absolute static-ns top-0 right-0 dtc-ns'>
+                            <div className='date bg-sky w3 h3 white tc'>
+                              <p className='f2 ma0 b'>{format(new Date(event.startsAt), 'd')}</p>
+                              <p className='ttu ma0'>{format(new Date(event.startsAt), 'MMM')}</p>
+                            </div>
+                          </td>
+                          <td className='tc-ns db dtc-ns table-label mr5 mr0-ns' data-label='Location'>
+                            {event.location}
+                          </td>
+                          <td className='tc-ns db dtc-ns ph1-m ph3-l table-label mr5 mr0-ns' data-label='Course'>
+                            {event.title}
+                          </td>
+                          <td className='tc-ns db dtc-ns table-label mr5 mr0-ns dn-m' data-label='Duration'>
+                            3 days
+                            <span className='f7 dark-gray dn dib-l'> / 6 hours per day</span>
+                          </td>
+                          <td className='tc-ns db dtc-ns table-label dn-m' data-label='Timezone'>
+                            {event.timezone}
+                          </td>
+                          <td className='js-price tc-ns db dtc-ns table-label' data-label='Price'>
+                            {event.priceAsString}
+                          </td>
+                          <td className='tc-ns db dtc-ns'>
+                            <a
+                              href={event.url}
+                              className='link dib white bg-sky br1 pv2 ph3 b f6 mv3 submit br2 b--none lh-solid mh1-m mh2-l'
+                            >
+                              Book&nbsp;⇢
+                            </a>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                </tbody>
+              </table>
+              <div className='js-empty-results dn tc'>
+                <p className='tc b bg-navy pa2 dib br2 white'>Oops, we don't run any event with that selection.</p>
+              </div>
+            </div>
+            <script dangerouslySetInnerHTML={{ __html: `(${FilterTable.toString()})()` }}></script>
+
+            <div className='ph3'>
+              <p className='f2-l f3 navy b tc mb2 pt4-ns pt2'>
+                What about <span className='i'>other locations</span>?
+              </p>
+              <p className='lh-copy f4 black-70 measure center tc'>
+                Learnk8s runs in-person workshops in Europe, North America, South East Asia and Australia. If you have a
+                suggestion for a new location, drop us a line at{' '}
+                <a className='link underline navy' href={mailto(newLocationEnquiry)}>
+                  hello@learnk8s.io
+                </a>{' '}
+                and will make it happen.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <Section className='bg-evian mt3 mt5-ns'>
+          <div className='mw7 center'>
+            <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Training your team?</p>
+            <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>Design your private session:</p>
+            <ul className='pl0 list f4 measure center'>
+              <ListItem>
+                <span className='b'>Customise the schedule in full</span> and select the modules relevant to you
+              </ListItem>
+              <ListItem>
+                Increase the session length <span className='b'>up to five full-time days</span>
+              </ListItem>
+              <ListItem>
+                Include <span className='b'>ad-hoc consulting sessions</span> to address your cluster configuration
+              </ListItem>
+              <ListItem>
+                Add <span className='b'>ad-hoc modules</span> developed to help you deliver your cluster to production.
+              </ListItem>
+            </ul>
+          </div>
+          <p className='tc pb4-ns'>
+            <a href={mailto(privateGroupEnquiry)} className='link dib white bg-sky br1 pa3 b f5 mv3'>
+              Get in touch →
+            </a>
+          </p>
+        </Section>
+
+        <Section className='mb4'>
+          <div className='mw7 center'>
+            <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Who are the instructors?</p>
+            <ul className='list pl0 flex flex-wrap justify-center pt3'>
+              {instructors.map((instructor, i) => {
+                return (
+                  <li className='w-50 w-third-ns mv3' key={i}>
+                    <div className='w4 center'>
+                      <div className='aspect-ratio aspect-ratio--1x1'>
+                        {{
+                          ...instructor.avatar,
+                          props: {
+                            ...instructor.avatar.props,
+                            className: 'aspect-ratio--object br-100',
+                            loading: 'lazy',
+                          },
+                        }}
+                      </div>
+                    </div>
+                    <p className='f4 navy mb1 tc'>
+                      <a href={instructor.link} ref='noreferrer' className='navy link'>
+                        {instructor.fullName}
+                      </a>
+                    </p>
+                  </li>
+                )
+              })}
+            </ul>
+            <p className='lh-copy f4 black-80 measure center tc ph3 mt4'>
+              You can chat with us on the{' '}
+              <a href='https://t.me/learnk8s' className='link navy underline' ref='noreferrer'>
+                Learnk8s' Telegram Group
+              </a>
+              !
+            </p>
+          </div>
+        </Section>
+
+        <Section className='bg-evian'>
+          <FAQs faqs={faqs} />
+        </Section>
+
         <Footer />
-        <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} className='toggle-collapse' />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-var request = new XMLHttpRequest();
-request.open('GET', 'https://academy.learnk8s.io/api/v1/prices', true);
-
-request.onload = function() {
-  if (this.status >= 200 && this.status < 400) {
-    try {
-      var resp = JSON.parse(this.response);
-      const keys = Object.keys(resp)
-      for (var i = 0; i < keys.length; i++) {
-        var key = keys[i]
-        var elements = [].slice.call(document.querySelectorAll("[data-price='" + key + "']"))
-        if (Array.isArray(elements) && elements.length > 0) {
-          var price = resp[key]
-          for (var j = 0, len = elements.length; j < len; j++) {
-            var element = elements[j]
-            element.innerHTML = new Intl.NumberFormat('en-' + price.country, {
-              style: 'currency',
-              currency: price.currency,
-              currencyDisplay: 'code',
-            }).format(price.gross)
-          }
-        }
-      }
-    } catch(error) {
-      console.log(error)
-    }
-  } else {}
-};
-
-request.onerror = function() {};
-
-request.send();
-      `,
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: `(${FetchPrice.toString()})()` }} />
       </Body>
     </Html>
   )
 }
 
-export const CourseRow: React.StatelessComponent<{
-  event: {
-    timezone: string
-    startsAt: string
-    location: { address?: string; city: string; country: string }
-    details: { title: string }
-    offer: { price: number; locale: string; currency: string }
+function FetchPrice() {
+  var request = new XMLHttpRequest()
+  request.open('GET', 'https://academy.learnk8s.io/api/v1/prices', true)
+
+  request.onload = function() {
+    if (this.status >= 200 && this.status < 400) {
+      try {
+        const resp = JSON.parse(this.response)
+        const keys = Object.keys(resp)
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i]
+          const elements = [].slice.call(document.querySelectorAll(`[data-tags*="price-${key}"]`)) as HTMLElement[]
+          if (elements.length > 0) {
+            const price = resp[key]
+            for (let j = 0, len = elements.length; j < len; j++) {
+              const element = elements[j]
+              const priceElement = element.querySelector('.js-price')
+              if (priceElement) {
+                priceElement.innerHTML = price.priceAsString
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+    }
   }
-}> = ({ event }) => {
-  const id = `e-${event.startsAt}-${event.location.address || ''}-${event.location.city}`
-    .toLowerCase()
-    .replace(/[^\w]+/g, '-')
+
+  request.onerror = function() {}
+
+  request.send()
+}
+
+const CourseRow: React.StatelessComponent<{
+  startsAt: string
+  title: string
+  id: string
+  tags: string[]
+  price: string
+  link: string
+}> = ({ startsAt, title, id, tags, price, link }) => {
   return (
-    <li className={`${event.timezone}`.split('/')[0].toLowerCase()} key={id}>
-      <div className='mv3 flex-ns items-start pb3 pb0-l module'>
-        <div className='date bg-sky w3 h3 white tc b'>
-          <p className='f2 ma0'>{format(new Date(event.startsAt), 'd')}</p>
-          <p className='ttu ma0'>{format(new Date(event.startsAt), 'MMM')}</p>
+    <li className='' key={id} data-tags={tags.join(' ')}>
+      <div className='mv3 flex items-start'>
+        <div className='flex-shrink-0 bg-navy w3 h3 white tc b br2 br--left'>
+          <p className='f2 ma0'>{format(new Date(startsAt), 'd')}</p>
+          <p className='ttu ma0'>{format(new Date(startsAt), 'MMM')}</p>
         </div>
-        <div className='bg-evian ph4 pt2 flex-auto relative'>
-          <h3 className='f3 ma0 mt3 mb2'>
-            {event.details.title} — {event.location.city}
-          </h3>
-          <h4 className='normal black-70 mt1 mb4'>3 days course</h4>
-          <div className={`controls controls-${id} absolute top-1 right-1`}>
-            <button
-              className='open bg-sky pa2 white f7 tc lh-solid bn br1'
-              data-toggle={`.details-${id},.controls-${id}`}
-              data-toggle-collapsed
-            >
-              ▼
-            </button>
-            <button
-              className='close bg-sky pa2 white f7 tc lh-solid bn br1'
-              data-toggle={`.details-${id},.controls-${id}`}
-            >
-              ▲
-            </button>
-          </div>
-          <div className={`details details-${id}`}>
-            <p className='ma0 mv3'>
-              <span className='ttu b black-20 f6 v-mid'>Location:</span> <span />
-              &nbsp;
-              <span className='link dib navy underline v-mid'>
-                {event.location.city}, {event.location.country}
-              </span>
-            </p>
-            <p className='ma0 mv3'>
-              <span className='ttu b black-20 f6'>Starts at:</span>{' '}
-              <span className='f5 black-70 dib'>{format(new Date(event.startsAt), 'h:mm aaaa')}</span>
-            </p>
-            <p className='ma0 mv3'>
-              <span className='ttu b black-20 f6'>Price:</span>{' '}
-              <span className='f4 black-70 dib'>
-                {new Intl.NumberFormat(event.offer.locale, {
-                  style: 'currency',
-                  currency: event.offer.currency,
-                  currencyDisplay: 'code',
-                }).format(event.offer.price)}{' '}
-              </span>
-            </p>
-            <p>
-              <PrimaryButton
-                text='Get in touch &#8594;'
-                mailto={mailto(publicCourseEnquiry(new Date(event.startsAt), event.timezone, event.location))}
-              />
-            </p>
-          </div>
+
+        <div className='pl2 pl3-m pl4-l pr5 flex-auto relative bg-white br2 br--right'>
+          <a href='#' className='link navy pv3 ma0 dtc v-mid lh-solid pointer'>
+            <span className='b f5 f4-m f3-l'>{title}</span>
+            <span className='db f6 f5-m f4-l pt2'>
+              Price: <span className='js-price'>{price}</span>
+            </span>
+          </a>
+
+          <a
+            href={link}
+            className='link bg-light-gray sky f4 tc lh-copy bn br-100 w2 h2 v-mid pointer absolute top-1 mt2 right-1 z-1'
+          >
+            →
+          </a>
         </div>
       </div>
     </li>
   )
 }
 
-export const PackageFeatures: React.StatelessComponent<{ description: string; benefits: string[] }> = ({
-  benefits,
-  description,
-  children,
-}) => {
+const Section: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
+  return <section className={`pv4 black-80 ph3 ${className || ''}`}>{children}</section>
+}
+
+const ListItem: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
   return (
-    <div className='content ph4 pb4'>
-      <div className='list pl0 black-70'>
-        <p className='lh-copy pt3 f4-l measure center'>{description}</p>
-        <ul className='list pl0'>
-          {benefits.map(benefit => (
-            <ListItem>{benefit}</ListItem>
-          ))}
-          {children}
-        </ul>
+    <li className={`mv2 flex justify-center ${className || ''}`}>
+      <div className='v-top tc'>
+        <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
       </div>
-    </div>
+      <div className='v-top pl2 pl3-ns w-90'>
+        <p className='mv0 f3-l f4 lh-copy black-80'>{children}</p>
+      </div>
+    </li>
   )
 }
 
-export const DashboardModule: React.StatelessComponent<{
+const ListItemX: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
+  return (
+    <li className={`mv2 flex justify-center ${className || ''}`}>
+      <div className='v-top tc'>
+        <img src='assets/x.svg' alt='Tick' className='w2 h2' />
+      </div>
+      <div className='v-top pl2 pl3-ns w-90'>
+        <p className='mv0 f3-l f4 lh-copy black-80'>{children}</p>
+      </div>
+    </li>
+  )
+}
+
+const DrillDown: React.StatelessComponent<{
+  className?: string
   title: string
   description: string
-  preview: JSX.Element
-  className?: string
-}> = ({ children, title, description, preview, className }) => {
-  const id = title.toLowerCase().replace(/[^\w]+/g, '-')
+  topics: string[]
+  subtitle: string
+}> = ({ children, className, title, subtitle, description, topics }) => {
   return (
-    <div className={`mh3 ${className}`}>
-      <div className='module bl bw3 b--sky pt1 pb3 ph4 shadow-2 mv4 bg-white'>
-        <p className='f3 navy b bb b--black-20 pb3'>{title}</p>
-        <div className=''>
-          <div className='w-80 center'>
-            <div className='aspect-ratio aspect-ratio--4x3'>
-              {React.createElement('img', {
-                src: preview.props.src,
-                alt: preview.props.alt,
-                loading: 'lazy',
-                className: 'aspect-ratio--object',
-              })}
-            </div>
-          </div>
-          <div className=''>
-            <p className='f5 lh-copy measure-wide'>{description}</p>
-            <div className={`controls controls-${id}`}>
-              <button
-                className='open dib ba b--sky sky pv2 ph3 b f5 br2 hover-bg-evian pointer bg-white'
-                data-toggle={`.details-${id},.controls-${id}`}
-                data-toggle-collapsed
-              >
-                View details
-              </button>
-              <button
-                className='close dib ba b--light-gray gray pv2 ph3 b f5 br2 ml2 bg-light-gray hover-bg-moon-gray hover-dark-gray pointer'
-                data-toggle={`.details-${id},.controls-${id}`}
-              >
-                Hide details
-              </button>
-            </div>
-            <div className={`details details-${id}`}>{children}</div>
-          </div>
+    <li className={`relative bg-white br2 pa3 ${className ?? ''}`}>
+      <input type='checkbox' id={toId(title)} className='o-0 absolute top-0 right-0' />
+      <label htmlFor={toId(title)} className='checked-hide absolute top-2 right-2 moon-gray'>
+        <span className='arr-down'></span>
+      </label>
+      <label htmlFor={toId(title)} className='dn checked-reveal absolute top-2 right-2 moon-gray'>
+        <span className='arr-up'></span>
+      </label>
+      <label className='f3-l f4 b pl0 pl4-ns db mr5' htmlFor={toId(title)}>
+        {title}
+      </label>
+      <p className='pl0 pl4-ns lh-copy mv1 ttu f5 silver mr5'>{subtitle}</p>
+      <div className='dn checked-reveal'>
+        <div className='pt4 ph1 pb1 ph1 pa4-ns mt3 mb0 bt b--light-gray'>
+          <p className='lh-copy f4 black-70 measure mt0'>{description}</p>
+          <ol className='pl4'>
+            {topics.map((it, i) => {
+              return (
+                <li key={i}>
+                  <p className='f4 lh-copy measure-narrow black-70 mv2'>{it}</p>
+                </li>
+              )
+            })}
+          </ol>
         </div>
       </div>
-    </div>
+    </li>
   )
 }
 
-function CreateToggle() {
-  function Toggle(element: HTMLElement) {
-    const target = element.dataset.toggle
-    if (!target) {
-      return
-    }
-    const targetElements = target.split(',').map(selector => document.querySelector(selector))
-    if (targetElements.some(it => !it)) {
-      return
-    }
-    if (targetElements[0]!.classList.contains('toggle-collapse')) {
-      targetElements.forEach(it => it!.classList.remove('toggle-collapse'))
-    } else {
-      targetElements.forEach(it => it!.classList.add('toggle-collapse'))
-    }
-  }
-
-  document.querySelectorAll<HTMLElement>('[data-toggle]').forEach(element => {
-    if (element.classList.contains('active')) {
-      return
-    }
-    element.classList.add('active')
-    element.addEventListener('click', () => Toggle(element))
-    if (!('toggleCollapsed' in element.dataset)) {
-      return
-    }
-    Toggle(element)
-  })
+function toId(raw: string): string {
+  return raw
+    .toLowerCase()
+    .replace(/[^\w]+/g, '-')
+    .replace('_', '-')
 }
 
-const InlineMarkdown: React.StatelessComponent<{ content: string }> = ({ content }) => {
-  return transform(toMdast(toVFile({ contents: content })), mdast2JsxInline())
+function FilterTable() {
+  const filters = document.querySelector('.js-filters')
+  const table = document.querySelector('.js-table')
+  if (!filters || !table) {
+    return
+  }
+  filters.addEventListener('click', event => {
+    if ((event.target as HTMLHtmlElement).tagName === 'INPUT') {
+      filter({
+        country: document.querySelector('input[name="country"]:checked')?.id ?? 'country-all',
+        courseType: document.querySelector('input[name="course-type"]:checked')?.id ?? 'course-all',
+      })
+    }
+  })
+
+  function filter({ country, courseType }: { country: string; courseType: string }) {
+    const rows = [].slice.call(document.querySelectorAll('.js-table tbody tr')) as HTMLTableRowElement[]
+    const totalVisibleRows = rows
+      .map(row => {
+        let isVisible = false
+        const tags = row.getAttribute('data-tags')?.split(' ') ?? []
+        switch (courseType) {
+          case 'course-all':
+            isVisible = country === 'country-all' || tags.includes(country) || tags.includes('course-online')
+            break
+          case 'course-in-person':
+            isVisible = tags.includes('course-in-person') && (country === 'country-all' || tags.includes(country))
+            break
+          case 'course-online':
+            isVisible = tags.includes('course-online')
+            break
+          default:
+        }
+        if (isVisible) {
+          row.classList.add('dt-row-ns', 'db')
+          row.classList.remove('dn')
+        } else {
+          row.classList.remove('dt-row-ns', 'db')
+          row.classList.add('dn')
+        }
+        return (isVisible ? 1 : 0) as number
+      })
+      .reduce((acc, it) => acc + it, 0)
+    if (totalVisibleRows === 0) {
+      document.querySelector('.js-empty-results')?.classList.add('db')
+    } else {
+      document.querySelector('.js-empty-results')?.classList.remove('db')
+    }
+  }
 }
