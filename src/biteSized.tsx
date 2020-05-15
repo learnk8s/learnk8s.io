@@ -56,7 +56,7 @@ function renderPage(state: State) {
   const pages = getPages(state)
   const page = pages.find(it => it.id === BiteSized.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === BiteSized.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   const blogPosts = getBlogPosts(state)
     .filter(post => hasTag(state, 'bite-sized')(pages.find(it => it.id === post.pageId)!))
     .sort(comparePublishedDate)

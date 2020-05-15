@@ -42,7 +42,7 @@ function renderPage(state: State) {
   const pages = getPages(state)
   const page = pages.find(it => it.id === FreeTools.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === FreeTools.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>
       <Head title={page.title} description={page.description}>

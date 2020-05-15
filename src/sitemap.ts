@@ -37,7 +37,7 @@ function renderPage(state: State) {
     .map(it => {
       return [
         `<url>`,
-        `<loc>${state.config.protocol}://${join(state.config.hostname, it.url)}</loc>`,
+        `<loc>${getConfig(state).protocol}://${join(getConfig(state).hostname, it.url)}</loc>`,
         `<lastmod>${new Date().toISOString()}</lastmod>`,
         `</url>`,
       ].join('')

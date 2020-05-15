@@ -44,7 +44,7 @@ function renderPage(state: State) {
     throw new Error(`RSS page not registered`)
   }
   const blogPosts = getBlogPosts(state)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
 
   const channel = [
     `<title>Learnk8s</title>`,
@@ -65,7 +65,7 @@ function renderPage(state: State) {
         if (!openGraph) {
           throw new Error(`Missing opengraph for blog post ${blogPost.title} and page ${page.title}`)
         }
-        const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+        const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
         return [
           '<item>',
           `<title>${blogPost.title}</title>`,

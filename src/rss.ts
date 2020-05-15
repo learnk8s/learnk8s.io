@@ -59,16 +59,16 @@ function renderPage(state: State) {
     throw new Error(`RSS page not registered`)
   }
   const blogPosts = getBlogPosts(state)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
 
   const feed = [
     '<title>Learnk8s</title>',
-    `<link href="${state.config.protocol}://${state.config.hostname}"/>`,
+    `<link href="${getConfig(state).protocol}://${getConfig(state).hostname}"/>`,
     `<link rel="self" href="${currentAbsoluteUrl}"/>`,
     `<updated>${new Date().toISOString()}</updated>`,
     `<icon>https://learnk8s.io/favicon.ico</icon>`,
     `<rights>Learnk8s Ltd</rights>`,
-    `<id>${state.config.protocol}://${join(state.config.hostname, '/')}</id>`,
+    `<id>${getConfig(state).protocol}://${join(getConfig(state).hostname, '/')}</id>`,
     blogPosts
       .sort((a, b) => {
         return new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf()
@@ -83,7 +83,7 @@ function renderPage(state: State) {
         if (!openGraph) {
           throw new Error(`Missing opengraph for blog post ${blogPost.title} and page ${page.title}`)
         }
-        const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+        const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
         return [
           '<entry>',
           `<title>${blogPost.title}</title>`,

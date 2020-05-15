@@ -58,7 +58,7 @@ async function renderPage(page: Page, state: State) {
   }
   const previewPicture = getPreviewPictures(state).find(it => it.pageId === page.id)
   const extraBlocks = getBlogPostMarkdownBlocks(state).filter(it => it.blogPostId === blog.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   const [content, ...blocks] = await Promise.all([
     read(blog.content),
     ...extraBlocks.map(it => it.content).map(it => read(it)),
