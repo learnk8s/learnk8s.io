@@ -302,11 +302,15 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
           <CTAInPerson course={course}></CTAInPerson>
         </section>
 
-        <Section className=''>
+        <section className='mb5 mt5 mt3-m mt0-l'>
+          <SecondaryCTA identifier={course.id}></SecondaryCTA>
+        </section>
+
+        <Section className='bg-evian'>
           <Guarantee></Guarantee>
         </Section>
 
-        <Section className='bg-evian'>
+        <Section className=''>
           <FAQs faqs={faqs} />
         </Section>
 
@@ -495,11 +499,15 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
           <CTAOnline course={course}></CTAOnline>
         </section>
 
-        <Section className=''>
+        <section className='mb5 mt5 mt3-m mt0-l'>
+          <SecondaryCTA identifier={course.id}></SecondaryCTA>
+        </section>
+
+        <Section className='bg-evian'>
           <Guarantee></Guarantee>
         </Section>
 
-        <Section className='bg-evian'>
+        <Section className=''>
           <FAQs faqs={faqs} />
         </Section>
 
@@ -995,6 +1003,88 @@ const Agenda: React.StatelessComponent<{ className?: string }> = ({ children, cl
             Get in touch to learn more.
           </a>
         </p>
+      </div>
+    </>
+  )
+}
+
+const SecondaryCTA: React.StatelessComponent<{ className?: string; identifier: string }> = ({
+  children,
+  className,
+  identifier,
+}) => {
+  return (
+    <>
+      <div className='ph3'>
+        <p className='f2-l f3 navy b tc mb2 pt4-ns pt2'>Maybe next time?</p>
+        <p className='lh-copy f4 black-70 measure center tc'>
+          If the date isn't quite right, don't worry. We run workshops regularly.{' '}
+          <span className='b'>Join our newsletter</span> and keep up to date with the latest news (and workshop
+          announcements) from Learnk8s:
+        </p>
+        <div className='f4 measure tc center'>
+          <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST'>
+            <input type='hidden' name='u' value='2f82ec7d5caaa9ced71141211' />
+            <input type='hidden' name='id' value='8ecff1a8cf' />
+            <input type='hidden' name='orig-lang' value='1' />
+            {/* <Honeypot> */}
+            <div className='dn' aria-label='Please leave the following three fields empty'>
+              <label htmlFor='b_name'>Name: </label>
+              <input type='text' name='b_name' tabIndex={-1} defaultValue='' placeholder='Freddie' id='b_comment' />
+
+              <label htmlFor='b_email'>Email: </label>
+              <input
+                type='email'
+                name='b_email'
+                tabIndex={-1}
+                defaultValue=''
+                placeholder='youremail@gmail.com'
+                id='b_comment'
+              />
+
+              <label htmlFor='b_comment'>Comment: </label>
+              <textarea name='b_comment' tabIndex={-1} placeholder='Please comment' id='b_comment' />
+            </div>
+            {/* </Honeypot> */}
+
+            <div className='mv4'>
+              <div className='mv3'>
+                <span className='dib bb ml2'>
+                  <input
+                    className='pa2 input-reset b--none'
+                    type='email'
+                    autoCapitalize='off'
+                    autoCorrect='off'
+                    name='MERGE0'
+                    id='MERGE0'
+                    size={25}
+                    defaultValue=''
+                    placeholder='Your email address'
+                  />
+                </span>
+              </div>
+            </div>
+
+            <div className=''>
+              <input
+                type='submit'
+                defaultValue='Subscribe'
+                className='dib white bg-blue br1 pv2 ph3 b f5 bn pointer'
+                name='submit'
+              />
+            </div>
+            <input type='hidden' name='MERGE2' id='MERGE2' defaultValue={identifier} />
+            <input
+              type='hidden'
+              name='ht'
+              defaultValue='69b0fd8eb9c012c25b28cf22b63612792eb64a30:MTU4OTUyNjkxMC45MDUz'
+            />
+            <input type='hidden' name='mc_signupsource' defaultValue='hosted' />
+          </form>
+          <p className='f6 black-60 mt4 mb0 underline'>
+            *We'll never share your email address, and you can opt-out at any time.
+          </p>
+        </div>
       </div>
     </>
   )
