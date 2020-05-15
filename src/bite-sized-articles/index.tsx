@@ -154,7 +154,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
     }),
   )
   storeV2.dispatch(
-    ActionV2.tags.add({ id: Pages.visualiseYaml.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.visualiseYaml.id }),
+    ActionV2.tags.add({
+      id: Pages.visualiseYaml.id + '-bite-sized',
+      tag: 'bite-sized',
+      pageId: Pages.visualiseYaml.id,
+    }),
   )
 
   storeV2.dispatch(ActionV2.pages.add(Pages.helm))
@@ -245,7 +249,11 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
     }),
   )
   storeV2.dispatch(
-    ActionV2.tags.add({ id: Pages.secretsGitOps.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.secretsGitOps.id }),
+    ActionV2.tags.add({
+      id: Pages.secretsGitOps.id + '-bite-sized',
+      tag: 'bite-sized',
+      pageId: Pages.secretsGitOps.id,
+    }),
   )
   storeV2.dispatch(
     ActionV2.relatedBlogs.add({
