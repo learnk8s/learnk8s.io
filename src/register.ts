@@ -45,6 +45,7 @@ import { State, Actions, StoreV2 } from './store'
 import * as Courses from './courses'
 import * as Workshops from './training.v2'
 import * as Training from './learn'
+import * as TrainingLandingPage from './training-landing'
 import * as BestPractices from './best-practices/best'
 import * as FreeTools from './freeTools'
 import * as Wallpapers from './wallpapers'
@@ -100,4 +101,5 @@ export function register(store: Store<State, Actions>, storeV2: StoreV2) {
   ProvisionCloudResources.Register(store, storeV2)
   CustomAuthentication.Register(store, storeV2)
   K8Bit.Register(store, storeV2)
+  TrainingLandingPage.Register(store, storeV2)
 }

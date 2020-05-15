@@ -110,7 +110,10 @@ commander
         imageSrcs.length === 0
           ? ''
           : `<div class="flex pt4">${imageSrcs
-              .map(src => `<div><img src="${resolve(join(dirname(filename), src))}"/></div>`)
+              .map(
+                src =>
+                  `<div><img src="${src.startsWith('http') ? src : resolve(join(dirname(filename), src))}"/></div>`,
+              )
               .join('')}</div>`
       const counter = `<p class="gray f5 b lh-copy">${i}/${blocks.length - 1}</p>`
       return `<li class='mv4 bg-white pt3 pb4 ph4 br2'><div>${i === 0 ? '' : counter}${html}</div>${imagesHtml}</li>`

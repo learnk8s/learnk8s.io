@@ -38,7 +38,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `Laravel is an excellent framework for developing PHP applications. Whether you need to prototype a new idea, develop an MVP (Minimum Viable Product) or release a full-fledged enterprise system, Laravel facilitates all of the development tasks and workflows. In this article, I'll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
       title: 'Kubernetes: deploy Laravel the easy way',
       publishedDate: '2018-04-25',
-      lastModifiedDate: '2019-11-15',
+      lastModifiedDate: '2020-05-12',
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )

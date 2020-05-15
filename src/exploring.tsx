@@ -126,7 +126,10 @@ setTimeout(ldinsp, 0);
         <Section>
           <div className='mt4 measure f3-l f4 center'>
             <h2 className='f1-l f2 navy'>A Kubernetes course built by engineers for engineers</h2>
-            <TwoItemsBig className='mv5' images={[material.managingState.cover, material.ckad.cover]}></TwoItemsBig>
+            <ThreeItemsBig
+              className='mv5'
+              images={[material.managingState.cover, material.authentication.cover, material.ckad.cover]}
+            ></ThreeItemsBig>
             <p className='measure f3-l f4 lh-copy center'>
               The course, where you can learn how to design, develop and deploy applications in Kubernetes.
             </p>
@@ -172,10 +175,7 @@ setTimeout(ldinsp, 0);
               title={`1. ${material.managingState.name}`}
               description={material.managingState.description}
             >
-              <p className='lh-copy measure-wide'>
-                You will learn how to package and run applications in Docker containers. The module covers the following
-                topics:
-              </p>
+              <p className='lh-copy measure-wide'>The module covers the following topics:</p>
               <ul>
                 {Object.values(material.managingState.topics).map((it, index) => (
                   <li key={index} className='lh-copy mv1'>
@@ -186,14 +186,26 @@ setTimeout(ldinsp, 0);
             </Module>
 
             <Module
+              preview={material.authentication.cover}
+              title={`2. ${material.authentication.name}`}
+              description={material.authentication.description}
+            >
+              <p className='lh-copy measure-wide'>The module covers the following topics:</p>
+              <ul>
+                {Object.values(material.authentication.topics).map((it, index) => (
+                  <li key={index} className='lh-copy mv1'>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </Module>
+
+            <Module
               preview={material.ckad.cover}
-              title={`2. ${material.ckad.name}`}
+              title={`3. ${material.ckad.name}`}
               description={material.ckad.description}
             >
-              <p className='lh-copy measure-wide'>
-                You will learn the basics of Kubernetes and how to deploy Linux containers. The module covers the
-                following topics:
-              </p>
+              <p className='lh-copy measure-wide'>The module covers the following topics:</p>
               <ul>
                 {Object.values(material.ckad.topics).map((it, index) => (
                   <li key={index} className='lh-copy mv1'>
@@ -323,27 +335,29 @@ setTimeout(ldinsp, 0);
           <div className='flex-l justify-center items-start'>
             <div className='bg-white br4 mh3 ph3 pb3 mw6'>
               <h2 className='lh-copy f2 navy tc'>Complete series</h2>
-              <TwoItems images={[material.managingState.cover, material.ckad.cover]}></TwoItems>
+              <ThreeItems
+                images={[material.managingState.cover, material.authentication.cover, material.ckad.cover]}
+              ></ThreeItems>
               <p className='f3 strike lh-solid mt3 mb4 gray tc'>
-                <span className='db' id='bundle-exploring-kubernetes-full'>
+                <span className='db' id='bundle-exploring-kubernetes-full2'>
                   {new Intl.NumberFormat('en-US', {
                     style: 'currency',
                     currency: 'USD',
                     currencyDisplay: 'code',
-                  }).format(108)}
+                  }).format(167)}
                 </span>
               </p>
               <p className='f2 navy tc mv4 bs'>
-                <span className='db' id='bundle-exploring-kubernetes'>
+                <span className='db' id='bundle-exploring-kubernetes2'>
                   {new Intl.NumberFormat('en-US', {
                     style: 'currency',
                     currency: 'USD',
                     currencyDisplay: 'code',
-                  }).format(79)}
+                  }).format(119)}
                 </span>
               </p>
               <ul className='list ph2'>
-                <ListItem>Access to 2 courses</ListItem>
+                <ListItem>Access to 3 courses</ListItem>
                 <ListItem>Ebooks for offline reading</ListItem>
                 <ListItem>Hands-on guided labs</ListItem>
                 <ListItem>Practice with real challenges</ListItem>
@@ -356,7 +370,7 @@ setTimeout(ldinsp, 0);
               </ul>
               <p className='tc mt4'>
                 <a
-                  href='https://academy.learnk8s.io/bundle-exploring-kubernetes'
+                  href='https://academy.learnk8s.io/bundle-exploring-kubernetes2'
                   className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                   target='_self'
                   rel='noreferrer'
@@ -448,6 +462,50 @@ setTimeout(ldinsp, 0);
                 <p className='tc mt4'>
                   <a
                     href='https://academy.learnk8s.io/single-managing-state'
+                    className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
+                    target='_self'
+                    rel='noreferrer'
+                  >
+                    Buy now →
+                  </a>
+                </p>
+              </div>
+            </li>
+            <li className='mw7 center mv3'>
+              <div className='bg-white br4 mh3 ph4 pb4 pt1'>
+                <h2 className='lh-solid f2 navy tc'>{material.authentication.name}</h2>
+                <div className='flex-ns'>
+                  <div className='w-40-ns pb3 pb0-ns'>
+                    <div className='aspect-ratio aspect-ratio--7x5'>
+                      {React.createElement('img', {
+                        src: material.authentication.cover.props.src,
+                        alt: material.authentication.cover.props.alt,
+                        loading: 'lazy',
+                        className: 'aspect-ratio--object br2 br--top shadow-4',
+                      })}
+                    </div>
+                  </div>
+                  <div className='w-60-ns'>
+                    <ul className='list pl3'>
+                      <ListItem>Ebooks for offline reading</ListItem>
+                      <ListItem>Hands-on guided labs</ListItem>
+                      <ListItem>Practice with real challenges</ListItem>
+                      <ListItem>One time fee, lifetime updates</ListItem>
+                    </ul>
+                  </div>
+                </div>
+                <p className='f2 navy tc mv4 bs'>
+                  <span className='db' id='single-authentication'>
+                    {new Intl.NumberFormat('en-US', {
+                      style: 'currency',
+                      currency: 'USD',
+                      currencyDisplay: 'code',
+                    }).format(59)}
+                  </span>
+                </p>
+                <p className='tc mt4'>
+                  <a
+                    href='https://academy.learnk8s.io/single-authentication'
                     className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2'
                     target='_self'
                     rel='noreferrer'
@@ -593,7 +651,45 @@ request.send();
   )
 }
 
-const TwoItems: React.StatelessComponent<{ images: [JSX.Element, JSX.Element]; className?: string }> = ({
+const ThreeItemsBig: React.StatelessComponent<{
+  images: [JSX.Element, JSX.Element, JSX.Element]
+  className?: string
+}> = ({ children, images, className }) => {
+  return (
+    <div className={`${className || ''} w4 w5-ns relative center`}>
+      <div className='aspect-ratio aspect-ratio--7x5 relative z-2'>
+        {React.createElement('img', {
+          src: images[0].props.src,
+          alt: images[0].props.alt,
+          loading: 'lazy',
+          className: 'aspect-ratio--object br2 br--top shadow-4',
+        })}
+      </div>
+      <div className='w-100 absolute top-0 right-1 mr5 right-0-l mr6-l z-1'>
+        <div className='aspect-ratio aspect-ratio--7x5'>
+          {React.createElement('img', {
+            src: images[1].props.src,
+            alt: images[1].props.alt,
+            loading: 'lazy',
+            className: 'aspect-ratio--object br2 br--top shadow-4',
+          })}
+        </div>
+      </div>
+      <div className='w-100 absolute top-0 left-1 ml5 left-0-l ml6-l z-3'>
+        <div className='aspect-ratio aspect-ratio--7x5'>
+          {React.createElement('img', {
+            src: images[2].props.src,
+            alt: images[2].props.alt,
+            loading: 'lazy',
+            className: 'aspect-ratio--object br2 br--top shadow-4',
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ThreeItems: React.StatelessComponent<{ images: [JSX.Element, JSX.Element, JSX.Element]; className?: string }> = ({
   children,
   images,
   className,
@@ -618,29 +714,11 @@ const TwoItems: React.StatelessComponent<{ images: [JSX.Element, JSX.Element]; c
           })}
         </div>
       </div>
-    </div>
-  )
-}
-
-const TwoItemsBig: React.StatelessComponent<{
-  images: [JSX.Element, JSX.Element]
-  className?: string
-}> = ({ children, images, className }) => {
-  return (
-    <div className={`${className || ''} w4 w5-ns relative center`}>
-      <div className='aspect-ratio aspect-ratio--7x5 relative z-2'>
-        {React.createElement('img', {
-          src: images[0].props.src,
-          alt: images[0].props.alt,
-          loading: 'lazy',
-          className: 'aspect-ratio--object br2 br--top shadow-4',
-        })}
-      </div>
-      <div className='w-100 absolute top-0 right-1 mr5 right-0-l mr6-l z-1'>
+      <div className='w-100 absolute top-0 left-0 ml5 z-3'>
         <div className='aspect-ratio aspect-ratio--7x5'>
           {React.createElement('img', {
-            src: images[1].props.src,
-            alt: images[1].props.alt,
+            src: images[2].props.src,
+            alt: images[2].props.alt,
             loading: 'lazy',
             className: 'aspect-ratio--object br2 br--top shadow-4',
           })}

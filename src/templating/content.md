@@ -427,8 +427,8 @@ spec:
   containers:
     - name: test-container
       env:
-    - name: DB_URL
-      value: postgres://dev:5432
+      - name: DB_URL
+        value: postgres://dev:5432
 ```
 
 The final directory structure is the following:

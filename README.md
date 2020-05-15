@@ -4,13 +4,8 @@
 
 1. Make a copy of an existing article:
     ```bash
-    cp -r src/custom-authentication src/my-article
-    cd src/my-article
-    ```
-
-1. Adapt the index file of the article:
-    ```bash
-    vim index.tsx
+    cp -r src/existing-article src/new-article
+    cd src/new-article
     ```
 
 1. Clear the content file:
@@ -18,22 +13,38 @@
     echo "Hello world" >content.md
     ```
 
-1. Adapt the footer file with related articles:
-    ```bash
-    vim content-related.md
-    ```
-
 1. Clear the assets directory:
     ```bash
     rm assets/*
     ```
 
-1. Register the article in `src/register.ts`:
+1. Rename the title images:
+    ```bash
+    mv existing-article.png new-article.png
+    mv existing-article.svg new-article.svg
+    ```
+
+1. Adapt the footer content file with the related articles:
+    ```bash
+    vim content-related.md
+    ```
+
+1. Adapt the index file of the article (use lots of search/replace):
+    ```bash
+    vim index.tsx
+    ```
+
+1. Add the article to `src/register.ts`:
     ```bash
     vim ../register.ts
     ```
 
-1. Try to build and run the website:
+1. Verify source code edits by running tests:
+    ```bash
+    npm test
+    ```
+
+1. Build and run the website:
     ```bash
     ENVENTBRITE_TOKEN=1 ENVENTBRITE_ORG=1 npm run build && npm start
     ```

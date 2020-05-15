@@ -77,7 +77,7 @@ Notice how the request does not complete and stays open.
 In another terminal, create a Pod in the _default_ namespace with:
 
 ```terminal|command=1|title=bash
-kubectl run random-pod --image=nginx --restart=Never
+kubectl run my-pod --image=nginx --restart=Never
 ```
 
 Observe the previous command.
