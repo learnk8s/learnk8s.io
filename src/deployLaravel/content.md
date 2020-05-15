@@ -53,8 +53,8 @@ Therefore you can follow this tutorial using either the demo application or you 
 Let's get started by cloning the project with:
 
 ```terminal|command=1,2|title=bash
-cd /to/your/working/directory
-git clone git@github.com:learnk8s/laravel-kubernetes-demo.git .
+git clone https://github.com/learnk8s/laravel-kubernetes-demo.git
+cd laravel-kubernetes-demo
 ```
 
 ## Before you start
@@ -126,12 +126,12 @@ The Dockerfile is just a description of what files should be bundled in the cont
 You can execute the instructions and create the Docker image with:
 
 ```terminal|command=1,2|title=bash
-docker build -t yourname/laravel-kubernetes-demo .
+docker build -t laravel-kubernetes-demo .
 ```
 
 Note the following about this command:
 
-- `-t yourname/laravel-kubernetes-demo` defines the name ("tag") of your container — in this case, your container is just called `yourname/laravel-kubernetes-demo`
+- `-t laravel-kubernetes-demo` defines the name ("tag") of your container — in this case, your container is just called `laravel-kubernetes-demo`
 - `.` is the location of the `Dockerfile` and application code — in this case, it's the current directory
 
 **The output is a Docker image.**
@@ -148,7 +148,7 @@ You can run the container with:
 docker run -ti \
   -p 8080:80 \
   -e APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY= \
-  yourname/laravel-kubernetes-demo
+  laravel-kubernetes-demo
 ```
 
 And the application should be available on <http://localhost:8080>.
@@ -161,7 +161,7 @@ _You built and ran the container locally, but how do you make it available to yo
 
 Usually, to share images, you can use a container registry such as [Docker Hub](https://hub.docker.com) or [Quay.io](https://quay.io).
 
-Container registries are web apps that store container images — like the `yourname/laravel-kubernetes-demo` image that you built earlier.
+Container registries are web apps that store container images — like the `laravel-kubernetes-demo` image that you built earlier.
 
 In this tutorial you will use Docker Hub to upload your containers.
 
@@ -185,18 +185,18 @@ Before you can upload your image, there is one last thing to do.
 If you wish to rename your image according to this format, run the following command:
 
 ```terminal|command=1|title=bash
-docker tag previousaccount/previousname <username>/laravel-kubernetes-demo
+docker tag laravel-kubernetes-demo <my-username>/laravel-kubernetes-demo
 ```
 
-> Please replace `<username>` with your Docker ID this time.
+> Please replace `<my-username>` with your Docker ID this time.
 
 **Now you can upload your image to Docker Hub:**
 
 ```terminal|command=1|title=bash
-docker push <username>/laravel-kubernetes-demo
+docker push <my-username>/laravel-kubernetes-demo
 ```
 
-Your image is now publicly available as `<username>/laravel-kubernetes-demo` on Docker Hub and everybody can download and run it.
+Your image is now publicly available as `<my-username>/laravel-kubernetes-demo` on Docker Hub and everybody can download and run it.
 
 To verify this, you can re-run your app, but this time using the new image name.
 
@@ -204,7 +204,7 @@ To verify this, you can re-run your app, but this time using the new image name.
 docker run -ti \
   -p 8080:80 \
   -e APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY= \
-  your-username/laravel-kubernetes-demo
+  <my-username>/laravel-kubernetes-demo
 ```
 
 Everything should work exactly as before.
@@ -222,7 +222,7 @@ You can deploy the container image with:
 ```terminal|command=1-6|title=bash
 kubectl run laravel-kubernetes-demo \
   --restart=Never \
-  --image=your-username/laravel-kubernetes-demo \
+  --image=<my-username>/laravel-kubernetes-demo \
   --port=80 \
   --env=APP_KEY=base64:cUPmwHx4LXa4Z25HhzFiWCf7TlQmSqnt98pnuiHmzgY=
 ```
@@ -231,7 +231,7 @@ Let's review the command:
 
 - `kubectl run laravel-kubernetes-demo` deploys an app in the cluster and gives it the name `laravel-kubernetes-demo`.
 - `--restart=Never` is used not to restart the app when it crashes.
-- `--image=yourname/laravel-kubernetes-demo` and `--port=80` are the name of the image and the port exposed on the container.
+- `--image=<my-username>/laravel-kubernetes-demo` and `--port=80` are the name of the image and the port exposed on the container.
 
 > Please note that 80 is the port exposed in the container. If you make a mistake, you shouldn't increment the port; you can still use port 80.
 > If you make a mistake, you can execute `kubectl delete pod app` and start again.
@@ -586,7 +586,7 @@ spec:
     spec:
       containers:
         - name: demo
-          image: your-username/laravel-kubernetes-demo
+          image: <my-username>/laravel-kubernetes-demo
           ports:
             - containerPort: 80
           env:
@@ -1173,9 +1173,8 @@ Rules:
   Host  Path  Backends
   ----  ----  --------
   *
-        /   laravel-kubernetes-demo:8181 (172.17.0.6:8181)
-Annotations:
-  rewrite-target:  /
+        /   laravel-kubernetes-demo:80 (172.17.0.6:80)
+Annotations:  ingress.kubernetes.io/rewrite-target: /
 Events:
   Type    Reason  Age   From                      Message
   ----    ------  ----  ----                      -------
@@ -1183,9 +1182,11 @@ Events:
   Normal  UPDATE  20s   nginx-ingress-controller  Ingress default/laravel-kubernetes-demo-ingress
 ```
 
-You can now access the application through the minikube IP address, as shown above.
+_But where do you access the app?_
 
-You can visit the app at <http://minikube_ip>.
+You should visit the IP address of the cluster.
+
+You can use minikube's IP address and visit <http://minikube_ip>.
 
 ## This is just the beginning
 
