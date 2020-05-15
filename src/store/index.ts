@@ -7,10 +7,10 @@ import { configureStore } from '@reduxjs/toolkit'
 
 export type State = {
   // website: WebsiteReducer.State
-  config: ConfigReducer.State
+  config: ConfigReducer.Config
 }
 
-export type StateV2 = CoursesReducer.State | WebsiteReducer.StateV2
+export type StateV2 = ReturnType<typeof storeV2.getState>
 
 export type Actions = WebsiteReducer.Actions
 
@@ -21,6 +21,7 @@ export const Action = {
 export const ActionV2 = {
   ...CoursesReducer.Action,
   ...WebsiteReducer.ActionV2,
+  ...ConfigReducer.Action,
 }
 
 export type StoreV2 = typeof storeV2
@@ -29,13 +30,15 @@ export const storeV2 = configureStore({
   reducer: {
     ...CoursesReducer.courseReducer,
     ...WebsiteReducer.websiteReducer,
+    ...ConfigReducer.configReducer,
   },
-  middleware: [...WebsiteReducer.middlewares, ...CoursesReducer.middlewares],
+  middleware: [...WebsiteReducer.middlewares, ...CoursesReducer.middlewares, ...ConfigReducer.middlewares],
 })
 
 export const Selector = {
   ...CoursesReducer.Selector,
   ...WebsiteReducer.Selector,
+  ...ConfigReducer.Selector,
 }
 
 export const store = createStore<State, Actions, {}, {}>(
@@ -45,17 +48,31 @@ export const store = createStore<State, Actions, {}, {}>(
   }),
   {
     // website: WebsiteReducer.createInitialState({}),
-    config: ConfigReducer.createInitialState({
-      organisationId: process.env.ENVENTBRITE_ORG as string,
-      isProduction: process.env.NODE_ENV === 'production',
-      hostname: 'learnk8s.io',
-      protocol: 'https',
-      eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
-      googleAnalytics: process.env.GOOGLE_ANALYTICS as string,
-      outputFolder: '_site',
-      canPublishEvents: process.env.PUBLISH_EVENTS === 'yes',
-    }),
+    // config: ConfigReducer.createInitialState({
+    //   organisationId: process.env.ENVENTBRITE_ORG as string,
+    //   isProduction: process.env.NODE_ENV === 'production',
+    //   hostname: 'learnk8s.io',
+    //   protocol: 'https',
+    //   eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
+    //   googleAnalytics: process.env.GOOGLE_ANALYTICS as string,
+    //   outputFolder: '_site',
+    //   canPublishEvents: process.env.PUBLISH_EVENTS === 'yes',
+    // }),
   },
+)
+
+storeV2.dispatch(
+  ActionV2.configs.add({
+    id: 'config',
+    organisationId: process.env.ENVENTBRITE_ORG as string,
+    isProduction: process.env.NODE_ENV === 'production',
+    hostname: 'learnk8s.io',
+    protocol: 'https',
+    eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
+    googleAnalytics: process.env.GOOGLE_ANALYTICS as string,
+    outputFolder: '_site',
+    canPublishEvents: process.env.PUBLISH_EVENTS === 'yes',
+  }),
 )
 
 export function getVenues(state: StateV2): CoursesReducer.CourseVenue[] {
@@ -78,8 +95,8 @@ export function getOnlineCourses(state: StateV2): OnlineCourse[] {
   return Object.values(Selector.onlineCourses.selectAll(state))
 }
 
-export function getConfig(state: State): ConfigReducer.State {
-  return state.config
+export function getConfig(state: State): ConfigReducer.Config {
+  return Selector.configs.selectAll(storeV2.getState())[0]
 }
 
 export function getPages(state: State): WebsiteReducer.Page[] {
@@ -104,7 +121,6 @@ export function getBlogPosts(state: State): WebsiteReducer.BlogPost[] {
 
 export function hasTag(state: State, tagId: string) {
   return (page: WebsiteReducer.Page) => {
-    console.log(Selector.tags.selectAll(storeV2.getState()))
     return Selector.tags
       .selectAll(storeV2.getState())
       .filter(it => it.pageId === page.id)
