@@ -4,7 +4,6 @@ import {
   State,
   hasTag,
   getBlogPosts,
-  getAuthors,
   getBlogPostMarkdownBlocks,
   getConfig,
   getPreviewPictures,
@@ -50,7 +49,7 @@ async function renderPage(page: Page, state: State) {
   if (!blog) {
     throw new Error('The page is not a blog post page.')
   }
-  const author = getAuthors(state).find(it => it.id === blog.authorId)
+  const author = Selector.authors.selectAll(state).find(it => it.id === blog.authorId)
   if (!author) {
     throw new Error('The blog post does not have an author attached')
   }

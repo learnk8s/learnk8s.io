@@ -1,4 +1,4 @@
-import { State, Action, getConfig, getBlogPosts, getAuthors, Store, Selector } from './store'
+import { State, Action, getConfig, getBlogPosts, Store, Selector } from './store'
 import { join } from 'path'
 import { RSSPipeline } from './optimise'
 
@@ -45,7 +45,7 @@ function renderPage(state: State) {
       })
       .map(blogPost => {
         const page = pages.find(it => it.id === blogPost.pageId)!
-        const author = getAuthors(state).find(it => it.id === blogPost.authorId)
+        const author = Selector.authors.selectAll(state).find(it => it.id === blogPost.authorId)
         if (!author) {
           throw new Error(`No author for blogPost ${blogPost.title}`)
         }

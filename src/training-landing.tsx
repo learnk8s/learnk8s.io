@@ -10,7 +10,7 @@ import {
 } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
-import { getConfig, getAuthors, Store, Action, Selector, State } from './store'
+import { getConfig, Store, Action, Selector, State } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
@@ -137,7 +137,7 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
   const page = Selector.pages.selectAll(state).find(it => it.id === `page-${course.id}`)!
   const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === `page-${course.id}`)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
-  const instructors = getAuthors(state).filter(it =>
+  const instructors = Selector.authors.selectAll(state).filter(it =>
     [
       Authors.danielePolencic.id,
       Authors.salmanIqbal.id,
@@ -320,7 +320,7 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
   const page = Selector.pages.selectAll(state).find(it => it.id === `page-${course.id}`)!
   const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === `page-${course.id}`)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
-  const instructors = getAuthors(state).filter(it =>
+  const instructors = Selector.authors.selectAll(state).filter(it =>
     [
       Authors.danielePolencic.id,
       Authors.salmanIqbal.id,

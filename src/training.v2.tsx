@@ -10,7 +10,7 @@ import {
 } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
-import { State, getWorkshops, getConfig, Store, Action, Selector, getAuthors } from './store'
+import { State, getWorkshops, getConfig, Store, Action, Selector } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
@@ -112,16 +112,18 @@ function renderPage(state: State) {
   const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === Training.id)
   const courses = getWorkshops(state)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
-  const instructors = getAuthors(state).filter(it =>
-    [
-      Authors.danielePolencic.id,
-      Authors.salmanIqbal.id,
-      Authors.gergelyRisko.id,
-      Authors.mauricioSalatino.id,
-      Authors.danielWeibel.id,
-      Authors.chrisNesbittSmith.id,
-    ].includes(it.id),
-  )
+  const instructors = Selector.authors
+    .selectAll(state)
+    .filter(it =>
+      [
+        Authors.danielePolencic.id,
+        Authors.salmanIqbal.id,
+        Authors.gergelyRisko.id,
+        Authors.mauricioSalatino.id,
+        Authors.danielWeibel.id,
+        Authors.chrisNesbittSmith.id,
+      ].includes(it.id),
+    )
   const onlineCourses = Selector.onlineCourses.selectAll(state)
   const inPersonCourses = Selector.inPersonCourses.selectAll(state)
   const allCourses = [...onlineCourses, ...inPersonCourses]

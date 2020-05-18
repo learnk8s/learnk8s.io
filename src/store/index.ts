@@ -60,14 +60,6 @@ export function getConfig(state: State): ConfigReducer.Config {
   return Selector.configs.selectAll(store.getState())[0]
 }
 
-export function getLandingPageLocations(state: State): WebsiteReducer.LandingPage[] {
-  return Object.values(Selector.landings.selectAll(store.getState()))
-}
-
-export function getAuthors(state: State): WebsiteReducer.Author[] {
-  return Object.values(Selector.authors.selectAll(store.getState()))
-}
-
 export function getBlogPosts(state: State): WebsiteReducer.BlogPost[] {
   return Object.values(Selector.blogPosts.selectAll(store.getState()))
 }
