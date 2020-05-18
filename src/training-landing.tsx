@@ -160,16 +160,18 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
   const page = Selector.pages.selectAll(state).find(it => it.id === `page-${course.id}`)!
   const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === `page-${course.id}`)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
-  const instructors = Selector.authors.selectAll(state).filter(it =>
-    [
-      Authors.danielePolencic.id,
-      Authors.salmanIqbal.id,
-      Authors.gergelyRisko.id,
-      Authors.mauricioSalatino.id,
-      Authors.danielWeibel.id,
-      Authors.chrisNesbittSmith.id,
-    ].includes(it.id),
-  )
+  const instructors = Selector.authors
+    .selectAll(state)
+    .filter(it =>
+      [
+        Authors.danielePolencic.id,
+        Authors.salmanIqbal.id,
+        Authors.gergelyRisko.id,
+        Authors.mauricioSalatino.id,
+        Authors.danielWeibel.id,
+        Authors.chrisNesbittSmith.id,
+      ].includes(it.id),
+    )
   return (
     <Html>
       <Head title={page.title} description={page.description}>
@@ -347,16 +349,18 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
   const page = Selector.pages.selectAll(state).find(it => it.id === `page-${course.id}`)!
   const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === `page-${course.id}`)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
-  const instructors = Selector.authors.selectAll(state).filter(it =>
-    [
-      Authors.danielePolencic.id,
-      Authors.salmanIqbal.id,
-      Authors.gergelyRisko.id,
-      Authors.mauricioSalatino.id,
-      Authors.danielWeibel.id,
-      Authors.chrisNesbittSmith.id,
-    ].includes(it.id),
-  )
+  const instructors = Selector.authors
+    .selectAll(state)
+    .filter(it =>
+      [
+        Authors.danielePolencic.id,
+        Authors.salmanIqbal.id,
+        Authors.gergelyRisko.id,
+        Authors.mauricioSalatino.id,
+        Authors.danielWeibel.id,
+        Authors.chrisNesbittSmith.id,
+      ].includes(it.id),
+    )
   return (
     <Html>
       <Head title={page.title} description={page.description}>
