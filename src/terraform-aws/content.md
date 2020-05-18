@@ -538,7 +538,11 @@ In the following, you will extend your fleet of clusters to three clusters in to
 
 To do so, edit your configuration as follows:
 
-```hcl|highlight=13-25,28-32|title=main.tf
+```hcl|highlight=17-29,32-36|title=main.tf
+provider "aws" {
+  region = "eu-central-1"
+}
+
 module "network" {
   source  = "weibeld/kubeadm/aws//modules/network"
   version = "~> 0.2"
