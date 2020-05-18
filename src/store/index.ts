@@ -44,10 +44,6 @@ store.dispatch(
   }),
 )
 
-export function getVenues(state: State): CoursesReducer.CourseVenue[] {
-  return Object.values(Selector.venues.selectAll(state))
-}
-
 export function getWorkshops(state: State): CoursesReducer.FullWorkshop[] {
   return Object.values(Selector.workshops.selectAll(state)).map(workshop => {
     return {

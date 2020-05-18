@@ -105,10 +105,9 @@ export function Register(store: Store) {
 
 export function Mount({ store }: { store: Store }) {
   const state = store.getState()
-  const stateV2 = store.getState()
   try {
     defaultAssetsPipeline({
-      jsx: renderPage(state, stateV2),
+      jsx: renderPage(state),
       isOptimisedBuild: getConfig(state).isProduction,
       siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
       url: Training.url,
@@ -119,10 +118,10 @@ export function Mount({ store }: { store: Store }) {
   }
 }
 
-function renderPage(state: State, stateV2: State) {
+function renderPage(state: State) {
   const page = getPages(state).find(it => it.id === Training.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
-  const courses = getWorkshops(stateV2)
+  const courses = getWorkshops(state)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   const instructors = getAuthors(state).filter(it =>
     [

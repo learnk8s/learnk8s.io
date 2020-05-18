@@ -1,13 +1,13 @@
 import cheerio from 'cheerio'
 import { zonedTimeToUtc } from 'date-fns-tz'
-import { getVenues, State, getWorkshops, getConfig } from './store'
+import { State, getWorkshops, getConfig, Selector } from './store'
 import { AxiosInstance } from 'axios'
 import { read } from './files'
 import { renderToJsx } from './markdown'
 import { jsxToString } from './jsx-utils/jsxToHast'
 
 export async function SyncVenues({ state, sdk }: { state: State; sdk: AxiosInstance }): Promise<VenueEventBrite[]> {
-  const venues = getVenues(state)
+  const venues = Selector.venues.selectAll(state)
   const response = await sdk.get<ResponseVenues>(`/organizations/${getConfig(state).organisationId}/venues/`)
   const { added } = diff({
     previous: response.data.venues.map(it => it.name),
