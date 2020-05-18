@@ -44,6 +44,7 @@ import * as BiteSizedArticles from './bite-sized-articles'
 import { State, Actions } from './store'
 import * as Courses from './courses'
 import * as Workshops from './training.v2'
+import * as CorporateTraining from './training-corporate'
 import * as Training from './learn'
 import * as TrainingLandingPage from './training-landing'
 import * as BestPractices from './best-practices/best'
@@ -55,6 +56,7 @@ import { Store } from 'redux'
 export function register(store: Store<State, Actions>) {
   Courses.Register(store)
   Workshops.Register(store)
+  CorporateTraining.Register(store)
   Training.Register(store)
   Landing.Register(store)
   BestPractices.Register(store)

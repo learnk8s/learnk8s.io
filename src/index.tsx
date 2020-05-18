@@ -30,6 +30,7 @@ import * as BiteSizedListing from './biteSized'
 import * as BiteSizedRenderer from './biteSized.v2'
 import { store, getConfig } from './store'
 import * as Workshop from './training.v2'
+import * as CorporateTraining from './training-corporate'
 import * as TrainingLandingPage from './training-landing'
 import * as Training from './learn'
 import * as BestPractices from './best-practices/best'
@@ -42,6 +43,7 @@ import { register } from './register'
 register(store)
 
 Workshop.Mount({ store })
+CorporateTraining.Mount({ store })
 Training.Mount({ store })
 BestPractices.Mount({ store })
 FreeTools.Mount({ store })
