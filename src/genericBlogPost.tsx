@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { getConfig, State, hasTag, getPreviewPictures, Selector, Store } from './store'
+import { getConfig, State, hasTag, Selector, Store } from './store'
 import { Page } from './store/websiteReducer'
 import { Head, Html, Body, Navbar, OpenGraph, Footer, Author, Subscribe, WhatIsLearnk8s } from './layout.v3'
 import { format } from 'date-fns'
@@ -45,7 +45,7 @@ export async function renderPage(pageMeta: Page, state: State) {
   if (!author) {
     throw new Error('The blog post does not have an author attached')
   }
-  const previewPicture = getPreviewPictures(state).find(it => it.pageId === pageMeta.id)
+  const previewPicture = Selector.previewPictures.selectAll(state).find(it => it.pageId === pageMeta.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   const extraBlocks = Selector.relatedBlogs.selectAll(state).filter(it => it.blogPostId === blog.id)
   const [content, ...blocks] = await Promise.all([
