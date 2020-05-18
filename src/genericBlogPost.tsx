@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { getConfig, State, getBlogPostMarkdownBlocks, hasTag, getPreviewPictures, Selector, Store } from './store'
+import { getConfig, State, hasTag, getPreviewPictures, Selector, Store } from './store'
 import { Page } from './store/websiteReducer'
 import { Head, Html, Body, Navbar, OpenGraph, Footer, Author, Subscribe, WhatIsLearnk8s } from './layout.v3'
 import { format } from 'date-fns'
@@ -47,7 +47,7 @@ export async function renderPage(pageMeta: Page, state: State) {
   }
   const previewPicture = getPreviewPictures(state).find(it => it.pageId === pageMeta.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
-  const extraBlocks = getBlogPostMarkdownBlocks(state).filter(it => it.blogPostId === blog.id)
+  const extraBlocks = Selector.relatedBlogs.selectAll(state).filter(it => it.blogPostId === blog.id)
   const [content, ...blocks] = await Promise.all([
     read(blog.content),
     ...extraBlocks.map(it => it.content).map(it => read(it)),

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Store } from 'redux'
-import { State, hasTag, getBlogPostMarkdownBlocks, getConfig, getPreviewPictures, Selector } from './store'
+import { State, hasTag, getConfig, getPreviewPictures, Selector } from './store'
 import { toVFile, read } from './files'
 import { join } from 'path'
 import { Html, Head, OpenGraph, Body, Footer, Navbar, Subscribe, Author, WhatIsLearnk8s } from './layout.v3'
@@ -46,7 +46,7 @@ async function renderPage(page: Page, state: State) {
     throw new Error('The blog post does not have an author attached')
   }
   const previewPicture = getPreviewPictures(state).find(it => it.pageId === page.id)
-  const extraBlocks = getBlogPostMarkdownBlocks(state).filter(it => it.blogPostId === blog.id)
+  const extraBlocks = Selector.relatedBlogs.selectAll(state).filter(it => it.blogPostId === blog.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   const [content, ...blocks] = await Promise.all([
     read(blog.content),

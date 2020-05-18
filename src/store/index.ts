@@ -69,10 +69,6 @@ export function hasTag(state: State, tagId: string) {
   }
 }
 
-export function getBlogPostMarkdownBlocks(state: State): WebsiteReducer.BlogPostMarkdownBlock[] {
-  return Object.values(Selector.relatedBlogs.selectAll(store.getState()))
-}
-
 export function getRedirects(state: State): WebsiteReducer.Redirect[] {
   return Object.values(Selector.redirects.selectAll(store.getState()))
 }
