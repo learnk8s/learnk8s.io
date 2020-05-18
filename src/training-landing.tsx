@@ -71,22 +71,22 @@ const publicOnlineCourseEnquiry = (date: Date | number): MailTo => ({
   email: 'hello@learnk8s.io',
 })
 
-const privateGroupEnquiry: MailTo = {
-  subject: 'Advanced Kubernetes training — Private group enquiry',
-  body: `Hi Learnk8s,\n\nWe wish to train ___(number) people to Kubernetes and containers in ____(month). Can you help?\n\nBest regards,\n`,
-  email: 'hello@learnk8s.io',
-}
-
 export function Register(store: Store) {
   const state = store.getState()
-  const courses = [...Selector.onlineCourses.selectAll(state), ...Selector.inPersonCourses.selectAll(state)]
-  courses.forEach(course => {
+  const onlineCourses = Selector.onlineCourses.selectAll(state)
+  const inPersonCourses = Selector.inPersonCourses.selectAll(state)
+  onlineCourses.forEach(course => {
+    const title = `${course.title} — ${course.location}`
+    const description = `Join the ${format(
+      new Date(course.startsAt),
+      'MMMM yyyy',
+    )} online Kubernetes course and become an expert in deploying and scaling applications with Kubernetes.`
     store.dispatch(
       Action.pages.add({
         id: `page-${course.id}`,
         url: course.url,
-        title: course.title,
-        description: course.description,
+        title,
+        description,
       }),
     )
     store.dispatch(
@@ -94,8 +94,31 @@ export function Register(store: Store) {
         id: `og-${course.id}`,
         pageId: `page-${course.id}`,
         image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-        description: course.description,
-        title: course.title,
+        description,
+        title,
+      }),
+    )
+  })
+  inPersonCourses.forEach(course => {
+    const title = `${course.title} — ${course.location}`
+    const description = `Join the ${format(new Date(course.startsAt), 'MMMM yyyy')} Kubernetes course in ${
+      course.location
+    } and become an expert in deploying and scaling applications with Kubernetes.`
+    store.dispatch(
+      Action.pages.add({
+        id: `page-${course.id}`,
+        url: course.url,
+        title,
+        description,
+      }),
+    )
+    store.dispatch(
+      Action.openGraphs.add({
+        id: `og-${course.id}`,
+        pageId: `page-${course.id}`,
+        image: <img src='assets/opengraph.v2.png' alt='Learnk8s' />,
+        description,
+        title,
       }),
     )
   })
@@ -212,7 +235,7 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
       <Body>
         <Navbar />
 
-        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt5'>
+        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt0 mt5-ns'>
           <CTAInPerson course={course}></CTAInPerson>
         </section>
 
@@ -220,7 +243,7 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
           <div className='mt4 measure f3-l f4 center'>
             <h2 className='f1-l f2 navy tc'>How does it work?</h2>
             <p className='measure f3-l f4 lh-copy center'>
-              This is a <span className='b'>full time, 3 days course</span> on learning and mastering Kubernetes.
+              This is a <span className='b'>full-time, 3 days course</span> on learning and mastering Kubernetes.
             </p>
             <p className='measure f3-l f4 lh-copy center'>Things you need to know about the course:</p>
             <ul className='list pl0 ph2-ns'>
@@ -301,11 +324,15 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
           <CTAInPerson course={course}></CTAInPerson>
         </section>
 
-        <Section className=''>
+        <section className='mb5 mt5 mt3-m mt0-l'>
+          <SecondaryCTA identifier={course.id}></SecondaryCTA>
+        </section>
+
+        <Section className='bg-evian'>
           <Guarantee></Guarantee>
         </Section>
 
-        <Section className='bg-evian'>
+        <Section className=''>
           <FAQs faqs={faqs} />
         </Section>
 
@@ -394,7 +421,7 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
       <Body>
         <Navbar />
 
-        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt5'>
+        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt0 mt5-ns'>
           <CTAOnline course={course}></CTAOnline>
         </section>
 
@@ -402,7 +429,7 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
           <div className='mt4 measure f3-l f4 center'>
             <h2 className='f1-l f2 navy tc'>How does it work?</h2>
             <p className='measure f3-l f4 lh-copy center'>
-              This is a <span className='b'>full time, 3 days course</span> on learning and mastering Kubernetes.
+              This is a <span className='b'>full-time, 3 days course</span> on learning and mastering Kubernetes.
             </p>
             <p className='measure f3-l f4 lh-copy center'>Things you need to know about the course:</p>
             <ul className='list pl0 ph2-ns'>
@@ -494,11 +521,15 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
           <CTAOnline course={course}></CTAOnline>
         </section>
 
-        <Section className=''>
+        <section className='mb5 mt5 mt3-m mt0-l'>
+          <SecondaryCTA identifier={course.id}></SecondaryCTA>
+        </section>
+
+        <Section className='bg-evian'>
           <Guarantee></Guarantee>
         </Section>
 
-        <Section className='bg-evian'>
+        <Section className=''>
           <FAQs faqs={faqs} />
         </Section>
 
@@ -631,10 +662,12 @@ const CTAInPerson: React.StatelessComponent<{
 }> = ({ children, className, course }) => {
   return (
     <>
-      <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Join the next Advanced Kubernetes course in {course.location}</p>
+      <p className='f1-l f2 navy b tc ph3 mb3 mt4 measure-narrow center'>
+        Join the next Advanced Kubernetes course in {course.location}
+      </p>
       <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>What you need to know:</p>
 
-      <ul className='pl0 list f3 mw6 center'>
+      <ul className='pl0 list f4 f3-ns mw6 center'>
         <li className='mv3 flex items-center'>
           <p className='b w-30 mv0'>When:</p>
           <p className='mv0 w-70'>{format(new Date(course.startsAt), `do 'of' MMMM yyyy`)}</p>
@@ -665,7 +698,7 @@ const CTAInPerson: React.StatelessComponent<{
             </a> */}
         <a
           href={mailto(publicOnlineCourseEnquiry(new Date(course.startsAt)))}
-          className='link dib white bg-sky br1 pa3 b f5 mv3 submit br2 b--none ttu'
+          className='link dib white bg-navy br1 pa3 b f5 mv3 submit br2 b--none ttu'
         >
           Book a ticket now
         </a>
@@ -697,10 +730,10 @@ const CTAOnline: React.StatelessComponent<{
 }> = ({ children, className, course }) => {
   return (
     <>
-      <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Join the online Advanced Kubernetes course</p>
+      <p className='f1-l f2 navy b tc ph3 mb3 mt4 measure-narrow center'>Join the online Advanced Kubernetes course</p>
       <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>What you need to know:</p>
 
-      <ul className='pl0 list f3 mw6 center'>
+      <ul className='pl0 list f4 f3-ns mw6 center'>
         <li className='mv3 flex items-center'>
           <p className='b w-30 mv0'>When:</p>
           <p className='mv0 w-70'>{format(new Date(course.startsAt), `do 'of' MMMM yyyy`)}</p>
@@ -731,7 +764,7 @@ const CTAOnline: React.StatelessComponent<{
             </a> */}
         <a
           href={mailto(publicOnlineCourseEnquiry(new Date(course.startsAt)))}
-          className='link dib white bg-sky br1 pa3 b f5 mv3 submit br2 b--none ttu'
+          className='link dib white bg-navy br1 pa3 b f5 mv3 submit br2 b--none ttu'
         >
           Book a ticket now
         </a>
@@ -989,11 +1022,92 @@ const Agenda: React.StatelessComponent<{ className?: string }> = ({ children, cl
           You will cover as many modules as possible, starting from the most popular.
         </p>
         <p className='lh-copy f4 black-80 measure center ph3 mb3 mb5-ns b'>
-          In private and corporate training, you can customise the schedule in full.{' '}
-          <a href={mailto(privateGroupEnquiry)} className='link navy underline'>
-            Get in touch to learn more.
+          <a href='/corporate-training' className='link navy underline'>
+            In private and corporate training, you can customise the schedule in full.
           </a>
         </p>
+      </div>
+    </>
+  )
+}
+
+const SecondaryCTA: React.StatelessComponent<{ className?: string; identifier: string }> = ({
+  children,
+  className,
+  identifier,
+}) => {
+  return (
+    <>
+      <div className='ph3'>
+        <p className='f2-l f3 navy b tc mb2 pt4-ns pt2'>Maybe next time?</p>
+        <p className='lh-copy f4 black-70 measure center tc'>
+          If the date isn't quite right, don't worry. We run workshops regularly.{' '}
+          <span className='b'>Join our newsletter</span> and keep up to date with the latest news (and workshop
+          announcements) from Learnk8s:
+        </p>
+        <div className='f4 measure tc center'>
+          <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST'>
+            <input type='hidden' name='u' value='2f82ec7d5caaa9ced71141211' />
+            <input type='hidden' name='id' value='8ecff1a8cf' />
+            <input type='hidden' name='orig-lang' value='1' />
+            {/* <Honeypot> */}
+            <div className='dn' aria-label='Please leave the following three fields empty'>
+              <label htmlFor='b_name'>Name: </label>
+              <input type='text' name='b_name' tabIndex={-1} defaultValue='' placeholder='Freddie' id='b_comment' />
+
+              <label htmlFor='b_email'>Email: </label>
+              <input
+                type='email'
+                name='b_email'
+                tabIndex={-1}
+                defaultValue=''
+                placeholder='youremail@gmail.com'
+                id='b_comment'
+              />
+
+              <label htmlFor='b_comment'>Comment: </label>
+              <textarea name='b_comment' tabIndex={-1} placeholder='Please comment' id='b_comment' />
+            </div>
+            {/* </Honeypot> */}
+
+            <div className='mv4'>
+              <div className='mv3'>
+                <span className='dib bb ml2'>
+                  <input
+                    className='pa2 input-reset b--none'
+                    type='email'
+                    autoCapitalize='off'
+                    autoCorrect='off'
+                    name='MERGE0'
+                    id='MERGE0'
+                    size={25}
+                    defaultValue=''
+                    placeholder='Your email address'
+                  />
+                </span>
+              </div>
+            </div>
+
+            <div className=''>
+              <input
+                type='submit'
+                defaultValue='Subscribe'
+                className='dib white bg-navy br1 pv2 ph3 b f5 bn pointer'
+                name='submit'
+              />
+            </div>
+            <input type='hidden' name='MERGE2' id='MERGE2' defaultValue={identifier} />
+            <input
+              type='hidden'
+              name='ht'
+              defaultValue='69b0fd8eb9c012c25b28cf22b63612792eb64a30:MTU4OTUyNjkxMC45MDUz'
+            />
+            <input type='hidden' name='mc_signupsource' defaultValue='hosted' />
+          </form>
+          <p className='f6 black-60 mt4 mb0 underline'>
+            *We'll never share your email address, and you can opt-out at any time.
+          </p>
+        </div>
       </div>
     </>
   )

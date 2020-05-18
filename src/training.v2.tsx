@@ -20,7 +20,8 @@ import { Authors } from './aboutUs'
 export const faqs: FAQ[] = [
   {
     title: 'What about Covid-19?',
-    content: 'The situation with Covid-19 is evolving rapidly. Please get in touch to confirm your attendance.',
+    content:
+      'The situation with Covid-19 is evolving rapidly. Please [get in touch to confirm your attendance](mailto:hello@learnk8s.io)).',
   },
   {
     title: 'Who is this workshop for?',
@@ -50,21 +51,6 @@ export const faqs: FAQ[] = [
   },
 ]
 
-const publicCourseEnquiry = (date: Date | number, timezone: string, venue: { city: string }): MailTo => ({
-  subject: 'Kubernetes training — Public course enquiry',
-  body: `Hello Learnk8s,\n\nI'd like to know more about the Kubernetes course that will be held on the ${format(
-    date,
-    'do',
-  )} of ${format(date, 'LLLL')} in ${venue.city}.\n\nKind regards,\n`,
-  email: 'hello@learnk8s.io',
-})
-
-const privateGroupEnquiry: MailTo = {
-  subject: 'Advanced Kubernetes training — Private group enquiry',
-  body: `Hi Learnk8s,\n\nWe wish to train ___(number) people to Kubernetes and containers in ____(month). Can you help?\n\nBest regards,\n`,
-  email: 'hello@learnk8s.io',
-}
-
 const newLocationEnquiry: MailTo = {
   subject: 'Advanced Kubernetes training — New location enquiry',
   body: `Hi Learnk8s,\n\nI'd like to know when you plan to visit ________.\n\nBest regards,\n`,
@@ -85,7 +71,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-training',
       pageId: Training.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: <img src='assets/opengraph.v2.png' alt='Learnk8s' />,
       description: Training.description,
       title: 'Kubernetes Training Courses',
     }),
@@ -286,7 +272,7 @@ function renderPage(state: State) {
               ))}
           </ul>
           <div className='tc'>
-            <a href='#start' className='link dib white bg-sky br1 pa3 b f5 mv3 submit br2 b--none ttu'>
+            <a href='#start' className='link dib white bg-navy br1 pa3 b f5 mv3 submit br2 b--none ttu'>
               Show all
             </a>
           </div>
@@ -296,7 +282,7 @@ function renderPage(state: State) {
           <div className='mt4 measure f3-l f4 center'>
             <h2 className='f1-l f2 navy tc'>How does it work?</h2>
             <p className='measure f3-l f4 lh-copy center'>
-              This is a <span className='b'>full time, 3 days course</span> on learning and mastering Kubernetes.
+              This is a <span className='b'>full-time, 3 days course</span> on learning and mastering Kubernetes.
             </p>
             <p className='measure f3-l f4 lh-copy center'>Things you need to know about the course:</p>
             <ul className='list pl0 ph2-ns'>
@@ -446,7 +432,7 @@ function renderPage(state: State) {
               You will cover as many modules as possible, starting from the most popular.
             </p>
             <p className='lh-copy f4 black-80 measure center ph3 mb3 mb5-ns b'>
-              <a href='#' className='link navy underline'>
+              <a href='/corporate-training' className='link navy underline'>
                 In private and corporate training, you can customise the schedule in full.
               </a>
             </p>
@@ -573,7 +559,7 @@ function renderPage(state: State) {
                           data-tags={event.tags.join(' ')}
                         >
                           <td className='absolute static-ns top-0 right-0 dtc-ns'>
-                            <div className='date bg-sky w3 h3 white tc'>
+                            <div className='date bg-navy w3 h3 white tc'>
                               <p className='f2 ma0 b'>{format(new Date(event.startsAt), 'd')}</p>
                               <p className='ttu ma0'>{format(new Date(event.startsAt), 'MMM')}</p>
                             </div>
@@ -597,7 +583,7 @@ function renderPage(state: State) {
                           <td className='tc-ns db dtc-ns'>
                             <a
                               href={event.url}
-                              className='link dib white bg-sky br1 pv2 ph3 b f6 mv3 submit br2 b--none lh-solid mh1-m mh2-l'
+                              className='link dib white bg-navy br1 pv2 ph3 b f6 mv3 submit br2 b--none lh-solid mh1-m mh2-l'
                             >
                               Book&nbsp;⇢
                             </a>
@@ -649,8 +635,8 @@ function renderPage(state: State) {
             </ul>
           </div>
           <p className='tc pb4-ns'>
-            <a href={mailto(privateGroupEnquiry)} className='link dib white bg-sky br1 pa3 b f5 mv3'>
-              Get in touch →
+            <a href='/corporate-training' className='link dib white bg-navy br1 pa3 b f5 mv3'>
+              Learn more →
             </a>
           </p>
         </Section>
