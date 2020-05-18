@@ -1,5 +1,5 @@
 import { Training } from './training.v2'
-import { State, Action, Store } from './store'
+import { State, Action, Store, Selector } from './store'
 
 export const Pages = {
   landingLondon: {

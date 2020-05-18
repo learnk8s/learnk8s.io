@@ -10,17 +10,7 @@ import {
 } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
-import {
-  State,
-  getPages,
-  getOpenGraph,
-  getWorkshops,
-  getConfig,
-  Store,
-  Action,
-  Selector,
-  getAuthors,
-} from './store'
+import { State, getOpenGraph, getWorkshops, getConfig, Store, Action, Selector, getAuthors } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
@@ -118,7 +108,7 @@ export function Mount({ store }: { store: Store }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Training.id)!
+  const page = Selector.pages.selectAll(state).find(it => it.id === Training.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
   const courses = getWorkshops(state)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`

@@ -1,15 +1,15 @@
-import { Store } from 'redux'
-import { Actions, State, getPages, getRedirects, getOpenGraph, getBlogPosts, store } from './store'
+import { State, getRedirects, getOpenGraph, getBlogPosts, store, Selector, Store } from './store'
 import { ok } from 'assert'
 
 function getCommonPages(state: State) {
   const redirectPageIds = getRedirects(state).map(it => it.fromPageId)
-  return getPages(state)
+  return Selector.pages
+    .selectAll(state)
     .filter(it => !redirectPageIds.includes(it.id))
     .filter(it => it.url.split('.').pop() !== 'xml')
 }
 
-function checkTitleDescription(store: Store<State, Actions>) {
+function checkTitleDescription(store: Store) {
   const state = store.getState()
   const pages = getCommonPages(state)
   pages.forEach(page => {
@@ -28,7 +28,7 @@ function checkTitleDescription(store: Store<State, Actions>) {
   })
 }
 
-function checkOpenGraph(store: Store<State, Actions>) {
+function checkOpenGraph(store: Store) {
   const state = store.getState()
   const commonPageIds = getCommonPages(state).map(it => it.id)
   const openGraphs = getOpenGraph(state).filter(it => commonPageIds.includes(it.pageId))
@@ -38,7 +38,7 @@ function checkOpenGraph(store: Store<State, Actions>) {
   })
 }
 
-function checkBlogPost(store: Store<State, Actions>) {
+function checkBlogPost(store: Store) {
   const state = store.getState()
   const blogPosts = getBlogPosts(state)
   blogPosts.forEach(bp => {
@@ -48,7 +48,7 @@ function checkBlogPost(store: Store<State, Actions>) {
   })
 }
 
-export function checkPageDetail(store: Store<State, Actions>) {
+export function checkPageDetail(store: Store) {
   checkTitleDescription(store)
   checkOpenGraph(store)
   checkBlogPost(store)

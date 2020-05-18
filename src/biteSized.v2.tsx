@@ -2,8 +2,6 @@ import * as React from 'react'
 import { Store } from 'redux'
 import {
   State,
-  Actions,
-  getPages,
   hasTag,
   getOpenGraph,
   getBlogPosts,
@@ -11,6 +9,7 @@ import {
   getBlogPostMarkdownBlocks,
   getConfig,
   getPreviewPictures,
+  Selector,
 } from './store'
 import { toVFile, read } from './files'
 import { join } from 'path'
@@ -27,9 +26,9 @@ import { transform } from './markdown/utils'
 import { mdast2Jsx, mdast2JsxInline } from './markdown/jsx'
 import { tachyons } from './tachyons/tachyons'
 
-export async function Mount({ store }: { store: Store<State, Actions> }) {
+export async function Mount({ store }: { store: Store }) {
   const state = store.getState()
-  const pages = getPages(state).filter(hasTag(state, 'bite-sized'))
+  const pages = Selector.pages.selectAll(state).filter(hasTag(state, 'bite-sized'))
   await Promise.all(
     pages.map(async page => {
       defaultAssetsPipeline({

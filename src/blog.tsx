@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Action, getBlogPosts, hasTag, Store } from './store'
+import { getOpenGraph, getConfig, State, Action, getBlogPosts, hasTag, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { BlogPost } from './store/websiteReducer'
 import { format } from 'date-fns'
@@ -39,7 +39,7 @@ export function Mount({ store }: { store: Store }) {
 }
 
 function renderPage(state: State) {
-  const pages = getPages(state)
+  const pages = Selector.pages.selectAll(state)
   const page = pages.find(it => it.id === Blog.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Blog.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`

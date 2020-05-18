@@ -41,7 +41,7 @@ import * as K8Bit from './k8bit/k8bit'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedArticles from './bite-sized-articles'
-import { Store } from './store'
+import { Store, Selector } from './store'
 import * as Courses from './courses'
 import * as Workshops from './training.v2'
 import * as Training from './learn'

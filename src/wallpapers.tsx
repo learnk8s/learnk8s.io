@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Action, Store } from './store'
+import { getOpenGraph, getConfig, State, Action, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { tachyons } from './tachyons/tachyons'
 
@@ -43,7 +43,7 @@ export function Mount({ store }: { store: Store }) {
 }
 
 function renderPage(state: State) {
-  const pages = getPages(state)
+  const pages = Selector.pages.selectAll(state)
   const page = pages.find(it => it.id === Wallpaper.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Wallpaper.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`

@@ -1,15 +1,15 @@
 import * as React from 'react'
 import {
   getConfig,
-  Actions,
   State,
-  getPages,
   getOpenGraph,
   getBlogPosts,
   getAuthors,
   getBlogPostMarkdownBlocks,
   hasTag,
   getPreviewPictures,
+  Selector,
+  Store,
 } from './store'
 import { Page } from './store/websiteReducer'
 import { Head, Html, Body, Navbar, OpenGraph, Footer, Author, Subscribe, WhatIsLearnk8s } from './layout.v3'
@@ -24,12 +24,11 @@ import { selectAll } from 'unist-util-select'
 import * as Mdast from 'mdast'
 import { mdast2Jsx } from './markdown/jsx'
 import { defaultAssetsPipeline } from './optimise'
-import { Store } from 'redux'
 import { tachyons } from './tachyons/tachyons'
 
-export async function Mount({ store }: { store: Store<State, Actions> }) {
+export async function Mount({ store }: { store: Store }) {
   const state = store.getState()
-  const pages = getPages(state).filter(hasTag(state, 'general-post'))
+  const pages = Selector.pages.selectAll(state).filter(hasTag(state, 'general-post'))
   await Promise.all(
     pages.map(async page => {
       defaultAssetsPipeline({
@@ -44,7 +43,7 @@ export async function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 export async function renderPage(pageMeta: Page, state: State) {
-  const page = getPages(state).find(it => it.id === pageMeta.id)!
+  const page = Selector.pages.selectAll(state).find(it => it.id === pageMeta.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === pageMeta.id)
   if (!openGraph) {
     throw new Error('The page does not have an open graph.')

@@ -60,9 +60,9 @@ export function getConfig(state: State): ConfigReducer.Config {
   return Selector.configs.selectAll(store.getState())[0]
 }
 
-export function getPages(state: State): WebsiteReducer.Page[] {
-  return Object.values(Selector.pages.selectAll(store.getState()))
-}
+// export function getPages(state: State): WebsiteReducer.Page[] {
+//   return Object.values(Selector.pages.selectAll(store.getState()))
+// }
 
 export function getOpenGraph(state: State): WebsiteReducer.OpenGraph[] {
   return Object.values(Selector.openGraphs.selectAll(store.getState()))

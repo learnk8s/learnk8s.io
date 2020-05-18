@@ -1,4 +1,4 @@
-import { State, Action, getConfig, getPages, getRedirects, hasTag, Store } from './store'
+import { State, Action, getConfig, getRedirects, hasTag, Store, Selector } from './store'
 import { RSSPipeline } from './optimise'
 import { join } from 'path'
 
@@ -26,7 +26,7 @@ export function Mount({ store }: { store: Store }) {
 
 function renderPage(state: State) {
   const redirects = getRedirects(state).map(it => it.fromPageId)
-  const pages = getPages(state).filter(it => !redirects.includes(it.id))
+  const pages = Selector.pages.selectAll(state).filter(it => !redirects.includes(it.id))
   const page = pages.find(it => it.id === SitemapXML.id)
   if (!page) {
     throw new Error(`Sitemap page not registered`)

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import { State, Action, getPages, getOpenGraph, getConfig, Store } from './store'
+import { State, Action, getOpenGraph, getConfig, Store, Selector } from './store'
 import { material } from './material'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo, FAQs, FAQ } from './layout.v3'
 import { defaultAssetsPipeline } from './optimise'
@@ -69,7 +69,7 @@ export function Mount({ store }: { store: Store }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Architecting.id)!
+  const page = Selector.pages.selectAll(state).find(it => it.id === Architecting.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Architecting.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (

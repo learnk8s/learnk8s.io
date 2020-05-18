@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { State, Action, getConfig, getPages, getBlogPosts, getAuthors, getOpenGraph, Store } from './store'
+import { State, Action, getConfig, getBlogPosts, getAuthors, getOpenGraph, Store, Selector } from './store'
 import { RSSPipeline } from './optimise'
 
 export const RSS = {
@@ -41,7 +41,7 @@ export function Mount({ store }: { store: Store }) {
 }
 
 function renderPage(state: State) {
-  const pages = getPages(state)
+  const pages = Selector.pages.selectAll(state)
   const page = pages.find(it => it.id === RSS.id)
   if (!page) {
     throw new Error(`RSS page not registered`)

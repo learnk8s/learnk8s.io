@@ -1,4 +1,4 @@
-import { State, Action, Store } from './store'
+import { State, Action, Store, Selector } from './store'
 import { Training } from './training.v2'
 
 export const Page = {
