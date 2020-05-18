@@ -1,5 +1,5 @@
 import { ok } from 'assert'
-import { store, getRedirects, Selector } from './store'
+import { store, Selector } from './store'
 import commander from 'commander'
 import { register } from './register'
 import * as Hast from 'hast'
@@ -15,7 +15,7 @@ ok(commander.hostname, 'Please provide a hostname such as --hostname http://loca
 
 register(store)
 const state = store.getState()
-const redirectPageIds = getRedirects(state).map(it => it.fromPageId)
+const redirectPageIds = Selector.redirects.selectAll(state).map(it => it.fromPageId)
 const pages = Selector.pages
   .selectAll(state)
   .filter(it => !redirectPageIds.includes(it.id))

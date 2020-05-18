@@ -1,8 +1,8 @@
-import { State, getRedirects, store, Selector, Store } from './store'
+import { State, store, Selector, Store } from './store'
 import { ok } from 'assert'
 
 function getCommonPages(state: State) {
-  const redirectPageIds = getRedirects(state).map(it => it.fromPageId)
+  const redirectPageIds = Selector.redirects.selectAll(state).map(it => it.fromPageId)
   return Selector.pages
     .selectAll(state)
     .filter(it => !redirectPageIds.includes(it.id))

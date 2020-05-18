@@ -1,4 +1,4 @@
-import { State, Action, getConfig, getRedirects, hasTag, Store, Selector } from './store'
+import { State, Action, getConfig, hasTag, Store, Selector } from './store'
 import { RSSPipeline } from './optimise'
 import { join } from 'path'
 
@@ -25,7 +25,7 @@ export function Mount({ store }: { store: Store }) {
 }
 
 function renderPage(state: State) {
-  const redirects = getRedirects(state).map(it => it.fromPageId)
+  const redirects = Selector.redirects.selectAll(state).map(it => it.fromPageId)
   const pages = Selector.pages.selectAll(state).filter(it => !redirects.includes(it.id))
   const page = pages.find(it => it.id === SitemapXML.id)
   if (!page) {
