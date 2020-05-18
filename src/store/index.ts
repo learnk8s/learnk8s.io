@@ -18,14 +18,13 @@ export type Actions =
   | ReturnType<typeof CoursesReducer2.courseOnlineSlice.actions.add>
 
 export const Action = {
-  ...WebsiteReducer.Action,
   addInPersonCourse: CoursesReducer2.courseInPersonSlice.actions.add,
   addOnlineCourse: CoursesReducer2.courseOnlineSlice.actions.add,
 }
 
 export const ActionV2 = {
   ...CoursesReducer.Action,
-  ...WebsiteReducer.ActionV2,
+  ...WebsiteReducer.Action,
   ...ConfigReducer.Action,
 }
 
@@ -37,7 +36,7 @@ export const storeV2 = configureStore({
     ...WebsiteReducer.websiteReducer,
     ...ConfigReducer.configReducer,
   },
-  middleware: [...WebsiteReducer.middlewares, ...CoursesReducer.middlewares, ...ConfigReducer.middlewares],
+  middleware: [...WebsiteReducer.middlewares, ...CoursesReducer.middlewares],
 })
 
 export const SelectorV2 = {
@@ -51,19 +50,7 @@ export const store = createStore<State, Actions, {}, {}>(
     coursesInPerson: CoursesReducer2.courseInPersonSlice.reducer,
     coursesOnline: CoursesReducer2.courseOnlineSlice.reducer,
   }),
-  {
-    // website: WebsiteReducer.createInitialState({}),
-    // config: ConfigReducer.createInitialState({
-    //   organisationId: process.env.ENVENTBRITE_ORG as string,
-    //   isProduction: process.env.NODE_ENV === 'production',
-    //   hostname: 'learnk8s.io',
-    //   protocol: 'https',
-    //   eventBriteToken: process.env.ENVENTBRITE_TOKEN as string,
-    //   googleAnalytics: process.env.GOOGLE_ANALYTICS as string,
-    //   outputFolder: '_site',
-    //   canPublishEvents: process.env.PUBLISH_EVENTS === 'yes',
-    // }),
-  },
+  {},
 )
 
 storeV2.dispatch(

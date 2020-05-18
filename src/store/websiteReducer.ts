@@ -1,4 +1,3 @@
-import { Reducer, applyMiddleware } from 'redux'
 import { VReference } from '../files'
 import { createEntityAdapter, createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 import { storeV2 } from '.'
@@ -85,7 +84,7 @@ export const tagSlice = createSlice({
   },
 })
 
-export type StateV2 = ReturnType<typeof storeV2.getState>
+export type State = ReturnType<typeof storeV2.getState>
 
 export const websiteReducer = {
   pages: pageSlice.reducer,
@@ -99,7 +98,7 @@ export const websiteReducer = {
   tags: tagSlice.reducer,
 }
 
-export const ActionV2 = {
+export const Action = {
   pages: { ...pageSlice.actions },
   redirects: { ...redirectSlice.actions },
   previewPictures: { ...previewPictureSlice.actions },
@@ -112,15 +111,15 @@ export const ActionV2 = {
 }
 
 export const Selector = {
-  pages: pageAdapter.getSelectors<StateV2>(state => state.pages),
-  redirects: redirectAdapter.getSelectors<StateV2>(state => state.redirects),
-  previewPictures: previewPictureAdapter.getSelectors<StateV2>(state => state.previewPictures),
-  landings: landingAdapter.getSelectors<StateV2>(state => state.landings),
-  authors: authorAdapter.getSelectors<StateV2>(state => state.authors),
-  openGraphs: openGraphAdapter.getSelectors<StateV2>(state => state.openGraphs),
-  blogPosts: blogPostAdapter.getSelectors<StateV2>(state => state.blogPosts),
-  relatedBlogs: relatedBlogAdapter.getSelectors<StateV2>(state => state.relatedBlogs),
-  tags: tagAdapter.getSelectors<StateV2>(state => state.tags),
+  pages: pageAdapter.getSelectors<State>(state => state.pages),
+  redirects: redirectAdapter.getSelectors<State>(state => state.redirects),
+  previewPictures: previewPictureAdapter.getSelectors<State>(state => state.previewPictures),
+  landings: landingAdapter.getSelectors<State>(state => state.landings),
+  authors: authorAdapter.getSelectors<State>(state => state.authors),
+  openGraphs: openGraphAdapter.getSelectors<State>(state => state.openGraphs),
+  blogPosts: blogPostAdapter.getSelectors<State>(state => state.blogPosts),
+  relatedBlogs: relatedBlogAdapter.getSelectors<State>(state => state.relatedBlogs),
+  tags: tagAdapter.getSelectors<State>(state => state.tags),
 }
 
 const checkRedirectPage = middlewareCheck(checkRedirectPageRequirement)
@@ -227,35 +226,6 @@ function checkTagRequirement(action: PayloadAction<Tag>, store: any) {
   }
 }
 
-export const Action = {
-  // registerLandingPageLocation(args: LandingPage) {
-  //   return { type: 'REGISTER_LANDING' as const, ...args }
-  // },
-  // registerOpenGraph(args: OpenGraph) {
-  //   return { type: 'REGISTER_OG' as const, ...args }
-  // },
-  // registerBlogPost(args: BlogPost) {
-  //   return { type: 'REGISTER_BLOG_POST.V2' as const, ...args }
-  // },
-  // registerPreviewPicture(args: PreviewPicture) {
-  //   return { type: 'REGISTER_PREVIEW_PICTURE' as const, ...args }
-  // },
-  // registerAuthor(args: Author) {
-  //   return { type: 'REGISTER_AUTHOR' as const, ...args }
-  // },
-  // assignTag(args: Tag) {
-  //   return { type: 'ASSIGN_TAG' as const, ...args }
-  // },
-  // registerBlogPostMarkdownBlock(args: BlogPostMarkdownBlock) {
-  //   return { type: 'REGISTER_RELATED_BLOCK' as const, ...args }
-  // },
-  // registerRedirect(args: Redirect) {
-  //   return { type: 'REGISTER_REDIRECT' as const, ...args }
-  // },
-}
-
-export type Actions = ReturnType<typeof Action[keyof typeof Action]>
-
 export type Page = {
   id: string
   url: string
@@ -319,119 +289,3 @@ export type BlogPostMarkdownBlock = {
   blogPostId: string
   content: VReference
 }
-
-// export interface State {
-//   // openGraph: Record<string, OpenGraph>
-//   // landingPages: Record<string, LandingPage>
-//   // blogPosts: Record<string, BlogPost>
-//   // authors: Record<string, Author>
-//   tags: Record<string, string[]>
-//   // relatedBlogs: Record<string, BlogPostMarkdownBlock>
-//   // redirects: Record<string, Redirect>
-//   // previewPictures: Record<string, PreviewPicture>
-// }
-
-// export function createInitialState(options: {}): State {
-//   return {
-//     ...options,
-//     // openGraph: {},
-//     // landingPages: {},
-//     // blogPosts: {},
-//     // authors: {},
-//     tags: {},
-//     // relatedBlogs: {},
-//     // redirects: {},
-//     // previewPictures: {},
-//   }
-// }
-
-// export const RootReducer: Reducer<State, Actions> = (
-//   state = createInitialState({ organisationId: 'unknown' }),
-//   action: Actions,
-// ): State => {
-//   switch (action.type) {
-//     // case 'REGISTER_OG': {
-//     //   if (action.id in state.openGraph) {
-//     //     throw new Error(`Duplicate openGraph id ${action.id}`)
-//     //   }
-//     //   return { ...state, openGraph: { ...state.openGraph, [action.id]: { ...action } } }
-//     // }
-//     // case 'REGISTER_LANDING': {
-//     //   return { ...state, landingPages: { ...state.landingPages, [action.id]: { ...action } } }
-//     // }
-//     // case 'REGISTER_BLOG_POST.V2': {
-//     //   if (!Selector.authors.selectAll(storeV2.getState()).some(it => it.id === action.authorId)) {
-//     //     throw new Error(`The author ${action.authorId} for the blog post ${action.title} doesn't exist`)
-//     //   }
-//     //   return { ...state, blogPosts: { ...state.blogPosts, [action.id]: { ...action } } }
-//     // }
-//     // case 'REGISTER_AUTHOR': {
-//     //   return { ...state, authors: { ...state.authors, [action.id]: { ...action } } }
-//     // }
-//     // case 'ASSIGN_TAG': {
-//     //   if (
-//     //     !Selector.pages
-//     //       .selectAll(storeV2.getState())
-//     //       .map(it => it.id)
-//     //       .includes(action.pageId)
-//     //   ) {
-//     //     throw new Error(`Trying to create a tag ${action.id} for the not existent page ${action.pageId}.`)
-//     //   }
-//     //   return {
-//     //     ...state,
-//     //     tags: {
-//     //       ...state.tags,
-//     //       [action.pageId]: [action.id, ...(Array.isArray(state.tags[action.pageId]) ? state.tags[action.pageId] : [])],
-//     //     },
-//     //   }
-//     // }
-//     // case 'REGISTER_RELATED_BLOCK': {
-//     //   if (!Selector.blogPosts.selectAll(storeV2.getState()).some(it => it.id === action.blogPostId)) {
-//     //     throw new Error(`Couldn't find the blog post ${action.blogPostId} for related article ${action.id}`)
-//     //   }
-//     //   return {
-//     //     ...state,
-//     //     relatedBlogs: { ...state.relatedBlogs, [Object.keys(state.relatedBlogs).length + 1]: { ...action } },
-//     //   }
-//     // }
-//     // case 'REGISTER_REDIRECT': {
-//     //   if (
-//     //     !Selector.pages
-//     //       .selectAll(storeV2.getState())
-//     //       .map(it => it.id)
-//     //       .includes(action.fromPageId)
-//     //   ) {
-//     //     throw new Error(
-//     //       `Couldn't create redirect ${action.fromPageId} -> ${action.redirectToPageId}. FROM does not exist`,
-//     //     )
-//     //   }
-//     //   if (
-//     //     !Selector.pages
-//     //       .selectAll(storeV2.getState())
-//     //       .map(it => it.id)
-//     //       .includes(action.redirectToPageId)
-//     //   ) {
-//     //     throw new Error(
-//     //       `Couldn't create redirect ${action.fromPageId} -> ${action.redirectToPageId}. TO does not exist`,
-//     //     )
-//     //   }
-//     //   return { ...state, redirects: { ...state.redirects, [action.id]: { ...action } } }
-//     // }
-//     // case 'REGISTER_PREVIEW_PICTURE': {
-//     //   if (
-//     //     !Selector.pages
-//     //       .selectAll(storeV2.getState())
-//     //       .map(it => it.id)
-//     //       .includes(action.pageId)
-//     //   ) {
-//     //     throw `Invalid pageId ${action.pageId} for picture ${action.id}`
-//     //   }
-//     //   return { ...state, previewPictures: { ...state.previewPictures, [action.id]: { ...action } } }
-//     // }
-//     default:
-//       assertUnreachable(action)
-//       return state
-//   }
-// }
-
-// function assertUnreachable(x: never): void {}
