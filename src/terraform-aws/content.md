@@ -15,9 +15,11 @@ In such cases, using one of the available automated cluster creation methods (su
 
 _This article presents an approach that attempts to combine both automation and flexibility._
 
-The solution consists of a [Terraform module](https://registry.terraform.io/modules/weibeld/kubeadm/aws) based on [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/) that allows creating bare-bones clusters on AWS with a single command:
+It's a [Terraform module](https://registry.terraform.io/modules/weibeld/kubeadm/aws) based on [kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/) that allows creating bare-bones clusters on AWS with a single command:
 
 ![Screencast](assets/screencast.gif)
+
+You can find the code [on GitHub](https://github.com/weibeld/terraform-aws-kubeadm).
 
 The aim of the project is to enable the creation of disposable kubeadm clusters which is an enabler for running controlled and automated Kubernetes experiments.
 
@@ -25,13 +27,13 @@ _The remainder of this article first reviews the available options for creating 
 
 ## Managed Kubernetes services
 
-Generally, the options for creating a Kubernetes cluster can be divided into two categories: managed services and installation tools.
+The options for creating a Kubernetes cluster can be divided into two categories: managed services and installation tools.
 
 Managed Kubernetes services create and operate a cluster for you and give you access to it.
 
 _They allow you to use Kubernetes in a Software as a Service (SaaS) manner._
 
-Naturally, managed Kubernetes services provide the highest degree of automation (creation and operation are entirely done for you), but the least amount of flexibility (you can configure only those settings that the service provider exposes through its API).
+Managed Kubernetes services provide the highest degree of automation (creation and operation are entirely done for you), but the least amount of flexibility (you can configure only those settings that the service provider exposes through its API).
 
 The most popular managed Kubernetes services are provided by the major cloud providers:
 
@@ -47,7 +49,7 @@ _They allow you to use Kubernetes as a self-managed piece of software._
 
 Installation tools provide varying degrees of automation and flexibility depending on the extent to which the tool wants to "get it right for you".
 
-Currently, the most popular (and officially supported) Kubernetes installation tools are:
+At the time of writing, the most popular (and officially supported) Kubernetes installation tools are:
 
 - [kops](https://kops.sigs.k8s.io/)
 - [kubespray](https://kubespray.io/)
@@ -65,7 +67,9 @@ That means, you can go from zero to a running cluster with effectively a single 
 
 On the other hand, kops anticipates many decisions for you, thus reducing your flexibility for how you want your cluster to look like.
 
-For example, kops requires the name of the cluster to be a valid DNS name, and requires you to set up DNS records that resolve this name; you also have to create an [Amazon S3 bucket](https://aws.amazon.com/s3/) for kops to store its state.
+For example, kops requires the name of the cluster to be a valid DNS name and asks you to set up DNS records that resolve this name.
+
+Also, you have to create an [Amazon S3 bucket](https://aws.amazon.com/s3/) for kops to store its state.
 
 ### kubespray
 
@@ -75,7 +79,7 @@ That means, in contrast to kops, you need to already have a suitable infrastruct
 
 Once you have your infrastructure, kubespray provides a large number of options for configuring the Kubernetes installation.
 
-However, at the same time, kubespray attempts to create a "production-ready" cluster, which causes it to apply certain default settings and features (such as installing a CNI plugin by default).
+Not all options are configurable, though — kubespray attempts to create a "production-ready" cluster, which causes it to apply certain default settings and features (such as installing a CNI plugin by default).
 
 This is great if you really want a production-ready cluster, but if all you want is a "bare-bones" cluster that you can then configure very selectively, the well-intentioned defaults of kubespray might get in your way.
 
@@ -94,7 +98,7 @@ In particular, kubeadm performs the following tasks:
 - Creating and distributing client and server certificates for the individual Kubernetes components (API server, etcd, scheduler, etc.)
 - Creating and distributing kubeconfig files for the individual Kubernetes components (so that they can talk to the API server)
 - Launching the kubelet as a [systemd](https://systemd.io/) process
-- Launching the remaining Kubernetes components as Pods in the [host network](https://github.com/kubernetes/api/blob/master/core/v1/types.go#L2938) (managed by the kubelet)
+- Launching the remaining Kubernetes components as Pods in the [host network](https://github.com/kubernetes/api/blob/master/core/v1/types.go#L2938) through the kubelet
 
 The result is a "minimum viable" cluster that you can then freely customise yourself according to your requirements.
 
@@ -111,27 +115,27 @@ Rather, it requires a whole series of manual steps:
 - Run the [`kubeadm init`](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/) command on one of the nodes
 - Run the [`kubeadm join`](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-join/) command on all the other nodes
 
-These steps furthermore depend on each other — for example, the `kubeadm join` commands must include a token and other identifiers that are generated by the initial `kubeadm init` command.
+Furthermore, these steps depend on each other — for example, the `kubeadm join` commands must include a token and other identifiers that are generated by the initial `kubeadm init` command.
 
-In summary, creating a Kubernetes cluster with kubeadm is a time-consuming tedious process when done manually, which counteracts the goal of having quick disposable clusters for running experiments.
+In summary, creating a Kubernetes cluster with kubeadm is a time-consuming tedious process when done manually.
 
 _This is where the Terraform kubeadm module comes in._
 
 ## Terraform kubeadm module
 
-Learnk8s created the [Terraform kubeadm module](https://registry.terraform.io/modules/weibeld/kubeadm/aws) to combine the simplicity and flexibility of kubeadm with a degree of automation comparable to other higher-level tools.
+The [Terraform kubeadm module](https://registry.terraform.io/modules/weibeld/kubeadm/aws) automates the operation of kubeadm with the goal of providing both automation and flexibility.
 
 ![Terraform kubeadm module](assets/terraform-kubeadm-module.png)
 
-The Terraform module automates both the provisioning of infrastructure and the execution of kubeadm on this infrastructure to create a Kubernetes cluster.
+However, the module does not only run kubeadm, but it also provisions the infrastructure for the cluster.
 
-With the Terraform kubeadm module, you can go from zero to a running cluster with a single command in a few minutes.
+> Currently, only AWS is supported as an infrastructure provider, but support for GCP and Azure is planned.
+
+That means, with the Terraform kubeadm module, you can go from zero to a running cluster on AWS with a single command in a few minutes.
 
 This brings you the convenience of kops without having to deal with opinionated features that you might not need.
 
 With the Terraform kubeadm module, you get the exact same "minimum viable" cluster that you also get when running kubeadm manually.
-
-> Currently, only AWS is supported as a target platform, but support for GCP and Azure is planned.
 
 _The following sections first briefly present Terraform and then give a full usage walkthrough of the Terraform kubeadm module._
 
@@ -399,7 +403,7 @@ terraform apply --auto-approve
 
 When the command completes, you should see an output looking something like this:
 
-```
+```hcl
 nodes = [
   {
     "name" = "master"
@@ -574,7 +578,7 @@ The main change of the above configuration consists in the addition of two invoc
 
 The configuration now includes three invocations of the kubeadm module, which results in Terraform creating three clusters.
 
-In the present configuration, all clusters use the same settings, but you could configure each cluster separately by specifying different [input variales](https://registry.terraform.io/modules/weibeld/kubeadm/aws?tab=inputs) for the individual invocations of the kubeadm module.
+In the present configuration, all clusters use the same settings, but you could configure each cluster separately by specifying different [input variables](https://registry.terraform.io/modules/weibeld/kubeadm/aws?tab=inputs) for the individual invocations of the kubeadm module.
 
 > You could also create a dedicated VPC for each cluster by adding additional invocations of the network submodule.
 
@@ -623,7 +627,7 @@ _Congratulations, you just created a fleet of three Kubernetes clusters!_
 
 ## Installing CNI plugins
 
-You have three clusters now, but something might still itch you about them.
+You have three clusters now, but something might still slightly bother you about them.
 
 They have no CNI plugin installed which causes the nodes to be `NotReady` and prevents any Pods from being scheduled.
 
@@ -678,7 +682,7 @@ If you list the Pods, they should now also all be `Running`.
 
 _The CNI plugins indeed completed the setup of your clusters and rendered them fully functional._
 
-At this point, you can launch further Pods in your clusters and do any other kinds of experiments.
+At this point, you can launch further Pods in your clusters and do more experiments.
 
 ## Destroying the clusters
 
