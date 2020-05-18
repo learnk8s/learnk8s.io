@@ -10,7 +10,7 @@ import {
 } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
-import { getOpenGraph, getConfig, getAuthors, Store, Action, Selector, State } from './store'
+import { getConfig, getAuthors, Store, Action, Selector, State } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
@@ -135,7 +135,7 @@ export function Mount({ store }: { store: Store }) {
 
 function renderInPersonCoursePage(course: CourseInPerson, state: State) {
   const page = Selector.pages.selectAll(state).find(it => it.id === `page-${course.id}`)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === `page-${course.id}`)
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === `page-${course.id}`)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   const instructors = getAuthors(state).filter(it =>
     [
@@ -318,7 +318,7 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
 
 function renderOnlineCoursePage(course: CourseOnline, state: State) {
   const page = Selector.pages.selectAll(state).find(it => it.id === `page-${course.id}`)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === `page-${course.id}`)
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === `page-${course.id}`)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   const instructors = getAuthors(state).filter(it =>
     [

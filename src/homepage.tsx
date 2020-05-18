@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, ListItem, Interlude, Consultation, Hero } from './layout.v3'
-import { State, Action, getConfig, getOpenGraph, Store, Selector } from './store'
+import { State, Action, getConfig, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { Training } from './training.v2'
@@ -43,7 +43,7 @@ export function Mount({ store }: { store: Store }) {
 
 function renderPage(state: State) {
   const page = Selector.pages.selectAll(state).find(it => it.id === HomePage.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === HomePage.id)
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === HomePage.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>

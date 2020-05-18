@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { State, Action, getConfig, getBlogPosts, getAuthors, getOpenGraph, Store, Selector } from './store'
+import { State, Action, getConfig, getBlogPosts, getAuthors, Store, Selector } from './store'
 import { RSSPipeline } from './optimise'
 
 export const RSS = {
@@ -67,7 +67,7 @@ function renderPage(state: State) {
         if (!author) {
           throw new Error(`No author for blogPost ${blogPost.title}`)
         }
-        const openGraph = getOpenGraph(state).find(it => it.pageId === page.id)
+        const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === page.id)
         if (!openGraph) {
           throw new Error(`Missing opengraph for blog post ${blogPost.title} and page ${page.title}`)
         }

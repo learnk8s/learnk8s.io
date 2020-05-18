@@ -3,7 +3,6 @@ import { Store } from 'redux'
 import {
   State,
   hasTag,
-  getOpenGraph,
   getBlogPosts,
   getAuthors,
   getBlogPostMarkdownBlocks,
@@ -43,7 +42,7 @@ export async function Mount({ store }: { store: Store }) {
 }
 
 async function renderPage(page: Page, state: State) {
-  const openGraph = getOpenGraph(state).find(it => it.pageId === page.id)
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === page.id)
   if (!openGraph) {
     throw new Error('The page does not have an open graph.')
   }

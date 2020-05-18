@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Navbar, Footer, Consultation, Html, Head, Body, OpenGraph } from './layout.v3'
-import { State, Action, getConfig, getOpenGraph, getBlogPosts, hasTag, Store, Selector } from './store'
+import { State, Action, getConfig, getBlogPosts, hasTag, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { BlogPost } from './store/websiteReducer'
@@ -43,7 +43,7 @@ export function Mount({ store }: { store: Store }) {
 function renderPage(state: State) {
   const pages = Selector.pages.selectAll(state)
   const page = pages.find(it => it.id === BiteSized.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === BiteSized.id)
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === BiteSized.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   const blogPosts = getBlogPosts(state)
     .filter(post => hasTag(state, 'bite-sized')(pages.find(it => it.id === post.pageId)!))

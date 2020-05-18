@@ -2,7 +2,6 @@ import * as React from 'react'
 import {
   getConfig,
   State,
-  getOpenGraph,
   getBlogPosts,
   getAuthors,
   getBlogPostMarkdownBlocks,
@@ -44,7 +43,7 @@ export async function Mount({ store }: { store: Store }) {
 
 export async function renderPage(pageMeta: Page, state: State) {
   const page = Selector.pages.selectAll(state).find(it => it.id === pageMeta.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === pageMeta.id)
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === pageMeta.id)
   if (!openGraph) {
     throw new Error('The page does not have an open graph.')
   }

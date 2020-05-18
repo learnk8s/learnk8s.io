@@ -1,6 +1,6 @@
 import React from 'react'
 import { Html, Head, OpenGraph, Body, Navbar, Footer, WhatIsLearnk8s } from '../layout.v3'
-import { State, Action, getOpenGraph, getConfig, Store, Selector } from '../store'
+import { State, Action, getConfig, Store, Selector } from '../store'
 import { join } from 'path'
 import { toMdast } from '../markdown'
 import { toVFile } from '../files'
@@ -108,7 +108,7 @@ type Section = {
 
 function renderPage(state: State, sections: Section[]) {
   const page = Selector.pages.selectAll(state).find(it => it.id === BestPractices.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === BestPractices.id)
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === BestPractices.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>

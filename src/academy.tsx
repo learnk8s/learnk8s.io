@@ -1,5 +1,5 @@
 import React from 'react'
-import { State, Action, getOpenGraph, getConfig, Store, Selector } from './store'
+import { State, Action, getConfig, Store, Selector } from './store'
 import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
@@ -39,7 +39,7 @@ export function Mount({ store }: { store: Store }) {
 
 function renderPage(state: State) {
   const page = Selector.pages.selectAll(state).find(it => it.id === Academy.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Academy.id)
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === Academy.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>

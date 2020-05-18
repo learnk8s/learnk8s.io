@@ -1,4 +1,4 @@
-import { State, getRedirects, getOpenGraph, getBlogPosts, store, Selector, Store } from './store'
+import { State, getRedirects, getBlogPosts, store, Selector, Store } from './store'
 import { ok } from 'assert'
 
 function getCommonPages(state: State) {
@@ -31,7 +31,7 @@ function checkTitleDescription(store: Store) {
 function checkOpenGraph(store: Store) {
   const state = store.getState()
   const commonPageIds = getCommonPages(state).map(it => it.id)
-  const openGraphs = getOpenGraph(state).filter(it => commonPageIds.includes(it.pageId))
+  const openGraphs = Selector.openGraphs.selectAll(state).filter(it => commonPageIds.includes(it.pageId))
   openGraphs.forEach(og => {
     ok(og.title !== '', `Page: ${og.id}, open graph title is not defined.`)
     ok(og.description !== '', `Page: ${og.id}, open graph description is not defined.`)
