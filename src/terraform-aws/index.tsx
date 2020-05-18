@@ -34,7 +34,7 @@ export function Register(store: Store<State, Actions>) {
       title: 'Bootstrapping Kubernetes clusters on AWS with Terraform',
       description:
         'There are many ways to create Kubernetes clusters and they generally pose a trade-off between automation and flexibility. In this article, you will learn how you can create a flexible cluster with kubeadm on AWS with a single command. The solution makes use of Terraform for both infrastructure provisioning and cluster bootstrapping.',
-      publishedDate: '2020-05-14',
+      publishedDate: '2020-05-19',
 
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
