@@ -8,8 +8,7 @@ import { toMdast } from './markdown'
 import { toVFile } from './files'
 import { mdast2JsxInline } from './markdown/jsx'
 import { Html, Head, Body, OpenGraph } from './layout.v3'
-import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph, StoreV2, ActionV2 } from './store'
+import { State, Action, getConfig, getPages, getOpenGraph, Store } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -40,10 +39,10 @@ export const ZeroToK8s = {
   description: `Zero to Kubernetes is a step-by-step course on how to design, develop and deploy Node.js applications on Kubernetes.`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(ZeroToK8s))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ZeroToK8s))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-zero-to-k8s',
       pageId: ZeroToK8s.id,
       image: <img src='assets/02k8s/opengraph.jpg' alt='Learnk8s preview' />,
@@ -53,7 +52,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),

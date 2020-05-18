@@ -1,6 +1,6 @@
 import { VReference } from '../files'
 import { createEntityAdapter, createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
-import { storeV2 } from '.'
+import { store } from '.'
 
 const pageAdapter = createEntityAdapter<Page>({})
 const redirectAdapter = createEntityAdapter<Redirect>({})
@@ -84,7 +84,7 @@ export const tagSlice = createSlice({
   },
 })
 
-export type State = ReturnType<typeof storeV2.getState>
+export type State = ReturnType<typeof store.getState>
 
 export const websiteReducer = {
   pages: pageSlice.reducer,
@@ -176,7 +176,7 @@ function checkPreviewPictureRequirement(action: PayloadAction<PreviewPicture>, s
   if (action.type === 'previewPicture/add') {
     if (
       !Selector.pages
-        .selectAll(storeV2.getState())
+        .selectAll(store.getState())
         .map(it => it.id)
         .includes(action.payload.pageId)
     ) {
@@ -189,7 +189,7 @@ function checkOpenGraphRequirement(action: PayloadAction<OpenGraph>, store: any)
   if (action.type === 'openGraph/add') {
     if (
       Selector.openGraphs
-        .selectAll(storeV2.getState())
+        .selectAll(store.getState())
         .map(it => it.id)
         .includes(action.payload.id)
     ) {
@@ -200,7 +200,7 @@ function checkOpenGraphRequirement(action: PayloadAction<OpenGraph>, store: any)
 
 function checkBlogPostRequirement(action: PayloadAction<BlogPost>, store: any) {
   if (action.type === 'blogPost/add') {
-    if (!Selector.authors.selectAll(storeV2.getState()).some(it => it.id === action.payload.authorId)) {
+    if (!Selector.authors.selectAll(store.getState()).some(it => it.id === action.payload.authorId)) {
       throw new Error(`The author ${action.payload.authorId} for the blog post ${action.payload.title} doesn't exist`)
     }
   }
@@ -208,7 +208,7 @@ function checkBlogPostRequirement(action: PayloadAction<BlogPost>, store: any) {
 
 function checkRelatedBlogRequirement(action: PayloadAction<BlogPostMarkdownBlock>, store: any) {
   if (action.type === 'relatedBlog/add') {
-    if (!Selector.blogPosts.selectAll(storeV2.getState()).some(it => it.id === action.payload.blogPostId)) {
+    if (!Selector.blogPosts.selectAll(store.getState()).some(it => it.id === action.payload.blogPostId)) {
       throw new Error(
         `Couldn't find the blog post ${action.payload.blogPostId} for related article ${action.payload.id}`,
       )
@@ -218,7 +218,7 @@ function checkRelatedBlogRequirement(action: PayloadAction<BlogPostMarkdownBlock
 
 function checkTagRequirement(action: PayloadAction<Tag>, store: any) {
   if (action.type === 'tag/add') {
-    if (!Selector.pages.selectAll(storeV2.getState()).some(it => it.id === action.payload.pageId)) {
+    if (!Selector.pages.selectAll(store.getState()).some(it => it.id === action.payload.pageId)) {
       throw new Error(
         `Trying to create a tag ${action.payload.tag} for the not existent page ${action.payload.pageId}.`,
       )

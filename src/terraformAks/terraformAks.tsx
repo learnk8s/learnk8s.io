@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const TerraformAks = {
   description: `Learn how you can use Terraform to create Kubernetes cluster in Azure.`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(TerraformAks))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(TerraformAks))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-terraform-aks',
       pageId: TerraformAks.id,
       image: (
@@ -25,8 +24,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.`,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.blogPosts.add({
+  store.dispatch(
+    Action.blogPosts.add({
       id: 'bp-terraform-aks',
       pageId: TerraformAks.id,
       authorId: Authors.danielePolencic.id,
@@ -36,18 +35,18 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.tags.add({ id: TerraformAks.id + '-general-post', tag: 'general-post', pageId: TerraformAks.id }),
+  store.dispatch(
+    Action.tags.add({ id: TerraformAks.id + '-general-post', tag: 'general-post', pageId: TerraformAks.id }),
   )
-  storeV2.dispatch(
-    ActionV2.relatedBlogs.add({
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'terraform-aks-related-0',
       blogPostId: 'bp-terraform-aks',
       content: toVFile({ path: join(__dirname, 'terraform-aks-related.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.previewPictures.add({
+  store.dispatch(
+    Action.previewPictures.add({
       id: 'terraform-aks-picture',
       pageId: TerraformAks.id,
       image: <img src='src/terraformAks/terraforming.svg' alt={TerraformAks.title} />,

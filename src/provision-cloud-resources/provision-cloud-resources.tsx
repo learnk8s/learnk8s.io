@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const ProvisionCloudResources = {
   description: `You can create and connect to managed cloud provider resources using the Service Catalog, a tool such as Kubeform or cloud-specific operators`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(ProvisionCloudResources))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ProvisionCloudResources))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-provision-cloud-resources',
       pageId: ProvisionCloudResources.id,
       image: (
@@ -28,8 +27,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `You can create and connect to managed cloud resources using the Service Catalog, a tool such as Kubeform or cloud-specific operators such as Config Connector and AWS Operator Service.`,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.blogPosts.add({
+  store.dispatch(
+    Action.blogPosts.add({
       id: 'bp-provision-cloud-resources',
       pageId: ProvisionCloudResources.id,
       authorId: Authors.danielePolencic.id,
@@ -40,22 +39,22 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.tags.add({
+  store.dispatch(
+    Action.tags.add({
       id: ProvisionCloudResources.id + '-general-post',
       tag: 'general-post',
       pageId: ProvisionCloudResources.id,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.relatedBlogs.add({
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'provision-cloud-resources-related-0',
       blogPostId: 'bp-provision-cloud-resources',
       content: toVFile({ path: join(__dirname, 'provision-cloud-resources-related.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.previewPictures.add({
+  store.dispatch(
+    Action.previewPictures.add({
       id: 'provision-cloud-resources-picture',
       pageId: ProvisionCloudResources.id,
       image: <img src='src/provision-cloud-resources/cloud-resources.svg' alt={ProvisionCloudResources.title} />,

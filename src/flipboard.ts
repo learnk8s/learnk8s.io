@@ -1,16 +1,4 @@
-import {
-  State,
-  Actions,
-  Action,
-  getPages,
-  getConfig,
-  getBlogPosts,
-  getAuthors,
-  getOpenGraph,
-  StoreV2,
-  ActionV2,
-} from './store'
-import { Store } from 'redux'
+import { State, Action, getPages, getConfig, getBlogPosts, getAuthors, getOpenGraph, Store } from './store'
 import { join } from 'path'
 import { RSSPipeline } from './optimise'
 
@@ -21,12 +9,12 @@ export const RSS = {
   description: 'RSS Flipboard',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(RSS))
-  storeV2.dispatch(ActionV2.tags.add({ id: RSS.id + '-no-sitemap', tag: 'no-sitemap', pageId: RSS.id }))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(RSS))
+  store.dispatch(Action.tags.add({ id: RSS.id + '-no-sitemap', tag: 'no-sitemap', pageId: RSS.id }))
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   RSSPipeline({
     content: renderPage(state),

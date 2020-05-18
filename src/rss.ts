@@ -1,17 +1,5 @@
 import { join } from 'path'
-import { Store } from 'redux'
-import {
-  State,
-  Actions,
-  Action,
-  getConfig,
-  getPages,
-  getBlogPosts,
-  getAuthors,
-  getOpenGraph,
-  StoreV2,
-  ActionV2,
-} from './store'
+import { State, Action, getConfig, getPages, getBlogPosts, getAuthors, getOpenGraph, Store } from './store'
 import { RSSPipeline } from './optimise'
 
 export const RSS = {
@@ -28,12 +16,12 @@ const OldRSS = {
   description: `RSS Feed`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(RSS))
-  storeV2.dispatch(ActionV2.pages.add(OldRSS))
-  storeV2.dispatch(ActionV2.tags.add({ id: RSS.id + '-no-sitemap', tag: 'no-sitemap', pageId: RSS.id }))
-  storeV2.dispatch(
-    ActionV2.redirects.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(RSS))
+  store.dispatch(Action.pages.add(OldRSS))
+  store.dispatch(Action.tags.add({ id: RSS.id + '-no-sitemap', tag: 'no-sitemap', pageId: RSS.id }))
+  store.dispatch(
+    Action.redirects.add({
       id: 'redirect-rss',
       fromPageId: OldRSS.id,
       redirectToPageId: RSS.id,
@@ -41,7 +29,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   RSSPipeline({
     content: renderPage(state),

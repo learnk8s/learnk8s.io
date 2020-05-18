@@ -1,21 +1,13 @@
 import cheerio from 'cheerio'
 import { zonedTimeToUtc } from 'date-fns-tz'
-import { getVenues, State, getWorkshops, StateV2, getConfig } from './store'
+import { getVenues, State, getWorkshops, getConfig } from './store'
 import { AxiosInstance } from 'axios'
 import { read } from './files'
 import { renderToJsx } from './markdown'
 import { jsxToString } from './jsx-utils/jsxToHast'
 
-export async function SyncVenues({
-  state,
-  stateV2,
-  sdk,
-}: {
-  state: State
-  stateV2: StateV2
-  sdk: AxiosInstance
-}): Promise<VenueEventBrite[]> {
-  const venues = getVenues(stateV2)
+export async function SyncVenues({ state, sdk }: { state: State; sdk: AxiosInstance }): Promise<VenueEventBrite[]> {
+  const venues = getVenues(state)
   const response = await sdk.get<ResponseVenues>(`/organizations/${getConfig(state).organisationId}/venues/`)
   const { added } = diff({
     previous: response.data.venues.map(it => it.name),
@@ -30,26 +22,24 @@ export async function SyncVenues({
       return addVenue(venue, sdk, getConfig(state).organisationId)
     }),
   )
-  return SyncVenues({ state, stateV2, sdk })
+  return SyncVenues({ state, sdk })
 }
 
 export async function SyncEvents({
   state,
-  stateV2,
   sdk,
   canPublish,
   log,
 }: {
   state: State
-  stateV2: StateV2
   sdk: AxiosInstance
   canPublish: boolean
   log: (...args: any[]) => void
 }) {
   try {
-    const venues = await SyncVenues({ state, stateV2, sdk })
+    const venues = await SyncVenues({ state, sdk })
     const events = await getEventsFromEventBrite(getConfig(state).organisationId, sdk)
-    const workshops = getWorkshops(stateV2)
+    const workshops = getWorkshops(state)
     const { added, unchanged } = diff({ previous: events.map(it => it.code), current: workshops.map(it => it.id) })
 
     await Promise.all(

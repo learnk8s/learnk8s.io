@@ -2,8 +2,7 @@ import React from 'react'
 import marked from 'marked'
 import { cat } from 'shelljs'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
-import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph, StoreV2, ActionV2 } from './store'
+import { State, Action, getConfig, getPages, getOpenGraph, Store } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -21,10 +20,10 @@ export const TermsAndConditions = {
   description: 'Terms and Conditions that applies to all services offered by Learnk8s',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(TermsAndConditions))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(TermsAndConditions))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-terms-and-conditions',
       pageId: TermsAndConditions.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -34,7 +33,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),

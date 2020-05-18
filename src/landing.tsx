@@ -1,6 +1,5 @@
 import { Training } from './training.v2'
-import { Store } from 'redux'
-import { State, Actions, Action, StoreV2, ActionV2 } from './store'
+import { State, Action, Store } from './store'
 
 export const Pages = {
   landingLondon: {
@@ -33,11 +32,11 @@ export const Pages = {
   },
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+export function Register(store: Store) {
   Object.values(Pages).forEach(page => {
-    storeV2.dispatch(ActionV2.pages.add(page))
-    storeV2.dispatch(
-      ActionV2.redirects.add({
+    store.dispatch(Action.pages.add(page))
+    store.dispatch(
+      Action.redirects.add({
         id: `redirect-${page.id}`,
         fromPageId: page.id,
         redirectToPageId: Training.id,

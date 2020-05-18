@@ -1,10 +1,9 @@
 import React from 'react'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig, StoreV2, ActionV2 } from './store'
+import { State, Action, getPages, getOpenGraph, getConfig, Store } from './store'
 import { material } from './material'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo, FAQs, FAQ } from './layout.v3'
-import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -45,10 +44,10 @@ export const Advanced = {
   description: `A hands-on, online course that dives into the details of Kubernetes architecture and networking.`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(Advanced))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Advanced))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-academy-advanced-in-practice',
       pageId: Advanced.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -58,7 +57,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),

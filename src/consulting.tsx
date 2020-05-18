@@ -14,9 +14,8 @@ import {
   MailTo,
 } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Actions, Action, StoreV2, ActionV2 } from './store'
+import { getOpenGraph, getPages, getConfig, State, Action, Store } from './store'
 import { defaultAssetsPipeline } from './optimise'
-import { Store } from 'redux'
 import { tachyons } from './tachyons/tachyons'
 
 const continuousDeliveryEnquiry: MailTo = {
@@ -44,10 +43,10 @@ export const Consulting = {
   description: 'Expertise in software development, strategy and operations to help you innovate at speed and scale.',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(Consulting))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Consulting))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-consulting',
       pageId: Consulting.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -58,7 +57,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),

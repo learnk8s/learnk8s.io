@@ -1,7 +1,6 @@
 import React from 'react'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig, StoreV2, ActionV2 } from './store'
+import { State, Action, getPages, getOpenGraph, getConfig, Store } from './store'
 import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
-import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -14,10 +13,10 @@ export const Academy = {
   description: `Learn Kubernetes from the comfort of wherever you are with step-by-step tutorial and guided, hands-on material.`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(Academy))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Academy))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-academy',
       pageId: Academy.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -27,7 +26,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),

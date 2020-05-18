@@ -1,6 +1,6 @@
 import { VReference } from '../files'
 import { createEntityAdapter, createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
-import { storeV2 } from '.'
+import { store } from '.'
 
 const courseAdapter = createEntityAdapter<Course>({})
 const venueAdapter = createEntityAdapter<CourseVenue>({})
@@ -8,6 +8,8 @@ const workshopAdapter = createEntityAdapter<Workshop>({})
 const pictureAdapter = createEntityAdapter<CoursePicture>({})
 const priceAdapter = createEntityAdapter<CoursePrice>({})
 const onlineCourseAdapter = createEntityAdapter<OnlineCourse>({})
+const courseInPersonAdapter = createEntityAdapter<CourseInPerson>({})
+const courseOnlineAdapter = createEntityAdapter<CourseOnline>({})
 
 export const courseSlice = createSlice({
   name: 'course',
@@ -59,7 +61,27 @@ export const onlineCourseSlice = createSlice({
   },
 })
 
-export type State = ReturnType<typeof storeV2.getState>
+export const courseInPersonSlice = createSlice({
+  name: 'coursesInPerson',
+  initialState: courseInPersonAdapter.getInitialState(),
+  reducers: {
+    add: (state, action: PayloadAction<Omit<CourseInPerson, 'type'>>) => {
+      return courseInPersonAdapter.addOne(state, { ...action.payload, type: 'in-person' })
+    },
+  },
+})
+
+export const courseOnlineSlice = createSlice({
+  name: 'coursesOnline',
+  initialState: courseOnlineAdapter.getInitialState(),
+  reducers: {
+    add: (state, action: PayloadAction<Omit<CourseOnline, 'type'>>) => {
+      return courseOnlineAdapter.addOne(state, { ...action.payload, type: 'online' })
+    },
+  },
+})
+
+export type State = ReturnType<typeof store.getState>
 
 export const courseReducer = {
   courses: courseSlice.reducer,
@@ -68,6 +90,8 @@ export const courseReducer = {
   pictures: pictureSlice.reducer,
   prices: priceSlice.reducer,
   onlineCourses: onlineCourseSlice.reducer,
+  coursesInPerson: courseInPersonSlice.reducer,
+  coursesOnline: courseOnlineSlice.reducer,
 }
 
 export const Action = {
@@ -77,6 +101,8 @@ export const Action = {
   pictures: { ...pictureSlice.actions },
   prices: { ...priceSlice.actions },
   onlineCourses: { ...onlineCourseSlice.actions },
+  addInPersonCourse: courseInPersonSlice.actions.add,
+  addOnlineCourse: courseOnlineSlice.actions.add,
 }
 
 export const Selector = {
@@ -85,7 +111,9 @@ export const Selector = {
   workshops: workshopAdapter.getSelectors<State>(state => state.workshops),
   pictures: pictureAdapter.getSelectors<State>(state => state.pictures),
   prices: priceAdapter.getSelectors<State>(state => state.prices),
-  onlineCourses: onlineCourseAdapter.getSelectors<State>(state => state.onlineCourses),
+  onlineCourses2: onlineCourseAdapter.getSelectors<State>(state => state.onlineCourses),
+  onlineCourses: courseOnlineAdapter.getSelectors<State>(state => state.coursesOnline),
+  inPersonCourses: courseInPersonAdapter.getSelectors<State>(state => state.coursesInPerson),
 }
 
 const checkWorkshop = middlewareCheck(checkWorkshopRequirement)
@@ -105,7 +133,7 @@ function checkWorkshopRequirement(action: PayloadAction<Workshop>, store: any) {
   if (action.type === 'workshop/add') {
     if (
       !Selector.courses
-        .selectAll(storeV2.getState())
+        .selectAll(store.getState())
         .map(it => it.id)
         .includes(action.payload.courseId)
     ) {
@@ -113,7 +141,7 @@ function checkWorkshopRequirement(action: PayloadAction<Workshop>, store: any) {
     }
     if (
       !Selector.venues
-        .selectAll(storeV2.getState())
+        .selectAll(store.getState())
         .map(it => it.id)
         .includes(action.payload.venueId)
     ) {
@@ -121,7 +149,7 @@ function checkWorkshopRequirement(action: PayloadAction<Workshop>, store: any) {
     }
     if (
       !Selector.prices
-        .selectAll(storeV2.getState())
+        .selectAll(store.getState())
         .map(it => it.id)
         .includes(action.payload.priceId)
     ) {
@@ -129,7 +157,7 @@ function checkWorkshopRequirement(action: PayloadAction<Workshop>, store: any) {
     }
     if (
       !Selector.pictures
-        .selectAll(storeV2.getState())
+        .selectAll(store.getState())
         .map(it => it.id)
         .includes(action.payload.pictureId)
     ) {
@@ -191,4 +219,39 @@ export type OnlineCourse = {
   endsAt: string
   title: string
   image: string
+}
+
+export interface CourseInPerson {
+  id: string
+  type: 'in-person'
+  startsAt: string
+  endsAt: string
+  title: string
+  description: string
+  priceAsString: string
+  price: number
+  currency: string
+  location: string
+  address: string
+  tags: string[]
+  timezone: string
+  link: string
+  url: string
+}
+
+export interface CourseOnline {
+  id: string
+  type: 'online'
+  startsAt: string
+  endsAt: string
+  title: string
+  description: string
+  priceAsString: string
+  price: number
+  currency: string
+  location: string
+  tags: string[]
+  timezone: string
+  link: string
+  url: string
 }

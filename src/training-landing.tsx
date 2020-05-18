@@ -10,25 +10,13 @@ import {
 } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
-import { Store } from 'redux'
-import {
-  State,
-  Actions,
-  Action,
-  getPages,
-  getOpenGraph,
-  getConfig,
-  getAuthors,
-  Selector,
-  StoreV2,
-  ActionV2,
-} from './store'
+import { getPages, getOpenGraph, getConfig, getAuthors, Store, Action, Selector, State } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
 import { tachyons } from './tachyons/tachyons'
 import { Authors } from './aboutUs'
-import { CourseInPerson, CourseOnline } from './store/coursesReducer.v2'
+import { CourseInPerson, CourseOnline } from './store/coursesReducer'
 import { Author } from './store/websiteReducer'
 
 export const faqs: FAQ[] = [
@@ -89,20 +77,20 @@ const privateGroupEnquiry: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
+export function Register(store: Store) {
   const state = store.getState()
   const courses = [...Selector.onlineCourses.selectAll(state), ...Selector.inPersonCourses.selectAll(state)]
   courses.forEach(course => {
-    storeV2.dispatch(
-      ActionV2.pages.add({
+    store.dispatch(
+      Action.pages.add({
         id: `page-${course.id}`,
         url: course.url,
         title: course.title,
         description: course.description,
       }),
     )
-    storeV2.dispatch(
-      ActionV2.openGraphs.add({
+    store.dispatch(
+      Action.openGraphs.add({
         id: `og-${course.id}`,
         pageId: `page-${course.id}`,
         image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -113,7 +101,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   })
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   const inPersonCourses = Selector.inPersonCourses.selectAll(state)
   const onlineCourses = Selector.onlineCourses.selectAll(state)

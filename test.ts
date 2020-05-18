@@ -1,6 +1,6 @@
 const backstop = require('backstopjs')
 import { ok } from 'assert'
-import { store, getPages, storeV2 } from './src/store'
+import { store, getPages } from './src/store'
 import commander from 'commander'
 import { register } from './src/register'
 
@@ -15,7 +15,7 @@ ok(commander.hostname, 'Please provide a hostname such as --hostname http://loca
 ok(commander.approve || commander.test, 'Please provide either --approve or --test')
 
 function renderPage(siteUrl: string): string[] {
-  register(store, storeV2)
+  register(store)
   const state = store.getState()
   const pages = getPages(state)
   return pages.map(it => `${siteUrl}${it.url}`)

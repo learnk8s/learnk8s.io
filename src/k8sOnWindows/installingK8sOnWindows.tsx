@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const K8sOnWindows = {
   description: `In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(K8sOnWindows))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(K8sOnWindows))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-k8s-on-windows',
       pageId: K8sOnWindows.id,
       image: (
@@ -25,8 +24,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: K8sOnWindows.description,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.blogPosts.add({
+  store.dispatch(
+    Action.blogPosts.add({
       id: 'bp-k8s-on-windows',
       pageId: K8sOnWindows.id,
       authorId: Authors.keithMifsud.id,
@@ -37,18 +36,18 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.tags.add({ id: K8sOnWindows.id + '-general-post', tag: 'general-post', pageId: K8sOnWindows.id }),
+  store.dispatch(
+    Action.tags.add({ id: K8sOnWindows.id + '-general-post', tag: 'general-post', pageId: K8sOnWindows.id }),
   )
-  storeV2.dispatch(
-    ActionV2.relatedBlogs.add({
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'k8s-on-windows-related-0',
       blogPostId: 'bp-k8s-on-windows',
       content: toVFile({ path: join(__dirname, 'k8s-on-windows-related.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.previewPictures.add({
+  store.dispatch(
+    Action.previewPictures.add({
       id: 'k8s-on-windows-picture',
       pageId: K8sOnWindows.id,
       image: <img src='src/k8sOnWindows/k8s_on_win.svg' alt={K8sOnWindows.title} />,

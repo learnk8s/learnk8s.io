@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const KubectlProductivity = {
   description: 'Learn the tips and tricks that make your usage of kubectl more efficient and effective.',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(KubectlProductivity))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(KubectlProductivity))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-kubectl-productivity',
       pageId: KubectlProductivity.id,
       image: <img src='src/advancedKubectl/magic.jpg' alt='Advanced kubectl usage' />,
@@ -24,8 +23,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
         'If you work with Kubernetes, then kubectl is probably one of your most-used tools. This article contains a series of tips and tricks to make your usage of kubectl more efficient and effective.',
     }),
   )
-  storeV2.dispatch(
-    ActionV2.blogPosts.add({
+  store.dispatch(
+    Action.blogPosts.add({
       id: 'bp-kubectl-productivity',
       pageId: KubectlProductivity.id,
       authorId: Authors.danielWeibel.id,
@@ -40,22 +39,22 @@ The goal of this article is not only to make your daily work with Kubernetes mor
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.tags.add({
+  store.dispatch(
+    Action.tags.add({
       id: KubectlProductivity.id + 'general-post',
       tag: 'general-post',
       pageId: KubectlProductivity.id,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.relatedBlogs.add({
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'kubectl-productivity-related-0',
       blogPostId: 'bp-kubectl-productivity',
       content: toVFile({ path: join(__dirname, 'kubectl-productivity-related.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.previewPictures.add({
+  store.dispatch(
+    Action.previewPictures.add({
       id: 'kubectl-productivity-picture',
       pageId: KubectlProductivity.id,
       image: <img src='src/advancedKubectl/magic.svg' alt={KubectlProductivity.title} />,

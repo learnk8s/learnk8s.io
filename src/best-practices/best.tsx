@@ -1,7 +1,6 @@
 import React from 'react'
 import { Html, Head, OpenGraph, Body, Navbar, Footer, WhatIsLearnk8s } from '../layout.v3'
-import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig, StoreV2, ActionV2 } from '../store'
+import { State, Action, getPages, getOpenGraph, getConfig, Store } from '../store'
 import { join } from 'path'
 import { toMdast } from '../markdown'
 import { toVFile } from '../files'
@@ -24,10 +23,10 @@ export const BestPractices = {
     'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(BestPractices))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(BestPractices))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-best-practices',
       pageId: BestPractices.id,
       image: <img src='src/best-practices/checklist.jpg' alt='Kubernetes production best practices' />,
@@ -48,7 +47,7 @@ function collectUntil(children: Mdast.Content[], startingElement: Node, untilSel
   return out
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   function parseMd({ title, file }: { file: string; title: string }) {
     const mdast = toMdast(
       toVFile({ contents: readFileSync(join(__dirname, file), 'utf8'), path: join(__dirname, file) }),

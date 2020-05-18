@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -19,10 +18,10 @@ const InfiniteConf = {
   description: `Workshop on Tensorflow and Kubernetes held at InfiniteConf 2018`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(ScalingTensorflow))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ScalingTensorflow))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-scaling-tensorflow',
       pageId: ScalingTensorflow.id,
       image: <img src='src/scalingKubeflow/kubeflow.png' alt='Big data' />,
@@ -30,8 +29,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: ScalingTensorflow.description,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.blogPosts.add({
+  store.dispatch(
+    Action.blogPosts.add({
       id: 'bp-scaling-tensorflow',
       pageId: ScalingTensorflow.id,
       authorId: Authors.salmanIqbal.id,
@@ -41,30 +40,30 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.tags.add({
+  store.dispatch(
+    Action.tags.add({
       id: ScalingTensorflow.id + '-general-post',
       tag: 'general-post',
       pageId: ScalingTensorflow.id,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.relatedBlogs.add({
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'scaling-tensorflow-related-0',
       blogPostId: 'bp-scaling-tensorflow',
       content: toVFile({ path: join(__dirname, 'scaling-tensorflow-related.md') }),
     }),
   )
-  storeV2.dispatch(ActionV2.pages.add(InfiniteConf))
-  storeV2.dispatch(
-    ActionV2.redirects.add({
+  store.dispatch(Action.pages.add(InfiniteConf))
+  store.dispatch(
+    Action.redirects.add({
       id: 'redirect-infinite-conf',
       fromPageId: InfiniteConf.id,
       redirectToPageId: ScalingTensorflow.id,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.previewPictures.add({
+  store.dispatch(
+    Action.previewPictures.add({
       id: 'scaling-tensorflow-picture',
       pageId: ScalingTensorflow.id,
       image: <img src='src/scalingKubeflow/kubeflow.svg' alt={ScalingTensorflow.title} />,

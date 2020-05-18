@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
-import { Store } from 'redux'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const ChaosEngineering = {
   description: `When you deploy an app in Kubernetes, your code ends up running on one or more worker nodes. But what happens when a node breaks and the network proxy crashes?`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(ChaosEngineering))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ChaosEngineering))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-chaos-engineering',
       pageId: ChaosEngineering.id,
       image: <img src='src/chaosEngineering/chaos-engineering-kubernetes.png' alt='Chaos engineering' />,
@@ -23,8 +22,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: ChaosEngineering.description,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.blogPosts.add({
+  store.dispatch(
+    Action.blogPosts.add({
       id: 'bp-chaos-engineering',
       pageId: ChaosEngineering.id,
       authorId: Authors.danielePolencic.id,
@@ -35,18 +34,18 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.tags.add({ id: ChaosEngineering.id + '-general-post', tag: 'general-post', pageId: ChaosEngineering.id }),
+  store.dispatch(
+    Action.tags.add({ id: ChaosEngineering.id + '-general-post', tag: 'general-post', pageId: ChaosEngineering.id }),
   )
-  storeV2.dispatch(
-    ActionV2.relatedBlogs.add({
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'chaos-engineering-related-0',
       blogPostId: 'bp-chaos-engineering',
       content: toVFile({ path: join(__dirname, 'chaos-engineering-related.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.previewPictures.add({
+  store.dispatch(
+    Action.previewPictures.add({
       id: 'chaos-enginnering-picture',
       pageId: ChaosEngineering.id,
       image: <img src='src/chaosEngineering/chaos-engineering-kubernetes.svg' alt={ChaosEngineering.title} />,

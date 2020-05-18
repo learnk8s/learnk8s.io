@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const PersistentConnections = {
   description: `Kubernetes doesn't load balance long-lived connections and some Pods might receive more requests than others. Learn how to fix that.`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(PersistentConnections))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(PersistentConnections))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-persistent-connections',
       pageId: PersistentConnections.id,
       image: (
@@ -25,8 +24,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: `Kubernetes doesn't load balance long-lived connections, and some Pods might receive more requests than others. If you're using HTTP/2, gRPC, RSockets, AMQP or any other long-lived connection such as a database connection, you might want to consider client-side load balancing.`,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.blogPosts.add({
+  store.dispatch(
+    Action.blogPosts.add({
       id: 'bp-persistent-connections',
       pageId: PersistentConnections.id,
       authorId: Authors.danielePolencic.id,
@@ -36,15 +35,15 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.tags.add({
+  store.dispatch(
+    Action.tags.add({
       id: PersistentConnections.id + '-general-post',
       tag: 'general-post',
       pageId: PersistentConnections.id,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.previewPictures.add({
+  store.dispatch(
+    Action.previewPictures.add({
       id: 'persistent-connections-picture',
       pageId: PersistentConnections.id,
       image: <img src='src/persistent-connections/persistent-connections.svg' alt={PersistentConnections.title} />,

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Store } from 'redux'
-import { State, Actions, getConfig, getRedirects, getPages } from './store'
+import { State, getConfig, getRedirects, getPages } from './store'
 import { defaultAssetsPipeline } from './optimise'
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   const redirects = getRedirects(state)
   const pages = getPages(state)

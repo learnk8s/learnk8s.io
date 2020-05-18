@@ -1,8 +1,7 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig, StoreV2, ActionV2 } from './store'
+import { State, Action, getPages, getOpenGraph, getConfig, Store } from './store'
 import { join } from 'path'
-import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { tachyons } from './tachyons/tachyons'
 
@@ -13,10 +12,10 @@ export const ContactUs = {
   description: 'Feel free to get in touch and let us know how we can help. ',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(ContactUs))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ContactUs))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-contact-us',
       pageId: ContactUs.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -26,7 +25,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),

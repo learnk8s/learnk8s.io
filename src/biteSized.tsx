@@ -1,18 +1,6 @@
 import * as React from 'react'
 import { Navbar, Footer, Consultation, Html, Head, Body, OpenGraph } from './layout.v3'
-import { Store } from 'redux'
-import {
-  State,
-  Actions,
-  Action,
-  getConfig,
-  getPages,
-  getOpenGraph,
-  getBlogPosts,
-  hasTag,
-  StoreV2,
-  ActionV2,
-} from './store'
+import { State, Action, getConfig, getPages, getOpenGraph, getBlogPosts, hasTag, Store } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { BlogPost } from './store/websiteReducer'
@@ -27,10 +15,10 @@ export const BiteSized = {
     'A regular column on the most interesting questions that we see online and during our workshops answered by a Kubernetes expert',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(BiteSized))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(BiteSized))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-bite-sized',
       pageId: BiteSized.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -41,7 +29,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),

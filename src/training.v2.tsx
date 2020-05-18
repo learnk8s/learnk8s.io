@@ -10,18 +10,15 @@ import {
 } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
-import { Store } from 'redux'
 import {
   State,
-  Actions,
   getPages,
   getOpenGraph,
   getWorkshops,
   getConfig,
   getOnlineCourses,
-  StoreV2,
-  StateV2,
-  ActionV2,
+  Store,
+  Action,
   Selector,
   getAuthors,
 } from './store'
@@ -93,10 +90,10 @@ export const Training = {
     'Join an instructor-led, hands-on course and become an expert in deploying and scaling applications with containers and Kubernetes.',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(Training))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Training))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-training',
       pageId: Training.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -106,9 +103,9 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 }
 
-export function Mount({ store, storeV2 }: { store: Store<State, Actions>; storeV2: StoreV2 }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
-  const stateV2 = storeV2.getState()
+  const stateV2 = store.getState()
   try {
     defaultAssetsPipeline({
       jsx: renderPage(state, stateV2),
@@ -122,7 +119,7 @@ export function Mount({ store, storeV2 }: { store: Store<State, Actions>; storeV
   }
 }
 
-function renderPage(state: State, stateV2: StateV2) {
+function renderPage(state: State, stateV2: State) {
   const page = getPages(state).find(it => it.id === Training.id)!
   const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
   const courses = getWorkshops(stateV2)

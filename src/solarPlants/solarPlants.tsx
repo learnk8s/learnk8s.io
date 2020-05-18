@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action, StoreV2, ActionV2 } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const SolarPlants = {
   description: `When you have thousands of solar panels and embedded computers how do you orchestrate software updates, monitor uptime and secure communications? Enter Kubernetes.`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(SolarPlants))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(SolarPlants))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-solar-plants',
       pageId: SolarPlants.id,
       image: <img src='src/solarPlants/solar_panel.png' alt='Solar panels and Kubernetes' />,
@@ -23,8 +22,8 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       description: SolarPlants.description,
     }),
   )
-  storeV2.dispatch(
-    ActionV2.blogPosts.add({
+  store.dispatch(
+    Action.blogPosts.add({
       id: 'bp-solar-plants',
       pageId: SolarPlants.id,
       authorId: Authors.danielePolencic.id,
@@ -34,18 +33,16 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.tags.add({ id: SolarPlants.id + '-general-post', tag: 'general-post', pageId: SolarPlants.id }),
-  )
-  storeV2.dispatch(
-    ActionV2.relatedBlogs.add({
+  store.dispatch(Action.tags.add({ id: SolarPlants.id + '-general-post', tag: 'general-post', pageId: SolarPlants.id }))
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'solar-plants-related-0',
       blogPostId: 'bp-solar-plants',
       content: toVFile({ path: join(__dirname, 'solar-plants-related.md') }),
     }),
   )
-  storeV2.dispatch(
-    ActionV2.previewPictures.add({
+  store.dispatch(
+    Action.previewPictures.add({
       id: 'solar-plants-picture',
       pageId: SolarPlants.id,
       image: <img src='src/solarPlants/solar_panel.svg' alt={SolarPlants.title} />,

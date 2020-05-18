@@ -1,5 +1,4 @@
-import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getRedirects, hasTag, StoreV2, ActionV2 } from './store'
+import { State, Action, getConfig, getPages, getRedirects, hasTag, Store } from './store'
 import { RSSPipeline } from './optimise'
 import { join } from 'path'
 
@@ -10,11 +9,11 @@ export const SitemapXML = {
   description: `Sitemap`,
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(SitemapXML))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(SitemapXML))
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   RSSPipeline({
     content: renderPage(state),

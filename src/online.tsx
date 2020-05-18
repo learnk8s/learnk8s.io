@@ -1,6 +1,4 @@
-import { Store } from 'redux'
-
-import { State, Actions, Action, StoreV2, ActionV2 } from './store'
+import { State, Action, Store } from './store'
 import { Training } from './training.v2'
 
 export const Page = {
@@ -10,10 +8,10 @@ export const Page = {
   description: 'Become an expert in deploying application at scale with Kubernetes.',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(Page))
-  storeV2.dispatch(
-    ActionV2.redirects.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Page))
+  store.dispatch(
+    Action.redirects.add({
       id: `redirect-${Page.id}`,
       fromPageId: Page.id,
       redirectToPageId: Training.id,

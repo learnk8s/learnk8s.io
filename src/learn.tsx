@@ -1,7 +1,6 @@
 import React from 'react'
 import { Footer, Html, Head, OpenGraph, Body, Navbar } from './layout.v3'
-import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig, StoreV2, ActionV2 } from './store'
+import { State, Action, getPages, getOpenGraph, getConfig, Store } from './store'
 import { join } from 'path'
 import { defaultAssetsPipeline } from './optimise'
 import { tachyons } from './tachyons/tachyons'
@@ -16,10 +15,10 @@ export const Learn = {
     'Join an instructor-led, hands-on course and become an expert in deploying and scaling applications with containers and Kubernetes.',
 }
 
-export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
-  storeV2.dispatch(ActionV2.pages.add(Learn))
-  storeV2.dispatch(
-    ActionV2.openGraphs.add({
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Learn))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-learn',
       pageId: Learn.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -29,7 +28,7 @@ export function Register(store: Store<State, Actions>, storeV2: StoreV2) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   try {
     defaultAssetsPipeline({
