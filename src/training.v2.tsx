@@ -16,7 +16,6 @@ import {
   getOpenGraph,
   getWorkshops,
   getConfig,
-  getOnlineCourses,
   Store,
   Action,
   Selector,

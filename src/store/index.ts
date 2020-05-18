@@ -56,10 +56,6 @@ export function getWorkshops(state: State): CoursesReducer.FullWorkshop[] {
   })
 }
 
-export function getOnlineCourses(state: State): OnlineCourse[] {
-  return Object.values(Selector.onlineCourses2.selectAll(state))
-}
-
 export function getConfig(state: State): ConfigReducer.Config {
   return Selector.configs.selectAll(store.getState())[0]
 }
