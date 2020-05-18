@@ -72,22 +72,22 @@ const publicOnlineCourseEnquiry = (date: Date | number): MailTo => ({
   email: 'hello@learnk8s.io',
 })
 
-const privateGroupEnquiry: MailTo = {
-  subject: 'Advanced Kubernetes training — Private group enquiry',
-  body: `Hi Learnk8s,\n\nWe wish to train ___(number) people to Kubernetes and containers in ____(month). Can you help?\n\nBest regards,\n`,
-  email: 'hello@learnk8s.io',
-}
-
 export function Register(store: Store<State, Actions>) {
   const state = store.getState()
-  const courses = [...Selector.onlineCourses.selectAll(state), ...Selector.inPersonCourses.selectAll(state)]
-  courses.forEach(course => {
+  const onlineCourses = Selector.onlineCourses.selectAll(state)
+  const inPersonCourses = Selector.inPersonCourses.selectAll(state)
+  onlineCourses.forEach(course => {
+    const title = `${course.title} — ${course.location}`
+    const description = `Join the ${format(
+      new Date(course.startsAt),
+      'MMMM yyyy',
+    )} online Kubernetes course and become an expert in deploying and scaling applications with Kubernetes.`
     store.dispatch(
       Action.registerPage({
         id: `page-${course.id}`,
         url: course.url,
-        title: course.title,
-        description: course.description,
+        title,
+        description,
       }),
     )
     store.dispatch(
@@ -95,8 +95,31 @@ export function Register(store: Store<State, Actions>) {
         id: `og-${course.id}`,
         pageId: `page-${course.id}`,
         image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-        description: course.description,
-        title: course.title,
+        description,
+        title,
+      }),
+    )
+  })
+  inPersonCourses.forEach(course => {
+    const title = `${course.title} — ${course.location}`
+    const description = `Join the ${format(new Date(course.startsAt), 'MMMM yyyy')} Kubernetes course in ${
+      course.location
+    } and become an expert in deploying and scaling applications with Kubernetes.`
+    store.dispatch(
+      Action.registerPage({
+        id: `page-${course.id}`,
+        url: course.url,
+        title,
+        description,
+      }),
+    )
+    store.dispatch(
+      Action.registerOpenGraph({
+        id: `og-${course.id}`,
+        pageId: `page-${course.id}`,
+        image: <img src='assets/opengraph.v2.png' alt='Learnk8s' />,
+        description,
+        title,
       }),
     )
   })
@@ -213,7 +236,7 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
       <Body>
         <Navbar />
 
-        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt5'>
+        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt0 mt5-ns'>
           <CTAInPerson course={course}></CTAInPerson>
         </section>
 
@@ -221,7 +244,7 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
           <div className='mt4 measure f3-l f4 center'>
             <h2 className='f1-l f2 navy tc'>How does it work?</h2>
             <p className='measure f3-l f4 lh-copy center'>
-              This is a <span className='b'>full time, 3 days course</span> on learning and mastering Kubernetes.
+              This is a <span className='b'>full-time, 3 days course</span> on learning and mastering Kubernetes.
             </p>
             <p className='measure f3-l f4 lh-copy center'>Things you need to know about the course:</p>
             <ul className='list pl0 ph2-ns'>
@@ -399,7 +422,7 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
       <Body>
         <Navbar />
 
-        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt5'>
+        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt0 mt5-ns'>
           <CTAOnline course={course}></CTAOnline>
         </section>
 
@@ -407,7 +430,7 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
           <div className='mt4 measure f3-l f4 center'>
             <h2 className='f1-l f2 navy tc'>How does it work?</h2>
             <p className='measure f3-l f4 lh-copy center'>
-              This is a <span className='b'>full time, 3 days course</span> on learning and mastering Kubernetes.
+              This is a <span className='b'>full-time, 3 days course</span> on learning and mastering Kubernetes.
             </p>
             <p className='measure f3-l f4 lh-copy center'>Things you need to know about the course:</p>
             <ul className='list pl0 ph2-ns'>
@@ -640,10 +663,12 @@ const CTAInPerson: React.StatelessComponent<{
 }> = ({ children, className, course }) => {
   return (
     <>
-      <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Join the next Advanced Kubernetes course in {course.location}</p>
+      <p className='f1-l f2 navy b tc ph3 mb3 mt4 measure-narrow center'>
+        Join the next Advanced Kubernetes course in {course.location}
+      </p>
       <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>What you need to know:</p>
 
-      <ul className='pl0 list f3 mw6 center'>
+      <ul className='pl0 list f4 f3-ns mw6 center'>
         <li className='mv3 flex items-center'>
           <p className='b w-30 mv0'>When:</p>
           <p className='mv0 w-70'>{format(new Date(course.startsAt), `do 'of' MMMM yyyy`)}</p>
@@ -674,7 +699,7 @@ const CTAInPerson: React.StatelessComponent<{
             </a> */}
         <a
           href={mailto(publicOnlineCourseEnquiry(new Date(course.startsAt)))}
-          className='link dib white bg-sky br1 pa3 b f5 mv3 submit br2 b--none ttu'
+          className='link dib white bg-navy br1 pa3 b f5 mv3 submit br2 b--none ttu'
         >
           Book a ticket now
         </a>
@@ -706,10 +731,10 @@ const CTAOnline: React.StatelessComponent<{
 }> = ({ children, className, course }) => {
   return (
     <>
-      <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Join the online Advanced Kubernetes course</p>
+      <p className='f1-l f2 navy b tc ph3 mb3 mt4 measure-narrow center'>Join the online Advanced Kubernetes course</p>
       <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>What you need to know:</p>
 
-      <ul className='pl0 list f3 mw6 center'>
+      <ul className='pl0 list f4 f3-ns mw6 center'>
         <li className='mv3 flex items-center'>
           <p className='b w-30 mv0'>When:</p>
           <p className='mv0 w-70'>{format(new Date(course.startsAt), `do 'of' MMMM yyyy`)}</p>
@@ -740,7 +765,7 @@ const CTAOnline: React.StatelessComponent<{
             </a> */}
         <a
           href={mailto(publicOnlineCourseEnquiry(new Date(course.startsAt)))}
-          className='link dib white bg-sky br1 pa3 b f5 mv3 submit br2 b--none ttu'
+          className='link dib white bg-navy br1 pa3 b f5 mv3 submit br2 b--none ttu'
         >
           Book a ticket now
         </a>
@@ -998,9 +1023,8 @@ const Agenda: React.StatelessComponent<{ className?: string }> = ({ children, cl
           You will cover as many modules as possible, starting from the most popular.
         </p>
         <p className='lh-copy f4 black-80 measure center ph3 mb3 mb5-ns b'>
-          In private and corporate training, you can customise the schedule in full.{' '}
-          <a href={mailto(privateGroupEnquiry)} className='link navy underline'>
-            Get in touch to learn more.
+          <a href='/corporate-training' className='link navy underline'>
+            In private and corporate training, you can customise the schedule in full.
           </a>
         </p>
       </div>
@@ -1069,7 +1093,7 @@ const SecondaryCTA: React.StatelessComponent<{ className?: string; identifier: s
               <input
                 type='submit'
                 defaultValue='Subscribe'
-                className='dib white bg-blue br1 pv2 ph3 b f5 bn pointer'
+                className='dib white bg-navy br1 pv2 ph3 b f5 bn pointer'
                 name='submit'
               />
             </div>
