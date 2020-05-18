@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Navbar, Footer, Consultation, Html, Head, Body, OpenGraph } from './layout.v3'
-import { State, Action, getConfig, getBlogPosts, hasTag, Store, Selector } from './store'
+import { State, Action, getConfig, hasTag, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { BlogPost } from './store/websiteReducer'
@@ -45,7 +45,7 @@ function renderPage(state: State) {
   const page = pages.find(it => it.id === BiteSized.id)!
   const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === BiteSized.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
-  const blogPosts = getBlogPosts(state)
+  const blogPosts = Selector.blogPosts.selectAll(state)
     .filter(post => hasTag(state, 'bite-sized')(pages.find(it => it.id === post.pageId)!))
     .sort(comparePublishedDate)
   return (

@@ -1,14 +1,5 @@
 import * as React from 'react'
-import {
-  getConfig,
-  State,
-  getBlogPosts,
-  getBlogPostMarkdownBlocks,
-  hasTag,
-  getPreviewPictures,
-  Selector,
-  Store,
-} from './store'
+import { getConfig, State, getBlogPostMarkdownBlocks, hasTag, getPreviewPictures, Selector, Store } from './store'
 import { Page } from './store/websiteReducer'
 import { Head, Html, Body, Navbar, OpenGraph, Footer, Author, Subscribe, WhatIsLearnk8s } from './layout.v3'
 import { format } from 'date-fns'
@@ -46,7 +37,7 @@ export async function renderPage(pageMeta: Page, state: State) {
   if (!openGraph) {
     throw new Error('The page does not have an open graph.')
   }
-  const blog = getBlogPosts(state).find(it => it.pageId === pageMeta.id)
+  const blog = Selector.blogPosts.selectAll(state).find(it => it.pageId === pageMeta.id)
   if (!blog) {
     throw new Error('The page is not a blog post page.')
   }

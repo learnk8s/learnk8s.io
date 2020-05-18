@@ -60,10 +60,6 @@ export function getConfig(state: State): ConfigReducer.Config {
   return Selector.configs.selectAll(store.getState())[0]
 }
 
-export function getBlogPosts(state: State): WebsiteReducer.BlogPost[] {
-  return Object.values(Selector.blogPosts.selectAll(store.getState()))
-}
-
 export function hasTag(state: State, tagId: string) {
   return (page: WebsiteReducer.Page) => {
     return Selector.tags

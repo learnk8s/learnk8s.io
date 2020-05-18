@@ -1,14 +1,6 @@
 import * as React from 'react'
 import { Store } from 'redux'
-import {
-  State,
-  hasTag,
-  getBlogPosts,
-  getBlogPostMarkdownBlocks,
-  getConfig,
-  getPreviewPictures,
-  Selector,
-} from './store'
+import { State, hasTag, getBlogPostMarkdownBlocks, getConfig, getPreviewPictures, Selector } from './store'
 import { toVFile, read } from './files'
 import { join } from 'path'
 import { Html, Head, OpenGraph, Body, Footer, Navbar, Subscribe, Author, WhatIsLearnk8s } from './layout.v3'
@@ -45,7 +37,7 @@ async function renderPage(page: Page, state: State) {
   if (!openGraph) {
     throw new Error('The page does not have an open graph.')
   }
-  const blog = getBlogPosts(state).find(it => it.pageId === page.id)
+  const blog = Selector.blogPosts.selectAll(state).find(it => it.pageId === page.id)
   if (!blog) {
     throw new Error('The page is not a blog post page.')
   }

@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { State, Action, getConfig, getBlogPosts, Store, Selector } from './store'
+import { State, Action, getConfig, Store, Selector } from './store'
 import { RSSPipeline } from './optimise'
 
 export const RSS = {
@@ -46,7 +46,7 @@ function renderPage(state: State) {
   if (!page) {
     throw new Error(`RSS page not registered`)
   }
-  const blogPosts = getBlogPosts(state)
+  const blogPosts = Selector.blogPosts.selectAll(state)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
 
   const feed = [

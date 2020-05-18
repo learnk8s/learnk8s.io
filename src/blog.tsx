@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, Consultation } from './layout.v3'
 import { join } from 'path'
-import { getConfig, State, Action, getBlogPosts, hasTag, Store, Selector } from './store'
+import { getConfig, State, Action, hasTag, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { BlogPost } from './store/websiteReducer'
 import { format } from 'date-fns'
@@ -43,7 +43,7 @@ function renderPage(state: State) {
   const page = pages.find(it => it.id === Blog.id)!
   const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === Blog.id)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
-  const blogPosts = getBlogPosts(state).sort(comparePublishedDate)
+  const blogPosts = Selector.blogPosts.selectAll(state).sort(comparePublishedDate)
   return (
     <Html>
       <Head title={page.title} description={page.description}>
