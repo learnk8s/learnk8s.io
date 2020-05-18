@@ -12,7 +12,7 @@ import {
   getPreviewPictures,
 } from './store'
 import { Page } from './store/websiteReducer'
-import { Head, Html, Body, Navbar, OpenGraph, Footer, Author, Subscribe, WhatIsLearnk8s } from './layout.v3'
+import { Head, Html, Body, OpenGraph, Footer, Author, Subscribe, WhatIsLearnk8s, NavbarSlim } from './layout.v3'
 import { format } from 'date-fns'
 import { join } from 'path'
 import { read } from './files'
@@ -107,10 +107,10 @@ export async function renderPage(pageMeta: Page, state: State) {
         />
       </Head>
       <Body>
-        <div className='white mb4 mb5-ns'>
-          <Navbar />
+        <div className='white sticky-l top-0 z-max'>
+          <NavbarSlim />
         </div>
-        <div className='tc mb4 db mw4 center'>
+        <div className='tc mb4 db mw4 center mt4 mt5-ns'>
           <Author name={author.fullName} avatar={author.avatar} link={author.link} />
         </div>
         <article className='lazy-article ph3 pt0 pb4 mw7 center'>
