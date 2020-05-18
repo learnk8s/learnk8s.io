@@ -656,8 +656,8 @@ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml \
 
 [Install Weave Net](https://www.weave.works/docs/net/latest/kubernetes/kube-addon/) on the second cluster:
 
-```terminal|command=1-2|title=bash
-K8S_VERSION=$(kubectl --kubeconfig obliging-eft.conf version | base64 | tr -d '\n')
+```terminal|command=1,2-3|title=bash
+K8S_VERSION=$(kubectl version --kubeconfig obliging-eft.conf | base64 | tr -d '\n')
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$K8S_VERSION" \
   --kubeconfig obliging-eft.conf 
 ```
