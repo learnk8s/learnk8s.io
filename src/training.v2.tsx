@@ -10,7 +10,7 @@ import {
 } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
-import { State, getWorkshops, getConfig, Store, Action, Selector } from './store'
+import { State, getConfig, Store, Action, Selector } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
@@ -96,7 +96,6 @@ export function Mount({ store }: { store: Store }) {
 function renderPage(state: State) {
   const page = Selector.pages.selectAll(state).find(it => it.id === Training.id)!
   const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === Training.id)
-  const courses = getWorkshops(state)
   const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   const instructors = Selector.authors
     .selectAll(state)

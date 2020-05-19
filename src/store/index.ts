@@ -1,8 +1,6 @@
-import { createStore, combineReducers } from 'redux'
 import * as CoursesReducer from './coursesReducer'
 import * as WebsiteReducer from './websiteReducer'
 import * as ConfigReducer from './configReducer'
-import { OnlineCourse } from './coursesReducer'
 import { configureStore } from '@reduxjs/toolkit'
 
 export type State = ReturnType<typeof store.getState>
