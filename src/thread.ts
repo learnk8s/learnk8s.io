@@ -15,6 +15,9 @@ import * as Hast$ from 'hast-util-select'
 import * as Unist$ from 'unist-util-select'
 import remove from 'unist-util-remove'
 import open from 'open'
+import inspect from 'unist-util-inspect'
+import { selectAll } from 'unist-util-select'
+import { mdast2tweet, TweetComponent } from './markdown/tweet'
 import { homedir } from 'os'
 import { createInterface, Interface } from 'readline'
 
@@ -38,6 +41,16 @@ interface TwitterCredential {
 interface Content {
   text: string
   images: string[]
+}
+
+interface Block {
+  content: Content
+  links: Link[]
+}
+
+interface Link {
+  type: string
+  value?: string
 }
 
 interface PostContent {
@@ -137,8 +150,8 @@ commander
     }
     checkFileExists(filename)
     const blocks = makeBlocks(filename)
-    const contents = extractImage({ blocks, filename })
-    lint(contents.map(c => c.text))
+    lint(blocks)
+    const contents = extractImage({ blocks: blocks.map(it => it.content), filename })
 
     const imagePaths = contents
       .reduce((acc, b) => [...acc, ...b.images], [] as string[])
@@ -275,35 +288,92 @@ function checkFileExists(filename: string) {
   }
 }
 
-function makeBlocks(filename: string): string[] {
+function makeBlocks(filename: string): Block[] {
   const file = readFileSync(filename, 'utf8')
-  return file.split('---').map((text, i, arr) => {
+  return file.split('---').map((block, i, arr) => {
+    const mdast = toMdast(toVFile({ contents: block }))
+    const tweets: TweetComponent = transform(mdast, mdast2tweet())
     const total = arr.length - 1
     const counter = `${i}/${total}`
-    return `${counter}\n\n${text}`
-  })
-}
+    const links: Link[] = []
+    const text: string =
+      tweets.children
+        ?.filter(it => it.type !== 'image')
+        .reduce((acc, it) => {
+          switch (it.type) {
+            case 'list':
+              if (it.start !== undefined) {
+                const itemText = it.children?.reduce((acc, li, index) => {
+                  const text = li.children?.reduce((acc, it) => {
+                    if (it.type === 'link') {
+                      links.push(it)
+                    }
+                    return `${acc}${it.value}`
+                  }, '')
+                  return `${acc}\n${index + (it.start || 1)}. ${text}`
+                }, '')
+                return `${acc}\n\n${itemText}`
+              }
 
-function lint(blocks: string[]): void {
-  blocks.forEach(block => {
-    if (block.length > 280) {
-      throw new Error(`It should have stopped at:\n ${block.slice(0, 280)}`)
+              const itemText = it.children?.reduce((acc, li) => {
+                const text = li.children?.reduce((acc, it) => {
+                  if (it.type === 'link') {
+                    links.push(it)
+                  }
+                  return `${acc}${it.value}`
+                }, '')
+                return `${acc}\n- ${text}`
+              }, '')
+              return `${acc}\n\n${itemText}`
+
+            case 'paragraph':
+              const text = it.children?.reduce((acc, it) => {
+                if (it.type === 'link') {
+                  links.push(it)
+                }
+                return `${acc}${it.value}`
+              }, '')
+              return `${acc}\n\n${text}`
+            default:
+              if (it.type === 'link') {
+                links.push(it)
+              }
+              return `${acc}\n\n${it.value}`
+          }
+        }, '') || ''
+
+    const images = tweets.children!.filter(it => it.type === 'image').map(it => it.value as string)
+    const tweetAndImage = {
+      text: i === 0 ? text.trim() : `${counter}${text}`.trim(),
+      images: images,
+    }
+    return {
+      content: tweetAndImage,
+      links,
     }
   })
 }
 
-function extractImage({ blocks, filename }: { blocks: string[]; filename: string }): Content[] {
-  const imagesRegex = /!\[.*?\]\(.+?\)/g
-  const imagePathRegex = /!\[.*?\]\((.+?)\)/
+function lint(blocks: Block[]): void {
+  blocks.forEach(block => {
+    const text = block.content.text
+    const textLength =
+      block.links.reduce((acc, it) => {
+        return acc + 23 - it.value!.length
+      }, 0) + text.length
+    if (textLength > 280) {
+      throw new Error(`Block length cannot more than 280 at: ${text}`)
+    }
+  })
+}
+
+function extractImage({ blocks, filename }: { blocks: Content[]; filename: string }): Content[] {
   return blocks.map(block => {
-    const images = block.match(imagesRegex) || []
-    const imagePaths = images.map(img => {
-      const [, path] = img.match(imagePathRegex)!
-      return join(resolve(dirname(filename)), path)
+    const imagePaths = block.images.map(img => {
+      return join(resolve(dirname(filename)), img)
     })
-    const text = block.replace(imagesRegex, '')
     return {
-      text: text.trim(),
+      text: block.text,
       images: imagePaths,
     }
   })
@@ -312,6 +382,9 @@ function extractImage({ blocks, filename }: { blocks: string[]; filename: string
 function checkImageNumberPerPost(contents: Content[]) {
   contents.forEach(content => {
     content.images.forEach(path => {
+      if (!path) {
+        return
+      }
       const ext = extname(path).slice(1)
       switch (ext) {
         case 'gif':
