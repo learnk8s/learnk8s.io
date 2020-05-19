@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const WhatIsKubernetes = {
   description: `Learn why Kubernetes emrged as the de-facto container orchestrator.s`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(WhatIsKubernetes))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(WhatIsKubernetes))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-what-is-kubernetes',
       pageId: WhatIsKubernetes.id,
       image: <img src='src/whatIsKubernetes/why-kube.png' alt='Kubernetes bucks' />,
@@ -24,7 +23,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-what-is-kubernetes',
       pageId: WhatIsKubernetes.id,
       authorId: Authors.danielePolencic.id,
@@ -34,16 +33,18 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: WhatIsKubernetes.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({ id: WhatIsKubernetes.id + '-general-post', tag: 'general-post', pageId: WhatIsKubernetes.id }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'what-is-kubernetes-related-0',
       blogPostId: 'bp-what-is-kubernetes',
       content: toVFile({ path: join(__dirname, 'what-is-kubernetes-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'what-is-kubernetes-picture',
       pageId: WhatIsKubernetes.id,
       image: <img src='src/whatIsKubernetes/why-kube.svg' alt={WhatIsKubernetes.title} />,

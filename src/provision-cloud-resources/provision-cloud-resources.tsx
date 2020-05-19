@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const ProvisionCloudResources = {
   description: `You can create and connect to managed cloud provider resources using the Service Catalog, a tool such as Kubeform or cloud-specific operators`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(ProvisionCloudResources))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ProvisionCloudResources))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-provision-cloud-resources',
       pageId: ProvisionCloudResources.id,
       image: (
@@ -29,7 +28,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-provision-cloud-resources',
       pageId: ProvisionCloudResources.id,
       authorId: Authors.danielePolencic.id,
@@ -40,16 +39,22 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ProvisionCloudResources.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({
+      id: ProvisionCloudResources.id + '-general-post',
+      tag: 'general-post',
+      pageId: ProvisionCloudResources.id,
+    }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'provision-cloud-resources-related-0',
       blogPostId: 'bp-provision-cloud-resources',
       content: toVFile({ path: join(__dirname, 'provision-cloud-resources-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'provision-cloud-resources-picture',
       pageId: ProvisionCloudResources.id,
       image: <img src='src/provision-cloud-resources/cloud-resources.svg' alt={ProvisionCloudResources.title} />,

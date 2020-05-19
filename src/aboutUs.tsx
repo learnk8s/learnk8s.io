@@ -1,7 +1,6 @@
 import React from 'react'
 import { Navbar, Html, OpenGraph, Head, Body, Footer, Consultation } from './layout.v3'
-import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph } from './store'
+import { State, Action, getConfig, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -159,10 +158,10 @@ export const Authors = {
   },
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(AboutUs))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(AboutUs))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-about-us',
       pageId: AboutUs.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -170,10 +169,10 @@ export function Register(store: Store<State, Actions>) {
       description: 'Experienced software consultants, specialising in Kubernetes.',
     }),
   )
-  Object.values(Authors).forEach(author => store.dispatch(Action.registerAuthor(author)))
+  Object.values(Authors).forEach(author => store.dispatch(Action.authors.add(author)))
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),
@@ -185,9 +184,9 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === AboutUs.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === AboutUs.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const page = Selector.pages.selectAll(state).find(it => it.id === AboutUs.id)!
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === AboutUs.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>
       <Head title={page.title} description={page.description}>

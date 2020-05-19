@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const ScalingSpringBoot = {
   description: `Learn how to scale SpringBoot apps in Kubernetes using the autoscaler and a message broker such as Kafka, RabbitMQ or ActiveMQ.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(ScalingSpringBoot))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ScalingSpringBoot))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-scaling-spring-boot',
       pageId: ScalingSpringBoot.id,
       image: <img src='src/scalingSpringBoot/autoscaling.png' alt='Containers' />,
@@ -24,7 +23,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-scaling-spring-boot',
       pageId: ScalingSpringBoot.id,
       authorId: Authors.danielePolencic.id,
@@ -35,16 +34,22 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ScalingSpringBoot.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({
+      id: ScalingSpringBoot.id + '-general-post',
+      tag: 'general-post',
+      pageId: ScalingSpringBoot.id,
+    }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'scaling-spring-boot-related-0',
       blogPostId: 'bp-scaling-spring-boot',
       content: toVFile({ path: join(__dirname, 'scaling-spring-boot-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'scaling-spring-boot-picture',
       pageId: ScalingSpringBoot.id,
       image: <img src='src/scalingSpringBoot/autoscaling.svg' alt={ScalingSpringBoot.title} />,

@@ -1,5 +1,4 @@
-import { Store } from 'redux'
-import { State, Actions, Action } from './store'
+import { State, Action, store, Store, Selector } from './store'
 import { toVFile } from './files'
 import { join } from 'path'
 
@@ -205,258 +204,134 @@ const NewPictures = {
   },
 }
 
-export function Register(store: Store<State, Actions>) {
-  Object.values(NewPictures).forEach(picture => store.dispatch(Action.registerCoursePicture(picture)))
-  Object.values(Courses).forEach(course => store.dispatch(Action.registerCourse(course)))
-  Object.values(Venues).forEach(venue => store.dispatch(Action.registerCourseVenue(venue)))
-  Object.values(CoursePrice).forEach(price => store.dispatch(Action.registerCoursePrice(price)))
+export function Register(store: Store) {
+  Object.values(NewPictures).forEach(picture => store.dispatch(Action.pictures.add(picture)))
+  Object.values(Courses).forEach(course => store.dispatch(Action.courses.add(course)))
+  Object.values(Venues).forEach(venue => store.dispatch(Action.venues.add(venue)))
+  Object.values(CoursePrice).forEach(price => store.dispatch(Action.prices.add(price)))
+
   store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|SINGAPORE|20200217',
-      startsAt: '2020-03-16T10:00:00',
-      endsAt: '2020-03-18T17:00:00',
-      timezone: 'Asia/Singapore',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Singapore.id,
-      venueId: Venues.JustCoSg.id,
-      pictureId: NewPictures.one.id,
+    Action.addInPersonCourse({
+      id: 'LK8S|LONDON|20201005',
+      startsAt: '2020-10-05T09:30:00',
+      endsAt: '2020-10-07T17:00:00',
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'GBP 1950.00',
+      price: 1950,
+      currency: 'GBP',
+      location: 'London',
+      address: 'CitizenM Southbank, London, UK',
+      tags: ['country-europe', 'course-in-person'],
+      timezone: 'GMT',
+      link: '#',
+      url: '/london-october-2020',
     }),
   )
   store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|SYDNEY|20200304',
-      startsAt: '2020-03-04T09:30:00',
-      endsAt: '2020-03-06T05:00:00',
-      timezone: 'Australia/Sydney',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Australia.id,
-      venueId: Venues.GenericSydney.id,
-      pictureId: NewPictures.one.id,
+    Action.addInPersonCourse({
+      id: 'LK8S|SINGAPORE|20201005',
+      startsAt: '2020-10-05T09:30:00',
+      endsAt: '2020-10-07T17:00:00',
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'SGD 2550.00',
+      price: 2550,
+      currency: 'SGD',
+      location: 'Singapore',
+      address: 'JustCo, Singapore',
+      tags: ['country-sea', 'course-in-person'],
+      timezone: 'SGT',
+      link: '#',
+      url: '/singapore-october-2020',
     }),
   )
   store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|BERLIN|20200304',
-      startsAt: '2020-02-26T09:30:00',
-      endsAt: '2020-02-28T05:00:00',
-      timezone: 'Europe/Berlin',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Germany.id,
-      venueId: Venues.GenericBerlin.id,
-      pictureId: NewPictures.one.id,
+    Action.addInPersonCourse({
+      id: 'LK8S|SANFRANCISCO|20201012',
+      startsAt: '2020-10-05T09:30:00',
+      endsAt: '2020-10-07T17:00:00',
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'USD 2,650.00',
+      price: 2650,
+      currency: 'USD',
+      location: 'San Francisco',
+      address: 'San Francisco, CA',
+      tags: ['country-na', 'course-in-person'],
+      timezone: 'PDT',
+      link: '#',
+      url: '/san-francisco-october-2020',
     }),
   )
   store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|LONDON|20200311',
-      startsAt: '2020-04-27T09:30:00',
-      endsAt: '2020-04-29T05:00:00',
-      timezone: 'Europe/London',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.GreatBritain.id,
-      venueId: Venues.LondonCitizenM.id,
-      pictureId: NewPictures.one.id,
+    Action.addInPersonCourse({
+      id: 'LK8S|ZURICH|20201005',
+      startsAt: '2020-10-05T09:30:00',
+      endsAt: '2020-10-07T17:00:00',
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'SGD 2550.00',
+      price: 2800,
+      currency: 'CHF',
+      location: 'Zurich',
+      address: 'Zurich, Switzerland',
+      tags: ['country-europe', 'course-in-person'],
+      timezone: 'CET',
+      link: '#',
+      url: '/zurich-october-2020',
     }),
   )
+
   store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|HONGKONG|20200311',
-      startsAt: '2020-03-11T09:30:00',
-      endsAt: '2020-03-13T05:00:00',
-      timezone: 'Asia/Hong_Kong',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.HongKong.id,
-      venueId: Venues.GenericHongKong.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|MILAN|20200318',
-      startsAt: '2020-03-18T09:30:00',
-      endsAt: '2020-03-20T05:00:00',
-      timezone: 'Europe/Rome',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Italy.id,
-      venueId: Venues.GenericMilan.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|DUBAI|20200318',
-      startsAt: '2020-03-18T09:30:00',
-      endsAt: '2020-03-20T05:00:00',
-      timezone: 'Asia/Dubai',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.UnitedArabEmirates.id,
-      venueId: Venues.GenericDubai.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|LONDON|20200629',
-      startsAt: '2020-06-29T09:30:00',
-      endsAt: '2020-07-01T05:00:00',
-      timezone: 'Europe/London',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.GreatBritain.id,
-      venueId: Venues.LondonCitizenM.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|SANFRANCISCO|20200622',
-      startsAt: '2020-06-22T09:30:00',
-      endsAt: '2020-06-24T05:00:00',
-      timezone: 'America/Los_Angeles',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.UnitedStates.id,
-      venueId: Venues.GenericSanFrancisco.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|MELBOURNE|20200615',
-      startsAt: '2020-06-15T09:30:00',
-      endsAt: '2020-06-17T05:00:00',
-      timezone: 'Australia/Sydney',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Australia.id,
-      venueId: Venues.GenericMelbourne.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|HONGKONG|20200610',
-      startsAt: '2020-06-10T09:30:00',
-      endsAt: '2020-06-12T05:00:00',
-      timezone: 'Asia/Hong_Kong',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.HongKong.id,
-      venueId: Venues.GenericHongKong.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|MUNICH|20200608',
-      startsAt: '2020-06-08T09:30:00',
-      endsAt: '2020-06-10T05:00:00',
-      timezone: 'Europe/Berlin',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Germany.id,
-      venueId: Venues.GenericMunich.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|DUBAI|20200609',
-      startsAt: '2020-06-09T09:30:00',
-      endsAt: '2020-06-11T05:00:00',
-      timezone: 'Asia/Dubai',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.UnitedArabEmirates.id,
-      venueId: Venues.GenericDubai.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|SINGAPORE|20200601',
+    Action.addOnlineCourse({
+      id: 'LK8S|ONLINE|20200601',
       startsAt: '2020-06-01T10:00:00',
       endsAt: '2020-06-03T17:00:00',
-      timezone: 'Asia/Singapore',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Singapore.id,
-      venueId: Venues.JustCoSg.id,
-      pictureId: NewPictures.one.id,
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'USD 2,249.00',
+      price: 2249,
+      currency: 'USD',
+      location: 'Online',
+      tags: ['course-online', 'price-online-course'],
+      timezone: 'SGT',
+      link: '#',
+      url: '/online-singapore-june-2020',
     }),
   )
   store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|ZURICH|20200601',
-      startsAt: '2020-06-01T09:30:00',
-      endsAt: '2020-06-03T05:00:00',
-      timezone: 'Europe/Zurich',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Switzerland.id,
-      venueId: Venues.GenericZurich.id,
-      pictureId: NewPictures.one.id,
+    Action.addOnlineCourse({
+      id: 'LK8S|ONLINE|20200608',
+      startsAt: '2020-06-08T10:00:00',
+      endsAt: '2020-06-10T17:00:00',
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'USD 2,249.00',
+      price: 2249,
+      currency: 'USD',
+      location: 'Online',
+      tags: ['course-online', 'price-online-course'],
+      timezone: 'CET',
+      link: '#',
+      url: '/online-london-june-2020',
     }),
   )
   store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|TORONTO|20200615',
-      startsAt: '2020-06-15T09:30:00',
-      endsAt: '2020-06-17T05:00:00',
-      timezone: 'America/Toronto',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.Canada.id,
-      venueId: Venues.GenericToronto.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerWorkshop({
-      id: 'LK8S|SEATTLE|20200629',
-      startsAt: '2020-06-29T09:30:00',
-      endsAt: '2020-07-01T05:00:00',
-      timezone: 'America/Los_Angeles',
-      courseId: Courses.threeDays.id,
-      priceId: CoursePrice.UnitedStates.id,
-      venueId: Venues.GenericSeattle.id,
-      pictureId: NewPictures.one.id,
-    }),
-  )
-  store.dispatch(
-    Action.registerOnlineCourse({
-      id: 'LK8S|ONLINE|20200427',
-      timezone: 'Central European Time (CET) UTC+1',
-      defaultPrice: {
-        country: 'US',
-        currency: 'USD',
-        gross: 2250,
-      },
-      startsAt: '2020-04-27T09:00:00',
-      endsAt: '2020-04-29T17:00:00',
-      title: 'Advanced Kubernetes course — Europe & Africa',
-      image: NewPictures.one.src,
-    }),
-  )
-  store.dispatch(
-    Action.registerOnlineCourse({
-      id: 'LK8S|ONLINE|20200513',
-      timezone: 'Central Time US (CDT) UTC-5',
-      defaultPrice: {
-        country: 'US',
-        currency: 'USD',
-        gross: 2250,
-      },
+    Action.addOnlineCourse({
+      id: 'LK8S|ONLINE|20200629',
       startsAt: '2020-06-29T09:00:00',
-      endsAt: '2020-06-31T17:00:00',
-      title: 'Advanced Kubernetes course — Americas',
-      image: NewPictures.one.src,
-    }),
-  )
-  store.dispatch(
-    Action.registerOnlineCourse({
-      id: 'LK8S|ONLINE|20200527',
-      timezone: 'Singapore (SGT) UTC+8',
-      defaultPrice: {
-        country: 'US',
-        currency: 'USD',
-        gross: 2250,
-      },
-      startsAt: '2020-06-01T09:00:00',
-      endsAt: '2020-06-03T17:00:00',
-      title: 'Advanced Kubernetes course — Asia Pacific',
-      image: NewPictures.one.src,
+      endsAt: '2020-07-01T17:00:00',
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'USD 2,249.00',
+      price: 2249,
+      currency: 'USD',
+      location: 'Online',
+      tags: ['course-online', 'price-online-course'],
+      timezone: 'EST',
+      link: '#',
+      url: '/online-new-york-june-2020',
     }),
   )
 }

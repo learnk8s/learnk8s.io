@@ -1,14 +1,14 @@
 import cheerio from 'cheerio'
 import { zonedTimeToUtc } from 'date-fns-tz'
-import { getVenues, State, getWorkshops } from './store'
+import { State, getWorkshops, getConfig, Selector } from './store'
 import { AxiosInstance } from 'axios'
 import { read } from './files'
 import { renderToJsx } from './markdown'
 import { jsxToString } from './jsx-utils/jsxToHast'
 
 export async function SyncVenues({ state, sdk }: { state: State; sdk: AxiosInstance }): Promise<VenueEventBrite[]> {
-  const venues = getVenues(state)
-  const response = await sdk.get<ResponseVenues>(`/organizations/${state.config.organisationId}/venues/`)
+  const venues = Selector.venues.selectAll(state)
+  const response = await sdk.get<ResponseVenues>(`/organizations/${getConfig(state).organisationId}/venues/`)
   const { added } = diff({
     previous: response.data.venues.map(it => it.name),
     current: venues.map(it => it.locationName),
@@ -19,7 +19,7 @@ export async function SyncVenues({ state, sdk }: { state: State; sdk: AxiosInsta
   await Promise.all(
     added.map(venueName => {
       const venue = venues.find(it => it.locationName === venueName)!
-      return addVenue(venue, sdk, state.config.organisationId)
+      return addVenue(venue, sdk, getConfig(state).organisationId)
     }),
   )
   return SyncVenues({ state, sdk })
@@ -38,7 +38,7 @@ export async function SyncEvents({
 }) {
   try {
     const venues = await SyncVenues({ state, sdk })
-    const events = await getEventsFromEventBrite(state.config.organisationId, sdk)
+    const events = await getEventsFromEventBrite(getConfig(state).organisationId, sdk)
     const workshops = getWorkshops(state)
     const { added, unchanged } = diff({ previous: events.map(it => it.code), current: workshops.map(it => it.id) })
 
@@ -60,7 +60,7 @@ export async function SyncEvents({
             endsAt: course.endsAt,
           },
           venues,
-          `/organizations/${state.config.organisationId}/events/`,
+          `/organizations/${getConfig(state).organisationId}/events/`,
           sdk,
         )
         log(`Adding a ticket to ${courseId} (${event.id})`)

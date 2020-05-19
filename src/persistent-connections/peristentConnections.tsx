@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const PersistentConnections = {
   description: `Kubernetes doesn't load balance long-lived connections and some Pods might receive more requests than others. Learn how to fix that.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(PersistentConnections))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(PersistentConnections))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-persistent-connections',
       pageId: PersistentConnections.id,
       image: (
@@ -26,7 +25,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-persistent-connections',
       pageId: PersistentConnections.id,
       authorId: Authors.danielePolencic.id,
@@ -36,9 +35,15 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: PersistentConnections.id }))
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.tags.add({
+      id: PersistentConnections.id + '-general-post',
+      tag: 'general-post',
+      pageId: PersistentConnections.id,
+    }),
+  )
+  store.dispatch(
+    Action.previewPictures.add({
       id: 'persistent-connections-picture',
       pageId: PersistentConnections.id,
       image: <img src='src/persistent-connections/persistent-connections.svg' alt={PersistentConnections.title} />,

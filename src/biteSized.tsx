@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Navbar, Footer, Consultation, Html, Head, Body, OpenGraph } from './layout.v3'
-import { Store } from 'redux'
-import { State, Actions, Action, getConfig, getPages, getOpenGraph, getBlogPosts, hasTag } from './store'
+import { State, Action, getConfig, hasTag, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { BlogPost } from './store/websiteReducer'
@@ -16,10 +15,10 @@ export const BiteSized = {
     'A regular column on the most interesting questions that we see online and during our workshops answered by a Kubernetes expert',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(BiteSized))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(BiteSized))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-bite-sized',
       pageId: BiteSized.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -30,7 +29,7 @@ export function Register(store: Store<State, Actions>) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),
@@ -42,11 +41,12 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const pages = getPages(state)
+  const pages = Selector.pages.selectAll(state)
   const page = pages.find(it => it.id === BiteSized.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === BiteSized.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
-  const blogPosts = getBlogPosts(state)
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === BiteSized.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
+  const blogPosts = Selector.blogPosts
+    .selectAll(state)
     .filter(post => hasTag(state, 'bite-sized')(pages.find(it => it.id === post.pageId)!))
     .sort(comparePublishedDate)
   return (

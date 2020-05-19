@@ -1,6 +1,33 @@
 import { Reducer } from 'redux'
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit'
+import { store } from '.'
 
-export interface State {
+const configAdapter = createEntityAdapter<Config>({})
+
+export const configSlice = createSlice({
+  name: 'config',
+  initialState: configAdapter.getInitialState({}),
+  reducers: {
+    add: configAdapter.addOne,
+  },
+})
+
+export const Action = {
+  configs: { ...configSlice.actions },
+}
+
+export const configReducer = {
+  configs: configSlice.reducer,
+}
+
+export type State = ReturnType<typeof store.getState>
+
+export const Selector = {
+  configs: configAdapter.getSelectors<State>(state => state.configs),
+}
+
+export interface Config {
+  id: string
   organisationId: string
   hostname: string
   protocol: string
@@ -10,39 +37,3 @@ export interface State {
   canPublishEvents: boolean
   eventBriteToken: string
 }
-
-export function createInitialState(options: {
-  organisationId: string
-  protocol: string
-  hostname: string
-  isProduction: boolean
-  eventBriteToken: string
-  googleAnalytics: string
-  outputFolder: string
-  canPublishEvents: boolean
-}): State {
-  return {
-    ...options,
-  }
-}
-
-export const RootReducer: Reducer<State, any> = (
-  state = createInitialState({
-    organisationId: 'unknown',
-    protocol: 'http',
-    hostname: 'localhost',
-    isProduction: false,
-    eventBriteToken: 'invalid',
-    googleAnalytics: 'invalid',
-    outputFolder: '_site',
-    canPublishEvents: false,
-  }),
-  action: any,
-): State => {
-  switch (action.type) {
-    default:
-      return state
-  }
-}
-
-function assertUnreachable(x: never): void {}

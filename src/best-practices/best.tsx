@@ -1,7 +1,6 @@
 import React from 'react'
 import { Html, Head, OpenGraph, Body, Navbar, Footer, WhatIsLearnk8s } from '../layout.v3'
-import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig } from '../store'
+import { State, Action, getConfig, Store, Selector } from '../store'
 import { join } from 'path'
 import { toMdast } from '../markdown'
 import { toVFile } from '../files'
@@ -24,10 +23,10 @@ export const BestPractices = {
     'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(BestPractices))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(BestPractices))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-best-practices',
       pageId: BestPractices.id,
       image: <img src='src/best-practices/checklist.jpg' alt='Kubernetes production best practices' />,
@@ -48,7 +47,7 @@ function collectUntil(children: Mdast.Content[], startingElement: Node, untilSel
   return out
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   function parseMd({ title, file }: { file: string; title: string }) {
     const mdast = toMdast(
       toVFile({ contents: readFileSync(join(__dirname, file), 'utf8'), path: join(__dirname, file) }),
@@ -108,9 +107,9 @@ type Section = {
 }
 
 function renderPage(state: State, sections: Section[]) {
-  const page = getPages(state).find(it => it.id === BestPractices.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === BestPractices.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const page = Selector.pages.selectAll(state).find(it => it.id === BestPractices.id)!
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === BestPractices.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>
       <Head title={page.title} description={page.description}>
@@ -243,7 +242,7 @@ function renderPage(state: State, sections: Section[]) {
 
         <Footer />
 
-        <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(${CreateToggle.toString()})()` }} className='toggle-collapse' />
         <script
           dangerouslySetInnerHTML={{
             __html: `(${TrackProgress.toString()})('${jsxToString(<ProgressWidget />)}')`,

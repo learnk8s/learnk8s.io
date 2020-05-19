@@ -1,42 +1,41 @@
 import React from 'react'
 import { Footer, Html, Head, OpenGraph, Body, Navbar } from './layout.v3'
-import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
+import { State, Action, getConfig, Store, Selector } from './store'
 import { join } from 'path'
 import { defaultAssetsPipeline } from './optimise'
 import { tachyons } from './tachyons/tachyons'
 import { JsonLd } from 'react-schemaorg'
 import { Course } from 'schema-dts'
 
-export const Training = {
+export const Learn = {
   id: 'learn',
   url: '/learn',
-  title: 'Kubernetes Courses ⎈ Learnk8s',
+  title: 'Kubernetes Online and Instructor-led courses ⎈ Learnk8s',
   description:
     'Join an instructor-led, hands-on course and become an expert in deploying and scaling applications with containers and Kubernetes.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Training))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Learn))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-learn',
-      pageId: Training.id,
+      pageId: Learn.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
-      description: Training.description,
+      description: Learn.description,
       title: 'Kubernetes Training Courses',
     }),
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   try {
     defaultAssetsPipeline({
       jsx: renderPage(state),
       isOptimisedBuild: getConfig(state).isProduction,
       siteUrl: `${getConfig(state).protocol}://${getConfig(state).hostname}`,
-      url: Training.url,
+      url: Learn.url,
       outputFolder: getConfig(state).outputFolder,
     })
   } catch (error) {
@@ -45,9 +44,9 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Training.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const page = Selector.pages.selectAll(state).find(it => it.id === Learn.id)!
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === Learn.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>
       <Head title={page.title} description={page.description}>
@@ -62,20 +61,6 @@ function renderPage(state: State) {
         <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         <link rel='canonical' href={currentAbsoluteUrl} />
-        <JsonLd<Course>
-          item={{
-            '@type': 'Course',
-            '@context': 'https://schema.org',
-            name: 'Online Advanced Kubernetes workshop',
-            courseCode: 'ONLINE-ADV-LK8S',
-            description: `In this course, you'll take an app, build it into a container then use Kubernetes to deploy, scale, and update it. You will learn how to build a cluter and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
-            educationalCredentialAwarded: 'Certificate of completetion',
-            provider: {
-              '@type': 'Organization',
-              name: 'Learnk8s',
-            },
-          }}
-        />
         <JsonLd<Course>
           item={{
             '@type': 'Course',
@@ -110,12 +95,14 @@ function renderPage(state: State) {
 
         <div className='bg-evian pv4'>
           <section className='mw8 center'>
-            <ul className='flex-l list pl0'>
-              <li className='w-third-l mw6 center'>
+            <ul className='flex-l justify-between-l list pl0'>
+              <li className='mw6 center'>
                 <div className='mh3 mb5'>
-                  <h2 className='f2-l f3 tc navy'>Online, self-paced courses</h2>
-                  <div className='aspect-ratio aspect-ratio--4x3'>
-                    <img src='assets/training/solo.svg' alt='The expert package' className='aspect-ratio--object' />
+                  <h2 className='f2-l f3 tc navy'>Online courses</h2>
+                  <div className='ph5-l'>
+                    <div className='aspect-ratio aspect-ratio--4x3'>
+                      <img src='assets/training/solo.svg' alt='The expert package' className='aspect-ratio--object' />
+                    </div>
                   </div>
                   <div className='bg-white br2 pa2 mt4'>
                     <p className='lh-copy f5 gray ttu b tc'>Great for</p>
@@ -134,46 +121,17 @@ function renderPage(state: State) {
                   </div>
                 </div>
               </li>
-              <li className='w-third-l mw6 center'>
+              <li className='mw6 center'>
                 <div className='mh3 mb5'>
-                  <h2 className='f2-l f3 tc navy'>Online classrooms</h2>
-                  <div className='aspect-ratio aspect-ratio--4x3'>
-                    <img src='assets/training/online.svg' alt='The expert package' className='aspect-ratio--object' />
-                  </div>
-                  <div className='bg-white br2 pa2 mt4'>
-                    <p className='lh-copy f5 gray ttu b tc'>Great for</p>
-                    <ul className='list ph2'>
-                      <ListItem>
-                        <span className='b'>Learning from the comfort of your home</span>
-                      </ListItem>
-                      <ListItem>Becoming an expert in a short time</ListItem>
-                      <ListItem>Discussing and asking questions to the instructor</ListItem>
-                    </ul>
-                    <ul className='list ph2 pt3'>
-                      <SpecialListItem>
-                        <span className='b'>Includes full access to the self-paced online course</span>
-                      </SpecialListItem>
-                    </ul>
-                    <p className='tc'>
-                      <a
-                        href='/kubernetes-online-classroom'
-                        className='link dib white bg-sky br1 pa3 b f5 mv3 submit br2 b--none'
-                      >
-                        Learn more ⇢
-                      </a>
-                    </p>
-                  </div>
-                </div>
-              </li>
-              <li className='w-third-l mw6 center'>
-                <div className='mh3 mb5'>
-                  <h2 className='f2-l f3 tc navy'>In-person workshops</h2>
-                  <div className='aspect-ratio aspect-ratio--4x3'>
-                    <img
-                      src='assets/training/in-person.svg'
-                      alt='The expert package'
-                      className='aspect-ratio--object'
-                    />
+                  <h2 className='f2-l f3 tc navy'>Instructor-led workshops</h2>
+                  <div className='ph5-l'>
+                    <div className='aspect-ratio aspect-ratio--4x3'>
+                      <img
+                        src='assets/training/in-person.svg'
+                        alt='The expert package'
+                        className='aspect-ratio--object'
+                      />
+                    </div>
                   </div>
                   <div className='bg-white br2 pa2 mt4'>
                     <p className='lh-copy f5 gray ttu b tc'>Great for</p>

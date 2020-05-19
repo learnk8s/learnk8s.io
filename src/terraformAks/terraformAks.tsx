@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const TerraformAks = {
   description: `Learn how you can use Terraform to create Kubernetes cluster in Azure.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(TerraformAks))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(TerraformAks))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-terraform-aks',
       pageId: TerraformAks.id,
       image: (
@@ -26,7 +25,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-terraform-aks',
       pageId: TerraformAks.id,
       authorId: Authors.danielePolencic.id,
@@ -36,16 +35,18 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: TerraformAks.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({ id: TerraformAks.id + '-general-post', tag: 'general-post', pageId: TerraformAks.id }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'terraform-aks-related-0',
       blogPostId: 'bp-terraform-aks',
       content: toVFile({ path: join(__dirname, 'terraform-aks-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'terraform-aks-picture',
       pageId: TerraformAks.id,
       image: <img src='src/terraformAks/terraforming.svg' alt={TerraformAks.title} />,

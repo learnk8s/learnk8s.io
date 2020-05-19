@@ -1,6 +1,6 @@
 const backstop = require('backstopjs')
 import { ok } from 'assert'
-import { store, getPages } from './src/store'
+import { store, Selector } from './src/store'
 import commander from 'commander'
 import { register } from './src/register'
 
@@ -17,7 +17,7 @@ ok(commander.approve || commander.test, 'Please provide either --approve or --te
 function renderPage(siteUrl: string): string[] {
   register(store)
   const state = store.getState()
-  const pages = getPages(state)
+  const pages = Selector.pages.selectAll(state)
   return pages.map(it => `${siteUrl}${it.url}`)
 }
 

@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const KubectlProductivity = {
   description: 'Learn the tips and tricks that make your usage of kubectl more efficient and effective.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(KubectlProductivity))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(KubectlProductivity))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-kubectl-productivity',
       pageId: KubectlProductivity.id,
       image: <img src='src/advancedKubectl/magic.jpg' alt='Advanced kubectl usage' />,
@@ -25,7 +24,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-kubectl-productivity',
       pageId: KubectlProductivity.id,
       authorId: Authors.danielWeibel.id,
@@ -40,16 +39,22 @@ The goal of this article is not only to make your daily work with Kubernetes mor
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: KubectlProductivity.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({
+      id: KubectlProductivity.id + 'general-post',
+      tag: 'general-post',
+      pageId: KubectlProductivity.id,
+    }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'kubectl-productivity-related-0',
       blogPostId: 'bp-kubectl-productivity',
       content: toVFile({ path: join(__dirname, 'kubectl-productivity-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'kubectl-productivity-picture',
       pageId: KubectlProductivity.id,
       image: <img src='src/advancedKubectl/magic.svg' alt={KubectlProductivity.title} />,

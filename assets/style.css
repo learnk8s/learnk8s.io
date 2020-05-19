@@ -318,47 +318,6 @@
   }
 }
 
-.yesno input.yes:checked ~ ol .yes .radio,
-.yesno input.no:checked ~ ol .no .radio {
-  background-color: black;
-  box-shadow: inset 0 0 0 0.2em white;
-}
-
-.yesno.first-right input.yes:checked ~ ol .yes {
-  background: rgba(158, 235, 207, 0.5);
-}
-.yesno.first-right input.no:checked ~ ol .no {
-  background: rgba(255, 114, 92, 0.3);
-}
-
-.yesno.second-right input.yes:checked ~ ol .yes {
-  background: rgba(255, 114, 92, 0.3);
-}
-.yesno.second-right input.no:checked ~ ol .no {
-  background: rgba(158, 235, 207, 0.5);
-}
-
-.yesno input.yes:checked ~ .answer .hide,
-.yesno input.no:checked ~ .answer .hide {
-  background-color: unset;
-}
-
-.yesno .hide {
-  background-color: black;
-}
-
-.yesno .hide::selection {
-  background-color: transparent;
-}
-.yesno .hide::-moz-selection {
-  background-color: transparent;
-}
-
-.checkbox:checked {
-  background-color: black;
-  box-shadow: inset 0 0 0 0.2em white;
-}
-
 @media screen and (max-width: 64em) {
   #main-menu .reveal {
     display: none;
@@ -440,25 +399,35 @@
   color: lightgray;
 }
 /* RESPONSIVE ARROWS */
-[class^='arr-'] {
+.arr-right {
   border: solid currentColor;
   border-width: 0 0.2em 0.2em 0;
   display: inline-block;
   padding: 0.4em;
-}
-.arr-right {
   transform: rotate(-45deg);
   -webkit-transform: rotate(-45deg);
 }
 .arr-left {
+  border: solid currentColor;
+  border-width: 0 0.2em 0.2em 0;
+  display: inline-block;
+  padding: 0.4em;
   transform: rotate(135deg);
   -webkit-transform: rotate(135deg);
 }
 .arr-up {
+  border: solid currentColor;
+  border-width: 0 0.2em 0.2em 0;
+  display: inline-block;
+  padding: 0.4em;
   transform: rotate(-135deg) translate(-0.2em, -0.2em);
   -webkit-transform: rotate(-135deg) translate(-0.2em, -0.2em);
 }
 .arr-down {
+  border: solid currentColor;
+  border-width: 0 0.2em 0.2em 0;
+  display: inline-block;
+  padding: 0.4em;
   transform: rotate(45deg) translate(-0.2em, -0.2em);
   -webkit-transform: rotate(45deg) translate(-0.2em, -0.2em);
 }
@@ -520,5 +489,15 @@ input[type='radio']:checked ~ .checked-reveal {
 @media screen and (min-width: 64em) {
   .feedback {
     column-count: 4;
+  }
+}
+
+.table-label::before {
+  content: attr(data-label) ': ';
+  font-weight: bold;
+}
+@media screen and (min-width: 32em) {
+  .table-label::before {
+    content: '';
   }
 }

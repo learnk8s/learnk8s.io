@@ -2,8 +2,6 @@ import commander from 'commander'
 import { readFileSync, existsSync, writeFileSync } from 'fs'
 import Twitter from 'twitter-lite'
 import { resolve, join, dirname, extname } from 'path'
-import { homedir } from 'os'
-import { createInterface, Interface } from 'readline'
 import { tempdir } from 'shelljs'
 import { tachyons } from './tachyons/tachyons'
 import { jsxToHast } from './jsx-utils/jsxToHast'
@@ -20,6 +18,8 @@ import open from 'open'
 import inspect from 'unist-util-inspect'
 import { selectAll } from 'unist-util-select'
 import { mdast2tweet, TweetComponent } from './markdown/tweet'
+import { homedir } from 'os'
+import { createInterface, Interface } from 'readline'
 
 const configFile = join(homedir(), '.thread.json')
 
@@ -123,7 +123,10 @@ commander
         imageSrcs.length === 0
           ? ''
           : `<div class="flex pt4">${imageSrcs
-              .map(src => `<div><img src="${resolve(join(dirname(filename), src))}"/></div>`)
+              .map(
+                src =>
+                  `<div><img src="${src.startsWith('http') ? src : resolve(join(dirname(filename), src))}"/></div>`,
+              )
               .join('')}</div>`
       const counter = `<p class="gray f5 b lh-copy">${i}/${blocks.length - 1}</p>`
       return `<li class='mv4 bg-white pt3 pb4 ph4 br2'><div>${i === 0 ? '' : counter}${html}</div>${imagesHtml}</li>`

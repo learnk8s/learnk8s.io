@@ -1,9 +1,8 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Actions, Action } from './store'
+import { getConfig, State, Action, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
-import { Store } from 'redux'
 import { tachyons } from './tachyons/tachyons'
 import { PrimaryButton } from './homepage'
 
@@ -14,10 +13,10 @@ export const FreeTools = {
   description: 'A collection of free tools to help you navigate your Kubernetes journey.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(FreeTools))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(FreeTools))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-free-tools',
       pageId: FreeTools.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -27,7 +26,7 @@ export function Register(store: Store<State, Actions>) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),
@@ -39,10 +38,10 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const pages = getPages(state)
+  const pages = Selector.pages.selectAll(state)
   const page = pages.find(it => it.id === FreeTools.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === FreeTools.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === FreeTools.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>
       <Head title={page.title} description={page.description}>

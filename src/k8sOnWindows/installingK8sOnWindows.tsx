@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const K8sOnWindows = {
   description: `In this article you'll learn how to make the right choices when it comes to setting up your development environment on Windows.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(K8sOnWindows))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(K8sOnWindows))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-k8s-on-windows',
       pageId: K8sOnWindows.id,
       image: (
@@ -26,7 +25,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-k8s-on-windows',
       pageId: K8sOnWindows.id,
       authorId: Authors.keithMifsud.id,
@@ -37,16 +36,18 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: K8sOnWindows.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({ id: K8sOnWindows.id + '-general-post', tag: 'general-post', pageId: K8sOnWindows.id }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'k8s-on-windows-related-0',
       blogPostId: 'bp-k8s-on-windows',
       content: toVFile({ path: join(__dirname, 'k8s-on-windows-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'k8s-on-windows-picture',
       pageId: K8sOnWindows.id,
       image: <img src='src/k8sOnWindows/k8s_on_win.svg' alt={K8sOnWindows.title} />,

@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { State, Actions, Action } from '../store'
-import { Store } from 'redux'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const ChaosEngineering = {
   description: `When you deploy an app in Kubernetes, your code ends up running on one or more worker nodes. But what happens when a node breaks and the network proxy crashes?`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(ChaosEngineering))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ChaosEngineering))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-chaos-engineering',
       pageId: ChaosEngineering.id,
       image: <img src='src/chaosEngineering/chaos-engineering-kubernetes.png' alt='Chaos engineering' />,
@@ -24,7 +23,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-chaos-engineering',
       pageId: ChaosEngineering.id,
       authorId: Authors.danielePolencic.id,
@@ -35,16 +34,18 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ChaosEngineering.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({ id: ChaosEngineering.id + '-general-post', tag: 'general-post', pageId: ChaosEngineering.id }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'chaos-engineering-related-0',
       blogPostId: 'bp-chaos-engineering',
       content: toVFile({ path: join(__dirname, 'chaos-engineering-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'chaos-enginnering-picture',
       pageId: ChaosEngineering.id,
       image: <img src='src/chaosEngineering/chaos-engineering-kubernetes.svg' alt={ChaosEngineering.title} />,

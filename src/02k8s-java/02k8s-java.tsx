@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const ZeroToK8sJava = {
   description: `Learn how to design and architect Spring Boot microservices that leverage Kubernetes and scale to millions of requests.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(ZeroToK8sJava))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ZeroToK8sJava))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-02k8s-java',
       pageId: ZeroToK8sJava.id,
       image: (
@@ -26,7 +25,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-02k8s-java',
       pageId: ZeroToK8sJava.id,
       authorId: Authors.mauricioSalatino.id,
@@ -37,16 +36,18 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ZeroToK8sJava.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({ id: ZeroToK8sJava.id + '-general-post', tag: 'general-post', pageId: ZeroToK8sJava.id }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: '02k8s-java-related-0',
       blogPostId: 'bp-02k8s-java',
       content: toVFile({ path: join(__dirname, '02k8s-java-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: '02k8s-java-picture',
       pageId: ZeroToK8sJava.id,
       image: <img src='src/02k8s-java/jury.svg' alt={ZeroToK8sJava.title} />,
