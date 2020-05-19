@@ -1,16 +1,5 @@
 import * as React from 'react'
-import {
-  getConfig,
-  Actions,
-  State,
-  getPages,
-  getOpenGraph,
-  getBlogPosts,
-  getAuthors,
-  getBlogPostMarkdownBlocks,
-  hasTag,
-  getPreviewPictures,
-} from './store'
+import { getConfig, State, hasTag, Selector, Store } from './store'
 import { Page } from './store/websiteReducer'
 import { Head, Html, Body, OpenGraph, Footer, Author, Subscribe, WhatIsLearnk8s, NavbarSlim } from './layout.v3'
 import { format } from 'date-fns'
@@ -24,12 +13,11 @@ import { selectAll } from 'unist-util-select'
 import * as Mdast from 'mdast'
 import { mdast2Jsx } from './markdown/jsx'
 import { defaultAssetsPipeline } from './optimise'
-import { Store } from 'redux'
 import { tachyons } from './tachyons/tachyons'
 
-export async function Mount({ store }: { store: Store<State, Actions> }) {
+export async function Mount({ store }: { store: Store }) {
   const state = store.getState()
-  const pages = getPages(state).filter(hasTag(state, 'general-post'))
+  const pages = Selector.pages.selectAll(state).filter(hasTag(state, 'general-post'))
   await Promise.all(
     pages.map(async page => {
       defaultAssetsPipeline({
@@ -44,22 +32,22 @@ export async function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 export async function renderPage(pageMeta: Page, state: State) {
-  const page = getPages(state).find(it => it.id === pageMeta.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === pageMeta.id)
+  const page = Selector.pages.selectAll(state).find(it => it.id === pageMeta.id)!
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === pageMeta.id)
   if (!openGraph) {
     throw new Error('The page does not have an open graph.')
   }
-  const blog = getBlogPosts(state).find(it => it.pageId === pageMeta.id)
+  const blog = Selector.blogPosts.selectAll(state).find(it => it.pageId === pageMeta.id)
   if (!blog) {
     throw new Error('The page is not a blog post page.')
   }
-  const author = getAuthors(state).find(it => it.id === blog.authorId)
+  const author = Selector.authors.selectAll(state).find(it => it.id === blog.authorId)
   if (!author) {
     throw new Error('The blog post does not have an author attached')
   }
-  const previewPicture = getPreviewPictures(state).find(it => it.pageId === pageMeta.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
-  const extraBlocks = getBlogPostMarkdownBlocks(state).filter(it => it.blogPostId === blog.id)
+  const previewPicture = Selector.previewPictures.selectAll(state).find(it => it.pageId === pageMeta.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
+  const extraBlocks = Selector.relatedBlogs.selectAll(state).filter(it => it.blogPostId === blog.id)
   const [content, ...blocks] = await Promise.all([
     read(blog.content),
     ...extraBlocks.map(it => it.content).map(it => read(it)),

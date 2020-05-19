@@ -1,17 +1,6 @@
 import * as React from 'react'
 import { Store } from 'redux'
-import {
-  State,
-  Actions,
-  getPages,
-  hasTag,
-  getOpenGraph,
-  getBlogPosts,
-  getAuthors,
-  getBlogPostMarkdownBlocks,
-  getConfig,
-  getPreviewPictures,
-} from './store'
+import { State, hasTag, getConfig, Selector } from './store'
 import { toVFile, read } from './files'
 import { join } from 'path'
 import { Html, Head, OpenGraph, Body, Footer, Navbar, Subscribe, Author, WhatIsLearnk8s } from './layout.v3'
@@ -27,9 +16,9 @@ import { transform } from './markdown/utils'
 import { mdast2Jsx, mdast2JsxInline } from './markdown/jsx'
 import { tachyons } from './tachyons/tachyons'
 
-export async function Mount({ store }: { store: Store<State, Actions> }) {
+export async function Mount({ store }: { store: Store }) {
   const state = store.getState()
-  const pages = getPages(state).filter(hasTag(state, 'bite-sized'))
+  const pages = Selector.pages.selectAll(state).filter(hasTag(state, 'bite-sized'))
   await Promise.all(
     pages.map(async page => {
       defaultAssetsPipeline({
@@ -44,21 +33,21 @@ export async function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 async function renderPage(page: Page, state: State) {
-  const openGraph = getOpenGraph(state).find(it => it.pageId === page.id)
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === page.id)
   if (!openGraph) {
     throw new Error('The page does not have an open graph.')
   }
-  const blog = getBlogPosts(state).find(it => it.pageId === page.id)
+  const blog = Selector.blogPosts.selectAll(state).find(it => it.pageId === page.id)
   if (!blog) {
     throw new Error('The page is not a blog post page.')
   }
-  const author = getAuthors(state).find(it => it.id === blog.authorId)
+  const author = Selector.authors.selectAll(state).find(it => it.id === blog.authorId)
   if (!author) {
     throw new Error('The blog post does not have an author attached')
   }
-  const previewPicture = getPreviewPictures(state).find(it => it.pageId === page.id)
-  const extraBlocks = getBlogPostMarkdownBlocks(state).filter(it => it.blogPostId === blog.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const previewPicture = Selector.previewPictures.selectAll(state).find(it => it.pageId === page.id)
+  const extraBlocks = Selector.relatedBlogs.selectAll(state).filter(it => it.blogPostId === blog.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   const [content, ...blocks] = await Promise.all([
     read(blog.content),
     ...extraBlocks.map(it => it.content).map(it => read(it)),

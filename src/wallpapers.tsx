@@ -1,9 +1,8 @@
 import React from 'react'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Actions, Action } from './store'
+import { getConfig, State, Action, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
-import { Store } from 'redux'
 import { tachyons } from './tachyons/tachyons'
 
 export const Wallpaper = {
@@ -19,10 +18,10 @@ const wallpaperRequest: MailTo = {
   email: 'hello@learnk8s.io',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Wallpaper))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Wallpaper))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-wallpaper',
       pageId: Wallpaper.id,
       image: <img src='assets/wallpapers/wallpaper-magician.png' alt='Kubernetes wallpapers' />,
@@ -32,7 +31,7 @@ export function Register(store: Store<State, Actions>) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),
@@ -44,10 +43,10 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const pages = getPages(state)
+  const pages = Selector.pages.selectAll(state)
   const page = pages.find(it => it.id === Wallpaper.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Wallpaper.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === Wallpaper.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>
       <Head title={page.title} description={page.description}>

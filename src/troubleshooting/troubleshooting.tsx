@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const Troubleshooting = {
   description: `Troubleshooting in Kubernetes can be a daunting task. In this article you will learn how to diagnose issues in Pods, Services and Ingress.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Troubleshooting))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Troubleshooting))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-troubleshooting-deployments',
       pageId: Troubleshooting.id,
       image: <img src='src/troubleshooting/flowchart.png' alt='Troubleshooting Kubernetes deployments' />,
@@ -24,7 +23,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-troubleshooting-deployments',
       pageId: Troubleshooting.id,
       authorId: Authors.danielePolencic.id,
@@ -34,9 +33,11 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: Troubleshooting.id }))
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.tags.add({ id: Troubleshooting.id + '-general-post', tag: 'general-post', pageId: Troubleshooting.id }),
+  )
+  store.dispatch(
+    Action.previewPictures.add({
       id: 'troubleshooting-picture',
       pageId: Troubleshooting.id,
       image: <img src='src/troubleshooting/flowchart.svg' alt={Troubleshooting.title} />,

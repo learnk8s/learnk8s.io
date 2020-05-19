@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const Templating = {
   description: `Learn how you can parametrise resource definitions with yq, kustomize and real code.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Templating))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Templating))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-templating-yaml-options',
       pageId: Templating.id,
       image: <img src='src/templating/templating.png' alt='Troubleshooting Kubernetes deployments' />,
@@ -24,7 +23,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-templating-yaml-options',
       pageId: Templating.id,
       authorId: Authors.danielePolencic.id,
@@ -35,9 +34,9 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: Templating.id }))
+  store.dispatch(Action.tags.add({ id: Templating.id + '-general-post', tag: 'general-post', pageId: Templating.id }))
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'templating-yaml-options-picture',
       pageId: Templating.id,
       image: <img src='src/templating/templating.svg' alt={Templating.title} />,

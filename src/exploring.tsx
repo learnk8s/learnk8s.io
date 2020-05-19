@@ -1,10 +1,9 @@
 import React from 'react'
 import { Course } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
+import { State, Action, getConfig, Store, Selector } from './store'
 import { material } from './material'
 import { Navbar, Html, Head, OpenGraph, Body, Footer, mailto, MailTo, FAQs, FAQ } from './layout.v3'
-import { Store } from 'redux'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
@@ -45,10 +44,10 @@ export const Exploring = {
   description: `A hands-on, online course on mastering Kubernetes, managing state and passing the CKAD exam.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Exploring))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Exploring))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-academy-exploring-kubernetes',
       pageId: Exploring.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -58,7 +57,7 @@ export function Register(store: Store<State, Actions>) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),
@@ -70,9 +69,9 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Exploring.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Exploring.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const page = Selector.pages.selectAll(state).find(it => it.id === Exploring.id)!
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === Exploring.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>
       <Head title={page.title} description={page.description}>

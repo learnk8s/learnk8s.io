@@ -41,7 +41,7 @@ import * as K8Bit from './k8bit/k8bit'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedArticles from './bite-sized-articles'
-import { State, Actions } from './store'
+import { Store, Selector } from './store'
 import * as Courses from './courses'
 import * as Workshops from './training.v2'
 import * as CorporateTraining from './training-corporate'
@@ -51,9 +51,8 @@ import * as BestPractices from './best-practices/best'
 import * as FreeTools from './freeTools'
 import * as Wallpapers from './wallpapers'
 import * as Flipboard from './flipboard'
-import { Store } from 'redux'
 
-export function register(store: Store<State, Actions>) {
+export function register(store: Store) {
   Courses.Register(store)
   Workshops.Register(store)
   CorporateTraining.Register(store)

@@ -10,8 +10,7 @@ import {
 } from 'schema-dts'
 import { JsonLd } from 'react-schemaorg'
 import { material } from './material'
-import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig, getAuthors, Selector } from './store'
+import { State, getConfig, Store, Action, Selector } from './store'
 import { join } from 'path'
 import { format, subDays } from 'date-fns'
 import { defaultAssetsPipeline } from './optimise'
@@ -66,10 +65,10 @@ export const Training = {
     'Join an instructor-led, hands-on course and become an expert in deploying and scaling applications with containers and Kubernetes.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Training))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Training))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-training',
       pageId: Training.id,
       image: <img src='assets/opengraph.v2.png' alt='Learnk8s' />,
@@ -79,7 +78,7 @@ export function Register(store: Store<State, Actions>) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   try {
     defaultAssetsPipeline({
@@ -95,19 +94,21 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Training.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Training.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
-  const instructors = getAuthors(state).filter(it =>
-    [
-      Authors.danielePolencic.id,
-      Authors.salmanIqbal.id,
-      Authors.gergelyRisko.id,
-      Authors.mauricioSalatino.id,
-      Authors.danielWeibel.id,
-      Authors.chrisNesbittSmith.id,
-    ].includes(it.id),
-  )
+  const page = Selector.pages.selectAll(state).find(it => it.id === Training.id)!
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === Training.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
+  const instructors = Selector.authors
+    .selectAll(state)
+    .filter(it =>
+      [
+        Authors.danielePolencic.id,
+        Authors.salmanIqbal.id,
+        Authors.gergelyRisko.id,
+        Authors.mauricioSalatino.id,
+        Authors.danielWeibel.id,
+        Authors.chrisNesbittSmith.id,
+      ].includes(it.id),
+    )
   const onlineCourses = Selector.onlineCourses.selectAll(state)
   const inPersonCourses = Selector.inPersonCourses.selectAll(state)
   const allCourses = [...onlineCourses, ...inPersonCourses]

@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -19,10 +18,10 @@ const OldDeployLaravel = {
   description: `In this article, I'll explain how to deal with the simple requirement of running a Laravel application as a local Kubernetes set up.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(DeployLaravel))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(DeployLaravel))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-deploy-laravel',
       pageId: DeployLaravel.id,
       image: <img src='src/deployLaravel/laravel_k8s.jpg' alt='Deploy Laravel on Kubernetes' />,
@@ -31,7 +30,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-deploy-laravel',
       pageId: DeployLaravel.id,
       authorId: Authors.keithMifsud.id,
@@ -42,24 +41,26 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: DeployLaravel.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({ id: DeployLaravel.id + '-general-post', tag: 'general-post', pageId: DeployLaravel.id }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'deploy-laravel-related-0',
       blogPostId: 'bp-deploy-laravel',
       content: toVFile({ path: join(__dirname, 'deploy-laravel-related.md') }),
     }),
   )
-  store.dispatch(Action.registerPage(OldDeployLaravel))
+  store.dispatch(Action.pages.add(OldDeployLaravel))
   store.dispatch(
-    Action.registerRedirect({
+    Action.redirects.add({
       id: 'redirect-laravel',
       fromPageId: OldDeployLaravel.id,
       redirectToPageId: DeployLaravel.id,
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'deploy-laravel-picture',
       pageId: DeployLaravel.id,
       image: <img src='src/deployLaravel/laravel_k8s.svg' alt={DeployLaravel.title} />,

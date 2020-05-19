@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { toVFile } from '../files'
 import { join } from 'path'
@@ -65,10 +64,10 @@ export const Pages = {
   },
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Pages.multipleClusters))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Pages.multipleClusters))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-multiple-kubernetes-clusters',
       pageId: Pages.multipleClusters.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -77,7 +76,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-multiple-kubernetes-clusters',
       pageId: Pages.multipleClusters.id,
       authorId: Authors.danielePolencic.id,
@@ -87,11 +86,17 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'connectMultipleClusters/connectMultipleClusters.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.multipleClusters.id }))
-
-  store.dispatch(Action.registerPage(Pages.ingressApiGateway))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.tags.add({
+      id: Pages.multipleClusters.id + '-bite-sized',
+      tag: 'bite-sized',
+      pageId: Pages.multipleClusters.id,
+    }),
+  )
+
+  store.dispatch(Action.pages.add(Pages.ingressApiGateway))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-ingress-api-gateway',
       pageId: Pages.ingressApiGateway.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -100,7 +105,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-ingress-api-gateway',
       pageId: Pages.ingressApiGateway.id,
       authorId: Authors.danielePolencic.id,
@@ -111,18 +116,24 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'ingressApiGateway/ingressApiGateway.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.ingressApiGateway.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({
+      id: Pages.ingressApiGateway.id + '-bite-sized',
+      tag: 'bite-sized',
+      pageId: Pages.ingressApiGateway.id,
+    }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'ingress-api-gateway-related-0',
       blogPostId: 'bp-ingress-api-gateway',
       content: toVFile({ path: join(__dirname, 'ingressApiGateway/ingressApiGateway-related.md') }),
     }),
   )
 
-  store.dispatch(Action.registerPage(Pages.visualiseYaml))
+  store.dispatch(Action.pages.add(Pages.visualiseYaml))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-visualise-yaml',
       pageId: Pages.visualiseYaml.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -131,7 +142,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-visualise-yaml',
       pageId: Pages.visualiseYaml.id,
       authorId: Authors.danielePolencic.id,
@@ -141,11 +152,17 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'visualiseYaml/visualiseYaml.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.visualiseYaml.id }))
-
-  store.dispatch(Action.registerPage(Pages.helm))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.tags.add({
+      id: Pages.visualiseYaml.id + '-bite-sized',
+      tag: 'bite-sized',
+      pageId: Pages.visualiseYaml.id,
+    }),
+  )
+
+  store.dispatch(Action.pages.add(Pages.helm))
+  store.dispatch(
+    Action.openGraphs.add({
       id: 'og-helm-templating',
       pageId: Pages.helm.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -154,7 +171,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-helm-templating',
       pageId: Pages.helm.id,
       authorId: Authors.danielePolencic.id,
@@ -164,18 +181,18 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'helm/helm.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.helm.id }))
+  store.dispatch(Action.tags.add({ id: Pages.helm.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.helm.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.relatedBlogs.add({
       id: 'helm-templating-related-0',
       blogPostId: 'bp-helm-templating',
       content: toVFile({ path: join(__dirname, 'helm/helm-related.md') }),
     }),
   )
 
-  store.dispatch(Action.registerPage(Pages.nodeSize))
+  store.dispatch(Action.pages.add(Pages.nodeSize))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-kubernetes-node-size',
       pageId: Pages.nodeSize.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -185,7 +202,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-kubernetes-node-size',
       pageId: Pages.nodeSize.id,
       authorId: Authors.danielWeibel.id,
@@ -196,18 +213,20 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'nodes-size/smallOrLarge.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.nodeSize.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({ id: Pages.nodeSize.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.nodeSize.id }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'kubernetes-node-size-related-0',
       blogPostId: 'bp-kubernetes-node-size',
       content: toVFile({ path: join(__dirname, 'nodes-size/smallOrLarge-related.md') }),
     }),
   )
 
-  store.dispatch(Action.registerPage(Pages.secretsGitOps))
+  store.dispatch(Action.pages.add(Pages.secretsGitOps))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-secrets-git-ops',
       pageId: Pages.secretsGitOps.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -217,7 +236,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-secrets-git-ops',
       pageId: Pages.secretsGitOps.id,
       authorId: Authors.omerLeviHevroni.id,
@@ -228,18 +247,24 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'secrets/secrets.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.secretsGitOps.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({
+      id: Pages.secretsGitOps.id + '-bite-sized',
+      tag: 'bite-sized',
+      pageId: Pages.secretsGitOps.id,
+    }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'secrets-git-ops-related-0',
       blogPostId: 'bp-secrets-git-ops',
       content: toVFile({ path: join(__dirname, 'secrets/secrets-related.md') }),
     }),
   )
 
-  store.dispatch(Action.registerPage(Pages.autoscaling))
+  store.dispatch(Action.pages.add(Pages.autoscaling))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-autoscaling-apps-kubernetes',
       pageId: Pages.autoscaling.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -248,7 +273,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-autoscaling-apps-kubernetes',
       pageId: Pages.autoscaling.id,
       authorId: Authors.danielWeibel.id,
@@ -258,18 +283,20 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'autoscaling/autoscaling.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.autoscaling.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({ id: Pages.autoscaling.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.autoscaling.id }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'autoscaling-apps-kubernetes-related-0',
       blogPostId: 'bp-autoscaling-apps-kubernetes',
       content: toVFile({ path: join(__dirname, 'autoscaling/autoscaling-related.md') }),
     }),
   )
 
-  store.dispatch(Action.registerPage(Pages.rollbacks))
+  store.dispatch(Action.pages.add(Pages.rollbacks))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-kubernetes-rollbacks',
       pageId: Pages.rollbacks.id,
       image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
@@ -278,7 +305,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-kubernetes-rollbacks',
       pageId: Pages.rollbacks.id,
       authorId: Authors.gergelyRisko.id,
@@ -288,9 +315,11 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'rollbacks/rollbacks.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'bite-sized', pageId: Pages.rollbacks.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({ id: Pages.rollbacks.id + '-bite-sized', tag: 'bite-sized', pageId: Pages.rollbacks.id }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'kubernetes-rollbacks-related-0',
       blogPostId: 'bp-kubernetes-rollbacks',
       content: toVFile({ path: join(__dirname, 'rollbacks/rollbacks-related.md') }),

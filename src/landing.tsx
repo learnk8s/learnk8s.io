@@ -1,6 +1,5 @@
 import { Training } from './training.v2'
-import { Store } from 'redux'
-import { State, Actions, Action } from './store'
+import { State, Action, Store, Selector } from './store'
 
 export const Pages = {
   landingLondon: {
@@ -33,11 +32,11 @@ export const Pages = {
   },
 }
 
-export function Register(store: Store<State, Actions>) {
+export function Register(store: Store) {
   Object.values(Pages).forEach(page => {
-    store.dispatch(Action.registerPage(page))
+    store.dispatch(Action.pages.add(page))
     store.dispatch(
-      Action.registerRedirect({
+      Action.redirects.add({
         id: `redirect-${page.id}`,
         fromPageId: page.id,
         redirectToPageId: Training.id,

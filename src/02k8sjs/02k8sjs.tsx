@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const ZeroToK8sJs = {
   description: `Learn how to design and architect Node.js apps that leverage Kubernetes and scale to millions of requests.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(ZeroToK8sJs))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ZeroToK8sJs))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-02k8sjs',
       pageId: ZeroToK8sJs.id,
       image: (
@@ -26,7 +25,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-02k8sjs',
       pageId: ZeroToK8sJs.id,
       authorId: Authors.danielePolencic.id,
@@ -37,16 +36,16 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ZeroToK8sJs.id }))
+  store.dispatch(Action.tags.add({ id: ZeroToK8sJs.id + '-general-post', tag: 'general-post', pageId: ZeroToK8sJs.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.relatedBlogs.add({
       id: '02k8sjs-related-0',
       blogPostId: 'bp-02k8sjs',
       content: toVFile({ path: join(__dirname, '02k8sjs-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'v-picture',
       pageId: ZeroToK8sJs.id,
       image: <img src='src/02k8sjs/jury.svg' alt={ZeroToK8sJs.title} />,

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Footer, Html, Head, OpenGraph, Body, Navbar } from './layout.v3'
-import { Store } from 'redux'
-import { State, Actions, Action, getPages, getOpenGraph, getConfig } from './store'
+import { State, Action, getConfig, Store, Selector } from './store'
 import { join } from 'path'
 import { defaultAssetsPipeline } from './optimise'
 import { tachyons } from './tachyons/tachyons'
@@ -16,10 +15,10 @@ export const Learn = {
     'Join an instructor-led, hands-on course and become an expert in deploying and scaling applications with containers and Kubernetes.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Learn))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Learn))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-learn',
       pageId: Learn.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -29,7 +28,7 @@ export function Register(store: Store<State, Actions>) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   try {
     defaultAssetsPipeline({
@@ -45,9 +44,9 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Learn.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Learn.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const page = Selector.pages.selectAll(state).find(it => it.id === Learn.id)!
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === Learn.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>
       <Head title={page.title} description={page.description}>

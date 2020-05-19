@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const SmallerImages = {
   description: `Learn how to make your container images smaller in size for a quicker transfer time and deployment.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(SmallerImages))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(SmallerImages))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-smaller-images',
       pageId: SmallerImages.id,
       image: <img src='src/smallerDockerImages/smaller_images.png' alt='Docker whale' />,
@@ -24,7 +23,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-smaller-images',
       pageId: SmallerImages.id,
       authorId: Authors.danielePolencic.id,
@@ -35,16 +34,18 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: SmallerImages.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({ id: SmallerImages.id + '-general-post', tag: 'general-post', pageId: SmallerImages.id }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'smaller-images-related-0',
       blogPostId: 'bp-smaller-images',
       content: toVFile({ path: join(__dirname, 'smaller-images-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'smaller-images-picture',
       pageId: SmallerImages.id,
       image: <img src='src/smallerDockerImages/smaller_images.svg' alt={SmallerImages.title} />,

@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const CustomAuthentication = {
   description: `Kubernetes allows binding a cluster to arbitrary authentication methods. In this article, you will learn how to implement LDAP authentication for your Kubernetes cluster.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(CustomAuthentication))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(CustomAuthentication))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-custom-authentication',
       pageId: CustomAuthentication.id,
       image: (
@@ -29,7 +28,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-custom-authentication',
       pageId: CustomAuthentication.id,
       authorId: Authors.danielWeibel.id,
@@ -40,16 +39,22 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: CustomAuthentication.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({
+      id: CustomAuthentication.id + '-general-post',
+      tag: 'general-post',
+      pageId: CustomAuthentication.id,
+    }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'custom-authentication',
       blogPostId: 'bp-custom-authentication',
       content: toVFile({ path: join(__dirname, 'content-related.md') }),
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'custom-authentication-picture',
       pageId: CustomAuthentication.id,
       image: <img src='src/custom-authentication/authentication.svg' alt={CustomAuthentication.title} />,

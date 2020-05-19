@@ -1,15 +1,15 @@
-import { Store } from 'redux'
-import { Actions, State, getPages, getRedirects, getOpenGraph, getBlogPosts, store } from './store'
+import { State, store, Selector, Store } from './store'
 import { ok } from 'assert'
 
 function getCommonPages(state: State) {
-  const redirectPageIds = getRedirects(state).map(it => it.fromPageId)
-  return getPages(state)
+  const redirectPageIds = Selector.redirects.selectAll(state).map(it => it.fromPageId)
+  return Selector.pages
+    .selectAll(state)
     .filter(it => !redirectPageIds.includes(it.id))
     .filter(it => it.url.split('.').pop() !== 'xml')
 }
 
-function checkTitleDescription(store: Store<State, Actions>) {
+function checkTitleDescription(store: Store) {
   const state = store.getState()
   const pages = getCommonPages(state)
   pages.forEach(page => {
@@ -28,19 +28,19 @@ function checkTitleDescription(store: Store<State, Actions>) {
   })
 }
 
-function checkOpenGraph(store: Store<State, Actions>) {
+function checkOpenGraph(store: Store) {
   const state = store.getState()
   const commonPageIds = getCommonPages(state).map(it => it.id)
-  const openGraphs = getOpenGraph(state).filter(it => commonPageIds.includes(it.pageId))
+  const openGraphs = Selector.openGraphs.selectAll(state).filter(it => commonPageIds.includes(it.pageId))
   openGraphs.forEach(og => {
     ok(og.title !== '', `Page: ${og.id}, open graph title is not defined.`)
     ok(og.description !== '', `Page: ${og.id}, open graph description is not defined.`)
   })
 }
 
-function checkBlogPost(store: Store<State, Actions>) {
+function checkBlogPost(store: Store) {
   const state = store.getState()
-  const blogPosts = getBlogPosts(state)
+  const blogPosts = Selector.blogPosts.selectAll(state)
   blogPosts.forEach(bp => {
     ok(bp.title !== '', `Page: ${bp.id}, blog post title is not defined.`)
     ok(bp.description !== '', `Page: ${bp.id}, blog post description is not defined.`)
@@ -48,7 +48,7 @@ function checkBlogPost(store: Store<State, Actions>) {
   })
 }
 
-export function checkPageDetail(store: Store<State, Actions>) {
+export function checkPageDetail(store: Store) {
   checkTitleDescription(store)
   checkOpenGraph(store)
   checkBlogPost(store)

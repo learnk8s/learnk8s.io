@@ -14,9 +14,8 @@ import {
   MailTo,
 } from './layout.v3'
 import { join } from 'path'
-import { getOpenGraph, getPages, getConfig, State, Actions, Action } from './store'
+import { getConfig, State, Action, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
-import { Store } from 'redux'
 import { tachyons } from './tachyons/tachyons'
 
 const continuousDeliveryEnquiry: MailTo = {
@@ -44,10 +43,10 @@ export const Consulting = {
   description: 'Expertise in software development, strategy and operations to help you innovate at speed and scale.',
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(Consulting))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(Consulting))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-consulting',
       pageId: Consulting.id,
       image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
@@ -58,7 +57,7 @@ export function Register(store: Store<State, Actions>) {
   )
 }
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
   defaultAssetsPipeline({
     jsx: renderPage(state),
@@ -70,9 +69,9 @@ export function Mount({ store }: { store: Store<State, Actions> }) {
 }
 
 function renderPage(state: State) {
-  const page = getPages(state).find(it => it.id === Consulting.id)!
-  const openGraph = getOpenGraph(state).find(it => it.pageId === Consulting.id)
-  const currentAbsoluteUrl = `${state.config.protocol}://${join(state.config.hostname, page.url)}`
+  const page = Selector.pages.selectAll(state).find(it => it.id === Consulting.id)!
+  const openGraph = Selector.openGraphs.selectAll(state).find(it => it.pageId === Consulting.id)
+  const currentAbsoluteUrl = `${getConfig(state).protocol}://${join(getConfig(state).hostname, page.url)}`
   return (
     <Html>
       <Head title={page.title} description={page.description}>

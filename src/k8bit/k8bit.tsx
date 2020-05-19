@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -12,10 +11,10 @@ export const K8Bit = {
   description: `In Kubernetes, how can you be notified when a Pod is added, removed or modified? In this article you'll learn how to use the API to track changes to Kubernetes resources.`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(K8Bit))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(K8Bit))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-k8bit',
       pageId: K8Bit.id,
       image: <img src='src/k8bit/k8bit.png' alt={K8Bit.title} />,
@@ -24,7 +23,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-k8bit',
       pageId: K8Bit.id,
       authorId: Authors.danielePolencic.id,
@@ -35,9 +34,9 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: K8Bit.id }))
+  store.dispatch(Action.tags.add({ id: K8Bit.id + '-general-post', tag: 'general-post', pageId: K8Bit.id }))
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'k8bit-picture',
       pageId: K8Bit.id,
       image: <img src='src/k8bit/k8bit.svg' alt={K8Bit.title} />,

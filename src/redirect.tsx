@@ -1,12 +1,12 @@
 import React from 'react'
 import { Store } from 'redux'
-import { State, Actions, getConfig, getRedirects, getPages } from './store'
+import { State, getConfig, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 
-export function Mount({ store }: { store: Store<State, Actions> }) {
+export function Mount({ store }: { store: Store }) {
   const state = store.getState()
-  const redirects = getRedirects(state)
-  const pages = getPages(state)
+  const redirects = Selector.redirects.selectAll(state)
+  const pages = Selector.pages.selectAll(state)
   redirects.map(redirect => {
     const from = pages.find(it => it.id === redirect.fromPageId)!
     const to = pages.find(it => it.id === redirect.redirectToPageId)!

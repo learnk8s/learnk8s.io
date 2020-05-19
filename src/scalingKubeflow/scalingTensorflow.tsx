@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Store } from 'redux'
-import { State, Actions, Action } from '../store'
+import { State, Action, Store } from '../store'
 import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
@@ -19,10 +18,10 @@ const InfiniteConf = {
   description: `Workshop on Tensorflow and Kubernetes held at InfiniteConf 2018`,
 }
 
-export function Register(store: Store<State, Actions>) {
-  store.dispatch(Action.registerPage(ScalingTensorflow))
+export function Register(store: Store) {
+  store.dispatch(Action.pages.add(ScalingTensorflow))
   store.dispatch(
-    Action.registerOpenGraph({
+    Action.openGraphs.add({
       id: 'og-scaling-tensorflow',
       pageId: ScalingTensorflow.id,
       image: <img src='src/scalingKubeflow/kubeflow.png' alt='Big data' />,
@@ -31,7 +30,7 @@ export function Register(store: Store<State, Actions>) {
     }),
   )
   store.dispatch(
-    Action.registerBlogPost({
+    Action.blogPosts.add({
       id: 'bp-scaling-tensorflow',
       pageId: ScalingTensorflow.id,
       authorId: Authors.salmanIqbal.id,
@@ -41,24 +40,30 @@ export function Register(store: Store<State, Actions>) {
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
-  store.dispatch(Action.assignTag({ id: 'general-post', pageId: ScalingTensorflow.id }))
   store.dispatch(
-    Action.registerBlogPostMarkdownBlock({
+    Action.tags.add({
+      id: ScalingTensorflow.id + '-general-post',
+      tag: 'general-post',
+      pageId: ScalingTensorflow.id,
+    }),
+  )
+  store.dispatch(
+    Action.relatedBlogs.add({
       id: 'scaling-tensorflow-related-0',
       blogPostId: 'bp-scaling-tensorflow',
       content: toVFile({ path: join(__dirname, 'scaling-tensorflow-related.md') }),
     }),
   )
-  store.dispatch(Action.registerPage(InfiniteConf))
+  store.dispatch(Action.pages.add(InfiniteConf))
   store.dispatch(
-    Action.registerRedirect({
+    Action.redirects.add({
       id: 'redirect-infinite-conf',
       fromPageId: InfiniteConf.id,
       redirectToPageId: ScalingTensorflow.id,
     }),
   )
   store.dispatch(
-    Action.registerPreviewPicture({
+    Action.previewPictures.add({
       id: 'scaling-tensorflow-picture',
       pageId: ScalingTensorflow.id,
       image: <img src='src/scalingKubeflow/kubeflow.svg' alt={ScalingTensorflow.title} />,

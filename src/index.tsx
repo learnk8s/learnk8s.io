@@ -28,7 +28,7 @@ import * as GenericBlogPost from './genericBlogPost'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedRenderer from './biteSized.v2'
-import { store, getConfig } from './store'
+import { store, getConfig, Selector } from './store'
 import * as Workshop from './training.v2'
 import * as CorporateTraining from './training-corporate'
 import * as TrainingLandingPage from './training-landing'
