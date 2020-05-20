@@ -149,6 +149,9 @@ const FONT_ASSETS = {
   'Inter-Regular_Black': {
     default: 'fonts/Inter-Black-slnt=0.ttf',
   },
+  'Inter-Black': {
+    default: 'fonts/Inter-Black-slnt=0.ttf',
+  },
   Inter: {
     '100': 'fonts/Inter-Thin-slnt=0.ttf',
     '200': 'fonts/Inter-ExtraLight-slnt=0.ttf',

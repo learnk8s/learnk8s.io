@@ -38,10 +38,11 @@ import * as ZeroToK8sJava from './02k8s-java/02k8s-java'
 import * as ProvisionCloudResources from './provision-cloud-resources/provision-cloud-resources'
 import * as CustomAuthentication from './custom-authentication/index'
 import * as K8Bit from './k8bit/k8bit'
+import * as AllocatableResources from './allocatable-resources/allocatable-resources'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedArticles from './bite-sized-articles'
-import { Store, Selector } from './store'
+import { Store } from './store'
 import * as Courses from './courses'
 import * as Workshops from './training.v2'
 import * as CorporateTraining from './training-corporate'
@@ -102,5 +103,6 @@ export function register(store: Store) {
   ProvisionCloudResources.Register(store)
   CustomAuthentication.Register(store)
   K8Bit.Register(store)
+  AllocatableResources.Register(store)
   TrainingLandingPage.Register(store)
 }
