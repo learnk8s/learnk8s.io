@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-k8bit',
       pageId: K8Bit.id,
-      image: <img src='src/k8bit/k8bit.png' alt={K8Bit.title} />,
+      image: 'src/k8bit/k8bit.png',
       title: K8Bit.title,
       description: K8Bit.description,
     }),

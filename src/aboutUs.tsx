@@ -164,7 +164,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-about-us',
       pageId: AboutUs.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: 'assets/open_graph_preview.png',
       title: 'Team',
       description: 'Experienced software consultants, specialising in Kubernetes.',
     }),

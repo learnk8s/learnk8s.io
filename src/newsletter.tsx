@@ -18,7 +18,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-newsletter',
       pageId: Newsletter.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: 'assets/open_graph_preview.png',
       title: 'Newsletter',
       description: 'Keep yourself up to date with the latest news from Learnk8s.',
     }),

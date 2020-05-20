@@ -71,7 +71,7 @@ export async function renderPage(pageMeta: Page, state: State) {
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
             headline: blog.title,
-            image: `${openGraph.image.props.src}`,
+            image: `${openGraph.image}`,
             author: {
               '@type': 'Person',
               name: author.fullName,

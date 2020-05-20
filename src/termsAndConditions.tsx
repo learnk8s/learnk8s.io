@@ -26,7 +26,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-terms-and-conditions',
       pageId: TermsAndConditions.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: 'assets/open_graph_preview.png',
       title: 'Terms and Conditions',
       description: 'Terms and Conditions that applies to all services offered by Learnk8s',
     }),

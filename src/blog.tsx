@@ -20,7 +20,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-blog',
       pageId: Blog.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: 'assets/open_graph_preview.png',
       title: 'blog',
       description: 'The fastest way to become an expert in deploying applications at scale with Kubernetes.',
     }),

@@ -19,7 +19,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-not-found-404',
       pageId: NotFound404.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: 'assets/open_graph_preview.png',
       title: NotFound404.title,
       description: NotFound404.description,
     }),

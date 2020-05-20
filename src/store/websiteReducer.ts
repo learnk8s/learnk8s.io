@@ -273,7 +273,7 @@ export type LandingPage = {
 export type OpenGraph = {
   id: string
   pageId: string
-  image: JSX.Element
+  image: string
   description: string
   title: string
 }

@@ -18,7 +18,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-career',
       pageId: Career.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: 'assets/open_graph_preview.png',
       title: 'Careers',
       description: 'Join Learnk8s and help others learn Docker and Kubernetes.',
     }),

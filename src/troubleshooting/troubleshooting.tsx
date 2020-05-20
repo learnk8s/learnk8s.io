@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-troubleshooting-deployments',
       pageId: Troubleshooting.id,
-      image: <img src='src/troubleshooting/flowchart.png' alt='Troubleshooting Kubernetes deployments' />,
+      image: 'src/troubleshooting/flowchart.png',
       title: Troubleshooting.title,
       description: Troubleshooting.description,
     }),

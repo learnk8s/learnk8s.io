@@ -21,7 +21,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-learn',
       pageId: Learn.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: 'assets/open_graph_preview.png',
       description: Learn.description,
       title: 'Kubernetes Training Courses',
     }),

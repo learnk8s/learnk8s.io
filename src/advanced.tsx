@@ -50,7 +50,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-academy-advanced-in-practice',
       pageId: Advanced.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: 'assets/open_graph_preview.png',
       title: 'Advanced Kubernetes in practice ⎈ Learnk8s Academy',
       description: `A hands-on, online course that dives into the details of Kubernetes architecture and networking.`,
     }),

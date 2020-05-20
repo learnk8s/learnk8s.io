@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-templating-yaml-options',
       pageId: Templating.id,
-      image: <img src='src/templating/templating.png' alt='Troubleshooting Kubernetes deployments' />,
+      image: 'src/templating/templating.png',
       title: Templating.title,
       description: `Learn how you can leverage tools such as yq and kustomize to template your Kubernetes YAML file. Learn how to write your own tool to generate YAML programatically with a real programming language such as Java, Node.js, Go, Python or C#.`,
     }),

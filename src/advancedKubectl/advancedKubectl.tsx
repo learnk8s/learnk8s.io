@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-kubectl-productivity',
       pageId: KubectlProductivity.id,
-      image: <img src='src/advancedKubectl/magic.jpg' alt='Advanced kubectl usage' />,
+      image: 'src/advancedKubectl/magic.jpg',
       title: 'Boosting your kubectl productivity',
       description:
         'If you work with Kubernetes, then kubectl is probably one of your most-used tools. This article contains a series of tips and tricks to make your usage of kubectl more efficient and effective.',

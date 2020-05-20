@@ -93,7 +93,7 @@ export function Register(store: Store) {
       Action.openGraphs.add({
         id: `og-${course.id}`,
         pageId: `page-${course.id}`,
-        image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+        image: 'assets/open_graph_preview.png',
         description,
         title,
       }),
@@ -116,7 +116,7 @@ export function Register(store: Store) {
       Action.openGraphs.add({
         id: `og-${course.id}`,
         pageId: `page-${course.id}`,
-        image: <img src='assets/opengraph.v2.png' alt='Learnk8s' />,
+        image: 'assets/opengraph.v2.png',
         description,
         title,
       }),

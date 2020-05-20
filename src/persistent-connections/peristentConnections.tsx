@@ -17,9 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-persistent-connections',
       pageId: PersistentConnections.id,
-      image: (
-        <img src='src/persistent-connections/persistent-connections.png' alt='Troubleshooting Kubernetes deployments' />
-      ),
+      image: 'src/persistent-connections/persistent-connections.png',
       title: PersistentConnections.title,
       description: `Kubernetes doesn't load balance long-lived connections, and some Pods might receive more requests than others. If you're using HTTP/2, gRPC, RSockets, AMQP or any other long-lived connection such as a database connection, you might want to consider client-side load balancing.`,
     }),

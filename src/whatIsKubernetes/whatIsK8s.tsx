@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-what-is-kubernetes',
       pageId: WhatIsKubernetes.id,
-      image: <img src='src/whatIsKubernetes/why-kube.png' alt='Kubernetes bucks' />,
+      image: 'src/whatIsKubernetes/why-kube.png',
       title: WhatIsKubernetes.title,
       description: `The industry has experienced a shift towards developing smaller applications. But how does that impact the infrastructure? Don't end up paying the extra price in your cloud bill; learn how you can fix it with Kubernetes.`,
     }),

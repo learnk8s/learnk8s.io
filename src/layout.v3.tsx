@@ -7,7 +7,7 @@ import { mdast2Jsx } from './markdown/jsx'
 export const OpenGraph: React.StatelessComponent<{
   currentAbsoluteUrl: string
   title: string
-  image: JSX.Element
+  image: string
   description: string
 }> = ({ children, currentAbsoluteUrl, title, image, description }) => {
   return (
@@ -15,7 +15,7 @@ export const OpenGraph: React.StatelessComponent<{
       <meta property='og:url' content={currentAbsoluteUrl} />
       <meta property='og:type' content='website' />
       <meta property='og:title' content={title} />
-      <meta property='og:image' content={image.props.src} />
+      <meta property='og:image' content={image} />
       <meta property='og:description' content={description} />
     </Fragment>
   )

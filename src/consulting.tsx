@@ -49,7 +49,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-consulting',
       pageId: Consulting.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      image: 'assets/open_graph_preview.png',
       title: 'Consulting',
       description:
         'Expertise in software development, strategy and operations to help you innovate at speed and scale.',

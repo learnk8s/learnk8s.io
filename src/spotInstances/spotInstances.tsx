@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-spot-instances',
       pageId: SpotInstances.id,
-      image: <img src='src/spotInstances/cheap-cluster.jpg' alt='Serving cheaper servers' />,
+      image: 'src/spotInstances/cheap-cluster.jpg',
       title: SpotInstances.title,
       description: SpotInstances.description,
     }),

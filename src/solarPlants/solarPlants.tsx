@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-solar-plants',
       pageId: SolarPlants.id,
-      image: <img src='src/solarPlants/solar_panel.png' alt='Solar panels and Kubernetes' />,
+      image: 'src/solarPlants/solar_panel.png',
       title: SolarPlants.title,
       description: SolarPlants.description,
     }),

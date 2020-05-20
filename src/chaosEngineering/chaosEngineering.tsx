@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-chaos-engineering',
       pageId: ChaosEngineering.id,
-      image: <img src='src/chaosEngineering/chaos-engineering-kubernetes.png' alt='Chaos engineering' />,
+      image: 'src/chaosEngineering/chaos-engineering-kubernetes.png',
       title: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1',
       description: ChaosEngineering.description,
     }),

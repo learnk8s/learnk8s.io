@@ -29,7 +29,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-best-practices',
       pageId: BestPractices.id,
-      image: <img src='src/best-practices/checklist.jpg' alt='Kubernetes production best practices' />,
+      image: 'src/best-practices/checklist.jpg',
       description:
         'This document highlights and consolidates best practices for building, deploying and scaling apps on Kubernetes in production.',
       title: 'Kubernetes production best practices',
