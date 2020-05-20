@@ -1,6 +1,6 @@
 **TL;DR:** Not all CPU and memory in your Kubernetes nodes can be used to run Pods.
 
-_The infographic below summaries the finding for allocations in Google Kubernetes Engine (GKE), Elastic Kubernetes Service (EKS) and Azure Kubernetes Service (AKS)._
+_The infographic below summarises how memory and CPU are allocated in Google Kubernetes Engine (GKE), Elastic Kubernetes Service (EKS) and Azure Kubernetes Service (AKS)._
 
 ![Allocatable resources in Kubernetes](allocatable-resources-infographic.png)
 
@@ -21,13 +21,13 @@ If you look closely at a single Node, you can divide the available resources in:
 
 ![The amount of compute resources that are available to Pods](allocatable-breakdown.svg)
 
-As you can guess, all of those quotas of resources are customisable.
+As you can guess, [all of those quotas of resources are customisable.](https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#eviction-thresholds)
 
 _But how do you decide how to assign resources?_
 
 Unfortunately, there isn't a _fixed_ answer as it depends on your cluster.
 
-However, there's consensus in the major managed Kubernetes services GKE, AKS, and EKS, and it's worth discussing how they partition the available resources.
+However, there's consensus in the major managed Kubernetes services [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine), [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes), and [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/), and it's worth discussing how they partition the available resources.
 
 ## Google Kubernetes Engine (GKE)
 
@@ -98,7 +98,7 @@ If you do the maths that amounts to:
 
 Let's explore Elastic Kubernetes Service (EKS) allocations.
 
-> Unfortunately, Elastic Kubernetes Service (EKS) doesn't offer documentation for those limits, so we can [rely on their code implementation](https://github.com/awslabs/amazon-eks-ami/blob/master/files/bootstrap.sh#L278).
+> Unfortunately, Elastic Kubernetes Service (EKS) doesn't offer documentation for allocatable resources. You can [rely on their code implementation](https://github.com/awslabs/amazon-eks-ami/blob/master/files/bootstrap.sh#L278) to extract the values.
 
 EKS reserves the following memory for each Node:
 
@@ -114,7 +114,7 @@ For example, an `m5.large` instance can only run 29 Pods, but an `m5.4xlarge` ca
 
 [You can view the full list here.](https://github.com/awslabs/amazon-eks-ami/blob/master/files/eni-max-pods.txt)
 
-If you were to select an `m5.large`, the memory reserved to the kubelet and agents is:
+If you were to select an `m5.large`, the memory reserved for the kubelet and agents is:
 
 ```
 Reserved memory = 255Mi + 11MiB * 29 = 574MiB
@@ -152,7 +152,7 @@ The memory reserved for the Kubelet is:
 - 6% of the next 112GB of memory (up to 128GB)
 - 2% of any memory above 128GB
 
-Notice how the allocation is the same as GKE.
+Notice how the allocation is the same as Google Kubernetes Engine (GKE).
 
 The CPU reserved for the Kubelet follows the following table:
 
@@ -166,13 +166,13 @@ The CPU reserved for the Kubelet follows the following table:
 |     32    |              420             |
 |     64    |              740             |
 
-The values are slightly higher than their counterparts in EKS and GKE, but still modest.
+The values are slightly higher than their counterparts but still modest.
 
-Overall, CPU and memory reserved for AKS are remarkably similar to GKE.
+Overall, CPU and memory reserved for AKS are remarkably similar to Google Kubernetes Engine (GKE).
 
 _There's one departure, though._
 
-**The hard eviction threshold in GKE is 100MB, but a staggering 750MiB in AKS.**
+**The hard eviction threshold in Google and Amazon's offering is 100MB, but a staggering 750MiB in AKS.**
 
 Let's have a look at a D3 v2 instance that has 8GiB of memory and 2 vCPU.
 
@@ -191,7 +191,7 @@ If you're running large nodes you should also consider:
 1. The **overhead on the Kubernetes agents that run on the node** — such as the container runtime (e.g. Docker), the kubelet, and cAdvisor.
 1. **Your high-availability (HA) strategy.** Pods can be deployed to a selected number of Nodes
 1. **Blast radius.** If you have only a few nodes, then the impact of a failing node is bigger than if you have many nodes.
-1. **Autoscaling is less cost effective** as the next increment is a (very) large Node.
+1. **Autoscaling is less cost-effective** as the next increment is a (very) large Node.
 
 _Smaller nodes aren't a silver bullet either._
 
