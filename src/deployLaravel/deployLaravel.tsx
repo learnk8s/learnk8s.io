@@ -63,7 +63,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'deploy-laravel-picture',
       pageId: DeployLaravel.id,
-      image: <img src='src/deployLaravel/laravel_k8s.svg' alt={DeployLaravel.title} />,
+      image: 'src/deployLaravel/laravel_k8s.svg',
     }),
   )
 }

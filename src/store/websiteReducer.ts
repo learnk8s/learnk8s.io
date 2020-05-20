@@ -253,7 +253,7 @@ export type BlogPost = {
 export type PreviewPicture = {
   id: string
   pageId: string
-  image: JSX.Element
+  image: string
 }
 
 export type Author = {

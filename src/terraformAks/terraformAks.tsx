@@ -47,7 +47,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'terraform-aks-picture',
       pageId: TerraformAks.id,
-      image: <img src='src/terraformAks/terraforming.svg' alt={TerraformAks.title} />,
+      image: 'src/terraformAks/terraforming.svg',
     }),
   )
 }

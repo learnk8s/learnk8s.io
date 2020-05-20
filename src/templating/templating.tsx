@@ -39,7 +39,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'templating-yaml-options-picture',
       pageId: Templating.id,
-      image: <img src='src/templating/templating.svg' alt={Templating.title} />,
+      image: 'src/templating/templating.svg',
     }),
   )
 }

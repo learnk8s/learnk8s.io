@@ -45,7 +45,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'solar-plants-picture',
       pageId: SolarPlants.id,
-      image: <img src='src/solarPlants/solar_panel.svg' alt={SolarPlants.title} />,
+      image: 'src/solarPlants/solar_panel.svg',
     }),
   )
 }

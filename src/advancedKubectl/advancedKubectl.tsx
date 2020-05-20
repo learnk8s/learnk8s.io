@@ -57,7 +57,7 @@ The goal of this article is not only to make your daily work with Kubernetes mor
     Action.previewPictures.add({
       id: 'kubectl-productivity-picture',
       pageId: KubectlProductivity.id,
-      image: <img src='src/advancedKubectl/magic.svg' alt={KubectlProductivity.title} />,
+      image: 'src/advancedKubectl/magic.svg',
     }),
   )
 }

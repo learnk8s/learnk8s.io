@@ -112,13 +112,7 @@ export async function renderPage(pageMeta: Page, state: State) {
           <hr className='pv2 bn' />
           <div className='aspect-ratio aspect-ratio--6x4'>
             {previewPicture ? (
-              {
-                ...previewPicture.image,
-                props: {
-                  ...previewPicture.image.props,
-                  className: (previewPicture.image.props.className || '').concat('aspect-ratio--object'),
-                },
-              }
+              <img src={previewPicture.image} className='aspect-ratio--object' alt={page.title} />
             ) : (
               <img src='assets/bsk.svg' className='aspect-ratio--object' alt={blog.title} />
             )}

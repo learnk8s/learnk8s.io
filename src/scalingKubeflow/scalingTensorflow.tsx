@@ -66,7 +66,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'scaling-tensorflow-picture',
       pageId: ScalingTensorflow.id,
-      image: <img src='src/scalingKubeflow/kubeflow.svg' alt={ScalingTensorflow.title} />,
+      image: 'src/scalingKubeflow/kubeflow.svg',
     }),
   )
 }

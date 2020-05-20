@@ -52,7 +52,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'provision-cloud-resources-picture',
       pageId: ProvisionCloudResources.id,
-      image: <img src='src/provision-cloud-resources/cloud-resources.svg' alt={ProvisionCloudResources.title} />,
+      image: 'src/provision-cloud-resources/cloud-resources.svg',
     }),
   )
 }

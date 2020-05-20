@@ -48,7 +48,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'k8s-on-windows-picture',
       pageId: K8sOnWindows.id,
-      image: <img src='src/k8sOnWindows/k8s_on_win.svg' alt={K8sOnWindows.title} />,
+      image: 'src/k8sOnWindows/k8s_on_win.svg',
     }),
   )
 }

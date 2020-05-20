@@ -40,7 +40,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'troubleshooting-picture',
       pageId: Troubleshooting.id,
-      image: <img src='src/troubleshooting/flowchart.svg' alt={Troubleshooting.title} />,
+      image: 'src/troubleshooting/flowchart.svg',
     }),
   )
 }

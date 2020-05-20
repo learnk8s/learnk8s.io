@@ -38,7 +38,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'cluster-size-picture',
       pageId: ClusterSize.id,
-      image: <img src='src/clusterSize/architecting-clusters.svg' alt={ClusterSize.title} />,
+      image: 'src/clusterSize/architecting-clusters.svg',
     }),
   )
   store.dispatch(

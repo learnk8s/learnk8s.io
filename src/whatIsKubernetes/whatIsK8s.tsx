@@ -47,7 +47,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'what-is-kubernetes-picture',
       pageId: WhatIsKubernetes.id,
-      image: <img src='src/whatIsKubernetes/why-kube.svg' alt={WhatIsKubernetes.title} />,
+      image: 'src/whatIsKubernetes/why-kube.svg',
     }),
   )
 }

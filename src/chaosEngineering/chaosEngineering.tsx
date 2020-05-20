@@ -48,7 +48,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'chaos-enginnering-picture',
       pageId: ChaosEngineering.id,
-      image: <img src='src/chaosEngineering/chaos-engineering-kubernetes.svg' alt={ChaosEngineering.title} />,
+      image: 'src/chaosEngineering/chaos-engineering-kubernetes.svg',
     }),
   )
 }

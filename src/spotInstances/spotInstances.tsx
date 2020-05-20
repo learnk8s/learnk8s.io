@@ -47,7 +47,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'spot-instances-picture',
       pageId: SpotInstances.id,
-      image: <img src='src/spotInstances/cheap-cluster.svg' alt={SpotInstances.title} />,
+      image: 'src/spotInstances/cheap-cluster.svg',
     }),
   )
 }

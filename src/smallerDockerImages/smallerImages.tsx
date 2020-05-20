@@ -48,7 +48,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'smaller-images-picture',
       pageId: SmallerImages.id,
-      image: <img src='src/smallerDockerImages/smaller_images.svg' alt={SmallerImages.title} />,
+      image: 'src/smallerDockerImages/smaller_images.svg',
     }),
   )
 }

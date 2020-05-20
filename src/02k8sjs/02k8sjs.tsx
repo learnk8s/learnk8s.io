@@ -46,7 +46,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'v-picture',
       pageId: ZeroToK8sJs.id,
-      image: <img src='src/02k8sjs/jury.svg' alt={ZeroToK8sJs.title} />,
+      image: 'src/02k8sjs/jury.svg',
     }),
   )
 }

@@ -52,7 +52,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'custom-authentication-picture',
       pageId: CustomAuthentication.id,
-      image: <img src='src/custom-authentication/authentication.svg' alt={CustomAuthentication.title} />,
+      image: 'src/custom-authentication/authentication.svg',
     }),
   )
 }

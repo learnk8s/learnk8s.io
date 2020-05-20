@@ -39,7 +39,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'k8bit-picture',
       pageId: K8Bit.id,
-      image: <img src='src/k8bit/k8bit.svg' alt={K8Bit.title} />,
+      image: 'src/k8bit/k8bit.svg',
     }),
   )
 }

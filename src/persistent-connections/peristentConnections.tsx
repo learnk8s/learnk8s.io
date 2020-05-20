@@ -44,7 +44,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'persistent-connections-picture',
       pageId: PersistentConnections.id,
-      image: <img src='src/persistent-connections/persistent-connections.svg' alt={PersistentConnections.title} />,
+      image: 'src/persistent-connections/persistent-connections.svg',
     }),
   )
 }

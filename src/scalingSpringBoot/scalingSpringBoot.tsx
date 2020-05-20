@@ -52,7 +52,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'scaling-spring-boot-picture',
       pageId: ScalingSpringBoot.id,
-      image: <img src='src/scalingSpringBoot/autoscaling.svg' alt={ScalingSpringBoot.title} />,
+      image: 'src/scalingSpringBoot/autoscaling.svg',
     }),
   )
 }
