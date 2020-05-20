@@ -21,7 +21,11 @@ If you look closely at a single Node, you can divide the available resources in:
 
 ![The amount of compute resources that are available to Pods](allocatable-breakdown.svg)
 
-As you can guess, [all of those quotas of resources are customisable.](https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#eviction-thresholds)
+As you can guess, [all of those quotas are customisable.](https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#eviction-thresholds)
+
+But please notice that reserving 100MB of memory for the operating system doesn't mean that the OS is limited to use only that amount.
+
+It could use more (or less) resources — you're just allocating and estimating memory and CPU usage at best of your abilities.
 
 _But how do you decide how to assign resources?_
 
