@@ -50,6 +50,7 @@ import * as Training from './learn'
 import * as TrainingLandingPage from './training-landing'
 import * as BestPractices from './best-practices/best'
 import * as FreeTools from './freeTools'
+import * as Research from './research'
 import * as Wallpapers from './wallpapers'
 import * as Flipboard from './flipboard'
 
@@ -61,6 +62,7 @@ export function register(store: Store) {
   Landing.Register(store)
   BestPractices.Register(store)
   FreeTools.Register(store)
+  Research.Register(store)
   Wallpapers.Register(store)
   Careers.Register(store)
   TermsAndConditions.Register(store)
