@@ -5,12 +5,6 @@ import { getConfig, State, Action, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { tachyons } from './tachyons/tachyons'
 
-const contributionEnquiry: MailTo = {
-  subject: 'Kubernetes research',
-  body: `Hi Learnk8s,\n\nI'd like to suggest a change to your research documents.\n\n________.\n\nBest regards,\n`,
-  email: 'hello@learnk8s.io',
-}
-
 const sponsorEnquiry: MailTo = {
   subject: 'Kubernetes research',
   body: `Hi Learnk8s,\n\nI'd like to suggest a topic of research.\n\n________.\n\nBest regards,\n`,
@@ -97,6 +91,11 @@ function renderPage(state: State) {
                 </a>
               </li>
               <li className='mv3'>
+                <a href='#managed-services' className='link navy underline-hover'>
+                  Kubernetes managed services (coming soon)
+                </a>
+              </li>
+              <li className='mv3'>
                 <a href='#requests' className='link navy underline-hover'>
                   Research requests
                 </a>
@@ -134,7 +133,101 @@ function renderPage(state: State) {
                 </div>
               </div>
             </li>
+            <li className='mv3 pv3 flex-ns mw8 center items-center justify-center ph4 border-box'>
+              <div className='w-40-ns'>
+                <div className='aspect-ratio aspect-ratio--4x3'>
+                  <img
+                    src='assets/research/managed-services.jpg'
+                    alt='Comparison of Kubernetes managed services'
+                    className='aspect-ratio--object shadow-1 br2'
+                  />
+                </div>
+              </div>
+              <div className='w-60-ns'>
+                <div className='pl4-ns'>
+                  <h2 className='f3 b navy lh-solid' id='managed-services'>
+                    Comparison of Kubernetes managed services (coming soon)
+                  </h2>
+                  <p className='lh-copy measure-narrow f4 black-80'>
+                    The research compares Kubernetes managed services such as Google Kubernetes Engine (GKE), Elastic
+                    Kubernetes Service (EKS) and Azure Kubernetes (AKS).
+                  </p>
+                  <span className='link dib white bg-navy br1 pa3 b f5 mv3 submit br2 b--none ttu'>Coming soon</span>
+                </div>
+              </div>
+            </li>
           </ul>
+
+          <div className='ph3'>
+            <p className='f2-l f3 navy b tc mb2 pt4-ns pt2'>Don't miss the new research!</p>
+            <p className='lh-copy f4 black-70 measure center tc'>
+              If you want to be notified when we publish new research documents, you can sign up for the Learnk8s
+              newsletter.
+            </p>
+            <div className='f4 measure tc center'>
+              <form action='https://learnk8s.us19.list-manage.com/subscribe/post' method='POST'>
+                <input type='hidden' name='u' value='2f82ec7d5caaa9ced71141211' />
+                <input type='hidden' name='id' value='8ecff1a8cf' />
+                <input type='hidden' name='orig-lang' value='1' />
+                {/* <Honeypot> */}
+                <div className='dn' aria-label='Please leave the following three fields empty'>
+                  <label htmlFor='b_name'>Name: </label>
+                  <input type='text' name='b_name' tabIndex={-1} defaultValue='' placeholder='Freddie' id='b_comment' />
+
+                  <label htmlFor='b_email'>Email: </label>
+                  <input
+                    type='email'
+                    name='b_email'
+                    tabIndex={-1}
+                    defaultValue=''
+                    placeholder='youremail@gmail.com'
+                    id='b_comment'
+                  />
+
+                  <label htmlFor='b_comment'>Comment: </label>
+                  <textarea name='b_comment' tabIndex={-1} placeholder='Please comment' id='b_comment' />
+                </div>
+                {/* </Honeypot> */}
+
+                <div className='mv4'>
+                  <div className='mv3'>
+                    <span className='dib bb ml2'>
+                      <input
+                        className='pa2 input-reset b--none'
+                        type='email'
+                        autoCapitalize='off'
+                        autoCorrect='off'
+                        name='MERGE0'
+                        id='MERGE0'
+                        size={25}
+                        defaultValue=''
+                        placeholder='Your email address'
+                      />
+                    </span>
+                  </div>
+                </div>
+
+                <div className=''>
+                  <input
+                    type='submit'
+                    defaultValue='Subscribe'
+                    className='dib white bg-navy br1 pv2 ph3 b f5 bn pointer'
+                    name='submit'
+                  />
+                </div>
+                <input type='hidden' name='MERGE2' id='MERGE2' defaultValue='research' />
+                <input
+                  type='hidden'
+                  name='ht'
+                  defaultValue='69b0fd8eb9c012c25b28cf22b63612792eb64a30:MTU4OTUyNjkxMC45MDUz'
+                />
+                <input type='hidden' name='mc_signupsource' defaultValue='hosted' />
+              </form>
+              <p className='f6 black-60 mt4 mb0 underline'>
+                *We'll never share your email address, and you can opt-out at any time.
+              </p>
+            </div>
+          </div>
         </section>
 
         <Section className='bg-evian mt3 mt5-ns'>
