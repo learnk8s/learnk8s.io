@@ -164,7 +164,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-about-us',
       pageId: AboutUs.id,
-      image: 'assets/open_graph_preview.png',
+      imagePath: 'assets/open_graph_preview.png',
       title: 'Team',
       description: 'Experienced software consultants, specialising in Kubernetes.',
     }),
@@ -194,7 +194,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

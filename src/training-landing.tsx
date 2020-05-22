@@ -93,7 +93,7 @@ export function Register(store: Store) {
       Action.openGraphs.add({
         id: `og-${course.id}`,
         pageId: `page-${course.id}`,
-        image: 'assets/open_graph_preview.png',
+        imagePath: 'assets/open_graph_preview.png',
         description,
         title,
       }),
@@ -116,7 +116,7 @@ export function Register(store: Store) {
       Action.openGraphs.add({
         id: `og-${course.id}`,
         pageId: `page-${course.id}`,
-        image: 'assets/opengraph.v2.png',
+        imagePath: 'assets/opengraph.v2.png',
         description,
         title,
       }),
@@ -179,7 +179,7 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
@@ -368,7 +368,7 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

@@ -24,7 +24,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-research',
       pageId: Research.id,
-      image: 'assets/opengraph.v2.png',
+      imagePath: 'assets/opengraph.v2.png',
       title: Research.title,
       description: Research.description,
     }),
@@ -54,7 +54,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

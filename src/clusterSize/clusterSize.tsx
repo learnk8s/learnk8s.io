@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-cluster-size',
       pageId: ClusterSize.id,
-      image: 'src/clusterSize/architecting-clusters.png',
+      imagePath: 'src/clusterSize/architecting-clusters.png',
       title: ClusterSize.title,
       description: `If you use Kubernetes as your application platform, one of the fundamental questions is: how many clusters should you have? One big cluster or multiple smaller clusters? This article investigates the pros and cons of different approaches.`,
     }),
@@ -38,7 +38,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'cluster-size-picture',
       pageId: ClusterSize.id,
-      image: 'src/clusterSize/architecting-clusters.svg',
+      imagePath: 'src/clusterSize/architecting-clusters.svg',
     }),
   )
   store.dispatch(

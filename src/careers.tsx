@@ -18,7 +18,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-career',
       pageId: Career.id,
-      image: 'assets/open_graph_preview.png',
+      imagePath: 'assets/open_graph_preview.png',
       title: 'Careers',
       description: 'Join Learnk8s and help others learn Docker and Kubernetes.',
     }),
@@ -47,7 +47,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

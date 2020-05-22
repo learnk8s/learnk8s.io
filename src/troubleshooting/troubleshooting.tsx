@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-troubleshooting-deployments',
       pageId: Troubleshooting.id,
-      image: 'src/troubleshooting/flowchart.png',
+      imagePath: 'src/troubleshooting/flowchart.png',
       title: Troubleshooting.title,
       description: Troubleshooting.description,
     }),
@@ -40,7 +40,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'troubleshooting-picture',
       pageId: Troubleshooting.id,
-      image: 'src/troubleshooting/flowchart.svg',
+      imagePath: 'src/troubleshooting/flowchart.svg',
     }),
   )
 }

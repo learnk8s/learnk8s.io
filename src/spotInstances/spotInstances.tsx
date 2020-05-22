@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-spot-instances',
       pageId: SpotInstances.id,
-      image: 'src/spotInstances/cheap-cluster.jpg',
+      imagePath: 'src/spotInstances/cheap-cluster.jpg',
       title: SpotInstances.title,
       description: SpotInstances.description,
     }),
@@ -47,7 +47,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'spot-instances-picture',
       pageId: SpotInstances.id,
-      image: 'src/spotInstances/cheap-cluster.svg',
+      imagePath: 'src/spotInstances/cheap-cluster.svg',
     }),
   )
 }

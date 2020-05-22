@@ -19,7 +19,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-free-tools',
       pageId: FreeTools.id,
-      image: 'assets/open_graph_preview.png',
+      imagePath: 'assets/open_graph_preview.png',
       title: 'Kubernetes tools',
       description: 'A collection of free tools to help you navigate your Kubernetes journey.',
     }),
@@ -49,7 +49,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

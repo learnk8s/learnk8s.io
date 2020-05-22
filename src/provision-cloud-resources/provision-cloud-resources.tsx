@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-provision-cloud-resources',
       pageId: ProvisionCloudResources.id,
-      image: 'src/provision-cloud-resources/cloud-resources.png',
+      imagePath: 'src/provision-cloud-resources/cloud-resources.png',
       title: 'Provisioning cloud resources (AWS, GCP, Azure) in Kubernetes',
       description: `You can create and connect to managed cloud resources using the Service Catalog, a tool such as Kubeform or cloud-specific operators such as Config Connector and AWS Operator Service.`,
     }),
@@ -52,7 +52,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'provision-cloud-resources-picture',
       pageId: ProvisionCloudResources.id,
-      image: 'src/provision-cloud-resources/cloud-resources.svg',
+      imagePath: 'src/provision-cloud-resources/cloud-resources.svg',
     }),
   )
 }

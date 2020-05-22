@@ -62,7 +62,7 @@ function renderPage(state: State) {
           `<pubDate>${new Date(blogPost.publishedDate).toUTCString()}</pubDate>`,
           `<dc:creator>${author.fullName}</dc:creator>`,
           `<description><![CDATA[${blogPost.description}]]></description>`,
-          `<enclosure url="${openGraph.image}" length="1000" type="${fileToMime(openGraph.image)}"/>`,
+          `<enclosure url="${openGraph.imagePath}" length="1000" type="${fileToMime(openGraph.imagePath)}"/>`,
           '</item>',
         ].join('')
       })

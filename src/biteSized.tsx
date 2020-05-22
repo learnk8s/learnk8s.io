@@ -21,7 +21,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-bite-sized',
       pageId: BiteSized.id,
-      image: 'assets/open_graph_preview.png',
+      imagePath: 'assets/open_graph_preview.png',
       title: 'Bite-sized Kubernetes learning ⎈ Learnk8s',
       description:
         'A regular column on the most interesting questions that we see online and during our workshops answered by a Kubernetes expert',
@@ -56,7 +56,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

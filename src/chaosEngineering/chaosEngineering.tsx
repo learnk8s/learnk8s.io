@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-chaos-engineering',
       pageId: ChaosEngineering.id,
-      image: 'src/chaosEngineering/chaos-engineering-kubernetes.png',
+      imagePath: 'src/chaosEngineering/chaos-engineering-kubernetes.png',
       title: 'Kubernetes Chaos Engineering: Lessons Learned — Part 1',
       description: ChaosEngineering.description,
     }),
@@ -48,7 +48,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'chaos-enginnering-picture',
       pageId: ChaosEngineering.id,
-      image: 'src/chaosEngineering/chaos-engineering-kubernetes.svg',
+      imagePath: 'src/chaosEngineering/chaos-engineering-kubernetes.svg',
     }),
   )
 }

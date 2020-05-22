@@ -18,7 +18,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-newsletter',
       pageId: Newsletter.id,
-      image: 'assets/open_graph_preview.png',
+      imagePath: 'assets/open_graph_preview.png',
       title: 'Newsletter',
       description: 'Keep yourself up to date with the latest news from Learnk8s.',
     }),
@@ -47,7 +47,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

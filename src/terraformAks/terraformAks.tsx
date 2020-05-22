@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-terraform-aks',
       pageId: TerraformAks.id,
-      image: 'src/terraformAks/terraforming.jpg',
+      imagePath: 'src/terraformAks/terraforming.jpg',
       title: TerraformAks.title,
       description: `Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.`,
     }),
@@ -47,7 +47,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'terraform-aks-picture',
       pageId: TerraformAks.id,
-      image: 'src/terraformAks/terraforming.svg',
+      imagePath: 'src/terraformAks/terraforming.svg',
     }),
   )
 }
