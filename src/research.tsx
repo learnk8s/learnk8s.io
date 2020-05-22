@@ -24,7 +24,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-research',
       pageId: Research.id,
-      image: <img src='assets/opengraph.v2.png' alt='Learnk8s' />,
+      image: 'assets/opengraph.v2.png',
       title: Research.title,
       description: Research.description,
     }),

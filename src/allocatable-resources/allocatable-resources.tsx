@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-allocatable-resources',
       pageId: AllocatableResources.id,
-      image: <img src='src/allocatable-resources/allocatable-resources.png' alt={AllocatableResources.title} />,
+      image: 'src/allocatable-resources/allocatable-resources.png',
       title: AllocatableResources.title,
       description: AllocatableResources.description,
     }),
@@ -45,7 +45,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'allocatable-resources-picture',
       pageId: AllocatableResources.id,
-      image: <img src='src/allocatable-resources/allocatable-resources.svg' alt={AllocatableResources.title} />,
+      image: 'src/allocatable-resources/allocatable-resources.svg',
     }),
   )
 }
