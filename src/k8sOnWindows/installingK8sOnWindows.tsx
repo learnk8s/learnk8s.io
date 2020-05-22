@@ -17,9 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-k8s-on-windows',
       pageId: K8sOnWindows.id,
-      image: (
-        <img src='src/k8sOnWindows/k8s_on_win.jpg' alt='Getting started with Docker and Kubernetes on Windows 10' />
-      ),
+      imagePath: 'src/k8sOnWindows/k8s_on_win.jpg',
       title: K8sOnWindows.title,
       description: K8sOnWindows.description,
     }),
@@ -50,7 +48,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'k8s-on-windows-picture',
       pageId: K8sOnWindows.id,
-      image: <img src='src/k8sOnWindows/k8s_on_win.svg' alt={K8sOnWindows.title} />,
+      imagePath: 'src/k8sOnWindows/k8s_on_win.svg',
     }),
   )
 }

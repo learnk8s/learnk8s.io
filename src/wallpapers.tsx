@@ -24,7 +24,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-wallpaper',
       pageId: Wallpaper.id,
-      image: <img src='assets/wallpapers/wallpaper-magician.png' alt='Kubernetes wallpapers' />,
+      imagePath: 'assets/wallpapers/wallpaper-magician.png',
       title: 'Kubernetes wallpapers ⎈ Learnk8s',
       description: 'A collection of free Kubernetes wallpapers for your computer.',
     }),
@@ -54,7 +54,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

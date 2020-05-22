@@ -59,7 +59,7 @@ export async function renderPage(pageMeta: Page, state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
@@ -71,7 +71,7 @@ export async function renderPage(pageMeta: Page, state: State) {
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
             headline: blog.title,
-            image: `${openGraph.image.props.src}`,
+            image: `${openGraph.imagePath}`,
             author: {
               '@type': 'Person',
               name: author.fullName,
@@ -112,13 +112,7 @@ export async function renderPage(pageMeta: Page, state: State) {
           <hr className='pv2 bn' />
           <div className='aspect-ratio aspect-ratio--6x4'>
             {previewPicture ? (
-              {
-                ...previewPicture.image,
-                props: {
-                  ...previewPicture.image.props,
-                  className: (previewPicture.image.props.className || '').concat('aspect-ratio--object'),
-                },
-              }
+              <img src={previewPicture.imagePath} className='aspect-ratio--object' alt={page.title} />
             ) : (
               <img src='assets/bsk.svg' className='aspect-ratio--object' alt={blog.title} />
             )}

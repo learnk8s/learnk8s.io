@@ -24,7 +24,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-deploy-laravel',
       pageId: DeployLaravel.id,
-      image: <img src='src/deployLaravel/laravel_k8s.jpg' alt='Deploy Laravel on Kubernetes' />,
+      imagePath: 'src/deployLaravel/laravel_k8s.jpg',
       title: 'Kubernetes: deploy Laravel the easy way',
       description: DeployLaravel.description,
     }),
@@ -63,7 +63,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'deploy-laravel-picture',
       pageId: DeployLaravel.id,
-      image: <img src='src/deployLaravel/laravel_k8s.svg' alt={DeployLaravel.title} />,
+      imagePath: 'src/deployLaravel/laravel_k8s.svg',
     }),
   )
 }

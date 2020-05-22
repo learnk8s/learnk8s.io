@@ -24,7 +24,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-scaling-tensorflow',
       pageId: ScalingTensorflow.id,
-      image: <img src='src/scalingKubeflow/kubeflow.png' alt='Big data' />,
+      imagePath: 'src/scalingKubeflow/kubeflow.png',
       title: ScalingTensorflow.title,
       description: ScalingTensorflow.description,
     }),
@@ -66,7 +66,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'scaling-tensorflow-picture',
       pageId: ScalingTensorflow.id,
-      image: <img src='src/scalingKubeflow/kubeflow.svg' alt={ScalingTensorflow.title} />,
+      imagePath: 'src/scalingKubeflow/kubeflow.svg',
     }),
   )
 }

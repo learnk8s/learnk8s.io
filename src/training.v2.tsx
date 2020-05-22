@@ -71,7 +71,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-training',
       pageId: Training.id,
-      image: <img src='assets/opengraph.v2.png' alt='Learnk8s' />,
+      imagePath: 'assets/opengraph.v2.png',
       description: Training.description,
       title: 'Kubernetes Training Courses',
     }),
@@ -119,7 +119,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

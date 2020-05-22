@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-scaling-spring-boot',
       pageId: ScalingSpringBoot.id,
-      image: <img src='src/scalingSpringBoot/autoscaling.png' alt='Containers' />,
+      imagePath: 'src/scalingSpringBoot/autoscaling.png',
       title: ScalingSpringBoot.title,
       description: `You should design your service so that even if it is subject to intermittent heavy loads, it continues to operate reliably. But how do you build such applications? And how do you deploy an application that scales dynamically?`,
     }),
@@ -52,7 +52,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'scaling-spring-boot-picture',
       pageId: ScalingSpringBoot.id,
-      image: <img src='src/scalingSpringBoot/autoscaling.svg' alt={ScalingSpringBoot.title} />,
+      imagePath: 'src/scalingSpringBoot/autoscaling.svg',
     }),
   )
 }

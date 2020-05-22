@@ -45,7 +45,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-zero-to-k8s',
       pageId: ZeroToK8s.id,
-      image: <img src='assets/02k8s/opengraph.jpg' alt='Learnk8s preview' />,
+      imagePath: 'assets/02k8s/opengraph.jpg',
       title: 'Deploying Node.js, Express and MongoDB with Kubernetes',
       description: `Zero to Kubernetes is a step-by-step course on how to design, develop and deploy Node.js applications on Kubernetes.`,
     }),
@@ -74,7 +74,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

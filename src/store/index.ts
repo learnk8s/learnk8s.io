@@ -66,11 +66,3 @@ export function hasTag(state: State, tagId: string) {
       .some(it => it.tag === tagId)
   }
 }
-
-export function getRedirects(state: State): WebsiteReducer.Redirect[] {
-  return Object.values(Selector.redirects.selectAll(store.getState()))
-}
-
-export function getPreviewPictures(state: State): WebsiteReducer.PreviewPicture[] {
-  return Object.values(Selector.previewPictures.selectAll(store.getState()))
-}

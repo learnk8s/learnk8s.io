@@ -70,7 +70,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-multiple-kubernetes-clusters',
       pageId: Pages.multipleClusters.id,
-      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      imagePath: 'assets/bsk.png',
       title: Pages.multipleClusters.title,
       description: `In Kubernetes, you might want to distribute your workloads in different regions to improve your reliability and availability. Should you use a single cluster over a unified network or multiple clusters? Learn what options you have.`,
     }),
@@ -99,7 +99,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-ingress-api-gateway',
       pageId: Pages.ingressApiGateway.id,
-      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      imagePath: 'assets/bsk.png',
       title: Pages.ingressApiGateway.title,
       description: `In Kubernetes, an Ingress is a component that routes the traffic from outside the cluster to your services and Pods inside the cluster. You can select an Ingress that is also an API gateway.`,
     }),
@@ -136,7 +136,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-visualise-yaml',
       pageId: Pages.visualiseYaml.id,
-      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      imagePath: 'assets/bsk.png',
       title: Pages.visualiseYaml.title,
       description: Pages.visualiseYaml.description,
     }),
@@ -165,7 +165,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-helm-templating',
       pageId: Pages.helm.id,
-      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      imagePath: 'assets/bsk.png',
       title: Pages.helm.title,
       description: Pages.helm.description,
     }),
@@ -195,7 +195,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-kubernetes-node-size',
       pageId: Pages.nodeSize.id,
-      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      imagePath: 'assets/bsk.png',
       title: Pages.nodeSize.title,
       description:
         'When you create a Kubernetes cluster, one of the first questions that pops up is: "what type of worker nodes should I use, and how many of them?". This article looks at the pros and cons of either using many small or few large worker nodes in your cluster.',
@@ -229,7 +229,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-secrets-git-ops',
       pageId: Pages.secretsGitOps.id,
-      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      imagePath: 'assets/bsk.png',
       title: Pages.secretsGitOps.title,
       description:
         'Kubernetes secrets that you load into the cluster must exist somewhere. Do you keep a copy or rely on Kubernetes to be the only source of truth? How do you back them up? What if you keep a copy and they go out of sync?',
@@ -267,7 +267,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-autoscaling-apps-kubernetes',
       pageId: Pages.autoscaling.id,
-      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      imagePath: 'assets/bsk.png',
       title: Pages.autoscaling.title,
       description: `Deploying an app to production with a static configuration is not optimal. Traffic patterns can change quickly and the app should be able to adapt to them. Kubernetes provides excellent support for autoscaling applications in the form of the Horizontal Pod Autoscaler. In this article, you will learn how to use it.`,
     }),
@@ -299,7 +299,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-kubernetes-rollbacks',
       pageId: Pages.rollbacks.id,
-      image: <img src='assets/bsk.png' alt='Bite-sized Kubernetes learning' />,
+      imagePath: 'assets/bsk.png',
       title: Pages.rollbacks.title,
       description: `When you introduce a change that breaks production, you should have a plan to roll back that change. Kubernetes and kubectl offer a simple mechanism to roll back changes to resources such as Deployments, StatefulSets and DaemonSets.`,
     }),

@@ -17,9 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-02k8s-java',
       pageId: ZeroToK8sJava.id,
-      image: (
-        <img src='src/02k8s-java/jury.png' alt='Hands-on guide: developing and deploying Java apps in Kubernetes' />
-      ),
+      imagePath: 'src/02k8s-java/jury.png',
       title: 'Developing and deploying Spring Boot microservices on Kubernetes',
       description: `Learning how to design and architect Spring Boot microservices that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
     }),
@@ -50,7 +48,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: '02k8s-java-picture',
       pageId: ZeroToK8sJava.id,
-      image: <img src='src/02k8s-java/jury.svg' alt={ZeroToK8sJava.title} />,
+      imagePath: 'src/02k8s-java/jury.svg',
     }),
   )
 }

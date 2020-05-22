@@ -253,7 +253,7 @@ export type BlogPost = {
 export type PreviewPicture = {
   id: string
   pageId: string
-  image: JSX.Element
+  imagePath: string
 }
 
 export type Author = {
@@ -273,7 +273,7 @@ export type LandingPage = {
 export type OpenGraph = {
   id: string
   pageId: string
-  image: JSX.Element
+  imagePath: string
   description: string
   title: string
 }

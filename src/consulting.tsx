@@ -49,7 +49,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-consulting',
       pageId: Consulting.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      imagePath: 'assets/open_graph_preview.png',
       title: 'Consulting',
       description:
         'Expertise in software development, strategy and operations to help you innovate at speed and scale.',
@@ -79,7 +79,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

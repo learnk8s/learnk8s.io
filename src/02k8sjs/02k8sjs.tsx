@@ -17,9 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-02k8sjs',
       pageId: ZeroToK8sJs.id,
-      image: (
-        <img src='src/02k8sjs/jury.jpg' alt='Hands-on guide: developing and deploying Node.js apps in Kubernetes' />
-      ),
+      imagePath: 'src/02k8sjs/jury.jpg',
       title: 'Hands-on guide: developing and deploying Node.js apps in Kubernetes',
       description: `Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling your traffic to millions of requests and beyond.`,
     }),
@@ -48,7 +46,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'v-picture',
       pageId: ZeroToK8sJs.id,
-      image: <img src='src/02k8sjs/jury.svg' alt={ZeroToK8sJs.title} />,
+      imagePath: 'src/02k8sjs/jury.svg',
     }),
   )
 }

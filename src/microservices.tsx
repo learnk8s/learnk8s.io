@@ -50,7 +50,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-academy-microservices-at-scale',
       pageId: Architecting.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      imagePath: 'assets/open_graph_preview.png',
       title: 'Microservices at scale with Kubernetes ⎈ Learnk8s Academy',
       description: `A hands-on, online course on mastering Kubernetes and the tools you'll need to build microservice applications at scale.`,
     }),
@@ -79,7 +79,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

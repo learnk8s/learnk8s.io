@@ -18,7 +18,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-contact-us',
       pageId: ContactUs.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      imagePath: 'assets/open_graph_preview.png',
       title: 'Contact us',
       description: 'Feel free to get in touch and let us know how we can help. ',
     }),
@@ -47,7 +47,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}

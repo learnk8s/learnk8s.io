@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-k8bit',
       pageId: K8Bit.id,
-      image: <img src='src/k8bit/k8bit.png' alt={K8Bit.title} />,
+      imagePath: 'src/k8bit/k8bit.png',
       title: K8Bit.title,
       description: K8Bit.description,
     }),
@@ -39,7 +39,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'k8bit-picture',
       pageId: K8Bit.id,
-      image: <img src='src/k8bit/k8bit.svg' alt={K8Bit.title} />,
+      imagePath: 'src/k8bit/k8bit.svg',
     }),
   )
 }

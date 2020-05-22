@@ -17,7 +17,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-solar-plants',
       pageId: SolarPlants.id,
-      image: <img src='src/solarPlants/solar_panel.png' alt='Solar panels and Kubernetes' />,
+      imagePath: 'src/solarPlants/solar_panel.png',
       title: SolarPlants.title,
       description: SolarPlants.description,
     }),
@@ -45,7 +45,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'solar-plants-picture',
       pageId: SolarPlants.id,
-      image: <img src='src/solarPlants/solar_panel.svg' alt={SolarPlants.title} />,
+      imagePath: 'src/solarPlants/solar_panel.svg',
     }),
   )
 }

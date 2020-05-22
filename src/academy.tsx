@@ -19,7 +19,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-academy',
       pageId: Academy.id,
-      image: <img src='assets/open_graph_preview.png' alt='Learnk8s preview' />,
+      imagePath: 'assets/open_graph_preview.png',
       title: 'In-depth, hands-on Kubernetes online courses',
       description: `Learn Kubernetes from the comfort of wherever you are with step-by-step tutorial and guided, hands-on material.`,
     }),
@@ -48,7 +48,7 @@ function renderPage(state: State) {
           <OpenGraph
             title={openGraph.title}
             description={openGraph.description}
-            image={openGraph.image}
+            image={openGraph.imagePath}
             currentAbsoluteUrl={currentAbsoluteUrl}
           />
         ) : null}
