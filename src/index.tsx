@@ -34,6 +34,7 @@ import * as TrainingLandingPage from './training-landing'
 import * as Training from './learn'
 import * as BestPractices from './best-practices/best'
 import * as FreeTools from './freeTools'
+import * as Research from './research'
 import * as Wallpapers from './wallpapers'
 import * as Flipboard from './flipboard'
 import { checkPageDetail } from './checkPageDetail'
@@ -46,6 +47,7 @@ CorporateTraining.Mount({ store })
 Training.Mount({ store })
 BestPractices.Mount({ store })
 FreeTools.Mount({ store })
+Research.Mount({ store })
 Wallpapers.Mount({ store })
 Careers.Mount({ store })
 TermsAndConditions.Mount({ store })
