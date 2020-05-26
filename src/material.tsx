@@ -5,7 +5,7 @@ const content = {
     id: 'LK8S-CONTAINERS',
     name: 'Linux containers and Kubernetes',
     description: `Kubernetes doesn't know how to deploy apps written in languages such as Java, Node.js, or .NET. Instead, it only understands and uses Linux containers. But how do these Linux containers work? Are those strictly necessary to master Kubernetes? In this course, you will familiarise yourself with containers and Docker.`,
-    cover: <img src='assets/material/cover_containers.svg' alt='Linux containers and Kubernetes' />,
+    cover: <img src='assets/material/cover-containers.svg' alt='Linux containers and Kubernetes' />,
     topics: {
       containersVMs: {
         title: 'Containers vs VMs',
@@ -58,7 +58,7 @@ const content = {
     name: 'Kubernetes fundamentals',
     description:
       'In this course, you will learn how to build, deploy and scale your application in a Kubernetes cluster. You will also learn how to declare and schedule resources to the cluster and understand how to expose architect apps that are designed to be horizontally scalable.',
-    cover: <img src='assets/material/cover_fundamentals.svg' alt='Kubernetes fundamentals' />,
+    cover: <img src='assets/material/cover-fundamentals.svg' alt='Kubernetes fundamentals' />,
     topics: {
       containersAtScale: {
         title: 'Managing containers at scale',
@@ -114,7 +114,7 @@ const content = {
     id: 'LK8S-ADVANCED-DEPLOYMENTS',
     name: 'Deployment strategies',
     description: `Every time you deploy new features in production, you shouldn't stop your app, change the version and start it again. With zero-downtime deployments, no one notices any glitch while you're upgrading your apps. How does that work in Kubernetes? In this course, you will learn how Services work in Kubernetes and how you can roll out changes with zero downtime using Rolling updates, Canary Deployments or Blue-green deployments.`,
-    cover: <img src='assets/material/cover_deployment-strategies.svg' alt='Advanced deployment strategies' />,
+    cover: <img src='assets/material/cover-deployment-strategies.svg' alt='Advanced deployment strategies' />,
     topics: {
       uptime: {
         title: 'Monitoring for uptime',
@@ -154,7 +154,7 @@ const content = {
     id: 'LK8S-ARCHITECTURE',
     name: 'Kubernetes Architecture',
     description: `Can Kubernetes recover from failures? In this course, you will learn the Kubernetes core components by building a cluster from scratch using kubeadm. But the best way to learn something is by breaking it. So you will also break the cluster one node at the time and observe what happens.`,
-    cover: <img src='assets/material/cover_architecture.svg' alt='Architecture' />,
+    cover: <img src='assets/material/cover-architecture.svg' alt='Architecture' />,
     topics: {
       clusters: {
         title: 'Single and multi-node clusters',
@@ -222,7 +222,7 @@ const content = {
     id: 'LK8S-NETWORKING',
     name: 'Networking in Kubernetes',
     description: `How do you route external traffic to your applications in the cluster? How can two apps in the cluster talk to each other? How is Kubernetes assigning IP addresses to Pods and Services? In this course, you will explore how the traffic is routed in the cluster.`,
-    cover: <img src='assets/material/cover_networking.svg' alt='Networking' />,
+    cover: <img src='assets/material/cover-networking.svg' alt='Networking' />,
     topics: {
       basicNetworking: {
         title: 'Network routing in Linux',
@@ -326,7 +326,7 @@ const content = {
     id: 'LK8S-TEMPLATING',
     name: 'Templating Kubernetes resources',
     description: `Resources in Kubernetes are described as YAML files. If you wish to have the same resources for different environments such as development, preproduction and production, you may be tempted to copy the files three times. Or you could use a templating engine. In this course, you will learn how to do precisely that with Helm.`,
-    cover: <img src='assets/material/cover_templating.svg' alt='Templating resources' />,
+    cover: <img src='assets/material/cover-templating.svg' alt='Templating resources' />,
     topics: {
       reusableTemplates: {
         title: 'Creating reusable templates',
@@ -371,7 +371,7 @@ const content = {
     name: 'Advanced networking',
     description:
       "Dive into the specifics of network interfaces, IP addresses and network topologies in this course about advanced Kubernetes networking. Learn how to build your Kubernetes network and how the Container Network Interface (CNI) works. And while you're at it why not making your very own Container Network Interface (CNI)?",
-    cover: <img src='assets/material/cover_advanced-networking.svg' alt='Advanced networking' />,
+    cover: <img src='assets/material/cover-advanced-networking.svg' alt='Advanced networking' />,
     topics: {
       nodeNetwork: {
         title: 'Exploring the Node network',
@@ -399,7 +399,7 @@ const content = {
     id: 'LK8S-AUTOSCALING',
     name: 'Autoscaling',
     description: `After deploying your app to production, the received traffic may change in unpredictable ways. How do you keep your app responsive at all times? You can adapt the number of replicas. But is it feasible to do this manually, or are there better ways? In this course, you will learn how to autoscale an application based on an application-specific custom metric.`,
-    cover: <img src='assets/material/cover_autoscaling.svg' alt='autoscaling' />,
+    cover: <img src='assets/material/cover-autoscaling.svg' alt='autoscaling' />,
     topics: {
       intro: {
         title: 'Introduction to autoscaling',
@@ -453,7 +453,7 @@ const content = {
     id: 'LK8S-SERVICE-MESHES',
     name: 'Service meshes',
     description: `When you have dozens, hundreds or even thousands of applications interacting in your cluster, it's hard to tell what is going on. What if you could inspect the traffic without affecting routine operations? What if you could upgrade the network and encrypt communications? In this course, you will explore what a Service Mesh is and how you can build your own.`,
-    cover: <img src='assets/material/cover_service-meshes.svg' alt='Service meshes' />,
+    cover: <img src='assets/material/cover-service-mesh.svg' alt='Service meshes' />,
     topics: {
       why: {
         title: 'Why service meshes?',

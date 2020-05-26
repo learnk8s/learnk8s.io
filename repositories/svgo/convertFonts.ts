@@ -140,6 +140,9 @@ const FONT_ASSETS = {
   'Inter-Bold': {
     default: 'fonts/Inter-Bold-slnt=0.ttf',
   },
+  'Inter-Medium': {
+    default: 'fonts/Inter-Medium-slnt=0.ttf',
+  },
   'Inter-Regular_Bold': {
     default: 'fonts/Inter-SemiBold-slnt=0.ttf',
   },

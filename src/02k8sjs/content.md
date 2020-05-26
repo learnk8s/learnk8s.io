@@ -1,4 +1,4 @@
-> **TL;DR:** In this guide you will launch a local Kubernetes cluster, develop an app using the Spring Boot framework and deploy it as a container in Kubernetes.
+> **TL;DR:** In this guide you will launch a local Kubernetes cluster, develop an app using Node.js and Express and deploy it as a container in Kubernetes.
 
 Learning how to design and architect applications that leverage Kubernetes is the most valuable skill that you could learn to be successful in deploying and scaling in the cloud.
 
