@@ -59,276 +59,207 @@ function renderPage(state: State) {
       <Body>
         <Navbar />
 
-        <Section>
-          <div className='mt4 pb4 pb5-l'>
-            <div className='measure f3-l f4 center'>
-              <h1 className='f1-l f2 navy'>Kubernetes online courses</h1>
+        <div className='new-hero pt4 pb5-l pb4 flex-ns justify-center-ns ph4'>
+          <div className='mw6-m mw7-l pr2 pr4-ns'>
+            <h1 className='f-subheadline-l f1 b white mv0 lh-solid'>Online Kubernetes courses</h1>
+            <div className='f4 measure'>
+              <p className='f2-l f3 white bt bw2 pt3 o-90'>
+                Learn <span className='b'>best practices and common pitfall</span> of deploying and scale apps in
+                Kubernetes with the Learnk8s' hands-on, <span className='b'>online courses.</span>
+              </p>
             </div>
-            <p className='measure f3-l f4 lh-copy center bl bw3 b--blue ph3'>
-              Learn <span className='b'>best practices and common pitfall</span> of deploying and scale apps in
-              Kubernetes with the Learnk8s' hands-on, <span className='b'>online courses.</span>
-            </p>
-            <div className='mw6 center'>
-              <div className='aspect-ratio aspect-ratio--4x3'>
-                <img src='assets/academy/full-package.svg' alt='The expert package' className='aspect-ratio--object' />
-              </div>
+          </div>
+          <div className='dn db-ns flex-auto-l w4-m mw5-l'>
+            <div className='aspect-ratio aspect-ratio--3x4'>
+              <img src={'assets/academy/pc.svg'} alt='' className='aspect-ratio--object' />
             </div>
+          </div>
+        </div>
+
+        <section className='mw7 ph3 ph4-l center relative bg-evian pt3 pb4 mt5'>
+          <p className='f1-l f2 navy b tc ph3 mb3 mt4'>Unlimited access</p>
+          <p className='lh-copy f4 black-70 measure center tc ph3 pb4 mt0'>
+            Enjoy all the Kubernetes content from Learnk8s and get access to future courses.
+          </p>
+          <div className='mw6 center'>
+            <div className='aspect-ratio aspect-ratio--4x3'>
+              <img src='assets/academy/full-package.svg' alt='The expert package' className='aspect-ratio--object' />
+            </div>
+          </div>
+          <p className='lh-copy f3 black-80 tc b pv3'>Includes access to the following courses</p>
+          <ul className='list pl0 flex flex-wrap'>
+            <ListItem className='w-50-ns'>{material.docker.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.kubernetesFundamentals.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.deploymentStrategies.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.architecture.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.networking.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.advancedNetworking.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.autoscaling.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.templating.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.serviceMeshes.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.authentication.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.managingState.name}</ListItem>
+            <ListItem className='w-50-ns'>{material.ckad.name}</ListItem>
+            <SpecialListItem>
+              <span className='b'>Future courses and updates</span>
+            </SpecialListItem>
+          </ul>
+          <p className='lh-copy f3 tc'>
+            Price:{' '}
+            <span id='all' className=''>
+              USD 499.00
+            </span>
+          </p>
+          <div className='tc'>
+            <a
+              href='https://academy.learnk8s.io/all'
+              className='link dib white bg-navy br1 pa3 b f5 mv3 submit br2 b--none ttu'
+            >
+              Buy now →
+            </a>
+          </div>
+        </section>
+
+        <Section className='bg-evian mt5'>
+          <h2 className='f1-l f2 navy tc'>Course bundles</h2>
+          <p className='lh-copy f4 black-70 measure center tc ph3 mb4'>
+            Guided paths that help you learn Kubernetes one step at the time.
+          </p>
+          <div className='mw8 center pv4 ph3-ns'>
+            <ul className='list pl0'>
+              <li className='mv4'>
+                <BundleBlock
+                  buynNowLink='https://academy.learnk8s.io/bundle-architecting'
+                  learnMoreLink='/architecting-scaling-apps-kubernetes'
+                  fullPriceInUSD='USD 137.00'
+                  bundlePriceInUSD='USD 89.00'
+                  fullPriceId='bundle-architecting-full'
+                  bundlePriceId='bundle-architecting'
+                  images={[
+                    material.docker.cover,
+                    material.kubernetesFundamentals.cover,
+                    material.deploymentStrategies.cover,
+                  ]}
+                >
+                  <h2 className='f2-ns f3 measure-narrow lh-title navy'>
+                    1. Architecting, developing and deploying applications at scale
+                  </h2>
+                  <p className='gray ttu f7'>
+                    Difficulty: <span className='dib pv1 ph2 white bg-gray br2'>Entry level</span>{' '}
+                    <span className='dib pv1 ph2 white bg-gray br2'>Intermediate</span>
+                  </p>
+                  <p className='measure f4 lh-copy black-80 pt3'>
+                    If you need to <span className='b underline'>quickly become productive at Kubernetes</span> to
+                    tackle the next big project at work, this is the perfect collection of courses for you.
+                  </p>
+                  <p className='measure f4 lh-copy black-80'>
+                    You will learn the basics as well as advanced deployment strategies to get your apps ready to a
+                    production Kubernetes cluster. The bundle includes access to the following courses:
+                  </p>
+                  <ol className='f4'>
+                    <li className='mv3'>{material.docker.name}</li>
+                    <li className='mv3'>{material.kubernetesFundamentals.name}</li>
+                    <li className='mv3'>{material.deploymentStrategies.name}</li>
+                  </ol>
+                </BundleBlock>
+              </li>
+
+              <li className='mv4'>
+                <BundleBlock
+                  buynNowLink='https://academy.learnk8s.io/bundle-advanced-kubernetes'
+                  learnMoreLink='/architecting-scaling-apps-kubernetes'
+                  fullPriceInUSD='USD 167.00'
+                  bundlePriceInUSD='USD 119.00'
+                  fullPriceId='bundle-advanced-kubernetes-full'
+                  bundlePriceId='bundle-advanced-kubernetes'
+                  images={[material.architecture.cover, material.networking.cover, material.advancedNetworking.cover]}
+                >
+                  <h2 className='f2-ns f3 measure-narrow lh-solid navy'>2. Advanced Kubernetes in practice</h2>
+                  <p className='gray ttu f7'>
+                    Difficulty: <span className='dib pv1 ph2 white bg-gray br2'>Intermediate</span>{' '}
+                    <span className='dib pv1 ph2 white bg-gray br2'>Advanced</span>
+                  </p>
+                  <p className='measure f4 lh-copy black-80'>
+                    If you <span className='i'>really</span> want to learn Kubernetes, you should build and break your
+                    cluster.
+                  </p>
+                  <p className='measure f4 lh-copy black-80'>
+                    The following collection of courses are designed to{' '}
+                    <span className='b underline'>dig deeper into Kubernetes internal components:</span>
+                  </p>
+                  <ol className='f4'>
+                    <li className='mv3'>{material.architecture.name}</li>
+                    <li className='mv3'>{material.networking.name}</li>
+                    <li className='mv3'>{material.advancedNetworking.name}</li>
+                  </ol>
+                </BundleBlock>
+              </li>
+
+              <li className='mv4'>
+                <BundleBlock
+                  buynNowLink='https://academy.learnk8s.io/bundle-microservices'
+                  learnMoreLink='/microservices-at-scale'
+                  fullPriceInUSD='USD 167.00'
+                  bundlePriceInUSD='USD 119.00'
+                  fullPriceId='bundle-microservices-full'
+                  bundlePriceId='bundle-microservices'
+                  images={[material.autoscaling.cover, material.templating.cover, material.serviceMeshes.cover]}
+                >
+                  <h2 className='f2-ns f3 measure-narrow lh-solid navy'>3. Microservices at scale</h2>
+                  <p className='gray ttu f7'>
+                    Difficulty: <span className='dib pv1 ph2 white bg-gray br2'>Intermediate</span>{' '}
+                    <span className='dib pv1 ph2 white bg-gray br2'>Advanced</span>
+                  </p>
+                  <p className='measure f4 lh-copy black-80'>
+                    Operating clusters with dozens, hundreds or thousands of microservices requires expertise and a
+                    solid plan.
+                  </p>
+                  <p className='measure f4 lh-copy black-80'>
+                    The following collection of courses are designed to help you{' '}
+                    <span className='b underline'>create your services with scalability and flexibility</span> in mind.
+                  </p>
+                  <ol className='f4'>
+                    <li className='mv3'>{material.autoscaling.name}</li>
+                    <li className='mv3'>{material.templating.name}</li>
+                    <li className='mv3'>{material.serviceMeshes.name}</li>
+                  </ol>
+                </BundleBlock>
+              </li>
+
+              <li className='mv4'>
+                <BundleBlock
+                  buynNowLink='https://academy.learnk8s.io/bundle-exploring-kubernetes2'
+                  learnMoreLink='/exploring-kubernetes'
+                  fullPriceInUSD='USD 167.00'
+                  bundlePriceInUSD='USD 119.00'
+                  fullPriceId='bundle-exploring-kubernetes2-full'
+                  bundlePriceId='bundle-exploring-kubernetes2'
+                  images={[material.authentication.cover, material.managingState.cover, material.ckad.cover]}
+                >
+                  <h2 className='f2-ns f3 measure-narrow lh-solid navy'>4. Exploring Kubernetes</h2>
+                  <p className='gray ttu f7'>
+                    Difficulty: <span className='dib pv1 ph2 white bg-gray br2'>Intermediate</span>{' '}
+                    <span className='dib pv1 ph2 white bg-gray br2'>Advanced</span>
+                  </p>
+                  <p className='measure f4 lh-copy black-80'>
+                    Kubernetes is a vast subject and becoming an expert requires exploring concepts related to storage,
+                    networking, and scaling — to name a few.
+                  </p>
+                  <p className='measure f4 lh-copy black-80'>
+                    This collection of courses are designed to cover several{' '}
+                    <span className='b underline'>advanced topics necessary to operate a production-ready cluster</span>
+                    .
+                  </p>
+                  <ol className='f4'>
+                    <li className='mv3'>{material.authentication.name}</li>
+                    <li className='mv3'>{material.managingState.name}</li>
+                    <li className='mv3'>{material.ckad.name}</li>
+                  </ol>
+                </BundleBlock>
+              </li>
+            </ul>
           </div>
         </Section>
-
-        <section className='mw8 center pv4 ph3'>
-          <div className='measure f3-l f4 center'>
-            <h2 className='f2 measure-narrow lh-solid navy'>
-              1. Architecting, developing and deploying applications at scale
-            </h2>
-            <p className='measure f4 lh-copy black-80'>
-              If you need to <span className='b underline'>quickly become productive at Kubernetes</span> to tackle the
-              next big project at work, this is the perfect collection of courses for you.
-            </p>
-            <p className='measure f4 lh-copy black-80'>
-              You will <span className='b underline'>learn the basics as well as advanced deployment strategies</span>{' '}
-              to get your apps ready to a production Kubernetes cluster.
-            </p>
-            <a
-              href='/architecting-scaling-apps-kubernetes'
-              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
-              target='_self'
-              rel='noreferrer'
-            >
-              Learn more →
-            </a>
-          </div>
-          <ul className='flex flex-wrap items-start list pl0 bt bw2 b--near-white pt4'>
-            <CourseBlock
-              title={material.docker.name}
-              img={material.docker.cover}
-              className='w-third-l center db mw6'
-              difficulty='Beginner'
-              defaultUSPrice={39}
-              priceId='single-containers'
-            >
-              <p className='lh-copy masure f5'>{material.docker.description}</p>
-              <a href='/architecting-scaling-apps-kubernetes' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-            <CourseBlock
-              title={material.kubernetesFundamentals.name}
-              img={material.kubernetesFundamentals.cover}
-              className='w-third-l center db mw6'
-              difficulty='Intermediate'
-              defaultUSPrice={49}
-              priceId='single-fundamentals'
-            >
-              <p className='lh-copy masure f5'>{material.kubernetesFundamentals.description}</p>
-              <a href='/architecting-scaling-apps-kubernetes' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-            <CourseBlock
-              title={material.deploymentStrategies.name}
-              img={material.deploymentStrategies.cover}
-              className='w-third-l center db mw6'
-              difficulty='Intermediate'
-              defaultUSPrice={49}
-              priceId='single-deployment-strategies'
-            >
-              <p className='lh-copy masure f5'>{material.deploymentStrategies.description}</p>
-              <a href='/architecting-scaling-apps-kubernetes' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-          </ul>
-        </section>
-
-        <section className='mw8 center pv4 ph3'>
-          <div className='measure f3-l f4 center'>
-            <h2 className='f2 measure-narrow lh-solid navy'>2. Advanced Kubernetes in practice</h2>
-            <p className='measure f4 lh-copy black-80'>
-              If you <span className='i'>really</span> want to learn Kubernetes, you should{' '}
-              <span className='underline'>build and break your own cluster</span>.
-            </p>
-            <p className='measure f4 lh-copy black-80'>
-              This collection of courses are designed to{' '}
-              <span className='b underline'>dig deeper into Kubernetes internal components</span>.
-            </p>
-            <a
-              href='/advanced-kubernetes-in-practice'
-              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
-              target='_self'
-              rel='noreferrer'
-            >
-              Learn more →
-            </a>
-          </div>
-          <ul className='flex flex-wrap items-start list pl0 bt bw2 b--near-white pt4'>
-            <CourseBlock
-              title={material.architecture.name}
-              img={material.architecture.cover}
-              className='w-third-l center db mw6'
-              difficulty='Intermediate'
-              defaultUSPrice={49}
-              priceId='single-architecture'
-            >
-              <p className='lh-copy masure f5'>{material.architecture.description}</p>
-              <a href='/advanced-kubernetes-in-practice' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-            <CourseBlock
-              title={material.networking.name}
-              img={material.networking.cover}
-              className='w-third-l center db mw6'
-              difficulty='Advanced'
-              defaultUSPrice={59}
-              priceId='single-networking'
-            >
-              <p className='lh-copy masure f5'>{material.networking.description}</p>
-              <a href='/advanced-kubernetes-in-practice' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-            <CourseBlock
-              title={material.advancedNetworking.name}
-              img={material.advancedNetworking.cover}
-              className='w-third-l center db mw6'
-              difficulty='Advanced'
-              defaultUSPrice={59}
-              priceId='single-advanced-networking'
-            >
-              <p className='lh-copy masure f5'>{material.advancedNetworking.description}</p>
-              <a href='/advanced-kubernetes-in-practice' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-          </ul>
-        </section>
-
-        <section className='mw8 center pv4 ph3'>
-          <div className='measure f3-l f4 center'>
-            <h2 className='f2 measure-narrow lh-solid navy'>3. Microservices at scale</h2>
-            <p className='measure f4 lh-copy black-80'>
-              Operating clusters with dozens, hundreds or thousands of microservices requires expertise and a solid
-              plan.
-            </p>
-            <p className='measure f4 lh-copy black-80'>
-              This collection of courses are designed to help you{' '}
-              <span className='b underline'>design your services with scalability and flexibility</span> in mind.
-            </p>
-            <a
-              href='/microservices-at-scale'
-              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
-              target='_self'
-              rel='noreferrer'
-            >
-              Learn more →
-            </a>
-          </div>
-          <ul className='flex flex-wrap items-start list pl0 bt bw2 b--near-white pt4'>
-            <CourseBlock
-              title={material.templating.name}
-              img={material.templating.cover}
-              className='w-third-l center db mw6'
-              difficulty='Intermediate'
-              defaultUSPrice={49}
-              priceId='single-templating'
-            >
-              <p className='lh-copy masure f5'>{material.templating.description}</p>
-              <a href='/microservices-at-scale' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-            <CourseBlock
-              title={material.autoscaling.name}
-              img={material.autoscaling.cover}
-              className='w-third-l center db mw6'
-              difficulty='Advanced'
-              defaultUSPrice={59}
-              priceId='single-autoscaling'
-            >
-              <p className='lh-copy masure f5'>{material.autoscaling.description}</p>
-              <a href='/microservices-at-scale' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-            <CourseBlock
-              title={material.serviceMeshes.name}
-              img={material.serviceMeshes.cover}
-              className='w-third-l center db mw6'
-              difficulty='Advanced'
-              defaultUSPrice={59}
-              priceId='single-service-meshes'
-            >
-              <p className='lh-copy masure f5'>{material.serviceMeshes.description}</p>
-              <a href='/microservices-at-scale' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-          </ul>
-        </section>
-
-        <section className='mw8 center pv4 ph3'>
-          <div className='measure f3-l f4 center'>
-            <h2 className='f2 measure-narrow lh-solid navy'>4. Exploring Kubernetes</h2>
-            <p className='measure f4 lh-copy black-80'>
-              Kubernetes is a vast subject and become an expert requires exploring concepts related to storage,
-              networking, and scaling — to name a few.
-            </p>
-            <p className='measure f4 lh-copy black-80'>
-              This collection of courses are designed to cover several{' '}
-              <span className='b underline'>advanced topics necessary to operate a production-ready cluster</span>.
-            </p>
-            <a
-              href='/exploring-kubernetes'
-              className='no-underline dib white bg-blue br1 pv3 ph4 b f4 br2 mv3'
-              target='_self'
-              rel='noreferrer'
-            >
-              Learn more →
-            </a>
-          </div>
-          <ul className='flex flex-wrap items-start list pl0 bt bw2 b--near-white pt4'>
-            <CourseBlock
-              title={material.managingState.name}
-              img={material.managingState.cover}
-              className='w-third-l center db mw6'
-              difficulty='Advanced'
-              defaultUSPrice={59}
-              priceId='single-managing-state'
-            >
-              <p className='lh-copy masure f5'>{material.managingState.description}</p>
-              <a href='/exploring-kubernetes' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-            <CourseBlock
-              title={material.authentication.name}
-              img={material.authentication.cover}
-              className='w-third-l center db mw6'
-              difficulty='Advanced'
-              defaultUSPrice={59}
-              priceId='single-authentication'
-            >
-              <p className='lh-copy masure f5'>{material.authentication.description}</p>
-              <a href='/exploring-kubernetes' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-            <CourseBlock
-              title={material.ckad.name}
-              img={material.ckad.cover}
-              className='w-third-l center db mw6'
-              difficulty='Advanced'
-              defaultUSPrice={49}
-              priceId='single-ckad'
-            >
-              <p className='lh-copy masure f5'>{material.ckad.description}</p>
-              <a href='/exploring-kubernetes' className='link no-underline underline-hover navy'>
-                Learn more &#8594;
-              </a>
-            </CourseBlock>
-          </ul>
-        </section>
 
         <Footer />
         <script
@@ -377,81 +308,111 @@ request.send();
   )
 }
 
-export const Item: React.StatelessComponent<{ tick: JSX.Element }> = ({ children, tick }) => {
+const BundleBlock: React.StatelessComponent<{
+  buynNowLink: string
+  learnMoreLink: string
+  fullPriceInUSD: string
+  bundlePriceInUSD: string
+  fullPriceId: string
+  bundlePriceId: string
+  images: [JSX.Element, JSX.Element, JSX.Element]
+}> = ({
+  children,
+  buynNowLink,
+  learnMoreLink,
+  fullPriceInUSD,
+  bundlePriceInUSD,
+  fullPriceId,
+  bundlePriceId,
+  images,
+}) => {
   return (
-    <li className='mv3 flex justify-center'>
-      <div className='v-top tc'>
-        <img src={tick.props.src} alt={tick.props.alt} className='w2 h2' />
-      </div>
-      <div className='v-top pl3 w-90'>{children}</div>
-    </li>
-  )
-}
-
-const CourseBlock: React.StatelessComponent<{
-  className?: string
-  img: JSX.Element
-  title: string
-  difficulty: string
-  defaultUSPrice: number
-  priceId: string
-}> = ({ children, className, img, title, difficulty, defaultUSPrice, priceId }) => {
-  return (
-    <li className={`${className || ''}`}>
-      <div className='br2 br--top shadow-4 ma3'>
-        <div className='aspect-ratio aspect-ratio--7x5 relative'>
-          {React.createElement('img', {
-            src: img.props.src,
-            alt: img.props.alt,
-            loading: 'lazy',
-            className: 'aspect-ratio--object br2 br--top z-1',
-          })}
-          <div className='z-2 absolute bottom-1 right-1 bg-navy b f6 ph2 pv1 br4 white ttu'>
-            Price:{' '}
-            <span id={priceId}>
-              {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', currencyDisplay: 'code' }).format(
-                defaultUSPrice,
-              )}
-            </span>
-          </div>
-        </div>
-        <div className='ph3 pb4'>
-          <ul className='list pl0 flex pt3'>
-            <li className='bg-near-white navy f7 ph2 pv1 ttu b br1'>Difficulty: {difficulty.toLowerCase()}</li>
-          </ul>
-          <h3 className='f3 lh-solid mt3'>{title}</h3>
+    <>
+      <div className='bg-white br2 pv2 ph4 f2-ns measure-narrow-ns center mw-100-l flex-l'>
+        <div className='w-70-l'>
           {children}
+          <p className='lh-copy f3'>
+            Price:{' '}
+            <span id={fullPriceId} className='strike f4'>
+              {fullPriceInUSD}
+            </span>{' '}
+            <span id={bundlePriceId}>{bundlePriceInUSD}</span>
+          </p>
+          <p className='lh-copy f4'>
+            <a
+              href={buynNowLink}
+              className='no-underline dib white bg-navy br1 pv3 ph4 b f4 br2 mv3 dib mr2'
+              target='_self'
+              rel='noreferrer'
+            >
+              Buy now →
+            </a>
+            or&nbsp;
+            <a href={learnMoreLink} className='link gray underline navy-hover'>
+              learn more
+            </a>
+          </p>
         </div>
+        <div className='w-30 dn db-l'>
+          <ul className='list pl0 pt5'>
+            <li className='h3 w-90'>
+              <div className='aspect-ratio aspect-ratio--7x5 relative'>
+                {React.createElement('img', {
+                  src: images[0].props.src,
+                  alt: images[0].props.alt,
+                  loading: 'lazy',
+                  className: 'aspect-ratio--object br2 z-1 shadow-1',
+                })}
+              </div>
+            </li>
+            <li className='h3 w-90 ml4'>
+              <div className='aspect-ratio aspect-ratio--7x5 relative'>
+                {React.createElement('img', {
+                  src: images[1].props.src,
+                  alt: images[1].props.alt,
+                  loading: 'lazy',
+                  className: 'aspect-ratio--object br2 z-1 shadow-1',
+                })}
+              </div>
+            </li>
+            <li className='h3 w-90 ml2'>
+              <div className='aspect-ratio aspect-ratio--7x5 relative'>
+                {React.createElement('img', {
+                  src: images[2].props.src,
+                  alt: images[2].props.alt,
+                  loading: 'lazy',
+                  className: 'aspect-ratio--object br2 z-1 shadow-1',
+                })}
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </>
+  )
+}
+
+const ListItem: React.StatelessComponent<{ className?: string }> = ({ children, className }) => {
+  return (
+    <li className={`mv2 flex justify-center ${className || ''}`}>
+      <div className='v-top tc'>
+        <img src='assets/tick.svg' alt='Tick' className='w2 h2' />
+      </div>
+      <div className='v-top pl2 pl3-ns w-90'>
+        <p className='mv0 f4 lh-copy black-80'>{children}</p>
       </div>
     </li>
   )
 }
 
-export const Feedback: React.StatelessComponent<{
-  description: string
-  author: string
-  role?: string
-  className?: string
-}> = ({ description, author, role, className }) => {
+const SpecialListItem: React.StatelessComponent<{}> = ({ children }) => {
   return (
-    <div className={`bg-evian ph4 pv3 ${className}`}>
-      <p className='f5 lh-copy black-80'>{description}</p>
-      <p className='f5 lh-copy black-80 b'>
-        — {author}
-        {role ? `, ${role}` : ''}
-      </p>
-    </div>
-  )
-}
-
-export const ListItemQuestion: React.StatelessComponent<{}> = ({ children }) => {
-  return (
-    <li className='mv3 flex justify-center'>
+    <li className='mv2 flex justify-center'>
       <div className='v-top tc'>
-        <img src='assets/question.svg' alt='Question' className='w2 h2' />
+        <img src='assets/plus2.svg' alt='Plus' className='w2 h2' />
       </div>
       <div className='v-top pl3 w-90'>
-        <p className='mv0 f4-l lh-copy black-70'>{children}</p>
+        <p className='mv0 f4 lh-copy black-80'>{children}</p>
       </div>
     </li>
   )
