@@ -167,7 +167,7 @@ function renderPage(state: State) {
               <li className='mv4'>
                 <BundleBlock
                   buynNowLink='https://academy.learnk8s.io/bundle-advanced-kubernetes'
-                  learnMoreLink='/architecting-scaling-apps-kubernetes'
+                  learnMoreLink='/advanced-kubernetes-in-practice'
                   fullPriceInUSD='USD 167.00'
                   bundlePriceInUSD='USD 119.00'
                   fullPriceId='bundle-advanced-kubernetes-full'
