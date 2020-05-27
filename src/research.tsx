@@ -131,10 +131,7 @@ function renderPage(state: State) {
                 <p className='b'>Others</p>
                 <ul className='f4 measure'>
                   <li className='mv3'>
-                    <a
-                      href='#roadmap'
-                      className='link navy underline-hover'
-                    >
+                    <a href='#roadmap' className='link navy underline-hover'>
                       Roadmap
                     </a>
                   </li>
