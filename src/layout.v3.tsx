@@ -85,11 +85,11 @@ export const Navbar: React.StatelessComponent<{}> = ({}) => {
           </li>
           <li className='ttu mh2'>
             <a
-              href='/kubernetes-free-tools'
+              href='/research'
               className='white link db b ph1 pv3 pv2-l f5 underline-hover'
-              title='Kubernetes free tools'
+              title='Kubernetes curated research'
             >
-              Tools
+              Research
             </a>
           </li>
         </ul>
@@ -118,11 +118,11 @@ export const NavbarSlim: React.StatelessComponent<{}> = ({}) => {
           </li>
           <li className='ttu mh2 lh-solid'>
             <a
-              href='/kubernetes-free-tools'
+              href='/research'
               className='white link db b ph1 pv2 f6 f5-ns underline-hover'
-              title='Kubernetes free tools'
+              title='Kubernetes curated research'
             >
-              Tools
+              Research
             </a>
           </li>
         </ul>
