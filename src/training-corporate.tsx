@@ -21,6 +21,11 @@ export const faqs: FAQ[] = [
       'Software developers, Data engineers, Architects and DevOps seeking to learn how to use Kubernetes to automate deployment, scaling and management of containerised applications.',
   },
   {
+    title: `What's the absolute minimum number of participants?`,
+    content:
+      'We can run private courses starting from only 5 delegates but only in specific cases. Please [get in touch](mailto:hello@learnk8s.io) to make sure that it applies to you.',
+  },
+  {
     title: 'Are there any joining instructions?',
     content:
       'You will receive the joining instructions with all the material needed to run the course after you sign up for the course.',
