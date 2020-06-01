@@ -226,7 +226,7 @@ export const Footer: React.StatelessComponent<{}> = ({}) => {
             </li>
             <li className='dib'>
               <a
-                href='https://learnk8s-slack-invite.herokuapp.com'
+                href='/slack'
                 className='link dib w2 h2 icon'
                 title='Learnk8s on Slack'
                 rel='noreferrer'
@@ -237,7 +237,7 @@ export const Footer: React.StatelessComponent<{}> = ({}) => {
             </li>
             <li className='dib'>
               <a
-                href='https://t.me/learnk8s'
+                href='/telegram'
                 className='link dib w2 h2 icon'
                 title='Learnk8s on Telegram'
                 rel='noreferrer'

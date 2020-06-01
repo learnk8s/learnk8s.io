@@ -462,6 +462,6 @@ _And that's all!_
 
 Now you know all the options when it comes to installing Docker and Kubernetes on Windows.
 
-If you stumbled on an error not described in the article, feel free to get in touch on Twitter [@learnk8s](https://twitter.com/learnk8s) or [Slack](https://learnk8s-slack-invite.herokuapp.com/).
+If you stumbled on an error not described in the article, feel free to get in touch on Twitter [@learnk8s](https://twitter.com/learnk8s) or [Slack](/slack).
 
 And since you have a fully working environment, you should check out the tutorial on how to deploy applications to Kubernetes [with PHP using laravel](/kubernetes-deploy-laravel-the-easy-way) or with [Node.js](/nodejs-kubernetes-guide).

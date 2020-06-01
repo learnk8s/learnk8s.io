@@ -326,7 +326,7 @@ function renderPage(state: State) {
                 <p className='lh-copy black-80 f4'>
                   If you wish to contribute with new comparison, charts, or any other research join the{' '}
                   <a
-                    href='https://learnk8s-slack-invite.herokuapp.com/'
+                    href='/slack'
                     className='link navy underline'
                     rel='noreferrer'
                     target='_blank'
@@ -335,18 +335,6 @@ function renderPage(state: State) {
                   </a>
                   .
                 </p>
-                <blockquote className='pl3 mh2 bl bw2 b--blue bg-evian pv1 ph4'>
-                  <p className='lh-copy measure-wide f4'>
-                    <a
-                      href='https://learnk8s-slack-invite.herokuapp.com/'
-                      className='link navy underline'
-                      rel='noreferrer'
-                      target='_blank'
-                    >
-                      You can join the Learnk8s Slack workspace with this link.
-                    </a>
-                  </p>
-                </blockquote>
                 <p className='lh-copy black-80 f4'>If you need some ideas, here's a shortlist:</p>
                 <ul className='f4'>
                   <li className='mv3 lh-copy'>
@@ -431,7 +419,7 @@ function renderPage(state: State) {
                 <p className='lh-copy black-80 f4'>
                   If you have an idea on how to do that and want to contribute,{' '}
                   <a
-                    href='https://learnk8s-slack-invite.herokuapp.com/'
+                    href='/slack'
                     className='link navy underline'
                     rel='noreferrer'
                     target='_blank'

@@ -109,7 +109,7 @@ function renderPage(state: State) {
             <p className='f4 measure-narrow black-70 center lh-copy'>
               If you have technical questions, chat live with the Learnk8s instructors in the{' '}
               <span className='navy'>#academy</span> channel.{' '}
-              <a href='https://learnk8s-slack-invite.herokuapp.com' className='link underline navy'>
+              <a href='/slack' className='link underline navy'>
                 Join Learnk8s on Slack
               </a>
               .
@@ -124,7 +124,7 @@ function renderPage(state: State) {
             </h2>
             <p className='f4 measure-narrow black-70 center lh-copy'>
               If you want to discuss the latest changes and share your victories with Kubernetes{' '}
-              <a href='https://t.me/learnk8s' className='link underline navy'>
+              <a href='/telegram' className='link underline navy'>
                 join now the Learnk8s telegram group
               </a>
               .

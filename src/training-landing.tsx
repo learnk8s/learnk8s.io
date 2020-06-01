@@ -261,7 +261,7 @@ function renderInPersonCoursePage(course: CourseInPerson, state: State) {
               </ListItem>
               <ListItem>
                 You will learn from expert instructors (you can find us on the{' '}
-                <a href='https://t.me/learnk8s' className='link navy underline' ref='noreferrer'>
+                <a href='/telegram' className='link navy underline' ref='noreferrer'>
                   Learnk8s Telegram group
                 </a>
                 ).
@@ -448,7 +448,7 @@ function renderOnlineCoursePage(course: CourseOnline, state: State) {
               <ListItem>
                 You will have the chance to <span className='b'>ask questions and discuss with the instructor</span>{' '}
                 (you can find us on the{' '}
-                <a href='https://t.me/learnk8s' className='link navy underline' ref='noreferrer'>
+                <a href='/telegram' className='link navy underline' ref='noreferrer'>
                   Learnk8s Telegram group
                 </a>
                 ).
@@ -849,7 +849,7 @@ const Instructors: React.StatelessComponent<{ className?: string; instructors: A
         </ul>
         <p className='lh-copy f4 black-80 measure center tc ph3 mt4'>
           You can chat with us on the{' '}
-          <a href='https://t.me/learnk8s' className='link navy underline' ref='noreferrer'>
+          <a href='/telegram' className='link navy underline' ref='noreferrer'>
             Learnk8s' Telegram Group
           </a>
           !

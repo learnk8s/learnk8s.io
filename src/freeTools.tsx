@@ -141,7 +141,7 @@ function renderPage(state: State) {
           <p className='lh-copy f4 black-70 measure center tc'>
             If you enjoy discussing the latest news on Kubernetes and sharing your learnings, you might want to join the
             Learnk8s Telegram group. You can{' '}
-            <a href='https://t.me/learnk8s' className='link navy underline'>
+            <a href='/telegram' className='link navy underline'>
               join us using this link
             </a>
             .
