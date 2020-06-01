@@ -325,12 +325,7 @@ function renderPage(state: State) {
                 <h4 className='navy f4 f3-l mb2'>Are you interested in authoring open-source research?</h4>
                 <p className='lh-copy black-80 f4'>
                   If you wish to contribute with new comparison, charts, or any other research join the{' '}
-                  <a
-                    href='/slack'
-                    className='link navy underline'
-                    rel='noreferrer'
-                    target='_blank'
-                  >
+                  <a href='/slack' className='link navy underline' rel='noreferrer' target='_blank'>
                     #research channel on Slack
                   </a>
                   .
@@ -418,12 +413,7 @@ function renderPage(state: State) {
                 </p>
                 <p className='lh-copy black-80 f4'>
                   If you have an idea on how to do that and want to contribute,{' '}
-                  <a
-                    href='/slack'
-                    className='link navy underline'
-                    rel='noreferrer'
-                    target='_blank'
-                  >
+                  <a href='/slack' className='link navy underline' rel='noreferrer' target='_blank'>
                     let's chat on Slack
                   </a>{' '}
                   or{' '}
