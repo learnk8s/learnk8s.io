@@ -303,7 +303,7 @@ export function Register(store: Store) {
   store.dispatch(
     Action.addOnlineCourse({
       id: 'LK8S|ONLINE|20200608',
-      startsAt: '2020-06-08T10:00:00',
+      startsAt: '2020-06-08T09:00:00',
       endsAt: '2020-06-10T17:00:00',
       title: 'Advanced Kubernetes course',
       description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
