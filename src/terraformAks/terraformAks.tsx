@@ -30,6 +30,7 @@ export function Register(store: Store) {
       description: `Using Azure Kubernetes Service (AKS) instead of creating your cluster is convenient if you are a small team and don't want to spend time monitoring and maintaining Kubernetes control planes. But while you can create a cluster with few clicks in the Azure portal, it usually a better idea to keep the configuration for your cluster under source control.`,
       title: 'Getting started with Terraform and Kubernetes on Azure AKS',
       publishedDate: '2019-08-21',
+      lastModifiedDate: '2020-06-09',
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
   )
