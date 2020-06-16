@@ -16,7 +16,7 @@ export function Register(store: Store) {
     Action.openGraphs.add({
       id: 'og-yaml-validation',
       pageId: YamlValidation.id,
-      imagePath: 'src/yaml-validation/allocatable-resources.png',
+      imagePath: 'src/yaml-validation/yaml-validate.png',
       title: YamlValidation.title,
       description: YamlValidation.description,
     }),
@@ -25,7 +25,7 @@ export function Register(store: Store) {
     Action.blogPosts.add({
       id: 'bp-yaml-validation',
       pageId: YamlValidation.id,
-      authorId: Authors.danielePolencic.id,
+      authorId: Authors.amitSaha.id,
       description: YamlValidation.description,
       title: YamlValidation.title,
       publishedDate: '2020-06-17',
@@ -44,7 +44,7 @@ export function Register(store: Store) {
     Action.previewPictures.add({
       id: 'yaml-validation-picture',
       pageId: YamlValidation.id,
-      imagePath: 'src/yaml-validation/allocatable-resources.svg',
+      imagePath: 'src/yaml-validation/yaml-validate.svg',
     }),
   )
 }

@@ -13,6 +13,22 @@ export const AboutUs = {
 }
 
 export const Authors = {
+  amitSaha: {
+    id: 'amit-saha',
+    fullName: 'Amit Saha',
+    avatar: (
+      <img
+        src='assets/authors/amit-saha/amit-saha-64x64.jpg'
+        srcSet='
+    assets/authors/amit-saha/amit-saha-64x64.jpg 1x,
+    assets/authors/amit-saha/amit-saha-128x128.jpg 2x
+    '
+        alt='Amit Saha'
+      />
+    ),
+    link: 'https://echorand.me',
+    description: 'Amit is a software engineer with a passion for infrastructure.',
+  },
   danielWeibel: {
     id: 'daniel-weibel',
     fullName: 'Daniel Weibel',
