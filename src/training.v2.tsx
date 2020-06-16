@@ -109,8 +109,12 @@ function renderPage(state: State) {
         Authors.chrisNesbittSmith.id,
       ].includes(it.id),
     )
-  const onlineCourses = Selector.onlineCourses.selectAll(state)
-  const inPersonCourses = Selector.inPersonCourses.selectAll(state)
+  const onlineCourses = Selector.onlineCourses
+    .selectAll(state)
+    .filter(it => new Date(it.startsAt).valueOf() > Date.now())
+  const inPersonCourses = Selector.inPersonCourses
+    .selectAll(state)
+    .filter(it => new Date(it.startsAt).valueOf() > Date.now())
   const allCourses = [...onlineCourses, ...inPersonCourses]
   return (
     <Html>
