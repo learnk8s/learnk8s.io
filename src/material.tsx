@@ -81,7 +81,7 @@ const content = {
         image: <img src='assets/material/api-12.svg' alt='Kubernetes Open API definition' />,
       },
       basics: {
-        title: 'What are Pods, Services, and Igresses?',
+        title: 'What are Pods, Services, and Ingresses?',
         image: <img src='assets/material/logical-11.svg' alt='Kubernetes basic concepts' />,
       },
       localCluster: {
@@ -137,7 +137,7 @@ const content = {
         image: <img src='assets/material/73-deployment-strategies.svg' alt='Labels and selectors' />,
       },
       canaryDeployments: {
-        title: 'Releasing features with canary deploymentss',
+        title: 'Releasing features with canary deployments',
         image: <img src='assets/material/61-deployment-strategies.svg' alt='Canary deployment' />,
       },
       bluGreenDeployments: {
@@ -309,11 +309,11 @@ const content = {
         image: <img src='assets/material/152-state.svg' alt='Deploying Apache Cassandra' />,
       },
       singleDatabase: {
-        title: 'Deploying a single database with persitence',
+        title: 'Deploying a single database with persistence',
         image: <img src='assets/material/48-state.svg' alt='Deploying PostgreSQL' />,
       },
       clusteredDatabase: {
-        title: 'Deploying a clustered database with persitence',
+        title: 'Deploying a clustered database with persistence',
         image: <img src='assets/material/174-state.svg' alt='Deploying a clustered PostgreSQL' />,
       },
       distributedStorage: {
