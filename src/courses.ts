@@ -334,4 +334,21 @@ export function Register(store: Store) {
       url: '/online-new-york-june-2020',
     }),
   )
+  store.dispatch(
+    Action.addOnlineCourse({
+      id: 'LK8S|ONLINE|20200812',
+      startsAt: '2020-08-12T09:00:00',
+      endsAt: '2020-08-14T17:00:00',
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'USD 2,249.00',
+      price: 2249,
+      currency: 'USD',
+      location: 'Online',
+      tags: ['course-online', 'price-online-course'],
+      timezone: 'CET',
+      link: '#',
+      url: '/online-europe-august-2020',
+    }),
+  )
 }
