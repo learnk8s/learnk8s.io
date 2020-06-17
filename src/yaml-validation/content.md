@@ -34,7 +34,7 @@ Let's get started!
 
 Before you start comparing tools, you should set a baseline.
 
-The following manifest has a few issue and isn't following best practices — _how many can you spot?_
+The following manifest has a few issues and isn't following best practices — _how many can you spot?_
 
 ```yaml|title=base-valid.yaml
 apiVersion: apps/v1
@@ -587,7 +587,7 @@ Copper has a few built-in helpers:
 
 You can see [all available helpers here](https://github.com/cloud66-oss/copper/tree/master/libjs).
 
-By default, it loads the entire input YAML file into the `$$` variable, and makes it available in your scripts (if you used jQuery in the past, you might find this pattern familiar).
+By default, it loads the entire input YAML file into the `$$` variable and makes it available in your scripts (if you used jQuery in the past, you might find this pattern familiar).
 
 In addition to not having to learn a custom language, you have access to the entire JavaScript language for writing your checks such as string interpolation, functions, etc.
 
@@ -698,7 +698,7 @@ _Unfortunately, DockerHub is not yet one of the supported registries._
 
 However, if you are using [Azure Container Registry (ACR)](https://azure.microsoft.com/en-us/services/container-registry/) or running your container registry, you might be in luck.
 
-The [artefact format is the same as used by Open Policy Agent (OPA) bundles](https://www.openpolicyagent.org/docs/latest/bundles) which makes it possible to use conftest to run tests from existing OPA bundles.
+The [artefact format is the same as used by Open Policy Agent (OPA) bundles](https://www.openpolicyagent.org/docs/latest/bundles), which makes it possible to use conftest to run tests from existing OPA bundles.
 
 You can find out more about [sharing policies and other features of conftest on the official website](https://www.conftest.dev).
 
