@@ -1,27 +1,27 @@
-**TL;DR:** _The article compares six static tools to validate and score Kubernetes YAML files for best practices and compliace._
+**TL;DR:** _The article compares six static tools to validate and score Kubernetes YAML files for best practices and compliance._
 
 Kubernetes workloads are most commonly defined as YAML formatted documents.
 
-Those manifests are parsed, checked, and deserialized in kubectl before they are submitted to the API server.
+Those manifests are parsed, checked, and deserialised in kubectl before they are submitted to the API server.
 
 One of the challenges with YAML is that it's rather hard to express constraints or relationships between manifest files.
 
 **What if you wish to check that all images deployed into the cluster are pulled from a trusted registry?**
 
-**How can you prevent your teammates from submitting Deployments that don't have PodDisruptionBudgets from being deployed to production?**
+**How can you prevent Deployments that don't have PodDisruptionBudgets from being submitted to the cluster?**
 
-Integrating static checking of these YAML manifests allows catching errors and policy violations closer to the
+Integrating static checking allows catching errors and policy violations closer to the
 development lifecycle.
 
-The guarantee around the validity and safety of the resource definitions is improved and you can trust that production workloads are following best practices.
+And since the guarantee around the validity and safety of the resource definitions is improved, you can trust that production workloads are following best practices.
 
 The ecosystem of static checking of Kubernetes YAML files can be grouped in the following categories:
 
-- **API validators** — Tools in this category validate a given YAML manifest against the Kubernetes server API for the data types as well as the data itself.
-- **Built-in checkers** — Tools in this category come with some opinionated and recommended checks built-in which are run against specified YAML manifests.
-- **Custom validators** — Tools in this category allow writing custom checks written in a standard language such as Rego.
+- **API validators** — Tools in this category validate a given YAML manifest against the Kubernetes API server.
+- **Built-in checkers** — Tools in this category come with opinionated built-in checks.
+- **Custom validators** — Tools in this category allow writing custom checks in several languages such as Rego and Javascript.
 
-In this article, you will be learning about six different tools:
+In this article, you will learn and compare six different tools:
 
 1. [Kubeval](#kubeval)
 1. [Kube-score](#kube-score)
@@ -34,9 +34,9 @@ Let's get started!
 
 ## Validating a deployment
 
-For the purpose of this article, you will consider a few kubernetes manifests to test how the different tools work.
+Before you start comparing tools, you should set a baseline.
 
-Let's start with the following Deployment and Service:
+The following manifest has a few issue and isn't following best practices — _how many can you spot?_
 
 ```yaml|title=base-valid.yaml
 apiVersion: apps/v1
@@ -73,15 +73,17 @@ spec:
     app: http-echo
 ```
 
+You will be using this YAML file to compare the different tools.
+
 > You can find the above YAML manifest as the file `base-valid.yaml` along with the other manifests referred to in the article in this [git repository](https://github.com/amitsaha/kubernetes-static-checkers-demo).
+
+The manifest describes a web application that always replies with a "Hello World" message on port 5678.
 
 You can deploy the application with:
 
 ```terminal|command=1|title=bash
 kubectl apply -f hello-world.yaml
 ```
-
-The container image is a simple web application that always replies with a "Hello World" message.
 
 You can test it with:
 
@@ -97,17 +99,17 @@ _But does it follow best practices?_
 
 ## Kubeval
 
-The main premise of [kubeval](https://www.kubeval.com/) is that any interaction with Kubernetes goes via its REST API.
+The premise of [kubeval](https://www.kubeval.com/) is that any interaction with Kubernetes goes via its REST API.
 
 Hence, you can use the API schema to validate whether a given YAML input conforms to the schema.
 
 _Let's have a look at an example._
 
-You can install Kubeval for your operating system following the [instructions on the project website](https://www.kubeval.com/installation/).
+You can follow the [instructions on the project website](https://www.kubeval.com/installation/) to install kubeval.
 
 > As of this writing, the latest release is 0.15.0.
 
-Once installed, let's try and run it specifying the manifest discussed earlier:
+Once installed, let's run it with the manifest discussed earlier:
 
 ```terminal|command=1|title=bash
 kubeval base-valid.yaml
@@ -228,7 +230,7 @@ spec:
     app: http-echo
 ```
 
-The advantage of a tool like kubeval is that you can catch such errors early in your deployment process.
+**The advantage of a tool like kubeval is that you can catch such errors early in your deployment process.**
 
 Also, you don't need access to a cluster to run the checks — they could run offline.
 
@@ -252,7 +254,7 @@ In addition to individual YAML files, you can run kubeval against directories as
 
 **You should also know that Kubeval makes it for easy integration with your Continuous Integration pipeline.**
 
-If you want to include the checks before you submit your manifests to the cluster, you will be pleased to know that Kubeval supports three output formats:
+If you want to include the checks before you submit your manifests to the cluster, you will be pleased to know that kubeval supports three output formats:
 
 1. Plain text
 1. JSON and
@@ -268,19 +270,21 @@ Kubeval is an excellent choice to check and validate resources, but please notic
 
 As an example, using the latest tag in the container images isn't considered a best practice.
 
-However, Kubeval doesn't report that as an error and it will validate the YAML without warnings.
+However, Kubeval doesn't report that as an error, and it will validate the YAML without warnings.
 
-_What if you want to score the YAML and catch violations such as the latest tag? How can you check your YAML files against best practices?_
+_What if you want to score the YAML and catch violations such as the latest tag?_
+
+_How can you check your YAML files against best practices?_
 
 ## Kube-score
 
-[Kube-score](https://github.com/zegl/kube-score) analyses a specified YAML manifest and scores it against in-built checks.
+[Kube-score](https://github.com/zegl/kube-score) analyses YAML manifests and scores them against in-built checks.
 
-These checks have been created based on security recommendations and best practices such as:
+These checks are selected based on security recommendations and best practices, such as:
 
 - Running containers as a non-root user.
 - Specifying health checks for pods.
-- Specifying resource requests and limits.
+- Defining resource requests and limits.
 
 The result of a check can be _OK_, _WARNING_, or _CRITICAL_.
 
@@ -335,13 +339,13 @@ The YAML file passes the kubeval checks, but `kube-score` points out several def
 - Missing memory and CPU requests and limits.
 - Missing Pod disruption budgets.
 - Missing anti-affinity rules to maximise availability.
-- The container running as root.
+- The container runs as root.
 
 **Those are all valid points that you should address to make your deployment more robust and reliable.**
 
 The `kube-score` command prints a human-friendly output containing all the _WARNING_ and _CRITICAL_ results, which is great during development.
 
-If you plan to use it as part of your Continuous Integration pipeline, you can use a more succinct output with the flag `--output-format ci` which also prints the checks with level _OK_:
+If you plan to use it as part of your Continuous Integration pipeline, you can use a more concise output with the flag `--output-format ci` which also prints the checks with level _OK_:
 
 ```terminal|command=1|title=bash
 kube-score score base-valid.yaml --output-format ci
@@ -366,9 +370,9 @@ kube-score score base-valid.yaml --output-format ci
 
 Similar to kubeval, `kube-score` returns a non-zero exit code when there is a _CRITICAL_ check that failed, but you configured it to fail even on _WARNINGs_.
 
-There is also a built-in check to validate resources against a different API versions — similar to kubeval.
+There is also a built-in check to validate resources against different API versions — similar to kubeval.
 
-However, this information is hardcoded in kube-score itself and it doesn't currently allow specifying the Kubernetes version.
+However, this information is hardcoded in kube-score itself, and you can't select a different Kubernetes version.
 
 Hence, if you upgrade your cluster or you have several different clusters running different versions, this can prove to be a severe limitation.
 
@@ -376,13 +380,13 @@ Hence, if you upgrade your cluster or you have several different clusters runnin
 
 You can learn more about [kube-score on the official website](https://github.com/zegl/kube-score).
 
-_Kube-score checks are an excellent tool to enforce best practices, but what if you want to customize one, or add your own rules?_
+_Kube-score checks are an excellent tool to enforce best practices, but what if you want to customise one, or add your own rules?_
 
 You can't.
 
 **Kube-score isn't designed to be extendable and you can't add or tweak policies.**
 
-If you want to write custom checks to comply with your organizational policies you can use one of the next four options - config-lint, copper, conftest or polaris.
+If you want to write custom checks to comply with your organisational policies, you can use one of the next four options - config-lint, copper, conftest or polaris.
 
 ## Config-lint
 
@@ -435,7 +439,7 @@ A `config-lint` rule to check this would look like this:
 Each rule must have the following attributes:
 
 - `id` — This uniquely identifies the rule.
-- `severity` — It has to be one of _FAILURE_, _WARNING_, and _NON\_COMPLIANT_.
+- `severity` — It has to be one of _FAILURE_, _WARNING_, and _NON_COMPLIANT_.
 - `message` — If a rule is violated, the contents of this string will be shown.
 - `resource` — The kind of resource we want this rule to be applied to.
 - `assertions` — A list of conditions that will be evaluated against the specified resource.
@@ -474,16 +478,16 @@ Let's now run the validation against the `base-valid.yaml` file using the above 
 config-lint -rules check_image_repo.yaml base-valid.yaml
 [
   {
-	"AssertionMessage": "Every expression fails: And expression fails: image does not start with my-company.com/",
-	"Category": "",
-	"CreatedAt": "2020-06-04T01:29:25Z",
-	"Filename": "test-data/base-valid.yaml",
-	"LineNumber": 0,
-	"ResourceID": "http-echo",
-	"ResourceType": "Deployment",
-	"RuleID": "DEPLOYMENT_IMAGE_REPOSITORY",
-	"RuleMessage": "Deployment must use a valid image repository",
-	"Status": "FAILURE"
+  "AssertionMessage": "Every expression fails: And expression fails: image does not start with my-company.com/",
+  "Category": "",
+  "CreatedAt": "2020-06-04T01:29:25Z",
+  "Filename": "test-data/base-valid.yaml",
+  "LineNumber": 0,
+  "ResourceID": "http-echo",
+  "ResourceType": "Deployment",
+  "RuleID": "DEPLOYMENT_IMAGE_REPOSITORY",
+  "RuleMessage": "Deployment must use a valid image repository",
+  "Status": "FAILURE"
   }
 ]
 ```
@@ -522,7 +526,9 @@ config-lint -rules check_image_repo.yaml image-valid-mycompany.yaml
 
 Config-lint is a promising framework that lets you write custom checks for Kubernetes YAML manifests using a YAML DSL.
 
-_But what if you want to express more complex logic and checks? Isn't YAML too limiting for that?_
+_But what if you want to express more complex logic and checks?_
+
+_Isn't YAML too limiting for that?_
 
 _What if you could express those checks with a real programming language?_
 
@@ -532,7 +538,7 @@ _What if you could express those checks with a real programming language?_
 
 However, Copper doesn't use YAML to define the checks.
 
-**Instead, checks are written in JavaScript and Copper provides a library with a few basic helpers to assist in reading Kubernetes objects and reporting errors.**
+**Instead, tests are written in JavaScript and Copper provides a library with a few basic helpers to assist in reading Kubernetes objects and reporting errors.**
 
 You can install Copper by downloading a binary for your operating system based on the [installation instructions](https://github.com/cloud66-oss/copper#installation).
 
@@ -570,28 +576,28 @@ As you can imagine, you can write more sophisticated checks such as validating d
 Copper has a few built-in helpers:
 
 - The `DockerImage` function reads the specified input file and creates an object containing the following attributes:
-
+  
   - `name` containing the image name
   - `tag` containing the image tag
   - `registry` containing the image registry
   - `registry_url` containing the protocol and the image registry, and
   - `fqin` representing the entire fully qualified image location.
 
-- The `findByName` function is helpful for finding a resource given a `kind` and `name` from an input file
+- The `findByName` function helps find a resource given a `kind` and `name` from an input file
 
-- The `findByLabels` function is helpful for finding a resource given `kind` and the `labels`.
+- The `findByLabels` function helps find a resource provided `kind` and the `labels`.
 
 You can see [all available helpers here](https://github.com/cloud66-oss/copper/tree/master/libjs).
 
-By default, it loads the entire input YAML file into the `$$` variable and that's available in your scripts (if you used jQuery in the past, you might find this pattern familiar).
+By default, it loads the entire input YAML file into the `$$` variable, and that's available in your scripts (if you used jQuery in the past, you might find this pattern familiar).
 
 In addition to not having to learn a custom language, you have access to the entire JavaScript language for writing your checks such as string interpolation, functions, etc.
 
 _It is worth noting that the current copper release embeds the ES5 version of the JavaScript engine and not ES6._
 
-To learn more, visit you can [visit the official project website](https://github.com/cloud66-oss/copper).
+To learn more, you can [visit the official project website](https://github.com/cloud66-oss/copper).
 
-If Javascript isn't your favourite language and you prefer a language designed to query and describe policies, you should check out conftest.
+If Javascript isn't your preferred language and you prefer a language designed to query and describe policies, you should check out conftest.
 
 ## Conftest
 
@@ -635,15 +641,15 @@ _Of course, it fails since the image isn't trusted._
 
 The above Rego file specifies a `deny` block which evaluates to a violation when true.
 
-If we have more than one `deny` block, conftest checks them independently and the overall result is a violation if any of the blocks results in a violation.
+If we have more than one `deny` block, conftest checks them independently, and the overall result is a violation of any of the blocks results in a breach.
 
-Other than the default output format, conftest supports JSON, TAP, and a table format via the `--output` flag, which is great if you wish to integrate the reports with your existing Continuous Integration pipeline.
+Other than the default output format, conftest supports JSON, TAP, and a table format via the `--output` flag, which is excellent if you wish to integrate the reports with your existing Continuous Integration pipeline.
 
 To help debug policies, conftest has a convenient `--trace` flag which prints a trace of how conftest is parsing the specified policy files.
 
-conftest policies can be published and shared as artifacts in OCI (Open Container Initiative) registries.
+Conftest policies can be published and shared as artefacts in OCI (Open Container Initiative) registries.
 
-The commands, `push` and `pull` allow publishing an artifact and pulling an existing artifact to and from a remote registry, respectively.
+The commands, `push` and `pull` allow publishing an artefact and pulling an existing artefact from a remote registry.
 
 Let's see a demo of publishing the above policy to a local docker registry using `conftest push`.
 
@@ -690,11 +696,11 @@ FAIL - base-valid.yaml - image 'hashicorp/http-echo' doesn't come from my-compan
 2 tests, 1 passed, 0 warnings, 1 failure
 ```
 
-_If you are wondering whether you can publish policy bundles to the docker hub, unfortunately, it is not yet one of the supported registries._
+_Unfortunately, DockerHub is not yet one of the supported registries._
 
-However, if you are using Azure container registry or running your own docker distribution, you are in luck.
+However, if you are using [Azure Container Registry (ACR)](https://azure.microsoft.com/en-us/services/container-registry/) or running your container registry, you might be in luck.
 
-The artifact format is the [same](https://www.openpolicyagent.org/docs/latest/bundles) as used by Open Policy Agent (OPA) bundles which makes it possible to use conftest to run tests from existing OPA bundles.
+The [artefact format is the same as used by Open Policy Agent (OPA) bundles](https://www.openpolicyagent.org/docs/latest/bundles) which makes it possible to use conftest to run tests from existing OPA bundles.
 
 You can find out more about [sharing policies and other features of conftest on the official website](https://www.conftest.dev).
 
@@ -702,15 +708,15 @@ You can find out more about [sharing policies and other features of conftest on 
 
 The last tool we will explore in this article is `polaris` ([https://github.com/FairwindsOps/polaris](https://github.com/FairwindsOps/polaris#cli)).
 
-**Polaris can be either installed inside a cluster or as a command-line tool to statically analyze Kubernetes manifests.**
+**Polaris can be either installed inside a cluster or as a command-line tool to analyse Kubernetes manifests statically.**
 
-When running as a command-line tool, it includes a number of inbuilt checks covering areas such as security and best practices similar to kube-score.
+When running as a command-line tool, it includes several built-in checks covering areas such as security and best practices — similar to kube-score.
 
 Also, you can use it to write custom checks similar to config-lint, copper, and conftest.
 
-In that sense, it combines the best of the two categories of tools you have learned about so far.
+In other words, polaris combines the best of the two categories: built-in and custom checkers.
 
-You can install the polaris command-line tool as per the instructions on the project [website](https://github.com/FairwindsOps/polaris/blob/master/docs/usage.md#cli).
+You can install the polaris command-line tool as per the [instructions on the project website](https://github.com/FairwindsOps/polaris/blob/master/docs/usage.md#cli).
 
 > The latest release at the time of writing is 1.0.3.
 
@@ -720,7 +726,9 @@ Once installed, you can run `polaris` against the `base-valid.yaml` manifest wit
 polaris audit --audit-path base-valid.yaml
 ```
 
-The above command will print a JSON formatted string detailing the checks that were run and the result of each check. The output will have the following structure:
+The above command will print a JSON formatted string detailing the checks that were run and the result of each test.
+
+The output will have the following structure:
 
 ```json|title=output.json
 {
@@ -744,11 +752,11 @@ The above command will print a JSON formatted string detailing the checks that w
 
 > [The complete output is available here](https://github.com/amitsaha/kubernetes-static-checkers-demo/blob/master/base-valid-polaris-result.json).
 
-Similar to kube-score, polaris identifies a number of cases where the manifest falls short of recommended best practice which includes:
+Similar to kube-score, polaris identifies several cases where the manifest falls short of recommended best practice which includes:
 
 - Missing health checks for the pods.
 - Container images don't have a tag specified.
-- Running as the root user is allowed.
+- The container runs as root.
 - CPU and memory requests and limits are not set.
 
 Each check is either classified with a severity level of _warning_ or _danger_.
@@ -764,21 +772,21 @@ polaris audit --audit-path test-data/base-valid.yaml --format score
 
 **The closer the score is to 100, the higher the degree of conformance.**
 
-If you look at the exit code of the `polaris audit` command, you will see that it was `0`.
+If you inspect the exit code of the `polaris audit` command, you will see that it was `0`.
 
 To make `polaris audit` exit with a non-zero code, you can make use of two other flags.
 
 The `--set-exit-code-below-score` flag accepts a threshold score in the range 1-100 and will exit with an exit code of 4 when the score is below the threshold.
 
-This is very useful in cases where your baseline score is 75, and you want to be alerted when it falls lower.
+This is very useful in cases where your baseline score is 75, and you want to be alerted when it goes lower.
 
 The `--set-exit-code-on-danger` flag will exit with an exit code of 3 when any of the _danger_ checks fail.
 
-_Let's now see how you can define a custom check for `polaris` to check whether the container images in a deployment are from a trusted registry._
+_Let's now see how you can define a custom check for `polaris` to test whether the container image in a Deployment is from a trusted registry._
 
-Custom checks are defined in a YAML format with the check itself defined using JSON Schema.
+Custom checks are defined in a YAML format with the test itself described using JSON Schema.
 
-The following YAML snippet defines a new check-called, `checkImageRepo`:
+The following YAML snippet defines a new check-called `checkImageRepo`:
 
 ```yaml|title=snippet.yaml
 checkImageRepo:
@@ -798,10 +806,10 @@ checkImageRepo:
 Let's have a closer look at it:
 
 - `successMessage` is a string which will be displayed when the check succeeds.
-- `failureMessage` is displayed when the check is unsuccessful.
+- `failureMessage` is displayed when the test is unsuccessful.
 - `category` refers to one of the categories - `Images`, `Health Checks`, `Security`, `Networking` and  `Resources`.
 - `target` is a string that determines which _spec_ object the check is applied against - and should be one of `Container`, `Pod`, or `Controller`.
-- The check itself is defined in the `schema` object using JSON schema. Here the check uses the `pattern` keyword to match whether the image is from an allowed registry or not.
+- The test itself is defined in the `schema` object using JSON schema. Here the check uses the `pattern` keyword to match whether the image is from an allowed registry or not.
 
 To run the check defined above you will need to create a Polaris configuration file as follows:
 
@@ -825,20 +833,20 @@ customChecks:
 
 Let's break down the file:
 
-- The configuration file above specifies the checks to be run in the `checks` object along with the severity label of the check. Since we want to be alerted when the image isn't trusted, `checkImageRepo` is assigned a `danger` severity level.
+- The `checks` field specifies the checks and their severity. Since we want to be alerted when the image isn't trusted, `checkImageRepo` is assigned a `danger` severity level.
 - The `checkImageRepo` check itself is then defined in the `customChecks` object.
 
 You can save the above file as `custom_check.yaml` and run `polaris audit` with the YAML manifest that you wish to validate.
 
-You can try to validate the `base-valid.yaml` manifest with:
+You can test it with the `base-valid.yaml` manifest:
 
 ```terminal|command=1|title=bash
 polaris audit --config custom_check.yaml --audit-path base-valid.yaml
 ```
 
-You will see that `polaris audit` ran only the custom check defined above which did not succeed.
+You will see that `polaris audit` ran only the custom check defined above, which did not succeed.
 
-If you amend the container image to `my-company.com/http-echo:1.0`, `polaris` will report a success.
+If you amend the container image to `my-company.com/http-echo:1.0`, `polaris` will report success.
 
 [The Github repository contains the amended manifest](https://github.com/amitsaha/kubernetes-static-checkers-demo), so you can test the previous command against the `image-valid-mycompany.yaml` manifest.
 
@@ -846,7 +854,7 @@ _But how do you run both the built-in and custom checks?_
 
 The configuration file above should be updated with all the built-in check identifiers and should look as follows:
 
-```yaml|title=polaris-conf.yaml|highlight=7,9
+```yaml|highlight=7,9|title=polaris-conf.yaml
 checks:
   cpuRequestsMissing: warning
   cpuLimitsMissing: warning
@@ -871,7 +879,7 @@ customChecks:
 
 You can see [an example of a complete configuration file here](https://github.com/amitsaha/kubernetes-static-checkers-demo/blob/master/polaris-configs/config_with_custom_check.yaml).
 
-Polaris augments the built-in checks with your own custom checks thus combining the best of both worlds.
+Polaris augments the built-in checks with your custom checks, thus combining the best of both worlds.
 
 However, not having access to more powerful languages like Rego or JavaScript may be a limitation to write more sophisticated checks.
 
@@ -883,11 +891,11 @@ While there are plenty of tools to validate, score and lint Kubernetes YAML file
 
 As an example, if you were to think about Kubernetes manifests going through a pipeline, **kubeval could be the first step in such a pipeline as it validates if the object definitions conform to the Kubernetes API schema.**
 
-Once this check has been successful, perhaps you could pass on to more elaborated checks such as standard best practices and custom organization policies.
+Once this check is successful, perhaps you could pass on to more elaborated tests such as standard best practices and custom policies.
 
 Kube-score and polaris are to excellent choices here.
 
-If you have **complex requirements and want to customize the checks down to the details, you should consider copper, config-lint, and conftest.**
+If you have **complex requirements and want to customise the checks down to the details, you should consider copper, config-lint, and conftest.**
 
 While both conftest and config-lint use more YAML to define custom validation rules, copper gives you access to a real programming language making it quite attractive.
 
@@ -897,13 +905,13 @@ _But should you use one of these and write all the checks from scratch or should
 
 The following table presents a summary of the tools:
 
-| Tool        | Features                                                                                                                                                   | Limitations                                                                                             | Custom checks |
-|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|---------------|
-| kubeval     | Validate YAML manifests against API Schema of a specific version                                                                                           | Doesn't recognize CRDs                                                                                  | No            |
-| kube-score  | Analyzes YAML  manifests against standard best practices Deprecated API version check                                                                      | Doesn't validate the definition No support for specific API versions for deprecated resource check      | No            |
-| copper      | A generic framework for writing custom checks for YAML manifests using JavaScript                                                                          | No inbuilt checks Sparse documentation                                                                  | Yes           |
-| config-lint | A generic framework for writing custom checks using DSL embedded in YAML The framework also supports other configuration formats - Terraform, for example. | No inbuilt checks The inbuilt assertions and operations may not be sufficient to account for all checks | Yes           |
-| conftest    | A generic framework for writing custom checks in Rego Rego is a robust policy language Sharing policies via OCI bundles                                    | No inbuilt checks Rego has a learning curve Docker hub not supported for sharing of policies            | Yes           |
-| polaris     | Analyzes YAML manifest against standard best practices Allows writing custom checks using JSON Schema                                                      | JSON Schema-based checks may not be sufficient                                                          | Yes           |
+| Tool        | Features                                                                                                                                                   | Limitations                                                                                            | Custom checks |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------- |
+| kubeval     | Validate YAML manifests against API Schema of a specific version                                                                                           | Doesn't recognise CRDs                                                                                 | No            |
+| kube-score  | Analyses YAML  manifests against standard best practices Deprecated API version check                                                                      | Doesn't validate the definition No support for specific API versions for deprecated resource check     | No            |
+| copper      | A generic framework for writing custom checks for YAML manifests using JavaScript                                                                          | No inbuilt checks Sparse documentation                                                                 | Yes           |
+| config-lint | A generic framework for writing custom checks using DSL embedded in YAML The framework also supports other configuration formats - Terraform, for example. | No inbuilt tests The inbuilt assertions and operations may not be sufficient to account for all checks | Yes           |
+| conftest    | A generic framework for writing custom checks in Rego Rego is a robust policy language Sharing policies via OCI bundles                                    | No inbuilt checks Rego has a learning curve Docker hub not supported for sharing of policies           | Yes           |
+| polaris     | Analyses YAML manifest against standard best practices Allows writing custom checks using JSON Schema                                                      | JSON Schema-based checks may not be sufficient                                                         | Yes           |
 
 Since these tools don't rely on access to a Kubernetes cluster, they are straightforward to set up and enable you to enforce gating as well as give quick feedback to pull request authors for projects.
