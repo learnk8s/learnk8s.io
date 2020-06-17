@@ -6,8 +6,8 @@ import { toVFile } from '../files'
 export const YamlValidation = {
   id: 'yaml-validation',
   url: '/validating-kubernetes-yaml',
-  title: 'Validating Kubernetes YAML for best practices and policies',
-  description: `..............................................................................`,
+  title: 'Validating Kubernetes YAML for best practice and policies',
+  description: `How can you prevent deployments that don't follow best practices from reaching the cluster? In this article you will compare six tools to validate Kubernetes YAML files.`,
 }
 
 export function Register(store: Store) {
