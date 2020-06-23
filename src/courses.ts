@@ -368,4 +368,21 @@ export function Register(store: Store) {
       url: '/online-apac-august-2020',
     }),
   )
+  store.dispatch(
+    Action.addOnlineCourse({
+      id: 'LK8S|ONLINE|20200826|2',
+      startsAt: '2020-08-26T08:00:00',
+      endsAt: '2020-08-28T16:00:00',
+      title: 'Advanced Kubernetes course',
+      description: `In this course, you will learn how to build a cluster and explore advanced topics such as networking, storage, multi-data centre and multi cloud deployments.`,
+      priceAsString: 'USD 2,249.00',
+      price: 2249,
+      currency: 'USD',
+      location: 'Online',
+      tags: ['course-online', 'price-online-course'],
+      timezone: 'EDT',
+      link: '#',
+      url: '/online-north-america-august-2020',
+    }),
+  )
 }
