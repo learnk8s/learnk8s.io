@@ -1,13 +1,8 @@
 import commander from 'commander'
-import { readFileSync, existsSync, writeFileSync } from 'fs'
-import { resolve, join, dirname } from 'path'
+import { writeFileSync } from 'fs'
+import { join } from 'path'
 import { tempdir } from 'shelljs'
-import toHtml from 'hast-util-to-html'
-import * as Hast from 'hast'
-import * as Hast$ from 'hast-util-select'
-import remove from 'unist-util-remove'
-import open from 'open'
-import { store, Selector, Action } from './store'
+import { store, Selector } from './store'
 import { register } from './register'
 
 commander.version('1.0.0').usage('[command] [options]')
