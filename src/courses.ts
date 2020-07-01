@@ -1,4 +1,4 @@
-import { State, Action, store, Store, Selector } from './store'
+import { Action, Store } from './store'
 import { toVFile } from './files'
 import { join } from 'path'
 
