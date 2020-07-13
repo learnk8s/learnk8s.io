@@ -40,6 +40,7 @@ import * as CustomAuthentication from './custom-authentication/index'
 import * as K8Bit from './k8bit/k8bit'
 import * as AllocatableResources from './allocatable-resources/allocatable-resources'
 import * as YAMLValidation from './yaml-validation/yaml-validation'
+import * as Gatekeeper from './gatekeeper/gatekeeper'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedArticles from './bite-sized-articles'
@@ -109,4 +110,5 @@ export function register(store: Store) {
   AllocatableResources.Register(store)
   TrainingLandingPage.Register(store)
   YAMLValidation.Register(store)
+  Gatekeeper.Register(store)
 }
