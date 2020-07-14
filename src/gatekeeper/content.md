@@ -1,5 +1,8 @@
+Policies in Kubernetes allow you to prevent certain workloads from being deployed in the cluster. 
+While compliance is usually the reason for enforcing strict policies in the cluster, there are a 
+number of recommended best practices that cluster admins should enforce. 
 
-Policies in Kubernetes allow you to prevent certain workloads from being deployed in the cluster. While compliance is usually the reason for enforcing strict policies in the cluster, there are a number of recommended best practices that cluster admins should enforce. Examples of such guidelines are:
+Examples of such guidelines are:
 
 1. Not running privileged pods
 1. Not running pods as root user
@@ -85,6 +88,7 @@ Create a new directory, conftest-checks and a file named `check_image_tag.rego` 
 
 
 ```prolog|title=check_image_tag.rego
+
 package main
 
 deny[msg] {
@@ -455,35 +459,38 @@ You can save the above definition into a file and name it check_image_tag.yaml
 
 The policy is similar to the previous that used Conftest. But there are some subtle and important differences:
 
-- The input object is available as via input.review.object instead of input, and there is no need to assert the input object kind here. You do that when creating the Constraint.
-- The deny rule is renamed to violation:
-              
-            ```
-            # conftest
-            Deny[msg] {...}
-            # gatekeeper
-            violation[{"msg": msg}]  {..}
-            ```
-- The violation rule block has a specific signature - an object with two properties - msg, a string and an optional “details”, an object with arbitrary properties to return custom data to provide additional information related to the violation. Here we return an empty object. See the next ConstraintTemplate for an example of a non-empty details object.
+- The input object is available as via input.review.object instead of input, and there is no need to assert the 
+input object kind here. You do that when creating the Constraint.
+
+- The deny rule is renamed to violation. For `conftest`, the rule signature was `Deny[msg] {...}`
+whereas for gatekeeper it is `violation[{"msg": msg}]  {..}`.
+
+- The violation rule block has a specific signature - an object with two properties - msg, a string and and
+`details` an object with arbitrary properties to return custom data to provide additional information 
+related to the violation. Here we return an empty object. See the next `ConstraintTemplate` for an 
+example of a non-empty details object.
 
 Now, create the constraint template:
 
-$ kubectl apply -f templates/check_image_tag.yaml                           
+```terminal|command=1|title=bash
+kubectl apply -f templates/check_image_tag.yaml
 constrainttemplate.templates.gatekeeper.sh/k8simagetagvalid created
+```
+You can run `kubectl describe` to query the template from the cluster:
 
-You can run kubectl describe to query the template from the cluster:
-
-$ kubectl describe constrainttemplate.templates.gatekeeper.sh/k8simagetagvalid
+```terminal|command=1|title=bash
+kubectl describe constrainttemplate.templates.gatekeeper.sh/k8simagetagvalid
 Name:         k8simagetagvalid
 Namespace:    
 Labels:       <none>
 Annotations:  kubectl.kubernetes.io/last-applied-configuration:
-                {"apiVersion":"templates.gatekeeper.sh/v1beta1","kind":"ConstraintTemplate","metadata":{"annotations":{},"name":"k8simagetagvalid"},"spec"...
+                {"apiVersion":"templates.gatekeeper.sh/v1beta1","kind":"ConstraintTemplate","metadata":
+                {"annotations":{},"name":"k8simagetagvalid"},"spec"...
 API Version:  templates.gatekeeper.sh/v1beta1
 Kind:         ConstraintTemplate
 
 ...
-
+```
 A ConstraintTemplate isn’t something you can use to validate deployments, though.
 It’s just a definition of a policy that can only be enforced by creating a Constraint. You may use the same ConstraintTemplate but define multiple constraints to enforce policies for different workloads, for example.
 
@@ -500,9 +507,9 @@ Constraints are a particular instance of a recipe — the ConstraintTemplate.
 
 Let’s have a look at an example.
 
-
 The following Constraint uses the previously defined ConstraintTemplate (recipe):
 
+```yaml|highlight=11|title=check_image_tag_constraint.yaml
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: K8sImageTagValid
 metadata:
@@ -512,49 +519,62 @@ spec:
     kinds:
       - apiGroups: ["apps"]
         kinds: ["Deployment"]
+```
+Notice how the `Constraint` references the `ConstraintTemplate` as well as what kind of resources it should be applied to.
 
-Notice how the Constraint references the ConstraintTemplate as well as what kind of resources it should be applied to.
+The spec.match object defines the workloads against which the constraint will be enforced. Here, you specify that it will be 
+enforced against the `apps` API group and of kind, `Deployment`. Since these fields are arrays, you can 
+specify multiple values and extend the checks to StatefulSets, DaemonSets, etc.
 
-The spec.match object defines the workloads against which the constraint will be enforced. Here, you specify that it will be enforced against the “apps” API group and of kind, “Deployment”. Since these fields are arrays, you can specify multiple values and extend the checks to StatefulSets, DaemonSets, etc.
-
-You can save the above content into a new file and name it check_image_tag_constraint.yaml.
+You can save the above content into a new file and name it `check_image_tag_constraint.yaml`.
 
 Run kubectl apply to create the constraint:
 
-$ kubectl apply -f check_image_tag_constraint.yaml 
+```
+kubectl apply -f check_image_tag_constraint.yaml 
 k8simagetagvalid.constraints.gatekeeper.sh/valid-image-tag created
+```
 
 Use kubectl describe to ensure that the constraint was created:
 
-$ kubectl describe k8simagetagvalid.constraints.gatekeeper.sh/valid-image-tag 
+```terminal|command=1|title=bash
+kubectl describe k8simagetagvalid.constraints.gatekeeper.sh/valid-image-tag
+
 Name:         valid-image-tag
 Namespace:    
 Labels:       <none>
 Annotations:  kubectl.kubernetes.io/last-applied-configuration:
-                {"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"K8sImageTagValid","metadata":{"annotations":{},"name":"valid-image-tag"},"spec":...
+                {"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"K8sImageTagValid","metadata":
+                 {"annotations":{},"name":"valid-image-tag"},"spec":...
 API Version:  constraints.gatekeeper.sh/v1beta1
 Kind:         K8sImageTagValid
 Metadata:
   Creation Timestamp:  2020-07-01T07:57:23Z
 ...
-
+```
 
 ### Is the policy working?
 
 Now, try creating a deployment with the previous YAML file, `deployment.yaml`:
 
-$ kubectl apply -f deployment.yaml 
+```terminal|command=1|title=bash
+kubectl apply -f deployment.yaml 
 
 Error from server ([denied by valid-image-tag] image 'hashicorp/http-echo' doesn't specify a valid tag
-[denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag): error when creating "test-data/deployment.yaml": admission webhook "validation.gatekeeper.sh" denied the request: [denied by valid-image-tag] image 'hashicorp/http-echo' doesn't specify a valid tag
+[denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag): error when creating 
+"test-data/deployment.yaml": admission webhook "validation.gatekeeper.sh" denied the request: 
+[denied by valid-image-tag] image 'hashicorp/http-echo' doesn't specify a valid tag
 [denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag
+```
 
-The deployment was rejected by the Gatekeeper policy. Notice how the check is built-in in the Kubernetes API.  You can’t skip the check or work around it. 
+The deployment was rejected by the Gatekeeper policy. Notice how the check is built-in in the Kubernetes API.
+You can't skip the check or work around it. 
 
-Implementing Gatekeeper policies in a cluster with existing workloads can be challenging since you don’t want to disrupt critical workloads from being deployed due to non-compliance. Hence, Gatekeeper allows setting up constraints in a dry run enforcement mode using enforcementAction: dryrun in the spec:
+Implementing Gatekeeper policies in a cluster with existing workloads can be challenging since you don't want to 
+disrupt critical workloads from being deployed due to non-compliance. Hence, Gatekeeper allows setting up constraints
+in a dry run enforcement mode using enforcementAction: dryrun in the spec:
 
-
-
+```yaml|highlight=6-6
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: K8sImageTagValid
 metadata:
@@ -565,13 +585,17 @@ spec:
     kinds:
       - apiGroups: ["apps"]
         kinds: ["Deployment"]
+```
 
 In this mode, the policy will not prevent any workloads from being deployed, but will log any violations. To see the violations run:
 
-$ kubectl describe k8simagetagvalid.constraints.gatekeeper.sh/valid-image-tag       
+```terminal|command=1|title=bash
+kubectl describe k8simagetagvalid.constraints.gatekeeper.sh/valid-image-tag       
+```
 
 The violations will be logged in the Violations field of the result:
 
+```terminal|command=1|title=bash
 Name:         valid-image-tag
 Namespace:    
 Labels:       <none>
@@ -591,10 +615,10 @@ Annotations:  kubectl.kubernetes.io/last-applied-configuration:
     Name:                http-echo
     Namespace:           default
 Events:                  <none>
+```
 
 
-Subsequently, you can fix these workloads and recreate the constraints removing enforcementAction: dryrun.
-
+Subsequently, you can fix these workloads and recreate the constraints removing `enforcementAction: dryrun`.
 
 Let’s have a look at another example.
 
