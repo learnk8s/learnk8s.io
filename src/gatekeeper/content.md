@@ -265,7 +265,8 @@ Also, the NamespaceLifecycle admission controller stops requests that could dele
 Controllers that check actions and resources are grouped under the Validation category.
 
 There's another category of controllers, and that's called Mutating.
-Mutation admission controllers
+
+## Mutation admission controllers
 
 As you can guess from the name, mutating controllers can inspect the request and change it.
 
