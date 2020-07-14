@@ -10,7 +10,6 @@ Examples of such guidelines are:
 1. Not using the latest tag for the container images
 1. Now allowing additional Linux capabilities by default
 
-
 In addition, you may want to enforce bespoke policies that all workloads may want to abide by, such as:
 
 - All workloads must have a "project" and "app" label
@@ -75,7 +74,6 @@ cluster, the right place for running this check is:
 - As part of your CI/CD pipeline before the branch is merged into the master branch.
 - As part of the CI/CD pipeline before the resource is submitted to the cluster.
 
-
 ## Enforcing policies using conftest
 
 [Conftest](https://conftest.dev) is a testing framework for configuration data that can be used to check and verify 
@@ -86,9 +84,7 @@ At the time of writing, the latest release is 0.19.0.
 
 Create a new directory, conftest-checks and a file named `check_image_tag.rego` with the following content:
 
-
 ```prolog|title=check_image_tag.rego
-
 package main
 
 deny[msg] {
@@ -134,7 +130,6 @@ Great, it detected both violations.
 
 Since conftest is a static binary, you could have it running your checks before you submit the YAML to the cluster.  If you already use 
 a CI/CD pipeline to apply changes to your cluster, you could have an extra step that validates all resources against your conftest policies.
-
 
 But does it really prevent someone from submitting a Deployment with the latest tag?
 
@@ -406,12 +401,12 @@ deployment.apps/gatekeeper-controller-manager created
 validatingwebhookconfiguration.admissionregistration.k8s.io/gatekeeper-validating-webhook-configuration created
 ```
 
-
 To verify whether gatekeeper has been set up correctly, run 
 
 ```terminal|command=1|title=bash
 kubectl -n gatekeeper-system describe svc gatekeeper-webhook-service 
 ```
+
 The output should be similar to:
 
 ```terminal|command=1|title=bash
@@ -469,15 +464,15 @@ You can save the above definition into a file and name it `check_image_tag.yaml`
 The policy is similar to the previous that used Conftest. But there are some subtle and important differences:
 
 - The input object is available as via input.review.object instead of input, and there is no need to assert the 
-input object kind here. You do that when creating the Constraint.
+  input object kind here. You do that when creating the Constraint.
 
 - The deny rule is renamed to violation. For `conftest`, the rule signature was `Deny[msg] {...}`
-whereas for gatekeeper it is `violation[{"msg": msg}]  {..}`.
+  whereas for gatekeeper it is `violation[{"msg": msg}]  {..}`.
 
 - The violation rule block has a specific signature - an object with two properties - msg, a string and and
-`details` an object with arbitrary properties to return custom data to provide additional information 
-related to the violation. Here we return an empty object. See the next `ConstraintTemplate` for an 
-example of a non-empty details object.
+  `details` an object with arbitrary properties to return custom data to provide additional information 
+  related to the violation. Here we return an empty object. See the next `ConstraintTemplate` for an 
+  example of a non-empty details object.
 
 Now, create the constraint template:
 
@@ -485,6 +480,7 @@ Now, create the constraint template:
 kubectl apply -f templates/check_image_tag.yaml
 constrainttemplate.templates.gatekeeper.sh/k8simagetagvalid created
 ```
+
 You can run `kubectl describe` to query the template from the cluster:
 
 ```terminal|command=1|title=bash
@@ -500,11 +496,11 @@ Kind:         ConstraintTemplate
 
 ...
 ```
+
 A ConstraintTemplate isn’t something you can use to validate deployments, though.
 It's just a definition of a policy that can only be enforced by creating a Constraint. 
 You may use the same ConstraintTemplate but define multiple constraints to enforce 
 policies for different workloads, for example.
-
 
 ### Creating a constraint
 
@@ -531,6 +527,7 @@ spec:
       - apiGroups: ["apps"]
         kinds: ["Deployment"]
 ```
+
 Notice how the `Constraint` references the `ConstraintTemplate` as well as what kind of resources it should be applied to.
 
 The `spec.match` object defines the workloads against which the constraint will be enforced. Here, you specify that it will be 
@@ -628,7 +625,6 @@ Annotations:  kubectl.kubernetes.io/last-applied-configuration:
 Events:                  <none>
 ```
 
-
 Subsequently, you can fix these workloads and recreate the constraints removing `enforcementAction: dryrun`.
 
 Let’s have a look at another example.
@@ -672,6 +668,7 @@ conftest test -p conftest-checks/check_labels.rego test-data/deployment.yaml
 FAIL - test-data/deployment.yaml - you must provide labels: {"project"}
 1 test, 0 passed, 0 warnings, 1 failure
 ```
+
 You can fix the issue by adding the project label, like this:
 
 ```yaml|highlight=7|title=deployment.yaml
@@ -705,6 +702,7 @@ spec:
         ports:
         - containerPort: 5678
 ```
+
 What happens when someone deploys the resource directly to the cluster?
 
 They could work around the policy.
@@ -779,7 +777,7 @@ To use the policy from the ConstraintTemplate, you need a Constraint.
 
 Create a new file, check_labels_constraints.yaml  with the following contents:
 
-```yaml|title=check_labels_constraints.yaml 
+```yaml|title=check_labels_constraints.yaml
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: K8sRequiredLabels
 metadata:
@@ -792,6 +790,7 @@ spec:
   parameters:
     labels: ["app", "project"]
 ```
+
 Run kubectl apply to create the constraint:
 
 ```terminal|command=1|title=bash
@@ -805,7 +804,6 @@ The second constraint checks that your deployment defines two labels, app, and p
 
 Now, try creating the deployment with the above manifest, deployment.yaml:
 
-
 ```terminal|command=1|title=bash
 kubectl apply -f deployment.yaml
 
@@ -816,7 +814,6 @@ Error from server ([denied by deployment-must-have-labels] you must provide labe
 [denied by deployment-must-have-labels] you must provide labels: {"project"}
 [denied by valid-image-tag] image 'hashicorp/http-echo' doesn't specify a valid tag
 [denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag
-
 ```
 
 The deployment is not created successfully since it doesn’t have the required project label as well as not using a valid image tag. 
@@ -876,5 +873,3 @@ In fact, you could even go as far as implementing a subset of relevant policies 
 A comparative solution which achieves the same level of policy enforcement is [polaris](https://github.com/FairwindsOps/polaris)
 which has both an out-of-cluster and an in-cluster policy enforcement functionality. However it uses a custom JSON schema 
 based policy specification language and hence may not be as expressive as Rego.
-
-
