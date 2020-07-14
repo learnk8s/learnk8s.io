@@ -712,7 +712,7 @@ They could work around the policy.
 So let’s add the same policy in Gatekeeper. First, you will have to create a
 `ConstraintTemplate`:
 
-
+```yaml|title=check_labels.yaml
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
@@ -741,29 +741,45 @@ spec:
           count(missing) > 0
           msg := sprintf("you must provide labels: %v", [missing])
         }
+```
 
-
-The above manifest illustrates how you can specify input parameters to the constraint template to configure its behavior at runtime. Going back to our ConstraintTemplate as a recipe analogy, input parameters are a way that the recipe allows you to customize certain ingredients. However, these ingredients must obey certain rules. For example, you want to only allow an array of strings as input to the ConstraintTemplate. This is described using an OpenAPIV3 schema in the validation object in the ConstraintTemplate specification above. 
+The above manifest illustrates how you can specify input parameters to the constraint template to configure its
+behavior at runtime. Going back to our ConstraintTemplate as a recipe analogy, input parameters are a way that 
+the recipe allows you to customize certain ingredients. However, these ingredients must obey certain rules. 
+For example, you want to only allow an array of strings as input to the ConstraintTemplate. This is described 
+using an OpenAPIV3 schema in the `validation` object in the ConstraintTemplate specification above. 
 
 The validation object was defined as:
 
+```yaml
 validation:        
-        openAPIV3Schema:
-          properties:
-            labels:
-              type: array
-              items: string
+  openAPIV3Schema:
+    properties:
+      labels:
+        type: array
+        items: string
+```
 
-This schema defines that the constraint template expects to only have one parameter, labels which is an array of strings. This becomes useful when for example, you may want to enforce that all deployment workloads have app and project labels, but all job workloads have a project label only. In such a case, you can define two constraints using the same constraint template, but only differing in value of the labels parameter. All input provided is made available to the constraint via the input.parameters attribute 
+This schema defines that the constraint template expects to only have one parameter, `labels` 
+which is an array of strings. This becomes useful when for example, you may want to enforce 
+that all deployment workloads have app and project labels, but all job workloads have a project 
+label only. In such a case, you can define two constraints using the same constraint template, 
+but only differing in value of the labels parameter. All input provided is made available to 
+the constraint via the input.parameters attribute 
 
-Save the above manifest into a file check_labels.yaml and then run kubectl apply to create the constraint template:
+Save the above manifest into a file check_labels.yaml and then run kubectl apply to create 
+the constraint template:
 
-$ kubectl apply -f check_labels.yaml
+```terminal|command=1|title=bash
+kubectl apply -f check_labels.yaml
 constrainttemplate.templates.gatekeeper.sh/k8srequiredlabels created
+```
 
 To use the policy from the ConstraintTemplate, you need a Constraint.
+
 Create a new file, check_labels_constraints.yaml  with the following contents:
 
+```yaml|title=check_labels_constraints.yaml 
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: K8sRequiredLabels
 metadata:
@@ -775,12 +791,13 @@ spec:
         kinds: ["Deployment"]
   parameters:
     labels: ["app", "project"]
-
-
+```
 Run kubectl apply to create the constraint:
 
-$ kubectl apply -f check_labels_constraints.yaml
+```terminal|command=1|title=bash
+kubectl apply -f check_labels_constraints.yaml
 k8srequiredlabels.constraints.gatekeeper.sh/deployment-must-have-labels created
+```
 
 At this stage, you have two constraints created in your cluster:
 The first constraint checks that your deployment is using an image with a  valid tag
@@ -789,14 +806,18 @@ The second constraint checks that your deployment defines two labels, app, and p
 Now, try creating the deployment with the above manifest, deployment.yaml:
 
 
-$ kubectl apply -f deployment.yaml
+```terminal|command=1|title=bash
+kubectl apply -f deployment.yaml
 
 Error from server ([denied by deployment-must-have-labels] you must provide labels: {"project"}
 [denied by valid-image-tag] image 'hashicorp/http-echo' doesn't specify a valid tag
-[denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag): error when creating "deployment.yaml": admission webhook "validation.gatekeeper.sh" denied the request: [denied by deployment-must-have-labels] you must provide labels: {"project"}
+[denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag): error when creating 
+"deployment.yaml": admission webhook "validation.gatekeeper.sh" denied the request: 
+[denied by deployment-must-have-labels] you must provide labels: {"project"}
 [denied by valid-image-tag] image 'hashicorp/http-echo' doesn't specify a valid tag
 [denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag
 
+```
 
 The deployment is not created successfully since it doesn’t have the required project label as well as not using a valid image tag. 
 
@@ -804,6 +825,7 @@ Job done!
 
 A valid deployment manifest that will be successfully deployed will have two labels - app and project as well as use tagged images:
 
+```yaml|title=deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -833,7 +855,7 @@ spec:
         args: ["-text", "hello-world"]
         ports:
         - containerPort: 5678
-
+```
 
 You validated your Deployment with a static and dynamic check. You can fail fast with the early static check and you can be 
 sure that no one works around the policy by submitting resources directly to the cluster. 
@@ -842,7 +864,7 @@ sure that no one works around the policy by submitting resources directly to the
 
 Both conftest and Gatekeeper uses the Rego language to define policies which makes these two tools an attractive solution 
 to implement out-of-cluster and in-cluster checks, respectively. However, as you saw above, there were a few changes needed 
-to make to the conftest Rego policy work with Gatekeeper. The [konstraint](https://github.com/plexsystems/konstraint ) 
+to make to the conftest Rego policy work with Gatekeeper. The [konstraint](https://github.com/plexsystems/konstraint) 
 project aims to help in this regard. The premise of konstraint is that your source of truth is a policy that you would write 
 in Rego for conftest and then generate the ConstraintTemplate and Constraint resources for Gatekeeper. Konstraint automates 
 the manual steps involved in converting a policy written for conftest to one that works in Gatekeeper. In addition, 
