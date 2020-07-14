@@ -423,6 +423,7 @@ In Gatekeeper, you need to first create a policy using a ConstraintTemplate cust
 
 Let’s have a look at an example. The following constraint template definition rejects any deployment that uses the latest tag:
 
+```
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
@@ -448,19 +449,22 @@ spec:
           endswith(image, "latest")  
           msg := sprintf("image '%v' uses latest tag", [image])
         }
-
+```
 
 You can save the above definition into a file and name it check_image_tag.yaml
 
 The policy is similar to the previous that used Conftest. But there are some subtle and important differences:
 
-The input object is available as via input.review.object instead of input, and there is no need to assert the input object kind here. You do that when creating the Constraint.
-The deny rule is renamed to violation:
+- The input object is available as via input.review.object instead of input, and there is no need to assert the input object kind here. You do that when creating the Constraint.
+- The deny rule is renamed to violation:
+              
+            ```
             # conftest
             Deny[msg] {...}
             # gatekeeper
             violation[{"msg": msg}]  {..}
-The violation rule block has a specific signature - an object with two properties - msg, a string and an optional “details”, an object with arbitrary properties to return custom data to provide additional information related to the violation. Here we return an empty object. See the next ConstraintTemplate for an example of a non-empty details object.
+            ```
+- The violation rule block has a specific signature - an object with two properties - msg, a string and an optional “details”, an object with arbitrary properties to return custom data to provide additional information related to the violation. Here we return an empty object. See the next ConstraintTemplate for an example of a non-empty details object.
 
 Now, create the constraint template:
 
