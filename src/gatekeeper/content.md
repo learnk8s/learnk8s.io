@@ -166,9 +166,9 @@ kubectl apply -f pod.yaml
 
 The definition is sent to the API server and:
 
-The definition is stored in etcd.
-The scheduler assigns the Pod to a node.
-The kubelet retrieves the Pod spec and creates it.
+1. The definition is stored in etcd.
+1. The scheduler assigns the Pod to a node.
+1. The kubelet retrieves the Pod spec and creates it.
 
 At least that's the high-level plan.
 
@@ -186,11 +186,11 @@ When you type `kubectl apply` a few things happen.
 
 The kubectl binary:
 
-Validates the resource client-side (is there any obvious error?).
-Converts the YAML payload into JSON.
-Reads the configs from your `KUBECONFIG`.
-Authenticates with the kube-apiserver and
-Sends a request with the payload to the kube-apiserver
+1. Validates the resource client-side (is there any obvious error?).
+1. Converts the YAML payload into JSON.
+1. Reads the configs from your `KUBECONFIG`.
+1. Authenticates with the kube-apiserver and
+1. Sends a request with the payload to the kube-apiserver
 
 When the kube-apiserver receives the request, it doesn’t store it in etcd immediately.
 
