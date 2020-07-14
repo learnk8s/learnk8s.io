@@ -24,7 +24,7 @@ The out-of-cluster approaches are accomplished by running static checks on the Y
 There are multiple tools available for achieving this. The in-cluster approaches make use of validating admission controllers which 
 are invoked as part of the API request and before the manifest is stored in the database. 
 
-You may find this git repository handy as you work through the article.
+You may find this [git repository](http://github.com/amitsaha/kubernetes-policy-enforcement-demo) handy as you work through the article.
 
 ## Example Deployment
 
