@@ -13,7 +13,7 @@ Examples of such guidelines are:
 
 In addition, you may want to enforce bespoke policies that all workloads may want to abide by, such as:
 
-- All workloads must have a “project” and “app” label
+- All workloads must have a "project" and "app" label
 - All workloads must use container images from a specific container registry (e.g.  my-company.com)
 
 Finally, there is a third category of checks that you would want to implement as policies to avoid disruption in your services. 
@@ -388,7 +388,8 @@ Internally, Gatekeeper makes use of the Open Policy Agent (OPA) to implement the
 
 In the part, you will try out Gatekeeper. You will need access to a Kubernetes cluster with admin-level privileges such as minikube . Once you have kubectl configured to communicate to the cluster, run the following to setup gatekeeper:
 
-$ kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml 
+```terminal|command=1|title=bash
+kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml 
 
 namespace/gatekeeper-system created
 customresourcedefinition.apiextensions.k8s.io/configs.config.gatekeeper.sh created
@@ -403,11 +404,17 @@ service/gatekeeper-webhook-service created
 deployment.apps/gatekeeper-audit created
 deployment.apps/gatekeeper-controller-manager created
 validatingwebhookconfiguration.admissionregistration.k8s.io/gatekeeper-validating-webhook-configuration created
+```
+
 
 To verify whether gatekeeper has been set up correctly, run 
-$ kubectl -n gatekeeper-system describe svc gatekeeper-webhook-service 
+
+```terminal|command=1|title=bash
+kubectl -n gatekeeper-system describe svc gatekeeper-webhook-service 
+```
 The output should be similar to:
 
+```terminal|command=1|title=bash
 Name:              gatekeeper-webhook-service
 Namespace:         gatekeeper-system
 Labels:            gatekeeper.sh/system=yes
@@ -418,7 +425,9 @@ Port:              <unset>  443/TCP
 TargetPort:        8443/TCP
 Endpoints:         172.18.0.4:8443
 ..
-This is the service that is invoked by the Kubernetes API as part of the request processing in the “Validating Admission” stage.
+```
+
+This is the service that is invoked by the Kubernetes API as part of the request processing in the "Validating Admission" stage.
 All your Pods, Deployments, Services, etc. are now intercepted and scrutinised by Gatekeeper.
 
 ### Defining reusable policies using a constraint template
@@ -427,7 +436,7 @@ In Gatekeeper, you need to first create a policy using a ConstraintTemplate cust
 
 Let’s have a look at an example. The following constraint template definition rejects any deployment that uses the latest tag:
 
-```
+```yaml|title=check_image_tag.yaml
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
@@ -455,7 +464,7 @@ spec:
         }
 ```
 
-You can save the above definition into a file and name it check_image_tag.yaml
+You can save the above definition into a file and name it `check_image_tag.yaml`.
 
 The policy is similar to the previous that used Conftest. But there are some subtle and important differences:
 
@@ -492,7 +501,9 @@ Kind:         ConstraintTemplate
 ...
 ```
 A ConstraintTemplate isn’t something you can use to validate deployments, though.
-It’s just a definition of a policy that can only be enforced by creating a Constraint. You may use the same ConstraintTemplate but define multiple constraints to enforce policies for different workloads, for example.
+It's just a definition of a policy that can only be enforced by creating a Constraint. 
+You may use the same ConstraintTemplate but define multiple constraints to enforce 
+policies for different workloads, for example.
 
 
 ### Creating a constraint
@@ -509,7 +520,7 @@ Let’s have a look at an example.
 
 The following Constraint uses the previously defined ConstraintTemplate (recipe):
 
-```yaml|highlight=11|title=check_image_tag_constraint.yaml
+```yaml|title=check_image_tag_constraint.yaml
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: K8sImageTagValid
 metadata:
@@ -522,7 +533,7 @@ spec:
 ```
 Notice how the `Constraint` references the `ConstraintTemplate` as well as what kind of resources it should be applied to.
 
-The spec.match object defines the workloads against which the constraint will be enforced. Here, you specify that it will be 
+The `spec.match` object defines the workloads against which the constraint will be enforced. Here, you specify that it will be 
 enforced against the `apps` API group and of kind, `Deployment`. Since these fields are arrays, you can 
 specify multiple values and extend the checks to StatefulSets, DaemonSets, etc.
 
@@ -530,7 +541,7 @@ You can save the above content into a new file and name it `check_image_tag_cons
 
 Run kubectl apply to create the constraint:
 
-```
+```terminal|command=1|title=bash
 kubectl apply -f check_image_tag_constraint.yaml 
 k8simagetagvalid.constraints.gatekeeper.sh/valid-image-tag created
 ```
@@ -628,6 +639,7 @@ Can you write a policy that forces the Deployment to have two labels: one for th
 
 First, you should enforce the policy as a check for conftest:
 
+```prolog|title=check_labels.rego
 package main
 
 deny[msg] {
@@ -640,23 +652,29 @@ deny[msg] {
   count(missing) > 0
   msg = sprintf("you must provide labels: %v", [missing])
 }
+```
 
 Save the above policy as a file check_labels.rego.
+
 Let’s have a look at the policy in detail:
-“required” is a set with two members - app and project. Those labels should be presented on all Deployments.
-“provided” retrieves the set of labels specified in the input. 
-Then, a set difference operation is performed and a new set that contains the labels which are present in “required”, but not found in “provided” is created
-If the number of elements in this set is greater than 0, the rule is violated. This is achieved using the count() function to check the number of elements in the “missing” set.
+
+- "required" is a set with two members - `app` and `project`. Those labels should be presented on all Deployments.
+- "provided" retrieves the set of labels specified in the input.
+
+Then, a set difference operation is performed and a new set that contains the labels which are present in "required",
+but not found in "provided" is created. If the number of elements in this set is greater than 0, the rule is violated. 
+This is achieved using the `count()` function to check the number of elements in the "missing" set.
 
 Run conftest specifying this policy and you will see a failure:
 
-$ conftest test -p conftest-checks/check_labels.rego test-data/deployment.yaml       
+```terminal|command=1|title=bash
+conftest test -p conftest-checks/check_labels.rego test-data/deployment.yaml
 FAIL - test-data/deployment.yaml - you must provide labels: {"project"}
-
 1 test, 0 passed, 0 warnings, 1 failure
-
+```
 You can fix the issue by adding the project label, like this:
 
+```yaml|highlight=7|title=deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -686,13 +704,13 @@ spec:
         args: ["-text", "hello-world"]
         ports:
         - containerPort: 5678
-
-
+```
 What happens when someone deploys the resource directly to the cluster?
 
 They could work around the policy.
 
-So let’s add the same policy in Gatekeeper. First, you will have to create a ConstraintTemplate:
+So let’s add the same policy in Gatekeeper. First, you will have to create a
+`ConstraintTemplate`:
 
 
 apiVersion: templates.gatekeeper.sh/v1beta1
