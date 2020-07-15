@@ -118,7 +118,7 @@ export const NavbarSlim: React.StatelessComponent<{}> = ({}) => {
           </li>
           <li className='ttu mh2 lh-solid'>
             <a
-              href='/research'
+              href='/kubernetes-resources'
               className='white link db b ph1 pv2 f6 f5-ns underline-hover'
               title='A curated list of Kubernetes resources and tools'
             >
