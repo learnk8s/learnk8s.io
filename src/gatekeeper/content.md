@@ -1,34 +1,41 @@
-Policies in Kubernetes allow you to prevent certain workloads from being deployed in the cluster. 
-While compliance is usually the reason for enforcing strict policies in the cluster, there are a 
-number of recommended best practices that cluster admins should enforce. 
+**TL;DR:** _In this article, you will learn about enforcing policies for your Kubernetes workloads using static tools such as [conftest](https://github.com/open-policy-agent/conftest) and in-cluster operators such as [Gatekeeper](https://github.com/open-policy-agent/gatekeeper)._
+
+Policies in Kubernetes allow you to prevent certain workloads from being deployed in the cluster.
+
+While compliance is usually the reason for enforcing strict policies in the cluster, there are a number of **recommended best practices that cluster admins should enforce.**
 
 Examples of such guidelines are:
 
-1. Not running privileged pods
-1. Not running pods as root user
+1. Not running privileged pods.
+1. Not running pods as root user.
 1. Not specifying resource limits
 1. Not using the latest tag for the container images
 1. Now allowing additional Linux capabilities by default
 
 In addition, you may want to enforce bespoke policies that all workloads may want to abide by, such as:
 
-- All workloads must have a "project" and "app" label
-- All workloads must use container images from a specific container registry (e.g.  my-company.com)
+- All workloads must have a "project" and "app" label.
+- All workloads must use container images from a specific container registry (e.g. my-company.com).
 
-Finally, there is a third category of checks that you would want to implement as policies to avoid disruption in your services. 
-An example of such a check is ensuring that no two services can use the same ingress hostname. 
+Finally, there is a third category of checks that you would want to implement as policies to avoid disruption in your services.
 
-In this article, you will learn about enforcing policies for your Kubernetes workloads using both out-of-cluster and in-cluster solutions. 
-These policies aim to reject workloads if they do not successfully satisfy the conditions set forth by the policy. 
-The out-of-cluster approaches are accomplished by running static checks on the YAML manifests before they are submitted to the cluster. 
-There are multiple tools available for achieving this. The in-cluster approaches make use of validating admission controllers which 
-are invoked as part of the API request and before the manifest is stored in the database. 
+_An example of such a check is ensuring that no two services can use the same ingress hostname._
 
-You may find this [git repository](http://github.com/amitsaha/kubernetes-policy-enforcement-demo) handy as you work through the article.
+In this article, you will learn about enforcing policies for your Kubernetes workloads using both out-of-cluster and in-cluster solutions.
 
-## Example Deployment
+These policies aim to reject workloads if they do not successfully satisfy the conditions set forth by the policy.
 
-Let’s consider the following YAML manifest to create a deployment for the image hashicorp/http-echo (`deployment.yaml`):
+The out-of-cluster approaches are accomplished by running static checks on the YAML manifests before they are submitted to the cluster.
+
+There are multiple tools available for achieving this.
+
+The in-cluster approaches make use of validating admission controllers which are invoked as part of the API request and before the manifest is stored in the database.
+
+> You may find this [git repository](http://github.com/amitsaha/kubernetes-policy-enforcement-demo) handy as you work through the article.
+
+## A non-compliant Deployment
+
+Let's consider the following YAML manifest to create a deployment for the image `hashicorp/http-echo`:
 
 ```yaml|title=deployment.yaml
 apiVersion: apps/v1
@@ -61,86 +68,129 @@ spec:
         - containerPort: 5678
 ```
 
-The above deployment will create a pod consisting of two containers from the same docker image. The first container doesn’t specify any 
-tag and the second container specifies the `latest` tag. Effectively, both the containers will use the latest version of the image, 
-`hashicorp/http-echo`. This is considered a bad practice and you want to prevent such a deployment from being created on your cluster.  
+The above deployment will create a pod consisting of two containers from the same container image.
+
+The first container doesn't specify any tag and the second container specifies the `latest` tag.
+
+Effectively, both the containers will use the latest version of the image, `hashicorp/http-echo`.
+
+**This is considered a bad practice and you want to prevent such a deployment from being created in your cluster.**
 
 The best practice is to pin the container image to a tag such as `hashicorp/http-echo:0.2.3`.
 
-Let’s see how you can detect the policy violation using a static check. Since you want to prevent the resource from reaching the 
-cluster, the right place for running this check is:
+**Let's see how you can detect the policy violation using a static check.**
 
-- As a git pre commit, before the resource is committed to git.
+Since you want to prevent the resource from reaching the cluster, the right place for running this check is:
+
+- As a GIT pre commit, before the resource is committed to GIT.
 - As part of your CI/CD pipeline before the branch is merged into the master branch.
 - As part of the CI/CD pipeline before the resource is submitted to the cluster.
 
 ## Enforcing policies using conftest
 
-[Conftest](https://conftest.dev) is a testing framework for configuration data that can be used to check and verify 
-Kubernetes manifests. Tests are written using the purpose-built query language, [Rego](https://www.openpolicyagent.org/docs/latest/policy-language/).
+[Conftest](https://conftest.dev) is a testing framework for configuration data that can be used to check and verify Kubernetes manifests.
 
-You can install conftest following the [instructions](https://www.conftest.dev/install/) on the project website. 
-At the time of writing, the latest release is 0.19.0.
+Tests are written using the purpose-built query language, [Rego](https://www.openpolicyagent.org/docs/latest/policy-language/).
 
-Create a new directory, conftest-checks and a file named `check_image_tag.rego` with the following content:
+You can install conftest following the [instructions](https://www.conftest.dev/install/) on the project website.
+
+> At the time of writing, the latest release is 0.19.0.
+
+Let's define two policies:
 
 ```prolog|title=check_image_tag.rego
 package main
 
 deny[msg] {
-  input.kind == "Deployment"  
+  input.kind == "Deployment"
   image := input.spec.template.spec.containers[_].image
   not count(split(image, ":")) == 2
   msg := sprintf("image '%v' doesn't specify a valid tag", [image])
 }
 
-
 deny[msg] {
-  input.kind == "Deployment"  
+  input.kind == "Deployment"
   image := input.spec.template.spec.containers[_].image
-  endswith(image, "latest")  
+  endswith(image, "latest")
   msg := sprintf("image '%v' uses latest tag", [image])
 }
 ```
 
-Can you guess what the two policies are checking?
+_Can you guess what the two policies are checking?_
 
 Both checks are applied only to Deployments and are designed to extract the image name from the `spec.container` section.
 
-The former rule checks that there’s a tag defined on the image.
+The former rule checks that there's a tag defined on the image.
+
+```prolog|highlight=6|title=check_image_tag.rego
+package main
+
+deny[msg] {
+  input.kind == "Deployment"
+  image := input.spec.template.spec.containers[_].image
+  not count(split(image, ":")) == 2
+  msg := sprintf("image '%v' doesn't specify a valid tag", [image])
+}
+
+deny[msg] {
+  input.kind == "Deployment"
+  image := input.spec.template.spec.containers[_].image
+  endswith(image, "latest")
+  msg := sprintf("image '%v' uses latest tag", [image])
+}
+```
 
 The latter checks that, if a tag is defined, it is not the latest tag.
 
+```prolog|highlight=13|title=check_image_tag.rego
+package main
+
+deny[msg] {
+  input.kind == "Deployment"
+  image := input.spec.template.spec.containers[_].image
+  not count(split(image, ":")) == 2
+  msg := sprintf("image '%v' doesn't specify a valid tag", [image])
+}
+
+deny[msg] {
+  input.kind == "Deployment"
+  image := input.spec.template.spec.containers[_].image
+  endswith(image, "latest")
+  msg := sprintf("image '%v' uses latest tag", [image])
+}
+```
+
 The two `deny` blocks evaluate to a violation when true.
 
-Notice that, when you have more than one `deny` block, conftest checks them independently, and the overall result is a 
-violation of any of the blocks results in a breach.
+Notice that, when you have more than one `deny` block, conftest checks them independently, and the overall result is a violation of any of the blocks results in a breach.
 
-Now, let’s run conftest specifying the above policy and the deployment.yaml manifest:
+Now, save the file as `check_image_tag.rego` and run conftest against the `deployment.yaml` manifest:
 
 ```terminal|command=1|title=bash
-conftest test -p conftest-checks  test-data/deployment.yaml
+conftest test -p conftest-checks test-data/deployment.yaml
 FAIL - test-data/deployment.yaml - image 'hashicorp/http-echo' doesn't specify a valid tag
 FAIL - test-data/deployment.yaml - image 'hashicorp/http-echo:latest' uses latest tag
 
 2 tests, 0 passed, 0 warnings, 2 failures
 ```
 
-Great, it detected both violations.
+**Great, it detected both violations.**
 
-Since `conftest` is a static binary, you could have it running your checks before you submit the YAML to the cluster.  If you already use 
-a CI/CD pipeline to apply changes to your cluster, you could have an extra step that validates all resources against your conftest policies.
+Since `conftest` is a static binary, you could have it running your checks before you submit the YAML to the cluster.
 
-But does it really prevent someone from submitting a Deployment with the `latest` tag?
+If you already use a CI/CD pipeline to apply changes to your cluster, you could have an extra step that validates all resources against your conftest policies.
 
-Of course, anyone with sufficient rights can still create the workload in your cluster and skip the CI/CD pipeline.
+_But does it really prevent someone from submitting a Deployment with the `latest` tag?_
 
-If you can run `kubectl apply -f deployment.yaml` successfully, you can ignore `conftest` and your cluster will run 
-images with the `latest` tag.
+**Of course, anyone with sufficient rights can still create the workload in your cluster and skip the CI/CD pipeline.**
 
-How can you prevent someone from working around your policies?
+If you can run `kubectl apply -f deployment.yaml` successfully, you can ignore `conftest` and your cluster will run images with the `latest` tag.
+
+_How can you prevent someone from working around your policies?_
 
 You could supplement the static check with dynamic policies deployed inside your cluster.
+
+_What if you could reject a resource after it is submitted to the the cluster?_
 
 ## The Kubernetes API
 
@@ -165,55 +215,98 @@ You could deploy the Pod to the cluster with:
 kubectl apply -f pod.yaml
 ```
 
-The definition is sent to the API server and:
+The YAML definition is sent to the API server and:
 
-1. The definition is stored in etcd.
+1. The YAML definition is stored in etcd.
 1. The scheduler assigns the Pod to a node.
 1. The kubelet retrieves the Pod spec and creates it.
 
 At least that's the high-level plan.
 
-But what's really going on under the hood?
+```slideshow
+{
+  "description": "Here's what happens when you type `kubectl apply -f`",
+  "slides": [
+    {
+      "image": "assets/control-plane-1.svg",
+      "description": "You use `kubectl apply -f deployment.yaml` to send a request to the control plane to deploy three replicas."
+    },
+    {
+      "image": "assets/control-plane-2.svg",
+      "description": "The API receives the request and the JSON payload — `kubectl` converted the YAML resource into JSON."
+    },
+    {
+      "image": "assets/control-plane-3.svg",
+      "description": "The API server persists the object definition into the database."
+    },
+    {
+      "image": "assets/control-plane-4.svg",
+      "description": "The YAML definition is stored in etcd."
+    }
+  ]
+}
+```
 
-You write resources in YAML, but the API is a REST (JSON) API.
+_But what's really going on under the hood — is that simple?_
 
-How does that work?
+_What happens when there's a typo in the YAML?_
 
-And what happens when there's a typo in the YAML?
-
-Who stops you from submitting broken resources to the etcd?
+_Who stops you from submitting broken resources to the etcd?_
 
 When you type `kubectl apply` a few things happen.
 
 The kubectl binary:
 
-1. Validates the resource client-side (is there any obvious error?).
+1. Validates the resource client-side _(is there any obvious error?)_.
 1. Converts the YAML payload into JSON.
 1. Reads the configs from your `KUBECONFIG`.
-1. Authenticates with the kube-apiserver and
-1. Sends a request with the payload to the kube-apiserver
+1. Sends a request with the payload to the `kube-apiserver`.
 
-When the `kube-apiserver` receives the request, it doesn’t store it in etcd immediately.
+When the `kube-apiserver` receives the request, it doesn't store it in etcd immediately.
 
 First, it has to verify that the requester is legitimate.
 
-In other words, it has to authenticate the request.
+In other words, [it has to authenticate the request.](https://kubernetes.io/docs/reference/access-authn-authz/authentication/)
 
-Once you are authenticated, do you have the permission to create resources?
+_Once you are authenticated, do you have the permission to create resources?_
 
-Identity and permission are not the same things.
+**Identity and permission are not the same thing.**
 
 Just because you have access to the cluster doesn't mean you can create or read all the resources.
 
-The authorisation is commonly done with Role-Based Access Control (RBAC).
+The authorisation is commonly done with [Role-Based Access Control (RBAC)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
 
 With Role-Based Access Control (RBAC), you can assign granular permissions and restrict what a user or app can do.
 
 At this point, you are authenticated and authorised by the kube-apiserver.
 
-Can you finally store the Pod definition in the etcd?
+```slideshow
+{
+  "description": "The Kubernetes API server - authn and authz",
+  "slides": [
+    {
+      "image": "assets/api-server-1.svg",
+      "description": "Until now, the API server has pictured as a single block in the control plane. However, there's more to it."
+    },
+    {
+      "image": "assets/api-server-2.svg",
+      "description": "The API is made of several smaller components. The first is the HTTP handler which receives and process the HTTP requests."
+    },
+    {
+      "image": "assets/api-server-3.svg",
+      "description": "Next the API verifies the caller. _Are you a user of the cluster?_"
+    },
+    {
+      "image": "assets/api-server-4.svg",
+      "description": "Even if you authorised, it doesn't guarantee that you have access to all resources. Perhaps you can create Pods, but not Secrets. In this phase, your user account is checked against the RBAC rules."
+    }
+  ]
+}
+```
 
-Not so fast.
+_Can you finally store the Pod definition in the etcd?_
+
+**Not so fast.**
 
 The `kube-apiserver` is designed as a pipeline.
 
@@ -221,7 +314,9 @@ The request goes through a series of components before it's stored in the databa
 
 While authorisation and authentication are the first two components, they are not the only ones.
 
-Before the object reaches the database, it is intercepted by the Admission controllers.
+Before the object reaches the database, it is intercepted by [the Admission controllers.](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/)
+
+![The next step in the Kubernetes API pipeline is the Mutating Admission Controller](assets/api-server-5.svg)
 
 At this stage, there's the opportunity to execute further checks on the current resource.
 
@@ -229,15 +324,15 @@ And Kubernetes has plenty of Admission controllers enabled by default.
 
 > You can check all the Admission controllers that are enabled in minikube with `kubectl -n kube-system describe pod kube-apiserver-minikube`. The output should contain the flag `--enable-admission-plugins` and a list of admission controllers.
 
-As an example, let's have a look at the NamespaceLifecycle admission controller.
+As an example, let's have a look at the `NamespaceLifecycle` admission controller.
 
-## Validation admission controllers
+## Validating admission controllers
 
 The `NamespaceLifecycle` admission controller prevents you from creating Pods in namespaces that don't exist yet.
 
 You can define a Pod with a namespace as follows:
 
-```yaml|title=pod-namespaced.yaml
+```yaml|title=pod-namespaced.yaml|highlight=5
 apiVersion: v1
 kind: Pod
 metadata:
@@ -264,11 +359,11 @@ The namespace `does-not-exist` doesn't exist and is finally rejected.
 
 Also, the `NamespaceLifecycle` admission controller stops requests that could delete the `default`, `kube-system` and `kube-public` namespaces.
 
-Controllers that check actions and resources are grouped under the `Validation` category.
+Controllers that check actions and resources are grouped under the **Validating** category.
 
-There's another category of controllers, and that's called `Mutating`.
+There's another category of controllers, and that's called **Mutating**.
 
-## Mutation admission controllers
+## Mutating admission controllers
 
 As you can guess from the name, mutating controllers can inspect the request and change it.
 
@@ -342,8 +437,7 @@ NAME                 PROVISIONER                RECLAIMPOLICY   VOLUMEBINDINGMOD
 standard (default)   k8s.io/minikube-hostpath   Delete          Immediate           8m
 ```
 
-If the name of the _default_ StorageClass were "aws-ebs", the `DefaultStorageClass` admission controller would have 
-injected it instead of "standard".
+If the name of the _default_ StorageClass were "aws-ebs", the `DefaultStorageClass` admission controller would have injected it instead of "standard".
 
 Kubernetes has several mutating and validating admission controllers.
 
@@ -351,9 +445,33 @@ You can [find the full list on the official documentation](https://kubernetes.io
 
 Once the request passes through the admission controllers, it is finally stored in etcd.
 
+```slideshow
+{
+  "description": "Mutating and validating admission controllers in the Kubernetes API",
+  "slides": [
+    {
+      "image": "assets/api-server-5.svg",
+      "description": "Mutating and Validating Admission controllers are another component in the Kubernetes API."
+    },
+    {
+      "image": "assets/api-server-6.svg",
+      "description": "If you pay close attention, you will learn that the Mutating Admission Controller is the first controller to be invoked."
+    },
+    {
+      "image": "assets/api-server-7.svg",
+      "description": "When the resource is mutated, is then passed to the schema validation phase. Here the API checks that resource is still valid _(does the Pod look like a Pod? any field missing?)_"
+    },
+    {
+      "image": "assets/api-server-8.svg",
+      "description": "In the last step you can find the Validating Admission Controllers. Those are the last component before the resource is stored in etcd."
+    }
+  ]
+}
+```
+
 _But what if you want to have a custom check or customise the resources based on your rules?_
 
-Admission controllers are designed to promote extensibility.
+**Admission controllers are designed to promote extensibility.**
 
 You can use the default Admission controllers that come with Kubernetes, or you can plug in your own.
 
@@ -368,6 +486,8 @@ Those admission controllers don't do anything themselves.
 
 You can register a component to the Mutation or Validation webhook, and those controllers will call it when the request passes through the Admission phase.
 
+![MutationAdmissionWebhook and ValidationAdmissionWebhook in the Kubernetes API](assets/api-server-9.svg)
+
 So you could write a component that checks if the current Pod uses a container image that comes from a private registry.
 
 You could register it as part of the `ValidationAdmissionWebhook` and pass or reject requests based on the container image.
@@ -376,49 +496,36 @@ And that's exactly what Gatekeeper does — it registers as a component in the c
 
 ## Enforcing policies using Gatekeeper
 
-Gatekeeper allows a Kubernetes administrator to implement policies for ensuring compliance and best practices in their cluster.
+[Gatekeeper](https://github.com/open-policy-agent/gatekeeper) allows a Kubernetes administrator to implement policies for ensuring compliance and best practices in their cluster.
 
 Gatekeeper registers itself as a controller with the validation webhook in the Kubernetes API.
-Any resource submitted to the cluster is intercepted and inspected against the list of active policies.
 
-Also, Gatekeeper embraces Kubernetes native concepts such as Custom Resource Definitions (CRDs) and hence the 
-policies are managed as Kubernetes resources. The [Google Cloud docs](https://cloud.google.com/anthos-config-management/docs/concepts/policy-controller)
-on this topic are a good place to learn more.
+![Gatekeeper as a Validating Admission Controller extension](assets/api-server-10.svg)
 
-Internally, Gatekeeper makes use of the Open Policy Agent (OPA) to implement the core policy engine and the 
-policies are written in the Rego language, same as checks for `conftest`. 
+**Any resource submitted to the cluster is intercepted and inspected against the list of active policies.**
 
-In the part, you will try out Gatekeeper. You will need access to a Kubernetes cluster with admin-level 
-privileges such as one setup using `minikube`. Once you have `kubectl` configured to communicate to the cluster, 
-run the following to setup gatekeeper:
+Also, Gatekeeper embraces Kubernetes native concepts such as Custom Resource Definitions (CRDs) and hence the policies are managed as Kubernetes resources.
+
+> The [Google Cloud docs](https://cloud.google.com/anthos-config-management/docs/concepts/policy-controller) on this topic are a good place to learn more.
+
+Internally, Gatekeeper makes use of the Open Policy Agent (OPA) to implement the core policy engine and the policies are written in the Rego language, same as checks for `conftest`.
+
+_In the next part, you will try out Gatekeeper._
+
+You will need access to a Kubernetes cluster with admin-level privileges such as the one you can set up using `minikube`.
+
+> If you're on Windows, you can [follow our handy guide on how to install Kubernetes and Docker](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows/).
+
+Once you have `kubectl` configured to communicate to the cluster, run the following to setup gatekeeper:
 
 ```terminal|command=1|title=bash
-kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml 
-
-namespace/gatekeeper-system created
-customresourcedefinition.apiextensions.k8s.io/configs.config.gatekeeper.sh created
-customresourcedefinition.apiextensions.k8s.io/constrainttemplates.templates.gatekeeper.sh created
-serviceaccount/gatekeeper-admin created
-role.rbac.authorization.k8s.io/gatekeeper-manager-role created
-clusterrole.rbac.authorization.k8s.io/gatekeeper-manager-role created
-rolebinding.rbac.authorization.k8s.io/gatekeeper-manager-rolebinding created
-clusterrolebinding.rbac.authorization.k8s.io/gatekeeper-manager-rolebinding created
-secret/gatekeeper-webhook-server-cert created
-service/gatekeeper-webhook-service created
-deployment.apps/gatekeeper-audit created
-deployment.apps/gatekeeper-controller-manager created
-validatingwebhookconfiguration.admissionregistration.k8s.io/gatekeeper-validating-webhook-configuration created
+kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml
 ```
 
 To verify whether gatekeeper has been set up correctly, run:
 
 ```terminal|command=1|title=bash
-kubectl -n gatekeeper-system describe svc gatekeeper-webhook-service 
-```
-
-The output should be similar to:
-
-```terminal|command=1|title=bash
+kubectl -n gatekeeper-system describe svc gatekeeper-webhook-service
 Name:              gatekeeper-webhook-service
 Namespace:         gatekeeper-system
 Labels:            gatekeeper.sh/system=yes
@@ -428,17 +535,20 @@ IP:                10.102.199.165
 Port:              <unset>  443/TCP
 TargetPort:        8443/TCP
 Endpoints:         172.18.0.4:8443
-..
+# more output ...
 ```
 
 This is the service that is invoked by the Kubernetes API as part of the request processing in the "Validating Admission" stage.
+
 All your Pods, Deployments, Services, etc. are now intercepted and scrutinised by Gatekeeper.
 
-### Defining reusable policies using a constraint template
+## Defining reusable policies using a constraint template
 
 In Gatekeeper, you need to first create a policy using a `ConstraintTemplate` custom resource.
 
-Let’s have a look at an example. The following constraint template definition rejects any deployment that uses the latest tag:
+_Let's have a look at an example._
+
+The following `ConstraintTemplate` definition rejects any deployment that uses the latest tag:
 
 ```yaml|title=check_image_tag.yaml
 apiVersion: templates.gatekeeper.sh/v1beta1
@@ -455,35 +565,124 @@ spec:
       rego: |
         package k8simagetagvalid
 
-        violation[{"msg": msg, “details”:{}}] {         
+        violation[{"msg": msg, "details":{}}] {
           image := input.review.object.spec.template.spec.containers[_].image
           not count(split(image, ":")) == 2
           msg := sprintf("image '%v' doesn't specify a valid tag", [image])
         }
 
-        violation[{"msg": msg, “details”:{}}] {
+        violation[{"msg": msg, "details":{}}] {
           image := input.review.object.spec.template.spec.containers[_].image
-          endswith(image, "latest")  
+          endswith(image, "latest")
           msg := sprintf("image '%v' uses latest tag", [image])
         }
 ```
 
-You can save the above definition into a file and name it `check_image_tag.yaml`.
+The policy is similar to the previous that used Conftest.
 
-The policy is similar to the previous that used Conftest. But there are some subtle and important differences:
+**But there are some subtle and important differences.**
 
-- The input object is available as via input.review.object instead of input, and there is no need to assert the 
-  input object kind here. You do that when creating the Constraint.
+The input object is available as via `input.review.object` instead of `input`, and there is no need to assert the input object kind here.
 
-- The deny rule is renamed to violation. For `conftest`, the rule signature was `Deny[msg] {...}`
-  whereas for gatekeeper it is `violation[{"msg": msg}]  {..}`.
+```yaml|highlight=16,22|title=check_image_tag.yaml
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8simagetagvalid
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sImageTagValid
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8simagetagvalid
 
-- The violation rule block has a specific signature - an object with two properties - msg, a string and and
-  `details` an object with arbitrary properties to return custom data to provide additional information 
-  related to the violation. Here we return an empty object. See the next `ConstraintTemplate` for an 
-  example of a non-empty details object.
+        violation[{"msg": msg, "details":{}}] {
+          image := input.review.object.spec.template.spec.containers[_].image
+          not count(split(image, ":")) == 2
+          msg := sprintf("image '%v' doesn't specify a valid tag", [image])
+        }
 
-Now, create the constraint template:
+        violation[{"msg": msg, "details":{}}] {
+          image := input.review.object.spec.template.spec.containers[_].image
+          endswith(image, "latest")
+          msg := sprintf("image '%v' uses latest tag", [image])
+        }
+```
+
+**The deny rule is renamed to violation.**
+
+In `conftest`, the rule signature was `Deny[msg] {...}` whereas in Gatekeeper it is `violation[{"msg": msg}] {...}`.
+
+```yaml|highlight=15,21|title=check_image_tag.yaml
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8simagetagvalid
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sImageTagValid
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8simagetagvalid
+
+        violation[{"msg": msg, "details":{}}] {
+          image := input.review.object.spec.template.spec.containers[_].image
+          not count(split(image, ":")) == 2
+          msg := sprintf("image '%v' doesn't specify a valid tag", [image])
+        }
+
+        violation[{"msg": msg, "details":{}}] {
+          image := input.review.object.spec.template.spec.containers[_].image
+          endswith(image, "latest")
+          msg := sprintf("image '%v' uses latest tag", [image])
+        }
+```
+
+The violation rule block has a specific signature — an object with two properties.
+
+The first is the `msg` property which a string.
+
+The latter is the object `details` which holds arbitrary properties and you can decorate with any value.
+
+In this case, it is an empty object.
+
+Both are used as return values:
+
+```yaml|highlight=15,21|title=check_image_tag.yaml
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8simagetagvalid
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sImageTagValid
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8simagetagvalid
+
+        violation[{"msg": msg, "details":{}}] {
+          image := input.review.object.spec.template.spec.containers[_].image
+          not count(split(image, ":")) == 2
+          msg := sprintf("image '%v' doesn't specify a valid tag", [image])
+        }
+
+        violation[{"msg": msg, "details":{}}] {
+          image := input.review.object.spec.template.spec.containers[_].image
+          endswith(image, "latest")
+          msg := sprintf("image '%v' uses latest tag", [image])
+        }
+```
+
+Now, create the `ConstraintTemplate`:
 
 ```terminal|command=1|title=bash
 kubectl apply -f templates/check_image_tag.yaml
@@ -495,33 +694,35 @@ You can run `kubectl describe` to query the template from the cluster:
 ```terminal|command=1|title=bash
 kubectl describe constrainttemplate.templates.gatekeeper.sh/k8simagetagvalid
 Name:         k8simagetagvalid
-Namespace:    
+Namespace:
 Labels:       <none>
 Annotations:  kubectl.kubernetes.io/last-applied-configuration:
                 {"apiVersion":"templates.gatekeeper.sh/v1beta1","kind":"ConstraintTemplate","metadata":
                 {"annotations":{},"name":"k8simagetagvalid"},"spec"...
 API Version:  templates.gatekeeper.sh/v1beta1
 Kind:         ConstraintTemplate
-
-...
+# more output ...
 ```
 
-A `ConstraintTemplate` isn’t something you can use to validate deployments, though.
-It's just a definition of a policy that can only be enforced by creating a `Constraint`. 
-You may use the same `ConstraintTemplate` but define multiple constraints to enforce 
-policies for different workloads, for example.
+A `ConstraintTemplate` isn't something you can use to validate deployments, though.
 
-### Creating a constraint
+It's just a definition of a policy that can only be enforced by creating a `Constraint`.
 
-A `Constraint` is a way to say "I want to apply this policy to the cluster".
+You may use the same `ConstraintTemplate` but define multiple constraints to enforce policies for different workloads, for example.
+
+## Creating a constraint
+
+A `Constraint` is a way to say _"I want to apply this policy to the cluster"_.
 
 You can think about `ConstraintTemplates` as a book of recipes.
-You have hundreds of recipes for baking cakes and cookies, but you can’t really eat them.
-You need to select the recipe and actually mix the ingredients to bake your cake.
 
-Constraints are a particular instance of a recipe — the `ConstraintTemplate`.
+You have hundreds of recipes for baking cakes and cookies, but you can't really eat them.
 
-Let’s have a look at an example.
+You need to choose the recipe and actually mix the ingredients to bake your cake.
+
+**Constraints are a particular instance of a recipe** — the `ConstraintTemplate`.
+
+Let's have a look at an example.
 
 The following `Constraint` uses the previously defined ConstraintTemplate (recipe):
 
@@ -539,26 +740,27 @@ spec:
 
 Notice how the `Constraint` references the `ConstraintTemplate` as well as what kind of resources it should be applied to.
 
-The `spec.match` object defines the workloads against which the constraint will be enforced. Here, you specify that it will be 
-enforced against the `apps` API group and of kind, `Deployment`. Since these fields are arrays, you can 
-specify multiple values and extend the checks to StatefulSets, DaemonSets, etc.
+The `spec.match` object defines the workloads against which the constraint will be enforced.
+
+Here, you specify that it will be enforced against the `apps` API group and of kind, `Deployment`.
+
+Since these fields are arrays, you can specify multiple values and extend the checks to StatefulSets, DaemonSets, etc.
 
 Save the above content into a new file and name it `check_image_tag_constraint.yaml`.
 
 Run `kubectl apply` to create the constraint:
 
 ```terminal|command=1|title=bash
-kubectl apply -f check_image_tag_constraint.yaml 
+kubectl apply -f check_image_tag_constraint.yaml
 k8simagetagvalid.constraints.gatekeeper.sh/valid-image-tag created
 ```
 
-Use kubectl describe to ensure that the constraint was created:
+Use `kubectl describe` to ensure that the constraint was created:
 
 ```terminal|command=1|title=bash
 kubectl describe k8simagetagvalid.constraints.gatekeeper.sh/valid-image-tag
-
 Name:         valid-image-tag
-Namespace:    
+Namespace:
 Labels:       <none>
 Annotations:  kubectl.kubernetes.io/last-applied-configuration:
                 {"apiVersion":"constraints.gatekeeper.sh/v1beta1","kind":"K8sImageTagValid","metadata":
@@ -567,31 +769,34 @@ API Version:  constraints.gatekeeper.sh/v1beta1
 Kind:         K8sImageTagValid
 Metadata:
   Creation Timestamp:  2020-07-01T07:57:23Z
-...
+# more output...
 ```
 
-### Is the policy working?
+## Testing the policy
 
-Now, try creating a deployment with the previous YAML file, `deployment.yaml`:
+Now, let's test the Deployment with the two containers images:
 
 ```terminal|command=1|title=bash
-kubectl apply -f deployment.yaml 
-
+kubectl apply -f deployment.yaml
 Error from server ([denied by valid-image-tag] image 'hashicorp/http-echo' doesn't specify a valid tag
-[denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag): error when creating 
-"test-data/deployment.yaml": admission webhook "validation.gatekeeper.sh" denied the request: 
+[denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag): error when creating
+"test-data/deployment.yaml": admission webhook "validation.gatekeeper.sh" denied the request:
 [denied by valid-image-tag] image 'hashicorp/http-echo' doesn't specify a valid tag
 [denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag
 ```
 
-The deployment was rejected by the Gatekeeper policy. Notice how the check is built-in in the Kubernetes API.
-You can't skip the check or work around it. 
+**The deployment was rejected by the Gatekeeper policy.**
 
-Implementing Gatekeeper policies in a cluster with existing workloads can be challenging since you don't want to 
-disrupt critical workloads from being deployed due to non-compliance. Hence, Gatekeeper allows setting up constraints
-in a dry run enforcement mode by specifying `enforcementAction: dryrun` in the spec:
+Notice how the check is built-in in the Kubernetes API.
 
-```yaml|highlight=6-6
+**You can't skip the check or work around it.**
+
+Implementing Gatekeeper policies in a cluster with existing workloads can be challenging since you don't want to
+disrupt critical workloads from being deployed due to non-compliance.
+
+Hence, Gatekeeper allows setting up constraints in a dry run enforcement mode by specifying `enforcementAction: dryrun` in the spec:
+
+```yaml|highlight=6|title=check_image_tag_constraint.yaml
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: K8sImageTagValid
 metadata:
@@ -604,18 +809,14 @@ spec:
         kinds: ["Deployment"]
 ```
 
-In this mode, the policy will not prevent any workloads from being deployed, but will log any violations. The violations
-will be logged in the `Violations` field of the `kubectl describe` command:
+In this mode, the policy will not prevent any workloads from being deployed, but will log any violations.
+
+The violations will be logged in the `Violations` field of the `kubectl describe` command:
 
 ```terminal|command=1|title=bash
-kubectl describe k8simagetagvalid.constraints.gatekeeper.sh/valid-image-tag       
-```
-
-The violations will be logged in the Violations field of the result:
-
-```terminal|command=1|title=bash
+kubectl describe k8simagetagvalid.constraints.gatekeeper.sh/valid-image-tag
 Name:         valid-image-tag
-Namespace:    
+Namespace:
 Labels:       <none>
 Annotations:  kubectl.kubernetes.io/last-applied-configuration:
 ....
@@ -637,12 +838,11 @@ Events:                  <none>
 
 Subsequently, you can fix these workloads and recreate the constraints removing `enforcementAction: dryrun`.
 
-Let’s have a look at another example.
+Let's have a look at another example.
 
-Can you write a policy that forces the Deployment to have two labels: `project` for the project and `app` for the
-application name?
+_Can you write a policy that forces the Deployment to have two labels: `project` for the project and `app` for the application name?_
 
-## Policy to enforce consistent labeling
+## A Policy to enforce consistent labels
 
 First, you should enforce the policy as a check for conftest:
 
@@ -650,27 +850,75 @@ First, you should enforce the policy as a check for conftest:
 package main
 
 deny[msg] {
-  input.kind == "Deployment"  
-  
+  input.kind == "Deployment"
+
   required := {"app", "project"}
   provided := {label | input.metadata.labels[label]}
   missing := required - provided
- 
+
   count(missing) > 0
   msg = sprintf("you must provide labels: %v", [missing])
 }
 ```
 
-Save the above policy as a file check_labels.rego.
+Let's have a look at the policy in detail:
 
-Let’s have a look at the policy in detail:
+`required` is a set with two members - `app` and `project`.
 
-- "required" is a set with two members - `app` and `project`. Those labels should be presented on all Deployments.
-- "provided" retrieves the set of labels specified in the input.
+Those labels should be presented on all Deployments.
 
-Then, a set difference operation is performed and a new set that contains the labels which are present in "required",
-but not found in "provided" is created. If the number of elements in this set is greater than 0, the rule is violated. 
-This is achieved using the `count()` function to check the number of elements in the "missing" set.
+```prolog|highlight=6|title=check_labels.rego
+package main
+
+deny[msg] {
+  input.kind == "Deployment"
+
+  required := {"app", "project"}
+  provided := {label | input.metadata.labels[label]}
+  missing := required - provided
+
+  count(missing) > 0
+  msg = sprintf("you must provide labels: %v", [missing])
+}
+```
+
+`provided` retrieves the set of labels specified in the input.
+
+```prolog|highlight=7|title=check_labels.rego
+package main
+
+deny[msg] {
+  input.kind == "Deployment"
+
+  required := {"app", "project"}
+  provided := {label | input.metadata.labels[label]}
+  missing := required - provided
+
+  count(missing) > 0
+  msg = sprintf("you must provide labels: %v", [missing])
+}
+```
+
+Then, a set difference operation is performed and a new set that contains the labels which are present in `required`, but not found in `provided` is created.
+
+```prolog|highlight=8|title=check_labels.rego
+package main
+
+deny[msg] {
+  input.kind == "Deployment"
+
+  required := {"app", "project"}
+  provided := {label | input.metadata.labels[label]}
+  missing := required - provided
+
+  count(missing) > 0
+  msg = sprintf("you must provide labels: %v", [missing])
+}
+```
+
+If the number of elements in this set is greater than 0, the rule is violated.
+
+This is achieved using the `count()` function to check the number of elements in the `missing` set.
 
 Run conftest specifying this policy and you will see a failure:
 
@@ -682,7 +930,7 @@ FAIL - test-data/deployment.yaml - you must provide labels: {"project"}
 
 You can fix the issue by adding the project label, like this:
 
-```yaml|highlight=7|title=deployment.yaml
+```yaml|highlight=6-7|title=deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -714,11 +962,13 @@ spec:
         - containerPort: 5678
 ```
 
-What happens when someone deploys the resource directly to the cluster?
+_What happens when someone deploys the resource directly to the cluster?_
 
 They could work around the policy.
 
-So let’s add the same policy in Gatekeeper. First, you will have to create a `ConstraintTemplate`:
+So let's add the same policy in Gatekeeper.
+
+First, you will have to create a `ConstraintTemplate`:
 
 ```yaml|title=check_labels.yaml
 apiVersion: templates.gatekeeper.sh/v1beta1
@@ -729,7 +979,7 @@ spec:
   crd:
     spec:
       names:
-        kind: K8sRequiredLabels        
+        kind: K8sRequiredLabels
       validation:
         # Schema for the `parameters` field
         openAPIV3Schema:
@@ -751,32 +1001,58 @@ spec:
         }
 ```
 
-The above manifest illustrates how you can specify input parameters to the constraint template to configure its
-behavior at runtime. Going back to our `ConstraintTemplate` as a recipe analogy, input parameters are a way that 
-the recipe allows you to customize certain ingredients. However, these ingredients must obey certain rules. 
-For example, you want to only allow an array of strings as input to the ConstraintTemplate. This is described 
-using an OpenAPIV3 schema in the `validation` object in the `ConstraintTemplate` specification above. 
+The above manifest illustrates how you can specify input parameters to the constraint template to configure its behavior at runtime.
+
+Going back to our `ConstraintTemplate` as a recipe analogy, input parameters are a way that the recipe allows you to customize certain ingredients.
+
+_However, these ingredients must obey certain rules._
+
+For example, you want to only allow an array of strings as input to the ConstraintTemplate.
+
+This is described using an OpenAPIV3 schema in the `validation` object in the `ConstraintTemplate` specification above.
 
 The validation object was defined as:
 
-```yaml
-validation:        
-  openAPIV3Schema:
-    properties:
-      labels:
-        type: array
-        items: string
+```yaml|title=check_labels.yaml|highlight=10-16
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredlabels
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredLabels
+      validation:
+        # Schema for the `parameters` field
+        openAPIV3Schema:
+          properties:
+            labels:
+              type: array
+              items: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequiredlabels
+
+        violation[{"msg": msg, "details": {"missing_labels": missing}}] {
+          provided := {label | input.review.object.metadata.labels[label]}
+          required := {label | label := input.parameters.labels[_]}
+          missing := required - provided
+          count(missing) > 0
+          msg := sprintf("you must provide labels: %v", [missing])
+        }
 ```
 
-This schema defines that the constraint template expects to only have one parameter, `labels` 
-which is an array of strings. This becomes useful when for example, you may want to enforce 
-that all deployment workloads have `app` and `project` labels, but all job workloads have a `project` 
-label only. In such a case, you can define two constraints using the same constraint template, 
-but only differing in value of the labels parameter. All input provided is made available to 
-the constraint via the `input.parameters` attribute 
+This schema defines that the constraint template expects to only have one parameter, `labels` which is an array of strings.
 
-Save the above manifest into a file `check_labels.yaml` and then run `kubectl apply` to create 
-the constraint template:
+This becomes useful when for example, you may want to enforce that all deployment workloads have `app` and `project` labels, but all job workloads have a `project` label only.
+
+In such a case, you can define two constraints using the same constraint template, but only differing in value of the labels parameter.
+
+All input provided is made available to the constraint via the `input.parameters` attribute.
+
+Save the above manifest into a file `check_labels.yaml` and then run `kubectl apply` to create the constraint template:
 
 ```terminal|command=1|title=bash
 kubectl apply -f check_labels.yaml
@@ -785,7 +1061,7 @@ constrainttemplate.templates.gatekeeper.sh/k8srequiredlabels created
 
 To use the policy from the `ConstraintTemplate`, you need a Constraint.
 
-Create a new file, `check_labels_constraints.yaml`  with the following contents:
+Create a new file, `check_labels_constraints.yaml` with the following contents:
 
 ```yaml|title=check_labels_constraints.yaml
 apiVersion: constraints.gatekeeper.sh/v1beta1
@@ -809,30 +1085,30 @@ k8srequiredlabels.constraints.gatekeeper.sh/deployment-must-have-labels created
 ```
 
 At this stage, you have two constraints created in your cluster:
-The first constraint checks that your deployment is using an image with a valid tag
-The second constraint checks that your deployment defines two labels, `app`, and `project`.
+
+1. The first constraint checks that your deployment is using an image with a valid tag.
+1. The second constraint checks that your deployment defines two labels, `app`, and `project`.
 
 Now, try creating the deployment with the above manifest, deployment.yaml:
 
 ```terminal|command=1|title=bash
 kubectl apply -f deployment.yaml
-
 Error from server ([denied by deployment-must-have-labels] you must provide labels: {"project"}
 [denied by valid-image-tag] image 'hashicorp/http-echo' doesn't specify a valid tag
-[denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag): error when creating 
-"deployment.yaml": admission webhook "validation.gatekeeper.sh" denied the request: 
+[denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag): error when creating
+"deployment.yaml": admission webhook "validation.gatekeeper.sh" denied the request:
 [denied by deployment-must-have-labels] you must provide labels: {"project"}
 [denied by valid-image-tag] image 'hashicorp/http-echo' doesn't specify a valid tag
 [denied by valid-image-tag] image 'hashicorp/http-echo:latest' uses latest tag
 ```
 
-The deployment is not created successfully since it doesn’t have the required project label as well as not using a valid image tag. 
+The deployment is not created successfully since it doesn't have the required project label as well as not using a valid image tag.
 
-Job done!
+**Job done!**
 
-A valid deployment manifest that will be successfully deployed will have two labels - app and project as well as use tagged images:
+A valid deployment manifest that will be successfully deployed will have two labels (app and project) as well as use tagged images:
 
-```yaml|title=deployment.yaml
+```yaml|highlight=6-7,20,26|title=deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -864,22 +1140,30 @@ spec:
         - containerPort: 5678
 ```
 
-You validated your Deployment with a static and dynamic check. You can fail fast with the early static check and you can be 
-sure that no one works around the policy by submitting resources directly to the cluster. 
+You validated your Deployment with a static and dynamic check.
+
+**You can fail fast with the early static check and you can be sure that no one works around the policy by submitting resources directly to the cluster.**
 
 ## Summary
 
-Both conftest and Gatekeeper uses the Rego language to define policies which makes these two tools an attractive solution 
-to implement out-of-cluster and in-cluster checks, respectively. However, as you saw above, there were a few changes needed 
-to make to the conftest Rego policy work with Gatekeeper. The [konstraint](https://github.com/plexsystems/konstraint) 
-project aims to help in this regard. The premise of konstraint is that your source of truth is a policy that you would write 
-in Rego for `conftest` and then generate the `ConstraintTemplate` and `Constraint` resources for Gatekeeper. Konstraint automates 
-the manual steps involved in converting a policy written for conftest to one that works in Gatekeeper. In addition, 
-testing Gatekeeper constraint templates and constraints is also made more straightforward using konstraint.
+Both conftest and Gatekeeper uses the Rego language to define policies which makes these two tools an attractive solution to implement out-of-cluster and in-cluster checks, respectively.
 
-Neither conftest nor gatekeeper are the only solutions when it comes to enforcing out-of-cluster and in-cluster policies 
-respectively. What makes the two solutions compelling is that you can use Rego to implement policies for both tools. 
-In fact, you could even go as far as implementing a subset of relevant policies both inside and outside the cluster. 
-A comparative solution which achieves the same level of policy enforcement is [polaris](https://github.com/FairwindsOps/polaris)
-which has both an out-of-cluster and an in-cluster policy enforcement functionality. However it uses a custom JSON schema 
-based policy specification language and hence may not be as expressive as Rego.
+However, as you saw above, **there were a few changes needed to make to the conftest Rego policy work with Gatekeeper.**
+
+The [konstraint](https://github.com/plexsystems/konstraint) project aims to help in this regard.
+
+The premise of konstraint is that your source of truth is a policy that you would write in Rego for `conftest` and then generate the `ConstraintTemplate` and `Constraint` resources for Gatekeeper.
+
+**Konstraint automates the manual steps involved in converting a policy written for conftest to one that works in Gatekeeper.**
+
+In addition, testing Gatekeeper constraint templates and constraints is also made more straightforward using konstraint.
+
+_Neither conftest nor gatekeeper are the only solutions when it comes to enforcing out-of-cluster and in-cluster policies respectively._
+
+What makes the two solutions compelling is that you can use Rego to implement policies for both tools.
+
+In fact, you could even go as far as implementing a subset of relevant policies both inside and outside the cluster.
+
+A comparative solution which achieves the same level of policy enforcement is [polaris](https://github.com/FairwindsOps/polaris) which has both an out-of-cluster and an in-cluster policy enforcement functionality.
+
+However it uses a custom JSON schema based policy specification language and hence may not be as expressive as Rego.
