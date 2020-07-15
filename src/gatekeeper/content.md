@@ -1,18 +1,18 @@
 **TL;DR:** _In this article, you will learn about enforcing policies for your Kubernetes workloads using static tools such as [conftest](https://github.com/open-policy-agent/conftest) and in-cluster operators such as [Gatekeeper](https://github.com/open-policy-agent/gatekeeper)._
 
-Policies in Kubernetes allow you to prevent certain workloads from being deployed in the cluster.
+Policies in Kubernetes allow you to prevent specific workloads from being deployed in the cluster.
 
-While compliance is usually the reason for enforcing strict policies in the cluster, there are a number of **recommended best practices that cluster admins should enforce.**
+While compliance is usually the reason for enforcing strict policies in the cluster, there are several **recommended best practices that cluster admins should implement.**
 
 Examples of such guidelines are:
 
 1. Not running privileged pods.
-1. Not running pods as root user.
+1. Not running pods as the root user.
 1. Not specifying resource limits
 1. Not using the latest tag for the container images
 1. Now allowing additional Linux capabilities by default
 
-In addition, you may want to enforce bespoke policies that all workloads may want to abide by, such as:
+Besides, you may want to enforce bespoke policies that all workloads may wish to abide by, such as:
 
 - All workloads must have a "project" and "app" label.
 - All workloads must use container images from a specific container registry (e.g. my-company.com).
@@ -82,7 +82,7 @@ The best practice is to pin the container image to a tag such as `hashicorp/http
 
 Since you want to prevent the resource from reaching the cluster, the right place for running this check is:
 
-- As a GIT pre commit, before the resource is committed to GIT.
+- As a GIT pre-commit, before the resource is committed to GIT.
 - As part of your CI/CD pipeline before the branch is merged into the master branch.
 - As part of the CI/CD pipeline before the resource is submitted to the cluster.
 
@@ -184,13 +184,13 @@ _But does it really prevent someone from submitting a Deployment with the `lates
 
 **Of course, anyone with sufficient rights can still create the workload in your cluster and skip the CI/CD pipeline.**
 
-If you can run `kubectl apply -f deployment.yaml` successfully, you can ignore `conftest` and your cluster will run images with the `latest` tag.
+If you can run `kubectl apply -f deployment.yaml` successfully, you can ignore `conftest`, and your cluster will run images with the `latest` tag.
 
 _How can you prevent someone from working around your policies?_
 
 You could supplement the static check with dynamic policies deployed inside your cluster.
 
-_What if you could reject a resource after it is submitted to the the cluster?_
+_What if you could reject a resource after it is submitted to the cluster?_
 
 ## The Kubernetes API
 
@@ -247,7 +247,7 @@ At least that's the high-level plan.
 }
 ```
 
-_But what's really going on under the hood — is that simple?_
+_But what's going on under the hood — is it that simple?_
 
 _What happens when there's a typo in the YAML?_
 
@@ -332,7 +332,7 @@ The `NamespaceLifecycle` admission controller prevents you from creating Pods in
 
 You can define a Pod with a namespace as follows:
 
-```yaml|title=pod-namespaced.yaml|highlight=5
+```yaml|highlight=5|title=pod-namespaced.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -492,7 +492,7 @@ So you could write a component that checks if the current Pod uses a container i
 
 You could register it as part of the `ValidationAdmissionWebhook` and pass or reject requests based on the container image.
 
-And that's exactly what Gatekeeper does — it registers as a component in the cluster and validates requests.
+And that's precisely what Gatekeeper does — it registers as a component in the cluster and validates requests.
 
 ## Enforcing policies using Gatekeeper
 
@@ -506,9 +506,9 @@ Gatekeeper registers itself as a controller with the validation webhook in the K
 
 Also, Gatekeeper embraces Kubernetes native concepts such as Custom Resource Definitions (CRDs) and hence the policies are managed as Kubernetes resources.
 
-> The [Google Cloud docs](https://cloud.google.com/anthos-config-management/docs/concepts/policy-controller) on this topic are a good place to learn more.
+> The [Google Cloud docs](https://cloud.google.com/anthos-config-management/docs/concepts/policy-controller) on this topic are an excellent place to learn more.
 
-Internally, Gatekeeper makes use of the Open Policy Agent (OPA) to implement the core policy engine and the policies are written in the Rego language, same as checks for `conftest`.
+Internally, Gatekeeper makes use of the Open Policy Agent (OPA) to implement the core policy engine, and the policies are written in the Rego language, same as checks for `conftest`.
 
 _In the next part, you will try out Gatekeeper._
 
@@ -516,13 +516,13 @@ You will need access to a Kubernetes cluster with admin-level privileges such as
 
 > If you're on Windows, you can [follow our handy guide on how to install Kubernetes and Docker](https://learnk8s.io/blog/installing-docker-and-kubernetes-on-windows/).
 
-Once you have `kubectl` configured to communicate to the cluster, run the following to setup gatekeeper:
+Once you have `kubectl` configured to communicate to the cluster, run the following to set up gatekeeper:
 
 ```terminal|command=1|title=bash
 kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml
 ```
 
-To verify whether gatekeeper has been set up correctly, run:
+To verify whether gatekeeper is set up correctly, run:
 
 ```terminal|command=1|title=bash
 kubectl -n gatekeeper-system describe svc gatekeeper-webhook-service
@@ -544,7 +544,7 @@ All your Pods, Deployments, Services, etc. are now intercepted and scrutinised b
 
 ## Defining reusable policies using a constraint template
 
-In Gatekeeper, you need to first create a policy using a `ConstraintTemplate` custom resource.
+In Gatekeeper, you need first to create a policy using a `ConstraintTemplate` custom resource.
 
 _Let's have a look at an example._
 
@@ -648,7 +648,7 @@ The violation rule block has a specific signature — an object with two propert
 
 The first is the `msg` property which a string.
 
-The latter is the object `details` which holds arbitrary properties and you can decorate with any value.
+The latter is the object `details` which holds arbitrary properties, and you can decorate with any value.
 
 In this case, it is an empty object.
 
@@ -716,9 +716,9 @@ A `Constraint` is a way to say _"I want to apply this policy to the cluster"_.
 
 You can think about `ConstraintTemplates` as a book of recipes.
 
-You have hundreds of recipes for baking cakes and cookies, but you can't really eat them.
+You have hundreds of recipes for baking cakes and cookies, but you can't eat them.
 
-You need to choose the recipe and actually mix the ingredients to bake your cake.
+You need to choose the recipe and mix the ingredients to bake your cake.
 
 **Constraints are a particular instance of a recipe** — the `ConstraintTemplate`.
 
@@ -742,7 +742,7 @@ Notice how the `Constraint` references the `ConstraintTemplate` as well as what 
 
 The `spec.match` object defines the workloads against which the constraint will be enforced.
 
-Here, you specify that it will be enforced against the `apps` API group and of kind, `Deployment`.
+Here, you specify that it will be enforced against the `apps` API group and of kind `Deployment`.
 
 Since these fields are arrays, you can specify multiple values and extend the checks to StatefulSets, DaemonSets, etc.
 
@@ -809,7 +809,7 @@ spec:
         kinds: ["Deployment"]
 ```
 
-In this mode, the policy will not prevent any workloads from being deployed, but will log any violations.
+In this mode, the policy will not prevent any workloads from being deployed but will log any violations.
 
 The violations will be logged in the `Violations` field of the `kubectl describe` command:
 
@@ -1001,19 +1001,19 @@ spec:
         }
 ```
 
-The above manifest illustrates how you can specify input parameters to the constraint template to configure its behavior at runtime.
+The above manifest illustrates how you can specify input parameters to the constraint template to configure its behaviour at runtime.
 
 Going back to our `ConstraintTemplate` as a recipe analogy, input parameters are a way that the recipe allows you to customize certain ingredients.
 
-_However, these ingredients must obey certain rules._
+_However, these ingredients must obey specific rules._
 
-For example, you want to only allow an array of strings as input to the ConstraintTemplate.
+For example, you want only to allow an array of strings as input to the ConstraintTemplate.
 
 This is described using an OpenAPIV3 schema in the `validation` object in the `ConstraintTemplate` specification above.
 
 The validation object was defined as:
 
-```yaml|title=check_labels.yaml|highlight=10-16
+```yaml|highlight=10-16|title=check_labels.yaml
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
@@ -1044,9 +1044,9 @@ spec:
         }
 ```
 
-This schema defines that the constraint template expects to only have one parameter, `labels` which is an array of strings.
+This schema defines that the constraint template expects only to have one parameter, `labels` which is an array of strings.
 
-This becomes useful when for example, you may want to enforce that all deployment workloads have `app` and `project` labels, but all job workloads have a `project` label only.
+This becomes useful when, for example, you may want to enforce that all deployment workloads have `app` and `project` labels, but all job workloads have a `project` label only.
 
 In such a case, you can define two constraints using the same constraint template, but only differing in value of the labels parameter.
 
@@ -1156,14 +1156,14 @@ The premise of konstraint is that your source of truth is a policy that you woul
 
 **Konstraint automates the manual steps involved in converting a policy written for conftest to one that works in Gatekeeper.**
 
-In addition, testing Gatekeeper constraint templates and constraints is also made more straightforward using konstraint.
+Besides, testing Gatekeeper constraint templates and constraints are also made more straightforward using konstraint.
 
 _Neither conftest nor gatekeeper are the only solutions when it comes to enforcing out-of-cluster and in-cluster policies respectively._
 
 What makes the two solutions compelling is that you can use Rego to implement policies for both tools.
 
-In fact, you could even go as far as implementing a subset of relevant policies both inside and outside the cluster.
+You could even go as far as implementing a subset of relevant policies both inside and outside the cluster.
 
 A comparative solution which achieves the same level of policy enforcement is [polaris](https://github.com/FairwindsOps/polaris) which has both an out-of-cluster and an in-cluster policy enforcement functionality.
 
-However it uses a custom JSON schema based policy specification language and hence may not be as expressive as Rego.
+However, it uses a custom JSON schema-based policy specification language and hence may not be as expressive as Rego.
