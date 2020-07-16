@@ -27,7 +27,7 @@ These policies aim to reject workloads if they do not successfully satisfy the c
 
 **The out-of-cluster approaches** are accomplished by running static checks on the YAML manifests before they are submitted to the cluster.
 
-[There are multiple tools available for achieving this.](https://deploy-preview-317--learnk8s.netlify.app/validating-kubernetes-yaml)
+[There are multiple tools available for achieving this.](https://learnk8s.io/validating-kubernetes-yaml)
 
 **The in-cluster approaches** make use of validating admission controllers which are invoked as part of the API request and before the manifest is stored in the database.
 
