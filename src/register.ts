@@ -1,6 +1,7 @@
 import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
 import * as Academy from './academy'
+import * as Linode from './linode'
 import * as ArchitectingAndScaling from './architecting'
 import * as AdvancedInPractice from './advanced'
 import * as MicroservicesAtScale from './microservices'
@@ -74,6 +75,7 @@ export function register(store: Store) {
   Newsletter.Register(store)
   AdvancedKubectl.Register(store)
   Academy.Register(store)
+  Linode.Register(store)
   ContactUs.Register(store)
   ChaosEngineering.Register(store)
   Flipboard.Register(store)

@@ -8,6 +8,7 @@ import Axios from 'axios'
 import * as NotFound from './404'
 import * as AboutUs from './aboutUs'
 import * as Academy from './academy'
+import * as Linode from './linode'
 import * as ArchitectingAndScaling from './architecting'
 import * as AdvancedInPractice from './advanced'
 import * as MicroservicesAtScale from './microservices'
@@ -56,6 +57,7 @@ Homepage.Mount({ store })
 AboutUs.Mount({ store })
 Newsletter.Mount({ store })
 Academy.Mount({ store })
+Linode.Mount({ store })
 ContactUs.Mount({ store })
 BiteSizedRenderer.Mount({ store })
 GenericBlogPost.Mount({ store })
