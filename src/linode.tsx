@@ -234,38 +234,6 @@ function renderPage(state: State) {
                   </ol>
                 </BundleBlock>
               </li>
-
-              <li className='mv4'>
-                <BundleBlock
-                  buynNowLink='https://academy.learnk8s.io/bundle-exploring-kubernetes2'
-                  learnMoreLink='/exploring-kubernetes'
-                  fullPriceInUSD='USD 167.00'
-                  bundlePriceInUSD='USD 119.00'
-                  fullPriceId='bundle-exploring-kubernetes2-full'
-                  bundlePriceId='bundle-exploring-kubernetes2'
-                  images={[material.authentication.cover, material.managingState.cover, material.ckad.cover]}
-                >
-                  <h2 className='f2-ns f3 measure-narrow lh-solid navy'>4. Exploring Kubernetes</h2>
-                  <p className='gray ttu f7'>
-                    Difficulty: <span className='dib pv1 ph2 white bg-gray br2'>Intermediate</span>{' '}
-                    <span className='dib pv1 ph2 white bg-gray br2'>Advanced</span>
-                  </p>
-                  <p className='measure f4 lh-copy black-80'>
-                    Kubernetes is a vast subject and becoming an expert requires exploring concepts related to storage,
-                    networking, and scaling — to name a few.
-                  </p>
-                  <p className='measure f4 lh-copy black-80'>
-                    This collection of courses are designed to cover several{' '}
-                    <span className='b underline'>advanced topics necessary to operate a production-ready cluster</span>
-                    .
-                  </p>
-                  <ol className='f4'>
-                    <li className='mv3'>{material.authentication.name}</li>
-                    <li className='mv3'>{material.managingState.name}</li>
-                    <li className='mv3'>{material.ckad.name}</li>
-                  </ol>
-                </BundleBlock>
-              </li>
             </ul>
           </div>
         </Section>
