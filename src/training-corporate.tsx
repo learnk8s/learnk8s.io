@@ -23,7 +23,7 @@ export const faqs: FAQ[] = [
   {
     title: `What's the absolute minimum number of participants?`,
     content:
-      'We can run private courses starting from only 5 delegates but only in specific cases. Please [get in touch](mailto:hello@learnk8s.io) to make sure that it applies to you.',
+      'We can run private courses starting from only 5 delegates but only in specific cases. Otherwise the minimum class size is 10 delegates. If you are not sure, please [get in touch](mailto:hello@learnk8s.io) to discuss.',
   },
   {
     title: 'Are there any joining instructions?',
