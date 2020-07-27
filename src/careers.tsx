@@ -4,6 +4,8 @@ import { State, Action, getConfig, Store, Selector } from './store'
 import { defaultAssetsPipeline } from './optimise'
 import { join } from 'path'
 import { tachyons } from './tachyons/tachyons'
+import { JsonLd } from 'react-schemaorg'
+import { JobPosting } from 'schema-dts'
 
 export const Career = {
   id: 'careers',
@@ -54,6 +56,28 @@ function renderPage(state: State) {
         <style>{tachyons}</style>
         <link rel='stylesheet' href='assets/style.css' />
         <link rel='canonical' href={currentAbsoluteUrl} />
+        <JsonLd<JobPosting>
+          item={{
+            '@context': 'https://schema.org',
+            '@type': 'JobPosting',
+            title: 'Kubernetes engineer',
+            description: 'Create automation scripts for Kubernetes based applications',
+            identifier: {
+              '@type': 'PropertyValue',
+              name: 'Learnk8s',
+              value: '4cb29126-aa9a-4354-890c-5130a24aeeeb',
+            },
+            hiringOrganization: {
+              '@type': 'Organization',
+              name: 'Learnk8s',
+              sameAs: 'https://learnk8s.io',
+            },
+            employmentType: 'CONTRACT',
+            jobLocationType: 'TELECOMMUTE',
+            skills: 'kubernetes, docker, containers',
+            datePosted: '01-01-2020',
+          }}
+        ></JsonLd>
       </Head>
       <Body>
         <div className='trapezoid-1 white pt3 pt0-ns pb2 pb4-ns'>
