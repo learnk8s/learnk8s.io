@@ -48,9 +48,27 @@ At the end of the process:
 
 **But the Pod still does not exist.**
 
-The previous tasks happened in the control plane, and the state was stored in the database.
+```slideshow
+{
+  "description": "Creating Pods",
+  "slides": [
+    {
+      "image": "assets/creating-a-pod-1.svg",
+      "description": "When you submit a Pod with `kubectl apply -f` the YAML is sent to the Kubernetes API."
+    },
+    {
+      "image": "assets/creating-a-pod-2.svg",
+      "description": "The API saves the Pod in the database — etcd."
+    },
+    {
+      "image": "assets/creating-a-pod-3.svg",
+      "description": "The scheduler assigns the best node for that Pod and the Pod's status changes to _Pending_. The Pod exists only in etcd."
+    }
+  ]
+}
+```
 
-It's like going to the gym — you might be willing to work out, but until you got out and do it, it's only a thought in your mind.
+The previous tasks happened in the control plane, and the state is stored in the database.
 
 _So who is creating the Pod in your Nodes?_
 
@@ -81,7 +99,7 @@ The Container Networking Interface (CNI) is a bit more interesting because it is
 1. Generating a valid IP address for the Pod
 1. Connecting the container to the rest of the network
 
-As you can imagine, there are several ways to connect the container to the network and generate a valid IP address (you could choose between IPv4 or IPv6 or maybe assign more than one IP address).
+As you can imagine, there are several ways to connect the container to the network and generate a valid IP address (you could choose between IPv4 or IPv6 or maybe assign more than a single IP address).
 
 As an example, [Docker creates virtual ethernet pairs and attaches it to a bridge](https://archive.shivam.dev/docker-networking-explained/), whereas [the AWS-CNI connects the Pods directly to the rest of the Virtual Private Cloud (VPC).](https://itnext.io/kubernetes-is-hard-why-eks-makes-it-easier-for-network-and-security-architects-ea6d8b2ca965)
 
@@ -97,11 +115,35 @@ As far the control plane is concerned, the Pod is still being created.
 
 It's the job of **the kubelet to collect all the details of the Pod such as the IP address and report them back to the control plane.**
 
-However, the kubelet doesn't immediately propagate the IP address.
+You can imagine that inspecting etcd would reveal not just where the Pod is running, but also its IP address.
 
-Instead, [it waits for a successful Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-tcp-liveness-probe) before sharing the details with the control plane.
-
-As soon as that happens, you can imagine that inspecting etcd would reveal not just where the Pod is running, but also its IP address.
+```slideshow
+{
+  "description": "Creating Pods",
+  "slides": [
+    {
+      "image": "assets/creating-a-pod-4.svg",
+      "description": "The Kubelet polls the control plane for updates."
+    },
+    {
+      "image": "assets/creating-a-pod-5.svg",
+      "description": "When a new Pod is assigned to its Node, the kubelet retrieves the details."
+    },
+    {
+      "image": "assets/creating-a-pod-6.svg",
+      "description": "The kubelet doesn't create the Pod itself. It relies on three components: the Container Runtime Interface, Container Network Interface and Constainer Storage Interface."
+    },
+    {
+      "image": "assets/creating-a-pod-7.svg",
+      "description": "Once all three components have successfully completed, the Pod is _Running_ in your Node and has an IP address assigned."
+    },
+    {
+      "image": "assets/creating-a-pod-8.svg",
+      "description": "The kubelet reports the IP address back to the control plane."
+    }
+  ]
+}
+```
 
 If the Pod isn't part of any Service, this is the end of the journey.
 
@@ -131,7 +173,7 @@ spec:
     name: app
 ```
 
-When you submit the Service to the cluster with `kubectl apply`, Kubernetes finds all the Pods that have the same label as the selector (`name: app`) and collects their IP addresses.
+When you submit the Service to the cluster with `kubectl apply`, Kubernetes finds all the Pods that have the same label as the selector (`name: app`) and collects their IP addresses — but only if they passed the [Readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-tcp-liveness-probe).
 
 Then, for each IP address, it concatenates the IP address and the port.
 
@@ -168,7 +210,7 @@ endpoints/my-service-2   192.168.99.100:8443
 
 The Endpoint collects all the IP addresses and ports from the Pods.
 
-But not just one time.
+_But not just one time._
 
 The Endpoint object is refreshed with a new list of endpoints when:
 
@@ -191,6 +233,46 @@ endpoints/my-service-2   192.168.99.100:8443
 
 Great, the endpoint is stored in the control plane, and the Endpoint object was updated.
 
+```slideshow
+{
+  "description": "Updating endpoints",
+  "slides": [
+    {
+      "image": "assets/updating-endpoints-1.svg",
+      "description": "In this picture, there's a single Pod deployed in your cluster. The Pod belongs to a Service. If you were to inspect etcd, you will find the Pod's details as well as Service."
+    },
+    {
+      "image": "assets/updating-endpoints-2.svg",
+      "description": "_What happens when a new Pod is deployed?_"
+    },
+    {
+      "image": "assets/updating-endpoints-3.svg",
+      "description": "Kubernetes has to keep track of the Pod and its IP address. The Service should route traffic to the new endpoint, so the IP address and port should be propagated."
+    },
+    {
+      "image": "assets/updating-endpoints-4.svg",
+      "description": "What happens when _another_ Pod is deployed?"
+    },
+    {
+      "image": "assets/updating-endpoints-5.svg",
+      "description": "The exact same process. A new \"row\" for the Pod is created in the database and the endpoint is propagated."
+    },
+    {
+      "image": "assets/updating-endpoints-6.svg",
+      "description": "_What happens when a Pod is deleted, though?_"
+    },
+    {
+      "image": "assets/updating-endpoints-7.svg",
+      "description": "The Service immediately removes the endpoint, and, eventually, the Pod is removed from the database too."
+    },
+    {
+      "image": "assets/updating-endpoints-8.svg",
+      "description": "Kubernetes reacts to every small change in your cluster."
+    }
+  ]
+}
+```
+
 _Are you ready to start using your Pod?_
 
 **There's more.**
@@ -204,6 +286,38 @@ A lot more!
 Kube-proxy uses the endpoints to set up iptables rules on the Nodes.
 
 So every time there is a change to an Endpoint (the object), kube-proxy retrieves the new list of IP addresses and ports and write the new iptables rules.
+
+```slideshow
+{
+  "description": "Kube-proxy and endpoints propagation",
+  "slides": [
+    {
+      "image": "assets/kube-proxy-1.svg",
+      "description": "Let's consider this three node cluster with two Pods and no Services. The state of the Pods is stored in etcd."
+    },
+    {
+      "image": "assets/kube-proxy-2.svg",
+      "description": "_What happens when you create a Service?_"
+    },
+    {
+      "image": "assets/kube-proxy-3.svg",
+      "description": "Kubernetes created an Endpoint object and collects all the endpoints (IP address and port pairs) from the Pods."
+    },
+    {
+      "image": "assets/kube-proxy-4.svg",
+      "description": "Kube-proxy daemon is subscribed to changes to Endpoints."
+    },
+    {
+      "image": "assets/kube-proxy-5.svg",
+      "description": "When an Endpoint is added, removed or updated, kube-proxy retrieves the new list of endpoints."
+    },
+    {
+      "image": "assets/kube-proxy-6.svg",
+      "description": "Kube-proxy uses the endpoints to creating iptables rules on each Node of your cluster."
+    }
+  ]
+}
+```
 
 The Ingress controller uses the same list of endpoints.
 
@@ -233,6 +347,50 @@ Instead, the Ingress controller sets up a subscription to be notified every time
 **The Ingress routes the traffic directly to the Pods skipping the Service.**
 
 As you can imagine, every time there is a change to an Endpoint (the object), the Ingress retrieves the new list of IP addresses and ports and reconfigures the controller to include the new Pods.
+
+```slideshow
+{
+  "description": "The Ingress controller and endpoints propagation",
+  "slides": [
+    {
+      "image": "assets/ingress-1.svg",
+      "description": "In this picture there's an Ingress controller with a Deployment with two replicas and a Service."
+    },
+    {
+      "image": "assets/ingress-2.svg",
+      "description": "If you want to route external traffic to the Pods through the Ingress, you should create an Ingress manifest (a YAML file)."
+    },
+    {
+      "image": "assets/ingress-3.svg",
+      "description": "As soon as you `kubectl apply -f ingress.yaml`, the Ingress controller retrieves the file from the control plane."
+    },
+    {
+      "image": "assets/ingress-4.svg",
+      "description": "The Ingress YAML has a `serviceName` property that describe which Service it should use."
+    },
+    {
+      "image": "assets/ingress-5.svg",
+      "description": "The Ingress controller retrieve the list of endpoints from the Service and skips it. The traffic flows directly to the endpoints (Pods)."
+    },
+    {
+      "image": "assets/ingress-6.svg",
+      "description": "_What happens when a new Pod is created?_"
+    },
+    {
+      "image": "assets/ingress-7.svg",
+      "description": "You know already how Kubernetes created the Pod and propagates the endpoint."
+    },
+    {
+      "image": "assets/ingress-8.svg",
+      "description": "The Ingress controller is subscribing to changes to the endpoints. Since there's an incoming change, it retrieve the new list of endpoints."
+    },
+    {
+      "image": "assets/ingress-9.svg",
+      "description": "The Ingress controller routes the traffic to the new Pod."
+    }
+  ]
+}
+```
 
 There are more examples of Kubernetes components that subscribe to changes to endpoints.
 
@@ -291,6 +449,34 @@ Since the components might be busy doing something else, **there is no guarantee
 
 For some, it could take less than a second; for others, it could take more.
 
+```slideshow
+{
+  "description": "Removing endpoints",
+  "slides": [
+    {
+      "image": "assets/removing-endpoint-1.svg",
+      "description": "If you're deleting a Pod with `kubectl delete pod`, the command reaches the Kubernetes API first."
+    },
+    {
+      "image": "assets/removing-endpoint-2.svg",
+      "description": "The message is intercepted by a specific controller in the control plane: the Endpoint controller."
+    },
+    {
+      "image": "assets/removing-endpoint-3.svg",
+      "description": "The Endpoint controller issue a command to the API to remove the IP address and port from the Endpoint object."
+    },
+    {
+      "image": "assets/removing-endpoint-4.svg",
+      "description": "_Who listens for Endpoint changes?_ Kube-proxy, the Ingress controller, CoreDNS, etc. are notified of the change."
+    },
+    {
+      "image": "assets/removing-endpoint-5.svg",
+      "description": "A few components such as kube-proxy might need some extra time to further propagate the changes."
+    }
+  ]
+}
+```
+
 At the same time, the status of the Pod in etcd is changed to _Terminating_.
 
 The kubelet is notified of the change and delegates:
@@ -299,7 +485,27 @@ The kubelet is notified of the change and delegates:
 1. Detaching the container from the network and releasing the IP address to the Container Network Interface (CNI).
 1. Destroying the container to the Container Runtime Interface (CRI).
 
-In other words, Kubernetes follows precisely the same steps to delete a Pod but in reverse.
+In other words, Kubernetes follows precisely the same steps to create a Pod but in reverse.
+
+```slideshow
+{
+  "description": "Deleting a Pod",
+  "slides": [
+    {
+      "image": "assets/deleting-pod-1.svg",
+      "description": "If you're deleting a Pod with `kubectl delete pod`, the command reaches the Kubernetes API first."
+    },
+    {
+      "image": "assets/deleting-pod-2.svg",
+      "description": "When the kubelet polls the control plane for updates, it notices that the Pod was delete."
+    },
+    {
+      "image": "assets/deleting-pod-3.svg",
+      "description": "The kubelet delegates destroying the Pod to the Container Runtime Interface, Container Network Interface and Container Storage Interface."
+    }
+  ]
+}
+```
 
 However, there is a subtle but essential difference.
 
@@ -312,6 +518,26 @@ When you create a Pod for the first time, Kubernetes waits for the kubelet to re
 And this could cause quite a few race conditions.
 
 _What if the Pod is deleted before the endpoint is propagated?_
+
+```slideshow
+{
+  "description": "Race conditions",
+  "slides": [
+    {
+      "image": "assets/race-1.svg",
+      "description": "Deleting the endpoint and deleting the Pod happen at the same time."
+    },
+    {
+      "image": "assets/race-2.svg",
+      "description": "So you could end up deleting the endpoint before kube-proxy updates the iptables rules."
+    },
+    {
+      "image": "assets/race-3.svg",
+      "description": "Or you might luckier and the Pod is deleted only after the endpoints are fully propagated."
+    }
+  ]
+}
+```
 
 ## Graceful shutdown
 
@@ -397,6 +623,36 @@ _Is 15 seconds the right delay to use?_
 
 There's at least a noticeable downside on having a long delay before shutting down the Pod.
 
+Here's a recap of what options you have:
+
+```slideshow
+{
+  "description": "Grace period",
+  "slides": [
+    {
+      "image": "assets/graceful-1.svg",
+      "description": "You already know that, when a Pod is deleted, the kubelet is notified of the change."
+    },
+    {
+      "image": "assets/graceful-2.svg",
+      "description": "If the Pod has a `preStop` hook, it is invoked first."
+    },
+    {
+      "image": "assets/graceful-3.svg",
+      "description": "When the `preStop` completes, the kubelet sends the SIGTERM signal to the container. From that point, the container should close all long-lived connections and prepare to terminate."
+    },
+    {
+      "image": "assets/graceful-4.svg",
+      "description": "By default, the process has 30 seconds to exit and that includes the `preStop` hook. If the process isn't exited by then, the kubelet sends the SIGKILL signal and force killing the process."
+    },
+    {
+      "image": "assets/graceful-5.svg",
+      "description": "The kubelet notifies the control plane that the Pod was deleted successfully."
+    }
+  ]
+}
+```
+
 ## Grace periods and rolling updates
 
 Graceful shutdown applies to Pods being deleted.
@@ -405,7 +661,7 @@ _But what if you don't delete the Pods?_
 
 Even if you don't, Kubernetes deletes Pods all the times.
 
-In particular, Kubernetes creates and deletes Pods every time you deploy a new version of your application.
+In particular, Kubernetes creates and deletes Pods every time you deploy a newer version of your application.
 
 When you change the image in your Deployment, Kubernetes rolls out the change incrementally.
 
@@ -452,11 +708,11 @@ If you have 10 Pods and the Pod takes 2 seconds to be ready and 20 to shut down 
 1. The new Pod takes 2 seconds to be ready after that Kubernetes creates a new one.
 1. In the meantime, the Pod being terminated stays terminating for 20 seconds
 
-After 20 seconds, all new Pods are live (10 Pods, _Ready_ after 2 seconds) and all 10 the previous Pods are terminating (the first _Terminated_ Pod is about to exit the process).
+After 20 seconds, all new Pods are live (10 Pods, _Ready_ after 2 seconds) and all 10 the previous Pods are terminating (the first _Terminated_ Pod is about to exit).
 
-In total, you have double the amount of Pods for a short amount of time.
+In total, you have double the amount of Pods for a short amount of time (10 _Running_, 10 _Terminating_).
 
-The longer the graceful period compared to the readiness probe, the more Pods you will have Running (and Terminating) at the same time.
+The longer the graceful period compared to the Readiness probe, the more Pods you will have _Running_ (and _Terminating_) at the same time.
 
 _Is it bad?_
 
@@ -480,11 +736,13 @@ You could increase the `terminationGracePeriodSeconds` to a couple of hours.
 
 However, the endpoint of the Pod is unreachable at that point.
 
+![Unreachable Pod](assets/unreachable-1.svg)
+
 If you expose metrics to monitor your Pod, your instrumentation won't be able to reach your Pod.
 
 _Why?_
 
-Tools such as Prometheus rely on Endpoints to scrape Pods in your cluster.
+**Tools such as Prometheus rely on Endpoints to scrape Pods in your cluster.**
 
 However, as soon as you delete the Pod, the endpoint deletion is propagated in the cluster — even to Prometheus!
 
@@ -502,13 +760,13 @@ An example of such Pod autoscaler is [Osiris — a general-purpose, scale-to-zer
 
 The technique is sometimes referred to as Rainbow Deployments and is useful every time you have to keep the previous pod _Running_ for longer than the grace period.
 
-Another excellent example is WebSockets.
+_Another excellent example is WebSockets._
 
 If you are streaming real-time updates to your users, you might not want to terminate the WebSockets every time there is a release.
 
 If you are frequently releasing during the day, that could lead to several interruptions to real-time feeds.
 
-Creating a new Deployment for every release is less obvious but better choice.
+**Creating a new Deployment for every release is less obvious but better choice.**
 
 Existing users can continue streaming updates while the most recent Deployment serves the new users.
 
