@@ -4,11 +4,11 @@
 
 > You can [download this handy diagram as a PDF here](graceful-shutdown.pdf).
 
-In Kubernetes, creating and deleting Pods is one of the most common operations.
+In Kubernetes, creating and deleting Pods is one of the most common tasks.
 
 Pods are created when you execute a rolling update, scale deployments, for every new release, for every job and cron job, etc.
 
-But Pods are also deleted and recreated after evictions or after a failed Liveness probe.
+But Pods are also deleted and recreated after evictions — when you mark a node as unschedulable for example.
 
 _If the nature of those Pods is so ephemeral, what happens when a Pod is in the middle of responding to a request but it's told to shut down?_
 
@@ -42,9 +42,9 @@ kubectl apply -f pod.yaml
 
 As soon as you enter the command, kubectl submits the Pod definition to the Kubernetes API.
 
-This is where the journey begins.
+_This is where the journey begins._
 
-## Creating the Pod state
+## Saving the state of the cluster in the database
 
 The Pod definition is received and inspected by the API and subsequently stored in the database — etcd.
 
@@ -90,7 +90,7 @@ _So who is creating the Pod in your Nodes?_
 
 ## The kubelet — the Kubernetes agent
 
-**It's the kubelet's job to poll the master node for updates.**
+**It's the kubelet's job to poll the control plane for updates.**
 
 You can imagine the kubelet relentlessly asking to the master node: _"I look after the worker Node 1, is there any new Pod for me?"._
 
@@ -112,14 +112,14 @@ docker run -d <my-container-image>
 
 The Container Networking Interface (CNI) is a bit more interesting because it is in charge of:
 
-1. Generating a valid IP address for the Pod
-1. Connecting the container to the rest of the network
+1. Generating a valid IP address for the Pod.
+1. Connecting the container to the rest of the network.
 
-As you can imagine, there are several ways to connect the container to the network and generate a valid IP address (you could choose between IPv4 or IPv6 or maybe assign more than a single IP address).
+As you can imagine, there are several ways to connect the container to the network and assign a valid IP address (you could choose between IPv4 or IPv6 or maybe assign multiple IP addresses).
 
 As an example, [Docker creates virtual ethernet pairs and attaches it to a bridge](https://archive.shivam.dev/docker-networking-explained/), whereas [the AWS-CNI connects the Pods directly to the rest of the Virtual Private Cloud (VPC).](https://itnext.io/kubernetes-is-hard-why-eks-makes-it-easier-for-network-and-security-architects-ea6d8b2ca965)
 
-Regardless of the Container Network Interface, the Pod is connected to the rest of the network and has a valid IP address assigned.
+When the Container Network Interface finishes its job, the Pod is connected to the rest of the network and has a valid IP address assigned.
 
 _There's only one issue._
 
@@ -197,6 +197,7 @@ If the IP address is `10.0.0.3` and the `targetPort` is `3000`, Kubernetes conca
 
 ```
 IP address + port = endpoint
+---------------------------------
 10.0.0.3   + 3000 = 10.0.0.3:3000
 ```
 
@@ -394,7 +395,7 @@ As you can imagine, every time there is a change to an Endpoint (the object), th
     },
     {
       "image": "assets/ingress-7.svg",
-      "description": "You know already how Kubernetes created the Pod and propagated the endpoint."
+      "description": "You know already how Kubernetes creates the Pod and propagates the endpoint."
     },
     {
       "image": "assets/ingress-8.svg",
@@ -431,11 +432,12 @@ A quick recap on what happens when you create a Pod:
 1. The kubelet delegates attaching the container to the Container Network Interface (CNI).
 1. The kubelet delegates mounting volumes in the container to the Container Storage Interface (CSI).
 1. The Container Network Interface assigns an IP address.
-1. The kubelet reports the IP address to the control plane after a successful Readiness probe.
+1. The kubelet reports the IP address to the control plane.
 1. The IP address is stored in etcd.
 
 And if your Pod belongs to a Service:
 
+1. The kubelet waits for a successful Readiness probe.
 1. All relevant Endpoints (objects) are notified of the change.
 1. The Endpoints add a new endpoint (IP address + port pair) to their list.
 1. Kube-proxy is notified of the Endpoint change. Kube-proxy updates the iptables rules on every node.
@@ -451,7 +453,7 @@ The Pod is _Running_. It is time to discuss what happens when you delete it.
 
 ## Deleting a Pod
 
-You might have guessed it already when the Pod is deleted, you have to follow the same steps but in reverse.
+You might have guessed it already, but when the Pod is deleted, you have to follow the same steps but in reverse.
 
 First, the endpoint should be removed from the Endpoint (object).
 
@@ -461,7 +463,7 @@ That, in turn, fires off all the events to kube-proxy, Ingress controller, DNS, 
 
 Those components will update their internal state and stop routing traffic to the IP address.
 
-Since the components might be busy doing something else, **there is no guarantee on how long it will take for those components to remove the IP address from their internal state.**
+Since the components might be busy doing something else, **there is no guarantee on how long it will take to remove the IP address from their internal state.**
 
 For some, it could take less than a second; for others, it could take more.
 
@@ -525,7 +527,7 @@ In other words, Kubernetes follows precisely the same steps to create a Pod but 
 
 However, there is a subtle but essential difference.
 
-**When you terminate a Pod, the endpoint and the signal to the kubelet to terminate the Pod are issued at the same time.**
+**When you terminate a Pod, removing the endpoint and the signal to the kubelet are issued at the same time.**
 
 When you create a Pod for the first time, Kubernetes waits for the kubelet to report the IP address and then kicks off the endpoint propagation.
 
@@ -577,35 +579,34 @@ _So what can you do avoid this race conditions and make sure that the Pod is del
 
 **You should wait.**
 
-_How how?_
-
-When the Pod is about to be deleted, it receives a SIGTERM signal.
+**When the Pod is about to be deleted, it receives a SIGTERM signal.**
 
 Your application can capture that signal and start shutting down.
 
-Since you already know that it's unlikely that the endpoint deletion propagated to all components in Kubernetes, you could:
+Since it's unlikely that the endpoint is immediately deleted from all components in Kubernetes, you could:
 
-1. Still process incoming traffic, despite the SIGTERM.
-1. Close existing long-lived connections (perhaps a database connection or WebSockets).
 1. Wait a bit longer before exiting.
+1. Still process incoming traffic, despite the SIGTERM.
+1. Finally, close existing long-lived connections (perhaps a database connection or WebSockets).
+1. Close the process.
 
-_How long?_
+_How long should you wait?_
 
-By default, Kubernetes will send the SIGTERM signal and wait 30 seconds before force killing the process.
+**By default, Kubernetes will send the SIGTERM signal and wait 30 seconds before force killing the process.**
 
 So you could use the first 15 seconds to continue operating as nothing happened.
 
-Hopefully, this period should be enough to propagate the endpoint deletion to kube-proxy, Ingress controller, CoreDNS, etc.
+Hopefully, the interval should be enough to propagate the endpoint removal to kube-proxy, Ingress controller, CoreDNS, etc.
 
 And, as a consequence, less and less traffic will reach your Pod until it stops.
 
 After the 15 seconds, it's safe to close your connection with the database (or any persistent connections) and terminate the process.
 
-If you think you need more time, you can start the process at 20 or 25 seconds.
+If you think you need more time, you can stop the process at 20 or 25 seconds.
 
 However, you should remember that Kubernetes will forcefully kill the process after 30 seconds [(unless you change the `terminationGracePeriodSeconds` in your Pod definition).](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution)
 
-_What if your app exits immediately and you can change the code to wait longer?_
+_What if you can't change the code to wait longer?_
 
 You could invoke a script to wait for a fixed amount of time and then let the app exit.
 
@@ -635,9 +636,9 @@ spec:
 
 The `preStop` hook is one of the [Pod LifeCycle hooks](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/).
 
-_Is 15 seconds the right delay to use?_
+_Is a 15 seconds delay the recommended amount?_
 
-There's at least a noticeable downside on having a long delay before shutting down the Pod.
+It depends, but it could be a sensible way to start testing.
 
 Here's a recap of what options you have:
 
@@ -728,6 +729,8 @@ After 20 seconds, all new Pods are live (10 Pods, _Ready_ after 2 seconds) and a
 
 In total, you have double the amount of Pods for a short amount of time (10 _Running_, 10 _Terminating_).
 
+![Rolling update and graceful shutdown](assets/rolling-1.svg)
+
 The longer the graceful period compared to the Readiness probe, the more Pods you will have _Running_ (and _Terminating_) at the same time.
 
 _Is it bad?_
@@ -750,7 +753,7 @@ _How can you avoid delaying shutting down the Pod?_
 
 You could increase the `terminationGracePeriodSeconds` to a couple of hours.
 
-However, the endpoint of the Pod is unreachable at that point.
+**However, the endpoint of the Pod is unreachable at that point.**
 
 ![Unreachable Pod](assets/unreachable-1.svg)
 
@@ -762,7 +765,7 @@ _Why?_
 
 However, as soon as you delete the Pod, the endpoint deletion is propagated in the cluster — even to Prometheus!
 
-Instead of increasing the grace period, you should consider creating a new Deployment for every new release.
+**Instead of increasing the grace period, you should consider creating a new Deployment for every new release.**
 
 When you create a brand new Deployment, the existing Deployment is left untouched.
 
@@ -770,11 +773,11 @@ The long-running jobs can continue processing the video as usual.
 
 Once they are done, you can delete them manually.
 
-If you wish to delete them automatically, you might want to set up an autoscaler that can scale your deployment to zero replicas when they run out of work.
+If you wish to delete them automatically, you might want to set up an autoscaler that can scale your deployment to zero replicas when they run out of tasks.
 
 An example of such Pod autoscaler is [Osiris — a general-purpose, scale-to-zero component for Kubernetes.](https://github.com/deislabs/osiris)
 
-The technique is sometimes referred to as Rainbow Deployments and is useful every time you have to keep the previous pod _Running_ for longer than the grace period.
+The technique is sometimes referred to as **Rainbow Deployments** and is useful every time you have to keep the previous Pods _Running_ for longer than the grace period.
 
 _Another excellent example is WebSockets._
 
