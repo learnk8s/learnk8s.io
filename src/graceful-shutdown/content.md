@@ -1,4 +1,20 @@
-What happens when a Pod is deleted?
+**TL;DR:** _In this article, you will learn how to prevent broken connections when a Pod starts up or shuts down. You will also learn how to shut down long-running tasks gracefully._
+
+![Graceful shutdown and zero downtime deployments in Kubernetes](graceful-shutdown-infographic.png)
+
+> You can [download this handy diagram as a PDF here](graceful-shutdown.pdf).
+
+In Kubernetes, creating and deleting Pods is one of the most common operations.
+
+Pods are created when you execute a rolling update, scale deployments, for every new release, for every job and cron job, etc.
+
+But Pods are also deleted and recreated after evictions or after a failed Liveness probe.
+
+_If the nature of those Pods is so ephemeral, what happens when a Pod is in the middle of responding to a request but it's told to shut down?_
+
+_Is the request completed before shutdown?_
+
+_What about subsequent requests, are those redirected somewhere else?_
 
 Before discussing what happens when a Pod is deleted, it's necessary to talk to about what happens when a Pod is created.
 
@@ -131,7 +147,7 @@ You can imagine that inspecting etcd would reveal not just where the Pod is runn
     },
     {
       "image": "assets/creating-a-pod-6.svg",
-      "description": "The kubelet doesn't create the Pod itself. It relies on three components: the Container Runtime Interface, Container Network Interface and Constainer Storage Interface."
+      "description": "The kubelet doesn't create the Pod itself. It relies on three components: the Container Runtime Interface, Container Network Interface and Container Storage Interface."
     },
     {
       "image": "assets/creating-a-pod-7.svg",
@@ -239,7 +255,7 @@ Great, the endpoint is stored in the control plane, and the Endpoint object was 
   "slides": [
     {
       "image": "assets/updating-endpoints-1.svg",
-      "description": "In this picture, there's a single Pod deployed in your cluster. The Pod belongs to a Service. If you were to inspect etcd, you will find the Pod's details as well as Service."
+      "description": "In this picture, there's a single Pod deployed in your cluster. The Pod belongs to a Service. If you were to inspect etcd, you would find the Pod's details as well as Service."
     },
     {
       "image": "assets/updating-endpoints-2.svg",
@@ -255,7 +271,7 @@ Great, the endpoint is stored in the control plane, and the Endpoint object was 
     },
     {
       "image": "assets/updating-endpoints-5.svg",
-      "description": "The exact same process. A new \"row\" for the Pod is created in the database and the endpoint is propagated."
+      "description": "The exact same process. A new \"row\" for the Pod is created in the database, and the endpoint is propagated."
     },
     {
       "image": "assets/updating-endpoints-6.svg",
@@ -293,7 +309,7 @@ So every time there is a change to an Endpoint (the object), kube-proxy retrieve
   "slides": [
     {
       "image": "assets/kube-proxy-1.svg",
-      "description": "Let's consider this three node cluster with two Pods and no Services. The state of the Pods is stored in etcd."
+      "description": "Let's consider this three-node cluster with two Pods and no Services. The state of the Pods is stored in etcd."
     },
     {
       "image": "assets/kube-proxy-2.svg",
@@ -354,7 +370,7 @@ As you can imagine, every time there is a change to an Endpoint (the object), th
   "slides": [
     {
       "image": "assets/ingress-1.svg",
-      "description": "In this picture there's an Ingress controller with a Deployment with two replicas and a Service."
+      "description": "In this picture, there's an Ingress controller with a Deployment with two replicas and a Service."
     },
     {
       "image": "assets/ingress-2.svg",
@@ -366,11 +382,11 @@ As you can imagine, every time there is a change to an Endpoint (the object), th
     },
     {
       "image": "assets/ingress-4.svg",
-      "description": "The Ingress YAML has a `serviceName` property that describe which Service it should use."
+      "description": "The Ingress YAML has a `serviceName` property that describes which Service it should use."
     },
     {
       "image": "assets/ingress-5.svg",
-      "description": "The Ingress controller retrieve the list of endpoints from the Service and skips it. The traffic flows directly to the endpoints (Pods)."
+      "description": "The Ingress controller retrieves the list of endpoints from the Service and skips it. The traffic flows directly to the endpoints (Pods)."
     },
     {
       "image": "assets/ingress-6.svg",
@@ -378,11 +394,11 @@ As you can imagine, every time there is a change to an Endpoint (the object), th
     },
     {
       "image": "assets/ingress-7.svg",
-      "description": "You know already how Kubernetes created the Pod and propagates the endpoint."
+      "description": "You know already how Kubernetes created the Pod and propagated the endpoint."
     },
     {
       "image": "assets/ingress-8.svg",
-      "description": "The Ingress controller is subscribing to changes to the endpoints. Since there's an incoming change, it retrieve the new list of endpoints."
+      "description": "The Ingress controller is subscribing to changes to the endpoints. Since there's an incoming change, it retrieves the new list of endpoints."
     },
     {
       "image": "assets/ingress-9.svg",
@@ -471,7 +487,7 @@ For some, it could take less than a second; for others, it could take more.
     },
     {
       "image": "assets/removing-endpoint-5.svg",
-      "description": "A few components such as kube-proxy might need some extra time to further propagate the changes."
+      "description": "A few components such as kube-proxy might need some extra time to propagate the changes further."
     }
   ]
 }
@@ -497,7 +513,7 @@ In other words, Kubernetes follows precisely the same steps to create a Pod but 
     },
     {
       "image": "assets/deleting-pod-2.svg",
-      "description": "When the kubelet polls the control plane for updates, it notices that the Pod was delete."
+      "description": "When the kubelet polls the control plane for updates, it notices that the Pod was deleted."
     },
     {
       "image": "assets/deleting-pod-3.svg",
@@ -533,7 +549,7 @@ _What if the Pod is deleted before the endpoint is propagated?_
     },
     {
       "image": "assets/race-3.svg",
-      "description": "Or you might luckier and the Pod is deleted only after the endpoints are fully propagated."
+      "description": "Or you might luckier, and the Pod is deleted only after the endpoints are fully propagated."
     }
   ]
 }
@@ -643,7 +659,7 @@ Here's a recap of what options you have:
     },
     {
       "image": "assets/graceful-4.svg",
-      "description": "By default, the process has 30 seconds to exit and that includes the `preStop` hook. If the process isn't exited by then, the kubelet sends the SIGKILL signal and force killing the process."
+      "description": "By default, the process has 30 seconds to exit, and that includes the `preStop` hook. If the process isn't exited by then, the kubelet sends the SIGKILL signal and force killing the process."
     },
     {
       "image": "assets/graceful-5.svg",
@@ -766,7 +782,7 @@ If you are streaming real-time updates to your users, you might not want to term
 
 If you are frequently releasing during the day, that could lead to several interruptions to real-time feeds.
 
-**Creating a new Deployment for every release is less obvious but better choice.**
+**Creating a new Deployment for every release is a less obvious but better choice.**
 
 Existing users can continue streaming updates while the most recent Deployment serves the new users.
 
@@ -774,10 +790,16 @@ As a user disconnects from old Pods, you can gradually decrease the replicas and
 
 ## Summary
 
-It's important to pay attention to how Pods are deleted from your cluster since their address might be still used to route traffic.
+You should pay attention to Pods being deleted from your cluster since their IP address might be still used to route traffic.
 
-Instead of immediately shutting down your Pods, you should consider waiting a little bit longer in your application or set up a `preStop` hook in your containers.
+Instead of immediately shutting down your Pods, you should consider waiting a little bit longer in your application or set up a `preStop` hook.
+
+The Pod should be removed only after all the endpoints in the cluster are propagated and removed from kube-proxy, Ingress controllers, CoreDNS, etc.
 
 If your Pods run long-lived tasks such as transcoding videos or serving real-time updates with WebSockets, you should consider using rainbow deployments.
 
 In rainbow deployments, you create a new Deployment for every release and delete the previous one when the connection (or the tasks) drained.
+
+You can manually remove the older deployments as soon as the long-running task is completed.
+
+Or you could automatically scale your deployment to zero replicas to automate the process.

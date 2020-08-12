@@ -6,8 +6,8 @@ import { toVFile } from '../files'
 export const GracefulShutdown = {
   id: 'graceful-shutdown',
   url: '/graceful-shutdown',
-  title: 'Graceful shutdown',
-  description: `..................................................................................................`,
+  title: 'Graceful shutdown and zero downtime deployments in Kubernetes',
+  description: `In this article, you will learn how to prevent broken connections when a Pod starts up or shuts down. You will also learn how to shut down long-running tasks gracefully.`,
 }
 
 export function Register(store: Store) {
@@ -28,7 +28,7 @@ export function Register(store: Store) {
       authorId: Authors.danielePolencic.id,
       description: GracefulShutdown.description,
       title: GracefulShutdown.title,
-      publishedDate: '2020-08-11',
+      publishedDate: '2020-08-12',
 
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
