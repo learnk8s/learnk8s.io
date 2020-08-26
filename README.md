@@ -2,6 +2,8 @@
 
 ## How to create a new article
 
+hello git
+
 1. Make a copy of an existing article:
     ```bash
     cp -r src/existing-article src/new-article
