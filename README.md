@@ -2,7 +2,7 @@
 
 ## How to create a new article
 
-hello git
+hello git - test-mg branch
 
 1. Make a copy of an existing article:
     ```bash
