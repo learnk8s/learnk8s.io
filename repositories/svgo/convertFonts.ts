@@ -128,6 +128,9 @@ const FONT_ASSETS = {
   'Inter-Regular_Light': {
     default: 'fonts/Inter-Light-slnt=0.ttf',
   },
+  'Inter-Light': {
+    default: 'fonts/Inter-Light-slnt=0.ttf',
+  },
   'Inter-Regular': {
     default: 'fonts/Inter-Regular-slnt=0.ttf',
   },

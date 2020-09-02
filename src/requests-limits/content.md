@@ -20,7 +20,7 @@ Notice how your application has 256MB of memory guaranteed, but it can grow up u
 
 After that it is stopped or throttled by Kubernetes.
 
-Insert nice diagram here. Y axis is memory, a bar, first line on request, second on limit. Highlight the gap
+![Requests and limits constraints](assets/requests-vs-limits.svg)
 
 Setting limits is useful to stop over committing resources and protect other deployments from resource starvation.
 
@@ -38,10 +38,13 @@ The app hasn't started yet, the scheduler can't really inspect memory and CPU us
 
 This is where requests come in. The scheduler reads the requests for each container in your Pods, aggregates them and finds the best node that can fit that Pod.
 
-Some applications might use more memory than CPU. Others the opposite.
+Some applications might use more memory than CPU.
+
+Others the opposite.
+
 It doesn't matter, Kubernetes checks the requests and finds the best Node for that Pod.
 
-insert diagram: Y axes memory, X axes CPU, and block size
+![Processes use memory and CPU](assets/sizing-processes.svg)
 
 You could visualise Kubernetes scheduler as a skilled Tetris player.
 
@@ -49,7 +52,13 @@ For each block, Kubernetes finds the best Node to optimise your resource utilisa
 
 CPU and memory requests define the minimum length and width of each block, and based on the size kubernetes finds the best Tetris board to fit the block.
 
-Insert animation with Kubernetes scheduler playing tetris
+```animation
+{
+  "description": "Kubernetes is the best tetris player",
+  "animation": "assets/tetris.svg",
+  "fallback": "assets/tetris.svg"
+}
+```
 
 _Without length and width the block becomes a dot, and how does one play tetris with dots (sizeless blocks)?_
 
@@ -59,11 +68,9 @@ And if your Tetris board is a real server, you might end up over committing reso
 
 Let's play Tetris with Kubernetes with an example.
 
-> You can follow the rest of the tutorial by launching a local cluster with [minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/).
-
 You can create an interactive busybox pod with CPU and memory requests using the following command:
 
-```terminal|command=4|title=bash
+```terminal|command=1-4|title=bash
 kubectl run -i --tty --rm busybox \
   --image=busybox \
   --restart=Never \
@@ -78,13 +85,13 @@ Imagine you have a computer with a single CPU and wish to run three containers i
 
 You might want to assign a third of CPU each — or 33.33%.
 
-In Kubernetes, the CPU is not assigned in percentages, but in thousands (also called millicores or millicpu).
+**In Kubernetes, the CPU is not assigned in percentages, but in thousands (also called millicores or millicpu).**
 
 One CPU is equal to 1000 millicores.
 
 If you wish to assign a third of a CPU, you should assign 333Mi (millicores) to your container.
 
-Memory is a bit more straightforward and it is measured in bytes.
+**Memory is a bit more straightforward and it is measured in bytes.**
 
 Kubernetes accepts both SI notation (K,M,G,T,P,E) and Binary notation (Ki,Mi,Gi,Ti,Pi,Ei) for memory definition.
 
@@ -96,17 +103,38 @@ Now that you have created the Pod with resource requests let's explore the memor
 
 ## Exploring memory and CPU requests
 
-Not all clusters come with metrics collection enabled by default.
+Defining memory and requests for CPU and memory doesn't mean that the container has to use the allocated resource.
 
-In minikube you can install the metrics server with:
+In the previous example you launched a idle busybox container.
+
+It's currently using close to zero memory and CPU.
+
+_But how do you know for sure?_
+
+_Is there a component in Kubernetes that measures the actual CPU and memory?_
+
+Kubernetes has several components designed to collect metrics, but two are important for Pods:
+
+1. The [kubelet collects metrics](https://rancher.com/blog/2019/native-kubernetes-monitoring-tools-part-1#cadvisor) from your Pods.
+1. The [metric server](https://github.com/kubernetes-sigs/metrics-server) collects and aggregates metrics from all kubelets.
+
+If you want to know the memory and CPU usage for your pod, you should use the metric server.
+
+However, not all clusters come with metrics server enabled by default.
+
+For example, EKS (the managed Kubernetes offering from Amazon Web Services) does not come with a metrics server installed by default.
+
+If you're testing locally, you will be pleased to know that you can enable the metrics-server in minikube with:
 
 ```terminal|command=1|title=bash
 minikube addons enable metrics-server
 ```
 
-You will use the same busybox Pod that you launched earlier.
+Back to the busybox pod.
 
-However, since the busybox container isn't executing any tasks, its memory and CPU consumption is close to zero.
+_How can you check the actual CPU and memory usage with the metrics server installed?_
+
+Since the busybox container isn't idle, let's artificially generate a few metrics to observe.
 
 Let's increase fill the memory with:
 
@@ -114,13 +142,13 @@ Let's increase fill the memory with:
 dd if=/dev/zero of=/dev/shm/fill bs=1k count=1024k
 ```
 
-And let's increase the cpu usage with a loop:
+And let's increase the CPU usage with a loop:
 
 ```terminal|command=1|title=bash
-$ while true; do true; done
+while true; do true; done
 ```
 
-In another terminal run the following command to inspect the resources used by the pod
+In another terminal run the following command to inspect the resources used by the pod:
 
 ```terminal|command=1|title=bash
 kubectl top pods
@@ -138,29 +166,31 @@ _Why is the container consuming about 400 millicores?_
 
 _Why not a full CPU?_
 
-When you define a CPU request in Kubernetes, that doesn't only define the minimum amount of CPU but also defines a share of CPU for that containerprocess.
+It should be using all available CPU since it's a while-loop without end.
 
-All containersprocesses share the same CPU, but they are nice to each other and they split the times based on their quotas.
+When you define a CPU request in Kubernetes, that doesn't only define the minimum amount of CPU but also defines a share of CPU for that container.
 
-Imagine having three containers that have a CPU request set to 60 millicores, 20 millicores and 20millicores.
+All containers share the same CPU, but they are nice to each other and they split the times based on their quotas.
 
-_The total request is only 100 millicores, but what happens when all three processes start using as much CPU as possible?_
+Imagine having three containers that have a CPU request set to 60 millicores, 20 millicores and 20 millicores.
 
-If you have a single CPU, the processes will grow to 600 millicores, 200 millicores and 200 millicores.
+_The total request is only 100 millicores, but what happens when all three processes start using as much CPU as possible (i.e. 100%)?_
+
+If you have a single CPU, the processes will grow to 600 millicores, 200 millicores and 200 millicores (i.e. 60%, 20%, 20%).
 
 All of them increased by a factor of 10x until they used all the available CPU.
 
-If you have 2 CPUs (or 2000 millicores), they will use 1200 millicores, 400 millicores and 400 millicores.
+If you have 2 CPUs (or 2000 millicores), they will use 1200 millicores, 400 millicores and 400 millicores (i.e. 60%, 20%, 20%).
 
-They keep the same quotas allocated.
+**They keep the same quotas allocated.**
 
 In the previous example, the Pod is consuming 400 millicores because it has to compete for CPU time with the rest of the processes in the cluster such as the Kubelet, the API server, etc, the controller manager, etc.
 
-Let's have a look at an example using docker to better understand cpu shares.
+Let's have a look at another example to better understand CPU shares.
 
 ## CPU shares
 
-I am running this example in a system with 2 vCPU.
+Please notice that the following example is executed in a system with 2 vCPU.
 
 To see the number of cores in your system use:
 
@@ -171,10 +201,12 @@ docker info | grep CPUs
 Now lets run a container that consumes all available CPU and assign it a CPU share of 1024.
 
 ```terminal|command=3|title=bash
-docker run -d --name stresser-1024 \
+docker run -d --rm --name stresser-1024 \
   --cpu-shares 1024 \
-  containerstack/cpustress
+  containerstack/cpustress --cpu 2
 ```
+
+The [containerstack/cpustress container](https://github.com/containerstack/docker-cpustress) is designed to consume all available CPU, but you need to tell it how many CPU are currently available (in this case is only 2 `--cpu 2`).
 
 The command uses a few flags:
 
@@ -185,9 +217,11 @@ You can run `docker stats` to see the resource utilised by the container:
 
 ```terminal|command=1|title=bash
 docker stats
+CONTAINER ID        NAME                CPU %               MEM USAGE / LIMIT     MEM %
+446bde82ad8a        stresser-1024       198.01%             4.562MiB / 3.848GiB   0.12%
 ```
 
-The cpu percentage of the container is 198%.
+The container is using 198% of the available CPU — all of it considering that you have only 2 cores available.
 
 _But how can the CPU usage be more than 100%?_
 
@@ -198,9 +232,9 @@ If you are running the same example in a 6 vCPU machine it might be around 590%.
 Let's create another container with cpu share of 2048.
 
 ```terminal|command=1|title=bash
-docker run -d --name stresser-2048 \
+docker run -d --rm --name stresser-2048 \
   --cpu-shares 2048 \
-  containerstack/cpustress
+  containerstack/cpustress --cpu 2
 ```
 
 _Is there enough CPU to run a second container?_
@@ -209,33 +243,48 @@ You should inspect the container and check.
 
 ```terminal|command=1|title=bash
 docker stats
+CONTAINER ID        NAME                CPU %               MEM USAGE / LIMIT     MEM %
+270ac57e5cbf        stresser-2048       133.27%             4.605MiB / 3.848GiB   0.12%
+446bde82ad8a        stresser-1024        66.66%             4.562MiB / 3.848GiB   0.12%
 ```
 
-The `docker stats` commands shows that the stresser-2048 container uses 133% of cpu and the stresser-1024 container uses 66%:
+The `docker stats` commands shows that the stresser-2048 container uses 133% of cpu and the stresser-1024 container uses 66%.
 
-When two containers are running in a 2 vCPU node with cpu shares of 2048 and 1024, the stresser-2048 container gets twice the share of cpu.
+When two containers are running in a 2 vCPU node with cpu shares of 2048 and 1024, the stresser-2048 container gets twice the share of the available CPU.
 
-The two containers are assigned 133.3% and 66.66% share of the available cpu resource respectively.
+The two containers are assigned 133.27% and 66.66% share of the available cpu resource respectively.
 
-In other words, processes are assigned CPU quotas and when they compete for CPU time, they compare their quotas and increase their usage accordingly.
+In other words, **processes are assigned CPU quotas and when they compete for CPU time**, they compare their quotas and increase their usage accordingly.
 
-Can you guess what happens when you launch a third container that is as CPU hungry as the first two combined?
+_Can you guess what happens when you launch a third container that is as CPU hungry as the first two combined?_
 
 ```terminal|command=1|title=bash
-docker run -d --name stresser-3072 --cpu-shares 3072 containerstack/cpustress
+docker run -d --name stresser-3072 \
+  --cpu-shares 3072 \
+  containerstack/cpustress --cpu 2
 ```
 
-The third container is using close to a 100% CPU, whereas the other two jabe ~66% and ~33%.
+Let's have a look at the metrics:
+
+```terminal|command=1|title=bash
+docker stats
+CONTAINER ID        NAME                CPU %               MEM USAGE / LIMIT     MEM %
+270ac57e5cbf        stresser-3072       101.17%             4.605MiB / 3.848GiB   0.12%
+446bde82ad8a        stresser-2048        66.31%             4.562MiB / 3.848GiB   0.12%
+e5cbfs82270a        stresser-1024        32.98%             4.602MiB / 3.848GiB   0.12%
+```
+
+The third container is using close to a 100% CPU, whereas the other two use ~66% and ~33%.
 
 Since all containers want to use all available CPU, they will divide the 2 CPU cores available according to their quotas ratio (3, 2, and 1).
 
-So the total ratio are 6 (3 + 2 + 1) and with 2 CPU each share equals to 33.33% (200 / 6).
+So the total ratio are 6 (3 + 2 + 1) and with 2 CPU each share equals to 33.33% (200 divided by 6).
 
 So the CPU time is shared as follows:
 
 - 1 share (or 33.33%) to first container.
-- 3 shares (or 33.33% * 2, 66.66%) to second container.
-- 3 shares (or 33.33% * 3, ~100%) to third container.
+- 2 shares (or 33.33% * 2 shares, 66.66%) to second container.
+- 3 shares (or 33.33% * 3 shares, ~100%) to third container.
 
 Now that you're familiar with CPU and memory requests, let's have a look at limits.
 
@@ -243,11 +292,11 @@ Now that you're familiar with CPU and memory requests, let's have a look at limi
 
 Limits define the hard limit for the container and make sure the pod doesn't consume all resources in the Node.
 
-Let's imagine you have an application with a limit of 250Mi of memory.
+_Let's imagine you have an application with a limit of 250Mi of memory._
 
 When the application uses more than the limit, Kubernetes kills the process with a OOMKilling (Out of Memory Killing) message.
 
-In other words, the process doesn't have an upper memory limit and it could cross the threshold of 250Mi.
+In other words, **the process doesn't have an upper memory limit and it could cross the threshold of 250Mi.**
 
 However, as soon as that happens, the process is killed.
 
@@ -257,13 +306,13 @@ _Is the Pod killed when it's using more CPU than the limit?_
 
 No, it's not.
 
-In reality, CPU is measured as a function of time.
+In reality, **CPU is measured as a function of time.**
 
 When you say 1 CPU limit, what you really mean is that the app runs up to 1 CPU second, every second.
 
 If your application has a single thread, you will consume at most 1 CPU second every second.
 
-However, if your application uses two threads it is twice as fast and you can complete the work in half of the time.
+**However, if your application uses two threads it is twice as fast and you can complete the work in half of the time.**
 
 Also the CPU quota is used in half of the time.
 
@@ -275,45 +324,80 @@ _What happens for the remaining 0.875 seconds?_
 
 Your process has to wait for the next CPU slot available and the cpu is throttled.
 
-Insert a diagram recap with slots
+```slideshow
+{
+  "description": "CPU limits",
+  "slides": [
+    {
+      "image": "assets/cpu-limits-1.svg",
+      "description": "In the following scenario there are three processes with 1, 2 and 8 threads."
+    },
+    {
+      "image": "assets/cpu-limits-2.svg",
+      "description": "The single thread process consume 1 CPU second every second."
+    },
+    {
+      "image": "assets/cpu-limits-3.svg",
+      "description": "The process with two threads consumes the same quota of 1 CPU second in half of the time."
+    },
+    {
+      "image": "assets/cpu-limits-4.svg",
+      "description": "The process with eight threads consumes the available quota in 1/8 of the time."
+    },
+    {
+      "image": "assets/cpu-limits-5.svg",
+      "description": "In the next second, the quota is allocated and the processes can consume the new allocation."
+    },
+    {
+      "image": "assets/cpu-limits-6.svg",
+      "description": "Notice how the last process is frequently throttled as it consumes its allocation too quickly."
+    }
+  ]
+}
+```
 
-Limits don't affect the cpu shares Let's revisit the docker example discussed earlier to understand how limits differ from requests.
+Let's revisit the docker example discussed earlier to understand how limits differ from requests.
 
 Now lets run the same cpustress image with half a CPU.
 
 You can set a CPU limit with the `--cpus` flag.
 
 ```terminal|command=1|title=bash
-docker run -it -d --name stresser-.5 \
+docker run --rm -d --name stresser-.5 \
   --cpus .5 \
-  containerstack/cpustress
+  containerstack/cpustress --cpu 2
 ```
 
-Run docker stats to inspect the cpu usage with:
+Run `docker stats` to inspect the CPU usage with:
 
 ```terminal|command=1|title=bash
 docker stats
+CONTAINER ID        NAME                CPU %               MEM USAGE / LIMIT     MEM %
+c445bbdb46aa        stresser-.5         49.33%              4.672MiB / 3.848GiB   0.12%
 ```
 
 Let's repeat the experiment with a full CPU
 
 ```terminal|command=1|title=bash
-docker run -d --name stresser-1 \
+docker run --rm -d --name stresser-1 \
   --cpus 1 \
-  containerstack/cpustress
+  containerstack/cpustress --cpu 2
 ```
 
 Run docker stats to inspect the cpu usage with:
 
 ```terminal|command=1|title=bash
 docker stats
+CONTAINER ID        NAME                CPU %               MEM USAGE / LIMIT     MEM %
+9c64c2d99be6        stresser-1          105.34%             4.648MiB / 3.848GiB   0.12%
+c445bbdb46aa        stresser-.5         51.25%              4.609MiB / 3.848GiB   0.12%
 ```
 
 Unlike CPU requests, the limits of one container do not affect the CPU usage of other containers.
 
-That's exactly what happens in Kubernetes as well.
+_That's exactly what happens in Kubernetes as well._
 
-Please notice that setting limits doesn't make the container see only the defined amount of memory or CPU.
+**Please notice that setting limits doesn't make the container see only the defined amount of memory or CPU.**
 
 The container can see the complete resource of the node to which it is scheduled.
 
@@ -333,7 +417,7 @@ You will use a simple cache service which has two endpoints, one to cache the da
 
 The service is written in python using the Flask framework.
 
-You can find [the complete code for this application here.](https://github.com/yolossn/flask-cache)
+> You can find [the complete code for this application here.](https://github.com/yolossn/flask-cache)
 
 Before you start, make sure that your cluster has the metrics server installed.
 
@@ -345,7 +429,7 @@ minikube addons enable metrics-server
 
 You might also need an Ingress controller to route the traffic to the app.
 
-In minikube, you can enable the nginx-ingress controller with:
+In minikube, you can enable the [ingress-nginx controller](https://github.com/kubernetes/ingress-nginx) with:
 
 ```terminal|command=1|title=bash
 minikube addons enable ingress
@@ -355,6 +439,17 @@ You can verify that the ingress and metrics servers are installed correctly with
 
 ```terminal|command=1|title=bash
 kubectl get pods --all-namespaces
+NAMESPACE     NAME                                        READY   STATUS
+kube-system   coredns-66bff467f8-nclrr                    1/1     Running
+kube-system   etcd-minikube                               1/1     Running
+kube-system   ingress-nginx-admission-create-tcqvg        0/1     Completed
+kube-system   ingress-nginx-admission-patch-rsltn         0/1     Completed
+kube-system   ingress-nginx-controller-69ccf5d9d8-n6lqp   1/1     Running
+kube-system   kube-apiserver-minikube                     1/1     Running
+kube-system   kube-controller-manager-minikube            1/1     Running
+kube-system   kube-proxy-cvkcg                            1/1     Running
+kube-system   kube-scheduler-minikube                     1/1     Running
+kube-system   metrics-server-7bc6d75975-54twv             1/1     Running
 ```
 
 It's time to deploy the application.
@@ -428,9 +523,9 @@ NAME                           CPU(cores)   MEMORY(bytes)
 flask-cache-85b94f6865-tvbg8   6m           150Mi
 ```
 
-Please notice that the container in the Pod does not define requests or limits for CPU or memory.
+Please notice that the container in the Pod does not define requests or limits for CPU or memory at the moment.
 
-You can finally access the cluster by visiting its IP address:
+You can finally access the app by visiting the cluster IP address:
 
 ```terminal|command=1|title=bash
 minikube ip
@@ -442,15 +537,15 @@ Now that you have the application running, it's time to find the right value for
 
 But before you dive into the tooling needed, let's lay down the plan.
 
-Request and limits depends on how much memory and CPU the application uses.
+**Request and limits depends on how much memory and CPU the application uses.**
 
 Those values are also affected by how the application is used.
 
 An application that serves static pages, might have a memory and CPU mostly static.
 
-However, an application that stores documents in the database might behave differently as more traffic is received.
+However, an application that stores documents in the database might behave differently as more traffic is ingested.
 
-So the best way to decide requests and limits for an application is to observe its standard behaviour.
+**The best way to decide requests and limits for an application is to observe its standard behaviour at runtime.**
 
 So you will need:
 
@@ -461,9 +556,11 @@ Let's start with generating the traffic.
 
 ## Generating traffic with locust
 
-There are many tools available to load testing apps such as ab, k6, BlazeMeter etc.
+There are many tools available to load testing apps such as [ab](https://httpd.apache.org/docs/2.4/programs/ab.html), [k6](https://github.com/loadimpact/k6), [BlazeMeter](https://www.blazemeter.com/) etc.
 
-In this tutorial you will use locust — an open source load testing tool.
+In this tutorial you will use [locust — an open source load testing tool.](https://github.com/locustio/locust)
+
+![locust — an open source load testing tool](assets/locust-graphs.svg)
 
 Locust includes a convenient dashboard where you can inspect the load traffic generated as well as see the performance of your app in real time.
 
@@ -514,7 +611,9 @@ The container binds on port 8089 on your computer.
 
 You can open your browser on <http://localhost:8089> to access the web interface.
 
-It's time to start the first test!
+![The locust web interface](assets/locust.svg)
+
+_It's time to start the first test!_
 
 You should simulate 1000 users with a hatch rate of 10.
 
@@ -530,8 +629,6 @@ The host field should be `http://<minikube ip>`.
 
 Click on start and switch over to the graph section.
 
-Insert GIF
-
 The real-time graph shows the requests per second received by the app, as well as requests per second, failure rate, response codes, etc.
 
 Excellent, now that you have a mechanism to generate load, it's time to peek at the application.
@@ -540,10 +637,11 @@ Let's have a look at the CPU and memory consumption:
 
 ```terminal|command=1|title=bash
 kubectl top pods
-<output here>
+NAME                                     CPU(cores)   MEMORY(bytes)
+flask-cache-79bb7c7d79-lpqm5             461m         182Mi
 ```
 
-The application is under load and using CPU and memory to respond to the traffic.
+The application is under load and it's using CPU and memory to respond to the traffic.
 
 _Is there a way to collect those metrics and use them for requests and limits?_
 
@@ -559,9 +657,9 @@ The SIG-autoscaling (the group in charge of looking after the autoscaling part o
 
 The Vertical Pod Autoscaler is a component that you install in the cluster and that estimates the correct requests and limits of a Pod based on the load.
 
-In other words, you don't have to come up with an algorithm to derive limits and requests.
+In other words, you don't have to come up with an algorithm to extrapolate limits and requests.
 
-The Vertical Pod Autoscaler applies a regression algorithm to the data collected by the metrics server.
+[The Vertical Pod Autoscaler applies a its own statistical model](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/autoscaling/vertical-pod-autoscaler.md#recommendation-model) to the data collected by the metrics server.
 
 Let's have a look at how it works.
 
@@ -641,15 +739,9 @@ Status:
 
 In the lower part of the output, the autoscaler has three sections:
 
-1. Lower bound
-1. Uncapped Target
-1. Upper Bound
-
-The lower bound is the minimum resource recommendation for the container.
-
-The upper bound is the maximum resource recommendation for the container.
-
-Uncapped target is the previous recommendation which was recommended by the autoscaler.
+1. **Lower bound** — the minimum resource recommendation for the container.
+1. **Uncapped Target** — the maximum resource recommendation for the container
+1. **Upper Bound** — the previous recommendation which was recommended by the autoscaler
 
 The recommended numbers are a bit skewed to the lower end because you haven't load test the app for a sustained period of time.
 
@@ -687,11 +779,17 @@ spec:
                 memory: XXXMi
 ```
 
-Insert something about the relationship between upper bound, etc. and the numbers written above.
+You can use the _Lower bound_ as your requests and the _Upper bound_ as your limits.
+
+**Great!**
+
+You just set requests and limits for a brand new application even if you haven't written the code yourself.
+
+You could extend the same techniques to your apps.
 
 ## Bonus: visualising limits and requests recommendations
 
-Inspecting the VPA object is a bit annoying.
+_Inspecting the VPA object is a bit annoying._
 
 If you prefer a visual tool to inspect the limit and request recommendations, you can install the Goldilocks dashboard.
 
