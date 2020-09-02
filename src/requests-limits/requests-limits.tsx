@@ -6,8 +6,8 @@ import { toVFile } from '../files'
 export const ResourceRequests = {
   id: 'requests-limits',
   url: '/setting-cpu-memory-limits-requests',
-  title: 'Setting proper resource limits and requests in Kubernetes',
-  description: `...................................................................................................`,
+  title: 'Setting the right requests and limits in Kubernetes',
+  description: `Find the right requests and limits can be tricky. Instead of guessing, you could inspect the application at runtime and extrapolate the values.`,
 }
 
 export function Register(store: Store) {
