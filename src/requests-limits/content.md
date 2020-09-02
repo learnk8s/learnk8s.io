@@ -793,7 +793,7 @@ _Inspecting the VPA object is a bit annoying._
 
 If you prefer a visual tool to inspect the limit and request recommendations, you can install the Goldilocks dashboard.
 
-insert nice pict
+![Goldilocks — get your resource requests "Just Right"](assets/goldilocks.svg)
 
 The Goldilocks dashboard creates VPA objects and makes the recommendations available through a web interface.
 
@@ -840,7 +840,7 @@ kubectl label namespace default goldilocks.fairwinds.com/enabled=true
 
 At this point goldilocks creates the VPA object for each deployment in the namespace and displays a convenient recap in the dashboard.
 
-Time to load test the app with locust.
+_Time to load test the app with locust._
 
 If you repeat the experiment and flood the application with requests, you should be able to see the Goldilocks dashboard recommending limits and requests for your Pods.
 
