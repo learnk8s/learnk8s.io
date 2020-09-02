@@ -172,6 +172,22 @@ export const Authors = {
     link: 'https://www.linkedin.com/in/cnesbittsmith/',
     description: 'Chris is a young and enthusiastic instructor at Learnk8s.',
   },
+  santhoshNagaraj: {
+    id: 'santhosh-nagaraj',
+    fullName: 'Santhosh Nagaraj',
+    avatar: (
+      <img
+        src='assets/authors/santhosh_nagaraj/santhosh_nagaraj-64x64.jpg'
+        srcSet='
+    assets/authors/santhosh_nagaraj/santhosh_nagaraj-64x64.jpg 1x,
+    assets/authors/santhosh_nagaraj/santhosh_nagaraj-128x128.jpg 2x
+    '
+        alt='Santhosh Nagaraj'
+      />
+    ),
+    link: 'https://www.linkedin.com/in/santhosh-nagaraj-s/',
+    description: 'Santhosh is a software engineer with a passion for cloud-native technologies.',
+  },
 }
 
 export function Register(store: Store) {
