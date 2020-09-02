@@ -83,7 +83,7 @@ kubectl run -i --tty --rm busybox \
 
 _What do these numbers actually mean?_
 
-## Understanding CPU and Memory units
+## Understanding CPU and memory units
 
 Imagine you have a computer with a single CPU and wish to run three containers in it.
 
@@ -105,7 +105,7 @@ To limit memory at 256MB, you can assign 268.4M (SI notation) or 256Mi (Binary n
 
 Now that you have created the Pod with resource requests, let's explore the memory and CPU used by the processes.
 
-## Exploring memory and CPU requests
+## Inspecting and collecting metrics with the metrics server
 
 Defining memory and requests for CPU and memory doesn't mean that the container has to use the allocated resource.
 
@@ -188,7 +188,7 @@ In the previous example, the Pod is consuming 400 millicores because it has to c
 
 Let's have a look at another example to understand CPU shares better.
 
-## CPU shares
+## CPU requests and CPU shares
 
 Please notice that the following example is executed in a system with 2 vCPU.
 
@@ -290,7 +290,7 @@ So the CPU time is shared as follows:
 
 Now that you're familiar with CPU and memory requests let's have a look at limits.
 
-## Understanding limits
+## Memory and CPU limits
 
 Limits define the hard limit for the container and make sure the pod doesn't consume all resources in the Node.
 
@@ -419,7 +419,7 @@ _How do find the right value for CPU and memory requests and limits?_
 
 Let's explore the CPU and memory used by a real app.
 
-## Real-world limits and requests
+## Limits and requests in practice
 
 You will use a simple cache service which has two endpoints, one to cache the data and another for retrieving it.
 
@@ -543,7 +543,7 @@ Now that you have the application running, it's time to find the right value for
 
 But before you dive into the tooling needed, let's lay down the plan.
 
-## Finding the right requests and limits
+## A plan for finding the right requests and limits
 
 **Requests and limits depend on how much memory and CPU the application uses.**
 
@@ -665,7 +665,7 @@ The app doesn't have requests and limits yet.
 
 _Is there a way to collect those metrics and use them to compute a value for requests and limits?_
 
-## Analysing requests and limits for live apps
+## Analysing requests and limits for running apps automatically
 
 It's usually common to have a metrics server and a database to store your metrics.
 
@@ -823,7 +823,7 @@ You just set requests and limits for a brand new application even if you were no
 
 You could extend the same techniques to your apps and set the right requests and limits even if you haven't used them before.
 
-## Bonus: visualising limits and requests recommendations
+## Visualising limits and requests recommendations
 
 _Inspecting the VPA object is a bit annoying._
 
