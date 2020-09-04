@@ -324,6 +324,17 @@ function renderPage(state: State) {
               <LinkedIn link='https://www.linkedin.com/in/keith-mifsud-369275157' />
               <World link='https://keith-mifsud.me' />
             </Profile>
+            <Profile
+              profile={<img src='assets/about-us/salaboy.png' alt='Mauricio "Salaboy" Salatino' />}
+              name='Mauricio Salatino'
+              bio='Mauricio is a Principal Software Engineer at Camunda (http://www.camunda.com ) and a LearnK8s (http://learnk8s.io ) Instructor. Mauricio has been working with Kubernetes for the last 4+ years, training teams and developing cloud-native applications. In his journey, he has participated in several open-source projects including Zeebe, Jhipster, Spring Cloud and Jenkins X. Previously, Mauricio worked at Red Hat/JBoss in the Business Automation Engineering department. Mauricio is currently involved with the CD Foundation (http://cd.foundation), the Jenkins X project (as member of the bootstrap steering committee) as well as he presented at Kubecon 2019 San Diego and Kubercon 2020 Amsterdam. '
+              role='Principal Software Engineer'
+            >
+              <GitHub link='https://github.com/salaboy' />
+              <Twitter link='https://twitter.com/salaboy' />
+              <LinkedIn link='https://www.linkedin.com/in/salaboy' />
+              <World link='https://salaboy.com' />
+            </Profile>
           </ul>
         </section>
 
