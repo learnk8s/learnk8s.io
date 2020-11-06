@@ -1,4 +1,5 @@
 Authenticating microservices requests in Kubernetes
+
 If your infrastructure consists of several applications interacting with each other, you might have faced the issue of securing the communication between services to prevent unauthenticated requests. Imagine having three apps:
 
 An API
@@ -650,7 +651,7 @@ $ kubectl delete ns secret-store
 Inter-Service authentication using service account token volume projection
 Now, you will learn to use Service Account Token Volume Projection (`ProjectedServiceAccountToken`) for workload identity in Kubernetes. The service account tokens made available to workloads via this mechanism are time-limited, audience bound and are not associated with secret objects. If a pod is deleted or the service account is removed, these tokens become invalid, thus preventing any abuse if stolen.
 
-A `serviceAccountToken` volume projection is one of the `projected` volume types. When this volume type is added to a pod, the service account token is injected at a configured filesystem path inside the pod. This is similar to how the service account tokens are mountedare made available inside the pod. There’s a difference though.However, the kubelet automatically rotates the injects a new token when it’s about to expirethe existing token is nearing its expiry period. In addition, you can configure the path at which you want this token to be available.
+A `serviceAccountToken` volume projection is one of the `projected` volume types. When this volume type is added to a pod, the service account token is injected at a configured filesystem path inside. This is similar to how the service account tokens are mounted inside the pod. There’s a difference though., the kubelet automatically rotates the token when it’s about to expire. In addition, you can configure the path at which you want this token to be available.
 API
 
 You will now modify the code for the API service to read the service account token mounted via volume projection and use that to authenticate to the secret store service:
@@ -676,7 +677,7 @@ go func() {
    }
  }()
 
-The readToken() function reads the file, /var/run/secrets/tokens/api-token and sets the global variable, serviceToken to the token value. If you are not familiar with Go’s ticker, think of a ticker as a background thread which runs a function at periodic intervals.
+The readToken() function reads the file, /var/run/secrets/tokens/api-token and sets the global variable, serviceToken to the token value. hyuiIf you are not familiar with Go’s ticker, think of a ticker as a background thread which runs a function at periodic intervals.
 
 You can find the entire application code in service_accounts_volume_projection/api/main.go
 Now, let’s deploy this service.  A built image (amitsaha/k8s-sa-volume-demo-api:sa-2 ) has been pushed to docker hub, so you will not need to build it locally. 
@@ -793,7 +794,7 @@ tr := authv1.TokenReview{
    	 },
     }
 
-Now, in the TokenReview object, secret store explicitly passes “secret-store” as the audience for the token it is asking the API to review. If the list of audiences in the token doesn’t include “secret-store” as an audience, the Token Review API will not authenticate the requestauthentication status will be reported as unsuccessful. In other words, This is a way for the secret store service canto assert theits identity of the caller and validate that the incoming request token was indeed meant for the secret store service.
+Now, in the TokenReview object, secret store explicitly passes “secret-store” as the audience for the token it is asking the API to review. If the token doesn’t include “secret-store” as an audience, the Token Review API will not authenticate the request. In other words, the secret store service can assert the identity of the caller and validate that the incoming request token was meant for the secret store service.
 
 You can find the entire application code in service_accounts_volume_projection/secret-store/main.go
 
