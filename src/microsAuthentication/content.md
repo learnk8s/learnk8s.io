@@ -17,7 +17,7 @@ to go through an Authorisation service first, authenticate and retrieve a token 
 to your request. That way, when the data store gets a token and presents it to the secret store, 
 it is rejected, but if the API service presents one, it will be accepted.
 
-[Three apps](./image1.png)
+![Three apps](./image1.png)
 
 You have several options when it comes to Authorisation server:
 
@@ -112,80 +112,125 @@ To deploy the image, you will create the following resources:
 
 The YAML manifest can be found in the `deployment.yaml` file. Run `kubectl apply` to create the above resources:
 
+```terminal|command=1|title=bash
 $ kubectl apply -f deployment.yaml
+```
+
+You should see the following resources created:
+
+```terminal|command=1|title=bash
 namespace/api created
 serviceaccount/api created
 deployment.apps/app created
+```
 
 
 To be able to access this service from the host system, you will have to expose the service first:
 
+```terminal|command=1|title=bash
 $ kubectl -n api expose deployment app --type=LoadBalancer --port=8080
 service/app exposed
+```
 
 Then, run:
 
+```terminal|command=1|title=bash
 $ minikube service app -n api
+```
 
 The above command will end an output like this:
 
 🎉  Opening service api/app in default browser...
 ❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
 
-You will also see a browser window opened automatically with a URL pointing to the deployed service. The web page will have this message:
+You will also see a browser window opened automatically with a URL pointing to the deployed service. 
+The web page will have this message:
+
 
 Get "http://app.secret-store.svc.cluster.local": dial tcp: lookup app.secret-store.svc.cluster.local: no such host
 
 
-
 This is expected since we haven’t yet deployed the secret store service.
 
-Keep the browser tab and above terminal window open.
+_Keep the browser tab and above terminal window open_
 
 Open a new terminal to carry out the next set of steps.
-Deploy the Secret Store service
 
-Go to the `service_accounts/secret-store` directory. This contains the source code for the application along with the Dockerfile. A built image (amitsaha/k8s-sa-volume-demo-ss:sa-1) has been pushed to docker hub, so you will not need to build it locally and we refer to that image from the Kubernetes deployment manifest.
+
+### Deploy the Secret Store service
+
+Go to the `service_accounts/secret-store` directory. This contains the source code for the application 
+along with the Dockerfile. A built image (amitsaha/k8s-sa-volume-demo-ss:sa-1) has been pushed to docker hub, 
+so you will not need to build it locally and we refer to that image from the Kubernetes deployment manifest.
 
 To deploy the image, you will create the following resources:
 
-Namespace - secret-store
-ServiceAccount - secret-store in the namespace `secret-store`
-ClusterRoleBinding - `role-tokenreview-binding` to bind `secret-store` service account to `system:auth-delegator` role.
-Deployment - app in namespace  `secret-store`
-Service - `secret-store` in namespace `secret-store`
+- **Namespace** - secret-store
+- **ServiceAccount** - secret-store in the **Namespace** secret-store
+- **ClusterRoleBinding** - role-tokenreview-binding to bind secret-store **ServiceAccount** to 
+  system:auth-delegator role
+- **Deployment** - app in **Namespace**  secret-store
+- **Service** - secret-store in **Namespace** secret-store
 
 
-A manifest creating the above resources can be found in the `deployment.yaml` file. Run kubectl apply to create the above resources:
+A manifest creating the above resources can be found in the `deployment.yaml` file. 
 
+Run kubectl apply to create the above resources:
+
+```terminal|command=1|title=bash
 $ kubectl apply -f deployment.yaml
+```
 
-Now, go back to the browser tab which had the API service URL opened and reload the tab. You will see the message: “Hello from secret store. You have been authenticated”. 
+Now, go back to the browser tab which had the API service URL opened and **reload** the tab. 
 
+You will see the message: _“Hello from secret store. You have been authenticated”_
 
 This tells us that the secret store service could successfully verify the token that API service provided in its request. 
 
-But how does all of that work? Let’s find out. 
+_But how does all of that work? Let’s find out._
 
 Keep the two terminal sessions running and switch to a new terminal session.
-Under the hood
-Service accounts are a way to associate your Kubernetes workload with an identity. You can use Service Accounts  to define what  resources should be accessible in the cluster and how they can be accessed. For example, when you want to restrict reading Secrets only to admin users in the cluster, you can do so using a service account. Service Accounts aren’t just for users, though. You can authenticate humans as well as applications in the cluster. If you want your applications to list all the available Pods in the cluster, you might be able to create a Service Account that grants read-only access to the Pod API. 
+
+
+## Under the hood
+
+Service accounts are a way to associate your Kubernetes workload with an identity. You can use 
+Service Accounts  to define what resources should be accessible in the cluster and who can access them.
+For example, when you want to restrict reading Secrets only to admin users in the cluster, you can do so 
+using a service account. Service Accounts aren’t just for users, though. You can authenticate humans as 
+well as applications in the cluster. If you want your applications to list all the available Pods in 
+the cluster, you will need to create a Service Account that is associated with read-only access to the 
+Pod API. 
 
 Service accounts are useful and straightforward, but you should know that:
 
-When you create a Service Account, Kubernetes creates a companion Secret object with a token. Then, you use the token to authenticate with the Kubernetes API. Since there’s a one-to-one relationship between the two, any workload that can read a secret in a namespace can also read the service account tokens in the same namespace In other words, you could have any workload using another Service Account in the same namespace to authenticate against the Kubernetes API — effectively impersonating someone else.
-Unfortunately, there’s no mechanism to restrict access to a subset of Secrets in a namespace. The application has access to all of them, or none of them.
-The tokens associated with a Service Account are long-lived and do not expire. In other words, once you have access to one of them, you can use it forever (or until the administrator deletes it).
-No audience binding of the tokens. As a cluster administrator, you cannot associate a token with a specific intended audience for different workloads. This means that anyone with access to the service account token can authenticate itself and are authorized to communicate with any other service running inside the cluster. The destination service doesn’t have any way to verify whether the token it was presented with was meant for itself at all.
+1. When you create a Service Account, Kubernetes creates a companion Secret object with a token. 
+   Then, you use the token to authenticate with the Kubernetes API. Since there’s a one-to-one 
+   relationship between the two, any workload that can read a secret in a namespace can also read 
+   the service account tokens in the same namespace In other words, you could have any 
+   workload using another Service Account in the same namespace to authenticate against the 
+   Kubernetes API — effectively impersonating someone else. Unfortunately, there’s no mechanism to 
+   restrict access to a subset of Secrets in a namespace. The application has access to all of them,
+   or none of them.
+ 2. The tokens associated with a Service Account are long-lived and do not expire. In other words, once 
+    you have access to one of them, you can use it forever (or until the administrator deletes the secret
+    associated with the token).
+ 3. No audience binding of the tokens. As a cluster administrator, you cannot associate a token with a 
+    specific intended audience for different workloads. This means that anyone with access to the 
+    service account token can authenticate itself and are authorized to communicate with any other 
+    service running inside the cluster. The destination service doesn’t have any way to verify whether 
+    the token it was presented with was meant for itself at all.
 
-Tokens associated with Service Accounts are verified by the Kubernetes API. In particular, there’s a specific component in charge of validating and rejecting them: the Token Review API.
+Tokens associated with Service Accounts are verified by the Kubernetes API. In particular, there’s a 
+specific component in charge of validating and rejecting them: the **Token Review API**.
 
-Let’s manually create a token and validate it against the Token Review API
-Creating a Service Account
+Let’s manually create a token and validate it against the Token Review API.
 
-Consider the following YAML manifest to create a namespace, test and a service account, sa-test-1 in it:
+### Creating a Service Account
 
+Consider the following YAML manifest to create a namespace, `test` and a service account, `sa-test-1` in it:
 
+```yaml|title=sa.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -196,12 +241,16 @@ kind: ServiceAccount
 metadata:
   name: sa-test-1
   namespace: test
+```
 
 Save the above into a file `sa.yaml` and run kubectl apply:
 
-$ kubectl apply -f sa.yaml
+```terminal|command=1|title=bash
+kubectl apply -f sa.yaml
+
 namespace/test created
 serviceaccount/sa-test-1 created
+```
 
 To view the token associated with the service account:
 
