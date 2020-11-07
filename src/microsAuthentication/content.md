@@ -496,12 +496,15 @@ The API endpoint expects a POST request with a JSON formatted payload of the fol
 In this case, the token you will use to authenticate to the API server as well as verify the status 
 of is the same. Thus, the curl command to run in the pod shell session is:
 
-```
+```terminal|command=1|title=bash
 
 # curl --cacert ${CACERT} -X "POST" $APISERVER/apis/authentication.k8s.io/v1/tokenreviews -H "Authorization: Bearer ${TOKEN}"  -H "Content-Type: application/json; char
 set=utf-8" -d '{"kind": "TokenReview","apiVersion": "authentication.k8s.io/v1", "spec": {"token": "'$TOKEN'"}}'
+```
 
 The response will look as follows:
+
+```json
 
 {
   "kind": "TokenReview",
@@ -542,11 +545,12 @@ The response will look as follows:
 	]
   }
 }
+```
 
 The key information in the response is in the status object with the following fields:
 
-authenticated: This is set to true which means the token was successfully validated by the API server
-The user field is another object with the following fields:
+- **authenticated**: This is set to true which means the token was successfully validated by the API server
+- The user field is another object with the following fields:
 username: The value of this key represents the username corresponding to the service account used by the pod - system:serviceaccount:test:sa-test-1
 uid: The value of this key represents the system user ID for the user
 Groups: The value of this key is a list containing the groups the user belongs to
