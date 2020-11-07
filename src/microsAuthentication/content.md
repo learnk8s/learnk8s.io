@@ -1,85 +1,116 @@
 Authenticating microservices requests in Kubernetes
 
-If your infrastructure consists of several applications interacting with each other, you might have faced the issue of securing the communication between services to prevent unauthenticated requests. Imagine having three apps:
+If your infrastructure consists of several applications interacting with each other, you might have faced the 
+issue of securing the communication between services to prevent unauthenticated requests. Imagine having three apps:
 
-An API
-A data store
-A secret store
+1. An API
+2. A data store
+3. A secret store
 
 You might want the secret store only to reply to requests to the API and reject any request from the data store.
 
-
-
 How would the secret store decide to authenticate or deny the request?
 
-A popular approach is to request and pass identity tokens to every call within services. So instead of issuing a request from the API service or the data store to the secret store directly, you might need to go through an Authorisation service first, authenticate and retrieve a token that is passed along to your request. That way, when the data store gets a token and presents it to the secret store, it is rejected, but if the API service presents one, it will be accepted.
+A popular approach is to request and pass identity tokens to every call within services. So instead of 
+issuing a request from the API service or the data store to the secret store directly, you might need 
+to go through an Authorisation service first, authenticate and retrieve a token that is passed along 
+to your request. That way, when the data store gets a token and presents it to the secret store, 
+it is rejected, but if the API service presents one, it will be accepted.
 
-
+[Three apps](./image1.png)
 
 You have several options when it comes to Authorisation server:
 
-You could use static tokens that don’t expire (and perhaps hardcoding them in the applications that communicate with each other and removing the need for an authorisation server at all)
-You could use oAuth by setting up an internal oAuth server
-You could roll out your own authorisation mechanism such as mutual TLS certificates
+- You could use static tokens that don’t expire (and perhaps hardcoding them in the applications that 
+  communicate with each other and removing the need for an authorisation server at all)
+- You could use oAuth by setting up an internal oAuth server
+- You could roll out your own authorisation mechanism such as mutual TLS certificates
 
 All authorisation servers have to do is to:
 
-Authenticate the caller -  The caller should have an identity that it’s part of the network and  verifiable
-Generate a token with a limited scope, validity and the desired audience
-Validate a token - The called service would call the Authorisation server with the provided token and accept the request if the validation is successful and reject it otherwise
+1. Authenticate the caller -  The caller should have an identity that it’s part of the network and  verifiable
+2. Generate a token with a limited scope, validity and the desired audience
+3. Validate a token - The called service would call the Authorisation server with the provided token and accept the request if the validation is successful and reject it otherwise
 
-Examples of Authorisation servers are tools such as Keycloak or Dex.
+Examples of Authorisation servers are tools such as [Keycloak]() or [Dex]().
 
-You might have not noticed, but Kubernetes offers the same primitives of the authorisation service within the cluster with Service Account, Roles and RoleBindings.
+You might have not noticed, but Kubernetes offers the same primitives of the authorisation service within the 
+cluster with Service Account, Roles and RoleBindings.
 
-You assign identities using Service Accounts. Service accounts are linked to roles to define what resources they have access to
+You assign identities using Service Accounts. Service accounts are linked to roles to define what
+resources they have access to. 
+
 Tokens are generated as soon as you create the Service Account and stored in a Secret
-You use the secret as a mechanism to authenticate to the API and make requests. You only receive successful replies for the resources you are entitled to consume
+
+You use the secret as a mechanism to authenticate to the API and make requests. You only receive 
+successful replies for the resources you are entitled to consume
 
 Could you use Service Accounts as a mechanism to authenticate requests between apps in the cluster?
 
-What if the Kubernetes API could be used as an Authorisation server?
+_What if the Kubernetes API could be used as an Authorisation server?_
+
 You could leverage the Service Account as tokens and validate their authenticity with the built-in Kubernetes API.
 
 Let’s try that.
 
-You will now deploy two services running in their own namespaces and associated with dedicated service accounts. We will refer to these services as the API service (API) and the Secret store. They are written in the Go programming language and they communicate via HTTP. The secret store requires that any client communicating to it identifies itself via a service account token. 
-Setting up
-You will need access to a Kubernetes cluster with the ServiceAccountVolume projection feature enabled. You will learn more about this feature later on in the article. The ServiceAccountVolume projection requires the Kubernetes API server to be started with certain specific API flags. The support for different Kubernetes providers may vary.
+You will now deploy two services:
 
-However, you can instead use the latest version of minikube. From the terminal run:
+1. We will refer to these services as the API service (API) and the Secret store 
+2. They are written in the Go programming language and they communicate via HTTP 
+3. Each service will run in its own namespaces and use dedicated service accounts
+4. The secret store requires that any client communicating to it identifies itself 
+   via a valid service account token passed as a HTTP header
 
+## Setting up
+
+You will need access to a Kubernetes cluster with the ServiceAccountVolume projection feature enabled. 
+You will learn more about this feature later on in the article. The ServiceAccountVolume projection 
+requires the Kubernetes API server to be started with certain specific API flags. The support for 
+different Kubernetes providers may vary.
+
+However, you can instead use the latest version of [minikube](). From your terminal, run:
+
+```terminal|command=1|title=bash
 $ minikube start --extra-config=apiserver.service-account-signing-key-file=/var/lib/minikube/certs/sa.key --extra-config=apiserver.service-account-issuer=kubernetes/serviceaccount --extra-config=apiserver.service-account-api-audiences=api
+```
 
 
-You should also clone the repository https://github.com/amitsaha/kubernetes-sa-volume-demo as it contains the demo source code that will be referred to in the article.
-Inter-Service authentication using Service accounts
-The API service is a headless web application listening on port 8080. When a client makes any request to it, the following steps occur in the backend:
+You should also clone the repository https://github.com/amitsaha/kubernetes-sa-volume-demo as 
+it contains the demo source code that will be referred to in the article.
 
-It reads the service account token
-Makes a HTTP GET request to the secret store service passing the X-Client-Id header with the token
-Returns the response it receives from the secret store
+## Inter-Service authentication using Service accounts
 
-The secret store service is another headless web application listening on port 8081. When a client makes any request to it, the following happens:
+The API service is a headless web application listening on port 8080. When a client makes any request to 
+it, the following steps occur in the backend:
 
-It looks for the X-Client-Id header in the request. If one is not found, a HTTP 401 error is sent back as a response.
-If the header is found, the value for the header is then checked with the Kubernetes API for its validity
-If the header value is found to be valid, the request is accepted, else rejected with a HTTP 403 response.
+1. It reads the service account token
+2. Makes a HTTP GET request to the secret store service passing the X-Client-Id header with the token
+3. Returns the response it receives from the secret store
+
+The secret store service is another headless web application listening on port 8081. When a 
+client makes any request to it, the following happens:
+
+1. It looks for the X-Client-Id HTTP header in the request. If one is not found, a HTTP 401 error is sent back as a response.
+2. If the header is found, the value for the header is then checked with the Kubernetes API for its validity
+3. If the header value is found to be valid, the request is accepted, else rejected with a HTTP 403 error response
 
 Next, you will deploy the services to the cluster.
 
 
-Deploy the API service
+### Deploy the API service
 
-Go to the `service_accounts/api` directory of the cloned repository.  This contains the source code for the application along with the Dockerfile. A built image (amitsaha/k8s-sa-volume-demo-api:sa-1 ) has been pushed to docker hub, so you will not need to build it locally and we refer to that image from the Kubernetes deployment manifest.
+Go to the `service_accounts/api` directory of the cloned repository.  This contains the source code for the 
+application along with the Dockerfile. A built image (amitsaha/k8s-sa-volume-demo-api:sa-1 ) has been pushed
+to docker hub, so you will not need to build it locally and we refer to that image from the Kubernetes 
+deployment manifest.
 
 To deploy the image, you will create the following resources:
 
-Namespace - api
-ServiceAccount - api in the namespace api
-Deployment - app in the namespace api
+- **Namespace** - api
+- **ServiceAccount** - api in the **Namespace** api
+- **Deployment** - app in the **Namespace** api
 
-The YAML manifest can be found in the `deployment.yaml` file. Run kubectl apply to create the above resources:
+The YAML manifest can be found in the `deployment.yaml` file. Run `kubectl apply` to create the above resources:
 
 $ kubectl apply -f deployment.yaml
 namespace/api created
