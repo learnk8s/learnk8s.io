@@ -550,25 +550,32 @@ The response will look as follows:
 The key information in the response is in the status object with the following fields:
 
 - **authenticated**: This is set to true which means the token was successfully validated by the API server
-- The user field is another object with the following fields:
-username: The value of this key represents the username corresponding to the service account used by the pod - system:serviceaccount:test:sa-test-1
-uid: The value of this key represents the system user ID for the user
-Groups: The value of this key is a list containing the groups the user belongs to
-audiences: The value of this field is a list of audiences the token is intended for. This field allows the token receiver to verify whether it is in the list of allowed audiences and hence can decide to accept it or reject it. In this case, the default audience is returned which was configured when you started the minikube cluster using --extra-config=apiserver.service-account-api-audiences=api.
+- The **user** field is another object with the following fields:
+  - *username*: The value of this key represents the username corresponding to the service account used by the 
+    pod - `system:serviceaccount:test:sa-test-1`
+  - *uid*: The value of this key represents the system user ID for the user
+- **Groups**: The value of this key is a list containing the groups the user belongs to
+- **audiences**: The value of this field is a list of audiences the token is intended for. This field allows 
+  the token receiver to verify whether it is in the list of allowed audiences and hence can decide to 
+  accept it or reject it. In this case, the default audience is returned which was configured when you 
+  started the minikube cluster using `--extra-config=apiserver.service-account-api-audiences=api`.
 
 
 Excellent, you just verified the token!
 
 You know that:
 
-The token is valid.
-The identity of the caller (the Service Account).
-The groups that the caller belongs to.
+- The token is valid.
+- The identity of the caller (the Service Account).
+- The groups that the caller belongs to
 
 You could leverage the information in your Secret Store component to validate the request!
 
-Let’s have a look at how you could include the above logic in your apps by looking at how the API and the secret store services are implemented.
-Implementation of the services
+Let’s have a look at how you could include the above logic in your apps by looking at how the API and the 
+secret store services are implemented.
+
+
+## Implementation of the services
 
 Here’s how the two services interact with each other and the Kubernetes API:
 
