@@ -623,7 +623,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 
 The following YAML manifest is used to deploy the API service:
 
-```yaml|title=deployment.yaml
+```yaml|highlight=27-27|title=deployment.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -714,7 +714,7 @@ result, err := clientset.AuthenticationV1().TokenReviews().Create(ctx, &tr, meta
 
 The following YAML manifest will create the various resources needed for the secret store service:
 
-```yaml|title=deployment.yaml
+```yaml|highlight=12-23|title=deployment.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -883,7 +883,7 @@ been pushed to docker hub, so you will not need to build it locally.
 
 You will use that image in the deployment manifest (_service_accounts_volume_projection/api/deployment.yaml_):
 
-```yaml|title=deployment.yaml
+```yaml|highlight=28-36|title=deployment.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -1089,9 +1089,11 @@ Service Account Token Volume projection allows you to associate non-global, time
 tokens to your Kubernetes workloads. In this article you saw an example of using it for authentication 
 between your services and how it is a better alternative to using the default service account tokens. 
 
-Kubernetes native software such as linkerd and istio are embracing it for their internal communication 
-and managed Kubernetes service providers such as GKE and AWS EKS are using this projection volume type 
-to enable more robust pod identity systems. 
+Kubernetes native software such as [linkerd](https://github.com/linkerd/linkerd2/issues/3260) and 
+[Istio](https://istio.io/latest/blog/2019/trustworthy-jwt-sds/) are embracing it for their internal communication 
+and managed Kubernetes service providers such as [GKE](https://cloud.google.com/community/tutorials/gke-workload-id-clientserver) 
+and [AWS EKS](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts-technical-overview.html) are 
+using this projection volume type to enable more robust pod identity systems. 
 
 ## Learn more
 
