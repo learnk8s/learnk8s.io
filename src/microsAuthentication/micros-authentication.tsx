@@ -28,7 +28,7 @@ export function Register(store: Store) {
       authorId: Authors.amitSaha.id,
       description: microsAuthentication.description,
       title: microsAuthentication.title,
-      publishedDate: '2020-06-17',
+      publishedDate: '2020-11-09',
 
       content: toVFile({ path: join(__dirname, 'content.md') }),
     }),
