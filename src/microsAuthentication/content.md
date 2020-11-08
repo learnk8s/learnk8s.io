@@ -71,7 +71,12 @@ different Kubernetes providers may vary.
 However, you can instead use the latest version of [minikube](). From your terminal, run:
 
 ```terminal|command=1|title=bash
-minikube start --extra-config=apiserver.service-account-signing-key-file=/var/lib/minikube/certs/sa.key --extra-config=apiserver.service-account-issuer=kubernetes/serviceaccount --extra-config=apiserver.service-account-api-audiences=api
+minikube start \
+  --extra-config=apiserver.service-account-signing-key-file=\
+    /var/lib/minikube/certs/sa.key \
+  --extra-config=apiserver.service-account-issuer=\
+    kubernetes/serviceaccount \ 
+  --extra-config=apiserver.service-account-api-audiences=api
 ```
 
 
@@ -259,7 +264,8 @@ Name:            	sa-test-1
 Namespace:       	test
 Labels:          	<none>
 Annotations:     	kubectl.kubernetes.io/last-applied-configuration:
-                   	{"apiVersion":"v1","kind":"ServiceAccount","metadata":{"annotations":{},"name":"sa-test-1","namespace":"test"}}
+            {"apiVersion":"v1","kind":"ServiceAccount","metadata":
+           {"annotations":{},"name":"sa-test-1","namespace":"test"}}
 Image pull secrets:  <none>
 Mountable secrets:   sa-test-1-token-99l5r
 Tokens:          	sa-test-1-token-99l5r
@@ -282,7 +288,19 @@ Data
 ====
 ca.crt: 	1066 bytes
 namespace:  4 bytes
-token:  	eyJhbGciOiJSUzI1NiIsImtpZCI6InY3MDRITGNmdGt1WTdwNFk4Q2Y1Q0tTUm5TMzdOVDBGdXFEQkU1bWVibE0ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJ0ZXN0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6InNhLXRlc3QtMS10b2tlbi05OWw1ciIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJzYS10ZXN0LTEiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJkMmQyMTBkOC04YmQ2LTQxMTUtYjc5Ni01ZmY0YmQzNzNkNzQiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6dGVzdDpzYS10ZXN0LTEifQ.hJVpGWU4gd1VoDPaeHPT-fIS_1Uc_r_hhuLPw0AjdCownGmeZj-yv_GgItRvDKdyj7jSpTnPfLiH0z8e_xGXssGHaWhHm5AOZt1Mf9TZYqdFrfNPdjwW2-_dpkytYC1zSVGNMQsEAI758s3RRGezk24Js3zWjpStK1AlcnDOmFslNP1aI2RmlubGd9CKb9Nm_1ln4gVc8n02RvpvlHU5LE6uVOe-e9TZrFpHrhPBDhrrFxC-x0-PgrdAlekc8wE2OcKfZtSsHofjH_0MPcN94ethCmgwniBJMfGvxrMp8-6KkSSAhLMrdsHth_KiXtNkC6EZjFCAcAJKe6juu1OIrg
+token:  	eyJhbGciOiJSUzI1NiIsImtpZCI6InY3MDRITGNmdGt1WTdwNFk4Q2Y1Q0tTUm
+5TMzdOVDBGdXFEQkU1bWVibE0ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW
+50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJ0ZXN0Iiwi
+a3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6InNhLXRlc3QtMS
+10b2tlbi05OWw1ciIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1
+hY2NvdW50Lm5hbWUiOiJzYS10ZXN0LTEiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2Nvd
+W50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJkMmQyMTBkOC04YmQ2LTQxMTUtYjc5Ni01Zm
+Y0YmQzNzNkNzQiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6dGVzdDpzYS10ZXN0
+LTEifQ.hJVpGWU4gd1VoDPaeHPT-fIS_1Uc_r_hhuLPw0AjdCownGmeZj-yv_GgItRvDK
+dyj7jSpTnPfLiH0z8e_xGXssGHaWhHm5AOZt1Mf9TZYqdFrfNPdjwW2-_dpkytYC1zSVG
+NMQsEAI758s3RRGezk24Js3zWjpStK1AlcnDOmFslNP1aI2RmlubGd9CKb9Nm_1ln4gVc
+8n02RvpvlHU5LE6uVOe-e9TZrFpHrhPBDhrrFxC-x0-PgrdAlekc8wE2OcKfZtSsHofj
+H_0MPcN94ethCmgwniBJMfGvxrMp8-6KkSSAhLMrdsHth_KiXtNkC6EZjFCAcAJKe6juu1OIrg
 ```
 
 The `token` object in the Data is a base64 encoded object representing a JSON web token payload. Once you have an 
@@ -498,8 +516,12 @@ of is the same. Thus, the curl command to run in the pod shell session is:
 
 ```terminal|command=1|title=bash
 
-# curl --cacert ${CACERT} -X "POST" $APISERVER/apis/authentication.k8s.io/v1/tokenreviews -H "Authorization: Bearer ${TOKEN}"  -H "Content-Type: application/json; char
-set=utf-8" -d '{"kind": "TokenReview","apiVersion": "authentication.k8s.io/v1", "spec": {"token": "'$TOKEN'"}}'
+# curl --cacert ${CACERT} -X "POST" \
+  $APISERVER/apis/authentication.k8s.io/v1/tokenreviews \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -H "Content-Type: application/json; charset=utf-8" \ 
+  -d '{"kind": "TokenReview","apiVersion": \
+   "authentication.k8s.io/v1", "spec": {"token": "'$TOKEN'"}}'
 ```
 
 The response will look as follows:
@@ -527,7 +549,19 @@ The response will look as follows:
 	]
   },
   "spec": {
-	"token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUwbGdTc1FvUzFvTDlud0lnQjhBbDhMaFdKT0VNeHM3STNaWERnaHB0MUEifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJ0ZXN0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6InNhLXRlc3QtMS10b2tlbi1zbWdoNCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJzYS10ZXN0LTEiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI0MmQ0M2U0Ni03NmZlLTQ0MWYtODI4MS1hNTY2OTY0ZTUyZmUiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6dGVzdDpzYS10ZXN0LTEifQ.eutlDryfPEWKoCDL7JV79AYslJw7aYWgYqVzhFUatipBp081yXyBz0ahEILqYkl4TvtIOkIY3zcy4Zuumjoomp7RFUvxe4OClaLEUHvRdpbjEK_pV_Rvz8xoBEeHBZntiyNYgtQieRC1zBq6xLvMt6HPLpCa_NkDTbON_9_T_ib6D4qnG7V_OtYL-S3aqgfWRnhc3H1s5j2M0BudRmybDoR76K3plehjKGqjggjIynb3r9tF4owNxsLrgU1SUZVG8yIc6_mriJntrTtHEo-OWD4fx01dkIg40fupJnDeKlHsPgQC4lfIvSjlv1aYQOS9VLssYs9Tg8Y10zCPoOjDdw"
+	"token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUwbGdTc1FvUzFvTDlud0lnQjhBbDhMaFd
+KT0VNeHM3STNaWERnaHB0MUEifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Ii
+wia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJ0ZXN0Iiwia3ViZXJ
+uZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6InNhLXRlc3QtMS10b2tlbi1z
+bWdoNCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hb
+WUiOiJzYS10ZXN0LTEiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWN
+jb3VudC51aWQiOiI0MmQ0M2U0Ni03NmZlLTQ0MWYtODI4MS1hNTY2OTY0ZTUyZmUiLCJzdWIiO
+iJzeXN0ZW06c2VydmljZWFjY291bnQ6dGVzdDpzYS10ZXN0LTEifQ.eutlDryfPEWKoCDL7JV7
+9AYslJw7aYWgYqVzhFUatipBp081yXyBz0ahEILqYkl4TvtIOkIY3zcy4Zuumjoomp7RFUvxe4
+OClaLEUHvRdpbjEK_pV_Rvz8xoBEeHBZntiyNYgtQieRC1zBq6xLvMt6HPLpCa_NkDTbON_9_T_
+ib6D4qnG7V_OtYL-S3aqgfWRnhc3H1s5j2M0BudRmybDoR76K3plehjKGqjggjIynb3r9tF4ow
+NxsLrgU1SUZVG8yIc6_mriJntrTtHEo-OWD4fx01dkIg40fupJnDeKlHsPgQC4lfIvSjlv1a
+YQOS9VLssYs9Tg8Y10zCPoOjDdw"
   },
   "status": {
 	"authenticated": true,
@@ -1047,7 +1081,9 @@ Name:          	app
 Namespace:     	secret-store
 Labels:        	<none>
 Annotations:   	kubectl.kubernetes.io/last-applied-configuration:
-                 	{"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"app","namespace":"secret-store"},"spec":{"ports":[{"port":80,"pro...
+               {"apiVersion":"v1","kind":"Service","metadata":
+               {"annotations":{},"name":"app","namespace":"secret-store"},
+               "spec":{"ports":[{"port":80,"pro...
 Selector:      	app=secret-store
 Type:          	ClusterIP
 IP:            	10.106.239.243
@@ -1068,9 +1104,13 @@ Hello from secret-store. You have been authenticated
 If you now view the logs of secret store via `kubectl -n secret-store logs <pod id>`, you will see the following:
 
 ```
-(v1.TokenReviewStatus) &TokenReviewStatus{Authenticated:true,User:UserInfo{Username:system:serviceaccount:api:api,
-UID:ec7c304f-9722-4d1b-9f67-d3ce32cd8d4c,Groups:[system:serviceaccounts system:serviceaccounts:api system:authenticated],Extra:map[string]ExtraValue{authentication.kubernetes.io/pod-name: 
-[app-65d954658c-dbbr5],authentication.kubernetes.io/pod-uid: [1b37a3f4-54f1-419c-b435-affce3f4a0f3],},},
+(v1.TokenReviewStatus) &TokenReviewStatus{Authenticated:true,
+User:UserInfo{Username:system:serviceaccount:api:api,
+UID:ec7c304f-9722-4d1b-9f67-d3ce32cd8d4c,
+Groups:[system:serviceaccounts system:serviceaccounts:api system:authenticated],
+Extra:map[string]ExtraValue{authentication.kubernetes.io/pod-name: 
+[app-65d954658c-dbbr5],
+authentication.kubernetes.io/pod-uid: [1b37a3f4-54f1-419c-b435-affce3f4a0f3],},},
 Error:,Audiences:[secret-store],}
 ```
 
