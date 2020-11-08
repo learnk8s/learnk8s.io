@@ -3,7 +3,7 @@ import { Authors } from '../aboutUs'
 import { join } from 'path'
 import { toVFile } from '../files'
 
-export const microsAuthentication = {
+export const MicrosAuthentication = {
   id: 'micros-authentication',
   url: '/microservices-authentication-kubernetes',
   title: 'Authenticating microservices requests in Kubernetes',
@@ -11,23 +11,23 @@ export const microsAuthentication = {
 }
 
 export function Register(store: Store) {
-  store.dispatch(Action.pages.add(microsAuthentication))
+  store.dispatch(Action.pages.add(MicrosAuthentication))
   store.dispatch(
     Action.openGraphs.add({
       id: 'og-micros-authentication',
-      pageId: microsAuthentication.id,
+      pageId: MicrosAuthentication.id,
       imagePath: 'src/yaml-validation/yaml-validate.png',
-      title: microsAuthentication.title,
-      description: microsAuthentication.description,
+      title: MicrosAuthentication.title,
+      description: MicrosAuthentication.description,
     }),
   )
   store.dispatch(
     Action.blogPosts.add({
       id: 'bp-micros-authentication',
-      pageId: microsAuthentication.id,
+      pageId: MicrosAuthentication.id,
       authorId: Authors.amitSaha.id,
-      description: microsAuthentication.description,
-      title: microsAuthentication.title,
+      description: MicrosAuthentication.description,
+      title: MicrosAuthentication.title,
       publishedDate: '2020-11-09',
 
       content: toVFile({ path: join(__dirname, 'content.md') }),
@@ -35,15 +35,15 @@ export function Register(store: Store) {
   )
   store.dispatch(
     Action.tags.add({
-      id: microsAuthentication.id + '-general-post',
+      id: MicrosAuthentication.id + '-general-post',
       tag: 'general-post',
-      pageId: microsAuthentication.id,
+      pageId: MicrosAuthentication.id,
     }),
   )
   store.dispatch(
     Action.previewPictures.add({
       id: 'yaml-validation-picture',
-      pageId: microsAuthentication.id,
+      pageId: MicrosAuthentication.id,
       imagePath: 'src/yaml-validation/yaml-validate.svg',
     }),
   )
