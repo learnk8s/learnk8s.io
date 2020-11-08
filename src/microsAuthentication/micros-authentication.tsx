@@ -17,17 +17,17 @@ export function Register(store: Store) {
       id: 'og-micros-authentication',
       pageId: microsAuthentication.id,
       imagePath: 'src/yaml-validation/yaml-validate.png',
-      title: MicrosAuthentication.title,
-      description: MicrosAuthentication.description,
+      title: microsAuthentication.title,
+      description: microsAuthentication.description,
     }),
   )
   store.dispatch(
     Action.blogPosts.add({
       id: 'bp-micros-authentication',
-      pageId: MicrosAuthentication.id,
+      pageId: microsAuthentication.id,
       authorId: Authors.amitSaha.id,
-      description: MicrosAuthentication.description,
-      title: MicrosAuthentication.title,
+      description: microsAuthentication.description,
+      title: microsAuthentication.title,
       publishedDate: '2020-06-17',
 
       content: toVFile({ path: join(__dirname, 'content.md') }),
@@ -35,15 +35,15 @@ export function Register(store: Store) {
   )
   store.dispatch(
     Action.tags.add({
-      id: MicrosAuthentication.id + '-general-post',
+      id: microsAuthentication.id + '-general-post',
       tag: 'general-post',
-      pageId: MicrosAuthentication.id,
+      pageId: microsAuthentication.id,
     }),
   )
   store.dispatch(
     Action.previewPictures.add({
       id: 'yaml-validation-picture',
-      pageId: MicrosAuthentication.id,
+      pageId: microsAuthentication.id,
       imagePath: 'src/yaml-validation/yaml-validate.svg',
     }),
   )
