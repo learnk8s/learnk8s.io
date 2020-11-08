@@ -1,5 +1,3 @@
-Authenticating microservices requests in Kubernetes
-
 If your infrastructure consists of several applications interacting with each other, you might have faced the 
 issue of securing the communication between services to prevent unauthenticated requests. Imagine having three apps:
 
