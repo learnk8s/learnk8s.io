@@ -9,45 +9,54 @@ You might want the secret store only to reply to requests to the API and reject 
 
 How would the secret store decide to authenticate or deny the request?
 
-A popular approach is to request and pass identity tokens to every call within services. So instead of 
-issuing a request from the API service or the data store to the secret store directly, you might need 
+A popular approach is to request and pass identity tokens to every call within services.
+
+So instead of issuing a request from the API service or the data store to the secret store directly, you might need 
 to go through an Authorisation service first, authenticate and retrieve a token that is passed along 
-to your request. That way, when the data store gets a token and presents it to the secret store, 
-it is rejected, but if the API service presents one, it will be accepted.
+to your request. 
+
+That way, when the data store presents the token to the secret store, 
+it is rejected, but if the API service presents the same token, it will be accepted.
 
 ![Three apps](image1.png)
 
 You have several options when it comes to Authorisation server:
 
-- You could use static tokens that don’t expire (and perhaps hardcoding them in the applications that 
-  communicate with each other and removing the need for an authorisation server at all)
-- You could use oAuth by setting up an internal oAuth server
-- You could roll out your own authorisation mechanism such as mutual TLS certificates
+- You could use static tokens that don't expire. You will perhaps specify them as environment
+  variables or hardcoding them in the applications that communicate with each other. This
+  removes the need for running a dedicated authorization server.
+- You could use oAuth by setting up an internal oAuth server.
+- You could roll out your own authorisation mechanism such as mutual TLS certificates.
 
 All authorisation servers have to do is to:
 
 1. Authenticate the caller -  The caller should have an identity that it’s part of the network and  verifiable
 1. Generate a token with a limited scope, validity and the desired audience
-1. Validate a token - The called service would call the Authorisation server with the provided token and accept the request if the validation is successful and reject it otherwise
+1. Validate a token - The called service would call the Authorisation server with 
+   the provided token and accept the request if the validation is successful and reject it otherwise
 
-Examples of Authorisation servers are tools such as [Keycloak]() or [Dex]().
+Examples of Authorisation servers are tools such as [Keycloak](https://www.keycloak.org/) or 
+[Dex](https://github.com/dexidp/dex).
 
 You might have not noticed, but Kubernetes offers the same primitives of the authorisation service within the 
 cluster with Service Account, Roles and RoleBindings.
 
-You assign identities using Service Accounts. Service accounts are linked to roles to define what
-resources they have access to. 
+You assign identities using Service Accounts. Service accounts are linked to roles to that
+grant access to resources they need.
 
-Tokens are generated as soon as you create the Service Account and stored in a Secret
+Tokens are generated as soon as you create the Service Account and stored in a Secret.
 
-You use the secret as a mechanism to authenticate to the API and make requests. You only receive 
-successful replies for the resources you are entitled to consume
+You use the secret as a mechanism to authenticate to the API and make requests. 
+
+You only receive successful replies for the resources you are entitled to consume.
 
 Could you use Service Accounts as a mechanism to authenticate requests between apps in the cluster?
 
+Kubernetes offers the same primitives to authentication requests just like Keycloak and Dex.
+
 _What if the Kubernetes API could be used as an Authorisation server?_
 
-You could leverage the Service Account as tokens and validate their authenticity with the built-in Kubernetes API.
+Could you use Service Accounts as a mechanism to authenticate requests between apps in the cluster?
 
 Let’s try that.
 
@@ -61,12 +70,19 @@ You will now deploy two services:
 
 ## Setting up
 
-You will need access to a Kubernetes cluster with the ServiceAccountVolume projection feature enabled. 
-You will learn more about this feature later on in the article. The ServiceAccountVolume projection 
-requires the Kubernetes API server to be started with certain specific API flags. The support for 
-different Kubernetes providers may vary.
+You will need access to a Kubernetes cluster with the [ServiceAccountVolume](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#service-account-token-volume-projection)
+projection feature enabled. 
 
-However, you can instead use the latest version of [minikube](). From your terminal, run:
+You will learn more about this feature later on in the article. 
+
+The ServiceAccountVolume projection requires the Kubernetes API server to be started with 
+certain specific API flags. 
+
+The support for different managed Kubernetes providers may vary.
+
+However, you can instead use the latest version of [minikube](https://github.com/kubernetes/minikube). 
+
+From your terminal, run:
 
 ```terminal|command=1|title=bash
 minikube start \
@@ -82,15 +98,17 @@ it contains the demo source code that will be referred to in the article.
 
 ## Inter-Service authentication using Service accounts
 
-The API service is a headless web application listening on port 8080. When a client makes any request to 
-it, the following steps occur in the backend:
+The API service is a headless web application listening on port 8080. 
+
+When a client makes any request to it, the following steps occur in the backend:
 
 1. It reads the service account token
 1. Makes a HTTP GET request to the secret store service passing the X-Client-Id header with the token
 1. Returns the response it receives from the secret store
 
-The secret store service is another headless web application listening on port 8081. When a 
-client makes any request to it, the following happens:
+The secret store service is another headless web application listening on port 8081. 
+
+When a client makes any request to it, the following happens:
 
 1. It looks for the X-Client-Id HTTP header in the request. If one is not found, a HTTP 401 error is sent back as a response.
 1. If the header is found, the value for the header is then checked with the Kubernetes API for its validity
@@ -100,10 +118,14 @@ Next, you will deploy the services to the cluster.
 
 ### Deploy the API service
 
-Go to the `service_accounts/api` directory of the cloned repository.  This contains the source code for the 
-application along with the Dockerfile. A built image (amitsaha/k8s-sa-volume-demo-api:sa-1 ) has been pushed
-to docker hub, so you will not need to build it locally and we refer to that image from the Kubernetes 
-deployment manifest.
+Go to the `service_accounts/api` directory of the cloned repository.
+
+This contains the source code for the application along with the Dockerfile. 
+
+A built image (amitsaha/k8s-sa-volume-demo-api:sa-1) has been pushed 
+to docker hub, so you will not need to build it locally.
+
+We refer to that image from the Kubernetes deployment manifest.
 
 To deploy the image, you will create the following resources:
 
@@ -111,7 +133,9 @@ To deploy the image, you will create the following resources:
 - **ServiceAccount** - api in the **Namespace** api
 - **Deployment** - app in the **Namespace** api
 
-The YAML manifest can be found in the `deployment.yaml` file. Run `kubectl apply` to create the above resources:
+The YAML manifest can be found in the `deployment.yaml` file. 
+
+Run `kubectl apply` to create the above resources:
 
 ```terminal|command=1|title=bash
 kubectl apply -f deployment.yaml
@@ -148,7 +172,7 @@ The web page will have this message:
 
 Get "<http://app.secret-store.svc.cluster.local">: dial tcp: lookup app.secret-store.svc.cluster.local: no such host
 
-This is expected since we haven’t yet deployed the secret store service.
+This is expected since you haven’t yet deployed the secret store service.
 
 _Keep the browser tab and above terminal window open_
 
@@ -156,9 +180,15 @@ Open a new terminal to carry out the next set of steps.
 
 ### Deploy the Secret Store service
 
-Go to the `service_accounts/secret-store` directory. This contains the source code for the application 
-along with the Dockerfile. A built image (amitsaha/k8s-sa-volume-demo-ss:sa-1) has been pushed to docker hub, 
-so you will not need to build it locally and we refer to that image from the Kubernetes deployment manifest.
+Go to the `service_accounts/secret-store` directory. 
+
+This contains the source code for the application along with the Dockerfile. 
+
+A built image (amitsaha/k8s-sa-volume-demo-ss:sa-1) has been pushed to docker hub. 
+
+You will not need to build it locally. 
+
+We will use that image to deploy the service.
 
 To deploy the image, you will create the following resources:
 
@@ -181,7 +211,8 @@ Now, go back to the browser tab which had the API service URL opened and **reloa
 
 You will see the message: _“Hello from secret store. You have been authenticated”_
 
-This tells us that the secret store service could successfully verify the token that API service provided in its request. 
+This tells us that the secret store service could successfully verify the 
+token that API service provided in its request. 
 
 _But how does all of that work? Let’s find out._
 
@@ -189,13 +220,21 @@ Keep the two terminal sessions running and switch to a new terminal session.
 
 ## Under the hood
 
-Service accounts are a way to associate your Kubernetes workload with an identity. You can use 
-Service Accounts  to define what resources should be accessible in the cluster and who can access them.
+Service accounts are a way to associate your Kubernetes workload with an identity. 
+
+You can use Service Accounts to define what resources should be accessible in the 
+cluster and who can access them.
+
 For example, when you want to restrict reading Secrets only to admin users in the cluster, you can do so 
-using a service account. Service Accounts aren’t just for users, though. You can authenticate humans as 
-well as applications in the cluster. If you want your applications to list all the available Pods in 
-the cluster, you will need to create a Service Account that is associated with read-only access to the 
-Pod API. 
+using a service account.
+
+Service Accounts aren’t just for users, though. 
+
+You can authenticate humans as well as applications in the cluster.
+
+If you want your applications to list all the available Pods in the cluster,
+you will need to create a Service Account that is associated with read-only 
+access to the Pod API. 
 
 Service accounts are useful and straightforward, but you should know that:
 
@@ -216,8 +255,9 @@ Service accounts are useful and straightforward, but you should know that:
    service running inside the cluster. The destination service doesn’t have any way to verify whether 
    the token it was presented with was meant for itself at all.
 
-Tokens associated with Service Accounts are verified by the Kubernetes API. In particular, there’s a 
-specific component in charge of validating and rejecting them: the **Token Review API**.
+Tokens associated with Service Accounts are verified by the Kubernetes API.
+
+In particular, there's a specific component in charge of validating and rejecting them: the **Token Review API**.
 
 Let’s manually create a token and validate it against the Token Review API.
 
