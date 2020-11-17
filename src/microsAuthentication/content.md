@@ -110,15 +110,15 @@ deployment.apps/app created
 You can temporarily expose the API with:
 
 ```terminal|command=1|title=bash
-kubectl -n api expose deployment
+kubectl --namspace api expose deployment/app --type=NodePort
 service/app exposed
 ```
 
 Retrieve the URL of the app with:
 
 ```terminal|command=1|title=bash
-minikube service deployment --url
-TODO: missing output
+minikube --namspace api service deployment --url
+http://192.168.99.101:31541
 ```
 
 _Will it work?_
@@ -126,7 +126,7 @@ _Will it work?_
 You can issue a request with:
 
 ```terminal|command=1|title=bash
-curl <insert URL from above>
+curl http://192.168.99.101:31541
 Get "<http://app.secret-store.svc.cluster.local">: dial tcp: lookup app.secret-store.svc.cluster.local: no such host
 ```
 
@@ -150,13 +150,17 @@ You can create the secret store with:
 
 ```terminal|command=1|title=bash
 kubectl apply -f service_accounts/secret-store/deployment.yaml
-TODO: missing output
+namespace/secret-store created
+serviceaccount/secret-store created
+clusterrolebinding.rbac.authorization.k8s.io/role-tokenreview-binding created
+deployment.apps/app created
+service/app created
 ```
 
 Now, go back to the previous terminal window with the API service and issue the same request again:
 
 ```terminal|command=1|title=bash
-curl <insert URL from above>
+curl http://192.168.99.101:31541
 Hello from secret store. You have been authenticated
 ```
 
@@ -180,11 +184,84 @@ You can authenticate humans as well as applications in the cluster.
 
 If you want your applications to list all the available Pods in the cluster, you will need to create a Service Account that is associated with read-only access to the Pod API.
 
+You deployed two apps that have Service Accounts — let's have a look.
+
+```terminal|command=1,5|title=bash
+kubectl get serviceaccount --namespace api
+NAME      SECRETS   AGE
+api       1         4m5s
+default   1         4m5s
+kubectl get serviceaccount --namespace secret-store
+NAME           SECRETS   AGE
+default        1         6m4s
+secret-store   1         6m4s
+```
+
+Those Service Account are the identities associated with the apps, but they don't define what permissions are granted.
+
+For that, you might need to list the Role and the RoleBinding:
+
+```terminal|command=1,3|title=bash
+kubectl get role,rolebinding --namespace api
+No resources found in api namespace.
+kubectl get role,rolebinding --namespace secretstore
+No resources found in secretstore namespace.
+```
+
+There are none!
+
+_How come you can have a Service Account without a Role and RoleBinding?_
+
+You created an empty Service Account that doesn't have any sort of permission.
+
+However, you can use it to authenticate your request to the API (but you can't create, update, delete, etc. resources).
+
 Service accounts are useful and straightforward, but you should know that:
 
-1. When you create a Service Account, Kubernetes creates a companion Secret object with a token. Then, you use the token to authenticate with the Kubernetes API. Since there's a one-to-one relationship between the two, any workload that can read a secret in a namespace can also read the service account tokens in the same namespac. In other words, you could have any workload using another Service Account in the same namespace to authenticate against the Kubernetes API — effectively impersonating someone else. Unfortunately, there's no mechanism to restrict access to a subset of Secrets in a namespace. The application has access to all of them, or none of them.
-1. The tokens associated with a Service Account are long-lived and do not expire. In other words, once you have access to one of them, you can use it forever (or until the administrator deletes the secret associated with the token).
-1. No audience binding of the tokens. As a cluster administrator, you cannot associate a token with a specific intended audience for different workloads. This means that anyone with access to the service account token can authenticate itself and are authorized to communicate with any other service running inside the cluster. The destination service doesn't have any way to verify whether the token it was presented with was meant for itself at all.
+### 1. When you create a Service Account, Kubernetes creates a companion Secret object with a token
+
+You use the token to authenticate with the Kubernetes API.
+
+In this example, you can inspect the Service Account and find the token with:
+
+```terminal|command=1|title=bash
+kubectl --namespace api describe serviceaccount api
+Name:                api
+Namespace:           api
+Mountable secrets:   api-token-ttr8q
+Tokens:              api-token-ttr8q
+```
+
+Which matches the Secret store in the namespace:
+
+```terminal|command=1|title=bash
+kubectl get secrets --namespace api
+NAME                  TYPE
+api-token-ttr8q       kubernetes.io/service-account-token
+default-token-vppc9   kubernetes.io/service-account-token
+```
+
+However, any workload that can read a secret in a namespace can also read the service account tokens in the same namespace.
+
+In other words, you could have any other Pod using the same Service Account to authenticate against the Kubernetes API — effectively impersonating someone else.
+
+Unfortunately, there's no mechanism to restrict access to a subset of Secrets in a namespace.
+
+**The application has access to all of them, or none of them.**
+
+### 2. The tokens associated with a Service Account are long-lived and do not expire
+
+In other words, once you have access to one of them, you can use it forever (or until the administrator deletes the secret associated with the token).
+
+### 3. No audience binding of the tokens
+
+As a cluster administrator, you cannot associate a token with a specific audience.
+
+As an example,
+
+Anyone with access to the service account token can authenticate itself and are authorized to communicate with any other service running inside the cluster.
+
+The destination service doesn't have any way to verify whether the token it was presented with was meant for itself at all.
 
 Tokens associated with Service Accounts are verified by the Kubernetes API.
 
