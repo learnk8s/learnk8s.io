@@ -12,35 +12,41 @@ _How would the secret store decide to authenticate or deny the request?_
 
 A popular approach is to request and pass identity tokens to every call within services.
 
-So instead of issuing a request from the API service or the data store to the secret store directly, you might need to go through an Authorisation service first, authenticate and retrieve a token that is passed along to your request.
+So instead of issuing a request to the secret store directly, you might need to go through an Authorisation service first, retrieve a token and authenticate your request.
 
-That way, when the data store presents the token to the secret store, it is rejected, but if the API service presents the same token, it will be accepted.
+That way, when the data store or the presents the token to the secret store, it is rejected.
+
+However, if the API service presents the same token, it is accepted.
 
 ![Three apps](image1.png)
 
-You have several options when it comes to Authorisation server:
+You have several options when it comes to authorisation server:
 
-- You could use static tokens that don't expire. You will perhaps specify them as environment variables or hardcoding them in the applications that communicate with each other. This removes the need for running a dedicated authorization server.
+- You could use static tokens that don't expire. In this case, there is no need for running a dedicated authorization server.
 - You could use oAuth by setting up an internal oAuth server.
 - You could roll out your own authorisation mechanism such as mutual TLS certificates.
 
 All authorisation servers have to do is to:
 
-1. Authenticate the caller - The caller should have an identity that it's part of the network and verifiable.
-1. Generate a token with a limited scope, validity and the desired audience.
-1. Validate a token - The called service would call the Authorisation server with the provided token and accept the request if the validation is successful and reject it otherwise.
+1. **Authenticate the caller** - The caller should have a valid and verifiable identity.
+1. **Generate a token with a limited scope, validity and the desired audience.**
+1. **Validate a token** - Service to service communication is allowed only if the token is legit.
 
 Examples of Authorisation servers are tools such as [Keycloak](https://www.keycloak.org/) or [Dex](https://github.com/dexidp/dex).
 
-You might have not noticed, but Kubernetes offers the same primitives of the authorisation service within the cluster with Service Account, Roles and RoleBindings.
+You might have not noticed, but even Kubernetes offers the same primitives as the authorisation service with Service Account, Roles and RoleBindings.
 
-You assign identities using Service Accounts. Service accounts are linked to roles to that grant access to resources they need.
+In Kubernetes, you assign identities using Service Accounts.
+
+Service accounts are linked to roles to that grant access to resources.
 
 Tokens are generated as soon as you create the Service Account and stored in a Secret.
 
-You use the secret as a mechanism to authenticate to the API and make requests.
+Users and Pods can use the secret as a mechanism to authenticate to the API and make requests.
 
 You only receive successful replies for the resources you are entitled to consume.
+
+If your Role grant you access to create and delete Pods, you won't be able to amend Secrets, or create ConfigMaps — for example.
 
 _Could you use Service Accounts as a mechanism to authenticate requests between apps in the cluster?_
 
@@ -54,27 +60,24 @@ Let's try that.
 
 You will now deploy two services:
 
-1. We will refer to these services as the API service (API) and the Secret store.
+1. You will refer to these services as the API service (API) and the Secret store.
 1. They are written in the Go programming language and they communicate via HTTP.
-1. Each service will run in its own namespaces and use dedicated service accounts.
-1. The secret store requires that any client communicating to it identifies itself via a valid service account token passed as a HTTP header.
+1. Each service runs in its own namespaces and use dedicated service accounts.
+1. The secret store requires that any client identifies itself before making a request.
 
-## Setting up
+## Creating the cluster
 
-You will need access to a Kubernetes cluster with the [ServiceAccountVolume](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#service-account-token-volume-projection)
-projection feature enabled.
+You will need access to a Kubernetes cluster with the [ServiceAccountVolume projection](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#service-account-token-volume-projection) feature enabled.
 
-You will learn more about this feature later on in the article.
+Don't worry if you don't know what a ServiceAccountVolume is — you will learn more about it later on in the article.
 
 The ServiceAccountVolume projection requires the Kubernetes API server to be started with certain specific API flags.
 
 The support for different managed Kubernetes providers may vary.
 
-However, you can instead use the latest version of [minikube](https://github.com/kubernetes/minikube).
+However, you can enable it in [minikube](https://github.com/kubernetes/minikube) with:
 
-From your terminal, run:
-
-```terminal|command=1|title=bash
+```terminal|command=1-6|title=bash
 minikube start \
   --extra-config=apiserver.service-account-signing-key-file=\
     /var/lib/minikube/certs/sa.key \
@@ -85,131 +88,87 @@ minikube start \
 
 You should also clone the repository <https://github.com/amitsaha/kubernetes-sa-volume-demo> as it contains the demo source code that will be referred to in the article.
 
-## Inter-Service authentication using Service accounts
+## Deploying the API component
 
 The API service is a headless web application listening on port 8080.
 
-When a client makes any request to it, the following steps occur in the backend:
+When a client makes any request to it, the API component:
 
-1. It reads the service account token.
-1. Makes a HTTP GET request to the secret store service passing the X-Client-Id header with the token.
-1. Returns the response it receives from the secret store.
+1. Reads the service account token.
+1. Makes a HTTP GET request to the secret store service with the token linked to the Service Account.
+1. Forwards the response.
 
-The secret store service is another headless web application listening on port 8081.
-
-When a client makes any request to it, the following happens:
-
-1. It looks for the X-Client-Id HTTP header in the request. If one is not found, a HTTP 401 error is sent back as a response.
-1. If the header is found, the value for the header is then checked with the Kubernetes API for its validity.
-1. If the header value is found to be valid, the request is accepted, else rejected with a HTTP 403 error response.
-
-Next, you will deploy the services to the cluster.
-
-### Deploy the API service
-
-Go to the `service_accounts/api` directory of the cloned repository.
-
-This contains the source code for the application along with the Dockerfile.
-
-> A built image (amitsaha/k8s-sa-volume-demo-api:sa-1) has been pushed
-> to docker hub, so you will not need to build it locally.
-
-We refer to that image from the Kubernetes deployment manifest.
-
-To deploy the image, you will create the following resources:
-
-- **Namespace** - api
-- **ServiceAccount** - api in the **Namespace** api
-- **Deployment** - app in the **Namespace** api
-
-The YAML manifest can be found in the `deployment.yaml` file.
-
-Run `kubectl apply` to create the above resources:
+You can deploy the app in the cluster with:
 
 ```terminal|command=1|title=bash
-kubectl apply -f deployment.yaml
-```
-
-You should see the following resources created:
-
-```terminal|command=1|title=bash
+kubectl apply -f service_accounts/api/deployment.yaml
 namespace/api created
 serviceaccount/api created
 deployment.apps/app created
 ```
 
-To be able to access this service from the host system, you will have to expose the service first:
+You can temporarily expose the API with:
 
 ```terminal|command=1|title=bash
-kubectl -n api expose deployment app --type=LoadBalancer --port=8080
+kubectl -n api expose deployment
 service/app exposed
 ```
 
-Then, run:
+Retrieve the URL of the app with:
 
 ```terminal|command=1|title=bash
-minikube service app -n api
-# truncated output
-🎉  Opening service api/app in default browser...
-❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+minikube service deployment --url
+TODO: missing output
 ```
 
-You will also see a browser window opened automatically with a URL pointing to the deployed service.
+_Will it work?_
 
-The web page will have this message:
+You can issue a request with:
 
-```
+```terminal|command=1|title=bash
+curl <insert URL from above>
 Get "<http://app.secret-store.svc.cluster.local">: dial tcp: lookup app.secret-store.svc.cluster.local: no such host
 ```
 
 This is expected since you haven't yet deployed the secret store service.
 
-_Keep the browser tab and above terminal window open_
+_Keep the terminal open._
 
 Open a new terminal to carry out the next set of steps.
 
-### Deploy the Secret Store service
+## Deploying the Secret store
 
-Go to the `service_accounts/secret-store` directory.
+The secret store service is another headless web application listening on port 8081.
 
-This contains the source code for the application along with the Dockerfile.
+When a client makes any request to it, the Secret store:
 
-A built image (amitsaha/k8s-sa-volume-demo-ss:sa-1) has been pushed to docker hub.
+1. Looks for a token in the request. If there isn't one, it replies with a HTTP 401 error response.
+1. Checks the token with the Kubernetes API for its validity. If it's invalid, it replies with a HTTP 403 response.
+1. Replies to the original request.
 
-You will not need to build it locally.
-
-We will use that image to deploy the service.
-
-To deploy the image, you will create the following resources:
-
-- **Namespace** - secret-store
-- **ServiceAccount** - secret-store in the **Namespace** secret-store
-- **ClusterRoleBinding** - role-tokenreview-binding to bind secret-store **ServiceAccount** to
-  system:auth-delegator role
-- **Deployment** - app in **Namespace**  secret-store
-- **Service** - secret-store in **Namespace** secret-store
-
-A manifest creating the above resources can be found in the `deployment.yaml` file.
-
-Run kubectl apply to create the above resources:
+You can create the secret store with:
 
 ```terminal|command=1|title=bash
-kubectl apply -f deployment.yaml
+kubectl apply -f service_accounts/secret-store/deployment.yaml
+TODO: missing output
 ```
 
-Now, go back to the browser tab which had the API service URL opened and **reload** the tab.
+Now, go back to the previous terminal window with the API service and issue the same request again:
 
-You will see the message: _“Hello from secret store. You have been authenticated”_
+```terminal|command=1|title=bash
+curl <insert URL from above>
+Hello from secret store. You have been authenticated
+```
 
-This tells us that the secret store service could successfully verify the token that API service provided in its request.
+The secret store service successfully verified the token and replied to your request.
 
 _But how does all of that work? Let's find out._
 
-Keep the two terminal sessions running and switch to a new terminal session.
+Keep the two terminal sessions running and switch to a new (third) terminal session.
 
 ## Under the hood
 
-Service accounts are a way to associate your Kubernetes workload with an identity.
+**Service accounts are a way to associate your Kubernetes workload with an identity.**
 
 You can use Service Accounts to define what resources should be accessible in the cluster and who can access them.
 
