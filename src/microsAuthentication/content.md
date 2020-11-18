@@ -180,7 +180,7 @@ Keep the two terminal sessions running and switch to a new (third) terminal sess
 
 **Service accounts are a way to associate your Kubernetes workload with an identity.**
 
-You can then combine a service account with a Role/ClusterRole and a RoleBinding/ClusterRoleBinding
+You can then combine a service account with a Role (or ClusterRole) and a RoleBinding (or ClusterRoleBinding)
 to define what or who can access what resources in a cluster.
 
 For example, when you want to restrict reading Secrets only to admin users in the cluster, you can do so using a service account.
@@ -221,7 +221,7 @@ _How come you can have a Service Account without a Role and RoleBinding?_
 
 You created an empty Service Account that doesn't have any sort of permission.
 
-However, you can use it to authenticate your request to the API (but you can't create, update, delete, etc. resources).
+However, you can use it to authenticate your request to the Kubernetes API (but you can't create, update, delete, etc. resources).
 
 Service accounts are useful and straightforward, but you should know that:
 
@@ -239,7 +239,7 @@ Mountable secrets:   api-token-ttr8q
 Tokens:              api-token-ttr8q
 ```
 
-Which matches the Secret store in the namespace:
+Which matches the Secret object in the namespace:
 
 ```terminal|command=1|title=bash
 kubectl get secrets --namespace api
@@ -489,7 +489,7 @@ The CACERT variable points to the Certificate Authority bundle that curl will us
 # CACERT=${SERVICEACCOUNT}/ca.crt
 ```
 
-Let's issue a request to theAPI and see if you can authenticate
+Let's issue a request to the Kubernetes API and see if you can authenticate:
 
 ```terminal|command=1|title=bash
 curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api
