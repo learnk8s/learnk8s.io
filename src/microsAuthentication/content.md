@@ -174,7 +174,8 @@ Keep the two terminal sessions running and switch to a new (third) terminal sess
 
 **Service accounts are a way to associate your Kubernetes workload with an identity.**
 
-You can use Service Accounts to define what resources should be accessible in the cluster and who can access them.
+You can then combine a service account with a Role/ClusterRole and a RoleBinding/ClusterRoleBinding
+to define what or who can access what resources in a cluster.
 
 For example, when you want to restrict reading Secrets only to admin users in the cluster, you can do so using a service account.
 
@@ -256,8 +257,6 @@ In other words, once you have access to one of them, you can use it forever (or 
 ### 3. No audience binding of the tokens
 
 As a cluster administrator, you cannot associate a token with a specific audience.
-
-As an example,
 
 Anyone with access to the service account token can authenticate itself and are authorized to communicate with any other service running inside the cluster.
 
