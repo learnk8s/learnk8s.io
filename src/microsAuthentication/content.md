@@ -110,14 +110,14 @@ deployment.apps/app created
 You can temporarily expose the API with:
 
 ```terminal|command=1|title=bash
-kubectl --namspace api expose deployment/app --type=NodePort
+kubectl --namespace api expose deployment/app --type=NodePort
 service/app exposed
 ```
 
 Retrieve the URL of the app with:
 
 ```terminal|command=1|title=bash
-minikube --namspace api service deployment --url
+minikube --namespace api service deployment --url
 http://192.168.99.101:31541
 ```
 
