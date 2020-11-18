@@ -12,15 +12,21 @@ _How would the secret store decide to authenticate or deny the request?_
 
 A popular approach is to request and pass identity tokens to every call within services.
 
-So instead of issuing a request to the secret store directly, you might need to go through an Authorisation service first, retrieve a token and authenticate your request.
+So instead of issuing a request to the secret store directly, you might need to go through an Authorisation service first, 
+retrieve a token and authenticate your request.
 
-That way, when the data store or the presents the token to the secret store, it is rejected.
+That way, when the data store presents a token to the secret store, it is rejected.
 
-However, if the API service presents the same token, it is accepted.
+However, if the API service presents the same token, it is accepted by the secret store.
+
+There is a certain context associated with the token that allows the secret store to accept a token from the API service
+and to reject a token from the data store service. 
+
+This context association and verfification could be implemented in multiple ways.
 
 ![Three apps](image1.png)
 
-You have several options when it comes to authorisation server:
+You have several options when it comes to implementing this mechanism of authentication:
 
 - You could use static tokens that don't expire. In this case, there is no need for running a dedicated authorization server.
 - You could use oAuth by setting up an internal oAuth server.
@@ -30,7 +36,7 @@ All authorisation servers have to do is to:
 
 1. **Authenticate the caller** - The caller should have a valid and verifiable identity.
 1. **Generate a token with a limited scope, validity and the desired audience.**
-1. **Validate a token** - Service to service communication is allowed only if the token is legit.
+1. **Validate a token** - Service to service communication is allowed only if the token is legit for the two services involved.
 
 Examples of Authorisation servers are tools such as [Keycloak](https://www.keycloak.org/) or [Dex](https://github.com/dexidp/dex).
 
@@ -38,7 +44,7 @@ You might have not noticed, but even Kubernetes offers the same primitives as th
 
 In Kubernetes, you assign identities using Service Accounts.
 
-Service accounts are linked to roles to that grant access to resources.
+Service accounts are then linked to roles to that grant access to resources.
 
 Tokens are generated as soon as you create the Service Account and stored in a Secret.
 
@@ -121,7 +127,7 @@ minikube --namespace api service deployment --url
 http://192.168.99.101:31541
 ```
 
-_Will it work?_
+_Will you get a successful response from the API server?_
 
 You can issue a request with:
 
