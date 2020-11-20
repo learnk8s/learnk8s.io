@@ -118,4 +118,5 @@ export function register(store: Store) {
   Gatekeeper.Register(store)
   GracefulShutdown.Register(store)
   RequestsLimits.Register(store)
+  MicroServiceAuthentication.Register(store)
 }

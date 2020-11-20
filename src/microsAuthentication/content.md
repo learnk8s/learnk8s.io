@@ -12,24 +12,20 @@ _How would the secret store decide to authenticate or deny the request?_
 
 A popular approach is to request and pass identity tokens to every call within services.
 
-So instead of issuing a request to the secret store directly, you might need to go through an Authorisation service first, 
-retrieve a token and authenticate your request.
+So instead of issuing a request to the secret store directly, you might need to go through an Authorisation service first, retrieve a token and authenticate your request.
 
 That way, when the data store presents a token to the secret store, it is rejected.
 
 However, if the API service presents the same token, it is accepted by the secret store.
 
-There is a certain context associated with the token that allows the secret store to accept a token from the API service
-and to reject a token from the data store service. 
-
-This context association and verfification could be implemented in multiple ways.
+There is a certain context associated with the token that allows the secret store to accept a token from the API service and to reject a token from the data store service.
 
 ![Three apps](image1.png)
 
 You have several options when it comes to implementing this mechanism of authentication:
 
 - You could use static tokens that don't expire. In this case, there is no need for running a dedicated authorization server.
-- You could use oAuth by setting up an internal oAuth server.
+- You could set up an oAuth server.
 - You could roll out your own authorisation mechanism such as mutual TLS certificates.
 
 All authorisation servers have to do is to:
@@ -40,7 +36,7 @@ All authorisation servers have to do is to:
 
 Examples of Authorisation servers are tools such as [Keycloak](https://www.keycloak.org/) or [Dex](https://github.com/dexidp/dex).
 
-You might have not noticed, but even Kubernetes offers the same primitives as the authorisation service with Service Account, Roles and RoleBindings.
+You might have not noticed, but even Kubernetes offers the same primitives as the authorisation service with Service Accounts, Roles and RoleBindings.
 
 In Kubernetes, you assign identities using Service Accounts.
 
@@ -56,7 +52,7 @@ If your Role grant you access to create and delete Pods, you won't be able to am
 
 _Could you use Service Accounts as a mechanism to authenticate requests between apps in the cluster?_
 
-Kubernetes offers the same primitives to authentication requests just like Keycloak and Dex.
+Kubernetes offers the same primitives to authenticate requests just like Keycloak and Dex.
 
 _What if the Kubernetes API could be used as an Authorisation server?_
 
@@ -77,7 +73,7 @@ You will need access to a Kubernetes cluster with the [ServiceAccountVolume proj
 
 Don't worry if you don't know what a ServiceAccountVolume is — you will learn more about it later on in the article.
 
-The ServiceAccountVolume projection requires the Kubernetes API server to be started with certain specific API flags.
+The ServiceAccountVolume projection requires the Kubernetes API server to be running with certain specific API flags.
 
 The support for different managed Kubernetes providers may vary.
 
@@ -150,7 +146,7 @@ When a client makes any request to it, the Secret store:
 
 1. Looks for a token in the request. If there isn't one, it replies with a HTTP 401 error response.
 1. Checks the token with the Kubernetes API for its validity. If it's invalid, it replies with a HTTP 403 response.
-1. Replies to the original request.
+1. Finally, when the token is valid, it replies to the original request.
 
 You can create the secret store with:
 
@@ -180,8 +176,7 @@ Keep the two terminal sessions running and switch to a new (third) terminal sess
 
 **Service accounts are a way to associate your Kubernetes workload with an identity.**
 
-You can then combine a service account with a Role (or ClusterRole) and a RoleBinding (or ClusterRoleBinding)
-to define what or who can access what resources in a cluster.
+You can then combine a service account with a Role (or ClusterRole) and a RoleBinding (or ClusterRoleBinding) to define what or who can access what resources in a cluster.
 
 For example, when you want to restrict reading Secrets only to admin users in the cluster, you can do so using a service account.
 
@@ -223,9 +218,11 @@ You created an empty Service Account that doesn't have any sort of permission.
 
 However, you can use it to authenticate your request to the Kubernetes API (but you can't create, update, delete, etc. resources).
 
-Service accounts are useful and straightforward, but you should know that:
+Service accounts are useful and straightforward, but there is something that you should know.
 
-### 1. When you create a Service Account, Kubernetes creates a companion Secret object with a token
+### 1. One Secret for every Service Account
+
+When you create a Service Account, Kubernetes creates a companion Secret object with a token
 
 You use the token to authenticate with the Kubernetes API.
 
@@ -256,7 +253,9 @@ Unfortunately, there's no mechanism to restrict access to a subset of Secrets in
 
 **The application has access to all of them, or none of them.**
 
-### 2. The tokens associated with a Service Account are long-lived and do not expire
+### 2. Long live the Service Account's token
+
+The tokens associated with a Service Account are long-lived and do not expire
 
 In other words, once you have access to one of them, you can use it forever (or until the administrator deletes the secret associated with the token).
 
@@ -268,13 +267,13 @@ Anyone with access to the service account token can authenticate itself and are 
 
 The destination service doesn't have any way to verify whether the token it was presented with was meant for itself at all.
 
+## Validating tokens with the Token Review API
+
 Tokens associated with Service Accounts are verified by the Kubernetes API.
 
 In particular, there's a specific component in charge of validating and rejecting them: the **Token Review API**.
 
 Let's manually create a token and validate it against the Token Review API.
-
-### Creating a Service Account
 
 Consider the following YAML manifest to create a namespace, `test` and a service account, `sa-test-1` in it:
 
@@ -295,7 +294,6 @@ Save the above into a file `sa.yaml` and run kubectl apply:
 
 ```terminal|command=1|title=bash
 kubectl apply -f sa.yaml
-
 namespace/test created
 serviceaccount/sa-test-1 created
 ```
@@ -304,80 +302,65 @@ To view the token associated with the service account:
 
 ```terminal|command=1|title=bash
 kubectl --namespace test describe sa sa-test-1
-Name:            	sa-test-1
-Namespace:       	test
-Labels:          	<none>
-Annotations:     	kubectl.kubernetes.io/last-applied-configuration:
-            {"apiVersion":"v1","kind":"ServiceAccount","metadata":
-           {"annotations":{},"name":"sa-test-1","namespace":"test"}}
-Image pull secrets:  <none>
-Mountable secrets:   sa-test-1-token-99l5r
-Tokens:          	sa-test-1-token-99l5r
-Events:          	<none>
+Name:                 sa-test-1
+Namespace:            test
+Labels:               <none>
+Image pull secrets:   <none>
+Mountable secrets:    sa-test-1-token-99l5r
+Tokens:               sa-test-1-token-99l5r
+Events:               <none>
 ```
 
-Then to view the secret object:
+Then to view the secret object, you can issue the following command:
 
-```
+```terminal|command=1|title=bash
 kubectl --namespace test describe secret sa-test-1-token-99l5r
-Name:     	sa-test-1-token-99l5r
-Namespace:	test
-Labels:   	<none>
-Annotations:  kubernetes.io/service-account.name: sa-test-1
-          	kubernetes.io/service-account.uid: d2d210d8-8bd6-4115-b796-5ff4bd373d74
-
+Name:       sa-test-1-token-99l5r
+Namespace:  test
+Labels:     <none>
 Type:  kubernetes.io/service-account-token
 
 Data
 ====
-ca.crt: 	1066 bytes
+ca.crt:     1066 bytes
 namespace:  4 bytes
-token:  	eyJhbGciOiJSUzI1NiIsImtpZCI6InY3MDRITGNmdGt1WTdwNFk4Q2Y1Q0tTUm
-5TMzdOVDBGdXFEQkU1bWVibE0ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW
-50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJ0ZXN0Iiwi
-a3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6InNhLXRlc3QtMS
-10b2tlbi05OWw1ciIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1
-hY2NvdW50Lm5hbWUiOiJzYS10ZXN0LTEiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2Nvd
-W50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJkMmQyMTBkOC04YmQ2LTQxMTUtYjc5Ni01Zm
-Y0YmQzNzNkNzQiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6dGVzdDpzYS10ZXN0
-LTEifQ.hJVpGWU4gd1VoDPaeHPT-fIS_1Uc_r_hhuLPw0AjdCownGmeZj-yv_GgItRvDK
-dyj7jSpTnPfLiH0z8e_xGXssGHaWhHm5AOZt1Mf9TZYqdFrfNPdjwW2-_dpkytYC1zSVG
-NMQsEAI758s3RRGezk24Js3zWjpStK1AlcnDOmFslNP1aI2RmlubGd9CKb9Nm_1ln4gVc
-8n02RvpvlHU5LE6uVOe-e9TZrFpHrhPBDhrrFxC-x0-PgrdAlekc8wE2OcKfZtSsHofj
-H_0MPcN94ethCmgwniBJMfGvxrMp8-6KkSSAhLMrdsHth_KiXtNkC6EZjFCAcAJKe6juu1OIrg
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6…
 ```
 
 The `token` object in the Data is a base64 encoded object representing a JSON web token payload.
 
-Once you have an appropriate RoleBinding or ClusterRoleBinding setup, you can then provide this token to perform operations in the cluster from within a pod.
+Once you have an appropriate RoleBinding or ClusterRoleBinding setup, you can use this token make requests to the Kubernetes API.
 
-For example, given a service account token, you want to verify whether the token is valid or not by invoking the Kubernetes TokenReview API.
+For example, you might want to verify whether the token is valid or not by invoking the Kubernetes TokenReview API.
 
 ### Verifying a token using TokenReview API
 
 A Service Account is just an identity with no permissions associated with it.
 
-If you want to grant access to the Service account you need two more objects: a binding and a role.
+If you want to grant access to the Service account you need two more objects: a Binding and a Role.
 
-In the role you define access to the resources such as read-only access to Secrets or only GET, DESCRIBE and LIST operations on Pods.
+In the Role you define access to the resources such as read-only access to Secrets or only GET, DESCRIBE and LIST operations on Pods.
 
 Kubernetes comes with a list of roles prepackaged that you can list with:
 
 ```terminal|command=1|title=bash
-kubectl get roles
+kubectl get roles --all-namespaces
+TODO: output
 ```
 
-In the following example, you will use the `system:auth-delegator` role which has all the permission you need to call the Token Review API. You can inspect it with:
+In the following example, you will use the `system:auth-delegator` role which has all the permission you need to call the Token Review API.
+
+You can inspect it with:
 
 ```terminal|command=1|title=bash
-kubectl get role system:auth-delegator
+kubectl describe role system:auth-delegator --namespace kube-system
 ```
 
-The only part missing is the binding.
+The only part missing is the Binding.
 
 You can create a ClusterRoleBinding to link the Service Account to a role and grant the permission cluster wide:
 
-```yaml|title=sa_rbac.yaml
+```yaml|highlight=8,11|title=sa_rbac.yaml
 kind: ClusterRoleBinding
 metadata:
   name: role-tokenreview-binding
@@ -392,126 +375,127 @@ subjects:
   namespace: test
 ```
 
-Save the above into a new file, sa_rbac.yaml and run kubectl apply:
+Now you Service Account is linked to the `system:auth-delegator` role.
 
-```
+Save the above into a new file, `sa_rbac.yaml` and submit it to the cluster with:
+
+```terminal|command=1|title=bash
 kubectl apply -f sa_rbac.yaml
 clusterrolebinding.rbac.authorization.k8s.io/role-tokenreview-binding created
 ```
 
 You have now created a service account and associated it with a ClusterRole to allow it to invoke the TokenReview API.
 
-How should you use it? Here's one way:
+_How should you use it?_
+
+Here's one way:
 
 1. You could assign the Service Account to a Pod.
-1. Invoke a HTTP client in that Pod to query the TokenReview API (You should be able to query the API because you assigned the `system:auth-delegator` role). When  making the request, you will pass on the service account token associated with the pod as a header value to the TokenReview API.
-1. You will verify the same token that you are using to authenticate. It's an artificial scenario but it solves our purpose here.
+1. Then, you could attach to the running container with `kubectl exec`
+1. Using an HTTP client like `curl`, you could issue a request to the TokenReview API.
 
-The image you will use to create the pod needs to have the bash, curl and the sleep programs available.
+It's an artificial scenario but it good compromise to test the flow.
 
-You can use the image `amitsaha/curl` - which I created for this article and is available on Docker Hub.
+The image you will use to create the pod needs to have the `bash`, `curl` and the `sleep` binaries available.
 
-```terminal|command=1|title=bash
-kubectl run --namespace=test --serviceaccount=sa-test-1 --generator=run-pod/v1 \
-  curl --image=amitsaha/curl  --image-pull-policy=Never --restart='Never' --command -- sleep 3600
+You can use the image `amitsaha/curl` - which I created for this article and [is available on Docker Hub](https://hub.docker.com/r/amitsaha/curl).
+
+```terminal|command=1-8|title=bash
+kubectl run --namespace=test \
+  --serviceaccount=sa-test-1 \
+  --generator=run-pod/v1 \
+  curl \
+  --image=amitsaha/curl \
+  --image-pull-policy=Never \
+  --restart='Never' \
+  --command -- sleep 3600
 pod/curl created
 ```
 
-Now, run kubectl describe to show details about the pod that was just created:
+Now, run `kubectl describe` to show details about the pod that was just created:
 
 ```terminal|command=1|title=bash
 kubectl --namespace test describe pod curl
-Name:     	curl
-Namespace:	test
-..
+Name:       curl
+Namespace:  test
+
 Containers:
   curl:
-	Container ID:  docker://9dc09c2f6f78b54e600eaec10db0885bad3da455126ab9230ac1914a301f445e
-	Image:     	amitsaha/curl
-	Image ID:  	docker://sha256:db3743f4dce44c902e0b89382d96d78ccf6adee92116cbfdb0c713591d0b08a8
-	Port:      	<none>
-	Host Port: 	<none>
-	Command:
-  	sleep
-  	3600
-	State:      	Running
-  	Started:  	Fri, 18 Sep 2020 17:06:22 +1000
-	Ready:      	True
-	Restart Count:  0
-	Environment:	<none>
-	Mounts:
-  	/var/run/secrets/kubernetes.io/serviceaccount from sa-test-1-token-smgh4 (ro)
-..
+  Image:     	amitsaha/curl
+  # truncated output
+  Mounts:
+    /var/run/secrets/kubernetes.io/serviceaccount from sa-test-1-token-smgh4 (ro)
 ```
 
-The key information in the above output is that the service account token is available to the pod in the directory, `/var/run/secrets/kubernetes.io/serviceaccount`.
+The key information is that the service account token is available to the pod in the directory, `/var/run/secrets/kubernetes.io/serviceaccount`.
 
 When a Pod is created, the Service Account data is automatically mounted as a volume and the Service Account token is available as a file inside that directory.
 
-Let's retrieve the token.
+_Let's retrieve the token._
 
-Use kubectl exec to start a shell session inside the running pod:
+Use `kubectl exec` to start a shell session inside the running pod:
 
-```terminal|command=1|title=bash
+```terminal|command=1,2|title=bash
 kubectl --namepsace test exec -ti curl bash
 root@curl:/#
 ```
 
-Inside the shell session, first export a few variables.
+Inside the shell session, you should export a few variables to issue a request.
 
-First up, let's export the APISERVER variable pointing to the Kubernetes API:
-
-```terminal|command=1|title=bash
-# APISERVER=https://kubernetes.default.svc
-```
-
-The SERVICEACCOUNT variable points to the filesystem directory at which the service account related files can be found:
+First up, let's export the `APISERVER` variable pointing to the Kubernetes API.
 
 ```terminal|command=1|title=bash
-# SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+export APISERVER=https://kubernetes.default.svc
 ```
 
-The NAMESPACE variable contains the namespace obtained via reading the contents of the namespace file in the above directory:
+You also need the current Namespace and the Service Account's token.
+
+The current namespace is available under the Service Account folder.
+
+You can export it with:
 
 ```terminal|command=1|title=bash
-# NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+export SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+export NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
 ```
 
-The TOKEN variable contains the service account token obtained via reading the contents of the token file in the same directory:
+The token is stored in the same directory:
 
 ```terminal|command=1|title=bash
-# TOKEN=$(cat ${SERVICEACCOUNT}/token)
+export TOKEN=$(cat ${SERVICEACCOUNT}/token)
 ```
 
-The CACERT variable points to the Certificate Authority bundle that curl will use to verify the Kubernetes API certificate:
+To connect to the Kubernetes API you also need the Certificate Authority bundle.
+
+You can export with:
 
 ```terminal|command=1|title=bash
-# CACERT=${SERVICEACCOUNT}/ca.crt
+export CACERT=${SERVICEACCOUNT}/ca.crt
 ```
 
-Let's issue a request to the Kubernetes API and see if you can authenticate:
+Finally, let's issue a request to the Kubernetes API and see if you can authenticate:
 
 ```terminal|command=1|title=bash
 curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api
 {
   "kind": "APIVersions",
   "versions": [
-  "v1"
+    "v1"
   ],
   "serverAddressByClientCIDRs": [
-  {
-    "clientCIDR": "0.0.0.0/0",
-    "serverAddress": "172.17.0.3:8443"
-  }
+    {
+      "clientCIDR": "0.0.0.0/0",
+      "serverAddress": "172.17.0.3:8443"
+    }
   ]
 }
 ```
 
-Excellent, you can reach the Kubernetes API.
+Excellent, you can reach the Kubernetes API!
 
 Note how you passed the Authorization header containing the service account token.
 
-If you don't supply it or pass in an invalid token, you will get a HTTP 403 error response as follows:
+If you don't supply it or pass in an invalid token, you will get a HTTP 403 error response:
 
 ```terminal|command=1|title=bash
 curl --cacert ${CACERT} -X GET ${APISERVER}/api
@@ -543,13 +527,15 @@ The API endpoint expects a POST request with a JSON formatted payload of the fol
   "kind": "TokenReview",
   "apiVersion": "authentication.k8s.io/v1",
   "spec": {
-  "token": "<your token>"
+    "token": "<your token>"
   }
 }
 ```
 
 In this case, the token you will use to authenticate to the API server as well as verify the status
-of is the same. Thus, the curl command to run in the pod shell session is:
+of is the same.
+
+Thus, the curl command to run in the pod shell session is:
 
 ```terminal|command=1-6|title=bash
 curl --cacert ${CACERT} -X "POST" \
@@ -560,58 +546,46 @@ curl --cacert ${CACERT} -X "POST" \
    "authentication.k8s.io/v1", "spec": {"token": "'$TOKEN'"}}'
 ```
 
-The response will look as follows:
+The response should look as follows:
 
 ```json
 {
   "kind": "TokenReview",
   "apiVersion": "authentication.k8s.io/v1",
   "metadata": {
-  "creationTimestamp": null,
-  "managedFields": [
-    {
-      "manager": "curl",
-      "operation": "Update",
-      "apiVersion": "authentication.k8s.io/v1",
-      "time": "2020-09-18T09:24:37Z",
-      "fieldsType": "FieldsV1",
-      "fieldsV1": {
-        "f:spec": {
-          "f:token": {}
+    "creationTimestamp": null,
+    "managedFields": [
+      {
+        "manager": "curl",
+        "operation": "Update",
+        "apiVersion": "authentication.k8s.io/v1",
+        "time": "2020-09-18T09:24:37Z",
+        "fieldsType": "FieldsV1",
+        "fieldsV1": {
+          "f:spec": {
+            "f:token": {}
+          }
         }
       }
-    }
-  ]
-  },
-  "spec": {
-  "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUwbGdTc1FvUzFvTDlud0lnQjhBbDhMaFd
-KT0VNeHM3STNaWERnaHB0MUEifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Ii
-wia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJ0ZXN0Iiwia3ViZXJ
-uZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6InNhLXRlc3QtMS10b2tlbi1z
-bWdoNCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hb
-WUiOiJzYS10ZXN0LTEiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWN
-jb3VudC51aWQiOiI0MmQ0M2U0Ni03NmZlLTQ0MWYtODI4MS1hNTY2OTY0ZTUyZmUiLCJzdWIiO
-iJzeXN0ZW06c2VydmljZWFjY291bnQ6dGVzdDpzYS10ZXN0LTEifQ.eutlDryfPEWKoCDL7JV7
-9AYslJw7aYWgYqVzhFUatipBp081yXyBz0ahEILqYkl4TvtIOkIY3zcy4Zuumjoomp7RFUvxe4
-OClaLEUHvRdpbjEK_pV_Rvz8xoBEeHBZntiyNYgtQieRC1zBq6xLvMt6HPLpCa_NkDTbON_9_T_
-ib6D4qnG7V_OtYL-S3aqgfWRnhc3H1s5j2M0BudRmybDoR76K3plehjKGqjggjIynb3r9tF4ow
-NxsLrgU1SUZVG8yIc6_mriJntrTtHEo-OWD4fx01dkIg40fupJnDeKlHsPgQC4lfIvSjlv1a
-YQOS9VLssYs9Tg8Y10zCPoOjDdw"
-  },
-  "status": {
-  "authenticated": true,
-  "user": {
-    "username": "system:serviceaccount:test:sa-test-1",
-    "uid": "42d43e46-76fe-441f-8281-a566964e52fe",
-    "groups": [
-      "system:serviceaccounts",
-      "system:serviceaccounts:test",
-      "system:authenticated"
     ]
   },
-  "audiences": [
-    "api"
-  ]
+  "spec": {
+    "token": "eyJhbGciOiJSUzI1NiI…"
+  },
+  "status": {
+    "authenticated": true,
+    "user": {
+      "username": "system:serviceaccount:test:sa-test-1",
+      "uid": "42d43e46-76fe-441f-8281-a566964e52fe",
+      "groups": [
+        "system:serviceaccounts",
+        "system:serviceaccounts:test",
+        "system:authenticated"
+      ]
+    },
+    "audiences": [
+      "api"
+    ]
   }
 }
 ```
