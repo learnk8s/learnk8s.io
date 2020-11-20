@@ -16,7 +16,7 @@ export const FreeTools = {
 export const Resources = {
   id: 'resources',
   url: '/kubernetes-resources',
-  title: 'Kubernetes curated resoureces',
+  title: 'Kubernetes curated resources',
   description: 'A collection of free tools and resources to help you navigate your Kubernetes journey.',
 }
 
