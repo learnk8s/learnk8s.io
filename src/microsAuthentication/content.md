@@ -100,32 +100,26 @@ When a client makes any request to it, the API component:
 1. Makes a HTTP GET request to the secret store service with the token linked to the Service Account.
 1. Forwards the response.
 
-You can deploy the app in the cluster with:
+You can deploy the app and expose it as a service in the cluster with:
 
 ```terminal|command=1|title=bash
 kubectl apply -f service_accounts/api/deployment.yaml
 namespace/api created
 serviceaccount/api created
 deployment.apps/app created
+service/app created
 ```
 
-You can temporarily expose the API with:
+Retrieve the URL of the API service with:
 
 ```terminal|command=1|title=bash
-kubectl --namespace api expose deployment/app --type=NodePort
-service/app exposed
-```
-
-Retrieve the URL of the app with:
-
-```terminal|command=1|title=bash
-minikube --namespace api service deployment --url
+minikube --namespace api service app  --url
 http://192.168.99.101:31541
 ```
 
 _Will you get a successful response from the API server?_
 
-You can issue a request with:
+You can issue a request to the above URL using `curl` (from a new terminal):
 
 ```terminal|command=1|title=bash
 curl http://192.168.99.101:31541
@@ -159,7 +153,7 @@ deployment.apps/app created
 service/app created
 ```
 
-Now, go back to the previous terminal window with the API service and issue the same request again:
+Now, use `curl` to make a request to the API service again:
 
 ```terminal|command=1|title=bash
 curl http://192.168.99.101:31541
@@ -345,7 +339,20 @@ Kubernetes comes with a list of roles prepackaged that you can list with:
 
 ```terminal|command=1|title=bash
 kubectl get roles --all-namespaces
-TODO: output
+
+NAMESPACE     NAME                                             CREATED AT
+kube-public   kubeadm:bootstrap-signer-clusterinfo             2020-08-01T08:07:34Z
+kube-public   system:controller:bootstrap-signer               2020-08-01T08:07:33Z
+kube-system   extension-apiserver-authentication-reader        2020-08-01T08:07:32Z
+kube-system   kube-proxy                                       2020-08-01T08:07:35Z
+kube-system   kubeadm:kubelet-config-1.18                      2020-08-01T08:07:33Z
+kube-system   kubeadm:nodes-kubeadm-config                     2020-08-01T08:07:33Z
+kube-system   system::leader-locking-kube-controller-manager   2020-08-01T08:07:33Z
+kube-system   system::leader-locking-kube-scheduler            2020-08-01T08:07:33Z
+kube-system   system:controller:bootstrap-signer               2020-08-01T08:07:32Z
+kube-system   system:controller:cloud-provider                 2020-08-01T08:07:32Z
+kube-system   system:controller:token-cleaner                  2020-08-01T08:07:33Z
+kube-system   system:persistent-volume-provisioner             2020-11-20T22:04:53Z
 ```
 
 In the following example, you will use the `system:auth-delegator` role which has all the permission you need to call the Token Review API.
@@ -697,6 +704,19 @@ spec:
           value: "http://app.secret-store.svc.cluster.local"
         ports:
         - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  namespace: api
+spec:
+  type: NodePort
+  selector:
+    app: api
+  ports:
+    - port: 8080
+      targetPort: 8080
 ```
 
 You will notice that there is nothing special about the deployment manifest above other than specifying a service account to the deployment.
@@ -968,6 +988,19 @@ spec:
         volumeMounts:
           - mountPath: /var/run/secrets/tokens
             name: api-token
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  namespace: api
+spec:
+  type: NodePort
+  selector:
+    app: api
+  ports:
+    - port: 8080
+      targetPort: 8080
 ```
 
 The projected volume specification above is defined as:
@@ -999,31 +1032,23 @@ Go into _service_accounts_volume_projection/api/_ directory and run kubectl appl
 kubectl apply -f deployment.yaml
 ```
 
-To be able to access this service from the host system, you will first need to expose the service as earlier:
+Retrieve the URL of the API service with:
 
 ```terminal|command=1|title=bash
-kubectl -n api expose deployment app --type=LoadBalancer --port=8080
-service/app exposed
+minikube --namespace api service app  --url
+http://192.168.99.101:31541
 ```
 
-Then, run:
+You can issue a request with:
 
 ```terminal|command=1|title=bash
-minikube service app -n api
-# truncated output
-🎉  Opening service api/app in default browser...
-❗  Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
-```
-
-As earlier, a browser tab will open and you should see the following:
-
-```
+curl http://192.168.99.101:31541
 Get "<http://app.secret-store.svc.cluster.local">: dial tcp: lookup app.secret-store.svc.cluster.local: no such host
 ```
 
 This is expected as the secret store is not yet deployed.
 
-Keep the tab and the terminal window open.
+Keep the terminal open.
 
 Next, let's modify and deploy the secret store service.
 
@@ -1091,9 +1116,13 @@ Events:        	<none>
 
 The value of `Endpoints` in the output above tells us that service is now up and running.
 
-Go back to the browser tab with the API service terminal open and reload the page. You will now see:
+Now, use `curl` to make a request to the API service again:
 
-Hello from secret-store. You have been authenticated
+```terminal|command=1|title=bash
+curl http://192.168.99.101:31541
+Hello from secret store. You have been authenticated
+```
+
 
 If you now view the logs of secret store via `kubectl -n secret-store logs <pod id>`, you will see the following:
 
