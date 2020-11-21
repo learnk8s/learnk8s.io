@@ -113,7 +113,7 @@ service/app created
 Retrieve the URL of the API service with:
 
 ```terminal|command=1|title=bash
-minikube --namespace api service app  --url
+minikube --namespace api service app --url
 http://192.168.99.101:31541
 ```
 
@@ -874,52 +874,49 @@ TODO: output
 
 The Service Account Tokens made available to workloads via the Service Account Token Volume Projection (`ProjectedServiceAccountToken`) are time-limited, audience bound and are not associated with secret objects.
 
-If a Pod is deleted or the service account is removed, these tokens become invalid, thus preventing any abuse if stolen.
+If a Pod is deleted or the Service Account is removed, these tokens become invalid, thus preventing any misuse.
 
 A `serviceAccountToken` volume projection is one of the `projected` volume types.
 
-When this volume type is added to a pod, the service account token is injected at a configured filesystem path inside.
+When this volume type is added to a Pod, the Service Aaccount Token is mounted on the filesystem — in the same way that the Service Account Tokens are mounted.
 
-This is similar to how the service account tokens are mounted inside the pod.
+_There's a difference though._
 
-There's a difference though.
-
-The kubelet automatically rotates the token when it's about to expire.
+**The kubelet automatically rotates the token when it's about to expire.**
 
 In addition, you can configure the path at which you want this token to be available.
 
-### API
+Let's see how you can amend the API component to include the Service Account Token Volume Projection.
 
-You will now modify the code for the API service to read the service account token mounted via volume projection and use that to authenticate to the secret store service:
+### The API component
 
-```go
+You can read the Service Account Token mounted via volume projection with:
+
+```go|title=main.go
 b, err := ioutil.ReadFile("/var/run/secrets/tokens/api-token")
 serviceToken = string(b)
 ```
 
-Note the path to the service account token is different from the previous case.
+Note how the path to the Service Account Token is different from the previous case (it used to be `/var/run/secrets/kubernetes.io/serviceaccount/token`).
 
-You will see how this is configured in the deployment manifest.
+Since the Service Account Token Volume Projection feature relies on the token being refreshed periodically by the kubelet, it is recommended to re-read the token every 5 minutes in the app.
 
-Since the service account token volume projection feature relies on the token being refreshed periodically by the
-kubelet, it is recommended to re-read the token every 5 minutes in the application code.
+You can accomplish this via [a _ticker_ in Go](https://gobyexample.com/tickers) as follows:
 
-You can accomplish this via a _ticker_ in Go as follows:
-
-```go
+```go|title=main.go
 ticker := time.NewTicker(300 * time.Second)
 done := make(chan bool)
 
 go func() {
-    for {
-        select {
-   	case <-done:
-   	    return
-   	case <-ticker.C:
-   	    readToken()
-   	}
-   }
- }()
+		for {
+				select {
+			case <-done:
+					return
+			case <-ticker.C:
+					readToken()
+			}
+		}
+}()
 ```
 
 The `readToken()` function reads the file, `/var/run/secrets/tokens/api-token` and sets the global variable, `serviceToken` to the token value.
@@ -928,9 +925,7 @@ _If you are not familiar with Go's ticker, think of a ticker as a background thr
 
 You can find the entire application code in `service_accounts_volume_projection/api/main.go`.
 
-Now, let's deploy this service.
-
-A built image (amitsaha/k8s-sa-volume-demo-api:sa-2 ) has been pushed to docker hub, so you will not need to build it locally.
+_Now, let's deploy this service._
 
 You will use that image in the deployment manifest (`service_accounts_volume_projection/api/deployment.yaml`):
 
@@ -998,39 +993,31 @@ spec:
       targetPort: 8080
 ```
 
-The projected volume specification above is defined as:
-
-```yaml
-volumes:
-  - name: api-token
-    projected:
-      sources:
-        - serviceAccountToken:
-          path: api-token
-          expirationSeconds: 600
-          audience: secret-store
-```
-
 A volume named `api-token` of `projected` type will be created with the source being `serviceAccountToken`.
 
-The `path` indicates the file where the token will be available inside the configured volume, audience field specifies what the intended audience for the token is (if not specified, it defaults to `api`) and the expirationSeconds indicate how long a token is valid for - the minimum is 600 seconds or 10 minutes.
+The volume defines three additional properties:
 
-The audience field in the manifest says that this service account token is allowed to communicate with another service which identifies itself with the `secret-store` audience.
+1. The `path` indicates the file where the token will be available inside the configured volume.
+1. The `audience` field specifies what the intended audience for the token is (if not specified, it defaults to `api`).
+1. The `expirationSeconds` indicate how long a token is valid for - the minimum is 600 seconds or 10 minutes.
 
-Going back to the example scenario introduced at the beginning, by deploying the data store service without adding secret-store to the list of valid audiences, it will not be able to communicate with the secret store.
+Please notice how the `audience` field specifies that this Service Account Token is allowed to communicate only with services that identify themselves as a `secret-store`.
 
-**Note that if you are deploying a pod to use this feature in a cluster with pod security policies enforced, you will need to ensure that the `projected` volume type is allowed.**
+If you don't include `secret-store` as an audience in the Secret store component, the API won't be able to talk to it — it's not its audience!
 
-Go into _service_accounts_volume_projection/api/_ directory and run kubectl apply:
+> Note that if you are deploying a Pod to use this feature in a cluster with Pod Security Policies enforced, [you will need to ensure that the `projected` volume type is allowed.](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#volumes-and-file-systems)
+
+You can create a new API deployment with:
 
 ```terminal|command=1|title=bash
-kubectl apply -f deployment.yaml
+kubectl apply -f service_accounts_volume_projection/api/deployment.yaml
+deployment.apps/api created TODO: check
 ```
 
 Retrieve the URL of the API service with:
 
 ```terminal|command=1|title=bash
-minikube --namespace api service app  --url
+minikube --namespace api service app --url
 http://192.168.99.101:31541
 ```
 
@@ -1051,36 +1038,29 @@ Next, let's modify and deploy the secret store service.
 
 The token review payload for the secret store will now be as follows:
 
-```go
+```go|title=main.go
 tr := authv1.TokenReview{
-   	 Spec: authv1.TokenReviewSpec{
-   		 Token: 	clientId,
-   		 Audiences: []string{"secret-store"},
-   	 },
-    }
+	pec: authv1.TokenReviewSpec{
+		Token:	clientId,
+		Audiences:	[]string{"secret-store"},
+	},
+}
 ```
 
-Now, in the TokenReview object, secret store explicitly passes “secret-store” as the audience for the token it is asking the API to review.
+Now, in the TokenReview object, the secret store explicitly passes `secret-store` as the audience for the token it is asking the API to review.
 
-If the token doesn't include “secret-store” as an audience, the Token Review API will not authenticate the request.
+If the token doesn't include `secret-store` as an audience, the Token Review API will not authenticate the request.
 
 In other words, the secret store service can assert the identity of the caller and validate that the incoming request token was meant for the secret store service.
 
 You can find the entire application code in `service_accounts_volume_projection/secret-store/main.go`.
 
-Next, let's deploy this service.
+_Next, let's deploy this service._
 
-A built image (_amitsaha/k8s-sa-volume-demo-ss:sa-2_) has been pushed to docker hub, so you will not need to build it locally.
-
-You will use that image in the deployment manifest (`service_accounts_volume_projection/secret-store/deployment.yaml`).
-
-The deployment manifest for the secret store will be the same as earlier.
-
-Go into the `service_accounts_volume_projection/secret-store` directory and run kubectl apply:
+You can create the deployment with:
 
 ```terminal|command=1|title=bash
-kubectl apply -f deployment.yaml
-
+kubectl apply -f service_accounts_volume_projection/secret-store/deployment.yaml
 namespace/secret-store created
 serviceaccount/secret-store created
 clusterrolebinding.rbac.authorization.k8s.io/role-tokenreview-binding configured
@@ -1091,22 +1071,16 @@ service/app created
 Let's check if the service is up and running correctly:
 
 ```terminal|command=1|title=bash
-kubectl -n secret-store describe svc app
-Name:          	app
-Namespace:     	secret-store
-Labels:        	<none>
-Annotations:   	kubectl.kubernetes.io/last-applied-configuration:
-               {"apiVersion":"v1","kind":"Service","metadata":
-               {"annotations":{},"name":"app","namespace":"secret-store"},
-               "spec":{"ports":[{"port":80,"pro...
-Selector:      	app=secret-store
-Type:          	ClusterIP
-IP:            	10.106.239.243
-Port:          	<unset>  80/TCP
-TargetPort:    	8081/TCP
-Endpoints:     	172.18.0.5:8081
-Session Affinity:  None
-Events:        	<none>
+kubectl --namespace secret-store describe service app
+Name:           app
+Namespace:      secret-store
+Labels:         <none>
+Selector:       app=secret-store
+Type:           ClusterIP
+IP:             10.106.239.243
+Port:           <unset>  80/TCP
+TargetPort:     8081/TCP
+Endpoints:      172.18.0.5:8081
 ```
 
 The value of `Endpoints` in the output above tells us that service is now up and running.
@@ -1118,9 +1092,10 @@ curl http://192.168.99.101:31541
 Hello from secret store. You have been authenticated
 ```
 
-If you now view the logs of secret store via `kubectl -n secret-store logs <pod id>`, you will see the following:
+You should inspect the logs of the Secret store with:
 
-```
+```terminal|command=1|title=bash
+kubectl --namespace secret-store logs <pod id>
 (v1.TokenReviewStatus) &TokenReviewStatus{Authenticated:true,
 User:UserInfo{Username:system:serviceaccount:api:api,
 UID:ec7c304f-9722-4d1b-9f67-d3ce32cd8d4c,
@@ -1131,9 +1106,9 @@ authentication.kubernetes.io/pod-uid: [1b37a3f4-54f1-419c-b435-affce3f4a0f3],},}
 Error:,Audiences:[secret-store],}
 ```
 
-In the logs of the API service, you can see log lines as follows which shows the service account token being re-read from the filesystem:
+In you switch to the logs of the API service, you should see the following lines that demonstrate when the Service Account Token is re-read from the filesystem:
 
-```
+```terminal|title=bash
 2020/08/26 05:03:43 Refreshing service account token
 2020/08/26 05:13:42 Refreshing service account token
 2020/08/26 05:18:42 Refreshing service account token
