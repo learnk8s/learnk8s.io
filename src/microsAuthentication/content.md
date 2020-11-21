@@ -1123,7 +1123,6 @@ curl http://192.168.99.101:31541
 Hello from secret store. You have been authenticated
 ```
 
-
 If you now view the logs of secret store via `kubectl -n secret-store logs <pod id>`, you will see the following:
 
 ```
