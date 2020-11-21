@@ -555,26 +555,13 @@ curl --cacert ${CACERT} -X "POST" \
 
 The response should look as follows:
 
-```json
+```json|highlight=12,13,16-20,22-24
 {
   "kind": "TokenReview",
   "apiVersion": "authentication.k8s.io/v1",
   "metadata": {
     "creationTimestamp": null,
-    "managedFields": [
-      {
-        "manager": "curl",
-        "operation": "Update",
-        "apiVersion": "authentication.k8s.io/v1",
-        "time": "2020-09-18T09:24:37Z",
-        "fieldsType": "FieldsV1",
-        "fieldsV1": {
-          "f:spec": {
-            "f:token": {}
-          }
-        }
-      }
-    ]
+    // truncated output
   },
   "spec": {
     "token": "eyJhbGciOiJSUzI1NiI…"
@@ -599,14 +586,14 @@ The response should look as follows:
 
 The key information in the response is in the status object with the following fields:
 
-- **authenticated**: This is set to true which means the token was successfully validated by the API server
-- The **user** field is another object with the following fields:
-  - _username_: The value of this key represents the username corresponding to the service account used by the pod - `system:serviceaccount:test:sa-test-1`.
-  - _uid_: The value of this key represents the system user ID for the user.
-- **Groups**: The value of this key is a list containing the groups the user belongs to.
-- **audiences**: The value of this field is a list of audiences the token is intended for. This field allows the token receiver to verify whether it is in the list of allowed audiences and hence can decide to accept it or reject it. In this case, the default audience is returned which was configured when you started the minikube cluster using `--extra-config=apiserver.service-account-api-audiences=api`.
+- **Authenticated**: the field is set to true which means the token was successfully validated.
+- In **user** object you can find the following properties:
+  - The **username** corresponding to the service account used by the Pod - `system:serviceaccount:test:sa-test-1`.
+  - The **uid** for system user ID of current user.
+- **Groups** includes the groups that the user belongs to.
+- **Audiences** contains a list of audiences that the token is intended for. In this case, only the `api` is a valid audience, you can't use the token for ????.
 
-Excellent, you just verified the token!
+_Excellent, you just verified the token!_
 
 You know that:
 
@@ -622,11 +609,11 @@ Let's have a look at how you could include the above logic in your apps by looki
 
 Here's how the two services interact with each other and the Kubernetes API:
 
-1. At startup, an API service pod reads the service account token from the filesystem inside the pod and keeps it in memory.
-1. The API pod then calls the secret store service passing the token as a HTTP header, `X-Client-Id`.
-1. At startup, the secret service pod uses the Kubernetes Go client reads its own service account token from the filesystem and keeps it in memory.
-1. When a secret store pod receives a request from an API pod, it reads the value of the `X-Client-Id` header and makes a validation request to to the TokenReview API using the token read in step 3 to authenticate and authorize itself to the Kubernetes API.
-1. If the API response comes back as authenticated, the secret store service responds with a successful message, else reports back a 401.
+1. At startup, an API service reads the Service Account token and keeps it in memory.
+1. The API then calls the secret store service passing the token as a HTTP header — i.e. `X-Client-Id`.
+1. At startup, the secret service reads the Service Account token and keeps it in memory.
+1. When the secret store receives a request from the API component, it reads the token from the `X-Client-Id` header and issues a request to to the TokenReview API to check its validity.
+1. If the response is authenticated, the secret store service replies with a successful message, otherwise a 401 error.
 
 The following diagram represents the above call flow:
 
@@ -638,7 +625,7 @@ You can find the application code in the file `service_accounts/api/main.go`.
 
 To read the service account token, the following function is used:
 
-```go
+```go|highlight=2,6|title=main.go
 func readToken() {
 	b, err := ioutil.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/token")
 	if err != nil {
@@ -648,12 +635,11 @@ func readToken() {
 }
 ```
 
-Then, the service token is passed on to the call to the Secret store service in a HTTP header, X-Client-Id:
+Then, the service token is passed on to the call to the Secret store service in a HTTP header, `X-Client-Id`:
 
-```go
+```go|highlight=8|title=main.go
 func handleIndex(w http.ResponseWriter, r *http.Request) {
-
-	...
+	…
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", serviceConnstring, nil)
 	if err != nil {
@@ -663,6 +649,10 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	resp, err := client.Do(req)
 	..
 ```
+
+As soon as the reply from the Secret store is received, it is then rendered.
+
+TODO: maybe show code?
 
 The following YAML manifest is used to deploy the API service:
 
@@ -721,7 +711,9 @@ spec:
 
 You will notice that there is nothing special about the deployment manifest above other than specifying a service account to the deployment.
 
-Let's move onto the secret store service. You can find the complete application in `service_accounts/secret-store/main.go`.
+Let's move onto the secret store service.
+
+You can find the complete application in `service_accounts/secret-store/main.go`.
 
 The secret store service does two key things:
 
@@ -730,7 +722,7 @@ The secret store service does two key things:
 
 Step (1) is performed by the following code:
 
-```go
+```go|highlight=1|title=main.go
 clientId := r.Header.Get("X-Client-Id")
 	if len(clientId) == 0 {
 		http.Error(w, "X-Client-Id not supplied", http.StatusUnauthorized)
@@ -742,7 +734,7 @@ Then, step (2) is performed using the Kubernetes Go client.
 
 First, we create a `ClientSet` object:
 
-```go
+```go|title=main.go
 config, err := rest.InClusterConfig()
 clientset, err := kubernetes.NewForConfig(config)
 ```
@@ -751,7 +743,7 @@ The `InClusterConfig()` function automatically reads the service account token f
 
 Then, you construct a `TokenReview` object specifying the token you want to validate in the `Token` field:
 
-```go
+```go|title=main.go
 tr := authv1.TokenReview{
 	Spec: authv1.TokenReviewSpec{
 	    Token: clientId,
@@ -759,9 +751,9 @@ tr := authv1.TokenReview{
 }
 ```
 
-Then, create a `TokenReview` request:
+Then, you can create a `TokenReview` request with:
 
-```go
+```go|title=main.go
 result, err := clientset.AuthenticationV1().TokenReviews().Create(ctx, &tr, metav1.CreateOptions{})
 ```
 
@@ -833,9 +825,10 @@ spec:
 
 Compared to the API service, the secret store service requires a ClusterRoleBinding resource to be created which associates the secret-store service account to the `system:auth-delegator` ClusterRole.
 
-Go back to the terminal session where you deployed the secret store service from and run `kubectl --namepsace secret-store logs <pod id>` and you will see the following log lines where you can see the response from the TokenReview API call:
+Go back to the terminal session where you deployed the secret store service and inspect the logs:
 
-```
+```terminal|command=1|title=bash
+kubectl --namepsace secret-store logs <pod id>
 2020/08/21 09:09:10 v1.TokenReviewStatus{Authenticated:true,
 User:v1.UserInfo{Username:"system:serviceaccount:secret-store:secret-store",
 UID:"24ae6734-9ca1-44d8-af93-98b6e6f8da17", Groups:[]string{"system:serviceaccounts",
@@ -843,7 +836,7 @@ UID:"24ae6734-9ca1-44d8-af93-98b6e6f8da17", Groups:[]string{"system:serviceaccou
 Audiences:[]string{"api"}, Error:""}
 ```
 
-This is a Go structure version of the JSON response you saw earlier.
+The output is a Go structure version of the JSON response you saw earlier.
 
 Thus, you see how API service reads the service account token and passes it onto its request to the secret store service as a way to authenticate itself.
 
@@ -851,35 +844,37 @@ The secret store service retrieves the token and then checks with the Kubernetes
 
 If valid, the secret store service allows the request from the API service to be processed.
 
-This suffers from two drawbacks:
+The implementation works well, but it suffers from two drawbacks:
 
-1. Anyone - human or otherwise with the permission to read the secret token in the api namespace can send a request to the secret store successfully. There is no embedded information in the token that the secret store can use to validate its intended audience.
-1. The secret token doesn't expire at all. If it is stolen, the only way to revoke it is to delete the service account and recreate it.
+1. Anyone with the access to the token can send a request to the secret store successfully. There is no information in the token to restrict who is allowed to make the request.
+1. The token doesn't expire at all. If it is stolen, the only way to revoke it is to delete the service account and recreate it.
 
-You can solve the above problems by implementing solutions such as mutual TLS or using a JWT based solution with a central authority server.
+You could solve both challenges by implementing solutions such as mutual TLS or using a JWT based solution with a central authority server.
 
-However, in Kubernetes, you can use the service account token volume projection feature to create time-bound and audience-specific service account tokens which do not persist in the cluster store.
+However, in Kubernetes, you can use the Service Account Token Volume Projection feature to create time-bound and audience-specific Service Account Tokens which do not persist in the cluster store.
 
-The Kubernetes API server performs the role of the central authority server and you don't have to worry about any of the internal details of expiring the tokens and more.
+The Kubernetes API server acts as the central authority server and you don't have to worry about expiring tokens.
 
 This feature was introduced in Kubernetes 1.12 and gained further improvements in 1.13 and provides a more secure alternative to workload-specific service accounts.
 
 In fact, this will be promoted to a GA feature in the upcoming Kubernetes 1.20 release.
 
-Before we move on, cleanup the two namespaces for the services which will also delete the other resources we created:
+In the next part of the article, you will re-implement the same code for authenticating apps using the Service Account Token Volume Projection.
 
-```terminal|command=1,2|title=bash
-kubectl delete ns api
-kubectl delete ns secret-store
+It's a good idea to cleanup the two namespaces with:
+
+```terminal|command=1,3|title=bash
+kubectl delete namespace api
+TODO: output
+kubectl delete namespace secret-store
+TODO: output
 ```
 
-## Inter-Service authentication using service account token volume projection
+## Inter-Service authentication using Service Account Token Volume Projection
 
-Now, you will learn to use Service Account Token Volume Projection (`ProjectedServiceAccountToken`) for workload identity in Kubernetes.
+The Service Account Tokens made available to workloads via the Service Account Token Volume Projection (`ProjectedServiceAccountToken`) are time-limited, audience bound and are not associated with secret objects.
 
-The service account tokens made available to workloads via this mechanism are time-limited, audience bound and are not associated with secret objects.
-
-If a pod is deleted or the service account is removed, these tokens become invalid, thus preventing any abuse if stolen.
+If a Pod is deleted or the service account is removed, these tokens become invalid, thus preventing any abuse if stolen.
 
 A `serviceAccountToken` volume projection is one of the `projected` volume types.
 
