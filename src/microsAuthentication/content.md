@@ -11,11 +11,11 @@ _How would the data store decide to authenticate or deny the request?_
 
 A popular approach is to request and pass identity tokens to every call within services.
 
-So instead of issuing a request to the data store directly, you might need to go through an Authentication service first, 
+So instead of issuing a request to the data store directly, you might need to go through an Authentication service first,
 retrieve a token and use that to authenticate your request to the data store.
 
-There is a certain context associated with the token that allows the data store to accept a token from the API service and to 
-reject a token from elsewhere. 
+There is a certain context associated with the token that allows the data store to accept a token from the API service and to
+reject a token from elsewhere.
 
 This context is used to authorize the request or reject it.
 
@@ -48,7 +48,7 @@ The same is valid for the two apps within your infrastrucure.
 1. The second app retrieves the token from the request and validates with Keycloak.
 1. If the token is valid, it replies to the request.
 
-You might have not noticed, but Kubernetes offers the same primitives as the authentication and authorisation 
+You might have not noticed, but Kubernetes offers the same primitives as the authentication and authorisation
 service with Service Accounts, Roles and RoleBindings.
 
 ## Kubernetes as an authorisation server
@@ -89,22 +89,20 @@ However, you can start a local cluster with the volume projection feature enable
 
 ```terminal|command=1-6|title=bash
 minikube start \
-    --extra-config=apiserver.service-account-signing-key-file=/var/lib/minikube/certs/sa.key \
-    --extra-config=apiserver.service-account-key-file=/var/lib/minikube/certs/sa.pub \
-    --extra-config=apiserver.service-account-issuer=kubernetes/serviceaccount \
-    --extra-config=apiserver.service-account-api-audiences=api
+  --extra-config=apiserver.service-account-signing-key-file=/var/lib/minikube/certs/sa.key \
+  --extra-config=apiserver.service-account-key-file=/var/lib/minikube/certs/sa.pub \
+  --extra-config=apiserver.service-account-issuer=kubernetes/serviceaccount \
+  --extra-config=apiserver.service-account-api-audiences=api
 ```
 
-You should also clone the repository <https://github.com/amitsaha/kubernetes-sa-volume-demo> as it contains the demo source code that 
-will be referred to in the article.
+You should also clone the repository <https://github.com/amitsaha/kubernetes-sa-volume-demo> as it contains the demo source code that will be referred to in the article.
 
 You will now deploy two services:
 
 1. You will refer to these services as the API service (API) and the data store.
 1. They are written in the Go programming language and they communicate via HTTP.
 1. Each service runs in its own namespaces and use dedicated Service Accounts.
-1. The data store replies to requests successfully only when the caller has a valid identity, 
-   else it rejects the request with an error.
+1. The data store replies to requests successfully only when the caller has a valid identity, else it rejects the request with an error.
 
 ## Deploying the API component
 
@@ -284,7 +282,7 @@ In the Role you define access to the resources such as read-only access to Secre
 Kubernetes comes with a list of roles and cluster roles prepackaged that you can list with
 `kubectl get roles --all-namespaces` and `kubectl get clusterroles` respectively.
 
-In the following example, you will use the `system:auth-delegator` cluster role which has all the permission to call the Token Review API.
+In the following example, you will use the `system:auth-delegator` ClusterRole which has the permission to call the Token Review API.
 
 You can inspect it with:
 
@@ -305,6 +303,7 @@ The only part missing is the ClusterRoleBinding.
 You can create a ClusterRoleBinding to link the Service Account to a Role and grant the permission cluster wide:
 
 ```yaml|highlight=8,11|title=sa_rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: role-tokenreview-binding
@@ -333,8 +332,8 @@ TODO: I couldn't find a easy way to do this.
 Let's impersonate the Service Account and test it:
 
 ```terminal|command=1|title=bash
-kubectl can-i <I wish I could check the auth-delegator> --as=sa-test-1
-MISSING OUTPUT
+kubectl auth can-i create tokenreviews --as=sa-test-1
+yes
 ```
 
 Great!
@@ -385,15 +384,47 @@ To issue a request to the Token Review API, you need to create a TokenReview res
 ```yaml|title=token.yaml
 kind: TokenReview
 apiVersion: authentication.k8s.io/v1
+metadata:
+  name: test
 spec:
-  token: <the token that you want to validate>
+  token: <replace with the token to validate>
 ```
 
 AMIT: this should be refactored. We can use Kubectl + impersonation.
 
 > I am not sure how we can make an API call using impersonation. Quick google didn't return anything
-> Also I would prefer this example to be as it is as it shows how this would work in an application running in a 
+> Also I would prefer this example to be as it is as it shows how this would work in an application running in a
 > pod and flows nicely into the service implementation in Go.
+
+AMIT: This is where we shine :)
+It's a POST request... so it should be `kubectl apply`.
+
+```terminal|command=1|title=bash
+kubectl apply -v=8 -f token.yaml
+tokenreview.authentication.k8s.io/test created
+kubectl get tokenreview
+Error from server (MethodNotAllowed): the server does not allow this method on the requested resource
+kubectl get tokenreview.authentication.k8s.io
+Error from server (MethodNotAllowed): the server does not allow this method on the requested resource
+kubectl describe tokenreview.authentication.k8s.io
+Error from server (MethodNotAllowed): the server does not allow this method on the requested resource
+```
+
+I was ready to give up when I tried adding `-v8` to the apply request.
+
+The response contains the JSON payload.
+
+Next, `kubectl apply -h` reveals that there's a `-o` flag for the output.
+
+And... voila! Validate a token with only kubectl:
+
+```terminal|command=1|title=bash
+kubectl apply -o yaml -f token.yaml
+```
+
+You're issueing a request using your own account (cluster admin) and validating the token for a Service account.
+
+It's easier to explain, and we skip the part where we connect to the API. The same part is skipped in the Go client too (it's part of the SDK).
 
 Thus, the `curl` command to run in the pod shell session is:
 
@@ -680,7 +711,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app 
+  name: app
   namespace: data-store
 spec:
   selector:
@@ -691,7 +722,7 @@ spec:
       targetPort: 8081
 ```
 
-Compared to the API service, the data store service requires a ClusterRoleBinding resource to be created which associates the 
+Compared to the API service, the data store service requires a ClusterRoleBinding resource to be created which associates the
 data-store Service Account to the `system:auth-delegator` ClusterRole.
 
 Go back to the terminal session where you deployed the data store service and inspect the logs:
