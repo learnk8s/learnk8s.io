@@ -390,6 +390,7 @@ spec:
 ```
 
 AMIT: this should be refactored. We can use Kubectl + impersonation.
+
 > I am not sure how we can make an API call using impersonation. Quick google didn't return anything
 > Also I would prefer this example to be as it is as it shows how this would work in an application running in a 
 > pod and flows nicely into the service implementation in Go.
@@ -520,7 +521,6 @@ As soon as the reply from the Secret store is received, it is then sent back as 
 		io.WriteString(w, string(body))
 	}
 ```
-
 
 The following YAML manifest is used to deploy the API service:
 
@@ -689,7 +689,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8081
-
 ```
 
 Compared to the API service, the data store service requires a ClusterRoleBinding resource to be created which associates the 
@@ -1059,4 +1058,3 @@ Kubernetes native software such as [Linkerd](https://github.com/linkerd/linkerd2
 
 - [Kubernetes Authentication](https://kubernetes.io/docs/reference/access-authn-authz/authentication/)
 - [Kubernetes Service Account Token Volume Projection](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#service-account-token-volume-projection)
-
