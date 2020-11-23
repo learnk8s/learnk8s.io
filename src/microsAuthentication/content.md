@@ -1,26 +1,25 @@
 If your infrastructure consists of several applications interacting with each other, you might have faced the issue of securing communications between services to prevent unauthenticated requests.
 
-Imagine having three apps:
+Imagine having two apps:
 
 1. An API
 1. A data store
-1. A secret store
 
-You might want the secret store only to reply to requests to the API and reject any request from the data store.
+You might want the data store only to reply to requests to the API and reject requests from anywhere else.
 
-_How would the secret store decide to authenticate or deny the request?_
+_How would the data store decide to authenticate or deny the request?_
 
 A popular approach is to request and pass identity tokens to every call within services.
 
-So instead of issuing a request to the secret store directly, you might need to go through an Authorisation service first, retrieve a token and authenticate your request.
+So instead of issuing a request to the data store directly, you might need to go through an Authentication service first, 
+retrieve a token and use that to authenticate your request to the data store.
 
-That way, when the data store presents a token to the secret store, it is rejected.
+There is a certain context associated with the token that allows the data store to accept a token from the API service and to 
+reject a token from elsewhere. 
 
-However, if the API service presents the same token, it is accepted by the secret store.
+This context is used to authorize the request or reject it.
 
-There is a certain context associated with the token that allows the secret store to accept a token from the API service and to reject a token from the data store service.
-
-![Three apps](image1.png)
+TODO: insert new diagram
 
 You have several options when it comes to implementing this mechanism of authentication:
 
@@ -42,14 +41,15 @@ When you use Keycloack, you first:
 1. A valid session is created for your user. The session might describe what groups you belong to.
 1. Every request proxied through Keycloak has to validate the current session, or you will be asked to log in again.
 
-The same is valid for two app within your infrastrucure.
+The same is valid for the two apps within your infrastrucure.
 
 1. The caller makes a request to Keycloack with its API key and secret to retrieve a session token.
 1. The caller makes a request to the second app using the token.
 1. The second app retrieves the token from the request and validates with Keycloak.
 1. If the token is valid, it replies to the request.
 
-You might have not noticed, but Kubernetes offers the same primitives as the authorisation service with Service Accounts, Roles and RoleBindings.
+You might have not noticed, but Kubernetes offers the same primitives as the authentication and authorisation 
+service with Service Accounts, Roles and RoleBindings.
 
 ## Kubernetes as an authorisation server
 
@@ -85,25 +85,26 @@ The Service Account Volume projection feature requires the Kubernetes API server
 
 The support for different managed Kubernetes providers may vary.
 
-However, you can enable it in [minikube](https://github.com/kubernetes/minikube) with:
+However, you can start a local cluster with the volume projection feature enabled in [minikube](https://github.com/kubernetes/minikube) with:
 
 ```terminal|command=1-6|title=bash
 minikube start \
-  --extra-config=apiserver.service-account-signing-key-file=\
-    /var/lib/minikube/certs/sa.key \
-  --extra-config=apiserver.service-account-issuer=\
-    kubernetes/serviceaccount \
-  --extra-config=apiserver.service-account-api-audiences=api
+    --extra-config=apiserver.service-account-signing-key-file=/var/lib/minikube/certs/sa.key \
+    --extra-config=apiserver.service-account-key-file=/var/lib/minikube/certs/sa.pub \
+    --extra-config=apiserver.service-account-issuer=kubernetes/serviceaccount \
+    --extra-config=apiserver.service-account-api-audiences=api
 ```
 
-You should also clone the repository <https://github.com/amitsaha/kubernetes-sa-volume-demo> as it contains the demo source code that will be referred to in the article.
+You should also clone the repository <https://github.com/amitsaha/kubernetes-sa-volume-demo> as it contains the demo source code that 
+will be referred to in the article.
 
 You will now deploy two services:
 
-1. You will refer to these services as the API service (API) and the Secret store.
+1. You will refer to these services as the API service (API) and the data store.
 1. They are written in the Go programming language and they communicate via HTTP.
 1. Each service runs in its own namespaces and use dedicated Service Accounts.
-1. The secret store replies to requests only when the caller has a valid identity.
+1. The data store replies to requests successfully only when the caller has a valid identity, 
+   else it rejects the request with an error.
 
 ## Deploying the API component
 
@@ -111,7 +112,7 @@ The API service is a headless web application listening on port 8080.
 
 When a client makes any request to it, the API component:
 
-1. Issues an HTTP GET request to the secret store with the token linked to the Service Account.
+1. Issues an HTTP GET request to the data store with the token linked to the Service Account.
 1. Forwards the response.
 
 You can deploy the app and expose it as a Service in the cluster with:
@@ -137,31 +138,31 @@ Let's try that:
 
 ```terminal|command=1|title=bash
 curl http://192.168.99.101:31541
-Get "<http://app.secret-store.svc.cluster.local">: dial tcp: lookup app.secret-store.svc.cluster.local: no such host
+Get "http://app.data-store.svc.cluster.local": dial tcp: lookup app.data-store.svc.cluster.local: no such host
 ```
 
-This is expected since you haven't yet deployed the secret store yet.
+This is expected since you haven't yet deployed the data store yet.
 
 _Keep the terminal open._
 
 Open a new terminal to carry out the next set of steps.
 
-## Deploying the Secret store
+## Deploying the Data store
 
-The Secret store service is another headless web application listening on port 8081.
+The Data store service is another headless web application listening on port 8081.
 
-When a client makes any request to it, the Secret store:
+When a client makes any request to it, the Data store:
 
-1. Looks for a token in the request. If there isn't one, it replies with a HTTP 401 error response.
+1. Looks for a token in the request header. If there isn't one, it replies with a HTTP 401 error response.
 1. Checks the token with the Kubernetes API for its validity. If it's invalid, it replies with a HTTP 403 response.
 1. Finally, when the token is valid, it replies to the original request.
 
-You can create the secret store with:
+You can create the data store with:
 
 ```terminal|command=1|title=bash
-kubectl apply -f service_accounts/secret-store/deployment.yaml
-namespace/secret-store created
-serviceaccount/secret-store created
+kubectl apply -f service_accounts/data-store/deployment.yaml
+namespace/data-store created
+serviceaccount/data-store created
 clusterrolebinding.rbac.authorization.k8s.io/role-tokenreview-binding created
 deployment.apps/app created
 service/app created
@@ -171,10 +172,10 @@ Now, use `curl` to make a request to the API service again:
 
 ```terminal|command=1|title=bash
 curl http://192.168.99.101:31541
-Hello from secret store. You have been authenticated
+Hello from data store. You have been authenticated
 ```
 
-The secret store service successfully verified the token and replied to your request.
+The data store service successfully verified the token and replied to your request.
 
 _But how does all of that work? Let's find out._
 
@@ -201,10 +202,10 @@ kubectl get serviceaccount --namespace api
 NAME      SECRETS   AGE
 api       1         4m5s
 default   1         4m5s
-kubectl get serviceaccount --namespace secret-store
+kubectl get serviceaccount --namespace data-store
 NAME           SECRETS   AGE
 default        1         6m4s
-secret-store   1         6m4s
+data-store   1         6m4s
 ```
 
 Those Service Account are the identities associated with the apps, but they don't define what permissions are granted.
@@ -214,8 +215,8 @@ For that, you might need to list the Role and the RoleBinding:
 ```terminal|command=1,3|title=bash
 kubectl get role,rolebinding --namespace api
 No resources found in api namespace.
-kubectl get role,rolebinding --namespace secretstore
-No resources found in secretstore namespace.
+kubectl get role,rolebinding --namespace data-store
+No resources found in data-store namespace.
 ```
 
 There are none!
@@ -280,36 +281,26 @@ If you want to grant access to the Service Account you need two more objects: a 
 
 In the Role you define access to the resources such as read-only access to Secrets or only GET, DESCRIBE and LIST operations on Pods.
 
-Kubernetes comes with a list of roles prepackaged that you can list with:
+Kubernetes comes with a list of roles and cluster roles prepackaged that you can list with
+`kubectl get roles --all-namespaces` and `kubectl get clusterroles` respectively.
 
-```terminal|command=1|title=bash
-kubectl get roles --all-namespaces
-
-NAMESPACE     NAME
-kube-public   kubeadm:bootstrap-signer-clusterinfo
-kube-public   system:controller:bootstrap-signer
-kube-system   extension-apiserver-authentication-reader
-kube-system   kube-proxy
-kube-system   kubeadm:kubelet-config-1.18
-kube-system   kubeadm:nodes-kubeadm-config
-kube-system   system::leader-locking-kube-controller-manager
-kube-system   system::leader-locking-kube-scheduler
-kube-system   system:controller:bootstrap-signer
-kube-system   system:controller:cloud-provider
-kube-system   system:controller:token-cleaner
-kube-system   system:persistent-volume-provisioner
-```
-
-In the following example, you will use the `system:auth-delegator` role which has all the permission to call the Token Review API.
+In the following example, you will use the `system:auth-delegator` cluster role which has all the permission to call the Token Review API.
 
 You can inspect it with:
 
 ```terminal|command=1|title=bash
-kubectl describe role system:auth-delegator --namespace kube-system
-TODO: output
+kubectl describe clusterrole system:auth-delegator --namespace kube-system
+Name:         system:auth-delegator
+Labels:       kubernetes.io/bootstrapping=rbac-defaults
+Annotations:  rbac.authorization.kubernetes.io/autoupdate: true
+PolicyRule:
+  Resources                                  Non-Resource URLs  Resource Names  Verbs
+  ---------                                  -----------------  --------------  -----
+  tokenreviews.authentication.k8s.io         []                 []              [create]
+  subjectaccessreviews.authorization.k8s.io  []                 []              [create]
 ```
 
-The only part missing is the Binding.
+The only part missing is the ClusterRoleBinding.
 
 You can create a ClusterRoleBinding to link the Service Account to a Role and grant the permission cluster wide:
 
@@ -336,6 +327,8 @@ Save the above into a new file, `sa_rbac.yaml` and submit it to the cluster with
 kubectl apply -f sa_rbac.yaml
 clusterrolebinding.rbac.authorization.k8s.io/role-tokenreview-binding created
 ```
+
+TODO: I couldn't find a easy way to do this.
 
 Let's impersonate the Service Account and test it:
 
@@ -397,6 +390,10 @@ spec:
 ```
 
 AMIT: this should be refactored. We can use Kubectl + impersonation.
+> I am not sure how we can make an API call using impersonation. Quick google didn't return anything
+> Also I would prefer this example to be as it is as it shows how this would work in an application running in a 
+> pod and flows nicely into the service implementation in Go.
+
 Thus, the `curl` command to run in the pod shell session is:
 
 ```terminal|command=1-6|title=bash
@@ -469,11 +466,13 @@ Let's have a look at how you could include the above logic in your apps.
 Here's how the two services interact with each other and the Kubernetes API:
 
 1. At startup, an API service reads the Service Account token and keeps it in memory.
-1. The API service calls the secret store passing the token as a HTTP header — i.e. `X-Client-Id`.
-1. When the secret store receives a request from the API component, it reads the token from the `X-Client-Id` header and issues a request to to the TokenReview API to check its validity.
-1. If the response is authenticated, the secret store service replies with a successful message, otherwise a 401 error.
+1. The API service calls the data store passing the token as a HTTP header — i.e. `X-Client-Id`.
+1. When the data store receives a request from the API component, it reads the token from the `X-Client-Id` header and issues a request to to the TokenReview API to check its validity.
+1. If the response is authenticated, the data store service replies with a successful message, otherwise a 401 error.
 
 The following diagram represents the above call flow:
+
+TODO: Diagram updation needed
 
 ![Call flow between the services](image2.png)
 
@@ -508,9 +507,20 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	..
 ```
 
-As soon as the reply from the Secret store is received, it is then rendered.
+As soon as the reply from the Secret store is received, it is then sent back as a response:
 
-TODO: maybe show code?
+```go|highlight=7-8|title=main.go
+        ..
+        if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	} else {
+		defer resp.Body.Close()
+		body, _ := ioutil.ReadAll(resp.Body)
+		io.WriteString(w, string(body))
+	}
+```
+
 
 The following YAML manifest is used to deploy the API service:
 
@@ -548,8 +558,8 @@ spec:
         env:
         - name: LISTEN_ADDR
           value: ":8080"
-        - name: SECRET_STORE_CONNSTRING
-          value: "http://app.secret-store.svc.cluster.local"
+        - name: DATA_STORE_CONNSTRING
+          value: "http://app.data-store.svc.cluster.local"
         ports:
         - containerPort: 8080
 ---
@@ -569,11 +579,11 @@ spec:
 
 You will notice that there is nothing special about the Deployment manifest above apart from having a Service Account associated with it.
 
-Let's move onto the secret store service.
+Let's move onto the data store service.
 
-You can find the complete application in `service_accounts/secret-store/main.go`.
+You can find the complete application in `service_accounts/data-store/main.go`.
 
-The secret store service does two key things:
+The data store service does two key things:
 
 1. It retrieves the value of the `X-Client-Id` header from the incoming request.
 1. It then invokes the Kubernetes Token Review API to check if it is a valid token or not.
@@ -615,21 +625,21 @@ Finally, you can create a `TokenReview` request with:
 result, err := clientset.AuthenticationV1().TokenReviews().Create(ctx, &tr, metav1.CreateOptions{})
 ```
 
-The following YAML manifest will create the various resources needed for the secret store service:
+The following YAML manifest will create the various resources needed for the data store service:
 
 ```yaml|highlight=12-23|title=deployment.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: secret-store
+  name: data-store
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: secret-store
-  namespace: secret-store
+  name: data-store
+  namespace: data-store
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: role-tokenreview-binding
@@ -639,25 +649,25 @@ roleRef:
   name: system:auth-delegator
 subjects:
 - kind: ServiceAccount
-  name: secret-store
-  namespace: secret-store
+  name: data-store
+  namespace: data-store
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app
-  namespace: secret-store
+  namespace: data-store
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: secret-store
+      app: data-store
   template:
     metadata:
       labels:
-        app: secret-store
+        app: data-store
     spec:
-      serviceAccount: secret-store
+      serviceAccount: data-store
       containers:
       - name: app
         image: amitsaha/k8s-sa-volume-demo-ss:sa-1
@@ -670,25 +680,27 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app
-  namespace: secret-store
+  name: app 
+  namespace: data-store
 spec:
   selector:
-    app: secret-store
+    app: data-store
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8081
+
 ```
 
-Compared to the API service, the secret store service requires a ClusterRoleBinding resource to be created which associates the secret-store Service Account to the `system:auth-delegator` ClusterRole.
+Compared to the API service, the data store service requires a ClusterRoleBinding resource to be created which associates the 
+data-store Service Account to the `system:auth-delegator` ClusterRole.
 
-Go back to the terminal session where you deployed the secret store service and inspect the logs:
+Go back to the terminal session where you deployed the data store service and inspect the logs:
 
 ```terminal|command=1|title=bash
-kubectl --namepsace secret-store logs <secret-store-pod-id>
+kubectl --namepsace data-store logs <data-store-pod-id>
 2020/08/21 09:09:10 v1.TokenReviewStatus{Authenticated:true,
-User:v1.UserInfo{Username:"system:serviceaccount:secret-store:secret-store",
+User:v1.UserInfo{Username:"system:serviceaccount:data-store:data-store",
 UID:"24ae6734-9ca1-44d8-af93-98b6e6f8da17", Groups:[]string{"system:serviceaccounts",
 "system:serviceaccounts:api", "system:authenticated"}, Extra:map[string]v1.ExtraValue(nil)},
 Audiences:[]string{"api"}, Error:""}
@@ -696,11 +708,11 @@ Audiences:[]string{"api"}, Error:""}
 
 The output is a Go structure version of the JSON response you saw earlier.
 
-Thus, you see how API service reads the Service Account Token and passes it onto its request to the secret store service as a way to authenticate itself.
+Thus, you see how API service reads the Service Account Token and passes it onto its request to the data store service as a way to authenticate itself.
 
-The secret store service retrieves the token and then checks with the Kubernetes API whether it is valid or not.
+The data store service retrieves the token and then checks with the Kubernetes API whether it is valid or not.
 
-If valid, the secret store service allows the request from the API service to be processed.
+If valid, the data store service allows the request from the API service to be processed.
 
 The implementation works well, but it suffers from three drawbacks:
 
@@ -781,9 +793,9 @@ It's a good idea to cleanup the two namespaces with:
 
 ```terminal|command=1,3|title=bash
 kubectl delete namespace api
-TODO: output
-kubectl delete namespace secret-store
-TODO: output
+namespace "api" deleted
+kubectl delete namespace data-store
+namespace "data-store" deleted
 ```
 
 ## Inter-Service authentication using Service Account Token Volume Projection
@@ -882,15 +894,15 @@ spec:
             - serviceAccountToken:
                 path: api-token
                 expirationSeconds: 600
-                audience: secret-store
+                audience: data-store
       containers:
       - name: app
         image: amitsaha/k8s-sa-volume-demo-api:sa-2
         env:
         - name: LISTEN_ADDR
           value: ":8080"
-        - name: SECRET_STORE_CONNSTRING
-          value: "http://app.secret-store.svc.cluster.local"
+        - name: DATA_STORE_CONNSTRING
+          value: "http://app.data-store.svc.cluster.local"
         ports:
         - containerPort: 8080
         volumeMounts:
@@ -919,9 +931,9 @@ The volume defines three additional properties:
 1. The `audience` field specifies what the intended audience for the token is (if not specified, it defaults to `api`).
 1. The `expirationSeconds` indicate how long a token is valid for - the minimum is 600 seconds or 10 minutes.
 
-Please notice how the `audience` field specifies that this Service Account Token is allowed to communicate only with services that identify themselves as a `secret-store`.
+Please notice how the `audience` field specifies that this Service Account Token is allowed to communicate only with services that identify themselves as a `data-store`.
 
-If you don't include `secret-store` as an audience in the Secret store component, the API won't be able to talk to it — it's not its audience!
+If you don't include `data-store` as an audience in the Secret store component, the API won't be able to talk to it — it's not its audience!
 
 > Note that if you are deploying a Pod to use this feature in a cluster with Pod Security Policies enforced, [you will need to ensure that the `projected` volume type is allowed.](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#volumes-and-file-systems)
 
@@ -929,7 +941,10 @@ You can create a new API deployment with:
 
 ```terminal|command=1|title=bash
 kubectl apply -f service_accounts_volume_projection/api/deployment.yaml
-deployment.apps/api created TODO: check
+namespace/api created
+serviceaccount/api created
+deployment.apps/app created
+service/app created
 ```
 
 Retrieve the URL of the API service with:
@@ -943,45 +958,45 @@ You can issue a request with:
 
 ```terminal|command=1|title=bash
 curl http://192.168.99.101:31541
-Get "<http://app.secret-store.svc.cluster.local">: dial tcp: lookup app.secret-store.svc.cluster.local: no such host
+Get "http://app.data-store.svc.cluster.local": dial tcp: lookup app.data-store.svc.cluster.local: no such host
 ```
 
-This is expected as the secret store is not yet deployed.
+This is expected as the data store is not yet deployed.
 
 Keep the terminal open.
 
-Next, let's modify and deploy the secret store service.
+Next, let's modify and deploy the data store service.
 
-### Secret Store
+### Data Store
 
-The token review payload for the secret store will now be as follows:
+The token review payload for the data store will now be as follows:
 
 ```go|title=main.go
 tr := authv1.TokenReview{
 	pec: authv1.TokenReviewSpec{
 		Token:	clientId,
-		Audiences:	[]string{"secret-store"},
+		Audiences:	[]string{"data-store"},
 	},
 }
 ```
 
-Now, in the TokenReview object, the secret store explicitly passes `secret-store` as the audience for the token it is asking the API to review.
+Now, in the TokenReview object, the data store explicitly passes `data-store` as the audience for the token it is asking the API to review.
 
-If the token doesn't include `secret-store` as an audience, the Token Review API will not authenticate the request.
+If the token doesn't include `data-store` as an audience, the Token Review API will not authenticate the request.
 
-In other words, the secret store service can assert the identity of the caller and validate that the incoming request token was meant for the secret store service.
+In other words, the data store service can assert the identity of the caller and validate that the incoming request token was meant for the data store service.
 
-You can find the entire application code in `service_accounts_volume_projection/secret-store/main.go`.
+You can find the entire application code in `service_accounts_volume_projection/data-store/main.go`.
 
 _Next, let's deploy this service._
 
 You can create the deployment with:
 
 ```terminal|command=1|title=bash
-kubectl apply -f service_accounts_volume_projection/secret-store/deployment.yaml
-namespace/secret-store created
-serviceaccount/secret-store created
-clusterrolebinding.rbac.authorization.k8s.io/role-tokenreview-binding configured
+kubectl apply -f service_accounts_volume_projection/data-store/deployment.yaml
+namespace/data-store created
+serviceaccount/data-store created
+clusterrolebinding.rbac.authorization.k8s.io/role-tokenreview-binding created
 deployment.apps/app created
 service/app created
 ```
@@ -989,11 +1004,11 @@ service/app created
 Let's check if the service is up and running correctly:
 
 ```terminal|command=1|title=bash
-kubectl --namespace secret-store describe service app
+kubectl --namespace data-store describe service app
 Name:           app
-Namespace:      secret-store
+Namespace:      data-store
 Labels:         <none>
-Selector:       app=secret-store
+Selector:       app=data-store
 Type:           ClusterIP
 IP:             10.106.239.243
 Port:           <unset>  80/TCP
@@ -1007,13 +1022,13 @@ Now, use `curl` to make a request to the API service again:
 
 ```terminal|command=1|title=bash
 curl http://192.168.99.101:31541
-Hello from secret store. You have been authenticated
+Hello from data store. You have been authenticated
 ```
 
 You should inspect the logs of the Secret store with:
 
 ```terminal|command=1|title=bash
-kubectl --namespace secret-store logs <pod id>
+kubectl --namespace data-store logs <pod id>
 (v1.TokenReviewStatus) &TokenReviewStatus{Authenticated:true,
 User:UserInfo{Username:system:serviceaccount:api:api,
 UID:ec7c304f-9722-4d1b-9f67-d3ce32cd8d4c,
@@ -1021,7 +1036,7 @@ Groups:[system:serviceaccounts system:serviceaccounts:api system:authenticated],
 Extra:map[string]ExtraValue{authentication.kubernetes.io/pod-name:
 [app-65d954658c-dbbr5],
 authentication.kubernetes.io/pod-uid: [1b37a3f4-54f1-419c-b435-affce3f4a0f3],},},
-Error:,Audiences:[secret-store],}
+Error:,Audiences:[data-store],}
 ```
 
 In you switch to the logs of the API service, you should see the following lines that demonstrate when the Service Account Token is re-read from the filesystem:
@@ -1044,3 +1059,4 @@ Kubernetes native software such as [Linkerd](https://github.com/linkerd/linkerd2
 
 - [Kubernetes Authentication](https://kubernetes.io/docs/reference/access-authn-authz/authentication/)
 - [Kubernetes Service Account Token Volume Projection](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#service-account-token-volume-projection)
+
