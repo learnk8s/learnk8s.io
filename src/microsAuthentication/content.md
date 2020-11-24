@@ -33,7 +33,7 @@ All the authentication and authorisation servers have to do is to:
 1. **Generate a token with a limited scope, validity and the desired audience.**
 1. **Validate a token** - Service to service communication is allowed only if the token is legit for the two services involved.
 
-Examples of dedicated software that allows you to implement authentication and authorisation 
+Examples of dedicated software that allows you to implement authentication and authorisation
 infrastructure are tools such as [Keycloak](https://www.keycloak.org/) or [Dex](https://github.com/dexidp/dex).
 
 When you use Keycloack, you first:
@@ -73,7 +73,7 @@ Kubernetes offers the same primitives to authenticate requests just like Keycloa
 _What if the Kubernetes API could be used as an Authentication and Authorisation server?_
 
 1. When a pod presents a valid service account token to the Kubernetes API, it performs an authentication operation
-1. If the authentication operation is successful, Kubernetes API server also checks if the token is *authorized* to perform 
+1. If the authentication operation is successful, Kubernetes API server also checks if the token is _authorized_ to perform
    the requested operation.
 
 _Could you use Service Accounts as a mechanism to authenticate requests between apps in the cluster?_
@@ -181,7 +181,6 @@ Hello from data store. You have been authenticated
 The data store service successfully verified the token and replied to your request.
 
 _But how does all of that work? Let's find out._
-
 
 ## Under the hood
 
@@ -394,56 +393,13 @@ spec:
   token: <replace with the token to validate>
 ```
 
-AMIT: this should be refactored. We can use Kubectl + impersonation.
-
-> I am not sure how we can make an API call using impersonation. Quick google didn't return anything
-> Also I would prefer this example to be as it is as it shows how this would work in an application running in a
-> pod and flows nicely into the service implementation in Go.
-
-AMIT: This is where we shine :)
-It's a POST request... so it should be `kubectl apply`.
-
-```terminal|command=1|title=bash
-kubectl apply -v=8 -f token.yaml
-tokenreview.authentication.k8s.io/test created
-kubectl get tokenreview
-Error from server (MethodNotAllowed): the server does not allow this method on the requested resource
-kubectl get tokenreview.authentication.k8s.io
-Error from server (MethodNotAllowed): the server does not allow this method on the requested resource
-kubectl describe tokenreview.authentication.k8s.io
-Error from server (MethodNotAllowed): the server does not allow this method on the requested resource
-```
-
-I was ready to give up when I tried adding `-v8` to the apply request.
-
-The response contains the JSON payload.
-
-Next, `kubectl apply -h` reveals that there's a `-o` flag for the output.
-
-And... voila! Validate a token with only kubectl:
+You can validate the request with:
 
 ```terminal|command=1|title=bash
 kubectl apply -o yaml -f token.yaml
 ```
 
-You're issueing a request using your own account (cluster admin) and validating the token for a Service account.
-
-It's easier to explain, and we skip the part where we connect to the API. The same part is skipped in the Go client too (it's part of the SDK).
-
-Thus, the `curl` command to run in the pod shell session is:
-
-```terminal|command=1-6|title=bash
-curl --cacert ${CACERT} -X "POST" \
-  $APISERVER/apis/authentication.k8s.io/v1/tokenreviews \
-  -H "Authorization: Bearer ${TOKEN}" \
-  -H "Content-Type: application/json; charset=utf-8" \
-  -d '{"kind": "TokenReview","apiVersion": \
-   "authentication.k8s.io/v1", "spec": {"token": "'$TOKEN'"}}'
-```
-
-Notice how you're verifying the same token that you use to connect to the API.
-
-You can use the same command to verify other tokens by replacing `{"token": "'$TOKEN'"}` with `{"token": "'$OTHER_TOKEN'"}`
+> Please notice the flag `-o yaml` that displays the output of the `kubectl apply` command.
 
 When you issue the command, the response should look as follows:
 
@@ -485,7 +441,7 @@ The key information in the response is in the status object with the following f
 - **Groups** includes the groups that the user belongs to.
 - **Audiences** contains a list of audiences that the token is intended for. In this case, only the `api` is a valid audience.
 
-_Excellent, you just verified your own token!_
+_Excellent, you just verified the Service Account token!_
 
 You know that:
 
@@ -493,7 +449,7 @@ You know that:
 - The identity of the caller (the Service Account).
 - The groups that the caller belongs to.
 
-Since you can validate and verify any token, you could leverage the same API endpoint in your Secret Store component to authenticate and authorise requests!
+Since you can validate and verify any token, you could leverage the same API endpoint in your Data Store component to authenticate and authorise requests!
 
 Let's have a look at how you could include the above logic in your apps.
 
@@ -516,7 +472,7 @@ First let's look at the implementation of the API service.
 
 You can find the application code in the file `service_accounts/api/main.go`.
 
-To read the Service Account Token, you could use the following function:
+The Service Account Token is automatically mounted in `/var/run/secrets/kubernetes.io/serviceaccount/token` and you could read its value with:
 
 ```go|highlight=2,6|title=main.go
 func readToken() {
@@ -532,29 +488,29 @@ Then, the Service Token is passed on to the call to the Secret store service in 
 
 ```go|highlight=8|title=main.go
 func handleIndex(w http.ResponseWriter, r *http.Request) {
-	…
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", serviceConnstring, nil)
-	if err != nil {
-		panic(err)
-	}
-	req.Header.Add("X-Client-Id", serviceToken)
-	resp, err := client.Do(req)
-	..
+…
+client := &http.Client{}
+req, err := http.NewRequest("GET", serviceConnstring, nil)
+if err != nil {
+	panic(err)
+}
+req.Header.Add("X-Client-Id", serviceToken)
+resp, err := client.Do(req)
+…
 ```
 
 As soon as the reply from the Secret store is received, it is then sent back as a response:
 
 ```go|highlight=7-8|title=main.go
-        ..
-        if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	} else {
-		defer resp.Body.Close()
-		body, _ := ioutil.ReadAll(resp.Body)
-		io.WriteString(w, string(body))
-	}
+	…
+if err != nil {
+	http.Error(w, err.Error(), http.StatusInternalServerError)
+	return
+} else {
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	io.WriteString(w, string(body))
+}
 ```
 
 The following YAML manifest is used to deploy the API service:
@@ -627,10 +583,10 @@ Step (1) is performed by the following code:
 
 ```go|highlight=1|title=main.go
 clientId := r.Header.Get("X-Client-Id")
-	if len(clientId) == 0 {
-		http.Error(w, "X-Client-Id not supplied", http.StatusUnauthorized)
-		return
-	}
+if len(clientId) == 0 {
+	http.Error(w, "X-Client-Id not supplied", http.StatusUnauthorized)
+	return
+}
 ```
 
 Then, step (2) is performed using the Kubernetes Go client.
@@ -726,8 +682,7 @@ spec:
       targetPort: 8081
 ```
 
-Compared to the API service, the data store service requires a ClusterRoleBinding resource to be created which associates the
-data-store Service Account to the `system:auth-delegator` ClusterRole.
+Compared to the API service, the data store service requires a ClusterRoleBinding resource to be created which associates the data-store Service Account to the `system:auth-delegator` ClusterRole.
 
 Go back to the terminal session where you deployed the data store service and inspect the logs:
 
