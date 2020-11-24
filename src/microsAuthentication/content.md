@@ -40,17 +40,16 @@ When you use Keycloack, you first:
 
 1. Login using your email and password — your identity is verified.
 1. A valid session is created for your user. The session might describe what groups you belong to.
-1. Every request proxied through Keycloak has to validate the current session, or you will be asked to log in again.
+1. Every request is validated and you will be asked to log in again when it's invalid.
 
 The same is valid for the two apps within your infrastructure.
 
-1. The caller makes a request to Keycloack with its API key and secret to retrieve a session token.
-1. The caller makes a request to the second app using the token.
-1. The second app retrieves the token from the request and validates with Keycloak.
+1. A backend component makes a request to Keycloack with its API key and secret to generate a session token.
+1. The backend makes a request to the second app using the token.
+1. The second app retrieves the token from the request and validates it with Keycloak.
 1. If the token is valid, it replies to the request.
 
-You might not have noticed, but Kubernetes offers the same primitives for implementing authentication
-and authorization with Service Accounts, Roles and RoleBindings.
+**You might not have noticed, but Kubernetes offers the same primitives for implementing authentication and authorization with Service Accounts, Roles and RoleBindings.**
 
 ## Kubernetes as an authentication and authorization server
 
@@ -58,19 +57,15 @@ In Kubernetes, you [assign identities using Service Accounts.](https://kubernete
 
 Service Accounts are then linked to Roles that grant access to resources.
 
-Users and Pods can use those identities as a mechanism to authenticate to the API and issue requests.
+**Users and Pods can use those identities as a mechanism to authenticate to the API and issue requests.**
 
-And they only receive successful replies for the resources you are authorized to consume.
+And they only receive successful replies for the resources they are authorized to consume.
 
 If a Role grants access to create and delete Pods, you won't be able to amend Secrets, or create ConfigMaps — for example.
 
 _Could you use Service Accounts as a mechanism to authenticate requests between apps in the cluster?_
 
-Kubernetes offers the same primitives to authenticate requests just like Keycloak and Dex.
-
 _What if the Kubernetes API could be used as an Authentication and Authorisation server?_
-
-_Could you use Service Accounts as a mechanism to authenticate requests between apps in the cluster?_
 
 Let's try that.
 
@@ -98,7 +93,7 @@ You should also [clone this repository](https://github.com/amitsaha/kubernetes-s
 
 You will now deploy two services:
 
-1. You will refer to these services as the API service (API) and the data store.
+1. You will refer to these services as the API service and the data store.
 1. They are written in the Go programming language, and they communicate via HTTP.
 1. Each service runs in its namespaces and use dedicated Service Accounts.
 1. The data store replies to requests successfully only when the caller has a valid identity, else it rejects the request with an error.
@@ -135,7 +130,7 @@ Let's try that:
 
 ```terminal|command=1|title=bash
 curl http://192.168.99.101:31541
-curl: (7) Failed to connect to 192.168.64.28 port 32526: Connection refused
+curl: (7) Failed to connect to 192.168.99.101 port 31541: Connection refused
 ```
 
 The error is expected since you haven't deployed the data store yet.
@@ -238,11 +233,11 @@ For that, you might need to list the Role and the RoleBinding:
 kubectl get rolebindings,clusterrolebindings \
   --all-namespaces \
   -o custom-columns='KIND:kind,NAME:metadata.name,SERVICE_ACCOUNTS:subjects[?(@.kind=="ServiceAccount")].name'
-KIND                 NAMESPACE     NAME                                    SERVICE_ACCOUNTS
-RoleBinding          kube-system   kube-proxy                              <none>
-ClusterRoleBinding   <none>        cluster-admin                           <none>
-ClusterRoleBinding   <none>        kubeadm:get-nodes                       <none>
-ClusterRoleBinding   <none>        role-tokenreview-binding                data-store
+KIND                 NAME                       SERVICE_ACCOUNTS
+RoleBinding          kube-proxy                 <none>
+ClusterRoleBinding   cluster-admin              <none>
+ClusterRoleBinding   kubeadm:get-nodes          <none>
+ClusterRoleBinding   role-tokenreview-binding   data-store
 # truncated
 ```
 
@@ -261,26 +256,6 @@ However, you can use that Service Account to authenticate the request to the Kub
 _What about the Data store?_
 
 _What kind of access does it have?_
-
-You can use kubectl with the `can-i` subcommand and the impersonation `--as` flag to test it:
-
-```terminal|command=1,3,5|title=bash
-kubectl auth can-i create deployments --as=data-store --namespace data-store
-no
-kubectl auth can-i list pods --as=data-store --namespace data-store
-no
-kubectl auth can-i delete services --as=data-store --namespace data-store
-no
-```
-
-You can keep querying all Kubernetes resources, but the Service Account has only one permission.
-
-```terminal|command=1|title=bash
-kubectl auth can-i create tokenreviews --as=sa-test-1
-yes
-```
-
-_What's a TokenReview?_
 
 Let's review the ClusterRoleBinding with:
 
@@ -318,13 +293,35 @@ PolicyRule:
 
 The `system:auth-delegator` ClusterRole has the permissions to call the Token Review API.
 
-_What's the Token Review API?_
+_What kind of permission is that?_
+
+You can use kubectl with the `can-i` subcommand and the impersonation `--as` flag to test permissions:
+
+```terminal|command=1,3,5|title=bash
+kubectl auth can-i create deployments --as=data-store --namespace data-store
+no
+kubectl auth can-i list pods --as=data-store --namespace data-store
+no
+kubectl auth can-i delete services --as=data-store --namespace data-store
+no
+```
+
+You can keep querying all Kubernetes resources, but the Service Account has only one permission.
+
+```terminal|command=1|title=bash
+kubectl auth can-i create tokenreviews --as=sa-test-1
+yes
+```
+
+_What's a TokenReview?_
 
 ## Issuing requests to the Kubernetes API
 
 The Kubernetes API verifies service Account identities.
 
 In particular, there's a specific component in charge of validating and rejecting them: the **Token Review API**.
+
+The Token Review API accepts tokens and returns if they are valid or not — _yes, it's that simple._
 
 Let's manually validate the API identity against the Token Review API.
 
@@ -361,11 +358,11 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6…
 
 The `token` object in the Data is a base64 encoded object representing a JSON web token payload.
 
-It's time to verify the token.
+_It's time to verify the token._
 
 To verify the validity of the token, you need to create a TokenReview resource:
 
-```yaml|title=token.yaml
+```yaml|highlight=6|title=token.yaml
 kind: TokenReview
 apiVersion: authentication.k8s.io/v1
 metadata:
@@ -406,7 +403,7 @@ status:
 
 The critical information in the response is in the status object with the following fields:
 
-- **Authenticated**: the field is set to true, which means the token was successfully validated.
+- **Authenticated**: the field is set to `true`, which means the token was successfully validated.
 - In **user** object you can find the following properties:
   - The **username** corresponding to the service account used by the Pod - `system:serviceaccount:test:sa-test-1`.
   - The **uid** for system user ID of the current user.
