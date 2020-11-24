@@ -23,17 +23,18 @@ TODO: insert new diagram
 
 You have several options when it comes to implementing this mechanism of authentication:
 
-- **You could use static tokens that don't expire.** In this case, there is no need for running a dedicated authorization server.
+- **You could use static tokens that don't expire.** In this case, there is no need for running a dedicated authentication server.
 - **You could set up an oAuth server.**
-- **You could roll out your own authorisation mechanism** such as mutual TLS certificates.
+- **You could roll out your own authentication and authorisation mechanism** such as mutual TLS certificates.
 
-All authorisation servers have to do is to:
+All the authentication and authorisation servers have to do is to:
 
 1. **Authenticate the caller** - The caller should have a valid and verifiable identity.
 1. **Generate a token with a limited scope, validity and the desired audience.**
 1. **Validate a token** - Service to service communication is allowed only if the token is legit for the two services involved.
 
-Examples of Authorisation servers are tools such as [Keycloak](https://www.keycloak.org/) or [Dex](https://github.com/dexidp/dex).
+Examples of dedicated software that allows you to implement authentication and authorisation 
+infrastructure are tools such as [Keycloak](https://www.keycloak.org/) or [Dex](https://github.com/dexidp/dex).
 
 When you use Keycloack, you first:
 
@@ -48,10 +49,10 @@ The same is valid for the two apps within your infrastrucure.
 1. The second app retrieves the token from the request and validates with Keycloak.
 1. If the token is valid, it replies to the request.
 
-You might have not noticed, but Kubernetes offers the same primitives as the authentication and authorisation
-service with Service Accounts, Roles and RoleBindings.
+You might have not noticed, but Kubernetes offers the same primitives for implementing authentication
+and authorization with Service Accounts, Roles and RoleBindings.
 
-## Kubernetes as an authorisation server
+## Kubernetes as an authentication and authorization server
 
 In Kubernetes, you [assign identities using Service Accounts.](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/)
 
@@ -61,7 +62,7 @@ A Token is generated as soon as you create the Service Account.
 
 Users and Pods can use the tokens as a mechanism to authenticate to the API and issue requests.
 
-And they only receive successful replies for the resources you are entitled to consume.
+And they only receive successful replies for the resources you are authorized to consume.
 
 If a Role grants access to create and delete Pods, you won't be able to amend Secrets, or create ConfigMaps — for example.
 
@@ -69,11 +70,15 @@ _Could you use Service Accounts as a mechanism to authenticate requests between 
 
 Kubernetes offers the same primitives to authenticate requests just like Keycloak and Dex.
 
-_What if the Kubernetes API could be used as an Authorisation server?_
+_What if the Kubernetes API could be used as an Authentication and Authorisation server?_
+
+1. When a pod presents a valid service account token to the Kubernetes API, it performs an authentication operation
+1. If the authentication operation is successful, Kubernetes API server also checks if the token is *authorized* to perform 
+   the requested operation.
 
 _Could you use Service Accounts as a mechanism to authenticate requests between apps in the cluster?_
 
-Let's try that.
+Let's try that first.
 
 ## Creating the cluster
 
@@ -177,7 +182,6 @@ The data store service successfully verified the token and replied to your reque
 
 _But how does all of that work? Let's find out._
 
-Keep the two terminal sessions running and switch to a new (third) terminal session.
 
 ## Under the hood
 
