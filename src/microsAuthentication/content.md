@@ -15,9 +15,9 @@ So instead of issuing a request to the data store directly, you might need to go
 retrieve a token and use that to authenticate your request to the data store.
 
 There is a specific context associated with the token that allows the data store to accept a token from the API service and to
-reject a token from elsewhere.
+reject it from elsewhere.
 
-This context is used to authorize the request or reject it.
+This context is used to approve or deny the request.
 
 TODO: insert new diagram
 
@@ -42,24 +42,22 @@ When you use Keycloack, you first:
 1. A valid session is created for your user. The session might describe what groups you belong to.
 1. Every request is validated and you will be asked to log in again when it's invalid.
 
-The same is valid for the two apps within your infrastructure.
+The same applies to two apps within your infrastructure.
 
 1. A backend component makes a request to Keycloack with its API key and secret to generate a session token.
-1. The backend makes a request to the second app using the token.
+1. The backend makes a request to the second app using the session token.
 1. The second app retrieves the token from the request and validates it with Keycloak.
 1. If the token is valid, it replies to the request.
 
-**You might not have noticed, but Kubernetes offers the same primitives for implementing authentication and authorization with Service Accounts, Roles and RoleBindings.**
+You might not have noticed, but **Kubernetes offers the same primitives for implementing authentication and authorization with Service Accounts, Roles and RoleBindings.**
 
 ## Kubernetes as an authentication and authorization server
 
 In Kubernetes, you [assign identities using Service Accounts.](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/)
 
-Service Accounts are then linked to Roles that grant access to resources.
-
 **Users and Pods can use those identities as a mechanism to authenticate to the API and issue requests.**
 
-And they only receive successful replies for the resources they are authorized to consume.
+Service Accounts are then linked to Roles that grant access to resources.
 
 If a Role grants access to create and delete Pods, you won't be able to amend Secrets, or create ConfigMaps — for example.
 
@@ -185,16 +183,20 @@ curl http://192.168.64.28:31690
 X-Client-Id not supplied
 ```
 
-Let's supply a dummy `X-Client-Id` header:
+It does not work.
+
+But you could supply a dummy `X-Client-Id` header:
 
 ```terminal|command=1|title=bash
 curl -H 'X-Client-Id: dummy' http://192.168.64.28:31690
 Invalid token
 ```
 
-Excellent!
+**Excellent!**
 
 You protected the data store from unauthenticated access using Kubernetes and Service Accounts.
+
+You can only make requests to it if you have a valid token.
 
 _But how does all of that work? Let's find out._
 
@@ -232,8 +234,8 @@ For that, you might need to list the Role and the RoleBinding:
 ```terminal|command=1-3|title=bash
 kubectl get rolebindings,clusterrolebindings \
   --all-namespaces \
-  -o custom-columns='KIND:kind,NAME:metadata.name,SERVICE_ACCOUNTS:subjects[?(@.kind=="ServiceAccount")].name'
-KIND                 NAME                       SERVICE_ACCOUNTS
+  -o custom-columns='KIND:kind,ROLE:metadata.name,SERVICE_ACCOUNTS:subjects[?(@.kind=="ServiceAccount")].name'
+KIND                 ROLE                       SERVICE_ACCOUNTS
 RoleBinding          kube-proxy                 <none>
 ClusterRoleBinding   cluster-admin              <none>
 ClusterRoleBinding   kubeadm:get-nodes          <none>
@@ -243,7 +245,9 @@ ClusterRoleBinding   role-tokenreview-binding   data-store
 
 > The command above uses [kubectl custom columns](https://kubernetes.io/docs/reference/kubectl/overview/#custom-columns) to filter the output of `kubectl get`.
 
-The only component that has any permission is the Data store.
+The table shows what RoleBinding is linked to a Role (and what ClusterRoleBinding is linked to a ClusterRole).
+
+The only component that has any Role is the Data store.
 
 **There's no Role or Rolebinding for the API.**
 
@@ -251,7 +255,7 @@ _How come you can have a Service Account without a Role and RoleBinding?_
 
 The API app has an empty Service Account that doesn't have any sort of permission.
 
-However, you can use that Service Account to authenticate the request to the Kubernetes API (but you can't create, update, delete, etc. resources).
+However, you can use that Service Account identity to authenticate the request to the Kubernetes API (but you can't create, update, delete, etc. resources).
 
 _What about the Data store?_
 
@@ -259,7 +263,7 @@ _What kind of access does it have?_
 
 Let's review the ClusterRoleBinding with:
 
-```terminal|command=1|title=bash
+```terminal|command=1|title=bash|highlight=7,11
 kubectl describe clusterrolebinding role-tokenreview-binding
 Name:         role-tokenreview-binding
 Labels:       <none>
@@ -317,21 +321,23 @@ _What's a TokenReview?_
 
 ## Issuing requests to the Kubernetes API
 
-The Kubernetes API verifies service Account identities.
+The Kubernetes API verifies Service Account identities.
 
 In particular, there's a specific component in charge of validating and rejecting them: the **Token Review API**.
 
 The Token Review API accepts tokens and returns if they are valid or not — _yes, it's that simple._
 
-Let's manually validate the API identity against the Token Review API.
+Let's manually validate the identity for the API component against the Token Review API.
 
-As the name of the API suggests, you need a token.
+It's the **Token** Review API, so you might need a token.
 
 _What token, though?_
 
 Every time you create a Service Account, Kubernetes creates a Secret.
 
 The Secret holds the token for the Service Account, and you can use that token to call the Kubernetes API.
+
+That's the token that should be validated against the Token Review API.
 
 So let's retrieve the token for the API Service Account with:
 
@@ -344,7 +350,7 @@ Tokens:              api-token-lxcb4
 
 Then to inspect the Secret object, you can issue the following command:
 
-```terminal|command=1|title=bash
+```terminal|command=1|title=bash|highlight=9
 kubectl --namespace api describe secret api-token-lxcb4
 Name:         api-token-lxcb4
 Type:  kubernetes.io/service-account-token
@@ -420,7 +426,7 @@ You know that:
 
 Since you can validate and verify any token, you could leverage the mechanism in your Data Store component to authenticate and authorise requests!
 
-Let's have a look at how you could include the above logic in your apps.
+Let's have a look at how you could include the above logic in your apps using the [Kubernetes Go client.](https://github.com/kubernetes/client-go)
 
 ## Implementation of the services
 
