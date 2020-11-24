@@ -9,12 +9,12 @@ You might want the data store only to reply to requests to the API and reject re
 
 _How would the data store decide to authenticate or deny the request?_
 
-A popular approach is to request and pass identity tokens to every call within services.
+**A popular approach is to request and pass identity tokens to every call within services.**
 
 So instead of issuing a request to the data store directly, you might need to go through an Authentication service first,
 retrieve a token and use that to authenticate your request to the data store.
 
-There is a certain context associated with the token that allows the data store to accept a token from the API service and to
+There is a specific context associated with the token that allows the data store to accept a token from the API service and to
 reject a token from elsewhere.
 
 This context is used to authorize the request or reject it.
@@ -24,8 +24,8 @@ TODO: insert new diagram
 You have several options when it comes to implementing this mechanism of authentication:
 
 - **You could use static tokens that don't expire.** In this case, there is no need for running a dedicated authentication server.
-- **You could set up an oAuth server.**
-- **You could roll out your own authentication and authorisation mechanism** such as mutual TLS certificates.
+- **You could set up an OAuth server.**
+- **You could roll out your authentication and authorisation mechanism** such as mutual TLS certificates.
 
 All the authentication and authorisation servers have to do is to:
 
@@ -38,18 +38,18 @@ infrastructure are tools such as [Keycloak](https://www.keycloak.org/) or [Dex](
 
 When you use Keycloack, you first:
 
-1. Log in using your email and password — your identity is verified.
+1. Login using your email and password — your identity is verified.
 1. A valid session is created for your user. The session might describe what groups you belong to.
 1. Every request proxied through Keycloak has to validate the current session, or you will be asked to log in again.
 
-The same is valid for the two apps within your infrastrucure.
+The same is valid for the two apps within your infrastructure.
 
 1. The caller makes a request to Keycloack with its API key and secret to retrieve a session token.
 1. The caller makes a request to the second app using the token.
 1. The second app retrieves the token from the request and validates with Keycloak.
 1. If the token is valid, it replies to the request.
 
-You might have not noticed, but Kubernetes offers the same primitives for implementing authentication
+You might not have noticed, but Kubernetes offers the same primitives for implementing authentication
 and authorization with Service Accounts, Roles and RoleBindings.
 
 ## Kubernetes as an authentication and authorization server
@@ -58,9 +58,7 @@ In Kubernetes, you [assign identities using Service Accounts.](https://kubernete
 
 Service Accounts are then linked to Roles that grant access to resources.
 
-A Token is generated as soon as you create the Service Account.
-
-Users and Pods can use the tokens as a mechanism to authenticate to the API and issue requests.
+Users and Pods can use those identities as a mechanism to authenticate to the API and issue requests.
 
 And they only receive successful replies for the resources you are authorized to consume.
 
@@ -72,13 +70,9 @@ Kubernetes offers the same primitives to authenticate requests just like Keycloa
 
 _What if the Kubernetes API could be used as an Authentication and Authorisation server?_
 
-1. When a pod presents a valid service account token to the Kubernetes API, it performs an authentication operation
-1. If the authentication operation is successful, Kubernetes API server also checks if the token is _authorized_ to perform
-   the requested operation.
-
 _Could you use Service Accounts as a mechanism to authenticate requests between apps in the cluster?_
 
-Let's try that first.
+Let's try that.
 
 ## Creating the cluster
 
@@ -100,13 +94,13 @@ minikube start \
   --extra-config=apiserver.service-account-api-audiences=api
 ```
 
-You should also clone the repository <https://github.com/amitsaha/kubernetes-sa-volume-demo> as it contains the demo source code that will be referred to in the article.
+You should also [clone this repository](https://github.com/amitsaha/kubernetes-sa-volume-demo) as it contains the demo source code that will be referred to in the article.
 
 You will now deploy two services:
 
 1. You will refer to these services as the API service (API) and the data store.
-1. They are written in the Go programming language and they communicate via HTTP.
-1. Each service runs in its own namespaces and use dedicated Service Accounts.
+1. They are written in the Go programming language, and they communicate via HTTP.
+1. Each service runs in its namespaces and use dedicated Service Accounts.
 1. The data store replies to requests successfully only when the caller has a valid identity, else it rejects the request with an error.
 
 ## Deploying the API component
@@ -115,7 +109,7 @@ The API service is a headless web application listening on port 8080.
 
 When a client makes any request to it, the API component:
 
-1. Issues an HTTP GET request to the data store with the token linked to the Service Account.
+1. Issues an HTTP GET request to the data store with its Service Account identity.
 1. Forwards the response.
 
 You can deploy the app and expose it as a Service in the cluster with:
@@ -141,10 +135,10 @@ Let's try that:
 
 ```terminal|command=1|title=bash
 curl http://192.168.99.101:31541
-Get "http://app.data-store.svc.cluster.local": dial tcp: lookup app.data-store.svc.cluster.local: no such host
+curl: (7) Failed to connect to 192.168.64.28 port 32526: Connection refused
 ```
 
-This is expected since you haven't yet deployed the data store yet.
+The error is expected since you haven't deployed the data store yet.
 
 _Keep the terminal open._
 
@@ -156,8 +150,8 @@ The Data store service is another headless web application listening on port 808
 
 When a client makes any request to it, the Data store:
 
-1. Looks for a token in the request header. If there isn't one, it replies with a HTTP 401 error response.
-1. Checks the token with the Kubernetes API for its validity. If it's invalid, it replies with a HTTP 403 response.
+1. Looks for a token in the request header. If there isn't one, it replies with an HTTP 401 error response.
+1. Checks the token with the Kubernetes API for its validity. If it's invalid, it replies with an HTTP 403 response.
 1. Finally, when the token is valid, it replies to the original request.
 
 You can create the data store with:
@@ -179,6 +173,33 @@ Hello from data store. You have been authenticated
 ```
 
 The data store service successfully verified the token and replied to your request.
+
+_What if you make a request directly to the Data store?_
+
+Retrieve the URL od the Data store with:
+
+```terminal|command=1|title=bash
+minikube --namespace data-store service app --url
+http://192.168.64.28:31690
+```
+
+Let's use `curl` to make a request to it:
+
+```terminal|command=1|title=bash
+curl http://192.168.64.28:31690
+X-Client-Id not supplied
+```
+
+Let's supply a dummy `X-Client-Id` header:
+
+```terminal|command=1|title=bash
+curl -H 'X-Client-Id: dummy' http://192.168.64.28:31690
+Invalid token
+```
+
+Excellent!
+
+You protected the data store from unauthenticated access using Kubernetes and Service Accounts.
 
 _But how does all of that work? Let's find out._
 
@@ -213,84 +234,78 @@ Those Service Account are the identities associated with the apps, but they don'
 
 For that, you might need to list the Role and the RoleBinding:
 
-```terminal|command=1,3|title=bash
-kubectl get role,rolebinding --namespace api
-No resources found in api namespace.
-kubectl get role,rolebinding --namespace data-store
-No resources found in data-store namespace.
+```terminal|command=1-3|title=bash
+kubectl get rolebindings,clusterrolebindings \
+  --all-namespaces \
+  -o custom-columns='KIND:kind,NAME:metadata.name,SERVICE_ACCOUNTS:subjects[?(@.kind=="ServiceAccount")].name'
+KIND                 NAMESPACE     NAME                                    SERVICE_ACCOUNTS
+RoleBinding          kube-system   kube-proxy                              <none>
+ClusterRoleBinding   <none>        cluster-admin                           <none>
+ClusterRoleBinding   <none>        kubeadm:get-nodes                       <none>
+ClusterRoleBinding   <none>        role-tokenreview-binding                data-store
+# truncated
 ```
 
-There are none!
+> The command above uses [kubectl custom columns](https://kubernetes.io/docs/reference/kubectl/overview/#custom-columns) to filter the output of `kubectl get`.
+
+The only component that has any permission is the Data store.
+
+**There's no Role or Rolebinding for the API.**
 
 _How come you can have a Service Account without a Role and RoleBinding?_
 
-You created an empty Service Account that doesn't have any sort of permission.
+The API app has an empty Service Account that doesn't have any sort of permission.
 
-However, you can use it to authenticate your request to the Kubernetes API (but you can't create, update, delete, etc. resources).
+However, you can use that Service Account to authenticate the request to the Kubernetes API (but you can't create, update, delete, etc. resources).
 
-_What components is validating the Service Account identity?_
-
-## Issueing requests to the Kubernetes API
-
-Tokens associated with Service Accounts are verified by the Kubernetes API.
-
-In particular, there's a specific component in charge of validating and rejecting them: the **Token Review API**.
-
-Let's manually create a token and validate it against the Token Review API.
-
-Consider the following YAML manifest to create a namespace `test` and a service account `sa-test-1`:
-
-```yaml|title=sa.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: test
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: sa-test-1
-  namespace: test
-```
-
-You can create the resources with:
-
-```terminal|command=1|title=bash
-kubectl apply -f sa.yaml
-namespace/test created
-serviceaccount/sa-test-1 created
-```
-
-The Service Account doesn't have any Role or ClusterRole associated.
+_What about the Data store?_
 
 _What kind of access does it have?_
 
 You can use kubectl with the `can-i` subcommand and the impersonation `--as` flag to test it:
 
 ```terminal|command=1,3,5|title=bash
-kubectl auth can-i create deployments --as=sa-test-1
+kubectl auth can-i create deployments --as=data-store --namespace data-store
 no
-kubectl auth can-i list pods --as=sa-test-1
+kubectl auth can-i list pods --as=data-store --namespace data-store
 no
-kubectl auth can-i delete services --as=sa-test-1
+kubectl auth can-i delete services --as=data-store --namespace data-store
 no
 ```
 
-You can keep querying all Kubernetes resources, but the Service Account doesn't have any access.
-
-If you want to grant access to the Service Account you need two more objects: a Binding and a Role.
-
-In the Role you define access to the resources such as read-only access to Secrets or only GET, DESCRIBE and LIST operations on Pods.
-
-Kubernetes comes with a list of roles and cluster roles prepackaged that you can list with
-`kubectl get roles --all-namespaces` and `kubectl get clusterroles` respectively.
-
-In the following example, you will use the `system:auth-delegator` ClusterRole which has the permission to call the Token Review API.
-
-You can inspect it with:
+You can keep querying all Kubernetes resources, but the Service Account has only one permission.
 
 ```terminal|command=1|title=bash
-kubectl describe clusterrole system:auth-delegator --namespace kube-system
+kubectl auth can-i create tokenreviews --as=sa-test-1
+yes
+```
+
+_What's a TokenReview?_
+
+Let's review the ClusterRoleBinding with:
+
+```terminal|command=1|title=bash
+kubectl describe clusterrolebinding role-tokenreview-binding
+Name:         role-tokenreview-binding
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  ClusterRole
+  Name:  system:auth-delegator
+Subjects:
+  Kind            Name        Namespace
+  ----            ----        ---------
+  ServiceAccount  data-store  data-store
+```
+
+From the output above, you can tell that the ClusterRoleBinding links the `data-store` Service Account to the `system:auth-delegator` ClusterRole.
+
+_What permissions grants the ClusterRole?_
+
+Let's find out with:
+
+```terminal|command=1|title=bash
+kubectl describe clusterrole system:auth-delegator
 Name:         system:auth-delegator
 Labels:       kubernetes.io/bootstrapping=rbac-defaults
 Annotations:  rbac.authorization.kubernetes.io/autoupdate: true
@@ -301,78 +316,46 @@ PolicyRule:
   subjectaccessreviews.authorization.k8s.io  []                 []              [create]
 ```
 
-The only part missing is the ClusterRoleBinding.
+The `system:auth-delegator` ClusterRole has the permissions to call the Token Review API.
 
-You can create a ClusterRoleBinding to link the Service Account to a Role and grant the permission cluster wide:
+_What's the Token Review API?_
 
-```yaml|highlight=8,11|title=sa_rbac.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: role-tokenreview-binding
-  namespace: test
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: system:auth-delegator
-subjects:
-- kind: ServiceAccount
-  name: sa-test-1
-  namespace: test
-```
+## Issuing requests to the Kubernetes API
 
-Now you Service Account is linked to the `system:auth-delegator` role.
+The Kubernetes API verifies service Account identities.
 
-Save the above into a new file, `sa_rbac.yaml` and submit it to the cluster with:
+In particular, there's a specific component in charge of validating and rejecting them: the **Token Review API**.
+
+Let's manually validate the API identity against the Token Review API.
+
+As the name of the API suggests, you need a token.
+
+_What token, though?_
+
+Every time you create a Service Account, Kubernetes creates a Secret.
+
+The Secret holds the token for the Service Account, and you can use that token to call the Kubernetes API.
+
+So let's retrieve the token for the API Service Account with:
 
 ```terminal|command=1|title=bash
-kubectl apply -f sa_rbac.yaml
-clusterrolebinding.rbac.authorization.k8s.io/role-tokenreview-binding created
-```
-
-TODO: I couldn't find a easy way to do this.
-
-Let's impersonate the Service Account and test it:
-
-```terminal|command=1|title=bash
-kubectl auth can-i create tokenreviews --as=sa-test-1
-yes
-```
-
-Great!
-
-You have now created a Service Account and associated it with a ClusterRole to allow it to invoke the TokenReview API.
-
-_How should you use it?_
-
-First, you should retrieve the Service Account token which is Stored in a Secret.
-
-You can reveal the name of the Secret associated with the Service Account with:
-
-```terminal|command=1|title=bash
-kubectl --namespace test describe sa sa-test-1
-Name:                 sa-test-1
-Namespace:            test
-Labels:               <none>
-Image pull secrets:   <none>
-Mountable secrets:    sa-test-1-token-99l5r
-Tokens:               sa-test-1-token-99l5r
-Events:               <none>
+kubectl --namespace api describe serviceaccount api
+Name:                api
+Mountable secrets:   api-token-lxcb4
+Tokens:              api-token-lxcb4
 ```
 
 Then to inspect the Secret object, you can issue the following command:
 
 ```terminal|command=1|title=bash
-kubectl --namespace test describe secret sa-test-1-token-99l5r
-Name:       sa-test-1-token-99l5r
-Namespace:  test
-Labels:     <none>
+kubectl --namespace api describe secret api-token-lxcb4
+Name:         api-token-lxcb4
 Type:  kubernetes.io/service-account-token
 
 Data
 ====
-ca.crt:     1066 bytes
-namespace:  4 bytes
+ca.crt:     1111 bytes
+namespace:  3 bytes
 token:      eyJhbGciOiJSUzI1NiIsImtpZCI6…
 ```
 
@@ -380,9 +363,7 @@ The `token` object in the Data is a base64 encoded object representing a JSON we
 
 It's time to verify the token.
 
-### Sending a token verification request
-
-To issue a request to the Token Review API, you need to create a TokenReview resource:
+To verify the validity of the token, you need to create a TokenReview resource:
 
 ```yaml|title=token.yaml
 kind: TokenReview
@@ -390,7 +371,7 @@ apiVersion: authentication.k8s.io/v1
 metadata:
   name: test
 spec:
-  token: <replace with the token to validate>
+  token: eyJhbGciOiJS…
 ```
 
 You can validate the request with:
@@ -403,41 +384,32 @@ kubectl apply -o yaml -f token.yaml
 
 When you issue the command, the response should look as follows:
 
-```json|highlight=12,13,16-20,22-24
-{
-  "kind": "TokenReview",
-  "apiVersion": "authentication.k8s.io/v1",
-  "metadata": {
-    "creationTimestamp": null,
-    // truncated output
-  },
-  "spec": {
-    "token": "eyJhbGciOiJSUzI1NiI…"
-  },
-  "status": {
-    "authenticated": true,
-    "user": {
-      "username": "system:serviceaccount:test:sa-test-1",
-      "uid": "42d43e46-76fe-441f-8281-a566964e52fe",
-      "groups": [
-        "system:serviceaccounts",
-        "system:serviceaccounts:test",
-        "system:authenticated"
-      ]
-    },
-    "audiences": [
-      "api"
-    ]
-  }
-}
+```yaml|highlight=9,10,13-15,16,17
+apiVersion: authentication.k8s.io/v1
+kind: TokenReview
+metadata:
+  name: test
+spec:
+  token: eyJhbGciOiJS…
+status:
+  audiences:
+  - api
+  authenticated: true
+  user:
+    groups:
+    - system:serviceaccounts
+    - system:serviceaccounts:api
+    - system:authenticated
+    uid: 7df3a132-c9fe-48d1-9fa5-b654c3156977
+    username: system:serviceaccount:api:api
 ```
 
-The key information in the response is in the status object with the following fields:
+The critical information in the response is in the status object with the following fields:
 
-- **Authenticated**: the field is set to true which means the token was successfully validated.
+- **Authenticated**: the field is set to true, which means the token was successfully validated.
 - In **user** object you can find the following properties:
   - The **username** corresponding to the service account used by the Pod - `system:serviceaccount:test:sa-test-1`.
-  - The **uid** for system user ID of current user.
+  - The **uid** for system user ID of the current user.
 - **Groups** includes the groups that the user belongs to.
 - **Audiences** contains a list of audiences that the token is intended for. In this case, only the `api` is a valid audience.
 
@@ -446,10 +418,10 @@ _Excellent, you just verified the Service Account token!_
 You know that:
 
 - The token is valid.
-- The identity of the caller (the Service Account).
+- The identity of the caller (the API Service Account).
 - The groups that the caller belongs to.
 
-Since you can validate and verify any token, you could leverage the same API endpoint in your Data Store component to authenticate and authorise requests!
+Since you can validate and verify any token, you could leverage the mechanism in your Data Store component to authenticate and authorise requests!
 
 Let's have a look at how you could include the above logic in your apps.
 
@@ -458,8 +430,8 @@ Let's have a look at how you could include the above logic in your apps.
 Here's how the two services interact with each other and the Kubernetes API:
 
 1. At startup, an API service reads the Service Account token and keeps it in memory.
-1. The API service calls the data store passing the token as a HTTP header — i.e. `X-Client-Id`.
-1. When the data store receives a request from the API component, it reads the token from the `X-Client-Id` header and issues a request to to the TokenReview API to check its validity.
+1. The API service calls the data store passing the token as an HTTP header — i.e. `X-Client-Id`.
+1. When the data store receives a request from the API component, it reads the token from the `X-Client-Id` header and issues a request to the Token Review API to check its validity.
 1. If the response is authenticated, the data store service replies with a successful message, otherwise a 401 error.
 
 The following diagram represents the above call flow:
@@ -468,7 +440,7 @@ TODO: Diagram updation needed
 
 ![Call flow between the services](image2.png)
 
-First let's look at the implementation of the API service.
+First, let's look at the implementation of the API service.
 
 You can find the application code in the file `service_accounts/api/main.go`.
 
@@ -476,11 +448,11 @@ The Service Account Token is automatically mounted in `/var/run/secrets/kubernet
 
 ```go|highlight=2,6|title=main.go
 func readToken() {
-	b, err := ioutil.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/token")
-	if err != nil {
-		panic(err)
-	}
-	serviceToken = string(b)
+  b, err := ioutil.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/token")
+  if err != nil {
+    panic(err)
+  }
+  serviceToken = string(b)
 }
 ```
 
@@ -492,7 +464,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 client := &http.Client{}
 req, err := http.NewRequest("GET", serviceConnstring, nil)
 if err != nil {
-	panic(err)
+  panic(err)
 }
 req.Header.Add("X-Client-Id", serviceToken)
 resp, err := client.Do(req)
@@ -502,14 +474,14 @@ resp, err := client.Do(req)
 As soon as the reply from the Secret store is received, it is then sent back as a response:
 
 ```go|highlight=7-8|title=main.go
-	…
+  …
 if err != nil {
-	http.Error(w, err.Error(), http.StatusInternalServerError)
-	return
+  http.Error(w, err.Error(), http.StatusInternalServerError)
+  return
 } else {
-	defer resp.Body.Close()
-	body, _ := ioutil.ReadAll(resp.Body)
-	io.WriteString(w, string(body))
+  defer resp.Body.Close()
+  body, _ := ioutil.ReadAll(resp.Body)
+  io.WriteString(w, string(body))
 }
 ```
 
@@ -584,8 +556,8 @@ Step (1) is performed by the following code:
 ```go|highlight=1|title=main.go
 clientId := r.Header.Get("X-Client-Id")
 if len(clientId) == 0 {
-	http.Error(w, "X-Client-Id not supplied", http.StatusUnauthorized)
-	return
+  http.Error(w, "X-Client-Id not supplied", http.StatusUnauthorized)
+  return
 }
 ```
 
@@ -598,15 +570,15 @@ config, err := rest.InClusterConfig()
 clientset, err := kubernetes.NewForConfig(config)
 ```
 
-The `InClusterConfig()` function automatically reads the Service Account Token for the Pod and hence you do not have to manually specify the path.
+The `InClusterConfig()` function automatically reads the Service Account Token for the Pod, and hence you do not have to specify the path manually.
 
 Then, you construct a `TokenReview` object specifying the token you want to validate in the `Token` field:
 
 ```go|title=main.go
 tr := authv1.TokenReview{
-	Spec: authv1.TokenReviewSpec{
-	    Token: clientId,
-	},
+  Spec: authv1.TokenReviewSpec{
+      Token: clientId,
+  },
 }
 ```
 
@@ -682,7 +654,7 @@ spec:
       targetPort: 8081
 ```
 
-Compared to the API service, the data store service requires a ClusterRoleBinding resource to be created which associates the data-store Service Account to the `system:auth-delegator` ClusterRole.
+Compared to the API service, the data store service requires a ClusterRoleBinding resource to be created, which associates the data-store Service Account to the `system:auth-delegator` ClusterRole.
 
 Go back to the terminal session where you deployed the data store service and inspect the logs:
 
@@ -699,7 +671,7 @@ The output is a Go structure version of the JSON response you saw earlier.
 
 Thus, you see how API service reads the Service Account Token and passes it onto its request to the data store service as a way to authenticate itself.
 
-The data store service retrieves the token and then checks with the Kubernetes API whether it is valid or not.
+The data store service retrieves the token and then checks with the Kubernetes API, whether it is valid or not.
 
 If valid, the data store service allows the request from the API service to be processed.
 
@@ -748,7 +720,7 @@ In other words, once you have access to one of them, you can use it forever (or 
 
 You could manually rotate identities by manually removing and re-assigning Service Accounts.
 
-If if sounds like a lot of work, it's because it is.
+If it sounds like a lot of work, it's because it is.
 
 ### 3. No audience binding of the tokens
 
@@ -760,7 +732,7 @@ The destination service doesn't have any way to verify whether the token it was 
 
 As an example, imagine buying a ticket for a flight from London to New York.
 
-If you buy a Ticket from British Airways, you can't use the ticket to board a Virgin Atlantic flight.
+If you buy a ticket from British Airways, you can't use the ticket to board a Virgin Atlantic flight.
 
 Your ticket is bound to a particular audience (British Airways).
 
@@ -770,15 +742,15 @@ You could solve both challenges by implementing solutions such as mutual TLS or 
 
 **However, in Kubernetes, you can use the Service Account Token Volume Projection feature to create time-bound and audience-specific Service Account Tokens which do not persist in the cluster store.**
 
-The Kubernetes API server acts as the central authority server and you don't have to worry about expiring tokens.
+The Kubernetes API server acts as the central authority server, and you don't have to worry about expiring tokens.
 
 This feature was introduced in Kubernetes 1.12 and gained further improvements in 1.13 and provides a more secure alternative to workload-specific service accounts.
 
-In fact, this will be promoted to a GA feature in the upcoming Kubernetes 1.20 release.
+This will be promoted to a GA feature in the upcoming Kubernetes 1.20 release.
 
 In the next part of the article, you will re-implement the same code for authenticating apps using the Service Account Token Volume Projection.
 
-It's a good idea to cleanup the two namespaces with:
+It's a good idea to clean up the two namespaces with:
 
 ```terminal|command=1,3|title=bash
 kubectl delete namespace api
@@ -797,7 +769,7 @@ A `serviceAccountToken` volume projection is one of the `projected` volume types
 
 > [A projected volume is a volume that mounts several existing volumes into the same directory.](https://kubernetes.io/docs/tasks/configure-pod-container/configure-projected-volume-storage/#configure-a-projected-volume-for-a-pod)
 
-When this volume type is added to a Pod, the Service Aaccount Token is mounted on the filesystem — in the same way that the Service Account Tokens are mounted.
+When this volume type is added to a Pod, the Service Account Token is mounted on the filesystem — in the same way that the Service Account Tokens are mounted.
 
 _There's a difference though._
 
@@ -827,14 +799,14 @@ ticker := time.NewTicker(300 * time.Second)
 done := make(chan bool)
 
 go func() {
-		for {
-				select {
-			case <-done:
-					return
-			case <-ticker.C:
-					readToken()
-			}
-		}
+    for {
+        select {
+      case <-done:
+          return
+      case <-ticker.C:
+          readToken()
+      }
+    }
 }()
 ```
 
@@ -922,7 +894,7 @@ The volume defines three additional properties:
 
 Please notice how the `audience` field specifies that this Service Account Token is allowed to communicate only with services that identify themselves as a `data-store`.
 
-If you don't include `data-store` as an audience in the Secret store component, the API won't be able to talk to it — it's not its audience!
+If you omit `data-store` as an audience in the Secret store component, the API won't be able to talk to it — it's not its audience!
 
 > Note that if you are deploying a Pod to use this feature in a cluster with Pod Security Policies enforced, [you will need to ensure that the `projected` volume type is allowed.](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#volumes-and-file-systems)
 
@@ -962,10 +934,10 @@ The token review payload for the data store will now be as follows:
 
 ```go|title=main.go
 tr := authv1.TokenReview{
-	pec: authv1.TokenReviewSpec{
-		Token:	clientId,
-		Audiences:	[]string{"data-store"},
-	},
+  pec: authv1.TokenReviewSpec{
+    Token:  clientId,
+    Audiences:  []string{"data-store"},
+  },
 }
 ```
 
@@ -1040,7 +1012,7 @@ In you switch to the logs of the API service, you should see the following lines
 
 Service Account Token Volume projection allows you to associate non-global, time-bound and audience bound service tokens to your Kubernetes workloads.
 
-In this article you saw an example of using it for authentication between your services and how it is a better alternative to using the default Service Account Tokens.
+In this article, you saw an example of using it for authentication between your services and how it is a better alternative to using the default Service Account Tokens.
 
 Kubernetes native software such as [Linkerd](https://github.com/linkerd/linkerd2/issues/3260) and [Istio](https://istio.io/latest/blog/2019/trustworthy-jwt-sds/) are embracing it for their internal communication and managed Kubernetes service providers such as [GKE](https://cloud.google.com/community/tutorials/gke-workload-id-clientserver) and [AWS EKS](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts-technical-overview.html) are using this projection volume type to enable more robust pod identity systems.
 
