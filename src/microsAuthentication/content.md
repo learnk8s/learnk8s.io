@@ -7,7 +7,7 @@ Imagine having two apps:
 
 You might want the data store only to reply to requests to the API and reject requests from anywhere else.
 
-_How would the data store decide to authenticate or deny the request?_
+_How would the data store decide to allow or deny the request?_
 
 **A popular approach is to request and pass identity tokens to every call within services.**
 
@@ -17,11 +17,11 @@ retrieve a token and use that to authenticate your request to the data store.
 There is a specific context associated with the token that allows the data store to accept a token from the API service and to
 reject it from elsewhere.
 
-This context is used to approve or deny the request.
+This context is used to permit or deny the request.
 
 TODO: insert new diagram
 
-You have several options when it comes to implementing this mechanism of authentication:
+You have several options when it comes to implementing this authentication mechanism:
 
 - **You could use static tokens that don't expire.** In this case, there is no need for running a dedicated authentication server.
 - **You could set up an OAuth server.**
@@ -91,18 +91,18 @@ You should also [clone this repository](https://github.com/amitsaha/kubernetes-s
 
 You will now deploy two services:
 
-1. You will refer to these services as the API service and the data store.
+1. You will refer to these services as the API service and the Data store.
 1. They are written in the Go programming language, and they communicate via HTTP.
-1. Each service runs in its namespaces and use dedicated Service Accounts.
+1. Each service runs in its namespaces and use dedicated Service Accounts identities.
 1. The data store replies to requests successfully only when the caller has a valid identity, else it rejects the request with an error.
 
 ## Deploying the API component
 
 The API service is a headless web application listening on port 8080.
 
-When a client makes any request to it, the API component:
+When you make a request to it, the API component:
 
-1. Issues an HTTP GET request to the data store with its Service Account identity.
+1. Issues an HTTP GET request to the Data store with its Service Account identity.
 1. Forwards the response.
 
 You can deploy the app and expose it as a Service in the cluster with:
@@ -165,11 +165,13 @@ curl http://192.168.99.101:31541
 Hello from data store. You have been authenticated
 ```
 
-The data store service successfully verified the token and replied to your request.
+The data store service successfully verified the token and replied to the API.
+
+The API forwards the request to you.
 
 _What if you make a request directly to the Data store?_
 
-Retrieve the URL od the Data store with:
+Retrieve the URL of the Data store with:
 
 ```terminal|command=1|title=bash
 minikube --namespace data-store service app --url
@@ -183,7 +185,7 @@ curl http://192.168.64.28:31690
 X-Client-Id not supplied
 ```
 
-It does not work.
+**It does not work.**
 
 But you could supply a dummy `X-Client-Id` header:
 
@@ -193,6 +195,8 @@ Invalid token
 ```
 
 **Excellent!**
+
+_It does not work!_
 
 You protected the data store from unauthenticated access using Kubernetes and Service Accounts.
 
@@ -204,7 +208,7 @@ _But how does all of that work? Let's find out._
 
 **Service Accounts are a way to associate your Kubernetes workloads with an identity.**
 
-You can combine a Service Account with a Role (or ClusterRole) and a RoleBinding (or ClusterRoleBinding) to define what or who can access what resources in a cluster.
+You can combine a Service Account with a Role and a RoleBinding to define what or who can access what resources in a cluster.
 
 For example, when you want to restrict reading Secrets only to admin users in the cluster, you can do so using a Service Account.
 
@@ -229,7 +233,7 @@ data-store   1         6m4s
 
 Those Service Account are the identities associated with the apps, but they don't define what permissions are granted.
 
-For that, you might need to list the Role and the RoleBinding:
+For that, you might need to list the Role and ClusterRoles:
 
 ```terminal|command=1-3|title=bash
 kubectl get rolebindings,clusterrolebindings \
@@ -432,10 +436,10 @@ Let's have a look at how you could include the above logic in your apps using th
 
 Here's how the two services interact with each other and the Kubernetes API:
 
-1. At startup, an API service reads the Service Account token and keeps it in memory.
-1. The API service calls the data store passing the token as an HTTP header — i.e. `X-Client-Id`.
-1. When the data store receives a request from the API component, it reads the token from the `X-Client-Id` header and issues a request to the Token Review API to check its validity.
-1. If the response is authenticated, the data store service replies with a successful message, otherwise a 401 error.
+1. At startup, an API component reads the Service Account token and keeps it in memory.
+1. The API component calls the data store passing the token as an HTTP header — i.e. `X-Client-Id`.
+1. When the data store receives a request, it reads the token from the `X-Client-Id` header and issues a request to the Token Review API to check its validity.
+1. If the response is authenticated, the data store component replies with a successful message, otherwise a 401 error.
 
 The following diagram represents the above call flow:
 
@@ -552,7 +556,7 @@ You can find the complete application in `service_accounts/data-store/main.go`.
 The data store service does two key things:
 
 1. It retrieves the value of the `X-Client-Id` header from the incoming request.
-1. It then invokes the Kubernetes Token Review API to check if it is a valid token or not.
+1. It then invokes the Kubernetes Token Review API to check if the token is valid.
 
 Step (1) is performed by the following code:
 
@@ -657,7 +661,7 @@ spec:
       targetPort: 8081
 ```
 
-Compared to the API service, the data store service requires a ClusterRoleBinding resource to be created, which associates the data-store Service Account to the `system:auth-delegator` ClusterRole.
+Compared to the API service, the data store service requires a ClusterRoleBinding resource to be created, which associates the `data-store` Service Account to the `system:auth-delegator` ClusterRole.
 
 Go back to the terminal session where you deployed the data store service and inspect the logs:
 
@@ -672,11 +676,11 @@ Audiences:[]string{"api"}, Error:""}
 
 The output is a Go structure version of the JSON response you saw earlier.
 
-Thus, you see how API service reads the Service Account Token and passes it onto its request to the data store service as a way to authenticate itself.
+Thus, you see how the API component reads the Service Account Token and passes it to the Data store as a way to authenticate itself.
 
-The data store service retrieves the token and then checks with the Kubernetes API, whether it is valid or not.
+The Data store service retrieves the token and checks it with the Kubernetes API.
 
-If valid, the data store service allows the request from the API service to be processed.
+When valid, the Data store component allows the request from the API service to be processed.
 
 The implementation works well, but it suffers from three drawbacks:
 
@@ -705,7 +709,7 @@ api-token-ttr8q       kubernetes.io/service-account-token
 default-token-vppc9   kubernetes.io/service-account-token
 ```
 
-**However, any workload that can read a secret in a namespace can also read the service account tokens in the same namespace.**
+**However, any workload that can read a secret in a namespace can also read the Service Account tokens in the same namespace.**
 
 In other words, you could have any other Pod using the same Service Account to authenticate against the Kubernetes API — effectively impersonating someone else.
 
@@ -713,21 +717,21 @@ Unfortunately, there's no mechanism to restrict access to a subset of Secrets in
 
 **The application has access to all of them, or none of them.**
 
-You could create a namespace for every app and store a Service Account with it, but that's often overkilled.
+You could create a namespace for every app and store a Service Account in it, but that's often overkilled.
 
 ## Long live the Service Account's token
 
-The tokens associated with a Service Account are long-lived and do not expire.
+**The tokens associated with a Service Account are long-lived and do not expire.**
 
-In other words, once you have access to one of them, you can use it forever (or until the administrator deletes the secret associated with the token).
+In other words, once you have access to one of them, you can use it forever (or until the administrator deletes the Secret associated with the token).
 
 You could manually rotate identities by manually removing and re-assigning Service Accounts.
 
 If it sounds like a lot of work, it's because it is.
 
-### 3. No audience binding of the tokens
+### No audience binding of the tokens
 
-As a cluster administrator, you cannot associate a token with a specific audience.
+**As a cluster administrator, you cannot associate a token with a specific audience.**
 
 Anyone with access to the Service Account token can authenticate with the Kubernetes API and is authorised to communicate with any other service running inside the cluster.
 
@@ -891,7 +895,7 @@ A volume named `api-token` of `projected` type will be created with the source b
 
 The volume defines three additional properties:
 
-1. The `path` indicates the file where the token will be available inside the configured volume.
+1. The `path` where the token will be available inside the configured volume.
 1. The `audience` field specifies what the intended audience for the token is (if not specified, it defaults to `api`).
 1. The `expirationSeconds` indicate how long a token is valid for - the minimum is 600 seconds or 10 minutes.
 
@@ -922,7 +926,7 @@ You can issue a request with:
 
 ```terminal|command=1|title=bash
 curl http://192.168.99.101:31541
-Get "http://app.data-store.svc.cluster.local": dial tcp: lookup app.data-store.svc.cluster.local: no such host
+curl: (7) Failed to connect to http://192.168.99.101 port 31541: Connection refused
 ```
 
 This is expected as the data store is not yet deployed.
@@ -944,11 +948,11 @@ tr := authv1.TokenReview{
 }
 ```
 
-Now, in the TokenReview object, the data store explicitly passes `data-store` as the audience for the token it is asking the API to review.
+Now, in the TokenReview object, the Data store explicitly passes `data-store` as the audience.
 
-If the token doesn't include `data-store` as an audience, the Token Review API will not authenticate the request.
+If the token doesn't include `data-store` as an audience, the Token Review API will not authorise the request.
 
-In other words, the data store service can assert the identity of the caller and validate that the incoming request token was meant for the data store service.
+In other words, the Data store service can assert the identity of the caller and validate that the incoming request token was meant for the data store service.
 
 You can find the entire application code in `service_accounts_volume_projection/data-store/main.go`.
 
@@ -980,7 +984,7 @@ TargetPort:     8081/TCP
 Endpoints:      172.18.0.5:8081
 ```
 
-The value of `Endpoints` in the output above tells us that service is now up and running.
+The value of `Endpoints` in the output above tells us that app is now up and running.
 
 Now, use `curl` to make a request to the API service again:
 
