@@ -753,7 +753,7 @@ The Kubernetes API server acts as the central authority server, and you don't ha
 
 This feature was introduced in Kubernetes 1.12 and gained further improvements in 1.13 and provides a more secure alternative to workload-specific service accounts.
 
-This will be promoted to a GA feature in the upcoming Kubernetes 1.20 release.
+This will be promoted to a GA feature in the [upcoming Kubernetes 1.20 release](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.20.md#api-change-1)
 
 In the next part of the article, you will re-implement the same code for authenticating apps using the Service Account Token Volume Projection.
 
