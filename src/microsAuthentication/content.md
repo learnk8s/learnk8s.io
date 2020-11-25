@@ -263,7 +263,7 @@ _What kind of access does it have?_
 
 Let's review the ClusterRoleBinding with:
 
-```terminal|command=1|title=bash|highlight=7,11
+```terminal|highlight=7,11|command=1|title=bash
 kubectl describe clusterrolebinding role-tokenreview-binding
 Name:         role-tokenreview-binding
 Labels:       <none>
@@ -350,7 +350,7 @@ Tokens:              api-token-lxcb4
 
 Then to inspect the Secret object, you can issue the following command:
 
-```terminal|command=1|title=bash|highlight=9
+```terminal|highlight=9|command=1|title=bash
 kubectl --namespace api describe secret api-token-lxcb4
 Name:         api-token-lxcb4
 Type:  kubernetes.io/service-account-token
