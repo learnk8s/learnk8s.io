@@ -558,40 +558,32 @@ The data store service does two key things:
 1. It retrieves the value of the `X-Client-Id` header from the incoming request.
 1. It then invokes the Kubernetes Token Review API to check if the token is valid.
 
-Step (1) is performed by the following code:
+The following code implements the above two steps:
 
-```go|highlight=1|title=main.go
+```go|title=main.go
+
+// Look for the X-Client-Id header from the incoming request
 clientId := r.Header.Get("X-Client-Id")
 if len(clientId) == 0 {
   http.Error(w, "X-Client-Id not supplied", http.StatusUnauthorized)
   return
 }
-```
 
-Then, step (2) is performed using the Kubernetes Go client.
-
-First, we create a `ClientSet` object:
-
-```go|title=main.go
+// The InClusterConfig() function defined by the Kubernetes Go client 
+// automatically reads the Service Account Token 
+// for the Pod, and hence you do not have to specify the path manually.
 config, err := rest.InClusterConfig()
 clientset, err := kubernetes.NewForConfig(config)
-```
 
-The `InClusterConfig()` function automatically reads the Service Account Token for the Pod, and hence you do not have to specify the path manually.
-
-Then, you construct a `TokenReview` object specifying the token you want to validate in the `Token` field:
-
-```go|title=main.go
+// Construct a TokenReview object specifying the token you want to validate in the 
+// Token field:
 tr := authv1.TokenReview{
   Spec: authv1.TokenReviewSpec{
       Token: clientId,
   },
 }
-```
 
-Finally, you can create a `TokenReview` request with:
-
-```go|title=main.go
+// Create the TokenReview request
 result, err := clientset.AuthenticationV1().TokenReviews().Create(ctx, &tr, metav1.CreateOptions{})
 ```
 
