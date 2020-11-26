@@ -44,6 +44,7 @@ import * as YAMLValidation from './yaml-validation/yaml-validation'
 import * as Gatekeeper from './gatekeeper/gatekeeper'
 import * as GracefulShutdown from './graceful-shutdown/graceful-shutdown'
 import * as RequestsLimits from './requests-limits/requests-limits'
+import * as MicroServiceAuthentication from './microsAuthentication/micros-authentication'
 
 import * as BiteSizedListing from './biteSized'
 import * as BiteSizedArticles from './bite-sized-articles'
@@ -117,4 +118,5 @@ export function register(store: Store) {
   Gatekeeper.Register(store)
   GracefulShutdown.Register(store)
   RequestsLimits.Register(store)
+  MicroServiceAuthentication.Register(store)
 }

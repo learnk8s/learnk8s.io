@@ -140,11 +140,12 @@ function mdast2mdast(vfile: VFile | VMemory | VReference): MdastVisitors<Mdast.L
           const { lang } = extractCodeFences(node.lang, [])
           switch (lang) {
             case 'terminal': {
-              const { command, title } = extractCodeFences(node.lang, ['command', 'title'])
+              const { command, title, highlight } = extractCodeFences(node.lang, ['command', 'title', 'highlight'])
               return {
                 type: 'terminal',
                 value: node.value,
                 command,
+                highlight,
                 title,
                 position: node.position,
               }
@@ -295,9 +296,13 @@ function mdast2string(vfile: VFile | VMemory | VReference): MdastVisitors<string
       return `${fences}${head}\n${node.value}\n${fences}`
     },
     terminal(node) {
-      return `${fences}terminal${node.command ? `|command=${node.command}` : ''}${
-        node.title ? `|title=${node.title}` : ''
-      }\n${node.value}\n${fences}`
+      const head = ([] as string[])
+        .concat(['terminal'])
+        .concat(node.highlight ? `highlight=${node.highlight}` : [])
+        .concat(node.command ? `command=${node.command}` : [])
+        .concat(node.title ? `title=${node.title}` : [])
+        .join('|')
+      return `${fences}${head}\n${node.value}\n${fences}`
     },
     powershell(node) {
       return `${fences}powershell${node.command ? `|command=${node.command}` : ''}${

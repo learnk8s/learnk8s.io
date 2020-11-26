@@ -202,6 +202,7 @@ declare module '~mdast/index' {
     type: 'terminal'
     title: string | null
     command: string | null
+    highlight: string | null
   }
 
   export interface PowerShell extends Literal {
