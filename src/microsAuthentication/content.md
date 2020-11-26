@@ -561,7 +561,6 @@ The data store service does two key things:
 The following code implements the above two steps:
 
 ```go|title=main.go
-
 // Look for the X-Client-Id header from the incoming request
 clientId := r.Header.Get("X-Client-Id")
 if len(clientId) == 0 {
