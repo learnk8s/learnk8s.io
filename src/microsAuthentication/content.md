@@ -658,11 +658,21 @@ Go back to the terminal session where you deployed the data store service and in
 
 ```terminal|command=1|title=bash
 kubectl --namepsace data-store logs <data-store-pod-id>
-2020/08/21 09:09:10 v1.TokenReviewStatus{Authenticated:true,
-User:v1.UserInfo{Username:"system:serviceaccount:data-store:data-store",
-UID:"24ae6734-9ca1-44d8-af93-98b6e6f8da17", Groups:[]string{"system:serviceaccounts",
-"system:serviceaccounts:api", "system:authenticated"}, Extra:map[string]v1.ExtraValue(nil)},
-Audiences:[]string{"api"}, Error:""}
+2020/11/26 03:17:43 {
+	"authenticated": true,
+	"user": {
+		"username": "system:serviceaccount:api:api",
+		"uid": "a693c26c-1b2e-47d0-a026-21802365f8d4",
+		"groups": [
+			"system:serviceaccounts",
+			"system:serviceaccounts:api",
+			"system:authenticated"
+		]
+	},
+	"audiences": [
+		"api"
+	]
+}
 ```
 
 The output is a Go structure version of the JSON response you saw earlier.
@@ -988,14 +998,30 @@ You should inspect the logs of the Secret store with:
 
 ```terminal|command=1|title=bash
 kubectl --namespace data-store logs <pod id>
-(v1.TokenReviewStatus) &TokenReviewStatus{Authenticated:true,
-User:UserInfo{Username:system:serviceaccount:api:api,
-UID:ec7c304f-9722-4d1b-9f67-d3ce32cd8d4c,
-Groups:[system:serviceaccounts system:serviceaccounts:api system:authenticated],
-Extra:map[string]ExtraValue{authentication.kubernetes.io/pod-name:
-[app-65d954658c-dbbr5],
-authentication.kubernetes.io/pod-uid: [1b37a3f4-54f1-419c-b435-affce3f4a0f3],},},
-Error:,Audiences:[data-store],}
+
+2020/11/26 02:04:51 {
+	"authenticated": true,
+	"user": {
+		"username": "system:serviceaccount:api:api",
+		"uid": "0d32dccd-3d84-4955-b6e8-bbc362debb52",
+		"groups": [
+			"system:serviceaccounts",
+			"system:serviceaccounts:api",
+			"system:authenticated"
+		],
+		"extra": {
+			"authentication.kubernetes.io/pod-name": [
+				"app-649cfb884b-hxzzj"
+			],
+			"authentication.kubernetes.io/pod-uid": [
+				"a4c967a0-2b57-4f1f-aabc-6aea2dc15098"
+			]
+		}
+	},
+	"audiences": [
+		"data-store"
+	]
+}
 ```
 
 In you switch to the logs of the API service, you should see the following lines that demonstrate when the Service Account Token is re-read from the filesystem:
