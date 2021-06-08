@@ -37,7 +37,7 @@
     "axios": "^0.19.0",
     "cheerio": "^1.0.0-rc.2",
     "cross-env": "^6.0.3",
-    "css-what": "^3.2.1",
+    "css-what": "^5.0.1",
     "cssnano": "^4.1.10",
     "cssom": "^0.4.4",
     "date-fns": "^2.6.0",
