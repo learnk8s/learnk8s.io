@@ -38,6 +38,7 @@ import * as ClusterSize from './clusterSize/clusterSize'
 import * as ZeroToK8sJava from './02k8s-java/02k8s-java'
 import * as ProvisionCloudResources from './provision-cloud-resources/provision-cloud-resources'
 import * as CustomAuthentication from './custom-authentication/index'
+import * as TerraformAWS from './terraform-aws/index'
 import * as K8Bit from './k8bit/k8bit'
 import * as AllocatableResources from './allocatable-resources/allocatable-resources'
 import * as YAMLValidation from './yaml-validation/yaml-validation'
@@ -110,6 +111,7 @@ export function register(store: Store) {
   Online.Register(store)
   ProvisionCloudResources.Register(store)
   CustomAuthentication.Register(store)
+  TerraformAWS.Register(store)
   K8Bit.Register(store)
   AllocatableResources.Register(store)
   TrainingLandingPage.Register(store)
