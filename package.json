@@ -63,7 +63,7 @@
     "remark-parse": "^6.0.3",
     "schema-dts": "^0.5.2",
     "serve-handler": "^6.1.2",
-    "shelljs": "^0.8.3",
+    "shelljs": "^0.8.5",
     "srcset": "^2.0.1",
     "svgo": "^1.2.2",
     "tape": "^4.10.1",
