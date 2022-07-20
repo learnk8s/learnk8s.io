@@ -67,7 +67,7 @@
     "srcset": "^2.0.1",
     "svgo": "^1.2.2",
     "tape": "^4.10.1",
-    "terser": "^3.17.0",
+    "terser": "^4.8.1",
     "ts-node": "^8.0.2",
     "twitter-lite": "^0.9.4",
     "typescript": "^3.7.2",
